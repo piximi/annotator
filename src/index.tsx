@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {ImageViewer} from "./components/ImageViewer";
+import {Provider} from "react-redux";
+import {productionStore} from "./store";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={productionStore}>
+      <ImageViewer/>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

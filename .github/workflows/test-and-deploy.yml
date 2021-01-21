@@ -21,7 +21,7 @@ jobs:
           git config --global user.name "Allen Goodman"
           git remote set-url origin https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}
           yarn deploy
-name: deploy
+name: test-and-deploy
 on:
   pull_request:
     branches: [ master ]

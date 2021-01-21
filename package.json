@@ -33,7 +33,7 @@
     ]
   },
   "homepage": "https://piximi.github.io/image-viewer",
-  "name": "image-viewer",
+  "name": "@piximi/image-viewer",
   "private": true,
   "scripts": {
     "build": "react-scripts build",

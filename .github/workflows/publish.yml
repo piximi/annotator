@@ -13,8 +13,6 @@
             restore-keys: |
               ${{ runner.os }}-yarn-
         - run: yarn
-        - name: test
-          run: yarn test
         - name: deploy
           run: |
             git config --global user.email "allen.goodman@icloud.com"

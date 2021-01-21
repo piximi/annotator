@@ -1486,7 +1486,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const [stageWidth, setStageWidth] = useState<number>(initialWidth);
   const [stageHeight, setStageHeight] = useState<number>(initialWidth);
-  const [scale, setScale] = useState<number>(initialWidth / stageWidth);
 
   const resize = () => {
     if (parentRef && parentRef.current) {
@@ -1503,7 +1502,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     return () => {
       window.removeEventListener("resize", resize);
     };
-  }, [scale, stageHeight, stageWidth]);
+  }, [stageHeight, stageWidth]);
 
   useEffect(() => {
     resize();
@@ -1520,7 +1519,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           height={initialWidth}
           position={{ x: stageX, y: stageY }}
           ref={stageRef}
-          scale={{ x: scale, y: scale }}
+          scale={{ x: zoomScaleX, y: zoomScaleY }}
           width={initialWidth}
         >
           <ReactKonva.Layer

@@ -6,14 +6,10 @@ import {
   StoreEnhancer,
 } from "@reduxjs/toolkit";
 import logger from "redux-logger";
-import createSagaMiddleware from "redux-saga";
-import { rootSaga } from "../sagas";
-
-export const saga = createSagaMiddleware();
 
 const enhancers: StoreEnhancer[] = [];
 
-const middleware: Middleware[] = [logger, saga];
+const middleware: Middleware[] = [logger];
 
 const preloadedState = {};
 
@@ -26,5 +22,3 @@ const options = {
 };
 
 export const productionStore: EnhancedStore = configureStore(options);
-
-saga.run(rootSaga);

@@ -4,6 +4,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn
+      - run: git config --global user.email 'allen.goodman@icloud.com'
+      - run: git config --global user.name "Allen Goodman"
+      - run: git remote set-url origin https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}
       - run: yarn deploy
 name: deploy
 on:

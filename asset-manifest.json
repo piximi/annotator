@@ -1,23 +1,35 @@
 {
   "files": {
-    "main.css": "/image-viewer/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/image-viewer/static/js/main.8df3dad6.chunk.js",
-    "main.js.map": "/image-viewer/static/js/main.8df3dad6.chunk.js.map",
-    "runtime-main.js": "/image-viewer/static/js/runtime-main.3c4bc5c3.js",
-    "runtime-main.js.map": "/image-viewer/static/js/runtime-main.3c4bc5c3.js.map",
-    "static/js/2.02d73685.chunk.js": "/image-viewer/static/js/2.02d73685.chunk.js",
-    "static/js/2.02d73685.chunk.js.map": "/image-viewer/static/js/2.02d73685.chunk.js.map",
-    "static/js/3.db7d3283.chunk.js": "/image-viewer/static/js/3.db7d3283.chunk.js",
-    "static/js/3.db7d3283.chunk.js.map": "/image-viewer/static/js/3.db7d3283.chunk.js.map",
+    "main.css": "/image-viewer/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/image-viewer/static/js/main.933cad7e.chunk.js",
+    "main.js.map": "/image-viewer/static/js/main.933cad7e.chunk.js.map",
+    "runtime-main.js": "/image-viewer/static/js/runtime-main.7d2c98e2.js",
+    "runtime-main.js.map": "/image-viewer/static/js/runtime-main.7d2c98e2.js.map",
+    "static/js/2.152a6991.chunk.js": "/image-viewer/static/js/2.152a6991.chunk.js",
+    "static/js/2.152a6991.chunk.js.map": "/image-viewer/static/js/2.152a6991.chunk.js.map",
+    "static/js/3.7fb9fe76.chunk.js": "/image-viewer/static/js/3.7fb9fe76.chunk.js",
+    "static/js/3.7fb9fe76.chunk.js.map": "/image-viewer/static/js/3.7fb9fe76.chunk.js.map",
     "index.html": "/image-viewer/index.html",
-    "static/css/main.8c8b27cf.chunk.css.map": "/image-viewer/static/css/main.8c8b27cf.chunk.css.map",
-    "static/js/2.02d73685.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.02d73685.chunk.js.LICENSE.txt",
-    "static/media/logo.6ce24c58.svg": "/image-viewer/static/media/logo.6ce24c58.svg"
+    "static/css/main.6dea0f05.chunk.css.map": "/image-viewer/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.152a6991.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.152a6991.chunk.js.LICENSE.txt",
+    "static/media/ColorAdjustment.d98e55ee.svg": "/image-viewer/static/media/ColorAdjustment.d98e55ee.svg",
+    "static/media/ColorSelection.0c6964e9.svg": "/image-viewer/static/media/ColorSelection.0c6964e9.svg",
+    "static/media/Elliptical.8b75a0e7.svg": "/image-viewer/static/media/Elliptical.8b75a0e7.svg",
+    "static/media/Hand.349d7548.svg": "/image-viewer/static/media/Hand.349d7548.svg",
+    "static/media/InvertSelection.b5e344d4.svg": "/image-viewer/static/media/InvertSelection.b5e344d4.svg",
+    "static/media/Lasso.1295fa63.svg": "/image-viewer/static/media/Lasso.1295fa63.svg",
+    "static/media/MagicWand.36571be2.svg": "/image-viewer/static/media/MagicWand.36571be2.svg",
+    "static/media/Magnetic.93cfdc26.svg": "/image-viewer/static/media/Magnetic.93cfdc26.svg",
+    "static/media/ObjectSelection.635bd1b2.svg": "/image-viewer/static/media/ObjectSelection.635bd1b2.svg",
+    "static/media/PolygonalSelection.1567b91a.svg": "/image-viewer/static/media/PolygonalSelection.1567b91a.svg",
+    "static/media/Quick.08ae5e3a.svg": "/image-viewer/static/media/Quick.08ae5e3a.svg",
+    "static/media/Rectangular.d98f54e1.svg": "/image-viewer/static/media/Rectangular.d98f54e1.svg",
+    "static/media/Zoom.3783ea22.svg": "/image-viewer/static/media/Zoom.3783ea22.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.3c4bc5c3.js",
-    "static/js/2.02d73685.chunk.js",
-    "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.8df3dad6.chunk.js"
+    "static/js/runtime-main.7d2c98e2.js",
+    "static/js/2.152a6991.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.933cad7e.chunk.js"
   ]
 }

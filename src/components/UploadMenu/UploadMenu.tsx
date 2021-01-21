@@ -8,7 +8,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { useStyles } from "./UploadMenu.css";
 import { useDispatch } from "react-redux";
-import { createImage } from "../../store/slices";
+import {imageViewerSlice} from "../../store/slices";
 import { DropboxMenuItem } from "../DropboxMenuItem";
 import { Shape } from "../../types/Shape";
 
@@ -45,7 +45,7 @@ export const UploadMenu = ({ anchorEl, onClose, open }: UploadMenuProps) => {
               channels: 4,
             };
 
-            dispatch(createImage({ shape: shape, src: src as string }));
+            dispatch(imageViewerSlice.actions.setImageViewerImage({ image: { id: "foo", instances: [], name: "foo", shape: shape, src: src as string }}));
           };
 
           image.src = src as string;

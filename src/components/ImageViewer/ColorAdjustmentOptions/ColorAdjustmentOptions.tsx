@@ -18,47 +18,6 @@ const LIGHTNESS_OPTIONS = [
   { name: "Black point" },
 ];
 
-type HistogramProps = {
-  bins: number;
-  image: Image;
-};
-
-const Histogram = ({ bins, image }: HistogramProps) => {
-  const histograms = image.getHistograms({ maxSlots: bins });
-
-  const transform = (xs: number[]): { x: number; y: number }[] => {
-    return xs.map((element, index) => {
-      return { x: index, y: element };
-    });
-  };
-
-  return (
-    <List>
-      <ListItem dense disabled>
-        <ListItemText primary="Histogram" />
-
-        <XYPlot height={300} width={300}>
-          <AreaSeries
-            color="#e53935"
-            data={transform(histograms[0])}
-            opacity={0.5}
-          />
-          <AreaSeries
-            color="#43a047"
-            data={transform(histograms[1])}
-            opacity={0.5}
-          />
-          <AreaSeries
-            color="#1e88e5"
-            data={transform(histograms[2])}
-            opacity={0.5}
-          />
-        </XYPlot>
-      </ListItem>
-    </List>
-  );
-};
-
 const Option = ({ name }: { name: string }) => {
   return (
     <ListItem dense>

@@ -1,4 +1,4 @@
-import { ImageViewerOperation } from "./SelectionMethod";
+import { ImageViewerOperation } from "./ImageViewerOperation";
 
 export type Settings = {
   tileSize: number;

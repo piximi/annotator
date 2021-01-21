@@ -13,10 +13,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - run: yarn
-      - run: git config --global user.email "allen.goodman@icloud.com"
-      - run: git config --global user.name "Allen Goodman"
-      - run: git remote set-url origin https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}
-      - run: yarn deploy
+      - name: test
+        run: yarn test
+      - name: deploy
+        run: |
+          git config --global user.email "allen.goodman@icloud.com"
+          git config --global user.name "Allen Goodman"
+          git remote set-url origin https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}
+          yarn deploy
 name: deploy
 on:
   pull_request:

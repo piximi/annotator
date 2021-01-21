@@ -8,7 +8,7 @@ jobs:
       - id: yarn-cache
         uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-yarn-${{ hashFiles("**/yarn.lock") }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           restore-keys: |
             ${{ runner.os }}-yarn-

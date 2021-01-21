@@ -1490,11 +1490,10 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   const resize = () => {
     if (parentRef && parentRef.current) {
-      setScale(parentRef.current.offsetWidth / initialWidth);
-      setStageWidth(stageWidth * scale);
-      setStageHeight(stageHeight * scale);
-      setZoomScaleX(scale);
-      setZoomScaleY(scale);
+      setZoomScaleX(parentRef.current.offsetWidth / initialWidth);
+      setZoomScaleY(parentRef.current.offsetWidth / initialWidth);
+      setStageWidth(stageWidth * zoomScaleX);
+      setStageHeight(stageHeight * zoomScaleY);
     }
   };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import {ImageViewer} from "./components/ImageViewer";
+import {ImageViewer} from "./components";
 import {Provider} from "react-redux";
 import {productionStore} from "./store";
 

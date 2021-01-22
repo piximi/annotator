@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import * as ReactKonva from "react-konva";
-import { Image as ImageType } from "../../types/Image";
-import { Stage } from "konva/types/Stage";
-import { Circle } from "konva/types/shapes/Circle";
-import { Transformer } from "konva/types/shapes/Transformer";
+import {Image as ImageType} from "../../types/Image";
+import {Stage} from "konva/types/Stage";
+import {Circle} from "konva/types/shapes/Circle";
+import {Transformer} from "konva/types/shapes/Transformer";
 import * as _ from "underscore";
-import { Line } from "konva/types/shapes/Line";
-import { Image as ImageKonvaType } from "konva/types/shapes/Image";
+import {Line} from "konva/types/shapes/Line";
+import {Image as ImageKonvaType} from "konva/types/shapes/Image";
 import useImage from "use-image";
-import {
-  convertPathToCoords,
-  createPathFinder,
-  makeGraph,
-} from "../../image/GraphHelper";
-import { Image } from "image-js";
-import { Graph } from "ngraph.graph";
-import { PathFinder } from "ngraph.path";
-import { getIdx } from "../../image/imageHelper";
-import { useDebounce } from "../../hooks";
+import {convertPathToCoords, createPathFinder, makeGraph,} from "../../image/GraphHelper";
+import {Image} from "image-js";
+import {Graph} from "ngraph.graph";
+import {PathFinder} from "ngraph.path";
+import {getIdx} from "../../image/imageHelper";
+import {useDebounce} from "../../hooks";
 
 type MagneticSelectionProps = {
   image: ImageType;

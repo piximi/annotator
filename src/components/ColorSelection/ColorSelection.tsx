@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import * as ReactKonva from "react-konva";
-import { Image as ImageType } from "../../types/Image";
-import { Stage } from "konva/types/Stage";
-import { Image } from "konva/types/shapes/Image";
+import {Image as ImageType} from "../../types/Image";
+import {Stage} from "konva/types/Stage";
+import {Image} from "konva/types/shapes/Image";
 import useImage from "use-image";
-import { flood } from "../../image";
+import {flood} from "../../image";
 import * as ImageJS from "image-js";
-import { Vector2d } from "konva/types/types";
+import {Vector2d} from "konva/types/types";
 
 type ColorSelectionProps = {
   image: ImageType;

@@ -6,7 +6,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Radio from "@material-ui/core/Radio";
 import React from "react";
 import SvgIcon from "@material-ui/core/SvgIcon";
-import { ReactComponent as InvertSelectionIcon } from "../../icons/InvertSelection.svg";
+import {ReactComponent as InvertSelectionIcon} from "../../icons/InvertSelection.svg";
 
 export const SelectionOptions = () => {
   return (

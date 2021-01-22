@@ -1,9 +1,9 @@
-import { Label } from "@material-ui/icons";
+import {Label} from "@material-ui/icons";
 import * as React from "react";
-import { Avatar, IconButton } from "@material-ui/core";
+import {Avatar, IconButton} from "@material-ui/core";
 import Popover from "@material-ui/core/Popover";
-import { CirclePicker, ColorResult } from "react-color";
-import { useStyles } from "./ColorIcon.css";
+import {CirclePicker, ColorResult} from "react-color";
+import {useStyles} from "./ColorIcon.css";
 
 const COLORS = [
   "#000000"

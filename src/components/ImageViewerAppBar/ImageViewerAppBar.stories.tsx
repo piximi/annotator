@@ -1,6 +1,6 @@
-import React, { ComponentProps } from "react";
-import { Meta, Story } from "@storybook/react/types-6-0";
-import { ImageViewerAppBar } from "./ImageViewerAppBar";
+import React, {ComponentProps} from "react";
+import {Meta, Story} from "@storybook/react/types-6-0";
+import {ImageViewerAppBar} from "./ImageViewerAppBar";
 
 export default {
   component: ImageViewerAppBar,

@@ -1,7 +1,7 @@
-import React, { ComponentProps } from "react";
-import { Meta, Story } from "@storybook/react/types-6-0";
-import { Image } from "../../types/Image";
-import { RectangularSelection } from "./RectangularSelection";
+import React, {ComponentProps} from "react";
+import {Meta, Story} from "@storybook/react/types-6-0";
+import {Image} from "../../types/Image";
+import {RectangularSelection} from "./RectangularSelection";
 
 export default {
   component: RectangularSelection,

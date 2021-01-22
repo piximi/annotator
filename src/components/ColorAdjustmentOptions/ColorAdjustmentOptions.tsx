@@ -6,7 +6,6 @@ import Slider from "@material-ui/core/Slider";
 import Collapse from "@material-ui/core/Collapse";
 import Switch from "@material-ui/core/Switch";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import { AreaSeries, XYPlot } from "react-vis";
 import Image from "image-js";
 
 const LIGHTNESS_OPTIONS = [

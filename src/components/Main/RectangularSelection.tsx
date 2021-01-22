@@ -1,9 +1,9 @@
 import * as ReactKonva from "react-konva";
-import React, { RefObject } from "react";
-import { Category } from "../../types/Category";
-import { toRGBA } from "../../image/toRGBA";
-import { useMarchingAnts } from "../../hooks";
-import { Rect } from "konva/types/shapes/Rect";
+import React, {RefObject} from "react";
+import {Category} from "../../types/Category";
+import {toRGBA} from "../../image/toRGBA";
+import {useMarchingAnts} from "../../hooks";
+import {Rect} from "konva/types/shapes/Rect";
 
 type RectangularSelectionProps = {
   activeCategory: Category;

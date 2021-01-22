@@ -1,16 +1,16 @@
 import React from "react";
-import { Image } from "../../types/Image";
+import {Image} from "../../types/Image";
 import * as ReactKonva from "react-konva";
 import useImage from "use-image";
-import { Stage } from "konva/types/Stage";
-import { Box } from "konva/types/shapes/Transformer";
-import { Rect } from "konva/types/shapes/Rect";
-import { Category } from "../../types/Category";
-import { toRGBA } from "../../image/toRGBA";
-import { useDispatch } from "react-redux";
-import { projectSlice } from "../../store/slices";
-import { BoundingBox } from "../../types/BoundingBox";
-import { useMarchingAnts, useSelection, useTransformer } from "../../hooks";
+import {Stage} from "konva/types/Stage";
+import {Box} from "konva/types/shapes/Transformer";
+import {Rect} from "konva/types/shapes/Rect";
+import {Category} from "../../types/Category";
+import {toRGBA} from "../../image/toRGBA";
+import {useDispatch} from "react-redux";
+import {projectSlice} from "../../store/slices";
+import {BoundingBox} from "../../types/BoundingBox";
+import {useMarchingAnts, useSelection, useTransformer} from "../../hooks";
 
 type RectangularSelectionProps = {
   data: Image;

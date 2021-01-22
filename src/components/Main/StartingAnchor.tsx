@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
-import React, { RefObject } from "react";
-import { Circle } from "konva/types/shapes/Circle";
+import React, {RefObject} from "react";
+import {Circle} from "konva/types/shapes/Circle";
 
 type StartingAnchorProps = {
   annotating: boolean;

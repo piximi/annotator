@@ -1,11 +1,11 @@
 import React from "react";
-import { useStyles } from "./OpenImageButton.css";
-import { Button } from "@material-ui/core";
+import {useStyles} from "./OpenImageButton.css";
+import {Button} from "@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Tooltip from "@material-ui/core/Tooltip";
-import { Shape } from "../../types/Shape";
-import { setImageViewerImage } from "../../store/slices";
-import { useDispatch } from "react-redux";
+import {Shape} from "../../types/Shape";
+import {setImageViewerImage} from "../../store/slices";
+import {useDispatch} from "react-redux";
 
 export const OpenImageButton = () => {
   const dispatch = useDispatch();

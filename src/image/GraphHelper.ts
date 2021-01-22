@@ -3,7 +3,7 @@ import {getIdx} from "./imageHelper";
 import {DataArray} from "image-js";
 import {aStar} from "ngraph.path";
 
-const validNeighbours = (
+export const validNeighbours = (
   x: number,
   y: number,
   height: number,

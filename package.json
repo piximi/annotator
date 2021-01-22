@@ -76,10 +76,12 @@
   "private": true,
   "scripts": {
     "build": "react-scripts build",
+    "build-storybook": "build-storybook -s public",
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "start": "react-scripts start",
+    "storybook": "start-storybook -p 6006 -s public",
     "test": "react-scripts test"
   },
   "version": "0.1.0"

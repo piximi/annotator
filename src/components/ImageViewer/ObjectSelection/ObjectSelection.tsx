@@ -12,6 +12,8 @@ import { projectSlice } from "../../../store/slices";
 import { BoundingBox } from "../../../types/BoundingBox";
 import * as tensorflow from "@tensorflow/tfjs";
 import { Image as KonvaImage } from "konva/types/shapes/Image";
+// import { getIdx } from "../../../image/imageHelper";
+// import { validNeighbours } from "../../../image/GraphHelper";
 
 export const useKeyPress = (key: string, action: () => void) => {
   useEffect(() => {
@@ -29,6 +31,34 @@ type ObjectSelectionProps = {
   category: Category;
 };
 
+// const getBoundariesFromMask = (
+//   maskData: Uint8ClampedArray,
+//   height: number,
+//   width: number
+// ) => {
+//   const coordinates: { x: number; y: number }[] = [];
+//
+//   const idx = getIdx(width, 4);
+//
+//   for (let x = 0; x < width; x++) {
+//     for (let y = 0; y < width; y++) {
+//       const pixel = maskData[idx(x, y, 0)];
+//       if (pixel === 255) {
+//         const neighborsIdx = validNeighbours(x, y, height, width);
+//         for (let neighborIdx of neighborsIdx) {
+//           const neighbor = maskData[idx(neighborIdx.x, neighborIdx.y, 0)];
+//           if (neighbor === 0) {
+//             coordinates.push({ x: x, y: y });
+//             break;
+//           }
+//         }
+//       }
+//     }
+//   }
+//
+//   return coordinates;
+// };
+
 export const ObjectSelection = ({ data, category }: ObjectSelectionProps) => {
   const dispatch = useDispatch();
   const [image] = useImage(data.src, "Anonymous");
@@ -37,6 +67,7 @@ export const ObjectSelection = ({ data, category }: ObjectSelectionProps) => {
   const shapeRef = React.useRef<Rect>(null);
   const imageRef = React.useRef<KonvaImage>(null);
   const maskRef = React.useRef<HTMLCanvasElement>(null);
+  const maskDataRef = React.useRef<Uint8ClampedArray | null>(null);
   const [x, setX] = React.useState<number>();
   const [y, setY] = React.useState<number>();
   const [height, setHeight] = React.useState<number>(0);
@@ -239,12 +270,18 @@ export const ObjectSelection = ({ data, category }: ObjectSelectionProps) => {
     });
 
     if (maskRef && maskRef.current && mask) {
-      await tensorflow.browser.toPixels(
+      maskDataRef.current = await tensorflow.browser.toPixels(
         mask as tensorflow.Tensor3D,
         maskRef.current
       );
 
       tensorflow.dispose(mask);
+
+      // const boundaries = getBoundariesFromMask(
+      //   maskDataRef.current,
+      //   height,
+      //   width
+      // );
     }
 
     setAnnotated(true);

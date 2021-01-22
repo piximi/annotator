@@ -3,8 +3,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuList from "@material-ui/core/MenuList";
 import Divider from "@material-ui/core/Divider";
 import { Category } from "../../../types/Category";
-import { HideOrShowCategoryMenuItem } from "../../HideOrShowCategoryMenuItem";
-import { HideOtherCategoriesMenuItem } from "../../HideOtherCategoriesMenuItem";
+import { HideOrShowCategoryMenuItem } from "../HideOrShowCategoryMenuItem";
+import { HideOtherCategoriesMenuItem } from "../HideOtherCategoriesMenuItem";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 

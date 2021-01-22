@@ -10,7 +10,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import { useDialog } from "../../hooks";
-import { CreateCategoryDialog } from "../CreateCategoryDialog";
+import { CreateCategoryDialog } from "../ImageViewer/CreateCategoryDialog";
 import AddIcon from "@material-ui/icons/Add";
 
 type CollapsibleListProps = {

@@ -6,57 +6,56 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import React, { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import Grid from "@material-ui/core/Grid";
 import { ColorIcon } from "../ColorIcon";
-import { useStyles } from "./EditCategoryDialog.css";
-import { Category } from "../../../types/Category";
-import { updateCategory } from "../../../store/slices";
+import Grid from "@material-ui/core/Grid";
+import { useStyles } from "./CreateCategoryDialog.css";
+import { ColorResult } from "react-color";
+import { sample } from "underscore";
+import { createCategory } from "../../../store/slices";
 
-type EditCategoryDialogProps = {
-  category: Category;
-  onCloseDialog: () => void;
-  openDialog: boolean;
+const COLORS = [
+  "#000000"
+]
+
+type CreateCategoryDialogProps = {
+  onClose: () => void;
+  open: boolean;
 };
 
-export const EditCategoryDialog = ({
-  category,
-  onCloseDialog,
-  openDialog,
-}: EditCategoryDialogProps) => {
+export const CreateCategoryDialog = ({
+  onClose,
+  open,
+}: CreateCategoryDialogProps) => {
   const dispatch = useDispatch();
+
+  const [color, setColor] = React.useState<string>(sample(COLORS)!);
+
+  const [name, setName] = useState<string>("");
 
   const classes = useStyles();
 
-  const [color, setColor] = useState<string>(category.color);
+  const onCreate = () => {
+    dispatch(createCategory({ name: name ? name : "Unnamed", color: color }));
 
-  const onColorChange = (color: any) => {
-    setColor(color.hex);
+    onClose();
+
+    setColor(sample(COLORS)!);
   };
 
-  const [name, setName] = useState<string>(category.name);
+  const onColorChange = (color: ColorResult) => {
+    setColor(color.hex);
+  };
 
   const onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
-  const onEdit = () => {
-    dispatch(
-      updateCategory({
-        id: category.id,
-        name: name,
-        color: color,
-      })
-    );
-
-    onCloseDialog();
-  };
-
   return (
-    <Dialog fullWidth onClose={onCloseDialog} open={openDialog}>
-      <DialogTitle>Edit category</DialogTitle>
+    <Dialog fullWidth maxWidth="xs" onClose={onClose} open={open}>
+      <DialogTitle>Create category</DialogTitle>
 
-      <DialogContent>
-        <div>
+      <DialogContent className={classes.createCategoryDialogContent}>
+        <div className={classes.createCategoryDialogGrid}>
           <Grid container spacing={1}>
             <Grid item xs={2} className={classes.createCategoryDialogItem}>
               <ColorIcon color={color} onColorChange={onColorChange} />
@@ -69,7 +68,6 @@ export const EditCategoryDialog = ({
                 label="Name"
                 margin="dense"
                 onChange={onNameChange}
-                value={name}
               />
             </Grid>
           </Grid>
@@ -77,12 +75,12 @@ export const EditCategoryDialog = ({
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onCloseDialog} color="primary">
+        <Button onClick={onClose} color="primary">
           Cancel
         </Button>
 
-        <Button onClick={onEdit} color="primary">
-          Update
+        <Button onClick={onCreate} color="primary">
+          Create
         </Button>
       </DialogActions>
     </Dialog>

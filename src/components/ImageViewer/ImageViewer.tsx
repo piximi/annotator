@@ -3,15 +3,15 @@ import { Category } from "../../types/Category";
 import { CssBaseline } from "@material-ui/core";
 import { Image } from "../../types/Image";
 import { ReactComponent as ColorAdjustmentIcon } from "../../icons/ColorAdjustment.svg";
-import { ReactComponent as EllipticalIcon } from "../../icons/Elliptical.svg";
-import { ReactComponent as LassoIcon } from "../../icons/Lasso.svg";
-import { ReactComponent as MagicWandIcon } from "../../icons/MagicWand.svg";
+import { ReactComponent as EllipticalIcon } from "../../icons/EllipticalSelection.svg";
+import { ReactComponent as LassoIcon } from "../../icons/LassoSelection.svg";
+import { ReactComponent as MagicWandIcon } from "../../icons/ColorSelection.svg";
 import { ReactComponent as ZoomIcon } from "../../icons/Zoom.svg";
 import { ReactComponent as HandIcon } from "../../icons/Hand.svg";
-import { ReactComponent as MagneticIcon } from "../../icons/Magnetic.svg";
-import { ReactComponent as QuickIcon } from "../../icons/Quick.svg";
+import { ReactComponent as MagneticIcon } from "../../icons/MagneticSelection.svg";
+import { ReactComponent as QuickIcon } from "../../icons/QuickSelection.svg";
 import { ReactComponent as ObjectSelectionIcon } from "../../icons/ObjectSelection.svg";
-import { ReactComponent as RectangularIcon } from "../../icons/Rectangular.svg";
+import { ReactComponent as RectangularIcon } from "../../icons/RectangularSelection.svg";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import {
   imageViewerImageSelector,

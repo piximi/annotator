@@ -911,8 +911,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const onZoomMouseDown = (position: { x: number; y: number }) => {
     if (zoomSelected) return;
 
-    setZoomSelectionX((position.x - stageX) / zoomScaleX);
-    setZoomSelectionY((position.y - stageY) / zoomScaleY);
+    setZoomSelectionX(position.x);
+    setZoomSelectionY(position.y);
 
     setZoomSelecting(true);
   };
@@ -922,12 +922,9 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     if (!zoomSelecting) return;
 
     if (zoomSelectionX && zoomSelectionY) {
-      setZoomSelectionHeight(
-        (position.y - stageY) / zoomScaleY - zoomSelectionY
-      );
-      setZoomSelectionWidth(
-        (position.x - stageX) / zoomScaleX - zoomSelectionX
-      );
+      setZoomSelectionHeight(position.y - zoomSelectionY)
+      setZoomSelectionWidth(position.x - zoomSelectionX)
+
       setZoomSelecting(true);
     }
   };
@@ -941,32 +938,23 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       zoomSelectionHeight
     ) {
       if (stageRef && stageRef.current) {
-        const newScaleX =
+        const newScale =
           zoomScaleX * (stageRef.current.width() / zoomSelectionWidth);
-        const newScaleY =
-          zoomScaleY * (stageRef.current.height() / zoomSelectionHeight);
-        setStageX(-1 * zoomSelectionX * newScaleX);
-        setStageY(-1 * zoomSelectionY * newScaleY);
-        setZoomScaleX(newScaleX);
-        setZoomScaleY(newScaleY);
+        setStageX(-1 * zoomSelectionX * newScale);
+        setStageY(-1 * zoomSelectionY * newScale);
+        setZoomScaleX(newScale);
+        setZoomScaleY(newScale);
       }
       setZoomSelected(true);
     } else {
       const scaleStep = zoomMode ? 1 / zoomIncrement : zoomIncrement;
 
       if (stageRef && stageRef.current) {
-        let pointerX = position.x;
-        let pointerY = position.y;
-
-        const mousePointTo = {
-          x: (pointerX - stageX) / zoomScaleX,
-          y: (pointerY - stageY) / zoomScaleY,
-        };
 
         const newScale = zoomScaleX * scaleStep;
 
-        setStageX(pointerX - mousePointTo.x * newScale);
-        setStageY(pointerY - mousePointTo.y * newScale);
+        setStageX(position.x - position.x * newScale);
+        setStageY(position.y - position.y * newScale);
 
         setZoomScaleX(newScale);
         setZoomScaleY(newScale);
@@ -1060,7 +1048,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const onMouseMove = () => {
     if (stageRef && stageRef.current && imageRef && imageRef.current) {
       // const position = stageRef.current.getPointerPosition();
-
       const transform = imageRef.current.getAbsoluteTransform().copy();
       transform.invert();
       const position = transform.point(stageRef.current.getPointerPosition());
@@ -1106,7 +1093,10 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   const onMouseUp = () => {
     if (stageRef && stageRef.current) {
-      const position = stageRef.current.getPointerPosition();
+      // const position = stageRef.current.getPointerPosition();
+      const transform = imageRef.current.getAbsoluteTransform().copy();
+      transform.invert();
+      const position = transform.point(stageRef.current.getPointerPosition());
 
       if (position) {
         switch (activeOperation) {
@@ -1176,17 +1166,10 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   }, [stageHeight, stageWidth, zoomScaleX, zoomScaleY]);
 
   useEffect(() => {
-    const resize = () => {
-      if (parentRef && parentRef.current) {
-        setZoomScaleX(parentRef.current.offsetWidth / initialWidth);
-        setZoomScaleY(parentRef.current.offsetWidth / initialWidth);
-        setStageWidth(stageWidth * zoomScaleX);
-        setStageHeight(stageHeight * zoomScaleY);
-      }
-    };
+    const resize = () => {};
 
     resize();
-  }, [stageHeight, stageWidth, zoomScaleX, zoomScaleY]);
+  }, []);
 
   return (
     <main className={classes.content}>

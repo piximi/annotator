@@ -938,14 +938,12 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       zoomSelectionHeight
     ) {
       if (stageRef && stageRef.current) {
-        const newScaleX =
+        const newScale =
           zoomScaleX * (stageRef.current.width() / zoomSelectionWidth);
-        const newScaleY =
-          zoomScaleY * (stageRef.current.height() / zoomSelectionHeight);
-        setStageX(-1 * zoomSelectionX * newScaleX);
-        setStageY(-1 * zoomSelectionY * newScaleY);
-        setZoomScaleX(newScaleX);
-        setZoomScaleY(newScaleY);
+        setStageX(-1 * zoomSelectionX * newScale);
+        setStageY(-1 * zoomSelectionY * newScale);
+        setZoomScaleX(newScale);
+        setZoomScaleY(newScale);
       }
       setZoomSelected(true);
     } else {

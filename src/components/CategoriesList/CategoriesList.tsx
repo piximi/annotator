@@ -1,9 +1,9 @@
-import { CollapsibleList } from "../CollapsibleList";
+import { CollapsibleList } from "../ImageViewer/CollapsibleList";
 import React from "react";
 import { useSelector } from "react-redux";
 import { CategoryListItem } from "../CategoryListItem";
 import { Category } from "../../types/Category";
-import { CreateCategoryListItem } from "../CreateCategoryListItem";
+import { CreateCategoryListItem } from "../ImageViewer/CreateCategoryListItem";
 import {
   createdCategoriesSelector,
   unknownCategorySelector,

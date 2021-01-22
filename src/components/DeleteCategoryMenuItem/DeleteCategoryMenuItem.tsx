@@ -2,7 +2,7 @@ import React from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import { Category } from "../../types/Category";
-import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
+import { DeleteCategoryDialog } from "../ImageViewer/DeleteCategoryDialog";
 import { useDialog } from "../../hooks";
 
 type DeleteCategoryMenuItemProps = {

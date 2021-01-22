@@ -1,7 +1,7 @@
 import React from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
-import { EditCategoryDialog } from "../EditCategoryDialog";
+import { EditCategoryDialog } from "../ImageViewer/EditCategoryDialog";
 import { Category } from "../../types/Category";
 import { useDialog } from "../../hooks";
 

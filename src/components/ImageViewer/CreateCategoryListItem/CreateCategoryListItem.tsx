@@ -1,12 +1,12 @@
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import AddIcon from "@material-ui/icons/Add";
 import ListItemText from "@material-ui/core/ListItemText";
+import AddIcon from "@material-ui/icons/Add";
 import React from "react";
-import { NewClassifierDialog } from "../NewClassifierDialog";
-import { useDialog } from "../../hooks";
+import { CreateCategoryDialog } from "../../CreateCategoryDialog";
+import { useDialog } from "../../../hooks";
 
-export const NewClassifierListItem = () => {
+export const CreateCategoryListItem = () => {
   const { onClose, onOpen, open } = useDialog();
 
   return (
@@ -16,10 +16,10 @@ export const NewClassifierListItem = () => {
           <AddIcon />
         </ListItemIcon>
 
-        <ListItemText primary="New classifier…" />
+        <ListItemText primary="Create category" />
       </ListItem>
 
-      <NewClassifierDialog onClose={onClose} open={open} />
+      <CreateCategoryDialog onClose={onClose} open={open} />
     </React.Fragment>
   );
 };

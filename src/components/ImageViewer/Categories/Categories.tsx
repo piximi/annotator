@@ -3,21 +3,18 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
 import { Category } from "../../../types/Category";
-import {
-  createdCategoriesSelector,
-  unknownCategorySelector,
-} from "../../../store/selectors";
+import {createdCategoriesSelector, unknownCategorySelector,} from "../../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Categories.css";
-import { CollapsibleList } from "../../CollapsibleList";
-import { CreateCategoryListItem } from "../../CreateCategoryListItem";
-import { CategoryListItemCheckbox } from "../../CategoryListItemCheckbox";
+import { CollapsibleList } from "../CollapsibleList";
+import { CreateCategoryListItem } from "../CreateCategoryListItem";
+import { CategoryListItemCheckbox } from "../CategoryListItemCheckbox";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import { CategoryMenu } from "../../CategoryMenu";
-import { DeleteCategoryDialog } from "../../DeleteCategoryDialog";
-import { EditCategoryDialog } from "../../EditCategoryDialog";
+import { CategoryMenu } from "../CategoryMenu";
+import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
+import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog, useMenu } from "../../../hooks";
 
 type CategoriesProps = {

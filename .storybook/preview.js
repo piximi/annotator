@@ -1,6 +1,6 @@
 import {Provider} from "react-redux";
-import {productionStore} from "../src/store";
 import React from "react";
+import {productionStore} from "../src/store";
 
 export const decorators = [
   (Story) => (

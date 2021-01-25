@@ -9,29 +9,18 @@ type StartingAnchorProps = {
   ref: RefObject<Circle>;
 };
 
-export const StartingAnchor = ({
-  annotating,
-                                 pointRadius,
-  position,
-  ref,
-}: StartingAnchorProps) => {
-  if (annotating && position) {
-    return (
-      <ReactKonva.Circle
+export const StartingAnchor = React.forwardRef<Circle, StartingAnchorProps>( (props, ref) => (
+    <ReactKonva.Circle
         fill="#000"
         globalCompositeOperation="source-over"
         hitStrokeWidth={64}
         id="start"
         name="anchor"
-        radius={pointRadius}
+        radius={props.pointRadius}
         ref={ref}
         stroke="#FFF"
         strokeWidth={1}
-        x={position.x}
-        y={position.y}
-      />
-    );
-  } else {
-    return <React.Fragment />;
-  }
-};
+        x={props.position?.x}
+        y={props.position?.y}
+    />
+))

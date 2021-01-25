@@ -1,5 +1,6 @@
 import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import Dialog from "@material-ui/core/Dialog";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
@@ -8,6 +9,36 @@ import {Shape} from "../../types/Shape";
 import {setImageViewerImage} from "../../store/slices";
 import {useDispatch} from "react-redux";
 import {useStyles} from "./OpenImageButton.css";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+
+type ExampleImageDialogProps = {
+  onClose: () => void;
+  open: boolean;
+};
+
+const ExampleImageDialog = ({onClose, open}: ExampleImageDialogProps) => {
+  return (
+    <Dialog open={open}>
+      <List component="div" role="list">
+        <ListItem button divider role="listitem">
+          <ListItemText
+            primary="Microscopy"
+            secondary="Fusce lectus lorem, lacinia eu libero eu, pellentesque semper dui. Nunc bibendum est eget lacus fermentum ullamcorper."
+          />
+        </ListItem>
+
+        <ListItem button role="listitem">
+          <ListItemText
+            primary="Microscopy (3D)"
+            secondary="Cras lobortis sapien eu tellus malesuada sodales. Vivamus placerat est eu mi ullamcorper, ut ultrices elit rhoncus. Aliquam vitae viverra nisi. Sed odio metus, finibus quis nisi a, vulputate varius justo."
+          />
+        </ListItem>
+      </List>
+    </Dialog>
+  )
+};
 
 type ComputerMenuItemProps = {
   onClose: () => void;
@@ -64,7 +95,7 @@ const ComputerMenuItem = ({onClose}: ComputerMenuItemProps) => {
 
 
   return (
-    <MenuItem component="label">
+    <MenuItem component="label" dense>
       Computer
       <input
         accept="image/*"
@@ -82,12 +113,24 @@ type ExampleMenuItemProps = {
 }
 
 const ExampleMenuItem = ({onClose}: ExampleMenuItemProps) => {
+  const [open, setOpen] = React.useState(false);
+
   const onClick = () => {
     onClose();
+
+    setOpen(true);
   }
 
+  const onDialogClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <MenuItem onClick={onClick}>Example</MenuItem>
+    <React.Fragment>
+      <MenuItem dense onClick={onClick}>Example</MenuItem>
+
+      <ExampleImageDialog onClose={onDialogClose} open={open}/>
+    </React.Fragment>
   );
 }
 

@@ -20,6 +20,10 @@ import {StartingAnchor} from "./StartingAnchor";
 import {ZoomSelection} from "./ZoomSelection";
 import {imageViewerZoomModeSelector} from "../../store/selectors/imageViewerZoomModeSelector";
 import {imageViewerImageSelector, imageViewerOperationSelector,} from "../../store/selectors";
+import {Image} from "konva/types/shapes/Image";
+import {Vector2d} from "konva/types/types";
+import {FloodImage, floodPixels, makeFloodMap} from "../../image/flood";
+import * as ImageJS from "image-js";
 
 type MainProps = {
   activeCategory: Category;
@@ -44,16 +48,104 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
    * Color selection
    */
   const ColorSelection = () => {
-    return null;
+    return (
+        <React.Fragment>
+        <ReactKonva.Image image={colorSelectOverlayImage} ref={colorSelectOverlayRef} />
+        {annotating && colorSelectInitialPosition && (
+            <ReactKonva.Label x={colorSelectInitialPosition.x} y={colorSelectInitialPosition.y}>
+              <ReactKonva.Tag
+                  fill={"#f0ce0f"}
+                  stroke={"#907c09"}
+                  shadowColor={"black"}
+                  pointerDirection={"up"}
+                  pointerWidth={10}
+                  pointerHeight={10}
+                  cornerRadius={5}
+              />
+              <ReactKonva.Text text={colorSelectTolerance.toString()} padding={5} />
+            </ReactKonva.Label>
+        )}
+        </React.Fragment>
+    )
+  };
+
+  const [colorSelectOverlayData, setColorSelectOverlayData] = useState<string>("");
+  const [colorSelectOverlayImage] = useImage(colorSelectOverlayData, "Anonymous");
+
+  const colorSelectOverlayRef = React.useRef<Image>(null);
+
+  const [colorSelectInitialPosition, setColorSelectInitialPosition] = useState<Vector2d>();
+  const [colorSelectTolerance, setColorSelectTolerance] = useState<number>(1);
+
+  const [colorSelectImageData, setColorSelectImageData] = useState<FloodImage>();
+
+  const updateOverlay = (position: { x: any; y: any }) => {
+    const results = floodPixels({
+      x: position.x,
+      y: position.y,
+      image: colorSelectImageData!,
+      tolerance: colorSelectTolerance,
+      color: activeCategory.color,
+    });
+    setColorSelectOverlayData(results);
   };
 
   const onColorSelection = () => {};
 
-  const onColorSelectionMouseDown = (position: { x: number; y: number }) => {};
+  const onColorSelectionMouseDown = async (position: { x: number; y: number }) => {
+    console.log(position)
+    setAnnotated(false);
+    setAnnotating(true);
+    setColorSelectTolerance(1);
+    let jsImage;
+    // Todo: Fix this little setup problem
+    if (imageRef.current && !colorSelectImageData) {
+      console.log(imageRef.current.toDataURL())
+      jsImage = await ImageJS.Image.load(imageRef.current.toDataURL());
+      setColorSelectImageData(jsImage as FloodImage);
+      return;
+    }
+    if (stageRef && stageRef.current) {
+      if (position) {
+        if (imageRef && imageRef.current) {
+          if (position !== colorSelectInitialPosition) {
+            setColorSelectInitialPosition(position);
+            setColorSelectImageData(
+                makeFloodMap({
+                  x: position.x,
+                  y: position.y,
+                  image: colorSelectImageData!,
+                })
+            );
+          }
+          updateOverlay(position);
+        }
+      }
+    }
 
-  const onColorSelectionMouseMove = (position: { x: number; y: number }) => {};
+  };
 
-  const onColorSelectionMouseUp = (position: { x: number; y: number }) => {};
+  const onColorSelectionMouseMove = (position: { x: number; y: number }) => {
+    if (annotating && stageRef && stageRef.current) {
+      if (position && colorSelectInitialPosition) {
+        const diff = Math.ceil(
+            Math.hypot(
+                position.x - colorSelectInitialPosition!.x,
+                position.y - colorSelectInitialPosition!.y
+            )
+        );
+        if (diff !== colorSelectTolerance) {
+          setColorSelectTolerance(diff);
+          updateOverlay(colorSelectInitialPosition);
+        }
+      }
+    }
+  };
+
+  const onColorSelectionMouseUp = (position: { x: number; y: number }) => {
+    setAnnotated(true);
+    setAnnotating(false);
+  };
 
   /*
    * Elliptical selection

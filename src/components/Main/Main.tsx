@@ -217,7 +217,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         <ReactKonva.Circle
           fill="#FFF"
           name="anchor"
-          radius={3}
+          radius={pointRadius}
           stroke="#FFF"
           strokeWidth={1}
           x={lassoSelectionAnchor.x}
@@ -299,6 +299,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
               );
             }
           )}
+          <LassoSelectionAnchor />
         </React.Fragment>
       );
     } else {
@@ -528,7 +529,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         <ReactKonva.Circle
           fill="#FFF"
           name="anchor"
-          radius={3}
+          radius={pointRadius}
           stroke="#FFF"
           strokeWidth={1}
           x={polygonalSelectionAnchor.x}

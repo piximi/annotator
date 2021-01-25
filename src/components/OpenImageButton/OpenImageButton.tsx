@@ -12,6 +12,7 @@ import {useStyles} from "./OpenImageButton.css";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import malaria from "../../images/malaria.png";
 
 type ExampleImageDialogProps = {
   onClose: () => void;
@@ -19,22 +20,55 @@ type ExampleImageDialogProps = {
 };
 
 const ExampleImageDialog = ({onClose, open}: ExampleImageDialogProps) => {
+  const dispatch = useDispatch();
+
+  const examples = [
+    {
+      name: "Microscopy",
+      description: "Fusce lectus lorem, lacinia eu libero eu, pellentesque semper dui. Nunc bibendum est eget lacus fermentum ullamcorper.",
+      data: malaria
+    },
+    {
+      name: "Microscopy (3D)",
+      description: "Cras lobortis sapien eu tellus malesuada sodales. Vivamus placerat est eu mi ullamcorper, ut ultrices elit rhoncus. Aliquam vitae viverra nisi. Sed odio metus, finibus quis nisi a, vulputate varius justo.",
+      data: malaria
+    }
+  ]
+
+  const onClick = ({data, description, name}: { data: any, description: string, name: string }) => {
+    onClose();
+
+    const shape: Shape = {
+      r: 512,
+      c: 512,
+      channels: 4,
+    };
+
+    dispatch(
+      setImageViewerImage({
+        image: {
+          id: "",
+          instances: [],
+          name: name,
+          shape: shape,
+          src: data as string,
+        },
+      })
+    );
+  }
+
   return (
     <Dialog open={open}>
       <List component="div" role="list">
-        <ListItem button divider role="listitem">
-          <ListItemText
-            primary="Microscopy"
-            secondary="Fusce lectus lorem, lacinia eu libero eu, pellentesque semper dui. Nunc bibendum est eget lacus fermentum ullamcorper."
-          />
-        </ListItem>
-
-        <ListItem button role="listitem">
-          <ListItemText
-            primary="Microscopy (3D)"
-            secondary="Cras lobortis sapien eu tellus malesuada sodales. Vivamus placerat est eu mi ullamcorper, ut ultrices elit rhoncus. Aliquam vitae viverra nisi. Sed odio metus, finibus quis nisi a, vulputate varius justo."
-          />
-        </ListItem>
+        {
+          examples.map((example, index) => {
+            return (
+              <ListItem button divider role="listitem" onClick={() => onClick(example)}>
+                <ListItemText primary={example.name} secondary={example.description}/>
+              </ListItem>
+            )
+          })
+        }
       </List>
     </Dialog>
   )

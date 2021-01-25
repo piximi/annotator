@@ -36,6 +36,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const classes = useStyles();
   const stageRef = useRef<Stage>(null);
   const imageRef = useRef<any>(null);
+  const pointRadius: number = 3;
 
   const activeOperation = useSelector(imageViewerOperationSelector);
 
@@ -235,6 +236,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           <StartingAnchor
             annotating={annotating}
             position={lassoSelectionStart}
+            pointRadius={pointRadius}
             ref={lassoSelectionStartingAnchorCircleRef}
           />
 
@@ -267,6 +269,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         <React.Fragment>
           <StartingAnchor
             annotating={annotating}
+            pointRadius={pointRadius}
             position={lassoSelectionStart}
             ref={lassoSelectionStartingAnchorCircleRef}
           />
@@ -304,41 +307,35 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const isInside = (
-      startingAnchorCircleRef: React.RefObject<Circle>,
+      startingPosition: { x: number, y: number } | undefined,
       position: { x: number; y: number }
   ) => {
-    if (
-        startingAnchorCircleRef &&
-        startingAnchorCircleRef.current
-    ) {
-      const rectangle = startingAnchorCircleRef.current.getClientRect();
-
+    if ( startingPosition ) {
       return (
-        rectangle.x <= position.x &&
-        position.x <= rectangle.x + rectangle.width &&
-        rectangle.y <= position.y &&
-        position.y <= rectangle.y + rectangle.height
-      );
-    } else {
-      return false;
+          startingPosition.x + pointRadius >= position.x &&
+          startingPosition.x - pointRadius <= position.x &&
+          startingPosition.y + pointRadius >= position.y &&
+          startingPosition.y - pointRadius <= position.y);
     }
   };
 
   const connected = (position: { x: number; y: number },
-                     startingAnchorCircleRef: React.RefObject<Circle>,
+                     startingPosition: { x:number; y: number } | undefined,
                      strokes: Array<{ points: Array<number> }>,
                      canClose: boolean
   ) => {
-    const inside = isInside(startingAnchorCircleRef, position);
-    if (strokes && strokes.length > 0) {
-      return inside && canClose;
+    if (startingPosition) {
+      const inside = isInside(startingPosition, position);
+      if (strokes && strokes.length > 0) {
+        return inside && canClose;
+      }
     }
   };
 
   const onLassoSelection = () => {};
 
   const onLassoSelectionMouseDown = (position: { x: number; y: number }) => {
-    if (connected(position, lassoSelectionStartingAnchorCircleRef, lassoSelectionStrokes, lassoSelectionCanClose)) {
+    if (connected(position, lassoSelectionStart, lassoSelectionStrokes, lassoSelectionCanClose)) {
       const stroke: { points: Array<number> } = {
         points: _.flatten(
           lassoSelectionStrokes.map(
@@ -386,7 +383,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const onLassoSelectionMouseMove = (position: { x: number; y: number }) => {
     if (
       !lassoSelectionCanClose &&
-      !isInside(lassoSelectionStartingAnchorCircleRef, position)
+      !isInside(lassoSelectionStart, position)
     ) {
       setLassoSelectionCanClose(true);
     }
@@ -424,7 +421,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onLassoSelectionMouseUp = (position: { x: number; y: number }) => {
-    if (connected(position, lassoSelectionStartingAnchorCircleRef, lassoSelectionStrokes, lassoSelectionCanClose)) {
+    if (connected(position, lassoSelectionStart, lassoSelectionStrokes, lassoSelectionCanClose)) {
       if (lassoSelectionStart) {
         const stroke = {
           points: [
@@ -549,6 +546,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         <React.Fragment>
           <StartingAnchor
             annotating={annotating}
+            pointRadius={pointRadius}
             position={polygonalSelectionStart}
             ref={polygonalSelectionStartingAnchorCircleRef}
           />
@@ -581,6 +579,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         <React.Fragment>
           <StartingAnchor
             annotating={annotating}
+            pointRadius={pointRadius}
             position={polygonalSelectionStart}
             ref={polygonalSelectionStartingAnchorCircleRef}
           />
@@ -625,7 +624,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     x: number;
     y: number;
   }) => {
-    if (connected(position, polygonalSelectionStartingAnchorCircleRef, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
+    if (connected(position, polygonalSelectionStart, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
 
 
       const stroke: { points: Array<number> } = {
@@ -684,7 +683,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   }) => {
     if (
       !polygonalSelectionCanClose &&
-      !isInside(polygonalSelectionStartingAnchorCircleRef, position)
+      !isInside(polygonalSelectionStart, position)
     ) {
       setPolygonalSelectionCanClose(true);
     }
@@ -726,7 +725,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onPolygonalSelectionMouseUp = (position: { x: number; y: number }) => {
-    if (connected(position, polygonalSelectionStartingAnchorCircleRef, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
+    if (connected(position, polygonalSelectionStart, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
       if (polygonalSelectionStart) {
         const stroke = {
           points: [

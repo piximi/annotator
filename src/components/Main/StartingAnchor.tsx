@@ -4,12 +4,14 @@ import {Circle} from "konva/types/shapes/Circle";
 
 type StartingAnchorProps = {
   annotating: boolean;
+  pointRadius: number;
   position?: { x: number; y: number };
   ref: RefObject<Circle>;
 };
 
 export const StartingAnchor = ({
   annotating,
+                                 pointRadius,
   position,
   ref,
 }: StartingAnchorProps) => {
@@ -21,7 +23,7 @@ export const StartingAnchor = ({
         hitStrokeWidth={64}
         id="start"
         name="anchor"
-        radius={3}
+        radius={pointRadius}
         ref={ref}
         stroke="#FFF"
         strokeWidth={1}

@@ -374,6 +374,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onLassoSelectionMouseMove = (position: { x: number; y: number }) => {
+
     if (
       !lassoSelectionCanClose &&
       !isInside(lassoSelectionStart, position)
@@ -381,19 +382,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setLassoSelectionCanClose(true);
     }
 
-    if (lassoSelectionStrokes[0].points.length === 0) {
-
-      let stroke = lassoSelectionStrokes[lassoSelectionStrokes.length - 1];
-
-      stroke.points = [...stroke.points, position.x, position.y];
-
-      lassoSelectionStrokes.splice(lassoSelectionStrokes.length - 1, 1, stroke);
-
-      setLassoSelectionStrokes(lassoSelectionStrokes.concat());
-
-    }
-
-     else if (lassoSelectionAnchor) {
+    if (lassoSelectionAnchor) {
       const stroke = {
         points: [
           lassoSelectionAnchor.x,
@@ -402,9 +391,27 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           position.y,
         ],
       };
-      setLassoSelectionStrokes([...lassoSelectionStrokes, stroke])
 
+      lassoSelectionStrokes.splice(lassoSelectionStrokes.length - 1, 1, stroke);
+      setLassoSelectionStrokes(lassoSelectionStrokes.concat())
+    }
+
+    else {
+      let stroke = lassoSelectionStrokes[lassoSelectionStrokes.length - 1];
+
+      if (stroke.points.length === 0 && lassoSelectionStart) {
+        stroke.points = [lassoSelectionStart.x, lassoSelectionStart.y, position.x, position.y]
       }
+      else {
+        stroke.points = [...stroke.points, position.x, position.y];
+      }
+
+      lassoSelectionStrokes.splice(0, 1, stroke);
+
+      setLassoSelectionStrokes(lassoSelectionStrokes.concat());
+
+    }
+
   };
 
   const onLassoSelectionMouseUp = (position: { x: number; y: number }) => {
@@ -435,7 +442,20 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setLassoSelectionAnnotation(stroke);
       setLassoSelectionStrokes([]);
     } else {
-      setLassoSelectionAnchor(position);
+
+      if (lassoSelectionStrokes[0].points.length > 0) {
+        setLassoSelectionAnchor(position);
+
+        const stroke = {
+          points: [
+            position.x,
+            position.y,
+            position.x,
+            position.y,
+          ],
+        };
+        setLassoSelectionStrokes([...lassoSelectionStrokes, stroke]);
+      }
     }
   };
 

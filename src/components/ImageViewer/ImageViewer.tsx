@@ -2,16 +2,16 @@ import React, {useEffect, useState} from "react";
 import {Category} from "../../types/Category";
 import {CssBaseline} from "@material-ui/core";
 import {Image} from "../../types/Image";
-import {ReactComponent as ColorAdjustmentIcon} from "../../icons/ColorAdjustment.svg";
-import {ReactComponent as EllipticalIcon} from "../../icons/EllipticalSelection.svg";
-import {ReactComponent as LassoIcon} from "../../icons/LassoSelection.svg";
-import {ReactComponent as MagicWandIcon} from "../../icons/ColorSelection.svg";
-import {ReactComponent as ZoomIcon} from "../../icons/Zoom.svg";
-import {ReactComponent as HandIcon} from "../../icons/Hand.svg";
-import {ReactComponent as MagneticIcon} from "../../icons/MagneticSelection.svg";
-import {ReactComponent as QuickIcon} from "../../icons/QuickSelection.svg";
-import {ReactComponent as ObjectSelectionIcon} from "../../icons/ObjectSelection.svg";
-import {ReactComponent as RectangularIcon} from "../../icons/RectangularSelection.svg";
+import {ReactComponent as ColorAdjustmentIcon} from "../icons/ColorAdjustment.svg";
+import {ReactComponent as EllipticalIcon} from "../icons/EllipticalSelection.svg";
+import {ReactComponent as LassoIcon} from "../icons/LassoSelection.svg";
+import {ReactComponent as MagicWandIcon} from "../icons/ColorSelection.svg";
+import {ReactComponent as ZoomIcon} from "../icons/Zoom.svg";
+import {ReactComponent as HandIcon} from "../icons/Hand.svg";
+import {ReactComponent as MagneticIcon} from "../icons/MagneticSelection.svg";
+import {ReactComponent as QuickIcon} from "../icons/QuickSelection.svg";
+import {ReactComponent as ObjectSelectionIcon} from "../icons/ObjectSelection.svg";
+import {ReactComponent as RectangularIcon} from "../icons/RectangularSelection.svg";
 import {ImageViewerOperation} from "../../types/ImageViewerOperation";
 import {imageViewerImageSelector, imageViewerOperationSelector, unknownCategorySelector,} from "../../store/selectors";
 import {useDispatch, useSelector} from "react-redux";
@@ -20,7 +20,7 @@ import {ImageViewerAppBar} from "../ImageViewerAppBar";
 import {Categories} from "../Categories";
 import {OperationOptions} from "../OperationOptions";
 import {SelectionOptions} from "../SelectionOptions";
-import {Operations} from "../Operations";
+import {Operations} from "../Operations/Operations";
 import {Main} from "../Main";
 import {ZoomOptions} from "../ZoomOptions";
 import {imageViewerSlice} from "../../store/slices";
@@ -158,29 +158,29 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
       {image && <Main activeCategory={activeCategory} zoomReset={zoomReset} />}
 
-      <OperationOptions
-        description={
-          operations[
-            operations.findIndex(
-              (operation) => operation.method === activeOperation
-            )
-          ].description
-        }
-        name={
-          operations[
-            operations.findIndex(
-              (operation) => operation.method === activeOperation
-            )
-          ].name
-        }
-        settings={
-          operations[
-            operations.findIndex(
-              (operation) => operation.method === activeOperation
-            )
-          ].settings
-        }
-      />
+      {/*<OperationOptions*/}
+      {/*  description={*/}
+      {/*    operations[*/}
+      {/*      operations.findIndex(*/}
+      {/*        (operation) => operation.method === activeOperation*/}
+      {/*      )*/}
+      {/*    ].description*/}
+      {/*  }*/}
+      {/*  name={*/}
+      {/*    operations[*/}
+      {/*      operations.findIndex(*/}
+      {/*        (operation) => operation.method === activeOperation*/}
+      {/*      )*/}
+      {/*    ].name*/}
+      {/*  }*/}
+      {/*  settings={*/}
+      {/*    operations[*/}
+      {/*      operations.findIndex(*/}
+      {/*        (operation) => operation.method === activeOperation*/}
+      {/*      )*/}
+      {/*    ].settings*/}
+      {/*  }*/}
+      {/*/>*/}
 
       <Operations />
     </div>

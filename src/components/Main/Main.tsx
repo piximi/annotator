@@ -382,7 +382,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                     dash={[4, 2]}
                     dashOffset={-dashOffset}
                     fill="None"
-                    key={key}
+                    key={key+1}
                     points={stroke.points}
                     stroke="white"
                     strokeWidth={1}
@@ -681,7 +681,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                     dash={[4, 2]}
                     dashOffset={-dashOffset}
                     fill="None"
-                    key={key}
+                    key={key+1}
                     points={stroke.points}
                     stroke="white"
                     strokeWidth={1}
@@ -837,7 +837,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setPolygonalSelectionStrokes([]);
     } else {
       if (polygonalSelectionStrokes.length === 1) {
-        // if (polygonalSelectionStartingAnchorCircleRef.current.posi )
         setPolygonalSelectionAnchor(position);
 
         if (polygonalSelectionStart && polygonalSelectionStart.x !== position.x && polygonalSelectionStart.y !== position.y) {

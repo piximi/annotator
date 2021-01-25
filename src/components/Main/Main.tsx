@@ -304,14 +304,15 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const isInside = (
-    startingAnchorCircle: React.RefObject<Circle>,
-    position: { x: number; y: number }
+      startingAnchorCircleRef: React.RefObject<Circle>,
+      position: { x: number; y: number }
   ) => {
     if (
-      lassoSelectionStartingAnchorCircleRef &&
-      lassoSelectionStartingAnchorCircleRef.current
+        startingAnchorCircleRef &&
+        startingAnchorCircleRef.current
     ) {
-      const rectangle = lassoSelectionStartingAnchorCircleRef.current.getClientRect();
+      const rectangle = startingAnchorCircleRef.current.getClientRect();
+
       return (
         rectangle.x <= position.x &&
         position.x <= rectangle.x + rectangle.width &&
@@ -323,17 +324,21 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     }
   };
 
-  const connected = (position: { x: number; y: number }) => {
-    const inside = isInside(lassoSelectionStartingAnchorCircleRef, position);
-    if (lassoSelectionStrokes && lassoSelectionStrokes.length > 0) {
-      return inside && lassoSelectionCanClose;
+  const connected = (position: { x: number; y: number },
+                     startingAnchorCircleRef: React.RefObject<Circle>,
+                     strokes: Array<{ points: Array<number> }>,
+                     canClose: boolean
+  ) => {
+    const inside = isInside(startingAnchorCircleRef, position);
+    if (strokes && strokes.length > 0) {
+      return inside && canClose;
     }
   };
 
   const onLassoSelection = () => {};
 
   const onLassoSelectionMouseDown = (position: { x: number; y: number }) => {
-    if (connected(position)) {
+    if (connected(position, lassoSelectionStartingAnchorCircleRef, lassoSelectionStrokes, lassoSelectionCanClose)) {
       const stroke: { points: Array<number> } = {
         points: _.flatten(
           lassoSelectionStrokes.map(
@@ -415,17 +420,11 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       lassoSelectionStrokes.splice(lassoSelectionStrokes.length - 1, 1, stroke);
 
       setLassoSelectionStrokes(lassoSelectionStrokes.concat());
-
-      if (connected(position)) {
-        //  TODO:
-      } else {
-        //  TODO:
-      }
     }
   };
 
   const onLassoSelectionMouseUp = (position: { x: number; y: number }) => {
-    if (connected(position)) {
+    if (connected(position, lassoSelectionStartingAnchorCircleRef, lassoSelectionStrokes, lassoSelectionCanClose)) {
       if (lassoSelectionStart) {
         const stroke = {
           points: [
@@ -626,7 +625,9 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     x: number;
     y: number;
   }) => {
-    if (connected(position)) {
+    if (connected(position, polygonalSelectionStartingAnchorCircleRef, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
+
+
       const stroke: { points: Array<number> } = {
         points: _.flatten(
           polygonalSelectionStrokes.map(
@@ -725,7 +726,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onPolygonalSelectionMouseUp = (position: { x: number; y: number }) => {
-    if (connected(position)) {
+    if (connected(position, polygonalSelectionStartingAnchorCircleRef, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
       if (polygonalSelectionStart) {
         const stroke = {
           points: [

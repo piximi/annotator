@@ -205,7 +205,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   const [lassoSelectionStrokes, setLassoSelectionStrokes] = useState<
     Array<{ points: Array<number> }>
-  >([]);
+  >([{points:[]}]);
 
   const LassoSelectionAnchor = () => {
     if (
@@ -350,33 +350,25 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setLassoSelectionAnnotation(stroke);
       setLassoSelectionStrokes([]);
     } else {
-      if (!lassoSelectionEarlyRelease) {
-        if (lassoSelectionAnchor) {
-          const stroke = {
-            points: [
-              lassoSelectionAnchor.x,
-              lassoSelectionAnchor.y,
-              position.x,
-              position.y,
-            ],
-          };
 
-          setLassoSelectionStrokes([...lassoSelectionStrokes, stroke]);
+      if (lassoSelectionStrokes[0].points.length === 0) {
+        setAnnotating(true);
 
-          setLassoSelectionAnchor(position);
-        } else {
-          setAnnotating(true);
-
+        if (!lassoSelectionStart) {
           setLassoSelectionStart(position);
-
-          const stroke: { points: Array<number> } = {
-            points: [position.x, position.y],
-          };
-
-          setLassoSelectionStrokes([...lassoSelectionStrokes, stroke]);
         }
-      } else {
-        setLassoSelectionEarlyRelease(false);
+      }
+
+      else if (lassoSelectionAnchor){
+        const stroke = {
+          points: [
+            lassoSelectionAnchor.x,
+            lassoSelectionAnchor.y,
+            position.x,
+            position.y,
+          ],
+        };
+        setLassoSelectionStrokes([...lassoSelectionStrokes, stroke]);
       }
     }
   };
@@ -389,7 +381,19 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setLassoSelectionCanClose(true);
     }
 
-    if (lassoSelectionAnchor && !lassoSelectionEarlyRelease) {
+    if (lassoSelectionStrokes[0].points.length === 0) {
+
+      let stroke = lassoSelectionStrokes[lassoSelectionStrokes.length - 1];
+
+      stroke.points = [...stroke.points, position.x, position.y];
+
+      lassoSelectionStrokes.splice(lassoSelectionStrokes.length - 1, 1, stroke);
+
+      setLassoSelectionStrokes(lassoSelectionStrokes.concat());
+
+    }
+
+     else if (lassoSelectionAnchor) {
       const stroke = {
         points: [
           lassoSelectionAnchor.x,
@@ -398,27 +402,9 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           position.y,
         ],
       };
+      setLassoSelectionStrokes([...lassoSelectionStrokes, stroke])
 
-      if (lassoSelectionStrokes.length > 2) {
-        lassoSelectionStrokes.splice(
-          lassoSelectionStrokes.length - 1,
-          1,
-          stroke
-        );
-
-        setLassoSelectionStrokes(lassoSelectionStrokes.concat());
-      } else {
-        setLassoSelectionStrokes([...lassoSelectionStrokes, stroke]);
       }
-    } else {
-      let stroke = lassoSelectionStrokes[lassoSelectionStrokes.length - 1];
-
-      stroke.points = [...stroke.points, position.x, position.y];
-
-      lassoSelectionStrokes.splice(lassoSelectionStrokes.length - 1, 1, stroke);
-
-      setLassoSelectionStrokes(lassoSelectionStrokes.concat());
-    }
   };
 
   const onLassoSelectionMouseUp = (position: { x: number; y: number }) => {
@@ -449,13 +435,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setLassoSelectionAnnotation(stroke);
       setLassoSelectionStrokes([]);
     } else {
-      if (
-        !lassoSelectionAnchor &&
-        lassoSelectionStrokes[lassoSelectionStrokes.length - 1].points.length <=
-          2
-      ) {
-        setLassoSelectionEarlyRelease(true);
-      }
       setLassoSelectionAnchor(position);
     }
   };

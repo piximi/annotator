@@ -358,18 +358,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           setLassoSelectionStart(position);
         }
       }
-
-      else if (lassoSelectionAnchor){
-        const stroke = {
-          points: [
-            lassoSelectionAnchor.x,
-            lassoSelectionAnchor.y,
-            position.x,
-            position.y,
-          ],
-        };
-        setLassoSelectionStrokes([...lassoSelectionStrokes, stroke]);
-      }
     }
   };
 
@@ -415,6 +403,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onLassoSelectionMouseUp = (position: { x: number; y: number }) => {
+
     if (connected(position, lassoSelectionStart, lassoSelectionStrokes, lassoSelectionCanClose)) {
       if (lassoSelectionStart) {
         const stroke = {

@@ -653,7 +653,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           ],
         };
 
-        setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
+        setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke])
 
         setPolygonalSelectionAnchor(position);
       } else if (polygonalSelectionStart) {
@@ -756,23 +756,23 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setPolygonalSelectionStrokes([]);
     } else {
       if (polygonalSelectionStrokes.length === 1) {
+        // if (polygonalSelectionStartingAnchorCircleRef.current.posi )
         setPolygonalSelectionAnchor(position);
 
-        if (polygonalSelectionStart) {
-          const stroke = {
-            points: [
-              polygonalSelectionStart!.x,
-              polygonalSelectionStart!.y,
-              position.x,
-              position.y,
-            ],
-          };
-
-          setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
+        if (polygonalSelectionStart && polygonalSelectionStart.x !== position.x && polygonalSelectionStart.y !== position.y) {
+            const stroke = {
+              points: [
+                polygonalSelectionStart!.x,
+                polygonalSelectionStart!.y,
+                position.x,
+                position.y,
+              ],
+            };
+            setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
+          }
         }
       }
-    }
-  };
+    };
 
   /*
    * Quick selection

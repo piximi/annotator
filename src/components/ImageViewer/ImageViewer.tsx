@@ -158,29 +158,29 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
       {image && <Main activeCategory={activeCategory} zoomReset={zoomReset} />}
 
-      {/*<OperationOptions*/}
-      {/*  description={*/}
-      {/*    operations[*/}
-      {/*      operations.findIndex(*/}
-      {/*        (operation) => operation.method === activeOperation*/}
-      {/*      )*/}
-      {/*    ].description*/}
-      {/*  }*/}
-      {/*  name={*/}
-      {/*    operations[*/}
-      {/*      operations.findIndex(*/}
-      {/*        (operation) => operation.method === activeOperation*/}
-      {/*      )*/}
-      {/*    ].name*/}
-      {/*  }*/}
-      {/*  settings={*/}
-      {/*    operations[*/}
-      {/*      operations.findIndex(*/}
-      {/*        (operation) => operation.method === activeOperation*/}
-      {/*      )*/}
-      {/*    ].settings*/}
-      {/*  }*/}
-      {/*/>*/}
+      <OperationOptions
+        description={
+          operations[
+            operations.findIndex(
+              (operation) => operation.method === activeOperation
+            )
+          ].description
+        }
+        name={
+          operations[
+            operations.findIndex(
+              (operation) => operation.method === activeOperation
+            )
+          ].name
+        }
+        settings={
+          operations[
+            operations.findIndex(
+              (operation) => operation.method === activeOperation
+            )
+          ].settings
+        }
+      />
 
       <Operations />
     </div>

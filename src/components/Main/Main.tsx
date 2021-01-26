@@ -7,7 +7,6 @@ import {Ellipse} from "konva/types/shapes/Ellipse";
 import {ImageViewerOperation} from "../../types/ImageViewerOperation";
 import {Rect} from "konva/types/shapes/Rect";
 import {Stage} from "konva/types/Stage";
-import {projectSlice} from "../../store/slices";
 import {toRGBA} from "../../image/toRGBA";
 import {useDispatch, useSelector} from "react-redux";
 import {useMarchingAnts, useSelection} from "../../hooks";
@@ -18,13 +17,12 @@ import * as _ from "underscore";
 import {RectangularSelection} from "./RectangularSelection";
 import {StartingAnchor} from "./StartingAnchor";
 import {ZoomSelection} from "./ZoomSelection";
-import {imageViewerImageInstancesSelector, imageViewerZoomModeSelector} from "../../store/selectors";
-import {imageViewerImageSelector, imageViewerOperationSelector,} from "../../store/selectors";
-import {Image as KonvaImage, Image} from "konva/types/shapes/Image";
+import {imageViewerImageInstancesSelector, imageViewerImageSelector, imageViewerOperationSelector, imageViewerZoomModeSelector} from "../../store/selectors";
+import {Image} from "konva/types/shapes/Image";
 import {Vector2d} from "konva/types/types";
 import {FloodImage, floodPixels, makeFloodMap} from "../../image/flood";
 import * as ImageJS from "image-js";
-import { imageViewerSlice } from "../../store/slices";
+import {setImageViewerImageInstances} from "../../store/slices";
 import {ObjectSelection} from "./ObjectSelection";
 
 
@@ -914,7 +912,11 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       };
 
       if (image) {
-        dispatch(imageViewerSlice.actions.setImageViewerImageInstances({ instances: [instance, ...instances!] }));
+        const payload = {
+          instances: [instance, ...instances!]
+        }
+
+        dispatch(setImageViewerImageInstances(payload));
       }
     }
   };

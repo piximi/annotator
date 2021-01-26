@@ -527,8 +527,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const onObjectSelection = () => {};
 
   const onObjectSelectionMouseUp = (position: { x: number; y: number }) => {
-    setAnnotated(true)
-    setAnnotating(false)
+
   };
 
   /*
@@ -1108,6 +1107,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
             return onMagneticSelectionMouseMove(position);
           case ImageViewerOperation.ObjectSelection:
+            if (annotated || !annotating) return;
             return onRectangularSelectionMouseMove(position);
           case ImageViewerOperation.PolygonalSelection:
             if (annotated || !annotating) return;
@@ -1157,6 +1157,10 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
             return onMagneticSelectionMouseUp(position);
           case ImageViewerOperation.ObjectSelection:
+            if (annotated || !annotating) return;
+
+            setAnnotated(true);
+            setAnnotating(false);
             return onObjectSelectionMouseUp(position);
           case ImageViewerOperation.PolygonalSelection:
             if (annotated || !annotating) return;

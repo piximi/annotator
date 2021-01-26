@@ -34,7 +34,8 @@ export const ObjectSelection = React.forwardRef<Rect, ObjectSelectionProps>( (pr
         />
     )
   } else if (!props.annotated && props.annotating) {
-    return (
+      return (
+
         <React.Fragment>
           <ReactKonva.Rect
               height={props.height}

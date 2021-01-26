@@ -14,5 +14,5 @@ export class LassoSelection extends Selection {
 
   onMouseUp(position: { x: number; y: number }) {}
 
-  select() {};
+  select(category: string) {};
 }

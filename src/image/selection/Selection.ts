@@ -18,5 +18,5 @@ export abstract class Selection {
 
   abstract onMouseUp(position: { x: number; y: number }): void;
 
-  abstract select(): void;
+  abstract select(category: string): void;
 }

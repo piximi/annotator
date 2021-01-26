@@ -41,7 +41,7 @@ export class RectangularSelection extends Selection {
     this.selecting = false;
   }
 
-  select() {
+  select(category: string) {
     this.deselect();
   };
 

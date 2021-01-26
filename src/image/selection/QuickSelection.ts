@@ -1,13 +1,13 @@
-import {Selection} from "./Selection";
+import { Selection } from "./Selection";
 
 export class QuickSelection extends Selection {
-  deselect(): void {}
+  deselect() {}
 
-  onMouseDown(position: { x: number; y: number }): void {}
+  onMouseDown(position: { x: number; y: number }) {}
 
-  onMouseMove(position: { x: number; y: number }): void {}
+  onMouseMove(position: { x: number; y: number }) {}
 
-  onMouseUp(position: { x: number; y: number }): void {}
+  onMouseUp(position: { x: number; y: number }) {}
 
   select() {};
 }

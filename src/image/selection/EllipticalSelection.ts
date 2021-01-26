@@ -1,4 +1,4 @@
-import {Selection} from "./Selection";
+import { Selection } from "./Selection";
 
 export class EllipticalSelection extends Selection {
   center?: { x: number; y: number };
@@ -11,7 +11,7 @@ export class EllipticalSelection extends Selection {
     this.selecting = false;
   }
 
-  onMouseDown(position: { x: number; y: number }): void {
+  onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;
 
     this.origin = position;
@@ -19,13 +19,13 @@ export class EllipticalSelection extends Selection {
     this.selecting = true;
   }
 
-  onMouseMove(position: { x: number; y: number }): void {
+  onMouseMove(position: { x: number; y: number }) {
     if (this.selected) return;
 
     this.resize(position);
   }
 
-  onMouseUp(position: { x: number; y: number }): void {
+  onMouseUp(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
 
     this.resize(position);

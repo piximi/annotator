@@ -4,6 +4,7 @@ import { Image } from "../../types/Image";
 import { ImageViewerSelectionMode } from "../../types/ImageViewerSelectionMode";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import { ImageViewerZoomMode } from "../../types/ImageViewerZoomMode";
+import {Instance} from "../../types/Instance";
 
 const initialState: ImageViewerState = {
   brightness: 0,
@@ -51,6 +52,14 @@ export const imageViewerSlice = createSlice({
     ) {
       state.image = action.payload.image;
     },
+    setImageViewerImageInstances(
+      state: ImageViewerState,
+      action: PayloadAction<{ instances: Array<Instance> }>
+    ) {
+      if (state.image) {
+        state.image.instances = action.payload.instances;
+      }
+    },
     setImageViewerOperation(
       state: ImageViewerState,
       action: PayloadAction<{ operation: ImageViewerOperation }>
@@ -90,6 +99,7 @@ export const {
   setImageViewerExposure,
   setImageViewerHue,
   setImageViewerImage,
+  setImageViewerImageInstances,
   setImageViewerOperation,
   setImageViewerSaturation,
   setImageViewerSelectionMode,

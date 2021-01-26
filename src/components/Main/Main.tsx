@@ -18,7 +18,7 @@ import * as _ from "underscore";
 import {RectangularSelection} from "./RectangularSelection";
 import {StartingAnchor} from "./StartingAnchor";
 import {ZoomSelection} from "./ZoomSelection";
-import {imageViewerZoomModeSelector} from "../../store/selectors/imageViewerZoomModeSelector";
+import {imageViewerZoomModeSelector} from "../../store/selectors";
 import {imageViewerImageSelector, imageViewerOperationSelector,} from "../../store/selectors";
 import {Image} from "konva/types/shapes/Image";
 import {Vector2d} from "konva/types/types";

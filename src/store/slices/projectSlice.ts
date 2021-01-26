@@ -65,9 +65,11 @@ export const projectSlice = createSlice({
         categoryId: action.payload.categoryId,
         mask: action.payload.mask,
       };
+
       const index = findIndex(state.images, (image: Image) => {
         return image.id === action.payload.id;
       });
+
       state.images[index].instances = [
         ...state.images[index].instances,
         instance,

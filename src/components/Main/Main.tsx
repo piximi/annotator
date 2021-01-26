@@ -31,6 +31,7 @@ import {setImageViewerImageInstances} from "../../store/slices";
 import {ObjectSelection} from "./ObjectSelection";
 import {EllipticalSelection} from "./EllipticalSelection";
 import * as tensorflow from "@tensorflow/tfjs";
+import { Tensor3D, Tensor4D } from "@tensorflow/tfjs";
 
 
 type MainProps = {
@@ -524,9 +525,9 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
    * Object selection
    */
   const objectSelectionRef = React.useRef<Rect>(null);
-  // const [crop, setCrop] = useState<HTMLImageElement>();
   const [model, setModel] = useState<tensorflow.LayersModel>();
-
+  const maskDataRef = React.useRef<Uint8ClampedArray | null>(null);
+  const maskRef = React.useRef<Tensor3D | Tensor4D >()
 
   const createModel = async () => {
     // FIXME: should be a local file
@@ -552,8 +553,11 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       createModel()
     }
 
-
   }, [activeOperation]);
+
+  useEffect(() => {
+
+  }, [maskRef.current])
 
 
   const onObjectSelection = () => {
@@ -568,7 +572,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       if (imageRef && imageRef.current) {
         const config = {
           callback: (cropped: HTMLImageElement) => {
-            const mask = tensorflow.tidy(() => {
+            maskRef.current = tensorflow.tidy(() => {
               if (cropped) {
                 const croppedInput: tensorflow.Tensor3D = tensorflow.browser.fromPixels(
                     cropped
@@ -606,9 +610,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         await imageRef.current.toImage(config);
       }
     };
-
     await f()
-
     };
 
   /*

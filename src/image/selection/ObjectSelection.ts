@@ -1,6 +1,6 @@
 import {Selection} from "./Selection";
 
-export default class ObjectSelection extends Selection {
+export class ObjectSelection extends Selection {
   public deselect(): void {}
 
   public onMouseDown(position: { x: number; y: number }): void {}

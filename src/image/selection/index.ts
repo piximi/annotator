@@ -1,9 +1,9 @@
-export * from "./ColorSelection";
-export * from "./EllipticalSelection";
-export * from "./LassoSelection";
-export * from "./MagneticSelection";
-export * from "./ObjectSelection";
-export * from "./PolygonalSelection";
-export * from "./QuickSelection";
-export * from "./RectangularSelection";
-export * from "./Selection";
+export { ColorSelection } from "./ColorSelection";
+export { EllipticalSelection } from "./EllipticalSelection";
+export { LassoSelection } from "./LassoSelection";
+export { MagneticSelection } from "./MagneticSelection";
+export { ObjectSelection } from "./ObjectSelection";
+export { PolygonalSelection } from "./PolygonalSelection";
+export { QuickSelection } from "./QuickSelection";
+export { RectangularSelection } from "./RectangularSelection";
+export { Selection } from "./Selection";

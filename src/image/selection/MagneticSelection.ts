@@ -1,6 +1,6 @@
 import {Selection} from "./Selection";
 
-export default class MagneticSelection extends Selection {
+export class MagneticSelection extends Selection {
   public deselect(): void {}
 
   public onMouseDown(position: { x: number; y: number }): void {}

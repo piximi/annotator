@@ -1,6 +1,6 @@
 import {Selection} from "./Selection";
 
-export default class ColorSelection extends Selection {
+export class ColorSelection extends Selection {
   public deselect(): void {}
 
   public onMouseDown(position: { x: number; y: number }): void {}

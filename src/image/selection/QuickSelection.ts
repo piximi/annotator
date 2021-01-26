@@ -1,6 +1,6 @@
 import {Selection} from "./Selection";
 
-export default class QuickSelection extends Selection {
+export class QuickSelection extends Selection {
   public deselect(): void {}
 
   public onMouseDown(position: { x: number; y: number }): void {}

@@ -1,6 +1,6 @@
 import {Selection} from "./Selection";
 
-export default class PolygonalSelection extends Selection {
+export class PolygonalSelection extends Selection {
   public deselect(): void {}
 
   public onMouseDown(position: { x: number; y: number }): void {}

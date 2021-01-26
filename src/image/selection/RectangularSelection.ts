@@ -1,6 +1,6 @@
 import {Selection} from "./Selection";
 
-export default class RectangularSelection extends Selection {
+export class RectangularSelection extends Selection {
   public c?: number;
   public r?: number;
 

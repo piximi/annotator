@@ -1,6 +1,6 @@
 import {Selection} from "./Selection";
 
-export default class LassoSelection extends Selection {
+export class LassoSelection extends Selection {
   public deselect(): void {}
 
   public onMouseDown(position: { x: number; y: number }): void {}

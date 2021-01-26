@@ -393,25 +393,37 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const isInside = (
-      startingPosition: { x: number, y: number } | undefined,
+      startingAnchorCircleRef: React.RefObject<Circle>,
       position: { x: number; y: number }
   ) => {
-    if ( startingPosition ) {
+    if (
+        startingAnchorCircleRef &&
+        startingAnchorCircleRef.current && imageRef && imageRef.current
+    ) {
+      let rectangle = startingAnchorCircleRef.current.getClientRect();
+
+        const transform = imageRef.current.getAbsoluteTransform().copy();
+        transform.invert();
+        const transformedRectangle = transform.point({x: rectangle.x, y: rectangle.y});
+
       return (
-          startingPosition.x + pointRadius >= position.x &&
-          startingPosition.x - pointRadius <= position.x &&
-          startingPosition.y + pointRadius >= position.y &&
-          startingPosition.y - pointRadius <= position.y);
+          transformedRectangle.x <= position.x &&
+          position.x <= transformedRectangle.x + rectangle.width &&
+          transformedRectangle.y <= position.y &&
+          position.y <= transformedRectangle.y + rectangle.height
+      );
+    } else {
+      return false;
     }
   };
 
   const connected = (position: { x: number; y: number },
-                     startingPosition: { x:number; y: number } | undefined,
+                     startingAnchorCircleRef: React.RefObject<Circle>,
                      strokes: Array<{ points: Array<number> }>,
                      canClose: boolean
   ) => {
-    if (startingPosition) {
-      const inside = isInside(startingPosition, position);
+    if (startingAnchorCircleRef) {
+      const inside = isInside(startingAnchorCircleRef, position);
       if (strokes && strokes.length > 0) {
         return inside && canClose;
       }
@@ -421,7 +433,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const onLassoSelection = () => {};
 
   const onLassoSelectionMouseDown = (position: { x: number; y: number }) => {
-    if (connected(position, lassoSelectionStart, lassoSelectionStrokes, lassoSelectionCanClose)) {
+    if (connected(position, lassoSelectionStartingAnchorCircleRef, lassoSelectionStrokes, lassoSelectionCanClose)) {
       const stroke: { points: Array<number> } = {
         points: _.flatten(
           lassoSelectionStrokes.map(
@@ -450,7 +462,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
     if (
       !lassoSelectionCanClose &&
-      !isInside(lassoSelectionStart, position)
+      !isInside(lassoSelectionStartingAnchorCircleRef, position)
     ) {
       setLassoSelectionCanClose(true);
     }
@@ -489,7 +501,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   const onLassoSelectionMouseUp = (position: { x: number; y: number }) => {
 
-    if (connected(position, lassoSelectionStart, lassoSelectionStrokes, lassoSelectionCanClose)) {
+    if (connected(position, lassoSelectionStartingAnchorCircleRef, lassoSelectionStrokes, lassoSelectionCanClose)) {
       if (lassoSelectionStart) {
         const stroke = {
           points: [
@@ -691,7 +703,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     x: number;
     y: number;
   }) => {
-    if (connected(position, polygonalSelectionStart, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
+    if (connected(position, polygonalSelectionStartingAnchorCircleRef, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
 
 
       const stroke: { points: Array<number> } = {
@@ -728,7 +740,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   }) => {
     if (
       !polygonalSelectionCanClose &&
-      !isInside(polygonalSelectionStart, position)
+      !isInside(polygonalSelectionStartingAnchorCircleRef, position)
     ) {
       setPolygonalSelectionCanClose(true);
     }
@@ -771,7 +783,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onPolygonalSelectionMouseUp = (position: { x: number; y: number }) => {
-    if (connected(position, polygonalSelectionStart, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
+    if (connected(position, polygonalSelectionStartingAnchorCircleRef, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
       if (polygonalSelectionStart) {
         const stroke = {
           points: [

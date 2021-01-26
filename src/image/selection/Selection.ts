@@ -1,7 +1,11 @@
+import {Instance} from "../../types/Instance";
+
 export abstract class Selection {
   selected: boolean = false;
 
   selecting: boolean = false;
+
+  selection?: Instance;
 
   abstract deselect(): void;
 

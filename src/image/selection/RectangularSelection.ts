@@ -36,7 +36,9 @@ export class RectangularSelection extends Selection {
     this.selecting = false;
   }
 
-  select() {};
+  select() {
+    this.deselect();
+  };
 
   private resize(position: { x: number; y: number }) {
     if (this.origin) {

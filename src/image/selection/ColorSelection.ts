@@ -5,6 +5,10 @@ export class ColorSelection extends Selection {
     return undefined;
   }
 
+  get mask(): string | undefined {
+    return undefined;
+  }
+
   deselect() {}
 
   onMouseDown(position: { x: number; y: number }) {}

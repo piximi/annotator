@@ -17,6 +17,10 @@ export class RectangularSelection extends Selection {
     ];
   }
 
+  get mask(): string | undefined {
+    return undefined;
+  }
+
   deselect() {
     this.selected = false;
 
@@ -48,12 +52,12 @@ export class RectangularSelection extends Selection {
   }
 
   select(category: number) {
-    if (!this.box) return;
+    if (!this.box || !this.mask) return;
 
     this.selection = {
       box: this.box,
       category: category,
-      mask: "",
+      mask: this.mask,
     };
 
     this.deselect();

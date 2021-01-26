@@ -9,6 +9,10 @@ export class EllipticalSelection extends Selection {
     return undefined;
   }
 
+  get mask(): string | undefined {
+    return undefined;
+  }
+
   deselect() {
     this.selected = false;
 

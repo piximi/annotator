@@ -9,6 +9,8 @@ export abstract class Selection {
 
   abstract get box(): [number, number, number, number] | undefined;
 
+  abstract get mask(): string | undefined;
+
   abstract deselect(): void;
 
   abstract onMouseDown(position: { x: number; y: number }): void;

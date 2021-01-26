@@ -29,6 +29,7 @@ import {FloodImage, floodPixels, makeFloodMap} from "../../image/flood";
 import * as ImageJS from "image-js";
 import {setImageViewerImageInstances} from "../../store/slices";
 import {ObjectSelection} from "./ObjectSelection";
+import {EllipticalSelection} from "./EllipticalSelection";
 
 
 type MainProps = {
@@ -188,50 +189,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     ellipticalSelectionRadiusY,
     setEllipticalSelectionRadiusY,
   ] = React.useState<number>(0);
-
-  const EllipticalSelection = () => {
-    if (annotated && !annotating) {
-      return (
-        <ReactKonva.Ellipse
-          dash={[4, 2]}
-          dashOffset={-dashOffset}
-          radiusX={ellipticalSelectionRadiusX}
-          radiusY={ellipticalSelectionRadiusY}
-          ref={ellipticalSelectionRef}
-          stroke="white"
-          strokeWidth={1}
-          x={ellipticalSelectionCenterX}
-          y={ellipticalSelectionCenterY}
-          fill={toRGBA(activeCategory.color, 0.3)}
-        />
-      );
-    } else if (!annotated && annotating) {
-      return (
-        <React.Fragment>
-          <ReactKonva.Ellipse
-            radiusX={ellipticalSelectionRadiusX}
-            radiusY={ellipticalSelectionRadiusY}
-            stroke="black"
-            strokeWidth={1}
-            x={ellipticalSelectionCenterX}
-            y={ellipticalSelectionCenterY}
-          />
-          <ReactKonva.Ellipse
-            dash={[4, 2]}
-            dashOffset={-dashOffset}
-            radiusX={ellipticalSelectionRadiusX}
-            radiusY={ellipticalSelectionRadiusY}
-            stroke="white"
-            strokeWidth={1}
-            x={ellipticalSelectionCenterX}
-            y={ellipticalSelectionCenterY}
-          />
-        </React.Fragment>
-      );
-    } else {
-      return null;
-    }
-  };
 
   const onEllipticalSelection = () => {};
 
@@ -1263,25 +1220,34 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           scale={{ x: zoomScaleX, y: zoomScaleY }}
           width={initialWidth}
         >
-          <ReactKonva.Layer
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-          >
+          <ReactKonva.Layer onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
             {img && <ReactKonva.Image ref={imageRef} image={img} />}
 
             {activeOperation === ImageViewerOperation.ColorSelection && (
               <ColorSelection />
             )}
+
             {activeOperation === ImageViewerOperation.EllipticalSelection && (
-              <EllipticalSelection />
+              <EllipticalSelection
+                activeCategory={activeCategory}
+                annotated={annotated}
+                annotating={annotating}
+                ellipticalSelectionCenterX={ellipticalSelectionCenterX}
+                ellipticalSelectionCenterY={ellipticalSelectionCenterY}
+                ellipticalSelectionRadiusX={ellipticalSelectionRadiusX}
+                ellipticalSelectionRadiusY={ellipticalSelectionRadiusY}
+                ellipticalSelectionRef={ellipticalSelectionRef}
+              />
             )}
+
             {activeOperation === ImageViewerOperation.LassoSelection && (
               <LassoSelection />
             )}
+
             {activeOperation === ImageViewerOperation.MagneticSelection && (
               <MagneticSelection />
             )}
+
             {activeOperation === ImageViewerOperation.ObjectSelection && (
                 <ObjectSelection
                     activeCategory={activeCategory}
@@ -1294,12 +1260,15 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                     y={rectangularSelectionY}
                 />
             )}
+
             {activeOperation === ImageViewerOperation.PolygonalSelection && (
               <PolygonalSelection />
             )}
+
             {activeOperation === ImageViewerOperation.QuickSelection && (
               <QuickSelection />
             )}
+
             {activeOperation === ImageViewerOperation.RectangularSelection && (
               <RectangularSelection
                 activeCategory={activeCategory}
@@ -1312,6 +1281,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                 y={rectangularSelectionY}
               />
             )}
+
             {activeOperation === ImageViewerOperation.Zoom && (
               <ZoomSelection
                 selected={zoomSelected}

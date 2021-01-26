@@ -18,6 +18,7 @@ type RectangularSelectionProps = {
 
 export const RectangularSelection = React.forwardRef<Rect, RectangularSelectionProps>( (props, ref) => {
   const dashOffset = useMarchingAnts();
+
   if (props.annotated && !props.annotating) {
     return (
         <ReactKonva.Rect

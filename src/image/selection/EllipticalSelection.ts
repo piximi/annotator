@@ -6,10 +6,30 @@ export class EllipticalSelection extends Selection {
   public radius?: { x: number; y: number };
 
   public onMouseDown(position: { x: number; y: number }): void {
+    if (this.selected) return;
+
     this.origin = position;
+
+    this.selecting = true;
   }
 
   public onMouseMove(position: { x: number; y: number }): void {
+    if (this.selected) return;
+
+    this.resize(position);
+  }
+
+  public onMouseUp(position: { x: number; y: number }): void {
+    if (this.selected || !this.selecting) return;
+
+    this.resize(position);
+
+    this.selected = true;
+
+    this.selecting = false;
+  }
+
+  private resize(position: { x: number; y: number }) {
     if (this.origin) {
       this.center = {
         x: (position.x - this.origin.x) / 2 + this.origin.x,
@@ -22,6 +42,4 @@ export class EllipticalSelection extends Selection {
       };
     }
   }
-
-  public onMouseUp(position: { x: number; y: number }): void {}
 }

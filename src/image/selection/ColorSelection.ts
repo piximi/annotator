@@ -3,7 +3,7 @@ import { Selection } from "./Selection";
 
 export class ColorSelection extends Selection {
   get boundingBox(): BoundingBox {
-    return { maximum: { r: 0, c: 0 }, minimum: { r: 0, c: 0 }};
+    return [0, 0, 0, 0];
   }
 
   deselect() {}

@@ -526,7 +526,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
    */
   const objectSelectionRef = React.useRef<Rect>(null);
   const [model, setModel] = useState<tensorflow.LayersModel>();
-  const maskDataRef = React.useRef<Uint8ClampedArray | null>(null);
   const tensorRef = React.useRef<Tensor3D | Tensor4D >()
 
   const createModel = async () => {

@@ -1,3 +1,35 @@
+import {validNeighbours} from "./GraphHelper";
+
+export const getBoundaryCoordinates = (
+  data: Float32Array,
+  height: number,
+  width: number,
+  nchannels: number,
+) => {
+  const coordinates: { x: number; y: number }[] = [];
+
+  const idx = getIdx(width, nchannels);
+
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < width; y++) {
+      const pixel = data[idx(x, y, 0)];
+      if (pixel === 255) {
+        const neighborsIdx = validNeighbours(x, y, height, width);
+        for (let neighborIdx of neighborsIdx) {
+          const neighbor = data[idx(neighborIdx.x, neighborIdx.y, 0)];
+          if (neighbor === 0) {
+            coordinates.push({ x: x, y: y });
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  return coordinates;
+};
+
+
 export const getIdx = (width: number, nchannels: number) => {
   return (x: number, y: number, index: number) => {
     index = index || 0;

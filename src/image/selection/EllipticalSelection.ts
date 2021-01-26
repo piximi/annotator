@@ -5,7 +5,7 @@ export class EllipticalSelection extends Selection {
   origin?: { x: number; y: number };
   radius?: { x: number; y: number };
 
-  get boundingBox(): [number, number, number, number] | undefined {
+  get box(): [number, number, number, number] | undefined {
     return undefined;
   }
 
@@ -39,7 +39,7 @@ export class EllipticalSelection extends Selection {
     this.selecting = false;
   }
 
-  select(category: string) {
+  select(category: number) {
     this.deselect();
   };
 

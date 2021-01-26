@@ -1,14 +1,13 @@
-import { BoundingBox } from "../../types/BoundingBox";
-import { Instance } from "../../types/Instance";
+import { ImageViewerSelection } from "../../types/ImageViewerSelection";
 
 export abstract class Selection {
   selected: boolean = false;
 
   selecting: boolean = false;
 
-  selection?: Instance;
+  selection?: ImageViewerSelection;
 
-  abstract get boundingBox(): BoundingBox | undefined;
+  abstract get box(): [number, number, number, number] | undefined;
 
   abstract deselect(): void;
 
@@ -18,5 +17,5 @@ export abstract class Selection {
 
   abstract onMouseUp(position: { x: number; y: number }): void;
 
-  abstract select(category: string): void;
+  abstract select(category: number): void;
 }

@@ -1,7 +1,7 @@
 import { Selection } from "./Selection";
 
 export class QuickSelection extends Selection {
-  get boundingBox(): [number, number, number, number] | undefined {
+  get box(): [number, number, number, number] | undefined {
     return undefined;
   }
 
@@ -13,5 +13,5 @@ export class QuickSelection extends Selection {
 
   onMouseUp(position: { x: number; y: number }) {}
 
-  select(category: string) {};
+  select(category: number) {};
 }

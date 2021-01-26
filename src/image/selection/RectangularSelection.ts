@@ -6,7 +6,7 @@ export class RectangularSelection extends Selection {
   x?: number;
   y?: number;
 
-  get boundingBox(): [number, number, number, number] | undefined {
+  get box(): [number, number, number, number] | undefined {
     if (!this.origin || !this.x || !this.y) return undefined;
 
     return [
@@ -47,7 +47,15 @@ export class RectangularSelection extends Selection {
     this.selecting = false;
   }
 
-  select(category: string) {
+  select(category: number) {
+    if (!this.box) return;
+
+    this.selection = {
+      box: this.box,
+      category: category,
+      mask: "",
+    };
+
     this.deselect();
   };
 

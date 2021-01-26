@@ -289,11 +289,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     false
   );
 
-  const [
-    lassoSelectionEarlyRelease,
-    setLassoSelectionEarlyRelease,
-  ] = useState<boolean>(false);
-
   const [lassoSelectionStart, setLassoSelectionStart] = useState<{
     x: number;
     y: number;

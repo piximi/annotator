@@ -31,34 +31,6 @@ type ObjectSelectionProps = {
   category: Category;
 };
 
-// const getBoundariesFromMask = (
-//   maskData: Uint8ClampedArray,
-//   height: number,
-//   width: number
-// ) => {
-//   const coordinates: { x: number; y: number }[] = [];
-//
-//   const idx = getIdx(width, 4);
-//
-//   for (let x = 0; x < width; x++) {
-//     for (let y = 0; y < width; y++) {
-//       const pixel = maskData[idx(x, y, 0)];
-//       if (pixel === 255) {
-//         const neighborsIdx = validNeighbours(x, y, height, width);
-//         for (let neighborIdx of neighborsIdx) {
-//           const neighbor = maskData[idx(neighborIdx.x, neighborIdx.y, 0)];
-//           if (neighbor === 0) {
-//             coordinates.push({ x: x, y: y });
-//             break;
-//           }
-//         }
-//       }
-//     }
-//   }
-//
-//   return coordinates;
-// };
-
 export const ObjectSelection = ({ data, category }: ObjectSelectionProps) => {
   const dispatch = useDispatch();
   const [image] = useImage(data.src, "Anonymous");

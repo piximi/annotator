@@ -527,7 +527,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const objectSelectionRef = React.useRef<Rect>(null);
   const [model, setModel] = useState<tensorflow.LayersModel>();
   const maskDataRef = React.useRef<Uint8ClampedArray | null>(null);
-  const maskRef = React.useRef<Tensor3D | Tensor4D >()
+  const tensorRef = React.useRef<Tensor3D | Tensor4D >()
 
   const createModel = async () => {
     // FIXME: should be a local file
@@ -550,14 +550,19 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   useEffect(() => {
     if (activeOperation === ImageViewerOperation.ObjectSelection)
     {
+      //this should be called only once
       createModel()
     }
 
   }, [activeOperation]);
 
-  useEffect(() => {
-
-  }, [maskRef.current])
+  useEffect(  () => {
+    if (tensorRef && tensorRef.current) {
+      tensorRef.current.data().then( (data) => {
+        console.log(data)
+      })
+    }
+  }, [tensorRef.current])
 
 
   const onObjectSelection = () => {
@@ -572,7 +577,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       if (imageRef && imageRef.current) {
         const config = {
           callback: (cropped: HTMLImageElement) => {
-            maskRef.current = tensorflow.tidy(() => {
+            tensorRef.current = tensorflow.tidy(() => {
               if (cropped) {
                 const croppedInput: tensorflow.Tensor3D = tensorflow.browser.fromPixels(
                     cropped
@@ -597,6 +602,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                       .resizeBilinear([Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth)]);
 
                   return output
+
                 }
               }
             });

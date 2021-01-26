@@ -1,6 +1,11 @@
+import { BoundingBox } from "../../types/BoundingBox";
 import { Selection } from "./Selection";
 
 export class LassoSelection extends Selection {
+  get boundingBox(): BoundingBox {
+    return { maximum: { r: 0, c: 0 }, minimum: { r: 0, c: 0 }};
+  }
+
   deselect() {}
 
   onMouseDown(position: { x: number; y: number }) {}

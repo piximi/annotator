@@ -1,4 +1,5 @@
-import {Instance} from "../../types/Instance";
+import { BoundingBox } from "../../types/BoundingBox";
+import { Instance } from "../../types/Instance";
 
 export abstract class Selection {
   selected: boolean = false;
@@ -6,6 +7,8 @@ export abstract class Selection {
   selecting: boolean = false;
 
   selection?: Instance;
+
+  abstract get boundingBox(): BoundingBox;
 
   abstract deselect(): void;
 

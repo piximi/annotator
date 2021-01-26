@@ -1,9 +1,14 @@
+import { BoundingBox } from "../../types/BoundingBox";
 import { Selection } from "./Selection";
 
 export class EllipticalSelection extends Selection {
   center?: { x: number; y: number };
   origin?: { x: number; y: number };
   radius?: { x: number; y: number };
+
+  get boundingBox(): BoundingBox {
+    return { maximum: { r: 0, c: 0 }, minimum: { r: 0, c: 0 }};
+  }
 
   deselect() {
     this.selected = false;

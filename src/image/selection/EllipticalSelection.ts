@@ -35,6 +35,8 @@ export class EllipticalSelection extends Selection {
     this.selecting = false;
   }
 
+  select() {};
+
   private resize(position: { x: number; y: number }) {
     if (this.origin) {
       this.center = {

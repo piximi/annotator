@@ -10,4 +10,6 @@ export abstract class Selection {
   abstract onMouseMove(position: { x: number; y: number }): void;
 
   abstract onMouseUp(position: { x: number; y: number }): void;
+
+  abstract select(): void;
 }

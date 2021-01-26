@@ -8,4 +8,6 @@ export class PolygonalSelection extends Selection {
   onMouseMove(position: { x: number; y: number }): void {}
 
   onMouseUp(position: { x: number; y: number }): void {}
+
+  select() {};
 }

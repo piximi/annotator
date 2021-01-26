@@ -1,10 +1,2 @@
-export type BoundingBox = {
-  maximum: {
-    r: number;
-    c: number;
-  };
-  minimum: {
-    r: number;
-    c: number;
-  };
-};
+export type BoundingBox = [number, number, number, number];
+

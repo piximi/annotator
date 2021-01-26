@@ -646,7 +646,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                 closed
                 dash={[4, 2]}
                 dashOffset={-dashOffset}
-                fill={activeCategory.color}
+                fill={toRGBA(activeCategory.color, 0.3)}
                 points={polygonalSelectionAnnotation.points}
                 stroke="white"
                 strokeWidth={1}

@@ -1,9 +1,21 @@
 import { Selection } from "./Selection";
 
 export class ColorSelection extends Selection {
-  public onMouseDown(position: { x: number; y: number }): void {}
+  get box(): [number, number, number, number] | undefined {
+    return undefined;
+  }
 
-  public onMouseMove(position: { x: number; y: number }): void {}
+  get mask(): string | undefined {
+    return undefined;
+  }
 
-  public onMouseUp(position: { x: number; y: number }): void {}
+  deselect() {}
+
+  onMouseDown(position: { x: number; y: number }) {}
+
+  onMouseMove(position: { x: number; y: number }) {}
+
+  onMouseUp(position: { x: number; y: number }) {}
+
+  select(category: number) {};
 }

@@ -1,10 +1,30 @@
+import { ImageViewerSelection } from "../../types/ImageViewerSelection";
+import * as ImageJS from "image-js";
+
 export abstract class Selection {
-  public selected: boolean = false;
-  public selecting: boolean = false;
+  image: ImageJS.Image;
 
-  public abstract onMouseDown(position: { x: number; y: number }): void;
+  selected: boolean = false;
 
-  public abstract onMouseMove(position: { x: number; y: number }): void;
+  selecting: boolean = false;
 
-  public abstract onMouseUp(position: { x: number; y: number }): void;
+  selection?: ImageViewerSelection;
+
+  constructor(image: ImageJS.Image) {
+    this.image = image;
+  }
+
+  abstract get box(): [number, number, number, number] | undefined;
+
+  abstract get mask(): string | undefined;
+
+  abstract deselect(): void;
+
+  abstract onMouseDown(position: { x: number; y: number }): void;
+
+  abstract onMouseMove(position: { x: number; y: number }): void;
+
+  abstract onMouseUp(position: { x: number; y: number }): void;
+
+  abstract select(category: number): void;
 }

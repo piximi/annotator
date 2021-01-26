@@ -1,12 +1,33 @@
 import { Selection } from "./Selection";
 
 export class RectangularSelection extends Selection {
-  public c?: number;
-  public r?: number;
+  origin?: { x: number; y: number };
 
-  public origin?: { x: number; y: number };
+  x?: number;
+  y?: number;
 
-  public onMouseDown(position: { x: number; y: number }): void {
+  get box(): [number, number, number, number] | undefined {
+    if (!this.origin || !this.x || !this.y) return undefined;
+
+    return [
+      this.origin.x,
+      this.origin.y,
+      this.origin.x + this.x,
+      this.origin.y + this.y
+    ];
+  }
+
+  get mask(): string | undefined {
+    return undefined;
+  }
+
+  deselect() {
+    this.selected = false;
+
+    this.selecting = false;
+  }
+
+  onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;
 
     this.origin = position;
@@ -14,13 +35,13 @@ export class RectangularSelection extends Selection {
     this.selecting = true;
   }
 
-  public onMouseMove(position: { x: number; y: number }): void {
+  onMouseMove(position: { x: number; y: number }) {
     if (this.selected) return;
 
     this.resize(position);
   }
 
-  public onMouseUp(position: { x: number; y: number }): void {
+  onMouseUp(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
 
     this.resize(position);
@@ -30,10 +51,22 @@ export class RectangularSelection extends Selection {
     this.selecting = false;
   }
 
+  select(category: number) {
+    if (!this.box || !this.mask) return;
+
+    this.selection = {
+      box: this.box,
+      category: category,
+      mask: this.mask,
+    };
+
+    this.deselect();
+  };
+
   private resize(position: { x: number; y: number }) {
     if (this.origin) {
-      this.c = position.x - this.origin.x;
-      this.r = position.y - this.origin.y;
+      this.x = position.x - this.origin.x;
+      this.y = position.y - this.origin.y;
     }
   }
 }

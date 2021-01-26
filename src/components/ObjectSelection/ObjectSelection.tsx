@@ -149,16 +149,7 @@ export const ObjectSelection = ({ data, category }: ObjectSelectionProps) => {
 
       const { x, y, width, height } = shapeRef.current.getClientRect();
 
-      const boundingBox: BoundingBox = {
-        maximum: {
-          r: y + height,
-          c: x + width,
-        },
-        minimum: {
-          r: y,
-          c: x,
-        },
-      };
+      const boundingBox: BoundingBox = [x, y, x + width, y + height];
 
       const payload = {
         boundingBox: boundingBox,

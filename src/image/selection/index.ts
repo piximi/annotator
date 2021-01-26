@@ -6,3 +6,4 @@ export { ObjectSelection } from "./ObjectSelection";
 export { PolygonalSelection } from "./PolygonalSelection";
 export { QuickSelection } from "./QuickSelection";
 export { RectangularSelection } from "./RectangularSelection";
+export { Selection } from "./Selection";

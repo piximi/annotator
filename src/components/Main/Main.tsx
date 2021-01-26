@@ -562,7 +562,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     if (tensorRef && tensorRef.current) {
 
       tensorRef.current.data().then( (data) => {
-        const boundaryPixels = getBoundaryCoordinates(data, rectangularSelectionHeight, rectangularSelectionWidth, 3)
+        const boundaryPixels = getBoundaryCoordinates(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
         })
 
     }

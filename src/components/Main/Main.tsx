@@ -30,6 +30,7 @@ import * as ImageJS from "image-js";
 import {setImageViewerImageInstances} from "../../store/slices";
 import {ObjectSelection} from "./ObjectSelection";
 import {EllipticalSelection} from "./EllipticalSelection";
+import * as tensorflow from "@tensorflow/tfjs";
 
 
 type MainProps = {
@@ -523,12 +524,90 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
    * Object selection
    */
   const objectSelectionRef = React.useRef<Rect>(null);
+  // const [crop, setCrop] = useState<HTMLImageElement>();
+  const [model, setModel] = useState<tensorflow.LayersModel>();
 
-  const onObjectSelection = () => {};
 
-  const onObjectSelectionMouseUp = (position: { x: number; y: number }) => {
+  const createModel = async () => {
+    // FIXME: should be a local file
+    const pathname =
+        "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
 
+    const graph = await tensorflow.loadLayersModel(pathname);
+
+    const optimizer = tensorflow.train.adam();
+
+    graph.compile({
+      optimizer: optimizer,
+      loss: "categoricalCrossentropy",
+      metrics: ["accuracy"],
+    });
+
+    setModel(graph);
   };
+
+  useEffect(() => {
+    if (activeOperation === ImageViewerOperation.ObjectSelection)
+    {
+      createModel()
+    }
+
+
+  }, [activeOperation]);
+
+
+  const onObjectSelection = () => {
+  };
+
+  const onObjectSelectionMouseUp = async (position: { x: number; y: number }) => {
+    if (annotated || !annotating) return;
+    setAnnotated(true);
+    setAnnotating(false);
+
+    const f = async () => {
+      if (imageRef && imageRef.current) {
+        const config = {
+          callback: (cropped: HTMLImageElement) => {
+            const mask = tensorflow.tidy(() => {
+              if (cropped) {
+                const croppedInput: tensorflow.Tensor3D = tensorflow.browser.fromPixels(
+                    cropped
+                );
+
+                const size: [number, number] = [128, 128];
+                const resized = tensorflow.image.resizeBilinear(croppedInput, size);
+                const standardized = resized.div(tensorflow.scalar(255));
+                const batch = standardized.expandDims(0);
+
+                // if (model) {
+                //   const prediction = model.predict(
+                //       batch
+                //   ) as tensorflow.Tensor<tensorflow.Rank>;
+                //
+                //   return prediction
+                //       .squeeze([0])
+                //       .tile([1, 1, 3])
+                //       .sub(0.3)
+                //       .sign()
+                //       .relu()
+                //       .resizeBilinear([rectangularSelectionHeight, rectangularSelectionWidth]);
+                // }
+              }
+            });
+
+          },
+          height: rectangularSelectionHeight,
+          width: rectangularSelectionWidth,
+          x: rectangularSelectionX,
+          y: rectangularSelectionY,
+        };
+        await imageRef.current.toImage(config);
+      }
+    };
+
+    await f()
+
+    };
 
   /*
    * Polygonal selection
@@ -1157,10 +1236,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
             return onMagneticSelectionMouseUp(position);
           case ImageViewerOperation.ObjectSelection:
-            if (annotated || !annotating) return;
-
-            setAnnotated(true);
-            setAnnotating(false);
             return onObjectSelectionMouseUp(position);
           case ImageViewerOperation.PolygonalSelection:
             if (annotated || !annotating) return;

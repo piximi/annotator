@@ -10,6 +10,14 @@ export class EllipticalSelection extends Selection {
   }
 
   public onMouseMove(position: { x: number; y: number }): void {
+    this.resize(position);
+  }
+
+  public onMouseUp(position: { x: number; y: number }): void {
+    this.resize(position);
+  }
+
+  private resize(position: { x: number; y: number }) {
     if (this.origin) {
       this.center = {
         x: (position.x - this.origin.x) / 2 + this.origin.x,
@@ -22,6 +30,4 @@ export class EllipticalSelection extends Selection {
       };
     }
   }
-
-  public onMouseUp(position: { x: number; y: number }): void {}
 }

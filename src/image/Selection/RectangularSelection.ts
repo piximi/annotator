@@ -11,11 +11,17 @@ export class RectangularSelection extends Selection {
   }
 
   public onMouseMove(position: { x: number; y: number }): void {
+    this.resize(position);
+  }
+
+  public onMouseUp(position: { x: number; y: number }): void {
+    this.resize(position);
+  }
+
+  private resize(position: { x: number; y: number }) {
     if (this.origin) {
       this.c = position.x - this.origin.x;
       this.r = position.y - this.origin.y;
     }
   }
-
-  public onMouseUp(position: { x: number; y: number }): void {}
 }

@@ -919,7 +919,9 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         mask: mask,
       };
 
-      dispatch(imageViewerSlice.actions.setImageViewerImageInstances({ instances: [instance, ...instances] }));
+      if (image) {
+        dispatch(imageViewerSlice.actions.setImageViewerImageInstances({ instances: [instance, ...instances!] }));
+      }
     }
   };
 

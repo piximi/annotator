@@ -579,19 +579,21 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                 const standardized = resized.div(tensorflow.scalar(255));
                 const batch = standardized.expandDims(0);
 
-                // if (model) {
-                //   const prediction = model.predict(
-                //       batch
-                //   ) as tensorflow.Tensor<tensorflow.Rank>;
-                //
-                //   return prediction
-                //       .squeeze([0])
-                //       .tile([1, 1, 3])
-                //       .sub(0.3)
-                //       .sign()
-                //       .relu()
-                //       .resizeBilinear([rectangularSelectionHeight, rectangularSelectionWidth]);
-                // }
+                if (model) {
+                  const prediction = model.predict(
+                      batch
+                  ) as tensorflow.Tensor<tensorflow.Rank>;
+
+                  const output = prediction
+                      .squeeze([0])
+                      .tile([1, 1, 3])
+                      .sub(0.3)
+                      .sign()
+                      .relu()
+                      .resizeBilinear([Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth)]);
+
+                  return output
+                }
               }
             });
 

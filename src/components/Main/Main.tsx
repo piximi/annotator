@@ -20,11 +20,13 @@ import {StartingAnchor} from "./StartingAnchor";
 import {ZoomSelection} from "./ZoomSelection";
 import {imageViewerImageInstancesSelector, imageViewerZoomModeSelector} from "../../store/selectors";
 import {imageViewerImageSelector, imageViewerOperationSelector,} from "../../store/selectors";
-import {Image} from "konva/types/shapes/Image";
+import {Image as KonvaImage, Image} from "konva/types/shapes/Image";
 import {Vector2d} from "konva/types/types";
 import {FloodImage, floodPixels, makeFloodMap} from "../../image/flood";
 import * as ImageJS from "image-js";
 import { imageViewerSlice } from "../../store/slices";
+import {ObjectSelection} from "./ObjectSelection";
+
 
 type MainProps = {
   activeCategory: Category;
@@ -565,17 +567,14 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   /*
    * Object selection
    */
-  const ObjectSelection = () => {
-    return null;
-  };
+  const objectSelectionRef = React.useRef<Rect>(null);
 
   const onObjectSelection = () => {};
 
-  const onObjectSelectionMouseDown = (position: { x: number; y: number }) => {};
-
-  const onObjectSelectionMouseMove = (position: { x: number; y: number }) => {};
-
-  const onObjectSelectionMouseUp = (position: { x: number; y: number }) => {};
+  const onObjectSelectionMouseUp = (position: { x: number; y: number }) => {
+    setAnnotated(true)
+    setAnnotating(false)
+  };
 
   /*
    * Polygonal selection
@@ -1099,7 +1098,10 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
             return onMagneticSelectionMouseDown(position);
           case ImageViewerOperation.ObjectSelection:
-            return onObjectSelectionMouseDown(position);
+            if (annotated) return;
+
+            setAnnotating(true);
+            return onRectangularSelectionMouseDown(position);
           case ImageViewerOperation.PolygonalSelection:
             if (annotated) return;
 
@@ -1147,7 +1149,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
             return onMagneticSelectionMouseMove(position);
           case ImageViewerOperation.ObjectSelection:
-            return onObjectSelectionMouseMove(position);
+            return onRectangularSelectionMouseMove(position);
           case ImageViewerOperation.PolygonalSelection:
             if (annotated || !annotating) return;
 
@@ -1279,7 +1281,16 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
               <MagneticSelection />
             )}
             {activeOperation === ImageViewerOperation.ObjectSelection && (
-              <ObjectSelection />
+                <ObjectSelection
+                    activeCategory={activeCategory}
+                    annotated={annotated}
+                    annotating={annotating}
+                    height={rectangularSelectionHeight}
+                    ref={objectSelectionRef}
+                    width={rectangularSelectionWidth}
+                    x={rectangularSelectionX}
+                    y={rectangularSelectionY}
+                />
             )}
             {activeOperation === ImageViewerOperation.PolygonalSelection && (
               <PolygonalSelection />

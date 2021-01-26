@@ -1,7 +1,8 @@
+import { TypedArray } from "@tensorflow/tfjs";
 import {validNeighbours} from "./GraphHelper";
 
 export const getBoundaryCoordinates = (
-  data: Float32Array,
+  data: TypedArray,
   height: number,
   width: number,
   nchannels: number,
@@ -11,9 +12,9 @@ export const getBoundaryCoordinates = (
   const idx = getIdx(width, nchannels);
 
   for (let x = 0; x < width; x++) {
-    for (let y = 0; y < width; y++) {
+    for (let y = 0; y < height; y++) {
       const pixel = data[idx(x, y, 0)];
-      if (pixel === 255) {
+      if (pixel > 0) {
         const neighborsIdx = validNeighbours(x, y, height, width);
         for (let neighborIdx of neighborsIdx) {
           const neighbor = data[idx(neighborIdx.x, neighborIdx.y, 0)];

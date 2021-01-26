@@ -32,6 +32,7 @@ import {ObjectSelection} from "./ObjectSelection";
 import {EllipticalSelection} from "./EllipticalSelection";
 import * as tensorflow from "@tensorflow/tfjs";
 import { Tensor3D, Tensor4D } from "@tensorflow/tfjs";
+import {getBoundaryCoordinates} from "../../image/imageHelper";
 
 
 type MainProps = {
@@ -527,6 +528,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const objectSelectionRef = React.useRef<Rect>(null);
   const [model, setModel] = useState<tensorflow.LayersModel>();
   const tensorRef = React.useRef<Tensor3D | Tensor4D >()
+  const maskRef = React.useRef<HTMLCanvasElement>(null);
+
 
   const createModel = async () => {
     // FIXME: should be a local file
@@ -555,11 +558,13 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   }, [activeOperation]);
 
-  useEffect(  () => {
+  useEffect(() => {
     if (tensorRef && tensorRef.current) {
+
       tensorRef.current.data().then( (data) => {
-        console.log(data)
-      })
+        const boundaryPixels = getBoundaryCoordinates(data, rectangularSelectionHeight, rectangularSelectionWidth, 3)
+        })
+
     }
   }, [tensorRef.current])
 
@@ -600,7 +605,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                       .relu()
                       .resizeBilinear([Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth)]);
 
-                  return output
+                  return output as tensorflow.Tensor3D
 
                 }
               }
@@ -1328,16 +1333,19 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             )}
 
             {activeOperation === ImageViewerOperation.ObjectSelection && (
-                <ObjectSelection
-                    activeCategory={activeCategory}
-                    annotated={annotated}
-                    annotating={annotating}
-                    height={rectangularSelectionHeight}
-                    ref={objectSelectionRef}
-                    width={rectangularSelectionWidth}
-                    x={rectangularSelectionX}
-                    y={rectangularSelectionY}
-                />
+                <React.Fragment>
+                  <ObjectSelection
+                      activeCategory={activeCategory}
+                      annotated={annotated}
+                      annotating={annotating}
+                      height={rectangularSelectionHeight}
+                      ref={objectSelectionRef}
+                      width={rectangularSelectionWidth}
+                      x={rectangularSelectionX}
+                      y={rectangularSelectionY}
+                  />
+                </React.Fragment>
+
             )}
 
             {activeOperation === ImageViewerOperation.PolygonalSelection && (

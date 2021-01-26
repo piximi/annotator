@@ -6,6 +6,12 @@ export class RectangularSelection extends Selection {
 
   public origin?: { x: number; y: number };
 
+  public deselect() {
+    this.selected = false;
+
+    this.selecting = false;
+  }
+
   public onMouseDown(position: { x: number; y: number }): void {
     if (this.selected) return;
 

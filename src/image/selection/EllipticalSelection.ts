@@ -5,6 +5,12 @@ export class EllipticalSelection extends Selection {
   public origin?: { x: number; y: number };
   public radius?: { x: number; y: number };
 
+  public deselect() {
+    this.selected = false;
+
+    this.selecting = false;
+  }
+
   public onMouseDown(position: { x: number; y: number }): void {
     if (this.selected) return;
 

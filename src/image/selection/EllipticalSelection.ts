@@ -1,6 +1,6 @@
-import { Selection } from "./Selection";
+import {Selection} from "./Selection";
 
-export class EllipticalSelection extends Selection {
+export default class EllipticalSelection extends Selection {
   public center?: { x: number; y: number };
   public origin?: { x: number; y: number };
   public radius?: { x: number; y: number };

@@ -325,13 +325,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     if (annotated && !annotating) {
       return (
         <React.Fragment>
-          <StartingAnchor
-            annotating={annotating}
-            position={lassoSelectionStart}
-            pointRadius={pointRadius}
-            ref={lassoSelectionStartingAnchorCircleRef}
-          />
-
           <LassoSelectionAnchor />
 
           {lassoSelectionAnnotation && (
@@ -625,13 +618,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     if (annotated && !annotating) {
       return (
         <React.Fragment>
-          <StartingAnchor
-            annotating={annotating}
-            pointRadius={pointRadius}
-            position={polygonalSelectionStart}
-            ref={polygonalSelectionStartingAnchorCircleRef}
-          />
-
           <PolygonalSelectionAnchor />
 
           {polygonalSelectionAnnotation && (
@@ -724,38 +710,16 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
       setPolygonalSelectionStrokes([]);
     } else {
-      if (polygonalSelectionAnchor) {
-        const stroke = {
-          points: [
-            polygonalSelectionAnchor.x,
-            polygonalSelectionAnchor.y,
-            position.x,
-            position.y,
-          ],
-        };
 
-        setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke])
+      if (polygonalSelectionStrokes.length === 0) {
+        setAnnotating(true)
 
-        setPolygonalSelectionAnchor(position);
-      } else if (polygonalSelectionStart) {
-        const stroke = {
-          points: [
-            polygonalSelectionStart.x,
-            polygonalSelectionStart.y,
-            position.x,
-            position.y,
-          ],
-        };
-
-        setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
-
-        setPolygonalSelectionAnchor(position);
-      } else {
-        setAnnotating(true);
-
-        setPolygonalSelectionStart(position);
+        if (!polygonalSelectionStart) {
+          setPolygonalSelectionStart(position)
+        }
       }
-    }
+      }
+
   };
 
   const onPolygonalSelectionMouseMove = (position: {
@@ -779,9 +743,9 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         ],
       };
       polygonalSelectionStrokes.splice(
-        polygonalSelectionStrokes.length - 1,
-        1,
-        stroke
+          polygonalSelectionStrokes.length - 1,
+          1,
+          stroke
       );
 
       setPolygonalSelectionStrokes(polygonalSelectionStrokes.concat());
@@ -794,6 +758,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           position.y,
         ],
       };
+
 
       polygonalSelectionStrokes.splice(
         polygonalSelectionStrokes.length - 1,
@@ -836,20 +801,33 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
       setPolygonalSelectionStrokes([]);
     } else {
-      if (polygonalSelectionStrokes.length === 1) {
+      if (polygonalSelectionStrokes.length > 0) {
+
         setPolygonalSelectionAnchor(position);
 
-        if (polygonalSelectionStart && polygonalSelectionStart.x !== position.x && polygonalSelectionStart.y !== position.y) {
-            const stroke = {
-              points: [
-                polygonalSelectionStart!.x,
-                polygonalSelectionStart!.y,
-                position.x,
-                position.y,
-              ],
-            };
-            setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
-          }
+        if (!polygonalSelectionAnchor) {
+          const stroke = {
+            points: [
+              polygonalSelectionStart!.x,
+              polygonalSelectionStart!.y,
+              position.x,
+              position.y,
+            ],
+          };
+          setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
+        }
+        else {
+          const stroke = {
+            points: [
+              polygonalSelectionAnchor!.x,
+              polygonalSelectionAnchor!.y,
+              position.x,
+              position.y,
+            ],
+          };
+          setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
+
+        }
         }
       }
     };

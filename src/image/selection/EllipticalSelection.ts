@@ -1,4 +1,3 @@
-import { BoundingBox } from "../../types/BoundingBox";
 import { Selection } from "./Selection";
 
 export class EllipticalSelection extends Selection {
@@ -6,8 +5,8 @@ export class EllipticalSelection extends Selection {
   origin?: { x: number; y: number };
   radius?: { x: number; y: number };
 
-  get boundingBox(): BoundingBox {
-    return [0, 0, 0, 0];
+  get boundingBox(): [number, number, number, number] | undefined {
+    return undefined;
   }
 
   deselect() {

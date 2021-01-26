@@ -8,7 +8,7 @@ export abstract class Selection {
 
   selection?: Instance;
 
-  abstract get boundingBox(): BoundingBox;
+  abstract get boundingBox(): BoundingBox | undefined;
 
   abstract deselect(): void;
 

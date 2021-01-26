@@ -1,9 +1,8 @@
-import { BoundingBox } from "../../types/BoundingBox";
 import { Selection } from "./Selection";
 
 export class ObjectSelection extends Selection {
-  get boundingBox(): BoundingBox {
-    return [0, 0, 0, 0];
+  get boundingBox(): [number, number, number, number] | undefined {
+    return undefined;
   }
 
   deselect() {}

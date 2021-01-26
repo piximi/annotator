@@ -1,14 +1,20 @@
-import { BoundingBox } from "../../types/BoundingBox";
 import { Selection } from "./Selection";
 
 export class RectangularSelection extends Selection {
-  c?: number;
-  r?: number;
-
   origin?: { x: number; y: number };
 
-  get boundingBox(): BoundingBox {
-    return [0, 0, 0, 0];
+  x?: number;
+  y?: number;
+
+  get boundingBox(): [number, number, number, number] | undefined {
+    if (!this.origin || !this.x || !this.y) return undefined;
+
+    return [
+      this.origin.x,
+      this.origin.y,
+      this.origin.x + this.x,
+      this.origin.y + this.y
+    ];
   }
 
   deselect() {
@@ -47,8 +53,8 @@ export class RectangularSelection extends Selection {
 
   private resize(position: { x: number; y: number }) {
     if (this.origin) {
-      this.c = position.x - this.origin.x;
-      this.r = position.y - this.origin.y;
+      this.x = position.x - this.origin.x;
+      this.y = position.y - this.origin.y;
     }
   }
 }

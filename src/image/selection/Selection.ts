@@ -1,13 +1,13 @@
 export abstract class Selection {
-  public selected: boolean = false;
+  selected: boolean = false;
 
-  public selecting: boolean = false;
+  selecting: boolean = false;
 
-  public abstract deselect(): void;
+  abstract deselect(): void;
 
-  public abstract onMouseDown(position: { x: number; y: number }): void;
+  abstract onMouseDown(position: { x: number; y: number }): void;
 
-  public abstract onMouseMove(position: { x: number; y: number }): void;
+  abstract onMouseMove(position: { x: number; y: number }): void;
 
-  public abstract onMouseUp(position: { x: number; y: number }): void;
+  abstract onMouseUp(position: { x: number; y: number }): void;
 }

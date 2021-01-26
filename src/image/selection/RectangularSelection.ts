@@ -1,18 +1,18 @@
 import {Selection} from "./Selection";
 
 export class RectangularSelection extends Selection {
-  public c?: number;
-  public r?: number;
+  c?: number;
+  r?: number;
 
-  public origin?: { x: number; y: number };
+  origin?: { x: number; y: number };
 
-  public deselect() {
+  deselect() {
     this.selected = false;
 
     this.selecting = false;
   }
 
-  public onMouseDown(position: { x: number; y: number }): void {
+  onMouseDown(position: { x: number; y: number }): void {
     if (this.selected) return;
 
     this.origin = position;
@@ -20,13 +20,13 @@ export class RectangularSelection extends Selection {
     this.selecting = true;
   }
 
-  public onMouseMove(position: { x: number; y: number }): void {
+  onMouseMove(position: { x: number; y: number }): void {
     if (this.selected) return;
 
     this.resize(position);
   }
 
-  public onMouseUp(position: { x: number; y: number }): void {
+  onMouseUp(position: { x: number; y: number }): void {
     if (this.selected || !this.selecting) return;
 
     this.resize(position);

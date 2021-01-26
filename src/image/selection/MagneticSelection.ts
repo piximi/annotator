@@ -1,11 +1,11 @@
 import {Selection} from "./Selection";
 
 export class MagneticSelection extends Selection {
-  public deselect(): void {}
+  deselect(): void {}
 
-  public onMouseDown(position: { x: number; y: number }): void {}
+  onMouseDown(position: { x: number; y: number }): void {}
 
-  public onMouseMove(position: { x: number; y: number }): void {}
+  onMouseMove(position: { x: number; y: number }): void {}
 
-  public onMouseUp(position: { x: number; y: number }): void {}
+  onMouseUp(position: { x: number; y: number }): void {}
 }

@@ -17,7 +17,12 @@ import * as _ from "underscore";
 import {RectangularSelection} from "./RectangularSelection";
 import {StartingAnchor} from "./StartingAnchor";
 import {ZoomSelection} from "./ZoomSelection";
-import {imageViewerImageInstancesSelector, imageViewerImageSelector, imageViewerOperationSelector, imageViewerZoomModeSelector} from "../../store/selectors";
+import {
+  imageViewerImageInstancesSelector,
+  imageViewerImageSelector,
+  imageViewerOperationSelector,
+  imageViewerZoomModeSelector
+} from "../../store/selectors";
 import {Image} from "konva/types/shapes/Image";
 import {Vector2d} from "konva/types/types";
 import {FloodImage, floodPixels, makeFloodMap} from "../../image/flood";

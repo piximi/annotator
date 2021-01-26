@@ -30,9 +30,17 @@ export {
 
 export {
   imageViewerSlice,
+  setImageViewerBrightness,
+  setImageViewerContrast,
+  setImageViewerExposure,
+  setImageViewerHue,
   setImageViewerImage,
+  setImageViewerImageInstances,
   setImageViewerOperation,
+  setImageViewerSaturation,
   setImageViewerSelectionMode,
+  setImageViewerVibrance,
+  setImageViewerZoomMode,
 } from "./imageViewerSlice";
 
 export {

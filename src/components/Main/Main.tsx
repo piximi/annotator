@@ -18,12 +18,13 @@ import * as _ from "underscore";
 import {RectangularSelection} from "./RectangularSelection";
 import {StartingAnchor} from "./StartingAnchor";
 import {ZoomSelection} from "./ZoomSelection";
-import {imageViewerZoomModeSelector} from "../../store/selectors";
+import {imageViewerImageInstancesSelector, imageViewerZoomModeSelector} from "../../store/selectors";
 import {imageViewerImageSelector, imageViewerOperationSelector,} from "../../store/selectors";
 import {Image} from "konva/types/shapes/Image";
 import {Vector2d} from "konva/types/types";
 import {FloodImage, floodPixels, makeFloodMap} from "../../image/flood";
 import * as ImageJS from "image-js";
+import { imageViewerSlice } from "../../store/slices";
 
 type MainProps = {
   activeCategory: Category;
@@ -34,6 +35,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const dispatch = useDispatch();
 
   const image = useSelector(imageViewerImageSelector);
+  const instances = useSelector(imageViewerImageInstancesSelector);
 
   const [img] = useImage(image!.src, "Anonymous");
   const dashOffset = useMarchingAnts();
@@ -910,14 +912,14 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         },
       };
 
-      const payload = {
+      const instance = {
         boundingBox: boundingBox,
         categoryId: activeCategory.id,
         id: image!.id,
         mask: mask,
       };
 
-      dispatch(projectSlice.actions.createImageInstance(payload));
+      dispatch(imageViewerSlice.actions.setImageViewerImageInstances({ instances: [instance, ...instances] }));
     }
   };
 

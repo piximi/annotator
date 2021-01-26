@@ -83,8 +83,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   const updateOverlay = (position: { x: any; y: any }) => {
     const results = floodPixels({
-      x: position.x,
-      y: position.y,
+      x: Math.floor(position.x),
+      y: Math.floor(position.y),
       image: colorSelectImageData!,
       tolerance: colorSelectTolerance,
       color: activeCategory.color,
@@ -114,8 +114,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             setColorSelectInitialPosition(position);
             setColorSelectImageData(
                 makeFloodMap({
-                  x: position.x,
-                  y: position.y,
+                  x: Math.floor(position.x),
+                  y: Math.floor(position.y),
                   image: colorSelectImageData!,
                 })
             );

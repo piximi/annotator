@@ -561,15 +561,18 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   useEffect(() => {
     if (tensorRef && tensorRef.current) {
 
-      tensorRef.current.data().then( (data) => {
-        // const boundaryPixels = getBoundaryCoordinates(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
-        const boundaryPixels = getNonZeroValues(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
-        if (rectangularSelectionX && rectangularSelectionY) {
-          const stroke = boundaryPixels.flatMap( (el: {x: number, y: number}) => [el.x + rectangularSelectionX, el.y + rectangularSelectionY] )
-          setObjectSelectionAnnotation(stroke)
-        }
+      tensorRef.current.print()
+      console.log(tensorRef.current.shape)
 
-        })
+      // tensorRef.current.data().then( (data) => {
+      //   // const boundaryPixels = getBoundaryCoordinates(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
+      //   const boundaryPixels = getNonZeroValues(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
+      //   if (rectangularSelectionX && rectangularSelectionY) {
+      //     const stroke = boundaryPixels.flatMap( (el: {x: number, y: number}) => [el.x + rectangularSelectionX, el.y + rectangularSelectionY] )
+      //     setObjectSelectionAnnotation(stroke)
+      //   }
+      //
+      //   })
 
     }
   }, [tensorRef.current])
@@ -608,7 +611,9 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                       .sub(0.3)
                       .sign()
                       .relu()
-                      .resizeBilinear([Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth)]);
+                      .resizeBilinear([Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth)])
+                      .greaterEqual(0.5)
+                      // .pad([])
 
                   return output as tensorflow.Tensor3D
 

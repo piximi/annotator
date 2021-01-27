@@ -19,11 +19,17 @@ export class LassoSelectionOperator extends SelectionOperator {
 
   deselect() {}
 
-  onMouseDown(position: { x: number; y: number }) {}
+  onMouseDown(position: { x: number; y: number }) {
+    if (this.selected) return;
+  }
 
-  onMouseMove(position: { x: number; y: number }) {}
+  onMouseMove(position: { x: number; y: number }) {
+    if (this.selected || !this.selecting) return;
+  }
 
-  onMouseUp(position: { x: number; y: number }) {}
+  onMouseUp(position: { x: number; y: number }) {
+    if (this.selected || !this.selecting) return;
+  }
 
   select(category: number) {};
 }

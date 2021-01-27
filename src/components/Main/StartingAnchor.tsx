@@ -5,7 +5,7 @@ import {Circle} from "konva/types/shapes/Circle";
 type StartingAnchorProps = {
   annotating: boolean;
   pointRadius: number;
-  position?: { x: number; y: number };
+  position?: { x: number; y: number } | null;
   ref: RefObject<Circle>;
 };
 

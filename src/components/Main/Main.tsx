@@ -981,7 +981,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const [polygonalSelectionAnchor, setPolygonalSelectionAnchor] = useState<{
     x: number;
     y: number;
-  }>();
+  } | null >();
 
   const [
     polygonalSelectionAnnotation,
@@ -996,7 +996,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const [polygonalSelectionStart, setPolygonalSelectionStart] = useState<{
     x: number;
     y: number;
-  }>();
+  } | null >();
 
   const [polygonalSelectionStrokes, setPolygonalSelectionStrokes] = useState<
     Array<{ points: Array<number> }>
@@ -1119,6 +1119,10 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setPolygonalSelectionAnnotation(stroke);
 
       setPolygonalSelectionStrokes([]);
+
+      setPolygonalSelectionStart(null);
+      setPolygonalSelectionAnchor(null);
+
     } else {
 
       if (polygonalSelectionStrokes.length === 0) {

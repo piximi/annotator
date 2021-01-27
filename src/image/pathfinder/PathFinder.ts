@@ -146,9 +146,10 @@ function reconstructPath(
     factor: number = 1
 ) {
     let coords = [];
+    const fromId = graph.fromId
     if (searchNode!.parentId !== null) {
         const parentNode = graph.getNode(searchNode!.parentId) as PiximiNode;
-        if (typeof parentNode !== "undefined") {
+        if (typeof parentNode !== "undefined" && parentNode.fromId === fromId) {
             coords.push(...parentNode.trace);
         }
     }

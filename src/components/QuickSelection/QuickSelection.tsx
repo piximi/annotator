@@ -1,12 +1,12 @@
 import React from "react";
 import * as ReactKonva from "react-konva";
-import {Image as ImageType} from "../../types/Image";
-import {Stage} from "konva/types/Stage";
-import {Image} from "konva/types/shapes/Image";
+import { Image as ImageType } from "../../types/Image";
+import { Stage } from "konva/types/Stage";
+import { Image } from "konva/types/shapes/Image";
 import useImage from "use-image";
-import {Filter} from "konva/types/Node";
-import {slic} from "../../image";
-import {Category} from "../../types/Category";
+import { Filter } from "konva/types/Node";
+import { slic } from "../../image";
+import { Category } from "../../types/Category";
 
 type Superpixels = {
   [pixel: number]: {

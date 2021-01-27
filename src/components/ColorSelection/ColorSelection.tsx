@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import * as ReactKonva from "react-konva";
-import {Image as ImageType} from "../../types/Image";
-import {Stage} from "konva/types/Stage";
-import {Image} from "konva/types/shapes/Image";
+import { Image as ImageType } from "../../types/Image";
+import { Stage } from "konva/types/Stage";
+import { Image } from "konva/types/shapes/Image";
 import useImage from "use-image";
 import * as ImageJS from "image-js";
 import { Vector2d } from "konva/types/types";
@@ -74,11 +74,11 @@ export const ColorSelection = ({ image, category }: ColorSelectionProps) => {
           if (position !== initialPosition) {
             setInitialPosition(position);
             setImageData(
-                makeFloodMap({
-                  x: position.x,
-                  y: position.y,
-                  image: imageData!,
-                })
+              makeFloodMap({
+                x: position.x,
+                y: position.y,
+                image: imageData!,
+              })
             );
           }
           updateOverlay(position);
@@ -92,10 +92,10 @@ export const ColorSelection = ({ image, category }: ColorSelectionProps) => {
       const newPosition = stageRef.current.getPointerPosition();
       if (newPosition && initialPosition) {
         const diff = Math.ceil(
-            Math.hypot(
-                newPosition.x - initialPosition!.x,
-                newPosition.y - initialPosition!.y
-            )
+          Math.hypot(
+            newPosition.x - initialPosition!.x,
+            newPosition.y - initialPosition!.y
+          )
         );
         if (diff !== tolerance) {
           setTolerance(diff);
@@ -110,34 +110,34 @@ export const ColorSelection = ({ image, category }: ColorSelectionProps) => {
   };
 
   return (
-      <ReactKonva.Stage
-          globalCompositeOperation="destination-over"
-          height={image.shape?.r}
-          ref={stageRef}
-          width={image.shape?.c}
+    <ReactKonva.Stage
+      globalCompositeOperation="destination-over"
+      height={image.shape?.r}
+      ref={stageRef}
+      width={image.shape?.c}
+    >
+      <ReactKonva.Layer
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
       >
-        <ReactKonva.Layer
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-        >
-          <ReactKonva.Image image={img} ref={imageRef} />
-          <ReactKonva.Image image={overlayImage} ref={overlayRef} />
-          {mouseHeld && initialPosition && (
-              <ReactKonva.Label x={initialPosition.x} y={initialPosition.y}>
-                <ReactKonva.Tag
-                    fill={"#f0ce0f"}
-                    stroke={"#907c09"}
-                    shadowColor={"black"}
-                    pointerDirection={"up"}
-                    pointerWidth={10}
-                    pointerHeight={10}
-                    cornerRadius={5}
-                />
-                <ReactKonva.Text text={tolerance.toString()} padding={5} />
-              </ReactKonva.Label>
-          )}
-        </ReactKonva.Layer>
-      </ReactKonva.Stage>
+        <ReactKonva.Image image={img} ref={imageRef} />
+        <ReactKonva.Image image={overlayImage} ref={overlayRef} />
+        {mouseHeld && initialPosition && (
+          <ReactKonva.Label x={initialPosition.x} y={initialPosition.y}>
+            <ReactKonva.Tag
+              fill={"#f0ce0f"}
+              stroke={"#907c09"}
+              shadowColor={"black"}
+              pointerDirection={"up"}
+              pointerWidth={10}
+              pointerHeight={10}
+              cornerRadius={5}
+            />
+            <ReactKonva.Text text={tolerance.toString()} padding={5} />
+          </ReactKonva.Label>
+        )}
+      </ReactKonva.Layer>
+    </ReactKonva.Stage>
   );
 };

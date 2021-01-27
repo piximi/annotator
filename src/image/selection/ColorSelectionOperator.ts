@@ -17,5 +17,5 @@ export class ColorSelectionOperator extends SelectionOperator {
 
   onMouseUp(position: { x: number; y: number }) {}
 
-  select(category: number) {};
+  select(category: number) {}
 }

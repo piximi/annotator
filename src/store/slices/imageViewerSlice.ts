@@ -4,7 +4,7 @@ import { Image } from "../../types/Image";
 import { ImageViewerSelectionMode } from "../../types/ImageViewerSelectionMode";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import { ImageViewerZoomMode } from "../../types/ImageViewerZoomMode";
-import {Instance} from "../../types/Instance";
+import { Instance } from "../../types/Instance";
 
 const initialState: ImageViewerState = {
   brightness: 0,

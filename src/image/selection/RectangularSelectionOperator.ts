@@ -3,17 +3,17 @@ import { SelectionOperator } from "./SelectionOperator";
 export class RectangularSelectionOperator extends SelectionOperator {
   origin?: { x: number; y: number };
 
-  x?: number;
-  y?: number;
+  width?: number;
+  height?: number;
 
   get boundingBox(): [number, number, number, number] | undefined {
-    if (!this.origin || !this.x || !this.y) return undefined;
+    if (!this.origin || !this.width || !this.height) return undefined;
 
     return [
       this.origin.x,
       this.origin.y,
-      this.origin.x + this.x,
-      this.origin.y + this.y
+      this.origin.x + this.width,
+      this.origin.y + this.height,
     ];
   }
 
@@ -61,12 +61,12 @@ export class RectangularSelectionOperator extends SelectionOperator {
     };
 
     this.deselect();
-  };
+  }
 
   private resize(position: { x: number; y: number }) {
     if (this.origin) {
-      this.x = position.x - this.origin.x;
-      this.y = position.y - this.origin.y;
+      this.width = position.x - this.origin.x;
+      this.height = position.y - this.origin.y;
     }
   }
 }

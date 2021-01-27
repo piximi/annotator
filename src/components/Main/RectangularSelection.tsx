@@ -1,9 +1,9 @@
 import * as ReactKonva from "react-konva";
-import React, {RefObject} from "react";
-import {Category} from "../../types/Category";
-import {toRGBA} from "../../image/toRGBA";
-import {useMarchingAnts} from "../../hooks";
-import {Rect} from "konva/types/shapes/Rect";
+import React, { RefObject } from "react";
+import { Category } from "../../types/Category";
+import { toRGBA } from "../../image/toRGBA";
+import { useMarchingAnts } from "../../hooks";
+import { Rect } from "konva/types/shapes/Rect";
 
 type RectangularSelectionProps = {
   activeCategory: Category;
@@ -16,48 +16,51 @@ type RectangularSelectionProps = {
   y?: number;
 };
 
-export const RectangularSelection = React.forwardRef<Rect, RectangularSelectionProps>( (props, ref) => {
+export const RectangularSelection = React.forwardRef<
+  Rect,
+  RectangularSelectionProps
+>((props, ref) => {
   const dashOffset = useMarchingAnts();
 
   if (props.annotated && !props.annotating) {
     return (
-        <ReactKonva.Rect
-            dash={[4, 2]}
-            dashOffset={-dashOffset}
-            fill={toRGBA(props.activeCategory.color, 0.3)}
-            height={props.height}
-            ref={ref}
-            stroke="white"
-            strokeWidth={1}
-            width={props.width}
-            x={props.x}
-            y={props.y}
-        />
-    )
+      <ReactKonva.Rect
+        dash={[4, 2]}
+        dashOffset={-dashOffset}
+        fill={toRGBA(props.activeCategory.color, 0.3)}
+        height={props.height}
+        ref={ref}
+        stroke="white"
+        strokeWidth={1}
+        width={props.width}
+        x={props.x}
+        y={props.y}
+      />
+    );
   } else if (!props.annotated && props.annotating) {
     return (
-        <React.Fragment>
-          <ReactKonva.Rect
-              height={props.height}
-              stroke="black"
-              strokeWidth={1}
-              width={props.width}
-              x={props.x}
-              y={props.y}
-          />
-          <ReactKonva.Rect
-              dash={[4, 2]}
-              dashOffset={-dashOffset}
-              height={props.height}
-              stroke="white"
-              strokeWidth={1}
-              width={props.width}
-              x={props.x}
-              y={props.y}
-          />
-        </React.Fragment>
+      <React.Fragment>
+        <ReactKonva.Rect
+          height={props.height}
+          stroke="black"
+          strokeWidth={1}
+          width={props.width}
+          x={props.x}
+          y={props.y}
+        />
+        <ReactKonva.Rect
+          dash={[4, 2]}
+          dashOffset={-dashOffset}
+          height={props.height}
+          stroke="white"
+          strokeWidth={1}
+          width={props.width}
+          x={props.x}
+          y={props.y}
+        />
+      </React.Fragment>
     );
   } else {
     return null;
   }
-})
+});

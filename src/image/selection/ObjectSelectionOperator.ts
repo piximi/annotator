@@ -47,5 +47,5 @@ export class ObjectSelectionOperator extends SelectionOperator {
     this.rectangularSelector.onMouseUp(position)
   }
 
-  select(category: number) {};
+  select(category: number) {}
 }

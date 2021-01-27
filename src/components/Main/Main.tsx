@@ -1,41 +1,48 @@
 import * as ReactKonva from "react-konva";
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useImage from "use-image";
-import {BoundingBox} from "../../types/BoundingBox";
-import {Category} from "../../types/Category";
-import {Ellipse} from "konva/types/shapes/Ellipse";
-import {ImageViewerOperation} from "../../types/ImageViewerOperation";
-import {Rect} from "konva/types/shapes/Rect";
-import {Stage} from "konva/types/Stage";
-import {toRGBA} from "../../image/toRGBA";
-import {useDispatch, useSelector} from "react-redux";
-import {useDebounce, useMarchingAnts, useSelection} from "../../hooks";
-import {useStyles} from "./Main.css";
-import {Circle} from "konva/types/shapes/Circle";
-import {Line} from "konva/types/shapes/Line";
+import { BoundingBox } from "../../types/BoundingBox";
+import { Category } from "../../types/Category";
+import { Ellipse } from "konva/types/shapes/Ellipse";
+import { ImageViewerOperation } from "../../types/ImageViewerOperation";
+import { Rect } from "konva/types/shapes/Rect";
+import { Stage } from "konva/types/Stage";
+import { toRGBA } from "../../image/toRGBA";
+import { useDispatch, useSelector } from "react-redux";
+import { useDebounce, useMarchingAnts, useSelection } from "../../hooks";
+import { useStyles } from "./Main.css";
+import { Circle } from "konva/types/shapes/Circle";
+import { Line } from "konva/types/shapes/Line";
 import * as _ from "underscore";
-import {RectangularSelection} from "./RectangularSelection";
-import {StartingAnchor} from "./StartingAnchor";
-import {ZoomSelection} from "./ZoomSelection";
+import { RectangularSelection } from "./RectangularSelection";
+import { StartingAnchor } from "./StartingAnchor";
+import { ZoomSelection } from "./ZoomSelection";
 import {
   imageViewerImageInstancesSelector,
   imageViewerImageSelector,
   imageViewerOperationSelector,
-  imageViewerZoomModeSelector
+  imageViewerZoomModeSelector,
 } from "../../store/selectors";
-import {Image} from "konva/types/shapes/Image";
-import {Vector2d} from "konva/types/types";
-import {FloodImage, floodPixels, makeFloodMap} from "../../image/flood";
+import { Image } from "konva/types/shapes/Image";
+import { Vector2d } from "konva/types/types";
+import { FloodImage, floodPixels, makeFloodMap } from "../../image/flood";
 import * as ImageJS from "image-js";
-import {setImageViewerImageInstances} from "../../store/slices";
-import {ObjectSelection} from "./ObjectSelection";
-import {EllipticalSelection} from "./EllipticalSelection";
+import { setImageViewerImageInstances } from "../../store/slices";
+import { ObjectSelection } from "./ObjectSelection";
+import { EllipticalSelection } from "./EllipticalSelection";
 import * as tensorflow from "@tensorflow/tfjs";
 import { Tensor3D, Tensor4D } from "@tensorflow/tfjs";
-import {getBoundaryCoordinates, getNonZeroValues, getIdx} from "../../image/imageHelper";
-import {createPathFinder, makeGraph, PiximiGraph} from "../../image/GraphHelper";
-import {transformCoordinatesToStrokes} from "../../image/pathfinder/PathFinder";
-
+import {
+  getBoundaryCoordinates,
+  getNonZeroValues,
+  getIdx,
+} from "../../image/imageHelper";
+import {
+  createPathFinder,
+  makeGraph,
+  PiximiGraph,
+} from "../../image/GraphHelper";
+import { transformCoordinatesToStrokes } from "../../image/pathfinder/PathFinder";
 
 type MainProps = {
   activeCategory: Category;
@@ -62,35 +69,55 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
    */
   const ColorSelection = () => {
     return (
-        <React.Fragment>
-        <ReactKonva.Image image={colorSelectOverlayImage} ref={colorSelectOverlayRef} />
+      <React.Fragment>
+        <ReactKonva.Image
+          image={colorSelectOverlayImage}
+          ref={colorSelectOverlayRef}
+        />
         {annotating && colorSelectInitialPosition && (
-            <ReactKonva.Label x={colorSelectInitialPosition.x} y={colorSelectInitialPosition.y}>
-              <ReactKonva.Tag
-                  fill={"#f0ce0f"}
-                  stroke={"#907c09"}
-                  shadowColor={"black"}
-                  pointerDirection={"up"}
-                  pointerWidth={10}
-                  pointerHeight={10}
-                  cornerRadius={5}
-              />
-              <ReactKonva.Text text={colorSelectTolerance.toString()} padding={5} />
-            </ReactKonva.Label>
+          <ReactKonva.Label
+            x={colorSelectInitialPosition.x}
+            y={colorSelectInitialPosition.y}
+          >
+            <ReactKonva.Tag
+              fill={"#f0ce0f"}
+              stroke={"#907c09"}
+              shadowColor={"black"}
+              pointerDirection={"up"}
+              pointerWidth={10}
+              pointerHeight={10}
+              cornerRadius={5}
+            />
+            <ReactKonva.Text
+              text={colorSelectTolerance.toString()}
+              padding={5}
+            />
+          </ReactKonva.Label>
         )}
-        </React.Fragment>
-    )
+      </React.Fragment>
+    );
   };
 
-  const [colorSelectOverlayData, setColorSelectOverlayData] = useState<string>("");
-  const [colorSelectOverlayImage] = useImage(colorSelectOverlayData, "Anonymous");
+  const [colorSelectOverlayData, setColorSelectOverlayData] = useState<string>(
+    ""
+  );
+  const [colorSelectOverlayImage] = useImage(
+    colorSelectOverlayData,
+    "Anonymous"
+  );
 
   const colorSelectOverlayRef = React.useRef<Image>(null);
 
-  const [colorSelectInitialPosition, setColorSelectInitialPosition] = useState<Vector2d>();
+  const [
+    colorSelectInitialPosition,
+    setColorSelectInitialPosition,
+  ] = useState<Vector2d>();
   const [colorSelectTolerance, setColorSelectTolerance] = useState<number>(1);
 
-  const [colorSelectImageData, setColorSelectImageData] = useState<FloodImage>();
+  const [
+    colorSelectImageData,
+    setColorSelectImageData,
+  ] = useState<FloodImage>();
 
   const updateOverlay = (position: { x: any; y: any }) => {
     const results = floodPixels({
@@ -105,15 +132,18 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   const onColorSelection = () => {};
 
-  const onColorSelectionMouseDown = async (position: { x: number; y: number }) => {
-    console.log(position)
+  const onColorSelectionMouseDown = async (position: {
+    x: number;
+    y: number;
+  }) => {
+    console.log(position);
     setAnnotated(false);
     setAnnotating(true);
     setColorSelectTolerance(1);
     let jsImage;
     // Todo: Fix this little setup problem
     if (imageRef.current && !colorSelectImageData) {
-      console.log(imageRef.current.toDataURL())
+      console.log(imageRef.current.toDataURL());
       jsImage = await ImageJS.Image.load(imageRef.current.toDataURL());
       setColorSelectImageData(jsImage as FloodImage);
       return;
@@ -124,28 +154,27 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           if (position !== colorSelectInitialPosition) {
             setColorSelectInitialPosition(position);
             setColorSelectImageData(
-                makeFloodMap({
-                  x: Math.floor(position.x),
-                  y: Math.floor(position.y),
-                  image: colorSelectImageData!,
-                })
+              makeFloodMap({
+                x: Math.floor(position.x),
+                y: Math.floor(position.y),
+                image: colorSelectImageData!,
+              })
             );
           }
           updateOverlay(position);
         }
       }
     }
-
   };
 
   const onColorSelectionMouseMove = (position: { x: number; y: number }) => {
     if (annotating && stageRef && stageRef.current) {
       if (position && colorSelectInitialPosition) {
         const diff = Math.ceil(
-            Math.hypot(
-                position.x - colorSelectInitialPosition!.x,
-                position.y - colorSelectInitialPosition!.y
-            )
+          Math.hypot(
+            position.x - colorSelectInitialPosition!.x,
+            position.y - colorSelectInitialPosition!.y
+          )
         );
         if (diff !== colorSelectTolerance) {
           setColorSelectTolerance(diff);
@@ -261,7 +290,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   const [lassoSelectionStrokes, setLassoSelectionStrokes] = useState<
     Array<{ points: Array<number> }>
-  >([{points:[]}]);
+  >([{ points: [] }]);
 
   const LassoSelectionAnchor = () => {
     if (
@@ -339,7 +368,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                     dash={[4, 2]}
                     dashOffset={-dashOffset}
                     fill="None"
-                    key={key+1}
+                    key={key + 1}
                     points={stroke.points}
                     stroke="white"
                     strokeWidth={1}
@@ -357,34 +386,40 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const isInside = (
-      startingAnchorCircleRef: React.RefObject<Circle>,
-      position: { x: number; y: number }
+    startingAnchorCircleRef: React.RefObject<Circle>,
+    position: { x: number; y: number }
   ) => {
     if (
-        startingAnchorCircleRef &&
-        startingAnchorCircleRef.current && imageRef && imageRef.current
+      startingAnchorCircleRef &&
+      startingAnchorCircleRef.current &&
+      imageRef &&
+      imageRef.current
     ) {
       let rectangle = startingAnchorCircleRef.current.getClientRect();
 
-        const transform = imageRef.current.getAbsoluteTransform().copy();
-        transform.invert();
-        const transformedRectangle = transform.point({x: rectangle.x, y: rectangle.y});
+      const transform = imageRef.current.getAbsoluteTransform().copy();
+      transform.invert();
+      const transformedRectangle = transform.point({
+        x: rectangle.x,
+        y: rectangle.y,
+      });
 
       return (
-          transformedRectangle.x <= position.x &&
-          position.x <= transformedRectangle.x + rectangle.width &&
-          transformedRectangle.y <= position.y &&
-          position.y <= transformedRectangle.y + rectangle.height
+        transformedRectangle.x <= position.x &&
+        position.x <= transformedRectangle.x + rectangle.width &&
+        transformedRectangle.y <= position.y &&
+        position.y <= transformedRectangle.y + rectangle.height
       );
     } else {
       return false;
     }
   };
 
-  const connected = (position: { x: number; y: number },
-                     startingAnchorCircleRef: React.RefObject<Circle>,
-                     strokes: Array<{ points: Array<number> }>,
-                     canClose: boolean
+  const connected = (
+    position: { x: number; y: number },
+    startingAnchorCircleRef: React.RefObject<Circle>,
+    strokes: Array<{ points: Array<number> }>,
+    canClose: boolean
   ) => {
     if (startingAnchorCircleRef) {
       const inside = isInside(startingAnchorCircleRef, position);
@@ -397,7 +432,14 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const onLassoSelection = () => {};
 
   const onLassoSelectionMouseDown = (position: { x: number; y: number }) => {
-    if (connected(position, lassoSelectionStartingAnchorCircleRef, lassoSelectionStrokes, lassoSelectionCanClose)) {
+    if (
+      connected(
+        position,
+        lassoSelectionStartingAnchorCircleRef,
+        lassoSelectionStrokes,
+        lassoSelectionCanClose
+      )
+    ) {
       const stroke: { points: Array<number> } = {
         points: _.flatten(
           lassoSelectionStrokes.map(
@@ -411,7 +453,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setLassoSelectionAnnotation(stroke);
       setLassoSelectionStrokes([]);
     } else {
-
       if (lassoSelectionStrokes[0].points.length === 0) {
         setAnnotating(true);
 
@@ -423,7 +464,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onLassoSelectionMouseMove = (position: { x: number; y: number }) => {
-
     if (
       !lassoSelectionCanClose &&
       !isInside(lassoSelectionStartingAnchorCircleRef, position)
@@ -442,30 +482,36 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       };
 
       lassoSelectionStrokes.splice(lassoSelectionStrokes.length - 1, 1, stroke);
-      setLassoSelectionStrokes(lassoSelectionStrokes.concat())
-    }
-
-    else {
+      setLassoSelectionStrokes(lassoSelectionStrokes.concat());
+    } else {
       let stroke = lassoSelectionStrokes[lassoSelectionStrokes.length - 1];
 
       if (stroke.points.length === 0 && lassoSelectionStart) {
-        stroke.points = [lassoSelectionStart.x, lassoSelectionStart.y, position.x, position.y]
-      }
-      else {
+        stroke.points = [
+          lassoSelectionStart.x,
+          lassoSelectionStart.y,
+          position.x,
+          position.y,
+        ];
+      } else {
         stroke.points = [...stroke.points, position.x, position.y];
       }
 
       lassoSelectionStrokes.splice(0, 1, stroke);
 
       setLassoSelectionStrokes(lassoSelectionStrokes.concat());
-
     }
-
   };
 
   const onLassoSelectionMouseUp = (position: { x: number; y: number }) => {
-
-    if (connected(position, lassoSelectionStartingAnchorCircleRef, lassoSelectionStrokes, lassoSelectionCanClose)) {
+    if (
+      connected(
+        position,
+        lassoSelectionStartingAnchorCircleRef,
+        lassoSelectionStrokes,
+        lassoSelectionCanClose
+      )
+    ) {
       if (lassoSelectionStart) {
         const stroke = {
           points: [
@@ -492,17 +538,11 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setLassoSelectionAnnotation(stroke);
       setLassoSelectionStrokes([]);
     } else {
-
       if (lassoSelectionStrokes[0].points.length > 0) {
         setLassoSelectionAnchor(position);
 
         const stroke = {
-          points: [
-            position.x,
-            position.y,
-            position.x,
-            position.y,
-          ],
+          points: [position.x, position.y, position.x, position.y],
         };
         setLassoSelectionStrokes([...lassoSelectionStrokes, stroke]);
       }
@@ -548,15 +588,15 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     y: number;
   }>();
   const [magneticSelectionStrokes, setMagneticSelectionStrokes] = useState<
-      Array<{ points: Array<number> }>
-      >([]);
+    Array<{ points: Array<number> }>
+  >([]);
   const magneticSelectionPosition = React.useRef<{
     x: number;
     y: number;
   } | null>(null);
   const magneticSelectionDebouncedPosition = useDebounce(
-      magneticSelectionPosition.current,
-      20
+    magneticSelectionPosition.current,
+    20
   );
   const magneticSelectionPathCoordsRef = React.useRef<any>();
   const magneticSelectionPathFinder = React.useRef<any>();
@@ -569,9 +609,9 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   useEffect(() => {
     if (magneticSelectionGraph && img) {
       magneticSelectionPathFinder.current = createPathFinder(
-          magneticSelectionGraph,
-          magneticSelectionDownsizedWidth,
-          magneticSelectionFactor,
+        magneticSelectionGraph,
+        magneticSelectionDownsizedWidth,
+        magneticSelectionFactor
       );
     }
   }, [magneticSelectionDownsizedWidth, magneticSelectionGraph, img]);
@@ -585,7 +625,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   // });
 
   useEffect(() => {
-    console.log("Loading image")
+    console.log("Loading image");
     const loadImg = async () => {
       const img = await ImageJS.Image.load(image.src);
       const grey = img.grey();
@@ -593,7 +633,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setMagneticSelectionDownsizedWidth(img.width * magneticSelectionFactor);
       const downsized = edges.resize({ factor: magneticSelectionFactor });
       setMagneticSelectionGraph(
-          makeGraph(downsized.data, downsized.height, downsized.width)
+        makeGraph(downsized.data, downsized.height, downsized.width)
       );
     };
     loadImg();
@@ -613,13 +653,11 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   //   }
   // }, [annotated]);
 
-
-
   const MagneticSelection = () => {
-    return  (
-        <React.Fragment>
+    return (
+      <React.Fragment>
         {magneticSelectionStart && (
-        <ReactKonva.Circle
+          <ReactKonva.Circle
             fill="#000"
             globalCompositeOperation="source-over"
             hitStrokeWidth={64}
@@ -631,71 +669,66 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             strokeWidth={1}
             x={magneticSelectionStart.x}
             y={magneticSelectionStart.y}
-        />
-    )}
+          />
+        )}
 
-    {!annotated &&
-    annotating &&
-    magneticSelectionStrokes.map(
-        (stroke: { points: Array<number> }, key: number) => (
-            <React.Fragment>
-              <ReactKonva.Line
+        {!annotated &&
+          annotating &&
+          magneticSelectionStrokes.map(
+            (stroke: { points: Array<number> }, key: number) => (
+              <React.Fragment>
+                <ReactKonva.Line
                   // key={key}
                   points={stroke.points}
                   stroke="#FFF"
                   strokeWidth={1}
-              />
+                />
 
-              <ReactKonva.Line
+                <ReactKonva.Line
                   dash={[4, 2]}
                   // key={key}
                   points={stroke.points}
                   stroke="#FFF"
                   strokeWidth={1}
-              />
-            </React.Fragment>
-            ))}
+                />
+              </React.Fragment>
+            )
+          )}
 
-
-
-    {!annotated &&
-    annotating &&
-    magneticSelectionPreviousStroke.map(
-        (stroke: { points: Array<number> }, key: number) => (
-            <React.Fragment>
-              <ReactKonva.Line
+        {!annotated &&
+          annotating &&
+          magneticSelectionPreviousStroke.map(
+            (stroke: { points: Array<number> }, key: number) => (
+              <React.Fragment>
+                <ReactKonva.Line
                   // key={key}
                   points={stroke.points}
                   stroke="#FFF"
                   strokeWidth={1}
-              />
+                />
 
-              <ReactKonva.Line
+                <ReactKonva.Line
                   dash={[4, 2]}
                   // key={key}
                   points={stroke.points}
                   stroke="#FFF"
                   strokeWidth={1}
-              />
-            </React.Fragment>
-        ))}
-
-
+                />
+              </React.Fragment>
+            )
+          )}
       </React.Fragment>
-    )
+    );
   };
 
   useEffect(
-      () => {
-        if (magneticSelectionDebouncedPosition && annotating) {
-          onMagneticSelectionMouseMove(magneticSelectionDebouncedPosition);
-        }
-      },
-      [
-        magneticSelectionDebouncedPosition
-      ] // Only call effect if debounced search term changes
+    () => {
+      if (magneticSelectionDebouncedPosition && annotating) {
+        onMagneticSelectionMouseMove(magneticSelectionDebouncedPosition);
+      }
+    },
+    [magneticSelectionDebouncedPosition] // Only call effect if debounced search term changes
   );
-
 
   const magnetConnected = (position: { x: number; y: number }) => {
     const inside = isInside(magneticSelectionStartingAnchorCircleRef, position);
@@ -718,7 +751,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         if (magnetConnected(magneticSelectionPosition.current)) {
           const stroke = {
             points: _.flatten(
-                magneticSelectionStrokes.map((stroke) => stroke.points)
+              magneticSelectionStrokes.map((stroke) => stroke.points)
             ),
           };
 
@@ -731,7 +764,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           setAnnotating(true);
 
           magneticSelectionStartPosition.current =
-              magneticSelectionPosition.current;
+            magneticSelectionPosition.current;
 
           if (magneticSelectionStrokes.length > 0) {
             setMagneticSelectionAnchor(magneticSelectionPosition.current);
@@ -758,50 +791,50 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
       if (magneticSelectionPosition && magneticSelectionPosition.current) {
         if (
-            !magneticSelectionCanClose &&
-            !isInside(
-                magneticSelectionStartingAnchorCircleRef,
-                magneticSelectionPosition.current
-            )
+          !magneticSelectionCanClose &&
+          !isInside(
+            magneticSelectionStartingAnchorCircleRef,
+            magneticSelectionPosition.current
+          )
         ) {
           setMagneticSelectionCanClose(true);
         }
 
         // let startPosition;
         if (
-            magneticSelectionPathFinder &&
-            magneticSelectionPathFinder.current &&
-            img &&
-            magneticSelectionStartPosition &&
-            magneticSelectionStartPosition.current
+          magneticSelectionPathFinder &&
+          magneticSelectionPathFinder.current &&
+          img &&
+          magneticSelectionStartPosition &&
+          magneticSelectionStartPosition.current
         ) {
           magneticSelectionPathCoordsRef.current = magneticSelectionPathFinder.current.find(
-              getIdx(magneticSelectionDownsizedWidth, 1)(
-                  Math.floor(
-                      magneticSelectionStartPosition.current.x *
-                      magneticSelectionFactor
-                  ),
-                  Math.floor(
-                      magneticSelectionStartPosition.current.y *
-                      magneticSelectionFactor
-                  ),
-                  0
+            getIdx(magneticSelectionDownsizedWidth, 1)(
+              Math.floor(
+                magneticSelectionStartPosition.current.x *
+                  magneticSelectionFactor
               ),
-              getIdx(magneticSelectionDownsizedWidth, 1)(
-                  Math.floor(
-                      magneticSelectionPosition.current.x * magneticSelectionFactor
-                  ),
-                  Math.floor(
-                      magneticSelectionPosition.current.y * magneticSelectionFactor
-                  ),
-                  0
-              )
+              Math.floor(
+                magneticSelectionStartPosition.current.y *
+                  magneticSelectionFactor
+              ),
+              0
+            ),
+            getIdx(magneticSelectionDownsizedWidth, 1)(
+              Math.floor(
+                magneticSelectionPosition.current.x * magneticSelectionFactor
+              ),
+              Math.floor(
+                magneticSelectionPosition.current.y * magneticSelectionFactor
+              ),
+              0
+            )
           );
 
           setMagneticSelectionStrokes(
-              transformCoordinatesToStrokes(
-                  magneticSelectionPathCoordsRef.current
-              )
+            transformCoordinatesToStrokes(
+              magneticSelectionPathCoordsRef.current
+            )
           );
         }
       }
@@ -837,7 +870,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
           const stroke = {
             points: _.flatten(
-                magneticSelectionStrokes.map((stroke) => stroke.points)
+              magneticSelectionStrokes.map((stroke) => stroke.points)
             ),
           };
 
@@ -853,7 +886,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             setMagneticSelectionAnchor(magneticSelectionPosition.current);
 
             magneticSelectionStartPosition.current =
-                magneticSelectionPosition.current;
+              magneticSelectionPosition.current;
 
             setMagneticSelectionPreviousStroke([
               ...magneticSelectionPreviousStroke,
@@ -872,14 +905,15 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
    */
   const objectSelectionRef = React.useRef<Rect>(null);
   const [model, setModel] = useState<tensorflow.LayersModel>();
-  const tensorRef = React.useRef<Tensor3D | Tensor4D >()
-  const [objectSelectionAnnotation, setObjectSelectionAnnotation] = useState<Array<number>>([])
-
+  const tensorRef = React.useRef<Tensor3D | Tensor4D>();
+  const [objectSelectionAnnotation, setObjectSelectionAnnotation] = useState<
+    Array<number>
+  >([]);
 
   const createModel = async () => {
     // FIXME: should be a local file
     const pathname =
-        "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
+      "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
 
     const graph = await tensorflow.loadLayersModel(pathname);
 
@@ -895,25 +929,25 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   useEffect(() => {
-    if (activeOperation === ImageViewerOperation.ObjectSelection)
-    {
+    if (activeOperation === ImageViewerOperation.ObjectSelection) {
       //this should be called only once
-      createModel()
+      createModel();
     }
-
   }, [activeOperation]);
 
   useEffect(() => {
     if (tensorRef && tensorRef.current) {
-      tensorRef.current.print()
-      console.log(tensorRef.current.shape)
+      tensorRef.current.print();
+      console.log(tensorRef.current.shape);
     }
-  }, [tensorRef.current])
-
+  }, [tensorRef.current]);
 
   const onObjectSelection = () => {};
 
-  const onObjectSelectionMouseUp = async (position: { x: number; y: number }) => {
+  const onObjectSelectionMouseUp = async (position: {
+    x: number;
+    y: number;
+  }) => {
     if (annotated || !annotating) return;
     setAnnotated(true);
     setAnnotating(false);
@@ -925,35 +959,53 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             tensorRef.current = tensorflow.tidy(() => {
               if (cropped) {
                 const croppedInput: tensorflow.Tensor3D = tensorflow.browser.fromPixels(
-                    cropped
+                  cropped
                 );
 
                 const size: [number, number] = [128, 128];
-                const resized = tensorflow.image.resizeBilinear(croppedInput, size);
+                const resized = tensorflow.image.resizeBilinear(
+                  croppedInput,
+                  size
+                );
                 const standardized = resized.div(tensorflow.scalar(255));
                 const batch = standardized.expandDims(0);
 
                 if (model && rectangularSelectionY && rectangularSelectionX) {
                   const prediction = model.predict(
-                      batch
+                    batch
                   ) as tensorflow.Tensor<tensorflow.Rank>;
 
                   const output = prediction
-                      .squeeze([0])
-                      .tile([1, 1, 3])
-                      .sub(0.3)
-                      .sign()
-                      .relu()
-                      .resizeBilinear([Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth)])
-                      .greaterEqual(0.5)
-                      .pad([[Math.floor(rectangularSelectionY), imageRef.current.height() - (Math.floor(rectangularSelectionY) + Math.floor(rectangularSelectionHeight))], [Math.floor(rectangularSelectionX), imageRef.current.width() - (Math.floor(rectangularSelectionX) + Math.floor(rectangularSelectionWidth)) ], [0, 0]])
-                      .cast('float32')
-                  return output as tensorflow.Tensor3D
-
+                    .squeeze([0])
+                    .tile([1, 1, 3])
+                    .sub(0.3)
+                    .sign()
+                    .relu()
+                    .resizeBilinear([
+                      Math.floor(rectangularSelectionHeight),
+                      Math.floor(rectangularSelectionWidth),
+                    ])
+                    .greaterEqual(0.5)
+                    .pad([
+                      [
+                        Math.floor(rectangularSelectionY),
+                        imageRef.current.height() -
+                          (Math.floor(rectangularSelectionY) +
+                            Math.floor(rectangularSelectionHeight)),
+                      ],
+                      [
+                        Math.floor(rectangularSelectionX),
+                        imageRef.current.width() -
+                          (Math.floor(rectangularSelectionX) +
+                            Math.floor(rectangularSelectionWidth)),
+                      ],
+                      [0, 0],
+                    ])
+                    .cast("float32");
+                  return output as tensorflow.Tensor3D;
                 }
               }
             });
-
           },
           height: rectangularSelectionHeight,
           width: rectangularSelectionWidth,
@@ -963,8 +1015,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         await imageRef.current.toImage(config);
       }
     };
-    await f()
-    };
+    await f();
+  };
 
   /*
    * Polygonal selection
@@ -974,7 +1026,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const [polygonalSelectionAnchor, setPolygonalSelectionAnchor] = useState<{
     x: number;
     y: number;
-  } | null >();
+  } | null>();
 
   const [
     polygonalSelectionAnnotation,
@@ -989,7 +1041,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const [polygonalSelectionStart, setPolygonalSelectionStart] = useState<{
     x: number;
     y: number;
-  } | null >();
+  } | null>();
 
   const [polygonalSelectionStrokes, setPolygonalSelectionStrokes] = useState<
     Array<{ points: Array<number> }>
@@ -1070,7 +1122,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                     dash={[4, 2]}
                     dashOffset={-dashOffset}
                     fill="None"
-                    key={key+1}
+                    key={key + 1}
                     points={stroke.points}
                     stroke="white"
                     strokeWidth={1}
@@ -1094,9 +1146,14 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     x: number;
     y: number;
   }) => {
-    if (connected(position, polygonalSelectionStartingAnchorCircleRef, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
-
-
+    if (
+      connected(
+        position,
+        polygonalSelectionStartingAnchorCircleRef,
+        polygonalSelectionStrokes,
+        polygonalSelectionCanClose
+      )
+    ) {
       const stroke: { points: Array<number> } = {
         points: _.flatten(
           polygonalSelectionStrokes.map(
@@ -1115,18 +1172,15 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
       setPolygonalSelectionStart(null);
       setPolygonalSelectionAnchor(null);
-
     } else {
-
       if (polygonalSelectionStrokes.length === 0) {
-        setAnnotating(true)
+        setAnnotating(true);
 
         if (!polygonalSelectionStart) {
-          setPolygonalSelectionStart(position)
+          setPolygonalSelectionStart(position);
         }
       }
-      }
-
+    }
   };
 
   const onPolygonalSelectionMouseMove = (position: {
@@ -1150,9 +1204,9 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         ],
       };
       polygonalSelectionStrokes.splice(
-          polygonalSelectionStrokes.length - 1,
-          1,
-          stroke
+        polygonalSelectionStrokes.length - 1,
+        1,
+        stroke
       );
 
       setPolygonalSelectionStrokes(polygonalSelectionStrokes.concat());
@@ -1166,7 +1220,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         ],
       };
 
-
       polygonalSelectionStrokes.splice(
         polygonalSelectionStrokes.length - 1,
         1,
@@ -1178,7 +1231,14 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onPolygonalSelectionMouseUp = (position: { x: number; y: number }) => {
-    if (connected(position, polygonalSelectionStartingAnchorCircleRef, polygonalSelectionStrokes, polygonalSelectionCanClose)) {
+    if (
+      connected(
+        position,
+        polygonalSelectionStartingAnchorCircleRef,
+        polygonalSelectionStrokes,
+        polygonalSelectionCanClose
+      )
+    ) {
       if (polygonalSelectionStart) {
         const stroke = {
           points: [
@@ -1209,7 +1269,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       setPolygonalSelectionStrokes([]);
     } else {
       if (polygonalSelectionStrokes.length > 0) {
-
         setPolygonalSelectionAnchor(position);
 
         if (!polygonalSelectionAnchor) {
@@ -1222,8 +1281,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             ],
           };
           setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
-        }
-        else {
+        } else {
           const stroke = {
             points: [
               polygonalSelectionAnchor!.x,
@@ -1233,11 +1291,10 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             ],
           };
           setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
-
-        }
         }
       }
-    };
+    }
+  };
 
   /*
    * Quick selection
@@ -1305,8 +1362,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
       if (image) {
         const payload = {
-          instances: [instance, ...instances!]
-        }
+          instances: [instance, ...instances!],
+        };
 
         dispatch(setImageViewerImageInstances(payload));
       }
@@ -1384,8 +1441,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     if (!zoomSelecting) return;
 
     if (zoomSelectionX && zoomSelectionY) {
-      setZoomSelectionHeight(position.y - zoomSelectionY)
-      setZoomSelectionWidth(position.x - zoomSelectionX)
+      setZoomSelectionHeight(position.y - zoomSelectionY);
+      setZoomSelectionWidth(position.x - zoomSelectionX);
 
       setZoomSelecting(true);
     }
@@ -1412,7 +1469,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       const scaleStep = zoomMode ? 1 / zoomIncrement : zoomIncrement;
 
       if (stageRef && stageRef.current) {
-
         const newScale = zoomScaleX * scaleStep;
 
         setStageX(position.x - position.x * newScale);
@@ -1651,7 +1707,11 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           scale={{ x: zoomScaleX, y: zoomScaleY }}
           width={initialWidth}
         >
-          <ReactKonva.Layer onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp}>
+          <ReactKonva.Layer
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+          >
             {img && <ReactKonva.Image ref={imageRef} image={img} />}
 
             {activeOperation === ImageViewerOperation.ColorSelection && (
@@ -1680,20 +1740,19 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             )}
 
             {activeOperation === ImageViewerOperation.ObjectSelection && (
-                <React.Fragment>
-                  <ObjectSelection
-                      activeCategory={activeCategory}
-                      annotated={annotated}
-                      annotating={annotating}
-                      height={rectangularSelectionHeight}
-                      points={objectSelectionAnnotation}
-                      ref={objectSelectionRef}
-                      width={rectangularSelectionWidth}
-                      x={rectangularSelectionX}
-                      y={rectangularSelectionY}
-                  />
-                </React.Fragment>
-
+              <React.Fragment>
+                <ObjectSelection
+                  activeCategory={activeCategory}
+                  annotated={annotated}
+                  annotating={annotating}
+                  height={rectangularSelectionHeight}
+                  points={objectSelectionAnnotation}
+                  ref={objectSelectionRef}
+                  width={rectangularSelectionWidth}
+                  x={rectangularSelectionX}
+                  y={rectangularSelectionY}
+                />
+              </React.Fragment>
             )}
 
             {activeOperation === ImageViewerOperation.PolygonalSelection && (

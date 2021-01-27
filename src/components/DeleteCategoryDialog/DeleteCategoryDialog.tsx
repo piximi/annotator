@@ -4,9 +4,9 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import {useDispatch} from "react-redux";
-import {Category} from "../../types/Category";
-import {deleteCategory} from "../../store/slices";
+import { useDispatch } from "react-redux";
+import { Category } from "../../types/Category";
+import { deleteCategory } from "../../store/slices";
 
 type DeleteCategoryDialogProps = {
   category: Category;

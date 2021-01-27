@@ -1,6 +1,6 @@
-import createGraph, {Graph, Node} from "ngraph.graph";
-import {getIdx} from "./imageHelper";
-import {DataArray} from "image-js";
+import createGraph, { Graph, Node } from "ngraph.graph";
+import { getIdx } from "./imageHelper";
+import { DataArray } from "image-js";
 
 import { cachedAStarPathSearch } from "./pathfinder/PathFinder";
 import { NodeHeap } from "./pathfinder/NodeHeap";
@@ -90,11 +90,10 @@ export const makeGraph = (
   return graph as PiximiGraph;
 };
 
-
 export const createPathFinder = (
-    graph: PiximiGraph,
-    width: number,
-    factor: number
+  graph: PiximiGraph,
+  width: number,
+  factor: number
 ) => {
   return cachedAStarPathSearch(graph, width, factor);
 };

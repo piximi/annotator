@@ -1,7 +1,7 @@
-import React, {ComponentProps} from "react";
-import {Meta, Story} from "@storybook/react/types-6-0";
-import {Image} from "../../types/Image";
-import {ColorSelection} from "./ColorSelection";
+import React, { ComponentProps } from "react";
+import { Meta, Story } from "@storybook/react/types-6-0";
+import { Image } from "../../types/Image";
+import { ColorSelection } from "./ColorSelection";
 import { Category } from "../../types/Category";
 
 export default {
@@ -10,7 +10,7 @@ export default {
 } as Meta;
 
 const Template: Story<ComponentProps<typeof ColorSelection>> = (args) => (
-    <ColorSelection {...args} />
+  <ColorSelection {...args} />
 );
 
 export const Default = Template.bind({});

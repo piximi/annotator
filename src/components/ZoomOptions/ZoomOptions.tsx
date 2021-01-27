@@ -1,15 +1,15 @@
 import Radio from "@material-ui/core/Radio";
 import React from "react";
-import {RadioGroup} from "@material-ui/core";
+import { RadioGroup } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
-import {useDispatch, useSelector} from "react-redux";
-import {imageViewerZoomModeSelector} from "../../store/selectors";
-import {ImageViewerZoomMode} from "../../types/ImageViewerZoomMode";
-import {imageViewerSlice} from "../../store/slices";
+import { useDispatch, useSelector } from "react-redux";
+import { imageViewerZoomModeSelector } from "../../store/selectors";
+import { ImageViewerZoomMode } from "../../types/ImageViewerZoomMode";
+import { imageViewerSlice } from "../../store/slices";
 
 type ZoomOptionsProps = {
   handleRevert: () => void;

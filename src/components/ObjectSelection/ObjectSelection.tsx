@@ -1,17 +1,17 @@
-import React, {useEffect, useState} from "react";
-import {Image as ImageViewerImage} from "../../types/Image";
+import React, { useEffect, useState } from "react";
+import { Image as ImageViewerImage } from "../../types/Image";
 import * as ReactKonva from "react-konva";
 import useImage from "use-image";
-import {Stage} from "konva/types/Stage";
-import {Box, Transformer} from "konva/types/shapes/Transformer";
-import {Rect} from "konva/types/shapes/Rect";
-import {Category} from "../../types/Category";
-import {toRGBA} from "../../image/toRGBA";
-import {useDispatch} from "react-redux";
-import {projectSlice} from "../../store/slices";
-import {BoundingBox} from "../../types/BoundingBox";
+import { Stage } from "konva/types/Stage";
+import { Box, Transformer } from "konva/types/shapes/Transformer";
+import { Rect } from "konva/types/shapes/Rect";
+import { Category } from "../../types/Category";
+import { toRGBA } from "../../image/toRGBA";
+import { useDispatch } from "react-redux";
+import { projectSlice } from "../../store/slices";
+import { BoundingBox } from "../../types/BoundingBox";
 import * as tensorflow from "@tensorflow/tfjs";
-import {Image as KonvaImage} from "konva/types/shapes/Image";
+import { Image as KonvaImage } from "konva/types/shapes/Image";
 // import { getIdx } from "../../../image/imageHelper";
 // import { validNeighbours } from "../../../image/GraphHelper";
 

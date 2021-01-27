@@ -3,9 +3,9 @@ import { SelectionOperator } from "./SelectionOperator";
 export class LassoSelectionOperator extends SelectionOperator {
   connected: boolean = false;
 
-  origin?: { x: number, y: number };
+  origin?: { x: number; y: number };
 
-  points: Array<{ x: number, y: number }> = [];
+  points: Array<{ x: number; y: number }> = [];
 
   strokes: Array<Array<number>> = [];
 
@@ -31,5 +31,5 @@ export class LassoSelectionOperator extends SelectionOperator {
     if (this.selected || !this.selecting) return;
   }
 
-  select(category: number) {};
+  select(category: number) {}
 }

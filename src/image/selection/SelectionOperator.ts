@@ -1,8 +1,8 @@
 import { ImageViewerSelection } from "../../types/ImageViewerSelection";
 import * as ImageJS from "image-js";
 
-export abstract class Selection {
-  image: ImageJS.Image;
+export abstract class SelectionOperator {
+  image?: ImageJS.Image;
 
   selected: boolean = false;
 
@@ -10,11 +10,11 @@ export abstract class Selection {
 
   selection?: ImageViewerSelection;
 
-  constructor(image: ImageJS.Image) {
-    this.image = image;
+  constructor(image?: ImageJS.Image) {
+    if (image) this.image = image;
   }
 
-  abstract get box(): [number, number, number, number] | undefined;
+  abstract get boundingBox(): [number, number, number, number] | undefined;
 
   abstract get mask(): string | undefined;
 

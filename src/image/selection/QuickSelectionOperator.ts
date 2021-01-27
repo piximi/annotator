@@ -1,7 +1,7 @@
-import { Selection } from "./Selection";
+import { SelectionOperator } from "./SelectionOperator";
 
-export class ColorSelection extends Selection {
-  get box(): [number, number, number, number] | undefined {
+export class QuickSelectionOperator extends SelectionOperator {
+  get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
   }
 

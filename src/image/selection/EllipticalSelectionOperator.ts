@@ -1,20 +1,12 @@
-import { Selection } from "./Selection";
+import { SelectionOperator } from "./SelectionOperator";
 
-export class RectangularSelection extends Selection {
+export class EllipticalSelectionOperator extends SelectionOperator {
+  center?: { x: number; y: number };
   origin?: { x: number; y: number };
+  radius?: { x: number; y: number };
 
-  x?: number;
-  y?: number;
-
-  get box(): [number, number, number, number] | undefined {
-    if (!this.origin || !this.x || !this.y) return undefined;
-
-    return [
-      this.origin.x,
-      this.origin.y,
-      this.origin.x + this.x,
-      this.origin.y + this.y
-    ];
+  get boundingBox(): [number, number, number, number] | undefined {
+    return undefined;
   }
 
   get mask(): string | undefined {
@@ -52,21 +44,20 @@ export class RectangularSelection extends Selection {
   }
 
   select(category: number) {
-    if (!this.box || !this.mask) return;
-
-    this.selection = {
-      box: this.box,
-      category: category,
-      mask: this.mask,
-    };
-
     this.deselect();
   };
 
   private resize(position: { x: number; y: number }) {
     if (this.origin) {
-      this.x = position.x - this.origin.x;
-      this.y = position.y - this.origin.y;
+      this.center = {
+        x: (position.x - this.origin.x) / 2 + this.origin.x,
+        y: (position.y - this.origin.y) / 2 + this.origin.y,
+      };
+
+      this.radius = {
+        x: Math.abs((position.x - this.origin.x) / 2),
+        y: Math.abs((position.y - this.origin.y) / 2),
+      };
     }
   }
 }

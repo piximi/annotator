@@ -905,20 +905,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   useEffect(() => {
     if (tensorRef && tensorRef.current) {
-
       tensorRef.current.print()
       console.log(tensorRef.current.shape)
-
-      // tensorRef.current.data().then( (data) => {
-      //   // const boundaryPixels = getBoundaryCoordinates(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
-      //   const boundaryPixels = getNonZeroValues(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
-      //   if (rectangularSelectionX && rectangularSelectionY) {
-      //     const stroke = boundaryPixels.flatMap( (el: {x: number, y: number}) => [el.x + rectangularSelectionX, el.y + rectangularSelectionY] )
-      //     setObjectSelectionAnnotation(stroke)
-      //   }
-      //
-      //   })
-
     }
   }, [tensorRef.current])
 
@@ -959,7 +947,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                       .resizeBilinear([Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth)])
                       .greaterEqual(0.5)
                       .pad([[Math.floor(rectangularSelectionY), imageRef.current.height() - (Math.floor(rectangularSelectionY) + Math.floor(rectangularSelectionHeight))], [Math.floor(rectangularSelectionX), imageRef.current.width() - (Math.floor(rectangularSelectionX) + Math.floor(rectangularSelectionWidth)) ], [0, 0]])
-
+                      .cast('float32')
                   return output as tensorflow.Tensor3D
 
                 }

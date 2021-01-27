@@ -145,17 +145,66 @@ function reconstructPath(
     width: number,
     factor: number = 1
 ) {
+    const [x, y] = fromIdxToCoord(searchNode.id, width);
+    const newCoord = [x / factor, y / factor];
     let coords = [];
     const fromId = graph.fromId
     if (searchNode!.parentId !== null) {
         const parentNode = graph.getNode(searchNode!.parentId) as PiximiNode;
         if (typeof parentNode !== "undefined" && parentNode.fromId === fromId) {
+            // Fetch a trace from the last coordinate
             coords.push(...parentNode.trace);
+            if (coords.length > 1) {
+                const oldDirection = pathDirection(coords[coords.length - 2], coords[coords.length - 1]);
+                const newDirection = pathDirection(coords[coords.length - 1], newCoord);
+                if (oldDirection === newDirection) {
+                    coords.pop();
+                }
+            }
         }
     }
-    const [x, y] = fromIdxToCoord(searchNode.id, width);
-    coords.push([x / factor, y / factor]);
+    coords.push(newCoord);
     return coords;
+}
+
+export const pathDirection = (from: Array<number>, to: Array<number>) => {
+    // Generate a number representing the relative direction of the coordinates.
+    // Assuming TopLeft of an image is 0,0
+    const dx = to[0] - from[0]
+    const dy = to[1] - from[1]
+    if (dx === 0) {
+        if (dy < 0) {
+            return 0 // Up
+        }
+        if (dy > 0) {
+            return 4 // Down
+        }
+    }
+    if (dy === 0) {
+        if (dx > 0) {
+            return 2 // Right
+        }
+        if (dx < 0) {
+            return 6 // Left
+        }
+    }
+    if (dx > 0) {
+        if (dy < 0) {
+            return 1 // Up+Right
+        }
+        if (dy > 0) {
+            return 3 // Down+Right
+        }
+    }
+    if (dx < 0) {
+        if (dy < 0) {
+            return 7 // Up+Left
+        }
+        if (dy > 0) {
+            return 5 // Down+Left
+        }
+    }
+    console.log("Invalid direction, this should never appear so check the code", dx, dy)
 }
 
 export const transformCoordinatesToStrokes = (

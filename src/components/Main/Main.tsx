@@ -528,7 +528,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const objectSelectionRef = React.useRef<Rect>(null);
   const [model, setModel] = useState<tensorflow.LayersModel>();
   const tensorRef = React.useRef<Tensor3D | Tensor4D >()
-  const maskRef = React.useRef<HTMLCanvasElement>(null);
+  const [objectSelectionAnnotation, setObjectSelectionAnnotation] = useState<Array<number>>([])
 
 
   const createModel = async () => {
@@ -563,14 +563,18 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
       tensorRef.current.data().then( (data) => {
         const boundaryPixels = getBoundaryCoordinates(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
+        if (rectangularSelectionX && rectangularSelectionY) {
+          const stroke = boundaryPixels.flatMap( (el: {x: number, y: number}) => [el.x + rectangularSelectionX, el.y + rectangularSelectionY] )
+          setObjectSelectionAnnotation(stroke)
+        }
+
         })
 
     }
   }, [tensorRef.current])
 
 
-  const onObjectSelection = () => {
-  };
+  const onObjectSelection = () => {};
 
   const onObjectSelectionMouseUp = async (position: { x: number; y: number }) => {
     if (annotated || !annotating) return;
@@ -1339,6 +1343,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                       annotated={annotated}
                       annotating={annotating}
                       height={rectangularSelectionHeight}
+                      points={objectSelectionAnnotation}
                       ref={objectSelectionRef}
                       width={rectangularSelectionWidth}
                       x={rectangularSelectionX}

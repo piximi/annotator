@@ -14,24 +14,32 @@ type ObjectSelectionProps = {
   width: number;
   x?: number;
   y?: number;
+  points: Array<number>
 };
 
 export const ObjectSelection = React.forwardRef<Rect, ObjectSelectionProps>( (props, ref) => {
   const dashOffset = useMarchingAnts();
   if (props.annotated && !props.annotating) {
     return (
-        <ReactKonva.Rect
-            dash={[4, 2]}
-            dashOffset={-dashOffset}
-            fill={toRGBA(props.activeCategory.color, 0.3)}
-            height={props.height}
-            ref={ref}
-            stroke="white"
-            strokeWidth={1}
-            width={props.width}
-            x={props.x}
-            y={props.y}
-        />
+        <React.Fragment>
+            <ReactKonva.Rect
+                dash={[4, 2]}
+                dashOffset={-dashOffset}
+                fill={toRGBA(props.activeCategory.color, 0.3)}
+                height={props.height}
+                ref={ref}
+                stroke="white"
+                strokeWidth={1}
+                width={props.width}
+                x={props.x}
+                y={props.y}
+            />
+            {props.points.length > 0 && <ReactKonva.Line
+                points={props.points}
+                stroke="white"
+                strokeWidth={1}
+            />}
+        </React.Fragment>
     )
   } else if (!props.annotated && props.annotating) {
       return (

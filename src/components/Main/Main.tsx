@@ -32,7 +32,7 @@ import {ObjectSelection} from "./ObjectSelection";
 import {EllipticalSelection} from "./EllipticalSelection";
 import * as tensorflow from "@tensorflow/tfjs";
 import { Tensor3D, Tensor4D } from "@tensorflow/tfjs";
-import {getBoundaryCoordinates} from "../../image/imageHelper";
+import {getBoundaryCoordinates, getNonZeroValues} from "../../image/imageHelper";
 
 
 type MainProps = {
@@ -562,7 +562,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     if (tensorRef && tensorRef.current) {
 
       tensorRef.current.data().then( (data) => {
-        const boundaryPixels = getBoundaryCoordinates(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
+        // const boundaryPixels = getBoundaryCoordinates(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
+        const boundaryPixels = getNonZeroValues(data, Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth), 3)
         if (rectangularSelectionX && rectangularSelectionY) {
           const stroke = boundaryPixels.flatMap( (el: {x: number, y: number}) => [el.x + rectangularSelectionX, el.y + rectangularSelectionY] )
           setObjectSelectionAnnotation(stroke)

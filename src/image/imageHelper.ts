@@ -14,7 +14,7 @@ export const getBoundaryCoordinates = (
   for (let x = 0; x < width; x++) {
     for (let y = 0; y < height; y++) {
       const pixel = data[idx(x, y, 0)];
-      if (pixel > 0.9) {
+      if (pixel === 1) {
         const neighborsIdx = validNeighbours(x, y, height, width);
         for (let neighborIdx of neighborsIdx) {
           const neighbor = data[idx(neighborIdx.x, neighborIdx.y, 0)];
@@ -29,6 +29,27 @@ export const getBoundaryCoordinates = (
 
   return coordinates;
 };
+
+export const getNonZeroValues = ( data: TypedArray,
+                                  height: number,
+                                  width: number,
+                                  nchannels: number,) => {
+  const coordinates: { x: number; y: number }[] = [];
+
+  const idx = getIdx(width, nchannels);
+
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < height; y++) {
+      const pixel = data[idx(x, y, 0)];
+      if (pixel > 0) {
+        coordinates.push({x: x, y: y});
+      }
+    }
+  }
+  return coordinates;
+}
+
+
 
 
 export const getIdx = (width: number, nchannels: number) => {

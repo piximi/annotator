@@ -945,7 +945,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                 const standardized = resized.div(tensorflow.scalar(255));
                 const batch = standardized.expandDims(0);
 
-                if (model) {
+                if (model && rectangularSelectionY && rectangularSelectionX) {
                   const prediction = model.predict(
                       batch
                   ) as tensorflow.Tensor<tensorflow.Rank>;
@@ -958,7 +958,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                       .relu()
                       .resizeBilinear([Math.floor(rectangularSelectionHeight), Math.floor(rectangularSelectionWidth)])
                       .greaterEqual(0.5)
-                      // .pad([])
+                      .pad([[Math.floor(rectangularSelectionY), imageRef.current.height() - (Math.floor(rectangularSelectionY) + Math.floor(rectangularSelectionHeight))], [Math.floor(rectangularSelectionX), imageRef.current.width() - (Math.floor(rectangularSelectionX) + Math.floor(rectangularSelectionWidth)) ], [0, 0]])
 
                   return output as tensorflow.Tensor3D
 

@@ -1,11 +1,10 @@
 import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
-import { test } from '@jest/globals';
+import { test } from "@jest/globals";
 
-
-test('onMouseDown', () => {
+test("onMouseDown", () => {
   const selectionOperator = new RectangularSelectionOperator();
 
-  selectionOperator.onMouseDown({ x: 0, y: 0 })
+  selectionOperator.onMouseDown({ x: 0, y: 0 });
 
   expect(selectionOperator.selected).toBe(false);
   expect(selectionOperator.selecting).toBe(true);
@@ -16,14 +15,14 @@ test('onMouseDown', () => {
   expect(selectionOperator.height).toBe(undefined);
 });
 
-test('onMouseMove', () => {
+test("onMouseMove", () => {
   const selectionOperator = new RectangularSelectionOperator();
 
   selectionOperator.selecting = true;
 
   selectionOperator.origin = { x: 0, y: 0 };
 
-  selectionOperator.onMouseMove({ x: 100, y: 100 })
+  selectionOperator.onMouseMove({ x: 100, y: 100 });
 
   expect(selectionOperator.selected).toBe(false);
   expect(selectionOperator.selecting).toBe(true);
@@ -34,14 +33,14 @@ test('onMouseMove', () => {
   expect(selectionOperator.height).toBe(100);
 });
 
-test('onMouseUp', () => {
+test("onMouseUp", () => {
   const selectionOperator = new RectangularSelectionOperator();
 
   selectionOperator.selecting = true;
 
   selectionOperator.origin = { x: 0, y: 0 };
 
-  selectionOperator.onMouseUp({ x: 100, y: 100 })
+  selectionOperator.onMouseUp({ x: 100, y: 100 });
 
   expect(selectionOperator.selected).toBe(true);
   expect(selectionOperator.selecting).toBe(false);

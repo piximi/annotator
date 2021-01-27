@@ -1,17 +1,21 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import * as ReactKonva from "react-konva";
-import {Image as ImageType} from "../../types/Image";
-import {Stage} from "konva/types/Stage";
-import {Circle} from "konva/types/shapes/Circle";
-import {Transformer} from "konva/types/shapes/Transformer";
+import { Image as ImageType } from "../../types/Image";
+import { Stage } from "konva/types/Stage";
+import { Circle } from "konva/types/shapes/Circle";
+import { Transformer } from "konva/types/shapes/Transformer";
 import * as _ from "underscore";
-import {Line} from "konva/types/shapes/Line";
-import {Image as ImageKonvaType} from "konva/types/shapes/Image";
+import { Line } from "konva/types/shapes/Line";
+import { Image as ImageKonvaType } from "konva/types/shapes/Image";
 import useImage from "use-image";
-import {createPathFinder, makeGraph, PiximiGraph} from "../../image/GraphHelper";
-import {Image} from "image-js";
-import {getIdx} from "../../image/imageHelper";
-import {useDebounce} from "../../hooks";
+import {
+  createPathFinder,
+  makeGraph,
+  PiximiGraph,
+} from "../../image/GraphHelper";
+import { Image } from "image-js";
+import { getIdx } from "../../image/imageHelper";
+import { useDebounce } from "../../hooks";
 
 type MagneticSelectionProps = {
   image: ImageType;
@@ -98,7 +102,7 @@ export const MagneticSelection = ({ image }: MagneticSelectionProps) => {
       magneticSelectionPathFinder.current = createPathFinder(
         magneticSelectionGraph,
         magneticSelectionDownsizedWidth,
-          magneticSelectionFactor,
+        magneticSelectionFactor
       );
     }
   }, [magneticSelectionDownsizedWidth, magneticSelectionGraph, img]);

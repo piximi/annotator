@@ -45,7 +45,7 @@ export class EllipticalSelectionOperator extends SelectionOperator {
 
   select(category: number) {
     this.deselect();
-  };
+  }
 
   private resize(position: { x: number; y: number }) {
     if (this.origin) {

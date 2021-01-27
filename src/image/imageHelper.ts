@@ -1,11 +1,11 @@
 import { TypedArray } from "@tensorflow/tfjs";
-import {validNeighbours} from "./GraphHelper";
+import { validNeighbours } from "./GraphHelper";
 
 export const getBoundaryCoordinates = (
   data: TypedArray,
   height: number,
   width: number,
-  nchannels: number,
+  nchannels: number
 ) => {
   const coordinates: { x: number; y: number }[] = [];
 
@@ -30,10 +30,12 @@ export const getBoundaryCoordinates = (
   return coordinates;
 };
 
-export const getNonZeroValues = ( data: TypedArray,
-                                  height: number,
-                                  width: number,
-                                  nchannels: number,) => {
+export const getNonZeroValues = (
+  data: TypedArray,
+  height: number,
+  width: number,
+  nchannels: number
+) => {
   const coordinates: { x: number; y: number }[] = [];
 
   const idx = getIdx(width, nchannels);
@@ -42,15 +44,12 @@ export const getNonZeroValues = ( data: TypedArray,
     for (let y = 0; y < height; y++) {
       const pixel = data[idx(x, y, 0)];
       if (pixel > 0) {
-        coordinates.push({x: x, y: y});
+        coordinates.push({ x: x, y: y });
       }
     }
   }
   return coordinates;
-}
-
-
-
+};
 
 export const getIdx = (width: number, nchannels: number) => {
   return (x: number, y: number, index: number) => {

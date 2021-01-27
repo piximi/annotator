@@ -1,9 +1,9 @@
 import * as ReactKonva from "react-konva";
-import React, {RefObject} from "react";
-import {Category} from "../../types/Category";
-import {toRGBA} from "../../image/toRGBA";
-import {useMarchingAnts} from "../../hooks";
-import {Ellipse} from "konva/types/shapes/Ellipse";
+import React, { RefObject } from "react";
+import { Category } from "../../types/Category";
+import { toRGBA } from "../../image/toRGBA";
+import { useMarchingAnts } from "../../hooks";
+import { Ellipse } from "konva/types/shapes/Ellipse";
 
 type EllipticalSelectionProps = {
   activeCategory: Category;
@@ -16,7 +16,10 @@ type EllipticalSelectionProps = {
   ellipticalSelectionRef: RefObject<Ellipse>;
 };
 
-export const EllipticalSelection = React.forwardRef<Ellipse, EllipticalSelectionProps>( (props, ref) => {
+export const EllipticalSelection = React.forwardRef<
+  Ellipse,
+  EllipticalSelectionProps
+>((props, ref) => {
   const dashOffset = useMarchingAnts();
 
   if (props.annotated && !props.annotating) {
@@ -60,4 +63,4 @@ export const EllipticalSelection = React.forwardRef<Ellipse, EllipticalSelection
   } else {
     return null;
   }
-})
+});

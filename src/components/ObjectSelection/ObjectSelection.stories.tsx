@@ -1,8 +1,8 @@
-import React, {ComponentProps} from "react";
-import {Meta, Story} from "@storybook/react/types-6-0";
-import {Image} from "../../types/Image";
-import {ObjectSelection} from "./ObjectSelection";
-import {Category} from "../../types/Category";
+import React, { ComponentProps } from "react";
+import { Meta, Story } from "@storybook/react/types-6-0";
+import { Image } from "../../types/Image";
+import { ObjectSelection } from "./ObjectSelection";
+import { Category } from "../../types/Category";
 
 export default {
   component: ObjectSelection,

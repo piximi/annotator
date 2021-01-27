@@ -2,19 +2,24 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import React from "react";
-import {ImageViewerOperation} from "../../types/ImageViewerOperation";
-import {Operation} from "../Operation";
-import {useStyles} from "./Operations.css";
-import {useDispatch, useSelector} from "react-redux";
-import {imageViewerOperationSelector} from "../../store/selectors";
-import {imageViewerSlice} from "../../store/slices";
+import { ImageViewerOperation } from "../../types/ImageViewerOperation";
+import { Operation } from "../Operation";
+import { useStyles } from "./Operations.css";
+import { useDispatch, useSelector } from "react-redux";
+import { imageViewerOperationSelector } from "../../store/selectors";
+import { imageViewerSlice } from "../../store/slices";
 import {
-  ColorAdjustmentIcon, ColorSelectionIcon,
-  EllipticalSelectionIcon, HandIcon,
+  ColorAdjustmentIcon,
+  ColorSelectionIcon,
+  EllipticalSelectionIcon,
+  HandIcon,
   LassoSelectionIcon,
-  MagneticSelectionIcon, ObjectSelectionIcon,
-  PolygonalSelectionIcon, QuickSelectionIcon,
-  RectangularSelectionIcon, ZoomIcon
+  MagneticSelectionIcon,
+  ObjectSelectionIcon,
+  PolygonalSelectionIcon,
+  QuickSelectionIcon,
+  RectangularSelectionIcon,
+  ZoomIcon,
 } from "../icons";
 
 export const Operations = () => {
@@ -47,7 +52,7 @@ export const Operations = () => {
           }
           selected={activeOperation === ImageViewerOperation.ColorAdjustment}
         >
-          <ColorAdjustmentIcon/>
+          <ColorAdjustmentIcon />
         </Operation>
 
         <Divider />
@@ -65,7 +70,7 @@ export const Operations = () => {
             activeOperation === ImageViewerOperation.RectangularSelection
           }
         >
-          <RectangularSelectionIcon/>
+          <RectangularSelectionIcon />
         </Operation>
 
         <Operation
@@ -81,7 +86,7 @@ export const Operations = () => {
             activeOperation === ImageViewerOperation.EllipticalSelection
           }
         >
-          <EllipticalSelectionIcon/>
+          <EllipticalSelectionIcon />
         </Operation>
 
         <Operation
@@ -95,7 +100,7 @@ export const Operations = () => {
           }
           selected={activeOperation === ImageViewerOperation.LassoSelection}
         >
-          <LassoSelectionIcon/>
+          <LassoSelectionIcon />
         </Operation>
 
         <Operation
@@ -109,7 +114,7 @@ export const Operations = () => {
           }
           selected={activeOperation === ImageViewerOperation.PolygonalSelection}
         >
-          <PolygonalSelectionIcon/>
+          <PolygonalSelectionIcon />
         </Operation>
 
         <Operation
@@ -123,7 +128,7 @@ export const Operations = () => {
           }
           selected={activeOperation === ImageViewerOperation.MagneticSelection}
         >
-          <MagneticSelectionIcon/>
+          <MagneticSelectionIcon />
         </Operation>
 
         <Operation
@@ -137,7 +142,7 @@ export const Operations = () => {
           }
           selected={activeOperation === ImageViewerOperation.ColorSelection}
         >
-          <ColorSelectionIcon/>
+          <ColorSelectionIcon />
         </Operation>
 
         <Operation
@@ -151,7 +156,7 @@ export const Operations = () => {
           }
           selected={activeOperation === ImageViewerOperation.QuickSelection}
         >
-          <QuickSelectionIcon/>
+          <QuickSelectionIcon />
         </Operation>
 
         <Operation
@@ -165,7 +170,7 @@ export const Operations = () => {
           }
           selected={activeOperation === ImageViewerOperation.ObjectSelection}
         >
-          <ObjectSelectionIcon/>
+          <ObjectSelectionIcon />
         </Operation>
 
         <Divider />
@@ -181,7 +186,7 @@ export const Operations = () => {
           }}
           selected={activeOperation === ImageViewerOperation.Zoom}
         >
-          <ZoomIcon/>
+          <ZoomIcon />
         </Operation>
 
         <Operation
@@ -195,7 +200,7 @@ export const Operations = () => {
           }}
           selected={activeOperation === ImageViewerOperation.Hand}
         >
-          <HandIcon/>
+          <HandIcon />
         </Operation>
       </List>
     </Drawer>

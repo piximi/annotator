@@ -1,7 +1,7 @@
-import React, {ComponentProps} from "react";
-import {Meta, Story} from "@storybook/react/types-6-0";
-import {Image} from "../../types/Image";
-import {MagneticSelection} from "./MagneticSelection";
+import React, { ComponentProps } from "react";
+import { Meta, Story } from "@storybook/react/types-6-0";
+import { Image } from "../../types/Image";
+import { MagneticSelection } from "./MagneticSelection";
 
 export default {
   component: MagneticSelection,

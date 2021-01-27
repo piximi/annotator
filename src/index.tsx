@@ -1,17 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import reportWebVitals from './reportWebVitals';
-import {ImageViewer} from "./components";
-import {Provider} from "react-redux";
-import {productionStore} from "./store";
+import React from "react";
+import ReactDOM from "react-dom";
+import reportWebVitals from "./reportWebVitals";
+import { ImageViewer } from "./components";
+import { Provider } from "react-redux";
+import { productionStore } from "./store";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={productionStore}>
-      <ImageViewer/>
+      <ImageViewer />
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

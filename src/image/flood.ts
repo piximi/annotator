@@ -48,10 +48,10 @@ export interface FloodImage extends ImageJS.Image {
 
 // Generate a tolerance map and associate it with the image itself
 export const makeFloodMap = ({
-                               x,
-                               y,
-                               image,
-                             }: {
+  x,
+  y,
+  image,
+}: {
   x: number;
   y: number;
   image: FloodImage;
@@ -63,10 +63,10 @@ export const makeFloodMap = ({
   image.target = new Position(x, y);
   image.overlayTolerance = -1;
   image.overlay = new ImageJS.Image(
-      image.width,
-      image.height,
-      new Uint8ClampedArray(image.width * image.height * 4),
-      { alpha: 1 }
+    image.width,
+    image.height,
+    new Uint8ClampedArray(image.width * image.height * 4),
+    { alpha: 1 }
   );
 
   const tol: Array<number> = [];
@@ -75,9 +75,9 @@ export const makeFloodMap = ({
 
   for (let i = 0; i < image.data.length; i += 4) {
     const red = Math.abs(image.data[i] - color[0]);
-    const green = Math.abs(image.data[i+1] - color[1]);
-    const blue = Math.abs(image.data[i+2] - color[2]);
-    tol.push(Math.floor((red + green + blue)/3));
+    const green = Math.abs(image.data[i + 1] - color[1]);
+    const blue = Math.abs(image.data[i + 2] - color[2]);
+    tol.push(Math.floor((red + green + blue) / 3));
   }
 
   image.toleranceMap = new ImageJS.Image(image.width, image.height, tol, {
@@ -88,12 +88,12 @@ export const makeFloodMap = ({
 };
 
 export const floodPixels = ({
-                              x,
-                              y,
-                              image,
-                              tolerance,
-                              color,
-                            }: {
+  x,
+  y,
+  image,
+  tolerance,
+  color,
+}: {
   x: number;
   y: number;
   image: FloodImage;
@@ -101,10 +101,10 @@ export const floodPixels = ({
   color: string;
 }) => {
   let overlay = new ImageJS.Image(
-      image.width,
-      image.height,
-      new Uint8ClampedArray(image.width * image.height * 4),
-      {alpha: 1}
+    image.width,
+    image.height,
+    new Uint8ClampedArray(image.width * image.height * 4),
+    { alpha: 1 }
   );
   const r = parseInt(color.slice(1, 3), 16);
   const g = parseInt(color.slice(3, 5), 16);
@@ -114,24 +114,28 @@ export const floodPixels = ({
   let roi = overlay.getRoiManager();
 
   // Use the watershed function with a single seed to determine the selected region.
-  roi.fromWaterShed({image: image.toleranceMap, fillMaxValue: tolerance, points: [[x, y]]})
+  roi.fromWaterShed({
+    image: image.toleranceMap,
+    fillMaxValue: tolerance,
+    points: [[x, y]],
+  });
 
-  let mask = roi.getMasks()[0]
+  let mask = roi.getMasks()[0];
 
   // roiPaint doesn't respect alpha, so we'll paint it ourselves.
   for (let x = 0; x < mask.width; x++) {
     for (let y = 0; y < mask.height; y++) {
       if (mask.getBitXY(x, y)) {
-          overlay.setPixelXY(
-                x + mask.position[0],
-                y + mask.position[1],
-                fillColor,
-            );
+        overlay.setPixelXY(
+          x + mask.position[0],
+          y + mask.position[1],
+          fillColor
+        );
       }
     }
   }
 
   // Set the origin point to white, for visibility.
-  overlay.setPixelXY(x, y, [255, 255, 255, 255])
-  return overlay.toDataURL()
-}
+  overlay.setPixelXY(x, y, [255, 255, 255, 255]);
+  return overlay.toDataURL();
+};

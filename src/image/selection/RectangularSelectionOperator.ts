@@ -13,7 +13,7 @@ export class RectangularSelectionOperator extends SelectionOperator {
       this.origin.x,
       this.origin.y,
       this.origin.x + this.width,
-      this.origin.y + this.height
+      this.origin.y + this.height,
     ];
   }
 
@@ -61,7 +61,7 @@ export class RectangularSelectionOperator extends SelectionOperator {
     };
 
     this.deselect();
-  };
+  }
 
   private resize(position: { x: number; y: number }) {
     if (this.origin) {

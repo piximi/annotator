@@ -5,10 +5,10 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 import Tooltip from "@material-ui/core/Tooltip";
-import {Shape} from "../../types/Shape";
-import {setImageViewerImage} from "../../store/slices";
-import {useDispatch} from "react-redux";
-import {useStyles} from "./OpenImageButton.css";
+import { Shape } from "../../types/Shape";
+import { setImageViewerImage } from "../../store/slices";
+import { useDispatch } from "react-redux";
+import { useStyles } from "./OpenImageButton.css";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -19,23 +19,33 @@ type ExampleImageDialogProps = {
   open: boolean;
 };
 
-const ExampleImageDialog = ({onClose, open}: ExampleImageDialogProps) => {
+const ExampleImageDialog = ({ onClose, open }: ExampleImageDialogProps) => {
   const dispatch = useDispatch();
 
   const examples = [
     {
       name: "Microscopy",
-      description: "Fusce lectus lorem, lacinia eu libero eu, pellentesque semper dui. Nunc bibendum est eget lacus fermentum ullamcorper.",
-      data: malaria
+      description:
+        "Fusce lectus lorem, lacinia eu libero eu, pellentesque semper dui. Nunc bibendum est eget lacus fermentum ullamcorper.",
+      data: malaria,
     },
     {
       name: "Microscopy (3D)",
-      description: "Cras lobortis sapien eu tellus malesuada sodales. Vivamus placerat est eu mi ullamcorper, ut ultrices elit rhoncus. Aliquam vitae viverra nisi. Sed odio metus, finibus quis nisi a, vulputate varius justo.",
-      data: malaria
-    }
-  ]
+      description:
+        "Cras lobortis sapien eu tellus malesuada sodales. Vivamus placerat est eu mi ullamcorper, ut ultrices elit rhoncus. Aliquam vitae viverra nisi. Sed odio metus, finibus quis nisi a, vulputate varius justo.",
+      data: malaria,
+    },
+  ];
 
-  const onClick = ({data, description, name}: { data: any, description: string, name: string }) => {
+  const onClick = ({
+    data,
+    description,
+    name,
+  }: {
+    data: any;
+    description: string;
+    name: string;
+  }) => {
     onClose();
 
     const shape: Shape = {
@@ -55,30 +65,36 @@ const ExampleImageDialog = ({onClose, open}: ExampleImageDialogProps) => {
         },
       })
     );
-  }
+  };
 
   return (
     <Dialog open={open}>
       <List component="div" role="list">
-        {
-          examples.map((example, index) => {
-            return (
-              <ListItem button divider role="listitem" onClick={() => onClick(example)}>
-                <ListItemText primary={example.name} secondary={example.description}/>
-              </ListItem>
-            )
-          })
-        }
+        {examples.map((example, index) => {
+          return (
+            <ListItem
+              button
+              divider
+              role="listitem"
+              onClick={() => onClick(example)}
+            >
+              <ListItemText
+                primary={example.name}
+                secondary={example.description}
+              />
+            </ListItem>
+          );
+        })}
       </List>
     </Dialog>
-  )
+  );
 };
 
 type ComputerMenuItemProps = {
   onClose: () => void;
-}
+};
 
-const ComputerMenuItem = ({onClose}: ComputerMenuItemProps) => {
+const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
   const dispatch = useDispatch();
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,7 +143,6 @@ const ComputerMenuItem = ({onClose}: ComputerMenuItemProps) => {
     }
   };
 
-
   return (
     <MenuItem component="label" dense>
       Computer
@@ -140,20 +155,20 @@ const ComputerMenuItem = ({onClose}: ComputerMenuItemProps) => {
       />
     </MenuItem>
   );
-}
+};
 
 type ExampleMenuItemProps = {
   onClose: () => void;
-}
+};
 
-const ExampleMenuItem = ({onClose}: ExampleMenuItemProps) => {
+const ExampleMenuItem = ({ onClose }: ExampleMenuItemProps) => {
   const [open, setOpen] = React.useState(false);
 
   const onClick = () => {
     onClose();
 
     setOpen(true);
-  }
+  };
 
   const onDialogClose = () => {
     setOpen(false);
@@ -161,27 +176,34 @@ const ExampleMenuItem = ({onClose}: ExampleMenuItemProps) => {
 
   return (
     <React.Fragment>
-      <MenuItem dense onClick={onClick}>Example</MenuItem>
+      <MenuItem dense onClick={onClick}>
+        Example
+      </MenuItem>
 
-      <ExampleImageDialog onClose={onDialogClose} open={open}/>
+      <ExampleImageDialog onClose={onDialogClose} open={open} />
     </React.Fragment>
   );
-}
+};
 
 type OpenImageMenuProps = {
   anchorEl: null | HTMLElement;
   onClose: () => void;
-}
+};
 
-const OpenImageMenu = ({anchorEl, onClose}: OpenImageMenuProps) => {
+const OpenImageMenu = ({ anchorEl, onClose }: OpenImageMenuProps) => {
   return (
-    <Menu anchorEl={anchorEl} keepMounted onClose={onClose} open={Boolean(anchorEl)}>
-      <ComputerMenuItem onClose={onClose}/>
+    <Menu
+      anchorEl={anchorEl}
+      keepMounted
+      onClose={onClose}
+      open={Boolean(anchorEl)}
+    >
+      <ComputerMenuItem onClose={onClose} />
 
-      <ExampleMenuItem onClose={onClose}/>
+      <ExampleMenuItem onClose={onClose} />
     </Menu>
-  )
-}
+  );
+};
 
 export const OpenImageButton = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -199,12 +221,16 @@ export const OpenImageButton = () => {
   return (
     <React.Fragment>
       <Tooltip title="Open image">
-        <Button className={classes.button} startIcon={<CloudUploadIcon />} onClick={onClick}>
+        <Button
+          className={classes.button}
+          startIcon={<CloudUploadIcon />}
+          onClick={onClick}
+        >
           Open image
         </Button>
       </Tooltip>
 
-      <OpenImageMenu anchorEl={anchorEl} onClose={onClose}/>
+      <OpenImageMenu anchorEl={anchorEl} onClose={onClose} />
     </React.Fragment>
   );
 };

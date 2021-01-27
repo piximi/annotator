@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import {useMarchingAnts} from "../../hooks";
+import { useMarchingAnts } from "../../hooks";
 
 type ZoomSelectionProps = {
   selected: boolean;

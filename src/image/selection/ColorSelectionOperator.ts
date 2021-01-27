@@ -1,6 +1,6 @@
-import { Selection } from "./Selection";
+import { SelectionOperator } from "./SelectionOperator";
 
-export class ObjectSelection extends Selection {
+export class ColorSelectionOperator extends SelectionOperator {
   get box(): [number, number, number, number] | undefined {
     return undefined;
   }

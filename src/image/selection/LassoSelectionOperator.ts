@@ -1,6 +1,6 @@
-import { Selection } from "./Selection";
+import { SelectionOperator } from "./SelectionOperator";
 
-export class MagneticSelection extends Selection {
+export class LassoSelectionOperator extends SelectionOperator {
   get box(): [number, number, number, number] | undefined {
     return undefined;
   }

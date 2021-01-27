@@ -9,7 +9,7 @@ export class LassoSelectionOperator extends SelectionOperator {
 
   strokes: Array<Array<number>> = [];
 
-  get box(): [number, number, number, number] | undefined {
+  get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
   }
 

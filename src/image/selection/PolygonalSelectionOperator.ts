@@ -1,7 +1,7 @@
 import { SelectionOperator } from "./SelectionOperator";
 
 export class PolygonalSelectionOperator extends SelectionOperator {
-  get box(): [number, number, number, number] | undefined {
+  get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
   }
 

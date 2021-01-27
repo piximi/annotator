@@ -5,7 +5,7 @@ export class EllipticalSelectionOperator extends SelectionOperator {
   origin?: { x: number; y: number };
   radius?: { x: number; y: number };
 
-  get box(): [number, number, number, number] | undefined {
+  get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
   }
 

@@ -14,7 +14,7 @@ export abstract class SelectionOperator {
     if (image) this.image = image;
   }
 
-  abstract get box(): [number, number, number, number] | undefined;
+  abstract get boundingBox(): [number, number, number, number] | undefined;
 
   abstract get mask(): string | undefined;
 

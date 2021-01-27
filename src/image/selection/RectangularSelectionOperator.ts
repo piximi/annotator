@@ -6,7 +6,7 @@ export class RectangularSelectionOperator extends SelectionOperator {
   x?: number;
   y?: number;
 
-  get box(): [number, number, number, number] | undefined {
+  get boundingBox(): [number, number, number, number] | undefined {
     if (!this.origin || !this.x || !this.y) return undefined;
 
     return [
@@ -52,10 +52,10 @@ export class RectangularSelectionOperator extends SelectionOperator {
   }
 
   select(category: number) {
-    if (!this.box || !this.mask) return;
+    if (!this.boundingBox || !this.mask) return;
 
     this.selection = {
-      box: this.box,
+      box: this.boundingBox,
       category: category,
       mask: this.mask,
     };

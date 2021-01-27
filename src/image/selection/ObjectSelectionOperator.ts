@@ -1,12 +1,17 @@
 import { SelectionOperator } from "./SelectionOperator";
 import * as tensorflow from "@tensorflow/tfjs";
+import {RectangularSelectionOperator} from "./RectangularSelectionOperator";
 
 export class ObjectSelectionOperator extends SelectionOperator {
 
   model?: tensorflow.LayersModel;
 
+  private rectangularSelector: RectangularSelectionOperator = new RectangularSelectionOperator();
+
   constructor() {
+
     super()
+
     const pathname =
         "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
     tensorflow.loadLayersModel(pathname).then( (graph) => {
@@ -30,11 +35,17 @@ export class ObjectSelectionOperator extends SelectionOperator {
 
   deselect() {}
 
-  onMouseDown(position: { x: number; y: number }) {}
+  onMouseDown(position: { x: number; y: number }) {
+    this.rectangularSelector.onMouseDown(position)
+  }
 
-  onMouseMove(position: { x: number; y: number }) {}
+  onMouseMove(position: { x: number; y: number }) {
+    this.rectangularSelector.onMouseMove(position)
+  }
 
-  onMouseUp(position: { x: number; y: number }) {}
+  onMouseUp(position: { x: number; y: number }) {
+    this.rectangularSelector.onMouseUp(position)
+  }
 
   select(category: number) {};
 }

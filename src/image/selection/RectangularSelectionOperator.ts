@@ -18,13 +18,17 @@ export class RectangularSelectionOperator extends SelectionOperator {
   }
 
   get mask(): string | undefined {
-    return undefined;
+    return "mask";
   }
 
   deselect() {
     this.selected = false;
-
     this.selecting = false;
+
+    this.origin = undefined;
+
+    this.width = undefined;
+    this.height = undefined;
   }
 
   onMouseDown(position: { x: number; y: number }) {
@@ -47,7 +51,6 @@ export class RectangularSelectionOperator extends SelectionOperator {
     this.resize(position);
 
     this.selected = true;
-
     this.selecting = false;
   }
 
@@ -59,8 +62,6 @@ export class RectangularSelectionOperator extends SelectionOperator {
       category: category,
       mask: this.mask,
     };
-
-    this.deselect();
   }
 
   private resize(position: { x: number; y: number }) {

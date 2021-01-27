@@ -1,6 +1,14 @@
 import { SelectionOperator } from "./SelectionOperator";
 
 export class LassoSelectionOperator extends SelectionOperator {
+  connected: boolean = false;
+
+  origin?: { x: number, y: number };
+
+  points: Array<{ x: number, y: number }> = [];
+
+  strokes: Array<Array<number>> = [];
+
   get box(): [number, number, number, number] | undefined {
     return undefined;
   }

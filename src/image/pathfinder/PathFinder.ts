@@ -63,7 +63,7 @@ export function cachedAStarPathSearch(
 
     const dest = graph.getNode(toId) as PiximiNode;
     if (dest) {
-      if (dest.fromId === fromId) {
+      if (dest.fromId === fromId && dest.trace.length > 0) {
         return dest.trace;
       }
     }

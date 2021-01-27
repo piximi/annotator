@@ -1,16 +1,13 @@
 import { SelectionOperator } from "./SelectionOperator";
 import * as tensorflow from "@tensorflow/tfjs";
 import {RectangularSelectionOperator} from "./RectangularSelectionOperator";
+import * as ImageJS from "image-js";
 
-export class ObjectSelectionOperator extends SelectionOperator {
-
+export class ObjectSelectionOperator extends RectangularSelectionOperator {
   model?: tensorflow.LayersModel;
 
-  private rectangularSelector: RectangularSelectionOperator = new RectangularSelectionOperator();
-
-  constructor() {
-
-    super()
+  constructor(image: ImageJS.Image) {
+    super(image);
 
     const pathname =
         "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
@@ -36,16 +33,34 @@ export class ObjectSelectionOperator extends SelectionOperator {
   deselect() {}
 
   onMouseDown(position: { x: number; y: number }) {
-    this.rectangularSelector.onMouseDown(position)
+    super.onMouseDown(position);
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    this.rectangularSelector.onMouseMove(position)
+    super.onMouseMove(position)
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    this.rectangularSelector.onMouseUp(position)
+    super.onMouseUp(position);
+    //
+    // const crop = this.image!.crop({
+    //   x: this.rectangularSelector.origin!.x,
+    //   y: this.rectangularSelector.origin!.y,
+    //   width: this.rectangularSelector.width,
+    //   height: this.rectangularSelector.height
+    // })
+    //
+    // const canvas = crop.getCanvas();
+    //
+    // const croppedInput: tensorflow.Tensor3D = tensorflow.browser.fromPixels(canvas);
+
+
+    // this.predict(croppedInput)
   }
 
   select(category: number) {}
+
+  private predict() {
+
+  }
 }

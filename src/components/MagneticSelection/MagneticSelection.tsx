@@ -8,10 +8,8 @@ import * as _ from "underscore";
 import {Line} from "konva/types/shapes/Line";
 import {Image as ImageKonvaType} from "konva/types/shapes/Image";
 import useImage from "use-image";
-import {convertPathToCoords, createPathFinder, makeGraph,} from "../../image/GraphHelper";
+import {createPathFinder, makeGraph, PiximiGraph} from "../../image/GraphHelper";
 import {Image} from "image-js";
-import {Graph} from "ngraph.graph";
-import {PathFinder} from "ngraph.path";
 import {getIdx} from "../../image/imageHelper";
 import {useDebounce} from "../../hooks";
 
@@ -62,11 +60,11 @@ export const MagneticSelection = ({ image }: MagneticSelectionProps) => {
   const [
     magneticSelectionFactor,
     setMagneticSelectionFactor,
-  ] = useState<number>(1);
+  ] = useState<number>(0.5);
   const [
     magneticSelectionGraph,
     setMagneticSelectionGraph,
-  ] = useState<Graph | null>(null);
+  ] = useState<PiximiGraph | null>(null);
   const [
     magneticSelectionPreviousStroke,
     setMagneticSelectionPreviousStroke,
@@ -87,7 +85,7 @@ export const MagneticSelection = ({ image }: MagneticSelectionProps) => {
     20
   );
   const magneticSelectionPathCoordsRef = React.useRef<any>();
-  const magneticSelectionPathFinder = React.useRef<PathFinder<any>>();
+  const magneticSelectionPathFinder = React.useRef<any>();
   const magneticSelectionRef = React.useRef<Line>(null);
   const magneticSelectionStartPosition = React.useRef<{
     x: number;
@@ -99,10 +97,10 @@ export const MagneticSelection = ({ image }: MagneticSelectionProps) => {
     if (magneticSelectionGraph && img) {
       magneticSelectionPathFinder.current = createPathFinder(
         magneticSelectionGraph,
-        magneticSelectionDownsizedWidth
+        magneticSelectionDownsizedWidth,
+          magneticSelectionFactor,
       );
     }
-    setMagneticSelectionFactor(0.25);
   }, [magneticSelectionDownsizedWidth, magneticSelectionGraph, img]);
 
   React.useEffect(() => {
@@ -239,7 +237,7 @@ export const MagneticSelection = ({ image }: MagneticSelectionProps) => {
           magneticSelectionStartPosition &&
           magneticSelectionStartPosition.current
         ) {
-          const foundPath = magneticSelectionPathFinder.current.find(
+          magneticSelectionPathCoordsRef.current = magneticSelectionPathFinder.current.find(
             getIdx(magneticSelectionDownsizedWidth, 1)(
               Math.floor(
                 magneticSelectionStartPosition.current.x *
@@ -260,12 +258,6 @@ export const MagneticSelection = ({ image }: MagneticSelectionProps) => {
               ),
               0
             )
-          );
-
-          magneticSelectionPathCoordsRef.current = convertPathToCoords(
-            foundPath,
-            magneticSelectionDownsizedWidth,
-            magneticSelectionFactor
           );
 
           setMagneticSelectionStrokes(

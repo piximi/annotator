@@ -1,7 +1,26 @@
 import createGraph, {Graph, Node} from "ngraph.graph";
 import {getIdx} from "./imageHelper";
 import {DataArray} from "image-js";
-import {aStar} from "ngraph.path";
+
+import { cachedAStarPathSearch } from "./pathfinder/PathFinder";
+import { NodeHeap } from "./pathfinder/NodeHeap";
+
+export interface PiximiGraph extends Graph {
+  fromId: number;
+  openSet: NodeHeap;
+}
+
+export interface PiximiNode extends Node {
+  fromId: number;
+  trace: Array<Array<number>>;
+
+  parentId: number | null;
+  closed: boolean;
+  open: number;
+  distanceToSource: number;
+  fScore: number;
+  heapIndex: number;
+}
 
 export const validNeighbours = (
   x: number,
@@ -46,7 +65,9 @@ export const makeGraph = (
   height: number,
   width: number
 ) => {
-  let graph = createGraph();
+  let graph: any = createGraph();
+  graph.fromId = -1;
+  graph.openSet = new NodeHeap();
 
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
@@ -66,20 +87,16 @@ export const makeGraph = (
       }
     }
   }
-  return graph;
+  return graph as PiximiGraph;
 };
 
-export const createPathFinder = (graph: Graph, width: number) => {
-  return aStar(graph, {
-    distance(fromNode: Node, toNode: Node) {
-      const [x1, y1] = fromIdxToCoord(fromNode.id as number, width);
-      const [x2, y2] = fromIdxToCoord(toNode.id as number, width);
-      if (x1 === x2 || y1 === y2) {
-        return toNode.data;
-      }
-      return 1.41 * toNode.data;
-    },
-  });
+
+export const createPathFinder = (
+    graph: PiximiGraph,
+    width: number,
+    factor: number
+) => {
+  return cachedAStarPathSearch(graph, width, factor);
 };
 
 export const convertPathToCoords = (

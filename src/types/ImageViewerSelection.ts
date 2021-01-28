@@ -1,5 +1,5 @@
 export type ImageViewerSelection = {
-  box: [number, number, number, number];
-  category: number;
+  boundingBox: [number, number, number, number];
+  categoryId: number;
   mask: string;
 };

@@ -1,6 +1,5 @@
-import { SelectionOperator } from "./SelectionOperator";
 import * as tensorflow from "@tensorflow/tfjs";
-import {RectangularSelectionOperator} from "./RectangularSelectionOperator";
+import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import * as ImageJS from "image-js";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
@@ -10,16 +9,16 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     super(image);
 
     const pathname =
-        "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
-    tensorflow.loadLayersModel(pathname).then( (graph) => {
+      "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
+    tensorflow.loadLayersModel(pathname).then((graph) => {
       const optimizer = tensorflow.train.adam();
       graph.compile({
         optimizer: optimizer,
         loss: "categoricalCrossentropy",
         metrics: ["accuracy"],
       });
-      this.model = graph
-    })
+      this.model = graph;
+    });
   }
 
   get boundingBox(): [number, number, number, number] | undefined {
@@ -37,7 +36,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    super.onMouseMove(position)
+    super.onMouseMove(position);
   }
 
   onMouseUp(position: { x: number; y: number }) {
@@ -54,13 +53,10 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     //
     // const croppedInput: tensorflow.Tensor3D = tensorflow.browser.fromPixels(canvas);
 
-
     // this.predict(croppedInput)
   }
 
   select(category: number) {}
 
-  private predict() {
-
-  }
+  private predict() {}
 }

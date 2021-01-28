@@ -58,8 +58,8 @@ export class RectangularSelectionOperator extends SelectionOperator {
     if (!this.boundingBox || !this.mask) return;
 
     this.selection = {
-      box: this.boundingBox,
-      category: category,
+      boundingBox: this.boundingBox,
+      categoryId: category,
       mask: this.mask,
     };
   }

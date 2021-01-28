@@ -43,6 +43,7 @@ import {
   PiximiGraph,
 } from "../../image/GraphHelper";
 import { transformCoordinatesToStrokes } from "../../image/pathfinder/PathFinder";
+import { EllipticalSelectionOperator } from "../../image/selection";
 
 type MainProps = {
   activeCategory: Category;
@@ -192,76 +193,13 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   /*
    * Elliptical selection
    */
+
+  // FIXME: this is for prototyping only, it's very slow to update
+  const [ellipticalSelectionOperator] = useState(
+    new EllipticalSelectionOperator()
+  );
+
   const ellipticalSelectionRef = React.useRef<Ellipse>(null);
-
-  const [
-    ellipticalSelectionStartX,
-    setEllipticalSelectionStartX,
-  ] = React.useState<number>(0);
-
-  const [
-    ellipticalSelectionStartY,
-    setEllipticalSelectionStartY,
-  ] = React.useState<number>(0);
-
-  const [
-    ellipticalSelectionCenterX,
-    setEllipticalSelectionCenterX,
-  ] = React.useState<number>();
-
-  const [
-    ellipticalSelectionCenterY,
-    setEllipticalSelectionCenterY,
-  ] = React.useState<number>();
-
-  const [
-    ellipticalSelectionRadiusX,
-    setEllipticalSelectionRadiusX,
-  ] = React.useState<number>(0);
-
-  const [
-    ellipticalSelectionRadiusY,
-    setEllipticalSelectionRadiusY,
-  ] = React.useState<number>(0);
-
-  const onEllipticalSelection = () => {};
-
-  const onEllipticalSelectionMouseDown = (position: {
-    x: number;
-    y: number;
-  }) => {
-    setEllipticalSelectionStartX(position.x);
-
-    setEllipticalSelectionStartY(position.y);
-  };
-
-  const onEllipticalSelectionMouseMove = (position: {
-    x: number;
-    y: number;
-  }) => {
-    if (ellipticalSelectionStartX && ellipticalSelectionStartY) {
-      setEllipticalSelectionCenterX(
-        (position.x - ellipticalSelectionStartX) / 2 + ellipticalSelectionStartX
-      );
-
-      setEllipticalSelectionCenterY(
-        (position.y - ellipticalSelectionStartY) / 2 + ellipticalSelectionStartY
-      );
-
-      setEllipticalSelectionRadiusX(
-        Math.abs((position.x - ellipticalSelectionStartX) / 2)
-      );
-
-      setEllipticalSelectionRadiusY(
-        Math.abs((position.y - ellipticalSelectionStartY) / 2)
-      );
-    }
-  };
-
-  const onEllipticalSelectionMouseUp = (position: {
-    x: number;
-    y: number;
-  }) => {};
 
   /*
    * Lasso selection
@@ -1489,7 +1427,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       case ImageViewerOperation.ColorSelection:
         return onColorSelection();
       case ImageViewerOperation.EllipticalSelection:
-        return onEllipticalSelection();
+        return ellipticalSelectionOperator.select(0);
       case ImageViewerOperation.Hand:
         return;
       case ImageViewerOperation.LassoSelection:
@@ -1527,11 +1465,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           case ImageViewerOperation.ColorSelection:
             return onColorSelectionMouseDown(position);
           case ImageViewerOperation.EllipticalSelection:
-            if (annotated) return;
-
-            setAnnotating(true);
-
-            return onEllipticalSelectionMouseDown(position);
+            return ellipticalSelectionOperator.onMouseDown(position);
           case ImageViewerOperation.Hand:
             break;
           case ImageViewerOperation.LassoSelection:
@@ -1580,9 +1514,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           case ImageViewerOperation.ColorSelection:
             return onColorSelectionMouseMove(position);
           case ImageViewerOperation.EllipticalSelection:
-            if (annotated) return;
-
-            return onEllipticalSelectionMouseMove(position);
+            return ellipticalSelectionOperator.onMouseMove(position);
           case ImageViewerOperation.Hand:
             break;
           case ImageViewerOperation.LassoSelection:
@@ -1627,12 +1559,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           case ImageViewerOperation.ColorSelection:
             return onColorSelectionMouseUp(position);
           case ImageViewerOperation.EllipticalSelection:
-            if (annotated || !annotating) return;
-
-            setAnnotated(true);
-            setAnnotating(false);
-
-            return onEllipticalSelectionMouseUp(position);
+            return ellipticalSelectionOperator.onMouseUp(position);
           case ImageViewerOperation.Hand:
             break;
           case ImageViewerOperation.LassoSelection:
@@ -1721,13 +1648,11 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             {activeOperation === ImageViewerOperation.EllipticalSelection && (
               <EllipticalSelection
                 activeCategory={activeCategory}
-                annotated={annotated}
-                annotating={annotating}
-                ellipticalSelectionCenterX={ellipticalSelectionCenterX}
-                ellipticalSelectionCenterY={ellipticalSelectionCenterY}
-                ellipticalSelectionRadiusX={ellipticalSelectionRadiusX}
-                ellipticalSelectionRadiusY={ellipticalSelectionRadiusY}
+                annotated={ellipticalSelectionOperator.selected}
+                annotating={ellipticalSelectionOperator.selecting}
+                center={ellipticalSelectionOperator.center}
                 ellipticalSelectionRef={ellipticalSelectionRef}
+                radius={ellipticalSelectionOperator.radius}
               />
             )}
 

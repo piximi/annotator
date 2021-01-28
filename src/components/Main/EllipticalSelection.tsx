@@ -9,10 +9,8 @@ type EllipticalSelectionProps = {
   activeCategory: Category;
   annotated: boolean;
   annotating: boolean;
-  ellipticalSelectionCenterX?: number;
-  ellipticalSelectionCenterY?: number;
-  ellipticalSelectionRadiusX: number;
-  ellipticalSelectionRadiusY: number;
+  center?: { x: number; y: number };
+  radius?: { x: number; y: number };
   ellipticalSelectionRef: RefObject<Ellipse>;
 };
 
@@ -22,18 +20,20 @@ export const EllipticalSelection = React.forwardRef<
 >((props, ref) => {
   const dashOffset = useMarchingAnts();
 
+  if (!props.center || !props.radius) return null;
+
   if (props.annotated && !props.annotating) {
     return (
       <ReactKonva.Ellipse
         dash={[4, 2]}
         dashOffset={-dashOffset}
-        radiusX={props.ellipticalSelectionRadiusX}
-        radiusY={props.ellipticalSelectionRadiusY}
+        radiusX={props.radius.x}
+        radiusY={props.radius.y}
         ref={props.ellipticalSelectionRef}
         stroke="white"
         strokeWidth={1}
-        x={props.ellipticalSelectionCenterX}
-        y={props.ellipticalSelectionCenterY}
+        x={props.center.x}
+        y={props.center.y}
         fill={toRGBA(props.activeCategory.color, 0.3)}
       />
     );
@@ -41,22 +41,22 @@ export const EllipticalSelection = React.forwardRef<
     return (
       <React.Fragment>
         <ReactKonva.Ellipse
-          radiusX={props.ellipticalSelectionRadiusX}
-          radiusY={props.ellipticalSelectionRadiusY}
+          radiusX={props.radius.x}
+          radiusY={props.radius.y}
           stroke="black"
           strokeWidth={1}
-          x={props.ellipticalSelectionCenterX}
-          y={props.ellipticalSelectionCenterY}
+          x={props.center.x}
+          y={props.center.y}
         />
         <ReactKonva.Ellipse
           dash={[4, 2]}
           dashOffset={-dashOffset}
-          radiusX={props.ellipticalSelectionRadiusX}
-          radiusY={props.ellipticalSelectionRadiusY}
+          radiusX={props.radius.x}
+          radiusY={props.radius.y}
           stroke="white"
           strokeWidth={1}
-          x={props.ellipticalSelectionCenterX}
-          y={props.ellipticalSelectionCenterY}
+          x={props.center.x}
+          y={props.center.y}
         />
       </React.Fragment>
     );

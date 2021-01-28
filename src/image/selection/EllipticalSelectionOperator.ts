@@ -6,11 +6,18 @@ export class EllipticalSelectionOperator extends SelectionOperator {
   radius?: { x: number; y: number };
 
   get boundingBox(): [number, number, number, number] | undefined {
-    return undefined;
+    if (!this.center || !this.origin || !this.radius) return undefined;
+
+    return [
+      this.origin.x,
+      this.origin.y,
+      this.center.x + this.radius.x,
+      this.center.y + this.radius.y,
+    ];
   }
 
   get mask(): string | undefined {
-    return undefined;
+    return "mask";
   }
 
   deselect() {
@@ -47,7 +54,13 @@ export class EllipticalSelectionOperator extends SelectionOperator {
   }
 
   select(category: number) {
-    this.deselect();
+    if (!this.boundingBox || !this.mask) return;
+
+    this.selection = {
+      boundingBox: this.boundingBox,
+      categoryId: category,
+      mask: this.mask,
+    };
   }
 
   private resize(position: { x: number; y: number }) {

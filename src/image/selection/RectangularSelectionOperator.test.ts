@@ -96,8 +96,8 @@ test("select", () => {
   expect(selectionOperator.selecting).toBe(false);
 
   expect(selectionOperator.selection).toStrictEqual({
-    box: [0, 0, 100, 100],
-    category: 0,
+    boundingBox: [0, 0, 100, 100],
+    categoryId: 0,
     mask: "mask",
   });
 

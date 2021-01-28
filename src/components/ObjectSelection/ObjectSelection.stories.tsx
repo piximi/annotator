@@ -31,6 +31,6 @@ const image: Image = {
 };
 
 Default.args = {
-  category: category,
+  categoryId: category,
   data: image,
 };

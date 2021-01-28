@@ -43,33 +43,66 @@ export class LassoSelectionOperator extends SelectionOperator {
     if (this.selected || !this.selecting) return;
 
     if (this.anchor) {
-      this.buffer.pop();
-      this.buffer.pop();
+      if (
+        this.buffer[this.buffer.length - 2] !== this.anchor.x ||
+        this.buffer[this.buffer.length - 1] !== this.anchor.y
+      ) {
+        this.buffer.pop();
+        this.buffer.pop();
+      }
 
-      this.buffer = [
-        ...this.buffer,
-        this.anchor.x,
-        this.anchor.y,
-        position.x,
-        position.y,
-      ];
+      this.buffer = [...this.buffer, position.x, position.y];
 
       return;
     }
 
     if (this.origin) {
-      this.buffer = [
-        ...this.buffer,
-        this.origin.x,
-        this.origin.y,
-        position.x,
-        position.y,
-      ];
+      this.buffer = [...this.buffer, position.x, position.y];
     }
   }
 
   onMouseUp(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
+
+    if (this.connected(position)) {
+      if (this.origin) {
+        this.buffer = [
+          ...this.buffer,
+          position.x,
+          position.y,
+          this.origin.x,
+          this.origin.y,
+        ];
+      }
+
+      this.selected = true;
+      this.selecting = false;
+
+      this.points = this.buffer;
+
+      this.buffer = [];
+
+      return;
+    }
+
+    if (this.anchor) {
+      this.buffer.pop();
+      this.buffer.pop();
+
+      this.buffer = [...this.buffer, position.x, position.y];
+
+      this.anchor = position;
+
+      return;
+    }
+
+    if (this.origin) {
+      this.buffer = [this.origin.x, this.origin.y, position.x, position.y];
+
+      this.anchor = position;
+
+      return;
+    }
   }
 
   select(category: number) {}

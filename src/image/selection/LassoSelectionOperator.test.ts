@@ -1,33 +1,10 @@
 import { test } from "@jest/globals";
-import { PolygonalSelectionOperator } from "./PolygonalSelectionOperator";
+import { LassoSelectionOperator } from "./LassoSelectionOperator";
 
-test("deselect", () => {
-  const operator = new PolygonalSelectionOperator();
-
-  operator.selected = true;
-
-  operator.anchor = { x: 100, y: 0 };
-  operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
-  operator.origin = { x: 0, y: 0 };
-  operator.points = [0, 0, 100, 0, 100, 100, 0, 100, 0, 0];
-
-  operator.deselect();
-
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(false);
-
-  expect(operator.selection).toBe(undefined);
-
-  expect(operator.origin).toStrictEqual(undefined);
-
-  expect(operator.anchor).toStrictEqual(undefined);
-  expect(operator.buffer).toStrictEqual([]);
-  expect(operator.origin).toStrictEqual(undefined);
-  expect(operator.points).toStrictEqual([]);
-});
+test("deselect", () => {});
 
 test("onMouseDown", () => {
-  const operator = new PolygonalSelectionOperator();
+  const operator = new LassoSelectionOperator();
 
   operator.onMouseDown({ x: 0, y: 0 });
 
@@ -43,7 +20,7 @@ test("onMouseDown", () => {
 });
 
 test("onMouseDown (subsequent, unconnected)", () => {
-  const operator = new PolygonalSelectionOperator();
+  const operator = new LassoSelectionOperator();
 
   operator.origin = { x: 0, y: 0 };
 
@@ -61,7 +38,7 @@ test("onMouseDown (subsequent, unconnected)", () => {
 });
 
 test("onMouseDown (subsequent, connected)", () => {
-  const operator = new PolygonalSelectionOperator();
+  const operator = new LassoSelectionOperator();
 
   operator.anchor = { x: 0, y: 100 };
   operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
@@ -81,14 +58,15 @@ test("onMouseDown (subsequent, connected)", () => {
 });
 
 test("onMouseMove", () => {
-  const operator = new PolygonalSelectionOperator();
+  const operator = new LassoSelectionOperator();
 
   operator.selecting = true;
 
   operator.origin = { x: 0, y: 0 };
 
-  operator.onMouseMove({ x: 100, y: 100 });
-  operator.onMouseMove({ x: 200, y: 200 });
+  operator.buffer = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4];
+
+  operator.onMouseMove({ x: 5, y: 5 });
 
   expect(operator.selected).toBe(false);
   expect(operator.selecting).toBe(true);
@@ -96,102 +74,15 @@ test("onMouseMove", () => {
   expect(operator.selection).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
-  expect(operator.buffer).toStrictEqual([0, 0, 200, 200]);
+  expect(operator.buffer).toStrictEqual([0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5]);
   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
   expect(operator.points).toStrictEqual([]);
 });
 
-test("onMouseMove (with anchor)", () => {
-  const operator = new PolygonalSelectionOperator();
+test("onMouseMove (with anchor)", () => {});
 
-  operator.selecting = true;
+test("onMouseUp (unconnected, with anchor)", () => {});
 
-  operator.anchor = { x: 100, y: 0 };
-  operator.buffer = [0, 0, 100, 0];
-  operator.origin = { x: 0, y: 0 };
+test("onMouseUp (unconnected, without anchor)", () => {});
 
-  operator.onMouseMove({ x: 100, y: 100 });
-
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
-
-  expect(operator.selection).toBe(undefined);
-
-  expect(operator.anchor).toStrictEqual({ x: 100, y: 0 });
-  expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 100, 100]);
-  expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
-  expect(operator.points).toStrictEqual([]);
-});
-
-test("onMouseUp (unconnected, with anchor)", () => {
-  const operator = new PolygonalSelectionOperator();
-
-  operator.selecting = true;
-
-  operator.anchor = { x: 100, y: 0 };
-  operator.buffer = [0, 0, 100, 0];
-  operator.origin = { x: 0, y: 0 };
-
-  operator.onMouseMove({ x: 0, y: 100 });
-  operator.onMouseUp({ x: 0, y: 100 });
-
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
-
-  expect(operator.selection).toBe(undefined);
-
-  expect(operator.anchor).toStrictEqual({ x: 0, y: 100 });
-  expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 0, 100]);
-  expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
-  expect(operator.points).toStrictEqual([]);
-});
-
-test("onMouseUp (unconnected, without anchor)", () => {
-  const operator = new PolygonalSelectionOperator();
-
-  operator.selecting = true;
-
-  operator.origin = { x: 0, y: 0 };
-
-  operator.onMouseUp({ x: 100, y: 100 });
-
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
-
-  expect(operator.selection).toBe(undefined);
-
-  expect(operator.anchor).toStrictEqual({ x: 100, y: 100 });
-  expect(operator.buffer).toStrictEqual([0, 0, 100, 100]);
-  expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
-  expect(operator.points).toStrictEqual([]);
-});
-
-test("select", () => {
-  const operator = new PolygonalSelectionOperator();
-
-  operator.selected = true;
-
-  operator.anchor = { x: 100, y: 0 };
-  operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
-  operator.origin = { x: 0, y: 0 };
-  operator.points = [0, 0, 100, 0, 100, 100, 0, 100, 0, 0];
-
-  operator.select(0);
-
-  expect(operator.selected).toBe(true);
-  expect(operator.selecting).toBe(false);
-
-  expect(operator.selection).toStrictEqual({
-    boundingBox: [0, 0, 100, 100],
-    categoryId: 0,
-    mask: "mask",
-  });
-
-  expect(operator.boundingBox).toStrictEqual([0, 0, 100, 100]);
-  expect(operator.mask).toBe("mask");
-
-  expect(operator.anchor).toStrictEqual({ x: 100, y: 0 });
-  expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 100, 100, 0, 100]);
-  expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
-  expect(operator.points).toStrictEqual([0, 0, 100, 0, 100, 100, 0, 100, 0, 0]);
-});
+test("select", () => {});

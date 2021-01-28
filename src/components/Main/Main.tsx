@@ -193,7 +193,11 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   /*
    * Elliptical selection
    */
-  const ellipticalSelectionOperator = new EllipticalSelectionOperator();
+
+  // FIXME: this is for prototyping only, it's very slow to update
+  const [ellipticalSelectionOperator] = useState(
+    new EllipticalSelectionOperator()
+  );
 
   const ellipticalSelectionRef = React.useRef<Ellipse>(null);
 

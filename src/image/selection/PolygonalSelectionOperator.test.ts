@@ -86,8 +86,8 @@ test("onMouseMove", () => {
   operator.selecting = true;
 
   operator.origin = { x: 0, y: 0 };
+  operator.buffer = [0, 0, 100, 100];
 
-  operator.onMouseMove({ x: 100, y: 100 });
   operator.onMouseMove({ x: 200, y: 200 });
 
   expect(operator.selected).toBe(false);
@@ -107,10 +107,10 @@ test("onMouseMove (with anchor)", () => {
   operator.selecting = true;
 
   operator.anchor = { x: 100, y: 0 };
-  operator.buffer = [0, 0, 100, 0];
+  operator.buffer = [0, 0, 100, 0, 100, 100];
   operator.origin = { x: 0, y: 0 };
 
-  operator.onMouseMove({ x: 100, y: 100 });
+  operator.onMouseMove({ x: 200, y: 200 });
 
   expect(operator.selected).toBe(false);
   expect(operator.selecting).toBe(true);
@@ -118,7 +118,7 @@ test("onMouseMove (with anchor)", () => {
   expect(operator.selection).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual({ x: 100, y: 0 });
-  expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 100, 100]);
+  expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 200, 200]);
   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
   expect(operator.points).toStrictEqual([]);
 });

@@ -1,4 +1,5 @@
 import { SelectionOperator } from "./SelectionOperator";
+import * as _ from "underscore";
 
 export class PolygonalSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
@@ -68,7 +69,50 @@ export class PolygonalSelectionOperator extends SelectionOperator {
     }
   }
 
-  onMouseUp(position: { x: number; y: number }) {}
+  onMouseUp(position: { x: number; y: number }) {
+    if (this.connected) {
+      if (this.origin) {
+        this.points = [
+          ...this.points,
+          position.x,
+          position.y,
+          this.origin.x,
+          this.origin.y,
+        ];
+      }
+
+      this.selected = true;
+      this.selecting = false;
+
+      this.shape = this.points;
+
+      this.points = [];
+    } else {
+      if (this.points.length > 0) {
+        this.anchor = position;
+
+        if (!this.anchor) {
+          if (this.origin) {
+            this.points = [
+              ...this.points,
+              this.origin.x,
+              this.origin.y,
+              position.x,
+              position.y,
+            ];
+          }
+        } else {
+          this.points = [
+            ...this.points,
+            this.anchor.x,
+            this.anchor.y,
+            position.x,
+            position.y,
+          ];
+        }
+      }
+    }
+  }
 
   select(category: number) {}
 }

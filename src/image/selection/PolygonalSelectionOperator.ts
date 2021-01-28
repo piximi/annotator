@@ -63,28 +63,24 @@ export class PolygonalSelectionOperator extends SelectionOperator {
     if (this.selected || !this.selecting) return;
 
     if (this.anchor) {
-      this.buffer.pop();
-      this.buffer.pop();
+      if (
+        this.buffer[this.buffer.length - 2] !== this.anchor.x ||
+        this.buffer[this.buffer.length - 1] !== this.anchor.y
+      ) {
+        this.buffer.pop();
+        this.buffer.pop();
+      }
 
-      this.buffer = [
-        ...this.buffer,
-        this.anchor.x,
-        this.anchor.y,
-        position.x,
-        position.y,
-      ];
+      this.buffer = [...this.buffer, position.x, position.y];
 
       return;
     }
 
     if (this.origin) {
-      this.buffer = [
-        ...this.buffer,
-        this.origin.x,
-        this.origin.y,
-        position.x,
-        position.y,
-      ];
+      this.buffer.pop();
+      this.buffer.pop();
+
+      this.buffer = [this.origin.x, this.origin.y, position.x, position.y];
     }
   }
 
@@ -116,13 +112,7 @@ export class PolygonalSelectionOperator extends SelectionOperator {
       this.buffer.pop();
       this.buffer.pop();
 
-      this.buffer = [
-        ...this.buffer,
-        this.anchor.x,
-        this.anchor.y,
-        position.x,
-        position.y,
-      ];
+      this.buffer = [...this.buffer, position.x, position.y];
 
       this.anchor = position;
 
@@ -130,13 +120,7 @@ export class PolygonalSelectionOperator extends SelectionOperator {
     }
 
     if (this.origin) {
-      this.buffer = [
-        ...this.buffer,
-        this.origin.x,
-        this.origin.y,
-        position.x,
-        position.y,
-      ];
+      this.buffer = [this.origin.x, this.origin.y, position.x, position.y];
 
       this.anchor = position;
 

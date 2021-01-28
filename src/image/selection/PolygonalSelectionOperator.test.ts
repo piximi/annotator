@@ -88,6 +88,7 @@ test("onMouseMove", () => {
   operator.origin = { x: 0, y: 0 };
 
   operator.onMouseMove({ x: 100, y: 100 });
+  operator.onMouseMove({ x: 200, y: 200 });
 
   expect(operator.selected).toBe(false);
   expect(operator.selecting).toBe(true);
@@ -95,7 +96,7 @@ test("onMouseMove", () => {
   expect(operator.selection).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
-  expect(operator.buffer).toStrictEqual([0, 0, 100, 100]);
+  expect(operator.buffer).toStrictEqual([0, 0, 200, 200]);
   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
   expect(operator.points).toStrictEqual([]);
 });
@@ -131,6 +132,7 @@ test("onMouseUp (unconnected, with anchor)", () => {
   operator.buffer = [0, 0, 100, 0];
   operator.origin = { x: 0, y: 0 };
 
+  operator.onMouseMove({ x: 0, y: 100 });
   operator.onMouseUp({ x: 0, y: 100 });
 
   expect(operator.selected).toBe(false);

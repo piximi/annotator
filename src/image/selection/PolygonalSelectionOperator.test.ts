@@ -86,7 +86,7 @@ test("onMouseMove", () => {
   operator.selecting = true;
 
   operator.origin = { x: 0, y: 0 };
-  operator.buffer = [0, 0, 100, 100];
+  operator.buffer = [0, 0];
 
   operator.onMouseMove({ x: 200, y: 200 });
 
@@ -129,10 +129,9 @@ test("onMouseUp (unconnected, with anchor)", () => {
   operator.selecting = true;
 
   operator.anchor = { x: 100, y: 0 };
-  operator.buffer = [0, 0, 100, 0];
+  operator.buffer = [0, 0, 100, 0, 100, 100];
   operator.origin = { x: 0, y: 0 };
 
-  operator.onMouseMove({ x: 0, y: 100 });
   operator.onMouseUp({ x: 0, y: 100 });
 
   expect(operator.selected).toBe(false);

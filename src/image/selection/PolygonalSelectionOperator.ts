@@ -2,14 +2,9 @@ import { SelectionOperator } from "./SelectionOperator";
 
 export class PolygonalSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
-
-  connected: boolean = false;
-
+  buffer: Array<number> = [];
   origin?: { x: number; y: number };
-
   points: Array<number> = [];
-
-  shape: Array<number> = [];
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -22,17 +17,17 @@ export class PolygonalSelectionOperator extends SelectionOperator {
   deselect() {}
 
   onMouseDown(position: { x: number; y: number }) {
-    if (this.connected) {
+    if (this.connected(position)) {
       this.selected = true;
       this.selecting = false;
 
-      this.shape = this.points;
+      this.points = this.buffer;
 
-      this.points = [];
+      this.buffer = [];
 
       this.origin = undefined;
     } else {
-      if (this.points && this.points.length === 0) {
+      if (this.buffer && this.buffer.length === 0) {
         this.selecting = true;
 
         if (!this.origin) {
@@ -44,10 +39,10 @@ export class PolygonalSelectionOperator extends SelectionOperator {
 
   onMouseMove(position: { x: number; y: number }) {
     if (this.anchor) {
-      this.points.pop();
+      this.buffer.pop();
 
-      this.points = [
-        ...this.points,
+      this.buffer = [
+        ...this.buffer,
         this.anchor.x,
         this.anchor.y,
         position.x,
@@ -55,10 +50,10 @@ export class PolygonalSelectionOperator extends SelectionOperator {
       ];
     } else {
       if (this.origin) {
-        this.points.pop();
+        this.buffer.pop();
 
-        this.points = [
-          ...this.points,
+        this.buffer = [
+          ...this.buffer,
           this.origin.x,
           this.origin.y,
           position.x,
@@ -69,10 +64,10 @@ export class PolygonalSelectionOperator extends SelectionOperator {
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.connected) {
+    if (this.connected(position)) {
       if (this.origin) {
-        this.points = [
-          ...this.points,
+        this.buffer = [
+          ...this.buffer,
           position.x,
           position.y,
           this.origin.x,
@@ -83,17 +78,17 @@ export class PolygonalSelectionOperator extends SelectionOperator {
       this.selected = true;
       this.selecting = false;
 
-      this.shape = this.points;
+      this.points = this.buffer;
 
-      this.points = [];
+      this.buffer = [];
     } else {
-      if (this.points.length > 0) {
+      if (this.buffer.length > 0) {
         this.anchor = position;
 
         if (!this.anchor) {
           if (this.origin) {
-            this.points = [
-              ...this.points,
+            this.buffer = [
+              ...this.buffer,
               this.origin.x,
               this.origin.y,
               position.x,
@@ -101,8 +96,8 @@ export class PolygonalSelectionOperator extends SelectionOperator {
             ];
           }
         } else {
-          this.points = [
-            ...this.points,
+          this.buffer = [
+            ...this.buffer,
             this.anchor.x,
             this.anchor.y,
             position.x,
@@ -114,4 +109,18 @@ export class PolygonalSelectionOperator extends SelectionOperator {
   }
 
   select(category: number) {}
+
+  private connected(
+    position: { x: number; y: number },
+    threshold: number = 2
+  ): boolean | undefined {
+    if (!this.origin) return undefined;
+
+    const distance = Math.hypot(
+      position.x - this.origin.x,
+      position.y - this.origin.y
+    );
+
+    return distance < threshold;
+  }
 }

@@ -1,28 +1,26 @@
 import { EllipticalSelectionOperator } from "./EllipticalSelectionOperator";
 import { test } from "@jest/globals";
 
-// test("deselect", () => {
-//   const selectionOperator = new EllipticalSelectionOperator();
-//
-//   selectionOperator.selected = true;
-//
-//   selectionOperator.origin = { x: 0, y: 0 };
-//
-//   selectionOperator.width = 100;
-//   selectionOperator.height = 100;
-//
-//   selectionOperator.deselect();
-//
-//   expect(selectionOperator.selected).toBe(false);
-//   expect(selectionOperator.selecting).toBe(false);
-//
-//   expect(selectionOperator.selection).toBe(undefined);
-//
-//   expect(selectionOperator.origin).toStrictEqual(undefined);
-//
-//   expect(selectionOperator.width).toBe(undefined);
-//   expect(selectionOperator.height).toBe(undefined);
-// });
+test("deselect", () => {
+  const ellipticalSelectionOperator = new EllipticalSelectionOperator();
+
+  ellipticalSelectionOperator.selected = true;
+
+  ellipticalSelectionOperator.center = { x: 50, y: 50 };
+  ellipticalSelectionOperator.origin = { x: 0, y: 0 };
+  ellipticalSelectionOperator.radius = { x: 50, y: 50 };
+
+  ellipticalSelectionOperator.deselect();
+
+  expect(ellipticalSelectionOperator.selected).toBe(false);
+  expect(ellipticalSelectionOperator.selecting).toBe(false);
+
+  expect(ellipticalSelectionOperator.selection).toBe(undefined);
+
+  expect(ellipticalSelectionOperator.center).toBe(undefined);
+  expect(ellipticalSelectionOperator.origin).toStrictEqual(undefined);
+  expect(ellipticalSelectionOperator.radius).toBe(undefined);
+});
 
 test("onMouseDown", () => {
   const ellipticalSelectionOperator = new EllipticalSelectionOperator();
@@ -34,9 +32,9 @@ test("onMouseDown", () => {
 
   expect(ellipticalSelectionOperator.selection).toBe(undefined);
 
+  expect(ellipticalSelectionOperator.center).toStrictEqual(undefined);
   expect(ellipticalSelectionOperator.origin).toStrictEqual({ x: 0, y: 0 });
   expect(ellipticalSelectionOperator.radius).toStrictEqual(undefined);
-  expect(ellipticalSelectionOperator.center).toStrictEqual(undefined);
 });
 
 test("onMouseMove", () => {
@@ -53,9 +51,9 @@ test("onMouseMove", () => {
 
   expect(ellipticalSelectionOperator.selection).toBe(undefined);
 
+  expect(ellipticalSelectionOperator.center).toStrictEqual({ x: 50, y: 50 });
   expect(ellipticalSelectionOperator.origin).toStrictEqual({ x: 0, y: 0 });
   expect(ellipticalSelectionOperator.radius).toStrictEqual({ x: 50, y: 50 });
-  expect(ellipticalSelectionOperator.center).toStrictEqual({ x: 50, y: 50 });
 });
 
 test("onMouseUp", () => {
@@ -72,9 +70,9 @@ test("onMouseUp", () => {
 
   expect(ellipticalSelectionOperator.selection).toBe(undefined);
 
+  expect(ellipticalSelectionOperator.center).toStrictEqual({ x: 50, y: 50 });
   expect(ellipticalSelectionOperator.origin).toStrictEqual({ x: 0, y: 0 });
   expect(ellipticalSelectionOperator.radius).toStrictEqual({ x: 50, y: 50 });
-  expect(ellipticalSelectionOperator.center).toStrictEqual({ x: 50, y: 50 });
 });
 
 // test("select", () => {

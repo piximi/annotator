@@ -15,8 +15,11 @@ export class EllipticalSelectionOperator extends SelectionOperator {
 
   deselect() {
     this.selected = false;
-
     this.selecting = false;
+
+    this.center = undefined;
+    this.origin = undefined;
+    this.radius = undefined;
   }
 
   onMouseDown(position: { x: number; y: number }) {

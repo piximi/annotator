@@ -1,13 +1,10 @@
 import { SelectionOperator } from "./SelectionOperator";
 
 export class LassoSelectionOperator extends SelectionOperator {
-  connected: boolean = false;
-
+  anchor?: { x: number; y: number };
+  buffer: Array<number> = [];
   origin?: { x: number; y: number };
-
-  points: Array<{ x: number; y: number }> = [];
-
-  strokes: Array<Array<number>> = [];
+  points: Array<number> = [];
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -21,10 +18,54 @@ export class LassoSelectionOperator extends SelectionOperator {
 
   onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;
+
+    if (this.connected(position)) {
+      if (this.origin) {
+        this.buffer = [...this.buffer, this.origin.x, this.origin.y];
+      }
+
+      this.selected = true;
+      this.selecting = false;
+
+      this.points = this.buffer;
+    }
+
+    if (this.buffer && this.buffer.length === 0) {
+      this.selecting = true;
+
+      if (!this.origin) {
+        this.origin = position;
+      }
+    }
   }
 
   onMouseMove(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
+
+    if (this.anchor) {
+      this.buffer.pop();
+      this.buffer.pop();
+
+      this.buffer = [
+        ...this.buffer,
+        this.anchor.x,
+        this.anchor.y,
+        position.x,
+        position.y,
+      ];
+
+      return;
+    }
+
+    if (this.origin) {
+      this.buffer = [
+        ...this.buffer,
+        this.origin.x,
+        this.origin.y,
+        position.x,
+        position.y,
+      ];
+    }
   }
 
   onMouseUp(position: { x: number; y: number }) {
@@ -32,4 +73,18 @@ export class LassoSelectionOperator extends SelectionOperator {
   }
 
   select(category: number) {}
+
+  private connected(
+    position: { x: number; y: number },
+    threshold: number = 2
+  ): boolean | undefined {
+    if (!this.origin) return undefined;
+
+    const distance = Math.hypot(
+      position.x - this.origin.x,
+      position.y - this.origin.y
+    );
+
+    return distance < threshold;
+  }
 }

@@ -43,7 +43,7 @@ import {
   PiximiGraph,
 } from "../../image/GraphHelper";
 import { transformCoordinatesToStrokes } from "../../image/pathfinder/PathFinder";
-import { EllipticalSelectionOperator } from "../../image/selection";
+import { EllipticalSelectionOperator } from "../../image/Selection";
 
 type MainProps = {
   activeCategory: Category;

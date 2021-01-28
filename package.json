@@ -64,6 +64,7 @@
     "@storybook/node-logger": "^6.1.15",
     "@storybook/preset-create-react-app": "^3.1.5",
     "@storybook/react": "^6.1.15",
+    "@types/lodash": "^4.14.168",
     "@types/react-color": "^3.0.4",
     "@types/react-redux": "^7.1.15",
     "@types/react-vis": "^1.11.5",

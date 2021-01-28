@@ -79,7 +79,27 @@ test("onMouseMove", () => {
   expect(operator.points).toStrictEqual([]);
 });
 
-test("onMouseMove (with anchor)", () => {});
+test("onMouseMove (with anchor)", () => {
+  const operator = new LassoSelectionOperator();
+
+  operator.selecting = true;
+
+  operator.anchor = { x: 0, y: 3 };
+  operator.buffer = [0, 0, 0, 1, 0, 2, 0, 3, 2, 2];
+  operator.origin = { x: 0, y: 0 };
+
+  operator.onMouseMove({ x: 5, y: 5 });
+
+  expect(operator.selected).toBe(false);
+  expect(operator.selecting).toBe(true);
+
+  expect(operator.selection).toBe(undefined);
+
+  expect(operator.anchor).toStrictEqual({ x: 0, y: 3 });
+  expect(operator.buffer).toStrictEqual([0, 0, 0, 1, 0, 2, 0, 3, 5, 5]);
+  expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
+  expect(operator.points).toStrictEqual([]);
+});
 
 test("onMouseUp (unconnected, with anchor)", () => {});
 

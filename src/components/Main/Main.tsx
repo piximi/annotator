@@ -32,18 +32,17 @@ import { ObjectSelection } from "./ObjectSelection";
 import { EllipticalSelection } from "./EllipticalSelection";
 import * as tensorflow from "@tensorflow/tfjs";
 import { Tensor3D, Tensor4D } from "@tensorflow/tfjs";
-import {
-  getBoundaryCoordinates,
-  getNonZeroValues,
-  getIdx,
-} from "../../image/imageHelper";
+import { getIdx } from "../../image/imageHelper";
 import {
   createPathFinder,
   makeGraph,
   PiximiGraph,
 } from "../../image/GraphHelper";
 import { transformCoordinatesToStrokes } from "../../image/pathfinder/PathFinder";
-import { EllipticalSelectionOperator } from "../../image/selection";
+import {
+  EllipticalSelectionOperator,
+  PolygonalSelectionOperator,
+} from "../../image/selection";
 
 type MainProps = {
   activeCategory: Category;
@@ -565,7 +564,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   useEffect(() => {
     console.log("Loading image");
     const loadImg = async () => {
-      const img = await ImageJS.Image.load(image.src);
+      const img = await ImageJS.Image.load(image!.src);
       const grey = img.grey();
       const edges = grey.sobelFilter();
       setMagneticSelectionDownsizedWidth(img.width * magneticSelectionFactor);
@@ -575,7 +574,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       );
     };
     loadImg();
-  }, [image.src, magneticSelectionFactor]);
+  }, [image, image?.src, magneticSelectionFactor]);
 
   // React.useEffect(() => {
   //   if (
@@ -961,35 +960,13 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
    */
   const polygonalSelectionStartingAnchorCircleRef = React.useRef<Circle>(null);
 
-  const [polygonalSelectionAnchor, setPolygonalSelectionAnchor] = useState<{
-    x: number;
-    y: number;
-  } | null>();
-
-  const [
-    polygonalSelectionAnnotation,
-    setPolygonalSelectionAnnotation,
-  ] = useState<{ points: Array<number> }>();
-
-  const [
-    polygonalSelectionCanClose,
-    setPolygonalSelectionCanClose,
-  ] = useState<boolean>(false);
-
-  const [polygonalSelectionStart, setPolygonalSelectionStart] = useState<{
-    x: number;
-    y: number;
-  } | null>();
-
-  const [polygonalSelectionStrokes, setPolygonalSelectionStrokes] = useState<
-    Array<{ points: Array<number> }>
-  >([]);
+  const polygonalSelectionOperator = new PolygonalSelectionOperator();
 
   const PolygonalSelectionAnchor = () => {
     if (
       annotating &&
-      polygonalSelectionAnchor &&
-      polygonalSelectionStrokes.length > 1
+      polygonalSelectionOperator.anchor &&
+      polygonalSelectionOperator.buffer.length > 1
     ) {
       return (
         <ReactKonva.Circle
@@ -998,8 +975,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           radius={pointRadius}
           stroke="#FFF"
           strokeWidth={1}
-          x={polygonalSelectionAnchor.x}
-          y={polygonalSelectionAnchor.y}
+          x={polygonalSelectionOperator.anchor.x}
+          y={polygonalSelectionOperator.anchor.y}
         />
       );
     } else {
@@ -1013,10 +990,10 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
         <React.Fragment>
           <PolygonalSelectionAnchor />
 
-          {polygonalSelectionAnnotation && (
+          {polygonalSelectionOperator.points && (
             <React.Fragment>
               <ReactKonva.Line
-                points={polygonalSelectionAnnotation.points}
+                points={polygonalSelectionOperator.points}
                 stroke="black"
                 strokeWidth={1}
               />
@@ -1026,7 +1003,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                 dash={[4, 2]}
                 dashOffset={-dashOffset}
                 fill={toRGBA(activeCategory.color, 0.3)}
-                points={polygonalSelectionAnnotation.points}
+                points={polygonalSelectionOperator.points}
                 stroke="white"
                 strokeWidth={1}
               />
@@ -1040,197 +1017,31 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           <StartingAnchor
             annotating={annotating}
             pointRadius={pointRadius}
-            position={polygonalSelectionStart}
+            position={polygonalSelectionOperator.origin}
             ref={polygonalSelectionStartingAnchorCircleRef}
           />
 
-          {polygonalSelectionStrokes.map(
-            (stroke: { points: Array<number> }, key: number) => {
-              return (
-                <React.Fragment>
-                  <ReactKonva.Line
-                    key={key}
-                    points={stroke.points}
-                    stroke="black"
-                    strokeWidth={1}
-                  />
+          <ReactKonva.Line
+            points={polygonalSelectionOperator.buffer}
+            stroke="black"
+            strokeWidth={1}
+          />
 
-                  <ReactKonva.Line
-                    closed={false}
-                    dash={[4, 2]}
-                    dashOffset={-dashOffset}
-                    fill="None"
-                    key={key + 1}
-                    points={stroke.points}
-                    stroke="white"
-                    strokeWidth={1}
-                  />
-                </React.Fragment>
-              );
-            }
-          )}
+          <ReactKonva.Line
+            closed={false}
+            dash={[4, 2]}
+            dashOffset={-dashOffset}
+            fill="None"
+            points={polygonalSelectionOperator.buffer}
+            stroke="white"
+            strokeWidth={1}
+          />
 
           <PolygonalSelectionAnchor />
         </React.Fragment>
       );
     } else {
       return null;
-    }
-  };
-
-  const onPolygonalSelection = () => {};
-
-  const onPolygonalSelectionMouseDown = (position: {
-    x: number;
-    y: number;
-  }) => {
-    if (
-      connected(
-        position,
-        polygonalSelectionStartingAnchorCircleRef,
-        polygonalSelectionStrokes,
-        polygonalSelectionCanClose
-      )
-    ) {
-      const stroke: { points: Array<number> } = {
-        points: _.flatten(
-          polygonalSelectionStrokes.map(
-            (stroke: { points: Array<number> }) => stroke.points
-          )
-        ),
-      };
-
-      setAnnotated(true);
-
-      setAnnotating(false);
-
-      setPolygonalSelectionAnnotation(stroke);
-
-      setPolygonalSelectionStrokes([]);
-
-      setPolygonalSelectionStart(null);
-      setPolygonalSelectionAnchor(null);
-    } else {
-      if (polygonalSelectionStrokes.length === 0) {
-        setAnnotating(true);
-
-        if (!polygonalSelectionStart) {
-          setPolygonalSelectionStart(position);
-        }
-      }
-    }
-  };
-
-  const onPolygonalSelectionMouseMove = (position: {
-    x: number;
-    y: number;
-  }) => {
-    if (
-      !polygonalSelectionCanClose &&
-      !isInside(polygonalSelectionStartingAnchorCircleRef, position)
-    ) {
-      setPolygonalSelectionCanClose(true);
-    }
-
-    if (polygonalSelectionAnchor) {
-      const stroke = {
-        points: [
-          polygonalSelectionAnchor.x,
-          polygonalSelectionAnchor.y,
-          position.x,
-          position.y,
-        ],
-      };
-      polygonalSelectionStrokes.splice(
-        polygonalSelectionStrokes.length - 1,
-        1,
-        stroke
-      );
-
-      setPolygonalSelectionStrokes(polygonalSelectionStrokes.concat());
-    } else if (polygonalSelectionStart) {
-      const stroke = {
-        points: [
-          polygonalSelectionStart.x,
-          polygonalSelectionStart.y,
-          position.x,
-          position.y,
-        ],
-      };
-
-      polygonalSelectionStrokes.splice(
-        polygonalSelectionStrokes.length - 1,
-        1,
-        stroke
-      );
-
-      setPolygonalSelectionStrokes(polygonalSelectionStrokes.concat());
-    }
-  };
-
-  const onPolygonalSelectionMouseUp = (position: { x: number; y: number }) => {
-    if (
-      connected(
-        position,
-        polygonalSelectionStartingAnchorCircleRef,
-        polygonalSelectionStrokes,
-        polygonalSelectionCanClose
-      )
-    ) {
-      if (polygonalSelectionStart) {
-        const stroke = {
-          points: [
-            position.x,
-            position.y,
-            polygonalSelectionStart.x,
-            polygonalSelectionStart.y,
-          ],
-        };
-
-        setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
-      }
-
-      const stroke: { points: Array<number> } = {
-        points: _.flatten(
-          polygonalSelectionStrokes.map(
-            (stroke: { points: Array<number> }) => stroke.points
-          )
-        ),
-      };
-
-      setAnnotated(true);
-
-      setAnnotating(false);
-
-      setPolygonalSelectionAnnotation(stroke);
-
-      setPolygonalSelectionStrokes([]);
-    } else {
-      if (polygonalSelectionStrokes.length > 0) {
-        setPolygonalSelectionAnchor(position);
-
-        if (!polygonalSelectionAnchor) {
-          const stroke = {
-            points: [
-              polygonalSelectionStart!.x,
-              polygonalSelectionStart!.y,
-              position.x,
-              position.y,
-            ],
-          };
-          setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
-        } else {
-          const stroke = {
-            points: [
-              polygonalSelectionAnchor!.x,
-              polygonalSelectionAnchor!.y,
-              position.x,
-              position.y,
-            ],
-          };
-          setPolygonalSelectionStrokes([...polygonalSelectionStrokes, stroke]);
-        }
-      }
     }
   };
 
@@ -1437,7 +1248,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       case ImageViewerOperation.ObjectSelection:
         return onObjectSelection();
       case ImageViewerOperation.PolygonalSelection:
-        return onPolygonalSelection();
+        return polygonalSelectionOperator.select(0);
       case ImageViewerOperation.QuickSelection:
         return onQuickSelection();
       case ImageViewerOperation.RectangularSelection:
@@ -1482,9 +1293,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             setAnnotating(true);
             return onRectangularSelectionMouseDown(position);
           case ImageViewerOperation.PolygonalSelection:
-            if (annotated) return;
-
-            return onPolygonalSelectionMouseDown(position);
+            return polygonalSelectionOperator.onMouseDown(position);
           case ImageViewerOperation.QuickSelection:
             return onQuickSelectionMouseDown(position);
           case ImageViewerOperation.RectangularSelection:
@@ -1529,9 +1338,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             if (annotated || !annotating) return;
             return onRectangularSelectionMouseMove(position);
           case ImageViewerOperation.PolygonalSelection:
-            if (annotated || !annotating) return;
-
-            return onPolygonalSelectionMouseMove(position);
+            return polygonalSelectionOperator.onMouseMove(position);
           case ImageViewerOperation.QuickSelection:
             return onQuickSelectionMouseMove(position);
           case ImageViewerOperation.RectangularSelection:
@@ -1573,9 +1380,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           case ImageViewerOperation.ObjectSelection:
             return onObjectSelectionMouseUp(position);
           case ImageViewerOperation.PolygonalSelection:
-            if (annotated || !annotating) return;
-
-            return onPolygonalSelectionMouseUp(position);
+            return polygonalSelectionOperator.onMouseUp(position);
           case ImageViewerOperation.QuickSelection:
             return onQuickSelectionMouseUp(position);
           case ImageViewerOperation.RectangularSelection:

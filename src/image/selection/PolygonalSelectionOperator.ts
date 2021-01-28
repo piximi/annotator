@@ -17,27 +17,33 @@ export class PolygonalSelectionOperator extends SelectionOperator {
   deselect() {}
 
   onMouseDown(position: { x: number; y: number }) {
-    if (this.connected(position)) {
+    if (this.selected) return;
+
+    if (this.origin && this.connected(position)) {
       this.selected = true;
       this.selecting = false;
 
       this.points = this.buffer;
 
+      this.anchor = undefined;
       this.buffer = [];
-
       this.origin = undefined;
-    } else {
-      if (this.buffer && this.buffer.length === 0) {
-        this.selecting = true;
 
-        if (!this.origin) {
-          this.origin = position;
-        }
+      return;
+    }
+
+    if (this.buffer && this.buffer.length === 0) {
+      this.selecting = true;
+
+      if (!this.origin) {
+        this.origin = position;
       }
     }
   }
 
   onMouseMove(position: { x: number; y: number }) {
+    if (this.selected || !this.selecting) return;
+
     if (this.anchor) {
       this.buffer.pop();
 
@@ -64,6 +70,8 @@ export class PolygonalSelectionOperator extends SelectionOperator {
   }
 
   onMouseUp(position: { x: number; y: number }) {
+    if (this.selected || !this.selecting) return;
+
     if (this.connected(position)) {
       if (this.origin) {
         this.buffer = [

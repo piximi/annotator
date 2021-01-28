@@ -1,111 +1,149 @@
-import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import { test } from "@jest/globals";
+import { PolygonalSelectionOperator } from "./PolygonalSelectionOperator";
 
-test("deselect", () => {
-  const selectionOperator = new RectangularSelectionOperator();
-
-  selectionOperator.selected = true;
-
-  selectionOperator.origin = { x: 0, y: 0 };
-
-  selectionOperator.width = 100;
-  selectionOperator.height = 100;
-
-  selectionOperator.deselect();
-
-  expect(selectionOperator.selected).toBe(false);
-  expect(selectionOperator.selecting).toBe(false);
-
-  expect(selectionOperator.selection).toBe(undefined);
-
-  expect(selectionOperator.origin).toStrictEqual(undefined);
-
-  expect(selectionOperator.width).toBe(undefined);
-  expect(selectionOperator.height).toBe(undefined);
-});
+// test("deselect", () => {
+//   const operator = new PolygonalSelectionOperator();
+//
+//   operator.selected = true;
+//
+//   operator.origin = { x: 0, y: 0 };
+//
+//   operator.width = 100;
+//   operator.height = 100;
+//
+//   operator.deselect();
+//
+//   expect(operator.selected).toBe(false);
+//   expect(operator.selecting).toBe(false);
+//
+//   expect(operator.selection).toBe(undefined);
+//
+//   expect(operator.origin).toStrictEqual(undefined);
+//
+//   expect(operator.width).toBe(undefined);
+//   expect(operator.height).toBe(undefined);
+// });
 
 test("onMouseDown", () => {
-  const selectionOperator = new RectangularSelectionOperator();
+  const operator = new PolygonalSelectionOperator();
 
-  selectionOperator.onMouseDown({ x: 0, y: 0 });
+  operator.onMouseDown({ x: 0, y: 0 });
 
-  expect(selectionOperator.selected).toBe(false);
-  expect(selectionOperator.selecting).toBe(true);
+  expect(operator.selected).toBe(false);
+  expect(operator.selecting).toBe(true);
 
-  expect(selectionOperator.selection).toBe(undefined);
+  expect(operator.selection).toBe(undefined);
 
-  expect(selectionOperator.origin).toStrictEqual({ x: 0, y: 0 });
-
-  expect(selectionOperator.width).toBe(undefined);
-  expect(selectionOperator.height).toBe(undefined);
+  expect(operator.anchor).toStrictEqual(undefined);
+  expect(operator.buffer).toStrictEqual([]);
+  expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
+  expect(operator.points).toStrictEqual([]);
 });
 
-test("onMouseMove", () => {
-  const selectionOperator = new RectangularSelectionOperator();
+test("onMouseDown (subsequent, unconnected)", () => {
+  const operator = new PolygonalSelectionOperator();
 
-  selectionOperator.selecting = true;
+  operator.origin = { x: 0, y: 0 };
 
-  selectionOperator.origin = { x: 0, y: 0 };
+  operator.onMouseDown({ x: 100, y: 0 });
 
-  selectionOperator.onMouseMove({ x: 100, y: 100 });
+  expect(operator.selected).toBe(false);
+  expect(operator.selecting).toBe(true);
 
-  expect(selectionOperator.selected).toBe(false);
-  expect(selectionOperator.selecting).toBe(true);
+  expect(operator.selection).toBe(undefined);
 
-  expect(selectionOperator.selection).toBe(undefined);
-
-  expect(selectionOperator.origin).toStrictEqual({ x: 0, y: 0 });
-
-  expect(selectionOperator.width).toBe(100);
-  expect(selectionOperator.height).toBe(100);
+  expect(operator.anchor).toStrictEqual(undefined);
+  expect(operator.buffer).toStrictEqual([]);
+  expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
+  expect(operator.points).toStrictEqual([]);
 });
 
-test("onMouseUp", () => {
-  const selectionOperator = new RectangularSelectionOperator();
+test("onMouseDown (subsequent, connected)", () => {
+  const operator = new PolygonalSelectionOperator();
 
-  selectionOperator.selecting = true;
+  operator.anchor = { x: 0, y: 100 };
+  operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
+  operator.origin = { x: 0, y: 0 };
 
-  selectionOperator.origin = { x: 0, y: 0 };
+  operator.onMouseDown({ x: 1, y: 1 });
 
-  selectionOperator.onMouseUp({ x: 100, y: 100 });
+  expect(operator.selected).toBe(true);
+  expect(operator.selecting).toBe(false);
 
-  expect(selectionOperator.selected).toBe(true);
-  expect(selectionOperator.selecting).toBe(false);
+  expect(operator.selection).toBe(undefined);
 
-  expect(selectionOperator.selection).toBe(undefined);
-
-  expect(selectionOperator.origin).toStrictEqual({ x: 0, y: 0 });
-
-  expect(selectionOperator.width).toBe(100);
-  expect(selectionOperator.height).toBe(100);
+  expect(operator.anchor).toStrictEqual(undefined);
+  expect(operator.buffer).toStrictEqual([]);
+  expect(operator.origin).toStrictEqual(undefined);
+  expect(operator.points).toStrictEqual([0, 0, 100, 0, 100, 100, 0, 100]);
 });
 
-test("select", () => {
-  const selectionOperator = new RectangularSelectionOperator();
-
-  selectionOperator.selected = true;
-
-  selectionOperator.origin = { x: 0, y: 0 };
-
-  selectionOperator.width = 100;
-  selectionOperator.height = 100;
-
-  selectionOperator.select(0);
-
-  expect(selectionOperator.selected).toBe(true);
-  expect(selectionOperator.selecting).toBe(false);
-
-  expect(selectionOperator.selection).toStrictEqual({
-    boundingBox: [0, 0, 100, 100],
-    categoryId: 0,
-    mask: "mask",
-  });
-
-  expect(selectionOperator.boundingBox).toStrictEqual([0, 0, 100, 100]);
-  expect(selectionOperator.mask).toBe("mask");
-
-  expect(selectionOperator.origin).toStrictEqual({ x: 0, y: 0 });
-
-  expect(selectionOperator.width).toBe(100);
-  expect(selectionOperator.height).toBe(100);
-});
+// test("onMouseMove", () => {
+//   const operator = new PolygonalSelectionOperator();
+//
+//   operator.selecting = true;
+//
+//   operator.origin = { x: 0, y: 0 };
+//
+//   operator.onMouseMove({ x: 100, y: 100 });
+//
+//   expect(operator.selected).toBe(false);
+//   expect(operator.selecting).toBe(true);
+//
+//   expect(operator.selection).toBe(undefined);
+//
+//   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
+//
+//   expect(operator.width).toBe(100);
+//   expect(operator.height).toBe(100);
+// });
+//
+// test("onMouseUp", () => {
+//   const operator = new PolygonalSelectionOperator();
+//
+//   operator.selecting = true;
+//
+//   operator.origin = { x: 0, y: 0 };
+//
+//   operator.onMouseUp({ x: 100, y: 100 });
+//
+//   expect(operator.selected).toBe(true);
+//   expect(operator.selecting).toBe(false);
+//
+//   expect(operator.selection).toBe(undefined);
+//
+//   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
+//
+//   expect(operator.width).toBe(100);
+//   expect(operator.height).toBe(100);
+// });
+//
+// test("select", () => {
+//   const operator = new PolygonalSelectionOperator();
+//
+//   operator.selected = true;
+//
+//   operator.origin = { x: 0, y: 0 };
+//
+//   operator.width = 100;
+//   operator.height = 100;
+//
+//   operator.select(0);
+//
+//   expect(operator.selected).toBe(true);
+//   expect(operator.selecting).toBe(false);
+//
+//   expect(operator.selection).toStrictEqual({
+//     boundingBox: [0, 0, 100, 100],
+//     categoryId: 0,
+//     mask: "mask",
+//   });
+//
+//   expect(operator.boundingBox).toStrictEqual([0, 0, 100, 100]);
+//   expect(operator.mask).toBe("mask");
+//
+//   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
+//
+//   expect(operator.width).toBe(100);
+//   expect(operator.height).toBe(100);
+// });

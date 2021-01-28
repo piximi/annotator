@@ -15,6 +15,7 @@ import { Circle } from "konva/types/shapes/Circle";
 import { Line } from "konva/types/shapes/Line";
 import * as _ from "underscore";
 import { RectangularSelection } from "./RectangularSelection";
+import { PolygonalSelection } from "./PolygonalSelection";
 import { StartingAnchor } from "./StartingAnchor";
 import { ZoomSelection } from "./ZoomSelection";
 import {
@@ -958,92 +959,9 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   /*
    * Polygonal selection
    */
-  const polygonalSelectionStartingAnchorCircleRef = React.useRef<Circle>(null);
-
-  const polygonalSelectionOperator = new PolygonalSelectionOperator();
-
-  const PolygonalSelectionAnchor = () => {
-    if (
-      annotating &&
-      polygonalSelectionOperator.anchor &&
-      polygonalSelectionOperator.buffer.length > 1
-    ) {
-      return (
-        <ReactKonva.Circle
-          fill="#FFF"
-          name="anchor"
-          radius={pointRadius}
-          stroke="#FFF"
-          strokeWidth={1}
-          x={polygonalSelectionOperator.anchor.x}
-          y={polygonalSelectionOperator.anchor.y}
-        />
-      );
-    } else {
-      return <React.Fragment />;
-    }
-  };
-
-  const PolygonalSelection = () => {
-    if (annotated && !annotating) {
-      return (
-        <React.Fragment>
-          <PolygonalSelectionAnchor />
-
-          {polygonalSelectionOperator.points && (
-            <React.Fragment>
-              <ReactKonva.Line
-                points={polygonalSelectionOperator.points}
-                stroke="black"
-                strokeWidth={1}
-              />
-
-              <ReactKonva.Line
-                closed
-                dash={[4, 2]}
-                dashOffset={-dashOffset}
-                fill={toRGBA(activeCategory.color, 0.3)}
-                points={polygonalSelectionOperator.points}
-                stroke="white"
-                strokeWidth={1}
-              />
-            </React.Fragment>
-          )}
-        </React.Fragment>
-      );
-    } else if (!annotated && annotating) {
-      return (
-        <React.Fragment>
-          <StartingAnchor
-            annotating={annotating}
-            pointRadius={pointRadius}
-            position={polygonalSelectionOperator.origin}
-            ref={polygonalSelectionStartingAnchorCircleRef}
-          />
-
-          <ReactKonva.Line
-            points={polygonalSelectionOperator.buffer}
-            stroke="black"
-            strokeWidth={1}
-          />
-
-          <ReactKonva.Line
-            closed={false}
-            dash={[4, 2]}
-            dashOffset={-dashOffset}
-            fill="None"
-            points={polygonalSelectionOperator.buffer}
-            stroke="white"
-            strokeWidth={1}
-          />
-
-          <PolygonalSelectionAnchor />
-        </React.Fragment>
-      );
-    } else {
-      return null;
-    }
-  };
+  const [polygonalSelectionOperator] = useState(
+    new PolygonalSelectionOperator()
+  );
 
   /*
    * Quick selection
@@ -1486,7 +1404,13 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             )}
 
             {activeOperation === ImageViewerOperation.PolygonalSelection && (
-              <PolygonalSelection />
+              <PolygonalSelection
+                activeCategory={activeCategory}
+                buffer={polygonalSelectionOperator.buffer}
+                points={polygonalSelectionOperator.points}
+                selected={polygonalSelectionOperator.selected}
+                selecting={polygonalSelectionOperator.selecting}
+              />
             )}
 
             {activeOperation === ImageViewerOperation.QuickSelection && (

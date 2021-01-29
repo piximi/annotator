@@ -1260,6 +1260,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             {activeOperation === ImageViewerOperation.LassoSelection && (
               <PolygonalSelection
                 activeCategory={activeCategory}
+                anchor={lassoSelectionOperator.anchor}
                 buffer={lassoSelectionOperator.buffer}
                 points={lassoSelectionOperator.points}
                 selected={lassoSelectionOperator.selected}
@@ -1290,6 +1291,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             {activeOperation === ImageViewerOperation.PolygonalSelection && (
               <PolygonalSelection
                 activeCategory={activeCategory}
+                anchor={polygonalSelectionOperator.anchor}
                 buffer={polygonalSelectionOperator.buffer}
                 points={polygonalSelectionOperator.points}
                 selected={polygonalSelectionOperator.selected}

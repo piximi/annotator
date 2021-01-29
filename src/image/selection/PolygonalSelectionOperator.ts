@@ -122,9 +122,7 @@ export class PolygonalSelectionOperator extends SelectionOperator {
       return;
     }
 
-    if (this.origin) {
-      this.buffer = [this.origin.x, this.origin.y, position.x, position.y];
-
+    if (this.origin && this.buffer.length > 0) {
       this.anchor = position;
 
       return;

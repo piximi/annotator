@@ -53,9 +53,35 @@ export const Stage = ({ src }: StageProps) => {
     }
   }, [operation]);
 
-  const onMouseDown = () => {};
-  const onMouseMove = () => {};
-  const onMouseUp = () => {};
+  const onMouseDown = () => {
+    if (!stageRef || !stageRef.current) return;
+
+    const position = stageRef.current.getPointerPosition();
+
+    if (!position) return;
+
+    operator.onMouseDown(position);
+  };
+
+  const onMouseMove = () => {
+    if (!stageRef || !stageRef.current) return;
+
+    const position = stageRef.current.getPointerPosition();
+
+    if (!position) return;
+
+    operator.onMouseMove(position);
+  };
+
+  const onMouseUp = () => {
+    if (!stageRef || !stageRef.current) return;
+
+    const position = stageRef.current.getPointerPosition();
+
+    if (!position) return;
+
+    operator.onMouseUp(position);
+  };
 
   return (
     <ReactKonva.Stage

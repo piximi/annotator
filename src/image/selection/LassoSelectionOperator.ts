@@ -24,7 +24,17 @@ export class LassoSelectionOperator extends SelectionOperator {
     return "mask";
   }
 
-  deselect() {}
+  deselect() {
+    this.selected = false;
+    this.selecting = false;
+
+    this.selection = undefined;
+
+    this.anchor = undefined;
+    this.buffer = [];
+    this.origin = undefined;
+    this.points = [];
+  }
 
   onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;

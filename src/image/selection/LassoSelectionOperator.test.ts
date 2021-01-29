@@ -1,8 +1,30 @@
 import { test } from "@jest/globals";
 import { LassoSelectionOperator } from "./LassoSelectionOperator";
-import { PolygonalSelectionOperator } from "./PolygonalSelectionOperator";
 
-test("deselect", () => {});
+test("deselect", () => {
+  const operator = new LassoSelectionOperator();
+
+  operator.selected = true;
+
+  operator.anchor = { x: 3, y: 3 };
+  operator.buffer = [0, 0, 1, 1, 2, 2, 3, 3, 4, 3, 5, 3];
+  operator.origin = { x: 0, y: 0 };
+  operator.points = [0, 0, 1, 1, 2, 2, 3, 3, 4, 3, 5, 3, 0, 0];
+
+  operator.deselect();
+
+  expect(operator.selected).toBe(false);
+  expect(operator.selecting).toBe(false);
+
+  expect(operator.selection).toBe(undefined);
+
+  expect(operator.origin).toStrictEqual(undefined);
+
+  expect(operator.anchor).toStrictEqual(undefined);
+  expect(operator.buffer).toStrictEqual([]);
+  expect(operator.origin).toStrictEqual(undefined);
+  expect(operator.points).toStrictEqual([]);
+});
 
 test("onMouseDown", () => {
   const operator = new LassoSelectionOperator();

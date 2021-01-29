@@ -1,7 +1,6 @@
 import { SelectionOperator } from "./SelectionOperator";
 import { createPathFinder, makeGraph, PiximiGraph } from "../GraphHelper";
 import { getIdx } from "../imageHelper";
-import { transformCoordinatesToStrokes } from "../pathfinder/PathFinder";
 
 export class MagneticSelectionOperator extends SelectionOperator {
   graph?: PiximiGraph;

@@ -1,8 +1,9 @@
 import * as ReactKonva from "react-konva";
 import Konva from "konva";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import useImage from "use-image";
 import { useStyles } from "./Content.css";
+import { SelectionOperator } from "../../image/selection";
 
 type StageProps = {
   src: string;
@@ -15,6 +16,8 @@ export const Stage = ({ src }: StageProps) => {
   const stageRef = useRef<Konva.Stage>(null);
 
   const classes = useStyles();
+
+  const [operator, setOperator] = useState<SelectionOperator>();
 
   const onMouseDown = () => {};
   const onMouseMove = () => {};

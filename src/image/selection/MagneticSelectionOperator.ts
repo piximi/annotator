@@ -13,7 +13,6 @@ export class MagneticSelectionOperator extends SelectionOperator {
   buffer: Array<number> = [];
   origin: { x: number; y: number } = { x: 0, y: 0 };
   canClose: boolean = false;
-  currentPosition?: { x: number; y: number };
   anchor?: { x: number; y: number }; // Not sure this is even necessary
 
   get boundingBox(): [number, number, number, number] | undefined {
@@ -24,32 +23,21 @@ export class MagneticSelectionOperator extends SelectionOperator {
     return undefined;
   }
 
-  deselect() {
-    this.selected = false;
-    this.selecting = false;
-
-    this.center = undefined;
-    this.origin = undefined;
-    this.radius = undefined;
-  }
+  deselect() {}
 
   onMouseDown(position: { x: number; y: number }) {
-    if (this.selected) {
-      return;
-    }
+    if (this.selected) return;
 
-    this.currentPosition = position;
-
-    if (this.connected(this.currentPosition)) {
+    if (this.connected(position)) {
       this.selected = true;
       this.selecting = false;
     } else {
       this.selecting = true;
 
-      this.origin = this.currentPosition;
+      this.origin = position;
 
       if (this.buffer.length > 0) {
-        this.anchor = this.currentPosition;
+        this.anchor = position;
 
         this.previous = [...this.previous, ...this.buffer];
       }
@@ -57,49 +45,29 @@ export class MagneticSelectionOperator extends SelectionOperator {
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (this.selected || !this.selecting) {
-      return;
-    }
+    if (this.selected || !this.selecting) return;
 
-    this.currentPosition = position;
-
-    if (this.currentPosition) {
-      if (
-        !this.canClose &&
-        !this.isInside(
-          magneticSelectionStartingAnchorCircleRef,
-          this.currentPosition
+    // let startPosition;
+    if (this.pathFinder && this.origin) {
+      const pathCoords = this.pathFinder.find(
+        getIdx(this.downsizedWidth, 1)(
+          Math.floor(this.origin.x * this.scalingFactor),
+          Math.floor(this.origin.y * this.scalingFactor),
+          0
+        ),
+        getIdx(this.downsizedWidth, 1)(
+          Math.floor(position.x * this.scalingFactor),
+          Math.floor(position.y * this.scalingFactor),
+          0
         )
-      ) {
-        this.canClose = true;
-      }
+      );
 
-      // let startPosition;
-      if (this.pathFinder && this.origin) {
-        const pathCoords = this.pathFinder.find(
-          getIdx(this.downsizedWidth, 1)(
-            Math.floor(this.origin.x * this.scalingFactor),
-            Math.floor(this.origin.y * this.scalingFactor),
-            0
-          ),
-          getIdx(this.downsizedWidth, 1)(
-            Math.floor(this.currentPosition.x * this.scalingFactor),
-            Math.floor(this.currentPosition.y * this.scalingFactor),
-            0
-          )
-        );
-
-        this.buffer = transformCoordinatesToStrokes(pathCoords);
-      }
+      this.buffer = transformCoordinatesToStrokes(pathCoords);
     }
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.selected || !this.selecting) {
-      return;
-    }
-
-    this.currentPosition = position;
+    if (this.selected || !this.selecting) return;
 
     if (this.connected(position)) {
       if (this.origin) {
@@ -122,11 +90,11 @@ export class MagneticSelectionOperator extends SelectionOperator {
       if (this.buffer.length > 0) {
         this.anchor = position;
 
-        this.origin = this.currentPosition;
+        this.origin = position;
 
         this.previous = [...this.previous, ...this.buffer];
       } else {
-        this.origin = this.currentPosition;
+        this.origin = position;
       }
     }
   }

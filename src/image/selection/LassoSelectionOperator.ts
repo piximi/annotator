@@ -1,4 +1,5 @@
 import { SelectionOperator } from "./SelectionOperator";
+import * as _ from "lodash";
 
 export class LassoSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
@@ -7,11 +8,20 @@ export class LassoSelectionOperator extends SelectionOperator {
   points: Array<number> = [];
 
   get boundingBox(): [number, number, number, number] | undefined {
-    return undefined;
+    if (!this.origin || !this.points) return undefined;
+
+    const pairs = _.chunk(this.points, 2);
+
+    return [
+      this.origin.x,
+      this.origin.y,
+      _.max(_.map(pairs, _.first))!,
+      _.max(_.map(pairs, _.last))!,
+    ];
   }
 
   get mask(): string | undefined {
-    return undefined;
+    return "mask";
   }
 
   deselect() {}
@@ -104,7 +114,15 @@ export class LassoSelectionOperator extends SelectionOperator {
     }
   }
 
-  select(category: number) {}
+  select(category: number) {
+    if (!this.boundingBox || !this.mask) return;
+
+    this.selection = {
+      boundingBox: this.boundingBox,
+      categoryId: category,
+      mask: this.mask,
+    };
+  }
 
   private connected(
     position: { x: number; y: number },

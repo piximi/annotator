@@ -80,7 +80,7 @@ export const PolygonalSelection = React.forwardRef<
           strokeWidth={1}
         />
 
-        {/*<StartingAnchor selecting={props.selecting} />*/}
+        <StartingAnchor selecting={props.selecting} origin={props.origin} />
         <PolygonalSelectionAnchor />
       </React.Fragment>
     );

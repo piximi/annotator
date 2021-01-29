@@ -26,6 +26,8 @@ export const StartingAnchor = React.forwardRef<Circle, StartingAnchorProps>(
           y={props.origin.y}
         />
       );
+    } else {
+      return <React.Fragment />;
     }
   }
 );

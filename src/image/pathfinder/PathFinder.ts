@@ -213,18 +213,3 @@ export const pathDirection = (from: Array<number>, to: Array<number>) => {
     dy
   );
 };
-
-export const transformCoordinatesToStrokes = (
-  coordinates: number[][]
-): Array<{ points: Array<number> }> => {
-  const strokes = [];
-
-  for (let index = 0; index < coordinates.length - 1; index++) {
-    const [startX, startY] = coordinates[index];
-    const [endX, endY] = coordinates[index + 1];
-
-    strokes.push({ points: [startX, startY, endX, endY] });
-  }
-
-  return strokes;
-};

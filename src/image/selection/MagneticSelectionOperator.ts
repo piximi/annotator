@@ -1,17 +1,37 @@
 import { SelectionOperator } from "./SelectionOperator";
 import { createPathFinder, makeGraph, PiximiGraph } from "../GraphHelper";
 import { getIdx } from "../imageHelper";
+import * as ImageJS from "image-js";
 
 export class MagneticSelectionOperator extends SelectionOperator {
   graph?: PiximiGraph;
   scalingFactor: number = 0.5;
   downsizedWidth: number = 0;
   pathFinder?: { find: (fromId: number, toId: number) => any };
-  points?: Array<number>;
+  points: Array<number> = [];
   previous: Array<number> = [];
   buffer: Array<number> = [];
-  origin: { x: number; y: number } = { x: 0, y: 0 };
+  origin?: { x: number; y: number };
   anchor?: { x: number; y: number };
+
+  constructor(image: ImageJS.Image) {
+    super(image);
+
+    if (!this.graph) {
+      console.log("Creating graph");
+      const grey = this.image!.grey();
+      const edges = grey.sobelFilter();
+      this.downsizedWidth = this.image!.width * this.scalingFactor;
+      const downsized = edges.resize({ factor: this.scalingFactor });
+      this.graph = makeGraph(downsized.data, downsized.height, downsized.width);
+      console.log("Creating pathfinder");
+      this.pathFinder = createPathFinder(
+        this.graph,
+        this.downsizedWidth,
+        this.scalingFactor
+      );
+    }
+  }
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -26,20 +46,22 @@ export class MagneticSelectionOperator extends SelectionOperator {
   onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;
 
-    if (this.connected(position)) {
+    if (this.connected(position) && this.origin) {
       this.selected = true;
       this.selecting = false;
-    } else {
-      this.selecting = true;
 
-      this.origin = position;
+      this.buffer = [...this.buffer, this.origin.x, this.origin.y];
 
-      if (this.buffer.length > 0) {
-        this.anchor = position;
-
-        this.previous = [...this.previous, ...this.buffer];
-      }
+      return;
     }
+
+    this.selecting = true;
+
+    this.origin = position;
+
+    this.anchor = position;
+
+    this.previous = [...this.previous, ...this.buffer];
   }
 
   onMouseMove(position: { x: number; y: number }) {
@@ -60,7 +82,11 @@ export class MagneticSelectionOperator extends SelectionOperator {
         )
       );
 
-      // this.buffer = transformCoordinatesToStrokes(pathCoords);
+      this.buffer = [
+        this.origin.x,
+        this.origin.y,
+        ...this.transformCoordinatesToStrokes(pathCoords),
+      ];
     }
   }
 
@@ -105,21 +131,6 @@ export class MagneticSelectionOperator extends SelectionOperator {
       return;
     }
 
-    if (!this.graph) {
-      console.log("Creating graph");
-      const grey = this.image!.grey();
-      const edges = grey.sobelFilter();
-      this.downsizedWidth = this.image!.width * this.scalingFactor;
-      const downsized = edges.resize({ factor: this.scalingFactor });
-      this.graph = makeGraph(downsized.data, downsized.height, downsized.width);
-      console.log("Creating pathfinder");
-      this.pathFinder = createPathFinder(
-        this.graph,
-        this.downsizedWidth,
-        this.scalingFactor
-      );
-    }
-
     if (!this.boundingBox || !this.mask) return;
 
     this.selection = {
@@ -141,5 +152,19 @@ export class MagneticSelectionOperator extends SelectionOperator {
     );
 
     return distance < threshold;
+  }
+
+  private transformCoordinatesToStrokes(
+    coordinates: Array<Array<number>>
+  ): Array<number> {
+    const strokes = [];
+
+    for (let index = 0; index < coordinates.length - 1; index++) {
+      const [endX, endY] = coordinates[index + 1];
+
+      strokes.push(endX, endY);
+    }
+
+    return strokes;
   }
 }

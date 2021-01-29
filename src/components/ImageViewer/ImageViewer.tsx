@@ -28,6 +28,7 @@ import { Operations } from "../Operations/Operations";
 import { Main } from "../Main";
 import { ZoomOptions } from "../ZoomOptions";
 import { imageViewerSlice } from "../../store/slices";
+import { Content } from "../Content";
 
 type ImageViewerProps = {
   image?: Image;
@@ -160,7 +161,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
         onCategoryClick={onCategoryClick}
       />
 
-      {image && <Main activeCategory={activeCategory} zoomReset={zoomReset} />}
+      {image && <Content />}
 
       <OperationOptions
         description={

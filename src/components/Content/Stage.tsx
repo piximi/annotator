@@ -1,9 +1,18 @@
 import * as ReactKonva from "react-konva";
 import Konva from "konva";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useImage from "use-image";
 import { useStyles } from "./Content.css";
-import { SelectionOperator } from "../../image/selection";
+import {
+  EllipticalSelectionOperator,
+  LassoSelectionOperator,
+  PolygonalSelectionOperator,
+  RectangularSelectionOperator,
+  SelectionOperator,
+} from "../../image/selection";
+import { useSelector } from "react-redux";
+import { imageViewerOperationSelector } from "../../store/selectors";
+import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 
 type StageProps = {
   src: string;
@@ -17,7 +26,32 @@ export const Stage = ({ src }: StageProps) => {
 
   const classes = useStyles();
 
-  const [operator, setOperator] = useState<SelectionOperator>();
+  const operation = useSelector(imageViewerOperationSelector);
+
+  const [operator, setOperator] = useState<SelectionOperator>(
+    new RectangularSelectionOperator()
+  );
+
+  useEffect(() => {
+    switch (operation) {
+      case ImageViewerOperation.EllipticalSelection:
+        setOperator(new EllipticalSelectionOperator());
+
+        return;
+      case ImageViewerOperation.LassoSelection:
+        setOperator(new LassoSelectionOperator());
+
+        return;
+      case ImageViewerOperation.PolygonalSelection:
+        setOperator(new PolygonalSelectionOperator());
+
+        return;
+      case ImageViewerOperation.RectangularSelection:
+        setOperator(new RectangularSelectionOperator());
+
+        return;
+    }
+  }, [operation]);
 
   const onMouseDown = () => {};
   const onMouseMove = () => {};

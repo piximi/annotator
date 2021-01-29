@@ -13,6 +13,7 @@ import {
 import { useSelector } from "react-redux";
 import { imageViewerOperationSelector } from "../../store/selectors";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
+import { EllipticalSelection } from "./EllipticalSelection";
 
 type StageProps = {
   src: string;
@@ -97,6 +98,12 @@ export const Stage = ({ src }: StageProps) => {
         onMouseUp={onMouseUp}
       >
         <ReactKonva.Image ref={imageRef} image={image} />
+
+        {operation === ImageViewerOperation.EllipticalSelection && (
+          <EllipticalSelection
+            operator={operator as EllipticalSelectionOperator}
+          />
+        )}
       </ReactKonva.Layer>
     </ReactKonva.Stage>
   );

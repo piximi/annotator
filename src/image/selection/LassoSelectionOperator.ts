@@ -1,4 +1,5 @@
 import { SelectionOperator } from "./SelectionOperator";
+import * as _ from "lodash";
 
 export class LassoSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
@@ -7,14 +8,33 @@ export class LassoSelectionOperator extends SelectionOperator {
   points: Array<number> = [];
 
   get boundingBox(): [number, number, number, number] | undefined {
-    return undefined;
+    if (!this.origin || !this.points) return undefined;
+
+    const pairs = _.chunk(this.points, 2);
+
+    return [
+      this.origin.x,
+      this.origin.y,
+      _.max(_.map(pairs, _.first))!,
+      _.max(_.map(pairs, _.last))!,
+    ];
   }
 
   get mask(): string | undefined {
-    return undefined;
+    return "mask";
   }
 
-  deselect() {}
+  deselect() {
+    this.selected = false;
+    this.selecting = false;
+
+    this.selection = undefined;
+
+    this.anchor = undefined;
+    this.buffer = [];
+    this.origin = undefined;
+    this.points = [];
+  }
 
   onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;
@@ -64,16 +84,19 @@ export class LassoSelectionOperator extends SelectionOperator {
   onMouseUp(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
 
-    if (this.connected(position)) {
-      if (this.origin) {
-        this.buffer = [
-          ...this.buffer,
-          position.x,
-          position.y,
-          this.origin.x,
-          this.origin.y,
-        ];
-      }
+    if (
+      this.connected(position) &&
+      this.origin &&
+      this.buffer &&
+      this.buffer.length > 0
+    ) {
+      this.buffer = [
+        ...this.buffer,
+        position.x,
+        position.y,
+        this.origin.x,
+        this.origin.y,
+      ];
 
       this.selected = true;
       this.selecting = false;
@@ -96,20 +119,25 @@ export class LassoSelectionOperator extends SelectionOperator {
       return;
     }
 
-    if (this.origin) {
-      this.buffer = [this.origin.x, this.origin.y, position.x, position.y];
-
+    if (this.origin && this.buffer && this.buffer.length > 0) {
       this.anchor = position;
-
       return;
     }
   }
 
-  select(category: number) {}
+  select(category: number) {
+    if (!this.boundingBox || !this.mask) return;
+
+    this.selection = {
+      boundingBox: this.boundingBox,
+      categoryId: category,
+      mask: this.mask,
+    };
+  }
 
   private connected(
     position: { x: number; y: number },
-    threshold: number = 2
+    threshold: number = 4
   ): boolean | undefined {
     if (!this.origin) return undefined;
 

@@ -42,6 +42,7 @@ import {
 import { transformCoordinatesToStrokes } from "../../image/pathfinder/PathFinder";
 import {
   EllipticalSelectionOperator,
+  LassoSelectionOperator,
   PolygonalSelectionOperator,
 } from "../../image/selection";
 
@@ -204,124 +205,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   /*
    * Lasso selection
    */
-  const lassoSelectionRef = React.useRef<Line>(null);
-
-  const lassoSelectionStartingAnchorCircleRef = React.useRef<Circle>(null);
-
-  const [lassoSelectionAnchor, setLassoSelectionAnchor] = useState<{
-    x: number;
-    y: number;
-  }>();
-
-  const [lassoSelectionAnnotation, setLassoSelectionAnnotation] = useState<{
-    points: Array<number>;
-  }>();
-
-  const [lassoSelectionCanClose, setLassoSelectionCanClose] = useState<boolean>(
-    false
-  );
-
-  const [lassoSelectionStart, setLassoSelectionStart] = useState<{
-    x: number;
-    y: number;
-  }>();
-
-  const [lassoSelectionStrokes, setLassoSelectionStrokes] = useState<
-    Array<{ points: Array<number> }>
-  >([{ points: [] }]);
-
-  const LassoSelectionAnchor = () => {
-    if (
-      annotating &&
-      lassoSelectionAnchor &&
-      lassoSelectionStrokes.length > 1
-    ) {
-      return (
-        <ReactKonva.Circle
-          fill="#FFF"
-          name="anchor"
-          radius={pointRadius}
-          stroke="#FFF"
-          strokeWidth={1}
-          x={lassoSelectionAnchor.x}
-          y={lassoSelectionAnchor.y}
-        />
-      );
-    } else {
-      return <React.Fragment />;
-    }
-  };
-
-  const LassoSelection = () => {
-    if (annotated && !annotating) {
-      return (
-        <React.Fragment>
-          <LassoSelectionAnchor />
-
-          {lassoSelectionAnnotation && (
-            <React.Fragment>
-              <ReactKonva.Line
-                points={lassoSelectionAnnotation.points}
-                stroke="black"
-                strokeWidth={1}
-              />
-
-              <ReactKonva.Line
-                closed
-                dash={[4, 2]}
-                dashOffset={-dashOffset}
-                fill={toRGBA(activeCategory.color, 0.3)}
-                points={lassoSelectionAnnotation.points}
-                ref={lassoSelectionRef}
-                stroke="white"
-                strokeWidth={1}
-              />
-            </React.Fragment>
-          )}
-        </React.Fragment>
-      );
-    } else if (!annotated && annotating) {
-      return (
-        <React.Fragment>
-          <StartingAnchor
-            annotating={annotating}
-            pointRadius={pointRadius}
-            position={lassoSelectionStart}
-            ref={lassoSelectionStartingAnchorCircleRef}
-          />
-
-          {lassoSelectionStrokes.map(
-            (stroke: { points: Array<number> }, key: number) => {
-              return (
-                <React.Fragment>
-                  <ReactKonva.Line
-                    key={key}
-                    points={stroke.points}
-                    stroke="black"
-                    strokeWidth={1}
-                  />
-
-                  <ReactKonva.Line
-                    closed={false}
-                    dash={[4, 2]}
-                    dashOffset={-dashOffset}
-                    fill="None"
-                    key={key + 1}
-                    points={stroke.points}
-                    stroke="white"
-                    strokeWidth={1}
-                  />
-                </React.Fragment>
-              );
-            }
-          )}
-          <LassoSelectionAnchor />
-        </React.Fragment>
-      );
-    } else {
-      return null;
-    }
-  };
+  const [lassoSelectionOperator] = useState(new LassoSelectionOperator());
 
   const isInside = (
     startingAnchorCircleRef: React.RefObject<Circle>,
@@ -1160,7 +1044,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       case ImageViewerOperation.Hand:
         return;
       case ImageViewerOperation.LassoSelection:
-        return onLassoSelection();
+        return lassoSelectionOperator.select(0);
       case ImageViewerOperation.MagneticSelection:
         return onMagneticSelection();
       case ImageViewerOperation.ObjectSelection:
@@ -1198,9 +1082,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           case ImageViewerOperation.Hand:
             break;
           case ImageViewerOperation.LassoSelection:
-            if (annotated) return;
-
-            return onLassoSelectionMouseDown(position);
+            return lassoSelectionOperator.onMouseDown(position);
           case ImageViewerOperation.MagneticSelection:
             if (annotated) return;
 
@@ -1245,9 +1127,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           case ImageViewerOperation.Hand:
             break;
           case ImageViewerOperation.LassoSelection:
-            if (annotated || !annotating) return;
-
-            return onLassoSelectionMouseMove(position);
+            return lassoSelectionOperator.onMouseMove(position);
           case ImageViewerOperation.MagneticSelection:
             if (annotated || !annotating) return;
 
@@ -1288,9 +1168,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           case ImageViewerOperation.Hand:
             break;
           case ImageViewerOperation.LassoSelection:
-            if (annotated || !annotating) return;
-
-            return onLassoSelectionMouseUp(position);
+            return lassoSelectionOperator.onMouseUp(position);
           case ImageViewerOperation.MagneticSelection:
             if (annotated || !annotating) return;
 
@@ -1380,7 +1258,14 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             )}
 
             {activeOperation === ImageViewerOperation.LassoSelection && (
-              <LassoSelection />
+              <PolygonalSelection
+                activeCategory={activeCategory}
+                anchor={lassoSelectionOperator.anchor}
+                buffer={lassoSelectionOperator.buffer}
+                points={lassoSelectionOperator.points}
+                selected={lassoSelectionOperator.selected}
+                selecting={lassoSelectionOperator.selecting}
+              />
             )}
 
             {activeOperation === ImageViewerOperation.MagneticSelection && (
@@ -1406,6 +1291,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             {activeOperation === ImageViewerOperation.PolygonalSelection && (
               <PolygonalSelection
                 activeCategory={activeCategory}
+                anchor={polygonalSelectionOperator.anchor}
                 buffer={polygonalSelectionOperator.buffer}
                 points={polygonalSelectionOperator.points}
                 selected={polygonalSelectionOperator.selected}

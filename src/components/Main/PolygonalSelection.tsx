@@ -20,7 +20,7 @@ export const PolygonalSelection = React.forwardRef<
   PolygonalSelectionProps
 >((props, ref) => {
   const PolygonalSelectionAnchor = () => {
-    if (props.selecting && props.anchor && props.buffer.length > 1) {
+    if (props.selecting && props.anchor) {
       return (
         <ReactKonva.Circle
           fill="#FFF"

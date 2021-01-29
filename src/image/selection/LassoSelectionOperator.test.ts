@@ -1,5 +1,6 @@
 import { test } from "@jest/globals";
 import { LassoSelectionOperator } from "./LassoSelectionOperator";
+import { PolygonalSelectionOperator } from "./PolygonalSelectionOperator";
 
 test("deselect", () => {});
 
@@ -101,8 +102,47 @@ test("onMouseMove (with anchor)", () => {
   expect(operator.points).toStrictEqual([]);
 });
 
-test("onMouseUp (unconnected, with anchor)", () => {});
+test("onMouseUp (unconnected, with anchor)", () => {
+  const operator = new LassoSelectionOperator();
 
-test("onMouseUp (unconnected, without anchor)", () => {});
+  operator.selecting = true;
+
+  operator.anchor = { x: 100, y: 0 };
+  operator.buffer = [0, 0, 100, 0, 100, 100];
+  operator.origin = { x: 0, y: 0 };
+
+  operator.onMouseUp({ x: 0, y: 100 });
+
+  expect(operator.selected).toBe(false);
+  expect(operator.selecting).toBe(true);
+
+  expect(operator.selection).toBe(undefined);
+
+  expect(operator.anchor).toStrictEqual({ x: 0, y: 100 });
+  expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 0, 100]);
+  expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
+  expect(operator.points).toStrictEqual([]);
+});
+
+test("onMouseUp (unconnected, without anchor)", () => {
+  const operator = new LassoSelectionOperator();
+
+  operator.selecting = true;
+
+  operator.buffer = [0, 0, 1, 1, 2, 2, 3, 3];
+  operator.origin = { x: 0, y: 0 };
+
+  operator.onMouseUp({ x: 4, y: 4 });
+
+  expect(operator.selected).toBe(false);
+  expect(operator.selecting).toBe(true);
+
+  expect(operator.selection).toBe(undefined);
+
+  expect(operator.anchor).toStrictEqual({ x: 4, y: 4 });
+  expect(operator.buffer).toStrictEqual([0, 0, 1, 1, 2, 2, 3, 3, 4, 4]);
+  expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
+  expect(operator.points).toStrictEqual([]);
+});
 
 test("select", () => {});

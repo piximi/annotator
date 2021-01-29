@@ -97,8 +97,7 @@ export class LassoSelectionOperator extends SelectionOperator {
     }
 
     if (this.origin) {
-      this.buffer = [this.origin.x, this.origin.y, position.x, position.y];
-
+      this.buffer = [...this.buffer, position.x, position.y];
       this.anchor = position;
 
       return;

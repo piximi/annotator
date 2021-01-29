@@ -7,16 +7,13 @@ import { Ellipse } from "konva/types/shapes/Ellipse";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import { Rect } from "konva/types/shapes/Rect";
 import { Stage } from "konva/types/Stage";
-import { toRGBA } from "../../image/toRGBA";
 import { useDispatch, useSelector } from "react-redux";
 import { useDebounce, useMarchingAnts, useSelection } from "../../hooks";
 import { useStyles } from "./Main.css";
 import { Circle } from "konva/types/shapes/Circle";
-import { Line } from "konva/types/shapes/Line";
 import * as _ from "underscore";
 import { RectangularSelection } from "./RectangularSelection";
 import { PolygonalSelection } from "./PolygonalSelection";
-import { StartingAnchor } from "./StartingAnchor";
 import { ZoomSelection } from "./ZoomSelection";
 import {
   imageViewerImageInstancesSelector,
@@ -39,7 +36,6 @@ import {
   makeGraph,
   PiximiGraph,
 } from "../../image/GraphHelper";
-import { transformCoordinatesToStrokes } from "../../image/pathfinder/PathFinder";
 import {
   EllipticalSelectionOperator,
   LassoSelectionOperator,
@@ -247,126 +243,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       const inside = isInside(startingAnchorCircleRef, position);
       if (strokes && strokes.length > 0) {
         return inside && canClose;
-      }
-    }
-  };
-
-  const onLassoSelection = () => {};
-
-  const onLassoSelectionMouseDown = (position: { x: number; y: number }) => {
-    if (
-      connected(
-        position,
-        lassoSelectionStartingAnchorCircleRef,
-        lassoSelectionStrokes,
-        lassoSelectionCanClose
-      )
-    ) {
-      const stroke: { points: Array<number> } = {
-        points: _.flatten(
-          lassoSelectionStrokes.map(
-            (stroke: { points: Array<number> }) => stroke.points
-          )
-        ),
-      };
-
-      setAnnotated(true);
-      setAnnotating(false);
-      setLassoSelectionAnnotation(stroke);
-      setLassoSelectionStrokes([]);
-    } else {
-      if (lassoSelectionStrokes[0].points.length === 0) {
-        setAnnotating(true);
-
-        if (!lassoSelectionStart) {
-          setLassoSelectionStart(position);
-        }
-      }
-    }
-  };
-
-  const onLassoSelectionMouseMove = (position: { x: number; y: number }) => {
-    if (
-      !lassoSelectionCanClose &&
-      !isInside(lassoSelectionStartingAnchorCircleRef, position)
-    ) {
-      setLassoSelectionCanClose(true);
-    }
-
-    if (lassoSelectionAnchor) {
-      const stroke = {
-        points: [
-          lassoSelectionAnchor.x,
-          lassoSelectionAnchor.y,
-          position.x,
-          position.y,
-        ],
-      };
-
-      lassoSelectionStrokes.splice(lassoSelectionStrokes.length - 1, 1, stroke);
-      setLassoSelectionStrokes(lassoSelectionStrokes.concat());
-    } else {
-      let stroke = lassoSelectionStrokes[lassoSelectionStrokes.length - 1];
-
-      if (stroke.points.length === 0 && lassoSelectionStart) {
-        stroke.points = [
-          lassoSelectionStart.x,
-          lassoSelectionStart.y,
-          position.x,
-          position.y,
-        ];
-      } else {
-        stroke.points = [...stroke.points, position.x, position.y];
-      }
-
-      lassoSelectionStrokes.splice(0, 1, stroke);
-
-      setLassoSelectionStrokes(lassoSelectionStrokes.concat());
-    }
-  };
-
-  const onLassoSelectionMouseUp = (position: { x: number; y: number }) => {
-    if (
-      connected(
-        position,
-        lassoSelectionStartingAnchorCircleRef,
-        lassoSelectionStrokes,
-        lassoSelectionCanClose
-      )
-    ) {
-      if (lassoSelectionStart) {
-        const stroke = {
-          points: [
-            position.x,
-            position.y,
-            lassoSelectionStart.x,
-            lassoSelectionStart.y,
-          ],
-        };
-
-        setLassoSelectionStrokes([...lassoSelectionStrokes, stroke]);
-      }
-
-      const stroke: { points: Array<number> } = {
-        points: _.flatten(
-          lassoSelectionStrokes.map(
-            (stroke: { points: Array<number> }) => stroke.points
-          )
-        ),
-      };
-
-      setAnnotated(true);
-      setAnnotating(false);
-      setLassoSelectionAnnotation(stroke);
-      setLassoSelectionStrokes([]);
-    } else {
-      if (lassoSelectionStrokes[0].points.length > 0) {
-        setLassoSelectionAnchor(position);
-
-        const stroke = {
-          points: [position.x, position.y, position.x, position.y],
-        };
-        setLassoSelectionStrokes([...lassoSelectionStrokes, stroke]);
       }
     }
   };
@@ -604,63 +480,63 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onMagneticSelectionMouseMove = (position: { x: number; y: number }) => {
-    if (annotated || !annotating) {
-      return;
-    }
-
-    if (stageRef && stageRef.current) {
-      magneticSelectionPosition.current = position;
-
-      if (magneticSelectionPosition && magneticSelectionPosition.current) {
-        if (
-          !magneticSelectionCanClose &&
-          !isInside(
-            magneticSelectionStartingAnchorCircleRef,
-            magneticSelectionPosition.current
-          )
-        ) {
-          setMagneticSelectionCanClose(true);
-        }
-
-        // let startPosition;
-        if (
-          magneticSelectionPathFinder &&
-          magneticSelectionPathFinder.current &&
-          img &&
-          magneticSelectionStartPosition &&
-          magneticSelectionStartPosition.current
-        ) {
-          magneticSelectionPathCoordsRef.current = magneticSelectionPathFinder.current.find(
-            getIdx(magneticSelectionDownsizedWidth, 1)(
-              Math.floor(
-                magneticSelectionStartPosition.current.x *
-                  magneticSelectionFactor
-              ),
-              Math.floor(
-                magneticSelectionStartPosition.current.y *
-                  magneticSelectionFactor
-              ),
-              0
-            ),
-            getIdx(magneticSelectionDownsizedWidth, 1)(
-              Math.floor(
-                magneticSelectionPosition.current.x * magneticSelectionFactor
-              ),
-              Math.floor(
-                magneticSelectionPosition.current.y * magneticSelectionFactor
-              ),
-              0
-            )
-          );
-
-          setMagneticSelectionStrokes(
-            transformCoordinatesToStrokes(
-              magneticSelectionPathCoordsRef.current
-            )
-          );
-        }
-      }
-    }
+    // if (annotated || !annotating) {
+    //   return;
+    // }
+    //
+    // if (stageRef && stageRef.current) {
+    //   magneticSelectionPosition.current = position;
+    //
+    //   if (magneticSelectionPosition && magneticSelectionPosition.current) {
+    //     if (
+    //       !magneticSelectionCanClose &&
+    //       !isInside(
+    //         magneticSelectionStartingAnchorCircleRef,
+    //         magneticSelectionPosition.current
+    //       )
+    //     ) {
+    //       setMagneticSelectionCanClose(true);
+    //     }
+    //
+    //     // let startPosition;
+    //     if (
+    //       magneticSelectionPathFinder &&
+    //       magneticSelectionPathFinder.current &&
+    //       img &&
+    //       magneticSelectionStartPosition &&
+    //       magneticSelectionStartPosition.current
+    //     ) {
+    //       magneticSelectionPathCoordsRef.current = magneticSelectionPathFinder.current.find(
+    //         getIdx(magneticSelectionDownsizedWidth, 1)(
+    //           Math.floor(
+    //             magneticSelectionStartPosition.current.x *
+    //               magneticSelectionFactor
+    //           ),
+    //           Math.floor(
+    //             magneticSelectionStartPosition.current.y *
+    //               magneticSelectionFactor
+    //           ),
+    //           0
+    //         ),
+    //         getIdx(magneticSelectionDownsizedWidth, 1)(
+    //           Math.floor(
+    //             magneticSelectionPosition.current.x * magneticSelectionFactor
+    //           ),
+    //           Math.floor(
+    //             magneticSelectionPosition.current.y * magneticSelectionFactor
+    //           ),
+    //           0
+    //         )
+    //       );
+    //
+    //       setMagneticSelectionStrokes(
+    //         transformCoordinatesToStrokes(
+    //           magneticSelectionPathCoordsRef.current
+    //         )
+    //       );
+    //     }
+    //   }
+    // }
   };
 
   const onMagneticSelectionMouseUp = (position: { x: number; y: number }) => {

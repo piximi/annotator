@@ -154,15 +154,15 @@ test("onMouseUp (unconnected, without anchor)", () => {
   operator.buffer = [0, 0, 1, 1, 2, 2, 3, 3];
   operator.origin = { x: 0, y: 0 };
 
-  operator.onMouseUp({ x: 4, y: 4 });
+  operator.onMouseUp({ x: 3, y: 3 });
 
   expect(operator.selected).toBe(false);
   expect(operator.selecting).toBe(true);
 
   expect(operator.selection).toBe(undefined);
 
-  expect(operator.anchor).toStrictEqual({ x: 4, y: 4 });
-  expect(operator.buffer).toStrictEqual([0, 0, 1, 1, 2, 2, 3, 3, 4, 4]);
+  expect(operator.anchor).toStrictEqual({ x: 3, y: 3 });
+  expect(operator.buffer).toStrictEqual([0, 0, 1, 1, 2, 2, 3, 3]);
   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
   expect(operator.points).toStrictEqual([]);
 });

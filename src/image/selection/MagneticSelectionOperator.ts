@@ -12,8 +12,7 @@ export class MagneticSelectionOperator extends SelectionOperator {
   previous: Array<number> = [];
   buffer: Array<number> = [];
   origin: { x: number; y: number } = { x: 0, y: 0 };
-  canClose: boolean = false;
-  anchor?: { x: number; y: number }; // Not sure this is even necessary
+  anchor?: { x: number; y: number };
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -62,7 +61,7 @@ export class MagneticSelectionOperator extends SelectionOperator {
         )
       );
 
-      this.buffer = transformCoordinatesToStrokes(pathCoords);
+      // this.buffer = transformCoordinatesToStrokes(pathCoords);
     }
   }
 
@@ -86,16 +85,18 @@ export class MagneticSelectionOperator extends SelectionOperator {
       this.points = this.buffer;
 
       this.buffer = [];
+
+      return;
+    }
+
+    if (this.buffer.length > 0) {
+      this.anchor = position;
+
+      this.origin = position;
+
+      this.previous = [...this.previous, ...this.buffer];
     } else {
-      if (this.buffer.length > 0) {
-        this.anchor = position;
-
-        this.origin = position;
-
-        this.previous = [...this.previous, ...this.buffer];
-      } else {
-        this.origin = position;
-      }
+      this.origin = position;
     }
   }
 

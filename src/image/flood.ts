@@ -54,20 +54,20 @@ export const makeFloodMap = ({
 }: {
   x: number;
   y: number;
-  image: FloodImage;
+  image: ImageJS.Image;
 }) => {
-  if (!image) {
-    console.log("Error - No image");
-    return;
-  }
-  image.target = new Position(x, y);
-  image.overlayTolerance = -1;
-  image.overlay = new ImageJS.Image(
-    image.width,
-    image.height,
-    new Uint8ClampedArray(image.width * image.height * 4),
-    { alpha: 1 }
-  );
+  // if (!image) {
+  //   console.log("Error - No image");
+  //   return;
+  // }
+  // image.target = new Position(x, y);
+  // image.overlayTolerance = -1;
+  // image.overlay = new ImageJS.Image(
+  //   image.width,
+  //   image.height,
+  //   new Uint8ClampedArray(image.width * image.height * 4),
+  //   { alpha: 1 }
+  // );
 
   const tol: Array<number> = [];
 
@@ -80,11 +80,10 @@ export const makeFloodMap = ({
     tol.push(Math.floor((red + green + blue) / 3));
   }
 
-  image.toleranceMap = new ImageJS.Image(image.width, image.height, tol, {
+  return new ImageJS.Image(image.width, image.height, tol, {
     alpha: 0,
     components: 1,
   });
-  return image;
 };
 
 export const floodPixels = ({
@@ -96,7 +95,7 @@ export const floodPixels = ({
 }: {
   x: number;
   y: number;
-  image: FloodImage;
+  image: ImageJS.Image;
   tolerance: number;
   color: string;
 }) => {
@@ -115,7 +114,7 @@ export const floodPixels = ({
 
   // Use the watershed function with a single seed to determine the selected region.
   roi.fromWaterShed({
-    image: image.toleranceMap,
+    image: image,
     fillMaxValue: tolerance,
     points: [[x, y]],
   });

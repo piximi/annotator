@@ -953,12 +953,12 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   const onMouseDown = useMemo(() => {
     const throttled = _.throttle(() => {
-      // if (!stageRef || !stageRef.current || !transform) return;
-
-      if (transform) {
-        const position = transform.point(stageRef.current.getPointerPosition());
+      if (stageRef && stageRef.current && transform) {
+        let position = stageRef.current.getPointerPosition();
 
         if (position) {
+          position = transform.point(position);
+
           switch (activeOperation) {
             case ImageViewerOperation.ColorAdjustment:
               break;
@@ -994,17 +994,26 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           }
         }
       }
-    }, 100);
+    }, 1000);
 
     return () => {
       return throttled();
     };
-  }, []);
+  }, [
+    activeOperation,
+    annotated,
+    ellipticalSelectionOperator,
+    lassoSelectionOperator,
+    onColorSelectionMouseDown,
+    onMagneticSelectionMouseDown,
+    onZoomMouseDown,
+    polygonalSelectionOperator,
+    setAnnotating,
+    transform,
+  ]);
 
   const onMouseMove = useMemo(() => {
     const throttled = _.throttle(() => {
-      console.info("onMouseMove");
-
       if (stageRef && stageRef.current && transform) {
         let position = stageRef.current.getPointerPosition();
 
@@ -1061,13 +1070,12 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   ]);
 
   const onMouseUp = () => {
-    if (stageRef && stageRef.current) {
-      // const position = stageRef.current.getPointerPosition();
-      const transform = imageRef.current.getAbsoluteTransform().copy();
-      transform.invert();
-      const position = transform.point(stageRef.current.getPointerPosition());
+    if (stageRef && stageRef.current && transform) {
+      let position = stageRef.current.getPointerPosition();
 
       if (position) {
+        position = transform.point(position);
+
         switch (activeOperation) {
           case ImageViewerOperation.ColorAdjustment:
             break;

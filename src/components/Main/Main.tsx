@@ -30,7 +30,6 @@ import { ObjectSelection } from "./ObjectSelection";
 import { EllipticalSelection } from "./EllipticalSelection";
 import * as tensorflow from "@tensorflow/tfjs";
 import { Tensor3D, Tensor4D } from "@tensorflow/tfjs";
-import { getIdx } from "../../image/imageHelper";
 import {
   createPathFinder,
   makeGraph,
@@ -1004,12 +1003,14 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
 
   const onMouseMove = useMemo(() => {
     const throttled = _.throttle(() => {
-      if (!stageRef || !stageRef.current || !transform) return;
+      console.info("onMouseMove");
 
-      if (transform) {
-        const position = transform.point(stageRef.current.getPointerPosition());
+      if (stageRef && stageRef.current && transform) {
+        let position = stageRef.current.getPointerPosition();
 
         if (position) {
+          position = transform.point(position);
+
           switch (activeOperation) {
             case ImageViewerOperation.ColorAdjustment:
               break;
@@ -1041,12 +1042,23 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           }
         }
       }
-    }, 100);
+    }, 10000);
 
     return () => {
       return throttled();
     };
-  }, []);
+  }, [
+    activeOperation,
+    annotated,
+    annotating,
+    ellipticalSelectionOperator,
+    lassoSelectionOperator,
+    onColorSelectionMouseMove,
+    onRectangularSelectionMouseMove,
+    onZoomMouseMove,
+    polygonalSelectionOperator,
+    transform,
+  ]);
 
   const onMouseUp = () => {
     if (stageRef && stageRef.current) {

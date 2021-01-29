@@ -69,7 +69,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     if (imageRef && imageRef.current) {
       setTransform(imageRef.current.getAbsoluteTransform().invert().copy());
     }
-  }, []);
+  }, [imageRef, imageRef.current]);
 
   const activeOperation = useSelector(imageViewerOperationSelector);
 

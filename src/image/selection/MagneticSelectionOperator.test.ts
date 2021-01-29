@@ -43,7 +43,7 @@ test("onMouseDown", async () => {
 
   expect(operator.selection).toBe(undefined);
 
-  expect(operator.anchor).toStrictEqual(undefined);
+  expect(operator.anchor).toStrictEqual({ x: 0, y: 0 });
   expect(operator.buffer).toStrictEqual([]);
   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
   expect(operator.points).toStrictEqual([]);

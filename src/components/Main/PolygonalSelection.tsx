@@ -3,6 +3,7 @@ import React, { RefObject } from "react";
 import { Category } from "../../types/Category";
 import { useMarchingAnts } from "../../hooks";
 import { Line } from "konva/types/shapes/Line";
+import { StartingAnchor } from "./StartingAnchor";
 
 type PolygonalSelectionProps = {
   activeCategory: Category;
@@ -79,6 +80,7 @@ export const PolygonalSelection = React.forwardRef<
           strokeWidth={1}
         />
 
+        <StartingAnchor selecting={props.selecting} origin={props.origin} />
         <PolygonalSelectionAnchor />
       </React.Fragment>
     );

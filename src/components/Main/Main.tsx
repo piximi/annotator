@@ -1160,6 +1160,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                 activeCategory={activeCategory}
                 anchor={lassoSelectionOperator.anchor}
                 buffer={lassoSelectionOperator.buffer}
+                origin={lassoSelectionOperator.origin}
                 points={lassoSelectionOperator.points}
                 selected={lassoSelectionOperator.selected}
                 selecting={lassoSelectionOperator.selecting}
@@ -1191,6 +1192,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                 activeCategory={activeCategory}
                 anchor={polygonalSelectionOperator.anchor}
                 buffer={polygonalSelectionOperator.buffer}
+                origin={polygonalSelectionOperator.origin}
                 points={polygonalSelectionOperator.points}
                 selected={polygonalSelectionOperator.selected}
                 selecting={polygonalSelectionOperator.selecting}

@@ -7,16 +7,13 @@ import { Ellipse } from "konva/types/shapes/Ellipse";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import { Rect } from "konva/types/shapes/Rect";
 import { Stage } from "konva/types/Stage";
-import { toRGBA } from "../../image/toRGBA";
 import { useDispatch, useSelector } from "react-redux";
 import { useDebounce, useMarchingAnts, useSelection } from "../../hooks";
 import { useStyles } from "./Main.css";
 import { Circle } from "konva/types/shapes/Circle";
-import { Line } from "konva/types/shapes/Line";
 import * as _ from "underscore";
 import { RectangularSelection } from "./RectangularSelection";
 import { PolygonalSelection } from "./PolygonalSelection";
-import { StartingAnchor } from "./StartingAnchor";
 import { ZoomSelection } from "./ZoomSelection";
 import {
   imageViewerImageInstancesSelector,
@@ -39,7 +36,6 @@ import {
   makeGraph,
   PiximiGraph,
 } from "../../image/GraphHelper";
-import { transformCoordinatesToStrokes } from "../../image/pathfinder/PathFinder";
 import {
   EllipticalSelectionOperator,
   LassoSelectionOperator,
@@ -484,63 +480,63 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onMagneticSelectionMouseMove = (position: { x: number; y: number }) => {
-    if (annotated || !annotating) {
-      return;
-    }
-
-    if (stageRef && stageRef.current) {
-      magneticSelectionPosition.current = position;
-
-      if (magneticSelectionPosition && magneticSelectionPosition.current) {
-        if (
-          !magneticSelectionCanClose &&
-          !isInside(
-            magneticSelectionStartingAnchorCircleRef,
-            magneticSelectionPosition.current
-          )
-        ) {
-          setMagneticSelectionCanClose(true);
-        }
-
-        // let startPosition;
-        if (
-          magneticSelectionPathFinder &&
-          magneticSelectionPathFinder.current &&
-          img &&
-          magneticSelectionStartPosition &&
-          magneticSelectionStartPosition.current
-        ) {
-          magneticSelectionPathCoordsRef.current = magneticSelectionPathFinder.current.find(
-            getIdx(magneticSelectionDownsizedWidth, 1)(
-              Math.floor(
-                magneticSelectionStartPosition.current.x *
-                  magneticSelectionFactor
-              ),
-              Math.floor(
-                magneticSelectionStartPosition.current.y *
-                  magneticSelectionFactor
-              ),
-              0
-            ),
-            getIdx(magneticSelectionDownsizedWidth, 1)(
-              Math.floor(
-                magneticSelectionPosition.current.x * magneticSelectionFactor
-              ),
-              Math.floor(
-                magneticSelectionPosition.current.y * magneticSelectionFactor
-              ),
-              0
-            )
-          );
-
-          setMagneticSelectionStrokes(
-            transformCoordinatesToStrokes(
-              magneticSelectionPathCoordsRef.current
-            )
-          );
-        }
-      }
-    }
+    // if (annotated || !annotating) {
+    //   return;
+    // }
+    //
+    // if (stageRef && stageRef.current) {
+    //   magneticSelectionPosition.current = position;
+    //
+    //   if (magneticSelectionPosition && magneticSelectionPosition.current) {
+    //     if (
+    //       !magneticSelectionCanClose &&
+    //       !isInside(
+    //         magneticSelectionStartingAnchorCircleRef,
+    //         magneticSelectionPosition.current
+    //       )
+    //     ) {
+    //       setMagneticSelectionCanClose(true);
+    //     }
+    //
+    //     // let startPosition;
+    //     if (
+    //       magneticSelectionPathFinder &&
+    //       magneticSelectionPathFinder.current &&
+    //       img &&
+    //       magneticSelectionStartPosition &&
+    //       magneticSelectionStartPosition.current
+    //     ) {
+    //       magneticSelectionPathCoordsRef.current = magneticSelectionPathFinder.current.find(
+    //         getIdx(magneticSelectionDownsizedWidth, 1)(
+    //           Math.floor(
+    //             magneticSelectionStartPosition.current.x *
+    //               magneticSelectionFactor
+    //           ),
+    //           Math.floor(
+    //             magneticSelectionStartPosition.current.y *
+    //               magneticSelectionFactor
+    //           ),
+    //           0
+    //         ),
+    //         getIdx(magneticSelectionDownsizedWidth, 1)(
+    //           Math.floor(
+    //             magneticSelectionPosition.current.x * magneticSelectionFactor
+    //           ),
+    //           Math.floor(
+    //             magneticSelectionPosition.current.y * magneticSelectionFactor
+    //           ),
+    //           0
+    //         )
+    //       );
+    //
+    //       setMagneticSelectionStrokes(
+    //         transformCoordinatesToStrokes(
+    //           magneticSelectionPathCoordsRef.current
+    //         )
+    //       );
+    //     }
+    //   }
+    // }
   };
 
   const onMagneticSelectionMouseUp = (position: { x: number; y: number }) => {

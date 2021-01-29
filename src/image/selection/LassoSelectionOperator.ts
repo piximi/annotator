@@ -84,16 +84,19 @@ export class LassoSelectionOperator extends SelectionOperator {
   onMouseUp(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
 
-    if (this.connected(position)) {
-      if (this.origin) {
-        this.buffer = [
-          ...this.buffer,
-          position.x,
-          position.y,
-          this.origin.x,
-          this.origin.y,
-        ];
-      }
+    if (
+      this.connected(position) &&
+      this.origin &&
+      this.buffer &&
+      this.buffer.length > 0
+    ) {
+      this.buffer = [
+        ...this.buffer,
+        position.x,
+        position.y,
+        this.origin.x,
+        this.origin.y,
+      ];
 
       this.selected = true;
       this.selecting = false;
@@ -136,7 +139,7 @@ export class LassoSelectionOperator extends SelectionOperator {
 
   private connected(
     position: { x: number; y: number },
-    threshold: number = 2
+    threshold: number = 4
   ): boolean | undefined {
     if (!this.origin) return undefined;
 

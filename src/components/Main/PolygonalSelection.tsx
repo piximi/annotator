@@ -45,21 +45,27 @@ export const PolygonalSelection = React.forwardRef<
       <React.Fragment>
         <PolygonalSelectionAnchor />
 
-        <ReactKonva.Line points={props.points} stroke="black" strokeWidth={1} />
+        {props.points && (
+          <React.Fragment>
+            <ReactKonva.Line
+              points={props.points}
+              stroke="black"
+              strokeWidth={1}
+            />
 
-        <ReactKonva.Line
-          closed
-          dash={[4, 2]}
-          dashOffset={-dashOffset}
-          points={props.points}
-          stroke="white"
-          strokeWidth={1}
-        />
+            <ReactKonva.Line
+              closed
+              dash={[4, 2]}
+              dashOffset={-dashOffset}
+              points={props.points}
+              stroke="white"
+              strokeWidth={1}
+            />
+          </React.Fragment>
+        )}
       </React.Fragment>
     );
-  }
-
-  if (!props.selected && props.selecting) {
+  } else if (!props.selected && props.selecting) {
     return (
       <React.Fragment>
         <ReactKonva.Line points={props.buffer} stroke="black" strokeWidth={1} />

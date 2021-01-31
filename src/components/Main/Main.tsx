@@ -852,43 +852,39 @@ export const Main = ({ activeCategory }: MainProps) => {
   const onMouseDown = useMemo(() => {
     const throttled = _.throttle(() => {
       if (stageRef && stageRef.current) {
-        if (transform) {
-          const position = transform.point(
-            stageRef.current.getPointerPosition()
-          );
+        const position = transform.point(stageRef.current.getPointerPosition());
 
-          if (position) {
-            switch (activeOperation) {
-              case ImageViewerOperation.ColorAdjustment:
-                break;
-              case ImageViewerOperation.ColorSelection:
-                return onColorSelectionMouseDown(position);
-              case ImageViewerOperation.EllipticalSelection:
-                return ellipticalSelectionOperator.onMouseDown(position);
-              case ImageViewerOperation.Hand:
-                break;
-              case ImageViewerOperation.LassoSelection:
-                return lassoSelectionOperator.onMouseDown(position);
-              case ImageViewerOperation.MagneticSelection:
-                if (annotated) return;
+        if (position) {
+          switch (activeOperation) {
+            case ImageViewerOperation.ColorAdjustment:
+              break;
+            case ImageViewerOperation.ColorSelection:
+              return onColorSelectionMouseDown(position);
+            case ImageViewerOperation.EllipticalSelection:
+              return ellipticalSelectionOperator.onMouseDown(position);
+            case ImageViewerOperation.Hand:
+              break;
+            case ImageViewerOperation.LassoSelection:
+              return lassoSelectionOperator.onMouseDown(position);
+            case ImageViewerOperation.MagneticSelection:
+              if (annotated) return;
 
-                return onMagneticSelectionMouseDown(position);
-              case ImageViewerOperation.ObjectSelection:
-                if (annotated) return;
+              return onMagneticSelectionMouseDown(position);
+            case ImageViewerOperation.ObjectSelection:
+              if (annotated) return;
 
-                setAnnotating(true);
-                return onRectangularSelectionMouseDown(position);
-              case ImageViewerOperation.PolygonalSelection:
-                return polygonalSelectionOperator.onMouseDown(position);
-              case ImageViewerOperation.QuickSelection:
-                return onQuickSelectionMouseDown(position);
-              case ImageViewerOperation.RectangularSelection:
-                if (annotated) return;
+              setAnnotating(true);
+              return onRectangularSelectionMouseDown(position);
+            case ImageViewerOperation.PolygonalSelection:
+              return polygonalSelectionOperator.onMouseDown(position);
+            case ImageViewerOperation.QuickSelection:
+              return onQuickSelectionMouseDown(position);
+            case ImageViewerOperation.RectangularSelection:
+              if (annotated) return;
 
-                setAnnotating(true);
+              setAnnotating(true);
 
-                return onRectangularSelectionMouseDown(position);
-            }
+              return onRectangularSelectionMouseDown(position);
           }
         }
       }
@@ -911,41 +907,36 @@ export const Main = ({ activeCategory }: MainProps) => {
 
   const onMouseMove = useMemo(() => {
     const throttled = _.throttle(() => {
-      if (stageRef && stageRef.current) {
-        let position = stageRef.current.getPointerPosition();
+      if (stageRef && stageRef.current && imageRef) {
+        const position = transform.point(stageRef.current.getPointerPosition());
 
-        if (transform) {
-          const position = transform.point(
-            stageRef.current.getPointerPosition()
-          );
-          if (position) {
-            switch (activeOperation) {
-              case ImageViewerOperation.ColorAdjustment:
-                break;
-              case ImageViewerOperation.ColorSelection:
-                return onColorSelectionMouseMove(position);
-              case ImageViewerOperation.EllipticalSelection:
-                return ellipticalSelectionOperator.onMouseMove(position);
-              case ImageViewerOperation.Hand:
-                break;
-              case ImageViewerOperation.LassoSelection:
-                return lassoSelectionOperator.onMouseMove(position);
-              case ImageViewerOperation.MagneticSelection:
-                if (annotated || !annotating) return;
+        if (position) {
+          switch (activeOperation) {
+            case ImageViewerOperation.ColorAdjustment:
+              break;
+            case ImageViewerOperation.ColorSelection:
+              return onColorSelectionMouseMove(position);
+            case ImageViewerOperation.EllipticalSelection:
+              return ellipticalSelectionOperator.onMouseMove(position);
+            case ImageViewerOperation.Hand:
+              break;
+            case ImageViewerOperation.LassoSelection:
+              return lassoSelectionOperator.onMouseMove(position);
+            case ImageViewerOperation.MagneticSelection:
+              if (annotated || !annotating) return;
 
-                return onMagneticSelectionMouseMove(position);
-              case ImageViewerOperation.ObjectSelection:
-                if (annotated || !annotating) return;
-                return onRectangularSelectionMouseMove(position);
-              case ImageViewerOperation.PolygonalSelection:
-                return polygonalSelectionOperator.onMouseMove(position);
-              case ImageViewerOperation.QuickSelection:
-                return onQuickSelectionMouseMove(position);
-              case ImageViewerOperation.RectangularSelection:
-                if (annotated) return;
+              return onMagneticSelectionMouseMove(position);
+            case ImageViewerOperation.ObjectSelection:
+              if (annotated || !annotating) return;
+              return onRectangularSelectionMouseMove(position);
+            case ImageViewerOperation.PolygonalSelection:
+              return polygonalSelectionOperator.onMouseMove(position);
+            case ImageViewerOperation.QuickSelection:
+              return onQuickSelectionMouseMove(position);
+            case ImageViewerOperation.RectangularSelection:
+              if (annotated) return;
 
-                return onRectangularSelectionMouseMove(position);
-            }
+              return onRectangularSelectionMouseMove(position);
           }
         }
       }

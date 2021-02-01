@@ -1223,13 +1223,15 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             {operation === ImageViewerOperation.RectangularSelection && (
               <RectangularSelection
                 activeCategory={activeCategory}
-                annotated={annotated}
-                annotating={annotating}
-                height={rectangularSelectionHeight}
+                annotated={(operator as RectangularSelectionOperator).selected}
+                annotating={
+                  (operator as RectangularSelectionOperator).selecting
+                }
+                height={(operator as RectangularSelectionOperator).height}
                 ref={rectangularSelectionRef}
-                width={rectangularSelectionWidth}
-                x={rectangularSelectionX}
-                y={rectangularSelectionY}
+                width={(operator as RectangularSelectionOperator).width}
+                x={(operator as RectangularSelectionOperator).origin?.x}
+                y={(operator as RectangularSelectionOperator).origin?.y}
               />
             )}
 

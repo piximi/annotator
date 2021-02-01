@@ -38,7 +38,10 @@ import {
   ColorSelectionOperator,
   EllipticalSelectionOperator,
   LassoSelectionOperator,
+  MagneticSelectionOperator,
+  ObjectSelectionOperator,
   PolygonalSelectionOperator,
+  QuickSelectionOperator,
   RectangularSelectionOperator,
   SelectionOperator,
 } from "../../image/selection";
@@ -854,23 +857,25 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       case ImageViewerOperation.ColorAdjustment:
         return;
       case ImageViewerOperation.ColorSelection:
-        return colorSelectionOperator.select(activeCategory);
+        return (operator as ColorSelectionOperator).select(activeCategory);
       case ImageViewerOperation.EllipticalSelection:
-        return ellipticalSelectionOperator.select(activeCategory);
+        return (operator as EllipticalSelectionOperator).select(activeCategory);
       case ImageViewerOperation.Hand:
         return;
       case ImageViewerOperation.LassoSelection:
-        return lassoSelectionOperator.select(activeCategory);
+        return (operator as LassoSelectionOperator).select(activeCategory);
       case ImageViewerOperation.MagneticSelection:
-        return onMagneticSelection();
+        return (operator as MagneticSelectionOperator).select(activeCategory);
       case ImageViewerOperation.ObjectSelection:
-        return onObjectSelection();
+        return (operator as ObjectSelectionOperator).select(activeCategory);
       case ImageViewerOperation.PolygonalSelection:
-        return polygonalSelectionOperator.select(activeCategory);
+        return (operator as PolygonalSelectionOperator).select(activeCategory);
       case ImageViewerOperation.QuickSelection:
-        return onQuickSelection();
+        return operator.select(activeCategory);
       case ImageViewerOperation.RectangularSelection:
-        return onRectangularSelection();
+        return (operator as RectangularSelectionOperator).select(
+          activeCategory
+        );
       case ImageViewerOperation.Zoom:
         return;
     }

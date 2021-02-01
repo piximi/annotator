@@ -207,7 +207,8 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
    * Magnetic selection
    */
   const [magneticSelectionOperator] = useState(
-      new MagneticSelectionOperator(imageJSImg!)
+      // new MagneticSelectionOperator(imageJSImg!)
+      null
   );
 
   const magneticSelectionRef = React.useRef<any>(null);

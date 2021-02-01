@@ -853,32 +853,33 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onSelection = () => {
-    switch (operation) {
-      case ImageViewerOperation.ColorAdjustment:
-        return;
-      case ImageViewerOperation.ColorSelection:
-        return (operator as ColorSelectionOperator).select(activeCategory);
-      case ImageViewerOperation.EllipticalSelection:
-        return (operator as EllipticalSelectionOperator).select(activeCategory);
-      case ImageViewerOperation.Hand:
-        return;
-      case ImageViewerOperation.LassoSelection:
-        return (operator as LassoSelectionOperator).select(activeCategory);
-      case ImageViewerOperation.MagneticSelection:
-        return (operator as MagneticSelectionOperator).select(activeCategory);
-      case ImageViewerOperation.ObjectSelection:
-        return (operator as ObjectSelectionOperator).select(activeCategory);
-      case ImageViewerOperation.PolygonalSelection:
-        return (operator as PolygonalSelectionOperator).select(activeCategory);
-      case ImageViewerOperation.QuickSelection:
-        return operator.select(activeCategory);
-      case ImageViewerOperation.RectangularSelection:
-        return (operator as RectangularSelectionOperator).select(
-          activeCategory
-        );
-      case ImageViewerOperation.Zoom:
-        return;
-    }
+    operator.select(activeCategory);
+    // switch (operation) {
+    //   case ImageViewerOperation.ColorAdjustment:
+    //     return;
+    //   case ImageViewerOperation.ColorSelection:
+    //     return (operator as ColorSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.EllipticalSelection:
+    //     return (operator as EllipticalSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.Hand:
+    //     return;
+    //   case ImageViewerOperation.LassoSelection:
+    //     return (operator as LassoSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.MagneticSelection:
+    //     return (operator as MagneticSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.ObjectSelection:
+    //     return (operator as ObjectSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.PolygonalSelection:
+    //     return (operator as PolygonalSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.QuickSelection:
+    //     return operator.select(activeCategory);
+    //   case ImageViewerOperation.RectangularSelection:
+    //     return (operator as RectangularSelectionOperator).select(
+    //       activeCategory
+    //     );
+    //   case ImageViewerOperation.Zoom:
+    //     return;
+    // }
   };
 
   const { annotated, annotating, setAnnotated, setAnnotating } = useSelection(

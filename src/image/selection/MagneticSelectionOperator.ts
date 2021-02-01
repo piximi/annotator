@@ -2,6 +2,7 @@ import { SelectionOperator } from "./SelectionOperator";
 import { createPathFinder, makeGraph, PiximiGraph } from "../GraphHelper";
 import { getIdx } from "../imageHelper";
 import * as ImageJS from "image-js";
+import {Category} from "../../types/Category";
 
 export class MagneticSelectionOperator extends SelectionOperator {
   graph?: PiximiGraph;
@@ -128,7 +129,7 @@ export class MagneticSelectionOperator extends SelectionOperator {
     }
   }
 
-  select(category: number) {
+  select(category: Category) {
     if (!this.image) {
       console.log("Error: no image");
       return;
@@ -138,7 +139,7 @@ export class MagneticSelectionOperator extends SelectionOperator {
 
     this.selection = {
       boundingBox: this.boundingBox,
-      categoryId: category,
+      categoryId: category.id,
       mask: this.mask,
     };
   }

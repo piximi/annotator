@@ -1,5 +1,6 @@
 import { EllipticalSelectionOperator } from "./EllipticalSelectionOperator";
 import { test } from "@jest/globals";
+import {Category} from "../../types/Category";
 
 test("deselect", () => {
   const operator = new EllipticalSelectionOperator();
@@ -84,7 +85,14 @@ test("select", () => {
   operator.origin = { x: 0, y: 0 };
   operator.radius = { x: 50, y: 50 };
 
-  operator.select(0);
+  const category: Category = {
+    color: "#0000FF",
+    id: "5ed3511d-1223-4bba-a0c2-2b3897232d98",
+    name: "foo",
+    visible: true,
+  }
+
+  operator.select(category);
 
   expect(operator.selected).toBe(true);
   expect(operator.selecting).toBe(false);

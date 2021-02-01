@@ -1,5 +1,6 @@
 import { ImageViewerSelection } from "../../types/ImageViewerSelection";
 import * as ImageJS from "image-js";
+import {Category} from "../../types/Category";
 
 export abstract class SelectionOperator {
   image?: ImageJS.Image;
@@ -26,5 +27,5 @@ export abstract class SelectionOperator {
 
   abstract onMouseUp(position: { x: number; y: number }): void;
 
-  abstract select(category: number): void;
+  abstract select(category: Category): void;
 }

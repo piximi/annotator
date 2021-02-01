@@ -1,5 +1,6 @@
 import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import { test } from "@jest/globals";
+import {Category} from "../../types/Category";
 
 test("deselect", () => {
   const selectionOperator = new RectangularSelectionOperator();
@@ -90,7 +91,13 @@ test("select", () => {
   selectionOperator.width = 100;
   selectionOperator.height = 100;
 
-  selectionOperator.select(0);
+  const category: Category = {
+    color: "#0000FF",
+    id: "5ed3511d-1223-4bba-a0c2-2b3897232d98",
+    name: "foo",
+    visible: true,
+  }
+  selectionOperator.select(category);
 
   expect(selectionOperator.selected).toBe(true);
   expect(selectionOperator.selecting).toBe(false);

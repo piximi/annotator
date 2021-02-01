@@ -1,6 +1,7 @@
 import * as tensorflow from "@tensorflow/tfjs";
 import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import * as ImageJS from "image-js";
+import {Category} from "../../types/Category";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
   model?: tensorflow.LayersModel;
@@ -56,7 +57,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     // this.predict(croppedInput)
   }
 
-  select(category: number) {}
+  select(category: Category) {}
 
   private predict() {}
 }

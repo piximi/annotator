@@ -16,27 +16,26 @@ import { RectangularSelection } from "./RectangularSelection";
 import { PolygonalSelection } from "./PolygonalSelection";
 import { ZoomSelection } from "./ZoomSelection";
 import {
+  categoriesSelector,
   imageViewerImageInstancesSelector,
   imageViewerImageSelector,
   imageViewerOperationSelector,
   imageViewerZoomModeSelector,
 } from "../../store/selectors";
 import { Image } from "konva/types/shapes/Image";
-import { Vector2d } from "konva/types/types";
-import { FloodImage, floodPixels, makeFloodMap } from "../../image/flood";
 import * as ImageJS from "image-js";
 import { setImageViewerImageInstances } from "../../store/slices";
 import { ObjectSelection } from "./ObjectSelection";
 import { EllipticalSelection } from "./EllipticalSelection";
 import * as tensorflow from "@tensorflow/tfjs";
 import { Tensor3D, Tensor4D } from "@tensorflow/tfjs";
-import { getIdx } from "../../image/imageHelper";
 import {
   createPathFinder,
   makeGraph,
   PiximiGraph,
 } from "../../image/GraphHelper";
 import {
+  ColorSelectionOperator,
   EllipticalSelectionOperator,
   LassoSelectionOperator,
   PolygonalSelectionOperator,
@@ -74,17 +73,24 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   /*
    * Color selection
    */
+
+  const [colorSelectionOperator] = useState(
+      new ColorSelectionOperator(activeCategory.color, img)
+  );
+
+  const colorSelectionOverlayRef = React.useRef<Image>(null);
+
   const ColorSelection = () => {
     return (
       <React.Fragment>
         <ReactKonva.Image
-          image={colorSelectOverlayImage}
-          ref={colorSelectOverlayRef}
+          image={colorSelectionOperator.overlayImage}
+          ref={colorSelectionOverlayRef}
         />
-        {annotating && colorSelectInitialPosition && (
+        {annotating && colorSelectionOperator.initialPosition && (
           <ReactKonva.Label
-            x={colorSelectInitialPosition.x}
-            y={colorSelectInitialPosition.y}
+            x={colorSelectionOperator.initialPosition.x}
+            y={colorSelectionOperator.initialPosition.y}
           >
             <ReactKonva.Tag
               fill={"#f0ce0f"}
@@ -96,7 +102,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
               cornerRadius={5}
             />
             <ReactKonva.Text
-              text={colorSelectTolerance.toString()}
+              text={colorSelectionOperator.tolerance.toString()}
               padding={5}
             />
           </ReactKonva.Label>
@@ -105,96 +111,6 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     );
   };
 
-  const [colorSelectOverlayData, setColorSelectOverlayData] = useState<string>(
-    ""
-  );
-  const [colorSelectOverlayImage] = useImage(
-    colorSelectOverlayData,
-    "Anonymous"
-  );
-
-  const colorSelectOverlayRef = React.useRef<Image>(null);
-
-  const [
-    colorSelectInitialPosition,
-    setColorSelectInitialPosition,
-  ] = useState<Vector2d>();
-  const [colorSelectTolerance, setColorSelectTolerance] = useState<number>(1);
-
-  const [
-    colorSelectImageData,
-    setColorSelectImageData,
-  ] = useState<FloodImage>();
-
-  const updateOverlay = (position: { x: any; y: any }) => {
-    const results = floodPixels({
-      x: Math.floor(position.x),
-      y: Math.floor(position.y),
-      image: colorSelectImageData!,
-      tolerance: colorSelectTolerance,
-      color: activeCategory.color,
-    });
-    setColorSelectOverlayData(results);
-  };
-
-  const onColorSelection = () => {};
-
-  const onColorSelectionMouseDown = async (position: {
-    x: number;
-    y: number;
-  }) => {
-    console.log(position);
-    setAnnotated(false);
-    setAnnotating(true);
-    setColorSelectTolerance(1);
-    let jsImage;
-    // Todo: Fix this little setup problem
-    if (imageRef.current && !colorSelectImageData) {
-      console.log(imageRef.current.toDataURL());
-      jsImage = await ImageJS.Image.load(imageRef.current.toDataURL());
-      setColorSelectImageData(jsImage as FloodImage);
-      return;
-    }
-    if (stageRef && stageRef.current) {
-      if (position) {
-        if (imageRef && imageRef.current) {
-          if (position !== colorSelectInitialPosition) {
-            setColorSelectInitialPosition(position);
-            setColorSelectImageData(
-              makeFloodMap({
-                x: Math.floor(position.x),
-                y: Math.floor(position.y),
-                image: colorSelectImageData!,
-              })
-            );
-          }
-          updateOverlay(position);
-        }
-      }
-    }
-  };
-
-  const onColorSelectionMouseMove = (position: { x: number; y: number }) => {
-    if (annotating && stageRef && stageRef.current) {
-      if (position && colorSelectInitialPosition) {
-        const diff = Math.ceil(
-          Math.hypot(
-            position.x - colorSelectInitialPosition!.x,
-            position.y - colorSelectInitialPosition!.y
-          )
-        );
-        if (diff !== colorSelectTolerance) {
-          setColorSelectTolerance(diff);
-          updateOverlay(colorSelectInitialPosition);
-        }
-      }
-    }
-  };
-
-  const onColorSelectionMouseUp = (position: { x: number; y: number }) => {
-    setAnnotated(true);
-    setAnnotating(false);
-  };
 
   /*
    * Elliptical selection
@@ -923,19 +839,19 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
       case ImageViewerOperation.ColorAdjustment:
         return;
       case ImageViewerOperation.ColorSelection:
-        return onColorSelection();
+        return colorSelectionOperator.select(activeCategory);
       case ImageViewerOperation.EllipticalSelection:
-        return ellipticalSelectionOperator.select(0);
+        return ellipticalSelectionOperator.select(activeCategory);
       case ImageViewerOperation.Hand:
         return;
       case ImageViewerOperation.LassoSelection:
-        return lassoSelectionOperator.select(0);
+        return lassoSelectionOperator.select(activeCategory);
       case ImageViewerOperation.MagneticSelection:
         return onMagneticSelection();
       case ImageViewerOperation.ObjectSelection:
         return onObjectSelection();
       case ImageViewerOperation.PolygonalSelection:
-        return polygonalSelectionOperator.select(0);
+        return polygonalSelectionOperator.select(activeCategory);
       case ImageViewerOperation.QuickSelection:
         return onQuickSelection();
       case ImageViewerOperation.RectangularSelection:
@@ -962,7 +878,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             case ImageViewerOperation.ColorAdjustment:
               break;
             case ImageViewerOperation.ColorSelection:
-              return onColorSelectionMouseDown(position);
+              return colorSelectionOperator.onMouseDown(position);
             case ImageViewerOperation.EllipticalSelection:
               return ellipticalSelectionOperator.onMouseDown(position);
             case ImageViewerOperation.Hand:
@@ -1002,7 +918,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     annotated,
     ellipticalSelectionOperator,
     lassoSelectionOperator,
-    onColorSelectionMouseDown,
+    colorSelectionOperator,
     onMagneticSelectionMouseDown,
     onZoomMouseDown,
     polygonalSelectionOperator,
@@ -1022,7 +938,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             case ImageViewerOperation.ColorAdjustment:
               break;
             case ImageViewerOperation.ColorSelection:
-              return onColorSelectionMouseMove(position);
+              return colorSelectionOperator.onMouseMove(position);
             case ImageViewerOperation.EllipticalSelection:
               return ellipticalSelectionOperator.onMouseMove(position);
             case ImageViewerOperation.Hand:
@@ -1059,7 +975,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     annotating,
     ellipticalSelectionOperator,
     lassoSelectionOperator,
-    onColorSelectionMouseMove,
+    colorSelectionOperator,
     onRectangularSelectionMouseMove,
     onZoomMouseMove,
     polygonalSelectionOperator,
@@ -1078,7 +994,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             case ImageViewerOperation.ColorAdjustment:
               break;
             case ImageViewerOperation.ColorSelection:
-              return onColorSelectionMouseUp(position);
+              return colorSelectionOperator.onMouseUp(position);
             case ImageViewerOperation.EllipticalSelection:
               return ellipticalSelectionOperator.onMouseUp(position);
             case ImageViewerOperation.Hand:
@@ -1117,7 +1033,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     annotating,
     ellipticalSelectionOperator,
     lassoSelectionOperator,
-    onColorSelectionMouseUp,
+    colorSelectionOperator,
     onMagneticSelectionMouseUp,
     onObjectSelectionMouseUp,
     onZoomMouseUp,

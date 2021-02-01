@@ -1,5 +1,6 @@
 import { SelectionOperator } from "./SelectionOperator";
 import * as _ from "lodash";
+import {Category} from "../../types/Category";
 
 export class LassoSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
@@ -125,12 +126,12 @@ export class LassoSelectionOperator extends SelectionOperator {
     }
   }
 
-  select(category: number) {
+  select(category: Category) {
     if (!this.boundingBox || !this.mask) return;
 
     this.selection = {
       boundingBox: this.boundingBox,
-      categoryId: category,
+      categoryId: category.id,
       mask: this.mask,
     };
   }

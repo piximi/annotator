@@ -141,18 +141,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   /*
    * Elliptical selection
    */
-
-  // FIXME: this is for prototyping only, it's very slow to update
-  const [ellipticalSelectionOperator] = useState(
-    new EllipticalSelectionOperator()
-  );
-
   const ellipticalSelectionRef = React.useRef<Ellipse>(null);
-
-  /*
-   * Lasso selection
-   */
-  const [lassoSelectionOperator] = useState(new LassoSelectionOperator());
 
   const isInside = (
     startingAnchorCircleRef: React.RefObject<Circle>,

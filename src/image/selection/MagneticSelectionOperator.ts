@@ -10,19 +10,19 @@ export class MagneticSelectionOperator extends SelectionOperator {
   downsizedWidth: number = 0;
   pathFinder?: { find: (fromId: number, toId: number) => any };
   points: Array<number> = [];
-  previous: Array<number> = [];
-  buffer: Array<number> = [];
-  origin?: { x: number; y: number };
-  anchor?: { x: number; y: number };
+  previous: Array<number> = []; // Full path coordinate list
+  buffer: Array<number> = []; // Current path coordinate list
+  origin?: { x: number; y: number }; // Point where the full path started, where we go to close the polygon.
+  anchor?: { x: number; y: number }; // Point we're pathing from in the current segment
 
   constructor(image: ImageJS.Image) {
     super(image);
 
-    if (!this.graph) {
+    if (!this.graph && this.image) {
       console.log("Creating graph");
-      const grey = this.image!.grey();
+      const grey = this.image.grey();
       const edges = grey.sobelFilter();
-      this.downsizedWidth = this.image!.width * this.scalingFactor;
+      this.downsizedWidth = this.image.width * this.scalingFactor;
       const downsized = edges.resize({ factor: this.scalingFactor });
       this.graph = makeGraph(downsized.data, downsized.height, downsized.width);
       console.log("Creating pathfinder");
@@ -56,11 +56,13 @@ export class MagneticSelectionOperator extends SelectionOperator {
       return;
     }
 
-    this.selecting = true;
-
-    this.origin = position;
+    if (!this.origin) {
+      this.origin = position;
+    }
 
     this.anchor = position;
+
+    this.selecting = true;
 
     this.previous = [...this.previous, ...this.buffer];
   }
@@ -69,11 +71,11 @@ export class MagneticSelectionOperator extends SelectionOperator {
     if (this.selected || !this.selecting) return;
 
     // let startPosition;
-    if (this.pathFinder && this.origin) {
-      const pathCoords = this.pathFinder.find(
+    if (this.origin) {
+      const pathCoords = this.pathFinder!.find(
         getIdx(this.downsizedWidth, 1)(
-          Math.floor(this.origin.x * this.scalingFactor),
-          Math.floor(this.origin.y * this.scalingFactor),
+          Math.floor(this.anchor!.x * this.scalingFactor),
+          Math.floor(this.anchor!.y * this.scalingFactor),
           0
         ),
         getIdx(this.downsizedWidth, 1)(
@@ -84,8 +86,8 @@ export class MagneticSelectionOperator extends SelectionOperator {
       );
 
       this.buffer = [
-        this.origin.x,
-        this.origin.y,
+        this.anchor!.x,
+        this.anchor!.y,
         ...this.transformCoordinatesToStrokes(pathCoords),
       ];
     }

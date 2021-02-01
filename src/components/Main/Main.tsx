@@ -63,6 +63,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const classes = useStyles();
   const stageRef = useRef<Stage>(null);
   const imageRef = useRef<Konva.Image>(null);
+  const [ imageJSImg, setImageJSImg ] = useState<ImageJS.Image>();
   const pointRadius: number = 3;
 
   const operation = useSelector(imageViewerOperationSelector);
@@ -100,12 +101,24 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     }
   }, [imageRef, imageRef.current]);
 
+  useEffect( () => {
+    const f = async () => {
+      if (imageRef && imageRef.current) {
+        const i = await ImageJS.Image.load(image!.src);
+
+        setImageJSImg(i);
+      }
+    }
+    f();
+  }, [imageRef, imageRef.current]);
+
+
   /*
    * Color selection
    */
 
   const [colorSelectionOperator] = useState(
-    new ColorSelectionOperator(activeCategory.color, img)
+    new ColorSelectionOperator(activeCategory.color, imageJSImg!)
   );
 
   const colorSelectionOverlayRef = React.useRef<Image>(null);
@@ -193,69 +206,74 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   /*
    * Magnetic selection
    */
+  const [magneticSelectionOperator] = useState(
+      new MagneticSelectionOperator(imageJSImg!)
+  );
+
+  const magneticSelectionRef = React.useRef<any>(null);
 
   // const transformerRef = React.useRef<Transformer>(null);
 
-  const [magneticSelectionAnchor, setMagneticSelectionAnchor] = useState<{
-    x: number;
-    y: number;
-  }>();
-  const [
-    magneticSelectionAnnotation,
-    setMagneticSelectionAnnotation,
-  ] = useState<{ points: Array<number> }>();
-  const [
-    magneticSelectionCanClose,
-    setMagneticSelectionCanClose,
-  ] = useState<boolean>(false);
-  const [
-    magneticSelectionDownsizedWidth,
-    setMagneticSelectionDownsizedWidth,
-  ] = useState<number>(0);
-  const [
-    magneticSelectionFactor,
-    setMagneticSelectionFactor,
-  ] = useState<number>(0.5);
-  const [
-    magneticSelectionGraph,
-    setMagneticSelectionGraph,
-  ] = useState<PiximiGraph | null>(null);
-  const [
-    magneticSelectionPreviousStroke,
-    setMagneticSelectionPreviousStroke,
-  ] = useState<Array<{ points: Array<number> }>>([]);
-  const [magneticSelectionStart, setMagneticSelectionStart] = useState<{
-    x: number;
-    y: number;
-  }>();
-  const [magneticSelectionStrokes, setMagneticSelectionStrokes] = useState<
-    Array<{ points: Array<number> }>
-  >([]);
-  const magneticSelectionPosition = React.useRef<{
-    x: number;
-    y: number;
-  } | null>(null);
-  const magneticSelectionDebouncedPosition = useDebounce(
-    magneticSelectionPosition.current,
-    20
-  );
-  const magneticSelectionPathCoordsRef = React.useRef<any>();
-  const magneticSelectionPathFinder = React.useRef<any>();
-  // const magneticSelectionRef = React.useRef<Line>(null);
-  const magneticSelectionStartPosition = React.useRef<{
-    x: number;
-    y: number;
-  } | null>(null);
-  const magneticSelectionStartingAnchorCircleRef = React.useRef<Circle>(null);
-  useEffect(() => {
-    if (magneticSelectionGraph && img) {
-      magneticSelectionPathFinder.current = createPathFinder(
-        magneticSelectionGraph,
-        magneticSelectionDownsizedWidth,
-        magneticSelectionFactor
-      );
-    }
-  }, [magneticSelectionDownsizedWidth, magneticSelectionGraph, img]);
+  // const [magneticSelectionAnchor, setMagneticSelectionAnchor] = useState<{
+  //   x: number;
+  //   y: number;
+  // }>();
+  // const [
+  //   magneticSelectionAnnotation,
+  //   setMagneticSelectionAnnotation,
+  // ] = useState<{ points: Array<number> }>();
+  // const [
+  //   magneticSelectionCanClose,
+  //   setMagneticSelectionCanClose,
+  // ] = useState<boolean>(false);
+  // const [
+  //   magneticSelectionDownsizedWidth,
+  //   setMagneticSelectionDownsizedWidth,
+  // ] = useState<number>(0);
+  // const [
+  //   magneticSelectionFactor,
+  //   setMagneticSelectionFactor,
+  // ] = useState<number>(0.5);
+  // const [
+  //   magneticSelectionGraph,
+  //   setMagneticSelectionGraph,
+  // ] = useState<PiximiGraph | null>(null);
+  // const [
+  //   magneticSelectionPreviousStroke,
+  //   setMagneticSelectionPreviousStroke,
+  // ] = useState<Array<{ points: Array<number> }>>([]);
+  // const [magneticSelectionStart, setMagneticSelectionStart] = useState<{
+  //   x: number;
+  //   y: number;
+  // }>();
+  // const [magneticSelectionStrokes, setMagneticSelectionStrokes] = useState<
+  //   Array<{ points: Array<number> }>
+  // >([]);
+  // const magneticSelectionPosition = React.useRef<{
+  //   x: number;
+  //   y: number;
+  // } | null>(null);
+  // const magneticSelectionDebouncedPosition = useDebounce(
+  //   magneticSelectionPosition.current,
+  //   20
+  // );
+  // const magneticSelectionPathCoordsRef = React.useRef<any>();
+  // const magneticSelectionPathFinder = React.useRef<any>();
+  // // const magneticSelectionRef = React.useRef<Line>(null);
+  // const magneticSelectionStartPosition = React.useRef<{
+  //   x: number;
+  //   y: number;
+  // } | null>(null);
+  // const magneticSelectionStartingAnchorCircleRef = React.useRef<Circle>(null);
+  // useEffect(() => {
+  //   if (magneticSelectionGraph && img) {
+  //     magneticSelectionPathFinder.current = createPathFinder(
+  //       magneticSelectionGraph,
+  //       magneticSelectionDownsizedWidth,
+  //       magneticSelectionFactor
+  //     );
+  //   }
+  // }, [magneticSelectionDownsizedWidth, magneticSelectionGraph, img]);
 
   // useEffect(() => {
   //   if (imageRef && imageRef.current) {
@@ -264,21 +282,21 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   //     imageRef.current.getLayer()?.batchDraw();
   //   }
   // });
-
-  useEffect(() => {
-    console.log("Loading image");
-    const loadImg = async () => {
-      const img = await ImageJS.Image.load(image!.src);
-      const grey = img.grey();
-      const edges = grey.sobelFilter();
-      setMagneticSelectionDownsizedWidth(img.width * magneticSelectionFactor);
-      const downsized = edges.resize({ factor: magneticSelectionFactor });
-      setMagneticSelectionGraph(
-        makeGraph(downsized.data, downsized.height, downsized.width)
-      );
-    };
-    loadImg();
-  }, [image, image?.src, magneticSelectionFactor]);
+  //
+  // useEffect(() => {
+  //   console.log("Loading image");
+  //   const loadImg = async () => {
+  //     const img = await ImageJS.Image.load(image!.src);
+  //     const grey = img.grey();
+  //     const edges = grey.sobelFilter();
+  //     setMagneticSelectionDownsizedWidth(img.width * magneticSelectionFactor);
+  //     const downsized = edges.resize({ factor: magneticSelectionFactor });
+  //     setMagneticSelectionGraph(
+  //       makeGraph(downsized.data, downsized.height, downsized.width)
+  //     );
+  //   };
+  //   loadImg();
+  // }, [image, image?.src, magneticSelectionFactor]);
 
   // React.useEffect(() => {
   //   if (
@@ -297,7 +315,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const MagneticSelection = () => {
     return (
       <React.Fragment>
-        {magneticSelectionStart && (
+        {magneticSelectionOperator.origin && (
           <ReactKonva.Circle
             fill="#000"
             globalCompositeOperation="source-over"
@@ -305,22 +323,20 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             id="start"
             name="anchor"
             radius={3}
-            ref={magneticSelectionStartingAnchorCircleRef}
+            // ref={magneticSelectionStartingAnchorCircleRef}
             stroke="#FFF"
             strokeWidth={1}
-            x={magneticSelectionStart.x}
-            y={magneticSelectionStart.y}
+            x={magneticSelectionOperator.origin.x}
+            y={magneticSelectionOperator.origin.y}
           />
         )}
 
-        {!annotated &&
-          annotating &&
-          magneticSelectionStrokes.map(
-            (stroke: { points: Array<number> }, key: number) => (
+        {!magneticSelectionOperator.selected &&
+        magneticSelectionOperator.selecting && (
               <React.Fragment>
                 <ReactKonva.Line
                   // key={key}
-                  points={stroke.points}
+                  points={magneticSelectionOperator.buffer}
                   stroke="#FFF"
                   strokeWidth={1}
                 />
@@ -328,218 +344,237 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                 <ReactKonva.Line
                   dash={[4, 2]}
                   // key={key}
-                  points={stroke.points}
+                  points={magneticSelectionOperator.buffer}
                   stroke="#FFF"
                   strokeWidth={1}
                 />
               </React.Fragment>
-            )
           )}
 
-        {!annotated &&
-          annotating &&
-          magneticSelectionPreviousStroke.map(
-            (stroke: { points: Array<number> }, key: number) => (
-              <React.Fragment>
-                <ReactKonva.Line
+        {magneticSelectionOperator.selected &&
+        !magneticSelectionOperator.selecting && (
+            <React.Fragment>
+              <ReactKonva.Line
                   // key={key}
-                  points={stroke.points}
+                  points={magneticSelectionOperator.points}
                   stroke="#FFF"
                   strokeWidth={1}
-                />
+              />
 
-                <ReactKonva.Line
+              <ReactKonva.Line
                   dash={[4, 2]}
                   // key={key}
-                  points={stroke.points}
+                  points={magneticSelectionOperator.points}
                   stroke="#FFF"
                   strokeWidth={1}
-                />
-              </React.Fragment>
-            )
-          )}
+              />
+            </React.Fragment>
+        )}
+
+        {/*{!magneticSelectionOperator.selected &&*/}
+        {/*magneticSelectionOperator.selecting &&*/}
+        {/*  magneticSelectionPreviousStroke.map(*/}
+        {/*    (stroke: { points: Array<number> }, key: number) => (*/}
+        {/*      <React.Fragment>*/}
+        {/*        <ReactKonva.Line*/}
+        {/*          // key={key}*/}
+        {/*          points={stroke.points}*/}
+        {/*          stroke="#FFF"*/}
+        {/*          strokeWidth={1}*/}
+        {/*        />*/}
+
+        {/*        <ReactKonva.Line*/}
+        {/*          dash={[4, 2]}*/}
+        {/*          // key={key}*/}
+        {/*          points={stroke.points}*/}
+        {/*          stroke="#FFF"*/}
+        {/*          strokeWidth={1}*/}
+        {/*        />*/}
+        {/*      </React.Fragment>*/}
+        {/*    )*/}
+        {/*  )}*/}
       </React.Fragment>
     );
   };
 
-  useEffect(
-    () => {
-      if (magneticSelectionDebouncedPosition && annotating) {
-        onMagneticSelectionMouseMove(magneticSelectionDebouncedPosition);
-      }
-    },
-    [magneticSelectionDebouncedPosition] // Only call effect if debounced search term changes
-  );
-
-  const magnetConnected = (position: { x: number; y: number }) => {
-    const inside = isInside(magneticSelectionStartingAnchorCircleRef, position);
-    if (magneticSelectionStrokes && magneticSelectionStrokes.length > 0) {
-      return inside && magneticSelectionCanClose;
-    }
-  };
-
-  const onMagneticSelection = () => {};
-
-  const onMagneticSelectionMouseDown = (position: { x: number; y: number }) => {
-    if (annotated) {
-      return;
-    }
-
-    if (stageRef && stageRef.current) {
-      magneticSelectionPosition.current = position;
-
-      if (magneticSelectionPosition && magneticSelectionPosition.current) {
-        if (magnetConnected(magneticSelectionPosition.current)) {
-          const stroke = {
-            points: _.flatten(
-              magneticSelectionStrokes.map((stroke) => stroke.points)
-            ),
-          };
-
-          setAnnotated(true);
-
-          setAnnotating(false);
-
-          setMagneticSelectionAnnotation(stroke);
-        } else {
-          setAnnotating(true);
-
-          magneticSelectionStartPosition.current =
-            magneticSelectionPosition.current;
-
-          if (magneticSelectionStrokes.length > 0) {
-            setMagneticSelectionAnchor(magneticSelectionPosition.current);
-
-            setMagneticSelectionPreviousStroke([
-              ...magneticSelectionPreviousStroke,
-              ...magneticSelectionStrokes,
-            ]);
-          } else {
-            setMagneticSelectionStart(magneticSelectionPosition.current);
-          }
-        }
-      }
-    }
-  };
-
-  const onMagneticSelectionMouseMove = (position: { x: number; y: number }) => {
-    // if (annotated || !annotating) {
-    //   return;
-    // }
-    //
-    // if (stageRef && stageRef.current) {
-    //   magneticSelectionPosition.current = position;
-    //
-    //   if (magneticSelectionPosition && magneticSelectionPosition.current) {
-    //     if (
-    //       !magneticSelectionCanClose &&
-    //       !isInside(
-    //         magneticSelectionStartingAnchorCircleRef,
-    //         magneticSelectionPosition.current
-    //       )
-    //     ) {
-    //       setMagneticSelectionCanClose(true);
-    //     }
-    //
-    //     // let startPosition;
-    //     if (
-    //       magneticSelectionPathFinder &&
-    //       magneticSelectionPathFinder.current &&
-    //       img &&
-    //       magneticSelectionStartPosition &&
-    //       magneticSelectionStartPosition.current
-    //     ) {
-    //       magneticSelectionPathCoordsRef.current = magneticSelectionPathFinder.current.find(
-    //         getIdx(magneticSelectionDownsizedWidth, 1)(
-    //           Math.floor(
-    //             magneticSelectionStartPosition.current.x *
-    //               magneticSelectionFactor
-    //           ),
-    //           Math.floor(
-    //             magneticSelectionStartPosition.current.y *
-    //               magneticSelectionFactor
-    //           ),
-    //           0
-    //         ),
-    //         getIdx(magneticSelectionDownsizedWidth, 1)(
-    //           Math.floor(
-    //             magneticSelectionPosition.current.x * magneticSelectionFactor
-    //           ),
-    //           Math.floor(
-    //             magneticSelectionPosition.current.y * magneticSelectionFactor
-    //           ),
-    //           0
-    //         )
-    //       );
-    //
-    //       setMagneticSelectionStrokes(
-    //         transformCoordinatesToStrokes(
-    //           magneticSelectionPathCoordsRef.current
-    //         )
-    //       );
-    //     }
-    //   }
-    // }
-  };
-
-  const onMagneticSelectionMouseUp = (position: { x: number; y: number }) => {
-    if (annotated) {
-      return;
-    }
-
-    if (!annotating) {
-      return;
-    }
-
-    if (stageRef && stageRef.current) {
-      magneticSelectionPosition.current = position;
-
-      if (magneticSelectionPosition && magneticSelectionPosition.current) {
-        if (magnetConnected(magneticSelectionPosition.current)) {
-          if (magneticSelectionStart) {
-            const stroke = {
-              points: [
-                magneticSelectionPosition.current.x,
-                magneticSelectionPosition.current.y,
-                magneticSelectionStart.x,
-                magneticSelectionStart.y,
-              ],
-            };
-
-            setMagneticSelectionStrokes([...magneticSelectionStrokes, stroke]);
-          }
-
-          const stroke = {
-            points: _.flatten(
-              magneticSelectionStrokes.map((stroke) => stroke.points)
-            ),
-          };
-
-          setAnnotated(true);
-
-          setAnnotating(false);
-
-          setMagneticSelectionAnnotation(stroke);
-
-          setMagneticSelectionStrokes([]);
-        } else {
-          if (magneticSelectionStrokes.length > 0) {
-            setMagneticSelectionAnchor(magneticSelectionPosition.current);
-
-            magneticSelectionStartPosition.current =
-              magneticSelectionPosition.current;
-
-            setMagneticSelectionPreviousStroke([
-              ...magneticSelectionPreviousStroke,
-              ...magneticSelectionStrokes,
-            ]);
-          } else {
-            setMagneticSelectionStart(magneticSelectionPosition.current);
-          }
-        }
-      }
-    }
-  };
+  // useEffect(
+  //   () => {
+  //     if (magneticSelectionDebouncedPosition && annotating) {
+  //       onMagneticSelectionMouseMove(magneticSelectionDebouncedPosition);
+  //     }
+  //   },
+  //   [magneticSelectionDebouncedPosition] // Only call effect if debounced search term changes
+  // );
+  //
+  // const magnetConnected = (position: { x: number; y: number }) => {
+  //   const inside = isInside(magneticSelectionStartingAnchorCircleRef, position);
+  //   if (magneticSelectionStrokes && magneticSelectionStrokes.length > 0) {
+  //     return inside && magneticSelectionCanClose;
+  //   }
+  // };
+  //
+  // const onMagneticSelection = () => {};
+  //
+  // const onMagneticSelectionMouseDown = (position: { x: number; y: number }) => {
+  //   if (annotated) {
+  //     return;
+  //   }
+  //
+  //   if (stageRef && stageRef.current) {
+  //     magneticSelectionPosition.current = position;
+  //
+  //     if (magneticSelectionPosition && magneticSelectionPosition.current) {
+  //       if (magnetConnected(magneticSelectionPosition.current)) {
+  //         const stroke = {
+  //           points: _.flatten(
+  //             magneticSelectionStrokes.map((stroke) => stroke.points)
+  //           ),
+  //         };
+  //
+  //         setAnnotated(true);
+  //
+  //         setAnnotating(false);
+  //
+  //         setMagneticSelectionAnnotation(stroke);
+  //       } else {
+  //         setAnnotating(true);
+  //
+  //         magneticSelectionStartPosition.current =
+  //           magneticSelectionPosition.current;
+  //
+  //         if (magneticSelectionStrokes.length > 0) {
+  //           setMagneticSelectionAnchor(magneticSelectionPosition.current);
+  //
+  //           setMagneticSelectionPreviousStroke([
+  //             ...magneticSelectionPreviousStroke,
+  //             ...magneticSelectionStrokes,
+  //           ]);
+  //         } else {
+  //           setMagneticSelectionStart(magneticSelectionPosition.current);
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
+  //
+  // const onMagneticSelectionMouseMove = (position: { x: number; y: number }) => {
+  //   // if (annotated || !annotating) {
+  //   //   return;
+  //   // }
+  //   //
+  //   // if (stageRef && stageRef.current) {
+  //   //   magneticSelectionPosition.current = position;
+  //   //
+  //   //   if (magneticSelectionPosition && magneticSelectionPosition.current) {
+  //   //     if (
+  //   //       !magneticSelectionCanClose &&
+  //   //       !isInside(
+  //   //         magneticSelectionStartingAnchorCircleRef,
+  //   //         magneticSelectionPosition.current
+  //   //       )
+  //   //     ) {
+  //   //       setMagneticSelectionCanClose(true);
+  //   //     }
+  //   //
+  //   //     // let startPosition;
+  //   //     if (
+  //   //       magneticSelectionPathFinder &&
+  //   //       magneticSelectionPathFinder.current &&
+  //   //       img &&
+  //   //       magneticSelectionStartPosition &&
+  //   //       magneticSelectionStartPosition.current
+  //   //     ) {
+  //   //       magneticSelectionPathCoordsRef.current = magneticSelectionPathFinder.current.find(
+  //   //         getIdx(magneticSelectionDownsizedWidth, 1)(
+  //   //           Math.floor(
+  //   //             magneticSelectionStartPosition.current.x *
+  //   //               magneticSelectionFactor
+  //   //           ),
+  //   //           Math.floor(
+  //   //             magneticSelectionStartPosition.current.y *
+  //   //               magneticSelectionFactor
+  //   //           ),
+  //   //           0
+  //   //         ),
+  //   //         getIdx(magneticSelectionDownsizedWidth, 1)(
+  //   //           Math.floor(
+  //   //             magneticSelectionPosition.current.x * magneticSelectionFactor
+  //   //           ),
+  //   //           Math.floor(
+  //   //             magneticSelectionPosition.current.y * magneticSelectionFactor
+  //   //           ),
+  //   //           0
+  //   //         )
+  //   //       );
+  //   //
+  //   //       setMagneticSelectionStrokes(
+  //   //         transformCoordinatesToStrokes(
+  //   //           magneticSelectionPathCoordsRef.current
+  //   //         )
+  //   //       );
+  //   //     }
+  //   //   }
+  //   // }
+  // };
+  //
+  // const onMagneticSelectionMouseUp = (position: { x: number; y: number }) => {
+  //   if (annotated) {
+  //     return;
+  //   }
+  //
+  //   if (!annotating) {
+  //     return;
+  //   }
+  //
+  //   if (stageRef && stageRef.current) {
+  //     magneticSelectionPosition.current = position;
+  //
+  //     if (magneticSelectionPosition && magneticSelectionPosition.current) {
+  //       if (magnetConnected(magneticSelectionPosition.current)) {
+  //         if (magneticSelectionStart) {
+  //           const stroke = {
+  //             points: [
+  //               magneticSelectionPosition.current.x,
+  //               magneticSelectionPosition.current.y,
+  //               magneticSelectionStart.x,
+  //               magneticSelectionStart.y,
+  //             ],
+  //           };
+  //
+  //           setMagneticSelectionStrokes([...magneticSelectionStrokes, stroke]);
+  //         }
+  //
+  //         const stroke = {
+  //           points: _.flatten(
+  //             magneticSelectionStrokes.map((stroke) => stroke.points)
+  //           ),
+  //         };
+  //
+  //         setAnnotated(true);
+  //
+  //         setAnnotating(false);
+  //
+  //         setMagneticSelectionAnnotation(stroke);
+  //
+  //         setMagneticSelectionStrokes([]);
+  //       } else {
+  //         if (magneticSelectionStrokes.length > 0) {
+  //           setMagneticSelectionAnchor(magneticSelectionPosition.current);
+  //
+  //           magneticSelectionStartPosition.current =
+  //             magneticSelectionPosition.current;
+  //
+  //           setMagneticSelectionPreviousStroke([
+  //             ...magneticSelectionPreviousStroke,
+  //             ...magneticSelectionStrokes,
+  //           ]);
+  //         } else {
+  //           setMagneticSelectionStart(magneticSelectionPosition.current);
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
 
   /*
    * Object selection

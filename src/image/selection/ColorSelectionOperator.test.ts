@@ -11,7 +11,7 @@ test("onMouseDown", async () => {
 
     const image = await Image.load(src);
 
-    const operator = new ColorSelectionOperator(image);
+    const operator = new ColorSelectionOperator("#FF0000", image);
 
     operator.onMouseDown({ x: 0, y: 0 });
 
@@ -36,7 +36,7 @@ test("onMouseMove", async () => {
 
     const image = await Image.load(src);
 
-    const operator = new ColorSelectionOperator(image);
+    const operator = new ColorSelectionOperator("#FF0000", image);
 
     operator.selecting = true;
 

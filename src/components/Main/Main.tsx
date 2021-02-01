@@ -889,11 +889,16 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const onMouseDown = () => {
     if (!stageRef || !stageRef.current) return;
 
-    const position = transform.point(stageRef.current.getPointerPosition());
+    if (transform && stageRef && stageRef.current) {
+      let position = stageRef.current.getPointerPosition();
 
-    if (!position) return;
+      if (!position) return;
 
-    operator.onMouseDown(position);
+      if (position) {
+        position = transform.point(position);
+        operator.onMouseDown(position);
+      }
+    }
   };
 
   // const onMouseDown = useMemo(() => {
@@ -959,11 +964,16 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const onMouseMove = () => {
     if (!stageRef || !stageRef.current) return;
 
-    const position = transform.point(stageRef.current.getPointerPosition());
+    if (transform && stageRef && stageRef.current) {
+      let position = stageRef.current.getPointerPosition();
 
-    if (!position) return;
+      if (!position) return;
 
-    operator.onMouseMove(position);
+      if (position) {
+        position = transform.point(position);
+        operator.onMouseMove(position);
+      }
+    }
   };
 
   // const onMouseMove = useMemo(() => {
@@ -1025,11 +1035,16 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const onMouseUp = () => {
     if (!stageRef || !stageRef.current) return;
 
-    const position = transform.point(stageRef.current.getPointerPosition());
+    if (transform && stageRef && stageRef.current) {
+      let position = stageRef.current.getPointerPosition();
 
-    if (!position) return;
+      if (!position) return;
 
-    operator.onMouseUp(position);
+      if (position) {
+        position = transform.point(position);
+        operator.onMouseUp(position);
+      }
+    }
   };
 
   // const onMouseUp = useMemo(() => {

@@ -29,7 +29,7 @@ export const ColorSelection = ({ image, category }: ColorSelectionProps) => {
   const [initialPosition, setInitialPosition] = useState<Vector2d>();
   const [tolerance, setTolerance] = useState<number>(1);
 
-  const [imageData, setImageData] = useState<FloodImage>();
+  const [imageData, setImageData] = useState<FloodImage|ImageJS.Image>();
   const updateOverlay = (position: { x: any; y: any }) => {
     const results = floodPixels({
       x: position.x,

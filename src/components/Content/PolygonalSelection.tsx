@@ -1,12 +1,14 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { PolygonalSelectionOperator } from "../../image/selection";
+import { useMarchingAnts } from "../../hooks";
 
 type PolygonalSelectionProps = {
   operator: PolygonalSelectionOperator;
 };
 
 export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
+  const dashOffset = useMarchingAnts();
   if (!operator.origin) return null;
 
   return (
@@ -32,6 +34,8 @@ export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
       )}
 
       <ReactKonva.Line
+        dash={[4, 2]}
+        dashOffset={-dashOffset}
         stroke="white"
         points={operator.buffer}
         strokeWidth={1}

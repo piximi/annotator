@@ -1,12 +1,14 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { LassoSelectionOperator } from "../../image/selection";
+import { useMarchingAnts } from "../../hooks";
 
 type LassoSelectionProps = {
   operator: LassoSelectionOperator;
 };
 
 export const LassoSelection = ({ operator }: LassoSelectionProps) => {
+  const dashOffset = useMarchingAnts();
   if (!operator.origin) return null;
 
   return (
@@ -32,6 +34,8 @@ export const LassoSelection = ({ operator }: LassoSelectionProps) => {
       )}
 
       <ReactKonva.Line
+        dash={[4, 2]}
+        dashOffset={-dashOffset}
         stroke="white"
         points={operator.buffer}
         strokeWidth={1}

@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { imageViewerOperationSelector } from "../../store/selectors";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import { EllipticalSelection } from "./EllipticalSelection";
+import { useAnimationFrame } from "../../hooks/useAnimationFrame/useAnimationFrame";
 
 type StageProps = {
   src: string;

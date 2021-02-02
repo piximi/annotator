@@ -1,5 +1,5 @@
 import { SelectionOperator } from "./SelectionOperator";
-import {Category} from "../../types/Category";
+import { Category } from "../../types/Category";
 
 export class RectangularSelectionOperator extends SelectionOperator {
   origin?: { x: number; y: number };

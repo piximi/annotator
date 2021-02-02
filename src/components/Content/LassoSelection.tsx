@@ -12,9 +12,9 @@ export const LassoSelection = ({ operator }: LassoSelectionProps) => {
   return (
     <ReactKonva.Group>
       <ReactKonva.Circle
-        fill="black"
+        fill="white"
         radius={3}
-        stroke="white"
+        stroke="black"
         strokeWidth={1}
         x={operator.origin.x}
         y={operator.origin.y}

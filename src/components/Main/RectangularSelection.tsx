@@ -9,9 +9,9 @@ type RectangularSelectionProps = {
   activeCategory: Category;
   annotated: boolean;
   annotating: boolean;
-  height: number;
+  height?: number;
   ref: RefObject<Rect>;
-  width: number;
+  width?: number;
   x?: number;
   y?: number;
 };

@@ -38,7 +38,12 @@ import {
   ColorSelectionOperator,
   EllipticalSelectionOperator,
   LassoSelectionOperator,
+  MagneticSelectionOperator,
+  ObjectSelectionOperator,
   PolygonalSelectionOperator,
+  QuickSelectionOperator,
+  RectangularSelectionOperator,
+  SelectionOperator,
 } from "../../image/selection";
 import Konva from "konva";
 
@@ -58,9 +63,35 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const classes = useStyles();
   const stageRef = useRef<Stage>(null);
   const imageRef = useRef<Konva.Image>(null);
+  const [ imageJSImg, setImageJSImg ] = useState<ImageJS.Image>();
   const pointRadius: number = 3;
 
-  const activeOperation = useSelector(imageViewerOperationSelector);
+  const operation = useSelector(imageViewerOperationSelector);
+
+  const [operator, setOperator] = useState<SelectionOperator>(
+    new RectangularSelectionOperator()
+  );
+
+  useEffect(() => {
+    switch (operation) {
+      case ImageViewerOperation.EllipticalSelection:
+        setOperator(new EllipticalSelectionOperator());
+
+        return;
+      case ImageViewerOperation.LassoSelection:
+        setOperator(new LassoSelectionOperator());
+
+        return;
+      case ImageViewerOperation.PolygonalSelection:
+        setOperator(new PolygonalSelectionOperator());
+
+        return;
+      case ImageViewerOperation.RectangularSelection:
+        setOperator(new RectangularSelectionOperator());
+
+        return;
+    }
+  }, [operation]);
 
   const [transform, setTransform] = useState<Konva.Transform>();
 
@@ -70,12 +101,24 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     }
   }, [imageRef, imageRef.current]);
 
+  useEffect( () => {
+    const f = async () => {
+      if (imageRef && imageRef.current) {
+        const i = await ImageJS.Image.load(image!.src);
+
+        setImageJSImg(i);
+      }
+    }
+    f();
+  }, [imageRef, imageRef.current]);
+
+
   /*
    * Color selection
    */
 
   const [colorSelectionOperator] = useState(
-      new ColorSelectionOperator(activeCategory.color, img)
+    new ColorSelectionOperator(activeCategory.color, imageJSImg!)
   );
 
   const colorSelectionOverlayRef = React.useRef<Image>(null);
@@ -111,22 +154,10 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
     );
   };
 
-
   /*
    * Elliptical selection
    */
-
-  // FIXME: this is for prototyping only, it's very slow to update
-  const [ellipticalSelectionOperator] = useState(
-    new EllipticalSelectionOperator()
-  );
-
   const ellipticalSelectionRef = React.useRef<Ellipse>(null);
-
-  /*
-   * Lasso selection
-   */
-  const [lassoSelectionOperator] = useState(new LassoSelectionOperator());
 
   const isInside = (
     startingAnchorCircleRef: React.RefObject<Circle>,
@@ -175,69 +206,75 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   /*
    * Magnetic selection
    */
+  const [magneticSelectionOperator] = useState(
+      // new MagneticSelectionOperator(imageJSImg!)
+      null
+  );
+
+  const magneticSelectionRef = React.useRef<any>(null);
 
   // const transformerRef = React.useRef<Transformer>(null);
 
-  const [magneticSelectionAnchor, setMagneticSelectionAnchor] = useState<{
-    x: number;
-    y: number;
-  }>();
-  const [
-    magneticSelectionAnnotation,
-    setMagneticSelectionAnnotation,
-  ] = useState<{ points: Array<number> }>();
-  const [
-    magneticSelectionCanClose,
-    setMagneticSelectionCanClose,
-  ] = useState<boolean>(false);
-  const [
-    magneticSelectionDownsizedWidth,
-    setMagneticSelectionDownsizedWidth,
-  ] = useState<number>(0);
-  const [
-    magneticSelectionFactor,
-    setMagneticSelectionFactor,
-  ] = useState<number>(0.5);
-  const [
-    magneticSelectionGraph,
-    setMagneticSelectionGraph,
-  ] = useState<PiximiGraph | null>(null);
-  const [
-    magneticSelectionPreviousStroke,
-    setMagneticSelectionPreviousStroke,
-  ] = useState<Array<{ points: Array<number> }>>([]);
-  const [magneticSelectionStart, setMagneticSelectionStart] = useState<{
-    x: number;
-    y: number;
-  }>();
-  const [magneticSelectionStrokes, setMagneticSelectionStrokes] = useState<
-    Array<{ points: Array<number> }>
-  >([]);
-  const magneticSelectionPosition = React.useRef<{
-    x: number;
-    y: number;
-  } | null>(null);
-  const magneticSelectionDebouncedPosition = useDebounce(
-    magneticSelectionPosition.current,
-    20
-  );
-  const magneticSelectionPathCoordsRef = React.useRef<any>();
-  const magneticSelectionPathFinder = React.useRef<any>();
-  // const magneticSelectionRef = React.useRef<Line>(null);
-  const magneticSelectionStartPosition = React.useRef<{
-    x: number;
-    y: number;
-  } | null>(null);
-  const magneticSelectionStartingAnchorCircleRef = React.useRef<Circle>(null);
-  useEffect(() => {
-    if (magneticSelectionGraph && img) {
-      magneticSelectionPathFinder.current = createPathFinder(
-        magneticSelectionGraph,
-        magneticSelectionDownsizedWidth,
-        magneticSelectionFactor
-      );
-    }
-  }, [magneticSelectionDownsizedWidth, magneticSelectionGraph, img]);
+  // const [magneticSelectionAnchor, setMagneticSelectionAnchor] = useState<{
+  //   x: number;
+  //   y: number;
+  // }>();
+  // const [
+  //   magneticSelectionAnnotation,
+  //   setMagneticSelectionAnnotation,
+  // ] = useState<{ points: Array<number> }>();
+  // const [
+  //   magneticSelectionCanClose,
+  //   setMagneticSelectionCanClose,
+  // ] = useState<boolean>(false);
+  // const [
+  //   magneticSelectionDownsizedWidth,
+  //   setMagneticSelectionDownsizedWidth,
+  // ] = useState<number>(0);
+  // const [
+  //   magneticSelectionFactor,
+  //   setMagneticSelectionFactor,
+  // ] = useState<number>(0.5);
+  // const [
+  //   magneticSelectionGraph,
+  //   setMagneticSelectionGraph,
+  // ] = useState<PiximiGraph | null>(null);
+  // const [
+  //   magneticSelectionPreviousStroke,
+  //   setMagneticSelectionPreviousStroke,
+  // ] = useState<Array<{ points: Array<number> }>>([]);
+  // const [magneticSelectionStart, setMagneticSelectionStart] = useState<{
+  //   x: number;
+  //   y: number;
+  // }>();
+  // const [magneticSelectionStrokes, setMagneticSelectionStrokes] = useState<
+  //   Array<{ points: Array<number> }>
+  // >([]);
+  // const magneticSelectionPosition = React.useRef<{
+  //   x: number;
+  //   y: number;
+  // } | null>(null);
+  // const magneticSelectionDebouncedPosition = useDebounce(
+  //   magneticSelectionPosition.current,
+  //   20
+  // );
+  // const magneticSelectionPathCoordsRef = React.useRef<any>();
+  // const magneticSelectionPathFinder = React.useRef<any>();
+  // // const magneticSelectionRef = React.useRef<Line>(null);
+  // const magneticSelectionStartPosition = React.useRef<{
+  //   x: number;
+  //   y: number;
+  // } | null>(null);
+  // const magneticSelectionStartingAnchorCircleRef = React.useRef<Circle>(null);
+  // useEffect(() => {
+  //   if (magneticSelectionGraph && img) {
+  //     magneticSelectionPathFinder.current = createPathFinder(
+  //       magneticSelectionGraph,
+  //       magneticSelectionDownsizedWidth,
+  //       magneticSelectionFactor
+  //     );
+  //   }
+  // }, [magneticSelectionDownsizedWidth, magneticSelectionGraph, img]);
 
   // useEffect(() => {
   //   if (imageRef && imageRef.current) {
@@ -246,21 +283,21 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   //     imageRef.current.getLayer()?.batchDraw();
   //   }
   // });
-
-  useEffect(() => {
-    console.log("Loading image");
-    const loadImg = async () => {
-      const img = await ImageJS.Image.load(image!.src);
-      const grey = img.grey();
-      const edges = grey.sobelFilter();
-      setMagneticSelectionDownsizedWidth(img.width * magneticSelectionFactor);
-      const downsized = edges.resize({ factor: magneticSelectionFactor });
-      setMagneticSelectionGraph(
-        makeGraph(downsized.data, downsized.height, downsized.width)
-      );
-    };
-    loadImg();
-  }, [image, image?.src, magneticSelectionFactor]);
+  //
+  // useEffect(() => {
+  //   console.log("Loading image");
+  //   const loadImg = async () => {
+  //     const img = await ImageJS.Image.load(image!.src);
+  //     const grey = img.grey();
+  //     const edges = grey.sobelFilter();
+  //     setMagneticSelectionDownsizedWidth(img.width * magneticSelectionFactor);
+  //     const downsized = edges.resize({ factor: magneticSelectionFactor });
+  //     setMagneticSelectionGraph(
+  //       makeGraph(downsized.data, downsized.height, downsized.width)
+  //     );
+  //   };
+  //   loadImg();
+  // }, [image, image?.src, magneticSelectionFactor]);
 
   // React.useEffect(() => {
   //   if (
@@ -279,7 +316,7 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   const MagneticSelection = () => {
     return (
       <React.Fragment>
-        {magneticSelectionStart && (
+        {magneticSelectionOperator.origin && (
           <ReactKonva.Circle
             fill="#000"
             globalCompositeOperation="source-over"
@@ -287,22 +324,20 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
             id="start"
             name="anchor"
             radius={3}
-            ref={magneticSelectionStartingAnchorCircleRef}
+            // ref={magneticSelectionStartingAnchorCircleRef}
             stroke="#FFF"
             strokeWidth={1}
-            x={magneticSelectionStart.x}
-            y={magneticSelectionStart.y}
+            x={magneticSelectionOperator.origin.x}
+            y={magneticSelectionOperator.origin.y}
           />
         )}
 
-        {!annotated &&
-          annotating &&
-          magneticSelectionStrokes.map(
-            (stroke: { points: Array<number> }, key: number) => (
+        {!magneticSelectionOperator.selected &&
+        magneticSelectionOperator.selecting && (
               <React.Fragment>
                 <ReactKonva.Line
                   // key={key}
-                  points={stroke.points}
+                  points={magneticSelectionOperator.buffer}
                   stroke="#FFF"
                   strokeWidth={1}
                 />
@@ -310,218 +345,237 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
                 <ReactKonva.Line
                   dash={[4, 2]}
                   // key={key}
-                  points={stroke.points}
+                  points={magneticSelectionOperator.buffer}
                   stroke="#FFF"
                   strokeWidth={1}
                 />
               </React.Fragment>
-            )
           )}
 
-        {!annotated &&
-          annotating &&
-          magneticSelectionPreviousStroke.map(
-            (stroke: { points: Array<number> }, key: number) => (
-              <React.Fragment>
-                <ReactKonva.Line
+        {magneticSelectionOperator.selected &&
+        !magneticSelectionOperator.selecting && (
+            <React.Fragment>
+              <ReactKonva.Line
                   // key={key}
-                  points={stroke.points}
+                  points={magneticSelectionOperator.points}
                   stroke="#FFF"
                   strokeWidth={1}
-                />
+              />
 
-                <ReactKonva.Line
+              <ReactKonva.Line
                   dash={[4, 2]}
                   // key={key}
-                  points={stroke.points}
+                  points={magneticSelectionOperator.points}
                   stroke="#FFF"
                   strokeWidth={1}
-                />
-              </React.Fragment>
-            )
-          )}
+              />
+            </React.Fragment>
+        )}
+
+        {/*{!magneticSelectionOperator.selected &&*/}
+        {/*magneticSelectionOperator.selecting &&*/}
+        {/*  magneticSelectionPreviousStroke.map(*/}
+        {/*    (stroke: { points: Array<number> }, key: number) => (*/}
+        {/*      <React.Fragment>*/}
+        {/*        <ReactKonva.Line*/}
+        {/*          // key={key}*/}
+        {/*          points={stroke.points}*/}
+        {/*          stroke="#FFF"*/}
+        {/*          strokeWidth={1}*/}
+        {/*        />*/}
+
+        {/*        <ReactKonva.Line*/}
+        {/*          dash={[4, 2]}*/}
+        {/*          // key={key}*/}
+        {/*          points={stroke.points}*/}
+        {/*          stroke="#FFF"*/}
+        {/*          strokeWidth={1}*/}
+        {/*        />*/}
+        {/*      </React.Fragment>*/}
+        {/*    )*/}
+        {/*  )}*/}
       </React.Fragment>
     );
   };
 
-  useEffect(
-    () => {
-      if (magneticSelectionDebouncedPosition && annotating) {
-        onMagneticSelectionMouseMove(magneticSelectionDebouncedPosition);
-      }
-    },
-    [magneticSelectionDebouncedPosition] // Only call effect if debounced search term changes
-  );
-
-  const magnetConnected = (position: { x: number; y: number }) => {
-    const inside = isInside(magneticSelectionStartingAnchorCircleRef, position);
-    if (magneticSelectionStrokes && magneticSelectionStrokes.length > 0) {
-      return inside && magneticSelectionCanClose;
-    }
-  };
-
-  const onMagneticSelection = () => {};
-
-  const onMagneticSelectionMouseDown = (position: { x: number; y: number }) => {
-    if (annotated) {
-      return;
-    }
-
-    if (stageRef && stageRef.current) {
-      magneticSelectionPosition.current = position;
-
-      if (magneticSelectionPosition && magneticSelectionPosition.current) {
-        if (magnetConnected(magneticSelectionPosition.current)) {
-          const stroke = {
-            points: _.flatten(
-              magneticSelectionStrokes.map((stroke) => stroke.points)
-            ),
-          };
-
-          setAnnotated(true);
-
-          setAnnotating(false);
-
-          setMagneticSelectionAnnotation(stroke);
-        } else {
-          setAnnotating(true);
-
-          magneticSelectionStartPosition.current =
-            magneticSelectionPosition.current;
-
-          if (magneticSelectionStrokes.length > 0) {
-            setMagneticSelectionAnchor(magneticSelectionPosition.current);
-
-            setMagneticSelectionPreviousStroke([
-              ...magneticSelectionPreviousStroke,
-              ...magneticSelectionStrokes,
-            ]);
-          } else {
-            setMagneticSelectionStart(magneticSelectionPosition.current);
-          }
-        }
-      }
-    }
-  };
-
-  const onMagneticSelectionMouseMove = (position: { x: number; y: number }) => {
-    // if (annotated || !annotating) {
-    //   return;
-    // }
-    //
-    // if (stageRef && stageRef.current) {
-    //   magneticSelectionPosition.current = position;
-    //
-    //   if (magneticSelectionPosition && magneticSelectionPosition.current) {
-    //     if (
-    //       !magneticSelectionCanClose &&
-    //       !isInside(
-    //         magneticSelectionStartingAnchorCircleRef,
-    //         magneticSelectionPosition.current
-    //       )
-    //     ) {
-    //       setMagneticSelectionCanClose(true);
-    //     }
-    //
-    //     // let startPosition;
-    //     if (
-    //       magneticSelectionPathFinder &&
-    //       magneticSelectionPathFinder.current &&
-    //       img &&
-    //       magneticSelectionStartPosition &&
-    //       magneticSelectionStartPosition.current
-    //     ) {
-    //       magneticSelectionPathCoordsRef.current = magneticSelectionPathFinder.current.find(
-    //         getIdx(magneticSelectionDownsizedWidth, 1)(
-    //           Math.floor(
-    //             magneticSelectionStartPosition.current.x *
-    //               magneticSelectionFactor
-    //           ),
-    //           Math.floor(
-    //             magneticSelectionStartPosition.current.y *
-    //               magneticSelectionFactor
-    //           ),
-    //           0
-    //         ),
-    //         getIdx(magneticSelectionDownsizedWidth, 1)(
-    //           Math.floor(
-    //             magneticSelectionPosition.current.x * magneticSelectionFactor
-    //           ),
-    //           Math.floor(
-    //             magneticSelectionPosition.current.y * magneticSelectionFactor
-    //           ),
-    //           0
-    //         )
-    //       );
-    //
-    //       setMagneticSelectionStrokes(
-    //         transformCoordinatesToStrokes(
-    //           magneticSelectionPathCoordsRef.current
-    //         )
-    //       );
-    //     }
-    //   }
-    // }
-  };
-
-  const onMagneticSelectionMouseUp = (position: { x: number; y: number }) => {
-    if (annotated) {
-      return;
-    }
-
-    if (!annotating) {
-      return;
-    }
-
-    if (stageRef && stageRef.current) {
-      magneticSelectionPosition.current = position;
-
-      if (magneticSelectionPosition && magneticSelectionPosition.current) {
-        if (magnetConnected(magneticSelectionPosition.current)) {
-          if (magneticSelectionStart) {
-            const stroke = {
-              points: [
-                magneticSelectionPosition.current.x,
-                magneticSelectionPosition.current.y,
-                magneticSelectionStart.x,
-                magneticSelectionStart.y,
-              ],
-            };
-
-            setMagneticSelectionStrokes([...magneticSelectionStrokes, stroke]);
-          }
-
-          const stroke = {
-            points: _.flatten(
-              magneticSelectionStrokes.map((stroke) => stroke.points)
-            ),
-          };
-
-          setAnnotated(true);
-
-          setAnnotating(false);
-
-          setMagneticSelectionAnnotation(stroke);
-
-          setMagneticSelectionStrokes([]);
-        } else {
-          if (magneticSelectionStrokes.length > 0) {
-            setMagneticSelectionAnchor(magneticSelectionPosition.current);
-
-            magneticSelectionStartPosition.current =
-              magneticSelectionPosition.current;
-
-            setMagneticSelectionPreviousStroke([
-              ...magneticSelectionPreviousStroke,
-              ...magneticSelectionStrokes,
-            ]);
-          } else {
-            setMagneticSelectionStart(magneticSelectionPosition.current);
-          }
-        }
-      }
-    }
-  };
+  // useEffect(
+  //   () => {
+  //     if (magneticSelectionDebouncedPosition && annotating) {
+  //       onMagneticSelectionMouseMove(magneticSelectionDebouncedPosition);
+  //     }
+  //   },
+  //   [magneticSelectionDebouncedPosition] // Only call effect if debounced search term changes
+  // );
+  //
+  // const magnetConnected = (position: { x: number; y: number }) => {
+  //   const inside = isInside(magneticSelectionStartingAnchorCircleRef, position);
+  //   if (magneticSelectionStrokes && magneticSelectionStrokes.length > 0) {
+  //     return inside && magneticSelectionCanClose;
+  //   }
+  // };
+  //
+  // const onMagneticSelection = () => {};
+  //
+  // const onMagneticSelectionMouseDown = (position: { x: number; y: number }) => {
+  //   if (annotated) {
+  //     return;
+  //   }
+  //
+  //   if (stageRef && stageRef.current) {
+  //     magneticSelectionPosition.current = position;
+  //
+  //     if (magneticSelectionPosition && magneticSelectionPosition.current) {
+  //       if (magnetConnected(magneticSelectionPosition.current)) {
+  //         const stroke = {
+  //           points: _.flatten(
+  //             magneticSelectionStrokes.map((stroke) => stroke.points)
+  //           ),
+  //         };
+  //
+  //         setAnnotated(true);
+  //
+  //         setAnnotating(false);
+  //
+  //         setMagneticSelectionAnnotation(stroke);
+  //       } else {
+  //         setAnnotating(true);
+  //
+  //         magneticSelectionStartPosition.current =
+  //           magneticSelectionPosition.current;
+  //
+  //         if (magneticSelectionStrokes.length > 0) {
+  //           setMagneticSelectionAnchor(magneticSelectionPosition.current);
+  //
+  //           setMagneticSelectionPreviousStroke([
+  //             ...magneticSelectionPreviousStroke,
+  //             ...magneticSelectionStrokes,
+  //           ]);
+  //         } else {
+  //           setMagneticSelectionStart(magneticSelectionPosition.current);
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
+  //
+  // const onMagneticSelectionMouseMove = (position: { x: number; y: number }) => {
+  //   // if (annotated || !annotating) {
+  //   //   return;
+  //   // }
+  //   //
+  //   // if (stageRef && stageRef.current) {
+  //   //   magneticSelectionPosition.current = position;
+  //   //
+  //   //   if (magneticSelectionPosition && magneticSelectionPosition.current) {
+  //   //     if (
+  //   //       !magneticSelectionCanClose &&
+  //   //       !isInside(
+  //   //         magneticSelectionStartingAnchorCircleRef,
+  //   //         magneticSelectionPosition.current
+  //   //       )
+  //   //     ) {
+  //   //       setMagneticSelectionCanClose(true);
+  //   //     }
+  //   //
+  //   //     // let startPosition;
+  //   //     if (
+  //   //       magneticSelectionPathFinder &&
+  //   //       magneticSelectionPathFinder.current &&
+  //   //       img &&
+  //   //       magneticSelectionStartPosition &&
+  //   //       magneticSelectionStartPosition.current
+  //   //     ) {
+  //   //       magneticSelectionPathCoordsRef.current = magneticSelectionPathFinder.current.find(
+  //   //         getIdx(magneticSelectionDownsizedWidth, 1)(
+  //   //           Math.floor(
+  //   //             magneticSelectionStartPosition.current.x *
+  //   //               magneticSelectionFactor
+  //   //           ),
+  //   //           Math.floor(
+  //   //             magneticSelectionStartPosition.current.y *
+  //   //               magneticSelectionFactor
+  //   //           ),
+  //   //           0
+  //   //         ),
+  //   //         getIdx(magneticSelectionDownsizedWidth, 1)(
+  //   //           Math.floor(
+  //   //             magneticSelectionPosition.current.x * magneticSelectionFactor
+  //   //           ),
+  //   //           Math.floor(
+  //   //             magneticSelectionPosition.current.y * magneticSelectionFactor
+  //   //           ),
+  //   //           0
+  //   //         )
+  //   //       );
+  //   //
+  //   //       setMagneticSelectionStrokes(
+  //   //         transformCoordinatesToStrokes(
+  //   //           magneticSelectionPathCoordsRef.current
+  //   //         )
+  //   //       );
+  //   //     }
+  //   //   }
+  //   // }
+  // };
+  //
+  // const onMagneticSelectionMouseUp = (position: { x: number; y: number }) => {
+  //   if (annotated) {
+  //     return;
+  //   }
+  //
+  //   if (!annotating) {
+  //     return;
+  //   }
+  //
+  //   if (stageRef && stageRef.current) {
+  //     magneticSelectionPosition.current = position;
+  //
+  //     if (magneticSelectionPosition && magneticSelectionPosition.current) {
+  //       if (magnetConnected(magneticSelectionPosition.current)) {
+  //         if (magneticSelectionStart) {
+  //           const stroke = {
+  //             points: [
+  //               magneticSelectionPosition.current.x,
+  //               magneticSelectionPosition.current.y,
+  //               magneticSelectionStart.x,
+  //               magneticSelectionStart.y,
+  //             ],
+  //           };
+  //
+  //           setMagneticSelectionStrokes([...magneticSelectionStrokes, stroke]);
+  //         }
+  //
+  //         const stroke = {
+  //           points: _.flatten(
+  //             magneticSelectionStrokes.map((stroke) => stroke.points)
+  //           ),
+  //         };
+  //
+  //         setAnnotated(true);
+  //
+  //         setAnnotating(false);
+  //
+  //         setMagneticSelectionAnnotation(stroke);
+  //
+  //         setMagneticSelectionStrokes([]);
+  //       } else {
+  //         if (magneticSelectionStrokes.length > 0) {
+  //           setMagneticSelectionAnchor(magneticSelectionPosition.current);
+  //
+  //           magneticSelectionStartPosition.current =
+  //             magneticSelectionPosition.current;
+  //
+  //           setMagneticSelectionPreviousStroke([
+  //             ...magneticSelectionPreviousStroke,
+  //             ...magneticSelectionStrokes,
+  //           ]);
+  //         } else {
+  //           setMagneticSelectionStart(magneticSelectionPosition.current);
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
 
   /*
    * Object selection
@@ -552,11 +606,11 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   useEffect(() => {
-    if (activeOperation === ImageViewerOperation.ObjectSelection) {
+    if (operation === ImageViewerOperation.ObjectSelection) {
       //this should be called only once
       createModel();
     }
-  }, [activeOperation]);
+  }, [operation]);
 
   useEffect(() => {
     if (tensorRef && tensorRef.current) {
@@ -835,212 +889,260 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
   };
 
   const onSelection = () => {
-    switch (activeOperation) {
-      case ImageViewerOperation.ColorAdjustment:
-        return;
-      case ImageViewerOperation.ColorSelection:
-        return colorSelectionOperator.select(activeCategory);
-      case ImageViewerOperation.EllipticalSelection:
-        return ellipticalSelectionOperator.select(activeCategory);
-      case ImageViewerOperation.Hand:
-        return;
-      case ImageViewerOperation.LassoSelection:
-        return lassoSelectionOperator.select(activeCategory);
-      case ImageViewerOperation.MagneticSelection:
-        return onMagneticSelection();
-      case ImageViewerOperation.ObjectSelection:
-        return onObjectSelection();
-      case ImageViewerOperation.PolygonalSelection:
-        return polygonalSelectionOperator.select(activeCategory);
-      case ImageViewerOperation.QuickSelection:
-        return onQuickSelection();
-      case ImageViewerOperation.RectangularSelection:
-        return onRectangularSelection();
-      case ImageViewerOperation.Zoom:
-        return;
-    }
+    operator.select(activeCategory);
+    // switch (operation) {
+    //   case ImageViewerOperation.ColorAdjustment:
+    //     return;
+    //   case ImageViewerOperation.ColorSelection:
+    //     return (operator as ColorSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.EllipticalSelection:
+    //     return (operator as EllipticalSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.Hand:
+    //     return;
+    //   case ImageViewerOperation.LassoSelection:
+    //     return (operator as LassoSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.MagneticSelection:
+    //     return (operator as MagneticSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.ObjectSelection:
+    //     return (operator as ObjectSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.PolygonalSelection:
+    //     return (operator as PolygonalSelectionOperator).select(activeCategory);
+    //   case ImageViewerOperation.QuickSelection:
+    //     return operator.select(activeCategory);
+    //   case ImageViewerOperation.RectangularSelection:
+    //     return (operator as RectangularSelectionOperator).select(
+    //       activeCategory
+    //     );
+    //   case ImageViewerOperation.Zoom:
+    //     return;
+    // }
   };
 
   const { annotated, annotating, setAnnotated, setAnnotating } = useSelection(
     onSelection
   );
 
-  const onMouseDown = useMemo(() => {
-    const throttled = _.throttle(() => {
-      if (stageRef && stageRef.current && imageRef && imageRef.current) {
-        // const position = stageRef.current.getPointerPosition();
-        // const transform = imageRef.current.getAbsoluteTransform().copy();
-        // transform.invert();
-        const position = transform.point(stageRef.current.getPointerPosition());
+  const onMouseDown = () => {
+    if (!stageRef || !stageRef.current) return;
 
-        if (position) {
-          switch (activeOperation) {
-            case ImageViewerOperation.ColorAdjustment:
-              break;
-            case ImageViewerOperation.ColorSelection:
-              return colorSelectionOperator.onMouseDown(position);
-            case ImageViewerOperation.EllipticalSelection:
-              return ellipticalSelectionOperator.onMouseDown(position);
-            case ImageViewerOperation.Hand:
-              break;
-            case ImageViewerOperation.LassoSelection:
-              return lassoSelectionOperator.onMouseDown(position);
-            case ImageViewerOperation.MagneticSelection:
-              if (annotated) return;
+    if (transform && stageRef && stageRef.current) {
+      let position = stageRef.current.getPointerPosition();
 
-              return onMagneticSelectionMouseDown(position);
-            case ImageViewerOperation.ObjectSelection:
-              if (annotated) return;
+      if (!position) return;
 
-              setAnnotating(true);
-              return onRectangularSelectionMouseDown(position);
-            case ImageViewerOperation.PolygonalSelection:
-              return polygonalSelectionOperator.onMouseDown(position);
-            case ImageViewerOperation.QuickSelection:
-              return onQuickSelectionMouseDown(position);
-            case ImageViewerOperation.RectangularSelection:
-              if (annotated) return;
-
-              setAnnotating(true);
-
-              return onRectangularSelectionMouseDown(position);
-            case ImageViewerOperation.Zoom:
-              return onZoomMouseDown(position);
-          }
-        }
+      if (position) {
+        position = transform.point(position);
+        operator.onMouseDown(position);
       }
-    }, 100);
-    return () => {
-      return throttled();
-    };
-  }, [
-    activeOperation,
-    annotated,
-    ellipticalSelectionOperator,
-    lassoSelectionOperator,
-    colorSelectionOperator,
-    onMagneticSelectionMouseDown,
-    onZoomMouseDown,
-    polygonalSelectionOperator,
-    setAnnotating,
-  ]);
+    }
+  };
 
-  const onMouseMove = useMemo(() => {
-    const throttled = _.throttle(() => {
-      if (stageRef && stageRef.current && imageRef && imageRef.current) {
-        // const position = stageRef.current.getPointerPosition();
-        // const transform = imageRef.current.getAbsoluteTransform().copy();
-        // transform.invert();
-        const position = transform.point(stageRef.current.getPointerPosition());
+  // const onMouseDown = useMemo(() => {
+  //   const throttled = _.throttle(() => {
+  //     if (stageRef && stageRef.current && imageRef && imageRef.current) {
+  //       // const position = stageRef.current.getPointerPosition();
+  //       // const transform = imageRef.current.getAbsoluteTransform().copy();
+  //       // transform.invert();
+  //       const position = transform.point(stageRef.current.getPointerPosition());
+  //
+  //       if (position) {
+  //         switch (operation) {
+  //           case ImageViewerOperation.ColorAdjustment:
+  //             break;
+  //           case ImageViewerOperation.ColorSelection:
+  //             return colorSelectionOperator.onMouseDown(position);
+  //           case ImageViewerOperation.EllipticalSelection:
+  //             return ellipticalSelectionOperator.onMouseDown(position);
+  //           case ImageViewerOperation.Hand:
+  //             break;
+  //           case ImageViewerOperation.LassoSelection:
+  //             return lassoSelectionOperator.onMouseDown(position);
+  //           case ImageViewerOperation.MagneticSelection:
+  //             if (annotated) return;
+  //
+  //             return onMagneticSelectionMouseDown(position);
+  //           case ImageViewerOperation.ObjectSelection:
+  //             if (annotated) return;
+  //
+  //             setAnnotating(true);
+  //             return onRectangularSelectionMouseDown(position);
+  //           case ImageViewerOperation.PolygonalSelection:
+  //             return polygonalSelectionOperator.onMouseDown(position);
+  //           case ImageViewerOperation.QuickSelection:
+  //             return onQuickSelectionMouseDown(position);
+  //           case ImageViewerOperation.RectangularSelection:
+  //             if (annotated) return;
+  //
+  //             setAnnotating(true);
+  //
+  //             return onRectangularSelectionMouseDown(position);
+  //           case ImageViewerOperation.Zoom:
+  //             return onZoomMouseDown(position);
+  //         }
+  //       }
+  //     }
+  //   }, 100);
+  //   return () => {
+  //     return throttled();
+  //   };
+  // }, [
+  //   operation,
+  //   annotated,
+  //   ellipticalSelectionOperator,
+  //   lassoSelectionOperator,
+  //   colorSelectionOperator,
+  //   onMagneticSelectionMouseDown,
+  //   onZoomMouseDown,
+  //   polygonalSelectionOperator,
+  //   setAnnotating,
+  // ]);
 
-        if (position) {
-          switch (activeOperation) {
-            case ImageViewerOperation.ColorAdjustment:
-              break;
-            case ImageViewerOperation.ColorSelection:
-              return colorSelectionOperator.onMouseMove(position);
-            case ImageViewerOperation.EllipticalSelection:
-              return ellipticalSelectionOperator.onMouseMove(position);
-            case ImageViewerOperation.Hand:
-              break;
-            case ImageViewerOperation.LassoSelection:
-              return lassoSelectionOperator.onMouseMove(position);
-            case ImageViewerOperation.MagneticSelection:
-              if (annotated || !annotating) return;
+  const onMouseMove = () => {
+    if (!stageRef || !stageRef.current) return;
 
-              return onMagneticSelectionMouseMove(position);
-            case ImageViewerOperation.ObjectSelection:
-              if (annotated || !annotating) return;
-              return onRectangularSelectionMouseMove(position);
-            case ImageViewerOperation.PolygonalSelection:
-              return polygonalSelectionOperator.onMouseMove(position);
-            case ImageViewerOperation.QuickSelection:
-              return onQuickSelectionMouseMove(position);
-            case ImageViewerOperation.RectangularSelection:
-              if (annotated) return;
+    if (transform && stageRef && stageRef.current) {
+      let position = stageRef.current.getPointerPosition();
 
-              return onRectangularSelectionMouseMove(position);
-            case ImageViewerOperation.Zoom:
-              return onZoomMouseMove(position);
-          }
-        }
+      if (!position) return;
+
+      if (position) {
+        position = transform.point(position);
+        operator.onMouseMove(position);
       }
-    }, 100);
-    return () => {
-      return throttled();
-    };
-  }, [
-    activeOperation,
-    annotated,
-    annotating,
-    ellipticalSelectionOperator,
-    lassoSelectionOperator,
-    colorSelectionOperator,
-    onRectangularSelectionMouseMove,
-    onZoomMouseMove,
-    polygonalSelectionOperator,
-  ]);
+    }
+  };
 
-  const onMouseUp = useMemo(() => {
-    const throttled = _.throttle(() => {
-      if (stageRef && stageRef.current && imageRef.current) {
-        // const position = stageRef.current.getPointerPosition();
-        // const transform = imageRef.current.getAbsoluteTransform().copy();
-        // transform.invert();
-        const position = transform.point(stageRef.current.getPointerPosition());
+  // const onMouseMove = useMemo(() => {
+  //   const throttled = _.throttle(() => {
+  //     if (stageRef && stageRef.current && imageRef && imageRef.current) {
+  //       // const position = stageRef.current.getPointerPosition();
+  //       // const transform = imageRef.current.getAbsoluteTransform().copy();
+  //       // transform.invert();
+  //       const position = transform.point(stageRef.current.getPointerPosition());
+  //
+  //       if (position) {
+  //         switch (operation) {
+  //           case ImageViewerOperation.ColorAdjustment:
+  //             break;
+  //           case ImageViewerOperation.ColorSelection:
+  //             return colorSelectionOperator.onMouseMove(position);
+  //           case ImageViewerOperation.EllipticalSelection:
+  //             return ellipticalSelectionOperator.onMouseMove(position);
+  //           case ImageViewerOperation.Hand:
+  //             break;
+  //           case ImageViewerOperation.LassoSelection:
+  //             return lassoSelectionOperator.onMouseMove(position);
+  //           case ImageViewerOperation.MagneticSelection:
+  //             if (annotated || !annotating) return;
+  //
+  //             return onMagneticSelectionMouseMove(position);
+  //           case ImageViewerOperation.ObjectSelection:
+  //             if (annotated || !annotating) return;
+  //             return onRectangularSelectionMouseMove(position);
+  //           case ImageViewerOperation.PolygonalSelection:
+  //             return polygonalSelectionOperator.onMouseMove(position);
+  //           case ImageViewerOperation.QuickSelection:
+  //             return onQuickSelectionMouseMove(position);
+  //           case ImageViewerOperation.RectangularSelection:
+  //             if (annotated) return;
+  //
+  //             return onRectangularSelectionMouseMove(position);
+  //           case ImageViewerOperation.Zoom:
+  //             return onZoomMouseMove(position);
+  //         }
+  //       }
+  //     }
+  //   }, 100);
+  //   return () => {
+  //     return throttled();
+  //   };
+  // }, [
+  //   operation,
+  //   annotated,
+  //   annotating,
+  //   ellipticalSelectionOperator,
+  //   lassoSelectionOperator,
+  //   colorSelectionOperator,
+  //   onRectangularSelectionMouseMove,
+  //   onZoomMouseMove,
+  //   polygonalSelectionOperator,
+  // ]);
 
-        if (position) {
-          switch (activeOperation) {
-            case ImageViewerOperation.ColorAdjustment:
-              break;
-            case ImageViewerOperation.ColorSelection:
-              return colorSelectionOperator.onMouseUp(position);
-            case ImageViewerOperation.EllipticalSelection:
-              return ellipticalSelectionOperator.onMouseUp(position);
-            case ImageViewerOperation.Hand:
-              break;
-            case ImageViewerOperation.LassoSelection:
-              return lassoSelectionOperator.onMouseUp(position);
-            case ImageViewerOperation.MagneticSelection:
-              if (annotated || !annotating) return;
+  const onMouseUp = () => {
+    if (!stageRef || !stageRef.current) return;
 
-              return onMagneticSelectionMouseUp(position);
-            case ImageViewerOperation.ObjectSelection:
-              return onObjectSelectionMouseUp(position);
-            case ImageViewerOperation.PolygonalSelection:
-              return polygonalSelectionOperator.onMouseUp(position);
-            case ImageViewerOperation.QuickSelection:
-              return onQuickSelectionMouseUp(position);
-            case ImageViewerOperation.RectangularSelection:
-              if (annotated || !annotating) return;
+    if (transform && stageRef && stageRef.current) {
+      let position = stageRef.current.getPointerPosition();
 
-              setAnnotated(true);
-              setAnnotating(false);
+      if (!position) return;
 
-              return onRectangularSelectionMouseUp(position);
-            case ImageViewerOperation.Zoom:
-              return onZoomMouseUp(position);
-          }
-        }
+      if (position) {
+        position = transform.point(position);
+        operator.onMouseUp(position);
       }
-    }, 100);
-    return () => {
-      return throttled();
-    };
-  }, [
-    activeOperation,
-    annotated,
-    annotating,
-    ellipticalSelectionOperator,
-    lassoSelectionOperator,
-    colorSelectionOperator,
-    onMagneticSelectionMouseUp,
-    onObjectSelectionMouseUp,
-    onZoomMouseUp,
-    polygonalSelectionOperator,
-    setAnnotated,
-    setAnnotating,
-  ]);
+    }
+  };
+
+  // const onMouseUp = useMemo(() => {
+  //   const throttled = _.throttle(() => {
+  //     if (stageRef && stageRef.current && imageRef.current) {
+  //       // const position = stageRef.current.getPointerPosition();
+  //       // const transform = imageRef.current.getAbsoluteTransform().copy();
+  //       // transform.invert();
+  //       const position = transform.point(stageRef.current.getPointerPosition());
+  //
+  //       if (position) {
+  //         switch (operation) {
+  //           case ImageViewerOperation.ColorAdjustment:
+  //             break;
+  //           case ImageViewerOperation.ColorSelection:
+  //             return colorSelectionOperator.onMouseUp(position);
+  //           case ImageViewerOperation.EllipticalSelection:
+  //             return ellipticalSelectionOperator.onMouseUp(position);
+  //           case ImageViewerOperation.Hand:
+  //             break;
+  //           case ImageViewerOperation.LassoSelection:
+  //             return lassoSelectionOperator.onMouseUp(position);
+  //           case ImageViewerOperation.MagneticSelection:
+  //             if (annotated || !annotating) return;
+  //
+  //             return onMagneticSelectionMouseUp(position);
+  //           case ImageViewerOperation.ObjectSelection:
+  //             return onObjectSelectionMouseUp(position);
+  //           case ImageViewerOperation.PolygonalSelection:
+  //             return polygonalSelectionOperator.onMouseUp(position);
+  //           case ImageViewerOperation.QuickSelection:
+  //             return onQuickSelectionMouseUp(position);
+  //           case ImageViewerOperation.RectangularSelection:
+  //             if (annotated || !annotating) return;
+  //
+  //             setAnnotated(true);
+  //             setAnnotating(false);
+  //
+  //             return onRectangularSelectionMouseUp(position);
+  //           case ImageViewerOperation.Zoom:
+  //             return onZoomMouseUp(position);
+  //         }
+  //       }
+  //     }
+  //   }, 100);
+  //   return () => {
+  //     return throttled();
+  //   };
+  // }, [
+  //   operation,
+  //   annotated,
+  //   annotating,
+  //   ellipticalSelectionOperator,
+  //   lassoSelectionOperator,
+  //   colorSelectionOperator,
+  //   onMagneticSelectionMouseUp,
+  //   onObjectSelectionMouseUp,
+  //   onZoomMouseUp,
+  //   polygonalSelectionOperator,
+  //   setAnnotated,
+  //   setAnnotating,
+  // ]);
 
   const initialWidth = 1000;
   const parentRef = useRef<HTMLDivElement>(null);
@@ -1091,38 +1193,38 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
           >
             {img && <ReactKonva.Image ref={imageRef} image={img} />}
 
-            {activeOperation === ImageViewerOperation.ColorSelection && (
+            {operation === ImageViewerOperation.ColorSelection && (
               <ColorSelection />
             )}
 
-            {activeOperation === ImageViewerOperation.EllipticalSelection && (
+            {operation === ImageViewerOperation.EllipticalSelection && (
               <EllipticalSelection
                 activeCategory={activeCategory}
-                annotated={ellipticalSelectionOperator.selected}
-                annotating={ellipticalSelectionOperator.selecting}
-                center={ellipticalSelectionOperator.center}
+                annotated={(operator as EllipticalSelectionOperator).selected}
+                annotating={(operator as EllipticalSelectionOperator).selecting}
+                center={(operator as EllipticalSelectionOperator).center}
                 ellipticalSelectionRef={ellipticalSelectionRef}
-                radius={ellipticalSelectionOperator.radius}
+                radius={(operator as EllipticalSelectionOperator).radius}
               />
             )}
 
-            {activeOperation === ImageViewerOperation.LassoSelection && (
+            {operation === ImageViewerOperation.LassoSelection && (
               <PolygonalSelection
                 activeCategory={activeCategory}
-                anchor={lassoSelectionOperator.anchor}
-                buffer={lassoSelectionOperator.buffer}
-                origin={lassoSelectionOperator.origin}
-                points={lassoSelectionOperator.points}
-                selected={lassoSelectionOperator.selected}
-                selecting={lassoSelectionOperator.selecting}
+                anchor={(operator as PolygonalSelectionOperator).anchor}
+                buffer={(operator as PolygonalSelectionOperator).buffer}
+                origin={(operator as PolygonalSelectionOperator).origin}
+                points={(operator as PolygonalSelectionOperator).points}
+                selected={(operator as PolygonalSelectionOperator).selected}
+                selecting={(operator as PolygonalSelectionOperator).selecting}
               />
             )}
 
-            {activeOperation === ImageViewerOperation.MagneticSelection && (
+            {operation === ImageViewerOperation.MagneticSelection && (
               <MagneticSelection />
             )}
 
-            {activeOperation === ImageViewerOperation.ObjectSelection && (
+            {operation === ImageViewerOperation.ObjectSelection && (
               <React.Fragment>
                 <ObjectSelection
                   activeCategory={activeCategory}
@@ -1138,36 +1240,38 @@ export const Main = ({ activeCategory, zoomReset }: MainProps) => {
               </React.Fragment>
             )}
 
-            {activeOperation === ImageViewerOperation.PolygonalSelection && (
+            {operation === ImageViewerOperation.PolygonalSelection && (
               <PolygonalSelection
                 activeCategory={activeCategory}
-                anchor={polygonalSelectionOperator.anchor}
-                buffer={polygonalSelectionOperator.buffer}
-                origin={polygonalSelectionOperator.origin}
-                points={polygonalSelectionOperator.points}
-                selected={polygonalSelectionOperator.selected}
-                selecting={polygonalSelectionOperator.selecting}
+                anchor={(operator as PolygonalSelectionOperator).anchor}
+                buffer={(operator as PolygonalSelectionOperator).buffer}
+                origin={(operator as PolygonalSelectionOperator).origin}
+                points={(operator as PolygonalSelectionOperator).points}
+                selected={(operator as PolygonalSelectionOperator).selected}
+                selecting={(operator as PolygonalSelectionOperator).selecting}
               />
             )}
 
-            {activeOperation === ImageViewerOperation.QuickSelection && (
+            {operation === ImageViewerOperation.QuickSelection && (
               <QuickSelection />
             )}
 
-            {activeOperation === ImageViewerOperation.RectangularSelection && (
+            {operation === ImageViewerOperation.RectangularSelection && (
               <RectangularSelection
                 activeCategory={activeCategory}
-                annotated={annotated}
-                annotating={annotating}
-                height={rectangularSelectionHeight}
+                annotated={(operator as RectangularSelectionOperator).selected}
+                annotating={
+                  (operator as RectangularSelectionOperator).selecting
+                }
+                height={(operator as RectangularSelectionOperator).height}
                 ref={rectangularSelectionRef}
-                width={rectangularSelectionWidth}
-                x={rectangularSelectionX}
-                y={rectangularSelectionY}
+                width={(operator as RectangularSelectionOperator).width}
+                x={(operator as RectangularSelectionOperator).origin?.x}
+                y={(operator as RectangularSelectionOperator).origin?.y}
               />
             )}
 
-            {activeOperation === ImageViewerOperation.Zoom && (
+            {operation === ImageViewerOperation.Zoom && (
               <ZoomSelection
                 selected={zoomSelected}
                 selecting={zoomSelecting}

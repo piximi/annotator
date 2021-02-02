@@ -32,5 +32,5 @@ const category: Category = {
 
 Default.args = {
   image: image,
-  categoryId: category,
+  category: category,
 };

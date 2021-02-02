@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { imageViewerOperationSelector } from "../../store/selectors";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import { EllipticalSelection } from "./EllipticalSelection";
-import { useAnimationFrame } from "../../hooks/useAnimationFrame/useAnimationFrame";
+import { useInterval } from "../../hooks";
 
 type StageProps = {
   src: string;
@@ -33,6 +33,8 @@ export const Stage = ({ src }: StageProps) => {
   const [operator, setOperator] = useState<SelectionOperator>(
     new RectangularSelectionOperator()
   );
+
+  useInterval(() => {}, 1000);
 
   useEffect(() => {
     switch (operation) {

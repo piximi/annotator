@@ -1,6 +1,6 @@
 import { EllipticalSelectionOperator } from "./EllipticalSelectionOperator";
 import { test } from "@jest/globals";
-import {Category} from "../../types/Category";
+import { Category } from "../../types/Category";
 
 test("deselect", () => {
   const operator = new EllipticalSelectionOperator();
@@ -90,7 +90,7 @@ test("select", () => {
     id: "5ed3511d-1223-4bba-a0c2-2b3897232d98",
     name: "foo",
     visible: true,
-  }
+  };
 
   operator.select(category);
 
@@ -99,7 +99,7 @@ test("select", () => {
 
   expect(operator.selection).toStrictEqual({
     boundingBox: [0, 0, 100, 100],
-    categoryId: 0,
+    categoryId: "5ed3511d-1223-4bba-a0c2-2b3897232d98",
     mask: "mask",
   });
 

@@ -15,6 +15,7 @@ import { imageViewerOperationSelector } from "../../store/selectors";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import { EllipticalSelection } from "./EllipticalSelection";
 import * as _ from "lodash";
+import { RectangularSelection } from "./RectangularSelection";
 
 type StageProps = {
   src: string;
@@ -129,6 +130,12 @@ export const Stage = ({ src }: StageProps) => {
         {operation === ImageViewerOperation.EllipticalSelection && (
           <EllipticalSelection
             operator={operator as EllipticalSelectionOperator}
+          />
+        )}
+
+        {operation === ImageViewerOperation.RectangularSelection && (
+          <RectangularSelection
+            operator={operator as RectangularSelectionOperator}
           />
         )}
       </ReactKonva.Layer>

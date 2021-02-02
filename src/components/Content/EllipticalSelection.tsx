@@ -6,11 +6,7 @@ type EllipticalSelectionProps = {
 };
 
 export const EllipticalSelection = ({ operator }: EllipticalSelectionProps) => {
-  console.info("beep");
-
   if (!operator.center || !operator.radius) return null;
-
-  console.info("boop");
 
   return (
     <ReactKonva.Ellipse

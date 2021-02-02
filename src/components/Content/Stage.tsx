@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
 import Konva from "konva";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import useImage from "use-image";
 import { useStyles } from "./Content.css";
 import {
@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { imageViewerOperationSelector } from "../../store/selectors";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import { EllipticalSelection } from "./EllipticalSelection";
-import { useInterval } from "../../hooks";
+import * as _ from "lodash";
 
 type StageProps = {
   src: string;
@@ -34,7 +34,7 @@ export const Stage = ({ src }: StageProps) => {
     new RectangularSelectionOperator()
   );
 
-  useInterval(() => {}, 1000);
+  const [, update] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
     switch (operation) {
@@ -57,35 +57,59 @@ export const Stage = ({ src }: StageProps) => {
     }
   }, [operation]);
 
-  const onMouseDown = () => {
-    if (!stageRef || !stageRef.current) return;
+  const onMouseDown = useMemo(() => {
+    const func = () => {
+      if (!stageRef || !stageRef.current) return;
 
-    const position = stageRef.current.getPointerPosition();
+      const position = stageRef.current.getPointerPosition();
 
-    if (!position) return;
+      if (!position) return;
 
-    operator.onMouseDown(position);
-  };
+      operator.onMouseDown(position);
 
-  const onMouseMove = () => {
-    if (!stageRef || !stageRef.current) return;
+      update();
+    };
 
-    const position = stageRef.current.getPointerPosition();
+    const throttled = _.throttle(func, 10);
 
-    if (!position) return;
+    return () => throttled();
+  }, [operator]);
 
-    operator.onMouseMove(position);
-  };
+  const onMouseMove = useMemo(() => {
+    const func = () => {
+      if (!stageRef || !stageRef.current) return;
 
-  const onMouseUp = () => {
-    if (!stageRef || !stageRef.current) return;
+      const position = stageRef.current.getPointerPosition();
 
-    const position = stageRef.current.getPointerPosition();
+      if (!position) return;
 
-    if (!position) return;
+      operator.onMouseMove(position);
 
-    operator.onMouseUp(position);
-  };
+      update();
+    };
+
+    const throttled = _.throttle(func, 10);
+
+    return () => throttled();
+  }, [operator]);
+
+  const onMouseUp = useMemo(() => {
+    const func = () => {
+      if (!stageRef || !stageRef.current) return;
+
+      const position = stageRef.current.getPointerPosition();
+
+      if (!position) return;
+
+      operator.onMouseUp(position);
+
+      update();
+    };
+
+    const throttled = _.throttle(func, 10);
+
+    return () => throttled();
+  }, [operator]);
 
   return (
     <ReactKonva.Stage

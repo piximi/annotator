@@ -161,8 +161,8 @@ export const ImageViewer = (props: ImageViewerProps) => {
         onCategoryClick={onCategoryClick}
       />
 
-      {image && <Main activeCategory={activeCategory} zoomReset={zoomReset} />}
-      {/*{image && <Content />}*/}
+      {/*{image && <Main activeCategory={activeCategory} zoomReset={zoomReset} />}*/}
+      {image && <Content />}
 
       <OperationOptions
         description={

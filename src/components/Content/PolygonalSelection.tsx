@@ -1,90 +1,48 @@
 import * as ReactKonva from "react-konva";
-import React, { RefObject } from "react";
-import { Category } from "../../types/Category";
-import { useMarchingAnts } from "../../hooks";
-import { Line } from "konva/types/shapes/Line";
-import { StartingAnchor } from "./StartingAnchor";
+import React from "react";
+import { PolygonalSelectionOperator } from "../../image/selection";
 
 type PolygonalSelectionProps = {
-  activeCategory: Category;
-  anchor?: { x: number; y: number };
-  buffer: Array<number>;
-  origin?: { x: number; y: number };
-  points: Array<number>;
-  ref: RefObject<Line>;
-  selected: boolean;
-  selecting: boolean;
+  operator: PolygonalSelectionOperator;
 };
 
-export const PolygonalSelection = React.forwardRef<
-  Line,
-  PolygonalSelectionProps
->((props, ref) => {
-  const PolygonalSelectionAnchor = () => {
-    if (props.selecting && props.anchor) {
-      return (
+export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
+  if (!operator.origin) return null;
+
+  return (
+    <ReactKonva.Group>
+      <ReactKonva.Circle
+        fill="black"
+        radius={3}
+        stroke="white"
+        strokeWidth={1}
+        x={operator.origin.x}
+        y={operator.origin.y}
+      />
+
+      {operator.anchor && (
         <ReactKonva.Circle
-          fill="#FFF"
-          name="anchor"
+          fill="black"
           radius={3}
-          stroke="#FFF"
-          strokeWidth={1}
-          x={props.anchor.x}
-          y={props.anchor.y}
-        />
-      );
-    } else {
-      return <React.Fragment />;
-    }
-  };
-
-  const dashOffset = useMarchingAnts();
-
-  if (props.selected && !props.selecting) {
-    return (
-      <React.Fragment>
-        <PolygonalSelectionAnchor />
-
-        {props.points && (
-          <React.Fragment>
-            <ReactKonva.Line
-              points={props.points}
-              stroke="black"
-              strokeWidth={1}
-            />
-
-            <ReactKonva.Line
-              closed
-              dash={[4, 2]}
-              dashOffset={-dashOffset}
-              points={props.points}
-              stroke="white"
-              strokeWidth={1}
-            />
-          </React.Fragment>
-        )}
-      </React.Fragment>
-    );
-  } else if (!props.selected && props.selecting) {
-    return (
-      <React.Fragment>
-        <ReactKonva.Line points={props.buffer} stroke="black" strokeWidth={1} />
-
-        <ReactKonva.Line
-          closed={false}
-          dash={[4, 2]}
-          dashOffset={-dashOffset}
-          fill="None"
-          points={props.buffer}
           stroke="white"
           strokeWidth={1}
+          x={operator.anchor.x}
+          y={operator.anchor.y}
         />
+      )}
 
-        <StartingAnchor selecting={props.selecting} origin={props.origin} />
-        <PolygonalSelectionAnchor />
-      </React.Fragment>
-    );
-  } else {
-    return null;
-  }
-});
+      <ReactKonva.Line
+        stroke="white"
+        points={operator.buffer}
+        strokeWidth={1}
+      />
+
+      <ReactKonva.Rect
+        dash={[4, 2]}
+        points={operator.buffer}
+        stroke="white"
+        strokeWidth={1}
+      />
+    </ReactKonva.Group>
+  );
+};

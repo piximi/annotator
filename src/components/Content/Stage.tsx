@@ -17,6 +17,7 @@ import { EllipticalSelection } from "./EllipticalSelection";
 import * as _ from "lodash";
 import { RectangularSelection } from "./RectangularSelection";
 import { LassoSelection } from "./LassoSelection";
+import { PolygonalSelection } from "./PolygonalSelection";
 
 type StageProps = {
   src: string;
@@ -136,6 +137,12 @@ export const Stage = ({ src }: StageProps) => {
 
         {operation === ImageViewerOperation.LassoSelection && (
           <LassoSelection operator={operator as LassoSelectionOperator} />
+        )}
+
+        {operation === ImageViewerOperation.PolygonalSelection && (
+          <PolygonalSelection
+            operator={operator as PolygonalSelectionOperator}
+          />
         )}
 
         {operation === ImageViewerOperation.RectangularSelection && (

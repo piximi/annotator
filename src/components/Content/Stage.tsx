@@ -60,6 +60,12 @@ export const Stage = ({ src }: StageProps) => {
         });
 
         return;
+      case ImageViewerOperation.ObjectSelection:
+        ImageJS.Image.load(src).then((image: ImageJS.Image) => {
+          setOperator(new ObjectSelectionOperator(image));
+        });
+
+        return;
       case ImageViewerOperation.PolygonalSelection:
         setOperator(new PolygonalSelectionOperator());
 

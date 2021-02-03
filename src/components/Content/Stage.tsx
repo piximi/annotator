@@ -26,7 +26,7 @@ import { ObjectSelection } from "./ObjectSelection";
 import { useWorker } from "@koale/useworker";
 
 const numbers = [...Array(5000000)].map((e) => ~~(Math.random() * 1000000));
-const sortNumbers = (nums) => nums.sort();
+const sortNumbers = (nums: Array<number>) => nums.sort();
 
 type StageProps = {
   src: string;

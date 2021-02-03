@@ -19,7 +19,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
   onMouseUp(position: { x: number; y: number }) {
     super.onMouseUp(position);
 
-    // do stuff
+    this.predict();
   }
 
   select(category: Category) {}
@@ -43,5 +43,41 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     return instance;
   }
 
-  private predict() {}
+  private predict() {
+    if (!this.image || !this.origin || !this.width || !this.height) return;
+
+    const crop = this.image.crop({
+      x: this.origin.x,
+      y: this.origin.y,
+      width: this.width,
+      height: this.height,
+    });
+
+    const mask = tensorflow.tidy(() => {
+      if (crop) {
+        const cropped: tensorflow.Tensor3D = tensorflow.browser.fromPixels(
+          crop.getCanvas()
+        );
+
+        const size: [number, number] = [128, 128];
+        const resized = tensorflow.image.resizeBilinear(cropped, size);
+        const standardized = resized.div(tensorflow.scalar(255));
+        const batch = standardized.expandDims(0);
+
+        if (this.graph) {
+          const prediction = this.graph.predict(
+            batch
+          ) as tensorflow.Tensor<tensorflow.Rank>;
+
+          return prediction
+            .squeeze([0])
+            .tile([1, 1, 3])
+            .sub(0.3)
+            .sign()
+            .relu()
+            .resizeBilinear([this.height!, this.width!]);
+        }
+      }
+    });
+  }
 }

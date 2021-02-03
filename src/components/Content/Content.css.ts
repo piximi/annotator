@@ -13,6 +13,7 @@ export const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
   },
   parent: {
+    cursor: "crosshair",
     width: `calc(100% - ${settingsWidth}px - ${theme.spacing(3)}px)`,
   },
 }));

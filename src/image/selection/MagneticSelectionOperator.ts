@@ -195,12 +195,14 @@ export class MagneticSelectionOperator extends SelectionOperator {
 
       if (!this.pathfinder) return;
 
-      this.path = this.pathfinder.find(source, destination);
+      this.path = _.flatten(this.pathfinder.find(source, destination));
 
       this.buffer.pop();
       this.buffer.pop();
 
-      this.buffer = [...this.buffer, position.x, position.y];
+      this.buffer = [...this.previous, ...this.path];
+
+      this.previous = [...this.previous, ...this.path];
 
       this.anchor = position;
 
@@ -228,7 +230,12 @@ export class MagneticSelectionOperator extends SelectionOperator {
 
       this.buffer = [this.origin.x, this.origin.y, ...this.path];
 
-      this.previous = [this.origin.x, this.origin.y, ...this.path];
+      this.previous = [
+        ...this.previous,
+        this.origin.x,
+        this.origin.y,
+        ...this.path,
+      ];
 
       return;
     }

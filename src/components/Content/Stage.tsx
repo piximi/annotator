@@ -38,52 +38,50 @@ export const Stage = ({ src }: StageProps) => {
 
   const operation = useSelector(imageViewerOperationSelector);
 
-  const [operator, setOperator] = useState<SelectionOperator>(
-    new RectangularSelectionOperator()
-  );
+  const [operator, setOperator] = useState<SelectionOperator>();
 
   const [, update] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
-    switch (operation) {
-      case ImageViewerOperation.EllipticalSelection:
-        setOperator(new EllipticalSelectionOperator());
+    ImageJS.Image.load(src).then((image: ImageJS.Image) => {
+      switch (operation) {
+        case ImageViewerOperation.EllipticalSelection:
+          setOperator(new EllipticalSelectionOperator(image));
 
-        return;
-      case ImageViewerOperation.LassoSelection:
-        setOperator(new LassoSelectionOperator());
+          return;
+        case ImageViewerOperation.LassoSelection:
+          setOperator(new LassoSelectionOperator(image));
 
-        return;
-      case ImageViewerOperation.MagneticSelection:
-        ImageJS.Image.load(src).then((image: ImageJS.Image) => {
-          setOperator(new MagneticSelectionOperator(image));
-        });
+          return;
+        case ImageViewerOperation.MagneticSelection:
+          ImageJS.Image.load(src).then((image: ImageJS.Image) => {
+            setOperator(new MagneticSelectionOperator(image));
+          });
 
-        return;
-      case ImageViewerOperation.ObjectSelection:
-        ImageJS.Image.load(src).then((image: ImageJS.Image) => {
+          return;
+        case ImageViewerOperation.ObjectSelection:
           ObjectSelectionOperator.compile(image).then(
             (operator: ObjectSelectionOperator) => {
               setOperator(operator);
             }
           );
-        });
 
-        return;
-      case ImageViewerOperation.PolygonalSelection:
-        setOperator(new PolygonalSelectionOperator());
+          return;
+        case ImageViewerOperation.PolygonalSelection:
+          setOperator(new PolygonalSelectionOperator(image));
 
-        return;
-      case ImageViewerOperation.RectangularSelection:
-        setOperator(new RectangularSelectionOperator());
+          return;
+        case ImageViewerOperation.RectangularSelection:
+          setOperator(new RectangularSelectionOperator(image));
 
-        return;
-    }
+          return;
+      }
+    });
   }, [operation, src]);
 
   const onMouseDown = useMemo(() => {
     const func = () => {
-      if (!stageRef || !stageRef.current) return;
+      if (!operator || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -101,7 +99,7 @@ export const Stage = ({ src }: StageProps) => {
 
   const onMouseMove = useMemo(() => {
     const func = () => {
-      if (!stageRef || !stageRef.current) return;
+      if (!operator || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -119,7 +117,7 @@ export const Stage = ({ src }: StageProps) => {
 
   const onMouseUp = useMemo(() => {
     const func = () => {
-      if (!stageRef || !stageRef.current) return;
+      if (!operator || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -150,35 +148,36 @@ export const Stage = ({ src }: StageProps) => {
       >
         <ReactKonva.Image ref={imageRef} image={image} />
 
-        {operation === ImageViewerOperation.EllipticalSelection && (
+        {operator && operation === ImageViewerOperation.EllipticalSelection && (
           <EllipticalSelection
             operator={operator as EllipticalSelectionOperator}
           />
         )}
 
-        {operation === ImageViewerOperation.LassoSelection && (
+        {operator && operation === ImageViewerOperation.LassoSelection && (
           <LassoSelection operator={operator as LassoSelectionOperator} />
         )}
 
-        {operation === ImageViewerOperation.MagneticSelection && (
+        {operator && operation === ImageViewerOperation.MagneticSelection && (
           <MagneticSelection operator={operator as MagneticSelectionOperator} />
         )}
 
-        {operation === ImageViewerOperation.ObjectSelection && (
+        {operator && operation === ImageViewerOperation.ObjectSelection && (
           <ObjectSelection operator={operator as ObjectSelectionOperator} />
         )}
 
-        {operation === ImageViewerOperation.PolygonalSelection && (
+        {operator && operation === ImageViewerOperation.PolygonalSelection && (
           <PolygonalSelection
             operator={operator as PolygonalSelectionOperator}
           />
         )}
 
-        {operation === ImageViewerOperation.RectangularSelection && (
-          <RectangularSelection
-            operator={operator as RectangularSelectionOperator}
-          />
-        )}
+        {operator &&
+          operation === ImageViewerOperation.RectangularSelection && (
+            <RectangularSelection
+              operator={operator as RectangularSelectionOperator}
+            />
+          )}
       </ReactKonva.Layer>
     </ReactKonva.Stage>
   );

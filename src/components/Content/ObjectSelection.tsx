@@ -2,7 +2,6 @@ import { ObjectSelectionOperator } from "../../image/selection";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 import { useMarchingAnts } from "../../hooks";
-import useImage from "use-image";
 
 type ObjectSelectionProps = {
   operator: ObjectSelectionOperator;
@@ -14,13 +13,10 @@ export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {
   useEffect(() => {
     if (operator.prediction) {
       const img = new Image();
-
-      img.onload = () => {};
-
       img.src = operator.prediction.toDataURL();
       setImage(img);
     }
-  });
+  }, [operator.prediction]);
 
   const dashOffset = useMarchingAnts();
 

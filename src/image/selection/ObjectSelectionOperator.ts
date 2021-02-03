@@ -84,15 +84,14 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     if (prediction) {
       tensorflow.browser
         .toPixels(prediction as tensorflow.Tensor3D)
-        .then((clamped) => {
-          const array = new Uint8Array(Array.from(clamped));
-
-          ImageJS.Image.load(array).then((image) => {
-            this.prediction = image;
+        .then(async (clamped) => {
+          const output = new ImageJS.Image({
+            width: this.width,
+            height: this.height,
+            data: clamped,
           });
+          this.prediction = output;
         });
-
-      console.info(this.prediction);
     }
   }
 }

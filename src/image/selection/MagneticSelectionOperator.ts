@@ -265,12 +265,12 @@ export class MagneticSelectionOperator extends SelectionOperator {
     return distance < threshold;
   }
 
-  private filter(factor: number = 0.5) {
-    if (this.image) {
-      const options = { factor: this.image.width * factor };
+  private filter() {
+    if (!this.image) return;
 
-      this.response = this.image.grey().sobelFilter(); //.resize(options);
-    }
+    const options = { factor: this.factor };
+
+    this.response = this.image.resize(options).grey().sobelFilter();
   }
 
   private transform(coordinates: Array<Array<number>>): Array<number> {

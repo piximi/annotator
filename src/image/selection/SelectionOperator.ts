@@ -1,18 +1,20 @@
 import { ImageViewerSelection } from "../../types/ImageViewerSelection";
 import * as ImageJS from "image-js";
-import {Category} from "../../types/Category";
+import { Category } from "../../types/Category";
 
 export abstract class SelectionOperator {
   image?: ImageJS.Image;
-
+  manager?: ImageJS.RoiManager;
   selected: boolean = false;
-
   selecting: boolean = false;
-
   selection?: ImageViewerSelection;
 
   constructor(image?: ImageJS.Image) {
-    if (image) this.image = image;
+    if (!image) return;
+
+    this.image = image;
+
+    this.manager = image.getRoiManager();
   }
 
   abstract get boundingBox(): [number, number, number, number] | undefined;

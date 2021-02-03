@@ -20,6 +20,7 @@ import { RectangularSelection } from "./RectangularSelection";
 import { imageViewerOperationSelector } from "../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
+import * as ImageJS from "image-js";
 
 type StageProps = {
   src: string;
@@ -51,6 +52,12 @@ export const Stage = ({ src }: StageProps) => {
         setOperator(new LassoSelectionOperator());
 
         return;
+      case ImageViewerOperation.MagneticSelection:
+        ImageJS.Image.load(src).then((image: ImageJS.Image) => {
+          setOperator(new MagneticSelectionOperator(image));
+        });
+
+        return;
       case ImageViewerOperation.PolygonalSelection:
         setOperator(new PolygonalSelectionOperator());
 
@@ -60,7 +67,7 @@ export const Stage = ({ src }: StageProps) => {
 
         return;
     }
-  }, [operation]);
+  }, [operation, src]);
 
   const onMouseDown = useMemo(() => {
     const func = () => {

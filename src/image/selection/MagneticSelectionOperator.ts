@@ -95,19 +95,6 @@ export class MagneticSelectionOperator extends SelectionOperator {
     if (!this.image || !this.pathfinder || this.selected || !this.selecting)
       return;
 
-    const path = this.pathfinder.find(
-      getIdx(this.image.width * this.factor, 1)(
-        Math.floor(this.anchor!.x * this.factor),
-        Math.floor(this.anchor!.y * this.factor),
-        0
-      ),
-      getIdx(this.image.width * this.factor, 1)(
-        Math.floor(position.x * this.factor),
-        Math.floor(position.y * this.factor),
-        0
-      )
-    );
-
     if (this.anchor) {
       if (
         this.buffer[this.buffer.length - 2] !== this.anchor.x ||
@@ -123,10 +110,29 @@ export class MagneticSelectionOperator extends SelectionOperator {
     }
 
     if (this.origin) {
+      const path = this.pathfinder.find(
+        getIdx(this.image.width * this.factor, 1)(
+          Math.floor(this.origin.x * this.factor),
+          Math.floor(this.origin.y * this.factor),
+          0
+        ),
+        getIdx(this.image.width * this.factor, 1)(
+          Math.floor(position.x * this.factor),
+          Math.floor(position.y * this.factor),
+          0
+        )
+      );
+
+      console.info(path);
+
       this.buffer.pop();
       this.buffer.pop();
 
-      this.buffer = [this.origin.x, this.origin.y, position.x, position.y];
+      this.buffer = [
+        this.origin.x,
+        this.origin.y,
+        ...([] as Array<number>).concat(...path),
+      ];
     }
   }
 
@@ -203,7 +209,7 @@ export class MagneticSelectionOperator extends SelectionOperator {
     if (this.image) {
       const options = { factor: this.image.width * factor };
 
-      this.response = this.image.grey().sobelFilter().resize(options);
+      this.response = this.image.grey().sobelFilter(); //.resize(options);
     }
   }
 }

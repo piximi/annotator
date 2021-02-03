@@ -12,16 +12,10 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
 
   deselect() {}
 
-  onMouseDown(position: { x: number; y: number }) {
-    super.onMouseDown(position);
-  }
-
-  onMouseMove(position: { x: number; y: number }) {
-    super.onMouseMove(position);
-  }
-
   onMouseUp(position: { x: number; y: number }) {
     super.onMouseUp(position);
+
+    // do stuff
   }
 
   select(category: Category) {}

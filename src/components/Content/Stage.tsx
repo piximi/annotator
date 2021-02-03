@@ -138,11 +138,15 @@ export const Stage = ({ src }: StageProps) => {
         )}
 
         {operation === ImageViewerOperation.LassoSelection && (
-          <LassoSelection operator={operator as LassoSelectionOperator} />
+          <LassoSelection
+            operator={operator as LassoSelectionOperator}
+          />
         )}
 
         {operation === ImageViewerOperation.MagneticSelection && (
-          <MagneticSelection operator={operator as MagneticSelectionOperator} />
+          <MagneticSelection
+            operator={operator as MagneticSelectionOperator}
+          />
         )}
 
         {operation === ImageViewerOperation.PolygonalSelection && (

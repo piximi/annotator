@@ -8,6 +8,7 @@ import {
   EllipticalSelectionOperator,
   LassoSelectionOperator,
   MagneticSelectionOperator,
+  ObjectSelectionOperator,
   PolygonalSelectionOperator,
   RectangularSelectionOperator,
   SelectionOperator,
@@ -21,6 +22,7 @@ import { imageViewerOperationSelector } from "../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
 import * as ImageJS from "image-js";
+import { ObjectSelection } from "./ObjectSelection";
 
 type StageProps = {
   src: string;
@@ -150,6 +152,10 @@ export const Stage = ({ src }: StageProps) => {
 
         {operation === ImageViewerOperation.MagneticSelection && (
           <MagneticSelection operator={operator as MagneticSelectionOperator} />
+        )}
+
+        {operation === ImageViewerOperation.ObjectSelection && (
+          <ObjectSelection operator={operator as ObjectSelectionOperator} />
         )}
 
         {operation === ImageViewerOperation.PolygonalSelection && (

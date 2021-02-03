@@ -1,74 +1,40 @@
+import { ObjectSelectionOperator } from "../../image/selection";
 import * as ReactKonva from "react-konva";
-import React, { RefObject } from "react";
-import { Category } from "../../types/Category";
-import { toRGBA } from "../../image/toRGBA";
+import React from "react";
 import { useMarchingAnts } from "../../hooks";
-import { Rect } from "konva/types/shapes/Rect";
 
 type ObjectSelectionProps = {
-  activeCategory: Category;
-  annotated: boolean;
-  annotating: boolean;
-  height: number;
-  ref: RefObject<Rect>;
-  width: number;
-  x?: number;
-  y?: number;
-  points: Array<number>;
+  operator: ObjectSelectionOperator;
 };
 
-export const ObjectSelection = React.forwardRef<Rect, ObjectSelectionProps>(
-  (props, ref) => {
-    const dashOffset = useMarchingAnts();
-    if (props.annotated && !props.annotating) {
-      return (
-        <React.Fragment>
-          <ReactKonva.Rect
-            dash={[4, 2]}
-            dashOffset={-dashOffset}
-            fill={toRGBA(props.activeCategory.color, 0.3)}
-            height={props.height}
-            ref={ref}
-            stroke="white"
-            strokeWidth={1}
-            width={props.width}
-            x={props.x}
-            y={props.y}
-          />
-          {props.points.length > 0 && (
-            <ReactKonva.Line
-              points={props.points}
-              stroke="white"
-              strokeWidth={1}
-            />
-          )}
-        </React.Fragment>
-      );
-    } else if (!props.annotated && props.annotating) {
-      return (
-        <React.Fragment>
-          <ReactKonva.Rect
-            height={props.height}
-            stroke="black"
-            strokeWidth={1}
-            width={props.width}
-            x={props.x}
-            y={props.y}
-          />
-          <ReactKonva.Rect
-            dash={[4, 2]}
-            dashOffset={-dashOffset}
-            height={props.height}
-            stroke="white"
-            strokeWidth={1}
-            width={props.width}
-            x={props.x}
-            y={props.y}
-          />
-        </React.Fragment>
-      );
-    } else {
-      return null;
-    }
-  }
-);
+export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {
+  const dashOffset = useMarchingAnts();
+
+  if (!operator.origin || !operator.width || !operator.height) return null;
+
+  return (
+    <ReactKonva.Group>
+      <ReactKonva.Rect
+        dash={[4, 2]}
+        dashOffset={-dashOffset}
+        height={operator.height}
+        stroke="black"
+        strokeWidth={1}
+        width={operator.width}
+        x={operator.origin.x}
+        y={operator.origin.y}
+      />
+
+      <ReactKonva.Rect
+        dash={[4, 2]}
+        dashOffset={-dashOffset}
+        height={operator.height}
+        stroke="white"
+        strokeWidth={1}
+        width={operator.width}
+        x={operator.origin.x}
+        y={operator.origin.y}
+      />
+    </ReactKonva.Group>
+  );
+};

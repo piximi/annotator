@@ -11,6 +11,7 @@ export class MagneticSelectionOperator extends SelectionOperator {
   factor: number;
   graph?: PiximiGraph;
   origin?: { x: number; y: number };
+  path: Array<number> = [];
   pathfinder?: { find: (fromId: number, toId: number) => any };
   points: Array<number> = [];
   previous: Array<number> = [];
@@ -110,7 +111,7 @@ export class MagneticSelectionOperator extends SelectionOperator {
         0
       );
 
-      const path = this.pathfinder.find(source, destination);
+      this.path = _.flatten(this.pathfinder.find(source, destination));
 
       if (
         this.buffer[this.buffer.length - 2] !== this.anchor.x ||
@@ -120,7 +121,12 @@ export class MagneticSelectionOperator extends SelectionOperator {
         this.buffer.pop();
       }
 
-      this.buffer = [this.anchor.x, this.anchor.y, ...this.transform(path)];
+      this.buffer = [
+        ...this.previous,
+        this.anchor.x,
+        this.anchor.y,
+        ...this.path,
+      ];
 
       return;
     }
@@ -138,12 +144,12 @@ export class MagneticSelectionOperator extends SelectionOperator {
         0
       );
 
-      const path = this.pathfinder.find(source, destination);
+      this.path = _.flatten(this.pathfinder.find(source, destination));
 
       this.buffer.pop();
       this.buffer.pop();
 
-      this.buffer = [this.origin.x, this.origin.y, ...this.transform(path)];
+      this.buffer = [this.origin.x, this.origin.y, ...this.path];
     }
   }
 
@@ -174,7 +180,23 @@ export class MagneticSelectionOperator extends SelectionOperator {
       return;
     }
 
-    if (this.anchor) {
+    if (this.anchor && this.image) {
+      const source = getIdx(this.image.width * this.factor, 1)(
+        Math.floor(this.anchor.x * this.factor),
+        Math.floor(this.anchor.y * this.factor),
+        0
+      );
+
+      const destination = getIdx(this.image.width * this.factor, 1)(
+        Math.floor(position.x * this.factor),
+        Math.floor(position.y * this.factor),
+        0
+      );
+
+      if (!this.pathfinder) return;
+
+      this.path = this.pathfinder.find(source, destination);
+
       this.buffer.pop();
       this.buffer.pop();
 
@@ -186,7 +208,27 @@ export class MagneticSelectionOperator extends SelectionOperator {
     }
 
     if (this.origin && this.buffer.length > 0) {
+      if (!this.image || !this.origin || !this.pathfinder) return;
+
       this.anchor = position;
+
+      const source = getIdx(this.image.width * this.factor, 1)(
+        Math.floor(this.origin.x * this.factor),
+        Math.floor(this.origin.y * this.factor),
+        0
+      );
+
+      const destination = getIdx(this.image.width * this.factor, 1)(
+        Math.floor(position.x * this.factor),
+        Math.floor(position.y * this.factor),
+        0
+      );
+
+      this.path = _.flatten(this.pathfinder.find(source, destination));
+
+      this.buffer = [this.origin.x, this.origin.y, ...this.path];
+
+      this.previous = [this.origin.x, this.origin.y, ...this.path];
 
       return;
     }

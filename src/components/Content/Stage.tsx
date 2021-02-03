@@ -1,8 +1,9 @@
 import * as ReactKonva from "react-konva";
+import * as _ from "lodash";
 import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import useImage from "use-image";
-import { useStyles } from "./Content.css";
+import { EllipticalSelection } from "./EllipticalSelection";
 import {
   EllipticalSelectionOperator,
   LassoSelectionOperator,
@@ -11,15 +12,14 @@ import {
   RectangularSelectionOperator,
   SelectionOperator,
 } from "../../image/selection";
-import { useSelector } from "react-redux";
-import { imageViewerOperationSelector } from "../../store/selectors";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
-import { EllipticalSelection } from "./EllipticalSelection";
-import * as _ from "lodash";
-import { RectangularSelection } from "./RectangularSelection";
 import { LassoSelection } from "./LassoSelection";
-import { PolygonalSelection } from "./PolygonalSelection";
 import { MagneticSelection } from "./MagneticSelection";
+import { PolygonalSelection } from "./PolygonalSelection";
+import { RectangularSelection } from "./RectangularSelection";
+import { imageViewerOperationSelector } from "../../store/selectors";
+import { useSelector } from "react-redux";
+import { useStyles } from "./Content.css";
 
 type StageProps = {
   src: string;
@@ -138,15 +138,11 @@ export const Stage = ({ src }: StageProps) => {
         )}
 
         {operation === ImageViewerOperation.LassoSelection && (
-          <LassoSelection
-            operator={operator as LassoSelectionOperator}
-          />
+          <LassoSelection operator={operator as LassoSelectionOperator} />
         )}
 
         {operation === ImageViewerOperation.MagneticSelection && (
-          <MagneticSelection
-            operator={operator as MagneticSelectionOperator}
-          />
+          <MagneticSelection operator={operator as MagneticSelectionOperator} />
         )}
 
         {operation === ImageViewerOperation.PolygonalSelection && (

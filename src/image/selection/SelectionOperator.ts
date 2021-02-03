@@ -3,15 +3,13 @@ import * as ImageJS from "image-js";
 import { Category } from "../../types/Category";
 
 export abstract class SelectionOperator {
-  image?: ImageJS.Image;
-  manager?: ImageJS.RoiManager;
+  image: ImageJS.Image;
+  manager: ImageJS.RoiManager;
   selected: boolean = false;
   selecting: boolean = false;
   selection?: ImageViewerSelection;
 
-  constructor(image?: ImageJS.Image) {
-    if (!image) return;
-
+  constructor(image: ImageJS.Image) {
     this.image = image;
 
     this.manager = image.getRoiManager();

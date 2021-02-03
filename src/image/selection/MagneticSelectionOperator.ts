@@ -96,6 +96,20 @@ export class MagneticSelectionOperator extends SelectionOperator {
       return;
 
     if (this.anchor) {
+      const source = getIdx(this.image.width * this.factor, 1)(
+        Math.floor(this.anchor.x * this.factor),
+        Math.floor(this.anchor.y * this.factor),
+        0
+      );
+
+      const destination = getIdx(this.image.width * this.factor, 1)(
+        Math.floor(position.x * this.factor),
+        Math.floor(position.y * this.factor),
+        0
+      );
+
+      const path = this.pathfinder.find(source, destination);
+
       if (
         this.buffer[this.buffer.length - 2] !== this.anchor.x ||
         this.buffer[this.buffer.length - 1] !== this.anchor.y
@@ -104,33 +118,30 @@ export class MagneticSelectionOperator extends SelectionOperator {
         this.buffer.pop();
       }
 
-      this.buffer = [...this.buffer, position.x, position.y];
+      this.buffer = [this.anchor.x, this.anchor.y, ...this.transform(path)];
 
       return;
     }
 
     if (this.origin) {
-      const path = this.pathfinder.find(
-        getIdx(this.image.width * this.factor, 1)(
-          Math.floor(this.origin.x * this.factor),
-          Math.floor(this.origin.y * this.factor),
-          0
-        ),
-        getIdx(this.image.width * this.factor, 1)(
-          Math.floor(position.x * this.factor),
-          Math.floor(position.y * this.factor),
-          0
-        )
+      const source = getIdx(this.image.width * this.factor, 1)(
+        Math.floor(this.origin.x * this.factor),
+        Math.floor(this.origin.y * this.factor),
+        0
       );
 
+      const destination = getIdx(this.image.width * this.factor, 1)(
+        Math.floor(position.x * this.factor),
+        Math.floor(position.y * this.factor),
+        0
+      );
+
+      const path = this.pathfinder.find(source, destination);
+
       this.buffer.pop();
       this.buffer.pop();
 
-      this.buffer = [
-        this.origin.x,
-        this.origin.y,
-        ...([] as Array<number>).concat(...path),
-      ];
+      this.buffer = [this.origin.x, this.origin.y, ...this.transform(path)];
     }
   }
 
@@ -209,6 +220,18 @@ export class MagneticSelectionOperator extends SelectionOperator {
 
       this.response = this.image.grey().sobelFilter(); //.resize(options);
     }
+  }
+
+  private transform(coordinates: Array<Array<number>>): Array<number> {
+    const strokes = [];
+
+    for (let index = 0; index < coordinates.length - 1; index++) {
+      const [endX, endY] = coordinates[index + 1];
+
+      strokes.push(endX, endY);
+    }
+
+    return strokes;
   }
 }
 

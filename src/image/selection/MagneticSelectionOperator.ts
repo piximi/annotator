@@ -123,8 +123,6 @@ export class MagneticSelectionOperator extends SelectionOperator {
         )
       );
 
-      console.info(path);
-
       this.buffer.pop();
       this.buffer.pop();
 

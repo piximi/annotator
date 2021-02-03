@@ -35,17 +35,16 @@ export const LassoSelection = ({ operator }: LassoSelectionProps) => {
       )}
 
       <ReactKonva.Line
+        points={operator.buffer}
+        stroke="black"
+        strokeWidth={1}
+      />
+
+      <ReactKonva.Line
         dash={[4, 2]}
         dashOffset={-dashOffset}
         stroke="white"
         points={operator.buffer}
-        strokeWidth={1}
-      />
-
-      <ReactKonva.Rect
-        dash={[4, 2]}
-        points={operator.buffer}
-        stroke="white"
         strokeWidth={1}
       />
     </ReactKonva.Group>

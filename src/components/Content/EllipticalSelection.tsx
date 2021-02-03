@@ -9,6 +9,7 @@ type EllipticalSelectionProps = {
 
 export const EllipticalSelection = ({ operator }: EllipticalSelectionProps) => {
   const dashOffset = useMarchingAnts();
+
   if (!operator.center || !operator.radius) return null;
 
   return (

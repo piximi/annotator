@@ -9,6 +9,7 @@ type PolygonalSelectionProps = {
 
 export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
   const dashOffset = useMarchingAnts();
+
   if (!operator.origin) return null;
 
   return (

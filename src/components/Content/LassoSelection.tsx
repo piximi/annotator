@@ -9,6 +9,7 @@ type LassoSelectionProps = {
 
 export const LassoSelection = ({ operator }: LassoSelectionProps) => {
   const dashOffset = useMarchingAnts();
+
   if (!operator.origin) return null;
 
   return (

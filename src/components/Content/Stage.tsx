@@ -23,6 +23,10 @@ import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
 import * as ImageJS from "image-js";
 import { ObjectSelection } from "./ObjectSelection";
+import { useWorker } from "@koale/useworker";
+
+const numbers = [...Array(5000000)].map((e) => ~~(Math.random() * 1000000));
+const sortNumbers = (nums) => nums.sort();
 
 type StageProps = {
   src: string;
@@ -44,6 +48,13 @@ export const Stage = ({ src }: StageProps) => {
 
   const [, update] = useReducer((x) => x + 1, 0);
 
+  const [sortWorker] = useWorker(sortNumbers);
+
+  const runSort = async () => {
+    const result = await sortWorker(numbers); // non-blocking UI
+    console.log(result);
+  };
+
   useEffect(() => {
     switch (operation) {
       case ImageViewerOperation.EllipticalSelection:
@@ -64,6 +75,8 @@ export const Stage = ({ src }: StageProps) => {
         ImageJS.Image.load(src).then((image: ImageJS.Image) => {
           setOperator(new ObjectSelectionOperator(image));
         });
+
+        runSort();
 
         return;
       case ImageViewerOperation.PolygonalSelection:

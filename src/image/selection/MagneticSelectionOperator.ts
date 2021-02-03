@@ -22,7 +22,7 @@ export class MagneticSelectionOperator extends SelectionOperator {
 
     this.factor = factor;
 
-    this.filter(factor);
+    this.filter();
 
     if (!this.image || !this.response) return;
 
@@ -271,17 +271,5 @@ export class MagneticSelectionOperator extends SelectionOperator {
     const options = { factor: this.factor };
 
     this.response = this.image.resize(options).grey().sobelFilter();
-  }
-
-  private transform(coordinates: Array<Array<number>>): Array<number> {
-    const strokes = [];
-
-    for (let index = 0; index < coordinates.length - 1; index++) {
-      const [endX, endY] = coordinates[index + 1];
-
-      strokes.push(endX, endY);
-    }
-
-    return strokes;
   }
 }

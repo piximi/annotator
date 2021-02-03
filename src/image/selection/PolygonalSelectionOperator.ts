@@ -1,6 +1,6 @@
 import { SelectionOperator } from "./SelectionOperator";
 import * as _ from "lodash";
-import {Category} from "../../types/Category";
+import { Category } from "../../types/Category";
 
 export class PolygonalSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
@@ -49,6 +49,9 @@ export class PolygonalSelectionOperator extends SelectionOperator {
       this.selecting = false;
 
       this.points = this.buffer;
+
+      this.anchor = undefined;
+      this.origin = undefined;
     }
 
     if (this.buffer && this.buffer.length === 0) {
@@ -108,6 +111,11 @@ export class PolygonalSelectionOperator extends SelectionOperator {
       this.points = this.buffer;
 
       this.buffer = [];
+
+      this.anchor = undefined;
+      this.origin = undefined;
+
+      console.log(this.anchor, this.origin);
 
       return;
     }

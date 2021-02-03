@@ -75,9 +75,9 @@ test("onMouseDown (subsequent, connected)", () => {
 
   expect(operator.selection).toBe(undefined);
 
-  expect(operator.anchor).toStrictEqual({ x: 0, y: 100 });
+  expect(operator.anchor).toStrictEqual(undefined);
   expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 100, 100, 0, 100, 0, 0]);
-  expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
+  expect(operator.origin).toStrictEqual(undefined);
   expect(operator.points).toStrictEqual([0, 0, 100, 0, 100, 100, 0, 100, 0, 0]);
 });
 

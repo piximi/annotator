@@ -10,18 +10,18 @@ type LassoSelectionProps = {
 export const LassoSelection = ({ operator }: LassoSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
-  if (!operator.origin) return null;
-
   return (
     <ReactKonva.Group>
-      <ReactKonva.Circle
-        fill="white"
-        radius={3}
-        stroke="black"
-        strokeWidth={1}
-        x={operator.origin.x}
-        y={operator.origin.y}
-      />
+      {operator.origin && (
+        <ReactKonva.Circle
+          fill="white"
+          radius={3}
+          stroke="black"
+          strokeWidth={1}
+          x={operator.origin.x}
+          y={operator.origin.y}
+        />
+      )}
 
       {operator.anchor && (
         <ReactKonva.Circle

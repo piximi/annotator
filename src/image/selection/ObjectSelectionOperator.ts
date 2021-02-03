@@ -5,6 +5,7 @@ import * as tensorflow from "@tensorflow/tfjs";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
   graph?: tensorflow.LayersModel;
+  prediction?: ImageJS.Image;
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -43,7 +44,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     return instance;
   }
 
-  private predict() {
+  private async predict() {
     if (!this.image || !this.origin || !this.width || !this.height) return;
 
     const crop = this.image.crop({
@@ -53,7 +54,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
       height: this.height,
     });
 
-    const mask = tensorflow.tidy(() => {
+    const prediction = tensorflow.tidy(() => {
       if (crop) {
         const cropped: tensorflow.Tensor3D = tensorflow.browser.fromPixels(
           crop.getCanvas()
@@ -79,5 +80,19 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
         }
       }
     });
+
+    if (prediction) {
+      tensorflow.browser
+        .toPixels(prediction as tensorflow.Tensor3D)
+        .then((clamped) => {
+          const array = new Uint8Array(Array.from(clamped));
+
+          ImageJS.Image.load(array).then((image) => {
+            this.prediction = image;
+          });
+        });
+
+      console.info(this.prediction);
+    }
   }
 }

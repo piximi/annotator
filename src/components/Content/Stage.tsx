@@ -6,6 +6,7 @@ import { useStyles } from "./Content.css";
 import {
   EllipticalSelectionOperator,
   LassoSelectionOperator,
+  MagneticSelectionOperator,
   PolygonalSelectionOperator,
   RectangularSelectionOperator,
   SelectionOperator,
@@ -18,6 +19,7 @@ import * as _ from "lodash";
 import { RectangularSelection } from "./RectangularSelection";
 import { LassoSelection } from "./LassoSelection";
 import { PolygonalSelection } from "./PolygonalSelection";
+import { MagneticSelection } from "./MagneticSelection";
 
 type StageProps = {
   src: string;
@@ -137,6 +139,10 @@ export const Stage = ({ src }: StageProps) => {
 
         {operation === ImageViewerOperation.LassoSelection && (
           <LassoSelection operator={operator as LassoSelectionOperator} />
+        )}
+
+        {operation === ImageViewerOperation.MagneticSelection && (
+          <MagneticSelection operator={operator as MagneticSelectionOperator} />
         )}
 
         {operation === ImageViewerOperation.PolygonalSelection && (

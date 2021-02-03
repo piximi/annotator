@@ -4,24 +4,7 @@ import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
-  constructor(image: ImageJS.Image) {
-    super(image);
-
-    const pathname =
-      "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
-
-    const graph = await tensorflow.loadLayersModel(pathname);
-
-    console.log(graph);
-
-    const optimizer = tensorflow.train.adam();
-
-    graph.compile({
-      optimizer: optimizer,
-      loss: "categoricalCrossentropy",
-      metrics: ["accuracy"],
-    });
-  }
+  graph?: tensorflow.LayersModel;
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -40,6 +23,25 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
   }
 
   select(category: Category) {}
+
+  static async compile(image: ImageJS.Image) {
+    const instance = new ObjectSelectionOperator(image);
+
+    const pathname =
+      "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
+
+    instance.graph = await tensorflow.loadLayersModel(pathname);
+
+    const optimizer = tensorflow.train.adam();
+
+    instance.graph.compile({
+      optimizer: optimizer,
+      loss: "categoricalCrossentropy",
+      metrics: ["accuracy"],
+    });
+
+    return instance;
+  }
 
   private predict() {}
 }

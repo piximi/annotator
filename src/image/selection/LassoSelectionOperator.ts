@@ -1,6 +1,7 @@
 import { SelectionOperator } from "./SelectionOperator";
 import * as _ from "lodash";
 import { Category } from "../../types/Category";
+import * as ImageJS from "image-js";
 
 export class LassoSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };

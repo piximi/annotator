@@ -2,12 +2,12 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import React from "react";
-import { ImageViewerOperation } from "../../../types/ImageViewerOperation";
-import { Operation } from "../../Operation";
+import { ImageViewerOperation } from "../../../../types/ImageViewerOperation";
+import { Operation } from "../Operation";
 import { useStyles } from "./Operations.css";
 import { useDispatch, useSelector } from "react-redux";
-import { imageViewerOperationSelector } from "../../../store/selectors";
-import { imageViewerSlice } from "../../../store/slices";
+import { imageViewerOperationSelector } from "../../../../store/selectors";
+import { imageViewerSlice } from "../../../../store/slices";
 import {
   ColorAdjustmentIcon,
   ColorSelectionIcon,
@@ -20,7 +20,7 @@ import {
   QuickSelectionIcon,
   RectangularSelectionIcon,
   ZoomIcon,
-} from "../../icons";
+} from "../../../icons";
 
 export const Operations = () => {
   const classes = useStyles();

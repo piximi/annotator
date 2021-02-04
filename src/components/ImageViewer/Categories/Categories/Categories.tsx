@@ -15,7 +15,7 @@ import { CategoryListItemCheckbox } from "../CategoryListItemCheckbox";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import { CategoryMenu } from "../CategoryMenu";
+import { CategoryMenu } from "../CategoryMenu/CategoryMenu";
 import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog, useMenu } from "../../../../hooks";

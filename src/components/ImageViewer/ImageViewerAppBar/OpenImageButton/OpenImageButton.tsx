@@ -5,14 +5,14 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 import Tooltip from "@material-ui/core/Tooltip";
-import { Shape } from "../../types/Shape";
-import { setImageViewerImage } from "../../store/slices";
+import { Shape } from "../../../../types/Shape";
+import { setImageViewerImage } from "../../../../store/slices";
 import { useDispatch } from "react-redux";
 import { useStyles } from "./OpenImageButton.css";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import malaria from "../../images/malaria.png";
+import malaria from "../../../../images/malaria.png";
 
 type ExampleImageDialogProps = {
   onClose: () => void;

@@ -1,1 +1,1 @@
-export { ImageViewer } from "./ImageViewer/ImageViewer";
+export { ImageViewer } from "./ImageViewer";

@@ -23,9 +23,9 @@ import { useStyles } from "./ImageViewer.css";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
 import { Categories } from "../Categories";
 import { OperationOptions } from "../OperationOptions";
-import { SelectionOptions } from "../../SelectionOptions";
+import { SelectionOptions } from "../SelectionOptions";
 import { Operations } from "../Operations";
-import { ZoomOptions } from "../../ZoomOptions";
+import { ZoomOptions } from "../ZoomOptions";
 import { imageViewerSlice } from "../../../store/slices";
 import { Content } from "../Content";
 

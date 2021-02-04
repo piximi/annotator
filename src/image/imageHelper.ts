@@ -53,11 +53,13 @@ export const mooreNeighborhood = (
   currBoundary = firstPointCoord;
   enteredFrom = { x: firstPointCoord.x - 1, y: firstPointCoord.y };
 
-  // find next clockwise pixel in neighborhood of currBoundary, from enteredFrom
-  pointer = clockwise.indexOf(
-    [currBoundary.x - enteredFrom.x, currBoundary.y - enteredFrom.y],
-    0
-  );
+  pointer = clockwise.findIndex((tuple) => {
+    return (
+      tuple[0] === currBoundary.y - enteredFrom.y &&
+      tuple[1] === currBoundary.x - enteredFrom.x
+    );
+  });
+  //FIXME this should only consider the allowed neighbors (or you'll run into problems getting neighbors from sides and corners)
   candidate = {
     x: currBoundary.x + clockwise[pointer + 1][1],
     y: currBoundary.y + clockwise[pointer + 1][0],
@@ -67,26 +69,33 @@ export const mooreNeighborhood = (
     candidate.x !== firstPointCoord.x ||
     candidate.y !== firstPointCoord.y
   ) {
-    debugger;
     if (data[idx(candidate.x, candidate.y, 0)] === 255) {
       boundaries.push(candidate);
       enteredFrom = currBoundary;
       currBoundary = candidate;
 
-      pointer = clockwise.indexOf(
-        [currBoundary.x - enteredFrom.x, currBoundary.y - enteredFrom.y],
-        0
-      );
+      pointer = clockwise.findIndex((tuple) => {
+        return (
+          tuple[0] === currBoundary.y - enteredFrom.y &&
+          tuple[1] === currBoundary.x - enteredFrom.x
+        );
+      });
+      //FIXME this should only consider the allowed neighbors (or you'll run into problems getting neighbors from sides and corners)
+
       candidate = {
         x: currBoundary.x + clockwise[pointer + 1][1],
         y: currBoundary.y + clockwise[pointer + 1][0],
       };
     } else {
       enteredFrom = candidate;
-      pointer = clockwise.indexOf(
-        [currBoundary.x - enteredFrom.x, currBoundary.y - enteredFrom.y],
-        0
-      );
+      pointer = clockwise.findIndex((tuple) => {
+        return (
+          tuple[0] === currBoundary.y - enteredFrom.y &&
+          tuple[1] === currBoundary.x - enteredFrom.x
+        );
+      });
+      //FIXME this should only consider the allowed neighbors (or you'll run into problems getting neighbors from sides and corners)
+
       candidate = {
         x: currBoundary.x + clockwise[pointer + 1][1],
         y: currBoundary.y + clockwise[pointer + 1][0],

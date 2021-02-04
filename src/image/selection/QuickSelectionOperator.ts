@@ -1,4 +1,5 @@
 import { SelectionOperator } from "./SelectionOperator";
+import { Category } from "../../types/Category";
 
 export class QuickSelectionOperator extends SelectionOperator {
   get boundingBox(): [number, number, number, number] | undefined {
@@ -17,5 +18,5 @@ export class QuickSelectionOperator extends SelectionOperator {
 
   onMouseUp(position: { x: number; y: number }) {}
 
-  select(category: number) {}
+  select(category: Category) {}
 }

@@ -5,11 +5,13 @@ import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import useImage from "use-image";
 import { EllipticalSelection } from "./EllipticalSelection";
 import {
+  ColorSelectionOperator,
   EllipticalSelectionOperator,
   LassoSelectionOperator,
   MagneticSelectionOperator,
   ObjectSelectionOperator,
   PolygonalSelectionOperator,
+  QuickSelectionOperator,
   RectangularSelectionOperator,
   SelectionOperator,
 } from "../../image/selection";
@@ -45,6 +47,10 @@ export const Stage = ({ src }: StageProps) => {
   useEffect(() => {
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
       switch (operation) {
+        case ImageViewerOperation.ColorSelection:
+          setOperator(new ColorSelectionOperator(image));
+
+          return;
         case ImageViewerOperation.EllipticalSelection:
           setOperator(new EllipticalSelectionOperator(image));
 
@@ -54,9 +60,7 @@ export const Stage = ({ src }: StageProps) => {
 
           return;
         case ImageViewerOperation.MagneticSelection:
-          ImageJS.Image.load(src).then((image: ImageJS.Image) => {
-            setOperator(new MagneticSelectionOperator(image));
-          });
+          setOperator(new MagneticSelectionOperator(image));
 
           return;
         case ImageViewerOperation.ObjectSelection:
@@ -69,6 +73,10 @@ export const Stage = ({ src }: StageProps) => {
           return;
         case ImageViewerOperation.PolygonalSelection:
           setOperator(new PolygonalSelectionOperator(image));
+
+          return;
+        case ImageViewerOperation.QuickSelection:
+          setOperator(new QuickSelectionOperator(image));
 
           return;
         case ImageViewerOperation.RectangularSelection:

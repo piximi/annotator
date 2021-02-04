@@ -102,27 +102,24 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
             data: clamped,
           });
 
-          const mask = this.manager.fromMask(this.prediction);
-          let maxSurface = Number.NEGATIVE_INFINITY;
-          let largest: any;
-          mask.getRois().map((roi: any, idx: number) => {
-            if (roi.surface > maxSurface) {
-              maxSurface = roi.surface;
-              largest = roi;
-            }
-          });
-          const roiContour = largest.contourMask.parent;
-          const roiData = Array.from(roiContour.data);
-          let idx = 0;
+          // get largest ROI
+          const rois = this.manager.fromMask(this.prediction).getRois();
+          rois.sort((a: any, b: any) => b.surface - a.surface);
+          const largest = rois[0];
 
-          while (idx < roiData.length) {
-            if (roiData[idx] > 0) {
-              let y = Math.floor(idx / (4 * width));
-              let x = Math.floor((idx - y * roiContour.width * 4) / 4);
-              this.points.push(x + this.origin!.x, y + this.origin!.y);
-            }
-            idx += 4;
-          }
+          const roiContour = largest.contourMask;
+
+          // const roiData = Array.from(roiContour.data);
+          // let idx = 0;
+          //
+          // while (idx < roiData.length) {
+          //   if (roiData[idx] > 0) {
+          //     let y = Math.floor(idx / (4 * width));
+          //     let x = Math.floor((idx - y * roiContour.width * 4) / 4);
+          //     this.points.push(x + this.origin!.x, y + this.origin!.y);
+          //   }
+          //   idx += 4;
+          // }
         });
     }
   }

@@ -104,7 +104,6 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
 
           const mask = this.manager.fromMask(this.prediction);
           let maxSurface = Number.NEGATIVE_INFINITY;
-          let id = 0;
           let largest: any;
           mask.getRois().map((roi: any, idx: number) => {
             if (roi.surface > maxSurface) {
@@ -112,7 +111,18 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
               largest = roi;
             }
           });
-          const roiMask = largest.getMask({ kind: "contour" });
+          const roiContour = largest.contourMask.parent;
+          const roiData = Array.from(roiContour.data);
+          let idx = 0;
+
+          while (idx < roiData.length) {
+            if (roiData[idx] > 0) {
+              let y = Math.floor(idx / (4 * width));
+              let x = Math.floor((idx - y * roiContour.width * 4) / 4);
+              this.points.push(x + this.origin!.x, y + this.origin!.y);
+            }
+            idx += 4;
+          }
         });
     }
   }

@@ -13,13 +13,13 @@ import {
   QuickSelectionOperator,
   RectangularSelectionOperator,
   SelectionOperator,
-} from "../../image/selection";
-import { ImageViewerOperation } from "../../types/ImageViewerOperation";
-import { imageViewerOperationSelector } from "../../store/selectors";
+} from "../../../../image/selection";
+import { ImageViewerOperation } from "../../../../types/ImageViewerOperation";
+import { imageViewerOperationSelector } from "../../../../store/selectors";
 import { useSelector } from "react-redux";
-import { useStyles } from "./Content.css";
+import { useStyles } from "../../Content/Content.css";
 import * as ImageJS from "image-js";
-import { Selection } from "./Selection";
+import { Selection } from "../Selection";
 
 type StageProps = {
   src: string;

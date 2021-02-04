@@ -7,9 +7,9 @@ import {
   PolygonalSelectionOperator,
   RectangularSelectionOperator,
   SelectionOperator,
-} from "../../../../image/selection";
+} from "../../../../../image/selection";
 import { EllipticalSelection } from "../EllipticalSelection";
-import { ImageViewerOperation } from "../../../../types/ImageViewerOperation";
+import { ImageViewerOperation } from "../../../../../types/ImageViewerOperation";
 import { LassoSelection } from "../LassoSelection";
 import { MagneticSelection } from "../MagneticSelection";
 import { ObjectSelection } from "../ObjectSelection";

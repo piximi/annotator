@@ -1,6 +1,6 @@
 import React from "react";
-import { Stage } from "./Stage";
-import { imageViewerImageSelector } from "../../store/selectors";
+import { Stage } from "../Stage";
+import { imageViewerImageSelector } from "../../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
 

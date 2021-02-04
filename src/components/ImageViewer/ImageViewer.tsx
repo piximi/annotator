@@ -24,8 +24,7 @@ import { ImageViewerAppBar } from "../ImageViewerAppBar";
 import { Categories } from "../Categories";
 import { OperationOptions } from "../OperationOptions";
 import { SelectionOptions } from "../SelectionOptions";
-import { Operations } from "../Operations/Operations";
-import { Main } from "../Main";
+import { Operations } from "../Operations";
 import { ZoomOptions } from "../ZoomOptions";
 import { imageViewerSlice } from "../../store/slices";
 import { Content } from "../Content";
@@ -161,7 +160,6 @@ export const ImageViewer = (props: ImageViewerProps) => {
         onCategoryClick={onCategoryClick}
       />
 
-      {/*{image && <Main activeCategory={activeCategory} zoomReset={zoomReset} />}*/}
       {image && <Content />}
 
       <OperationOptions

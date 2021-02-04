@@ -1,27 +1,27 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { MagneticSelectionOperator } from "../../image/selection";
-import { useMarchingAnts } from "../../hooks";
+import { LassoSelectionOperator } from "../../../../image/selection";
+import { useMarchingAnts } from "../../../../hooks";
 
-type MagneticSelectionProps = {
-  operator: MagneticSelectionOperator;
+type LassoSelectionProps = {
+  operator: LassoSelectionOperator;
 };
 
-export const MagneticSelection = ({ operator }: MagneticSelectionProps) => {
+export const LassoSelection = ({ operator }: LassoSelectionProps) => {
   const dashOffset = useMarchingAnts();
-
-  if (!operator.origin) return null;
 
   return (
     <ReactKonva.Group>
-      <ReactKonva.Circle
-        fill="white"
-        radius={3}
-        stroke="black"
-        strokeWidth={1}
-        x={operator.origin.x}
-        y={operator.origin.y}
-      />
+      {operator.origin && (
+        <ReactKonva.Circle
+          fill="white"
+          radius={3}
+          stroke="black"
+          strokeWidth={1}
+          x={operator.origin.x}
+          y={operator.origin.y}
+        />
+      )}
 
       {operator.anchor && (
         <ReactKonva.Circle

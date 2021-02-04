@@ -3,7 +3,6 @@ import * as _ from "lodash";
 import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import useImage from "use-image";
-import { EllipticalSelection } from "./EllipticalSelection";
 import {
   ColorSelectionOperator,
   EllipticalSelectionOperator,
@@ -16,15 +15,10 @@ import {
   SelectionOperator,
 } from "../../image/selection";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
-import { LassoSelection } from "./LassoSelection";
-import { MagneticSelection } from "./MagneticSelection";
-import { PolygonalSelection } from "./PolygonalSelection";
-import { RectangularSelection } from "./RectangularSelection";
 import { imageViewerOperationSelector } from "../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
 import * as ImageJS from "image-js";
-import { ObjectSelection } from "./ObjectSelection";
 import { Selection } from "./Selection";
 
 type StageProps = {

@@ -1,13 +1,13 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { LassoSelectionOperator } from "../../image/selection";
-import { useMarchingAnts } from "../../hooks";
+import { PolygonalSelectionOperator } from "../../../../image/selection";
+import { useMarchingAnts } from "../../../../hooks";
 
-type LassoSelectionProps = {
-  operator: LassoSelectionOperator;
+type PolygonalSelectionProps = {
+  operator: PolygonalSelectionOperator;
 };
 
-export const LassoSelection = ({ operator }: LassoSelectionProps) => {
+export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
   return (

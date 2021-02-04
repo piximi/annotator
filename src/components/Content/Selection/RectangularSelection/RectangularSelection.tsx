@@ -1,23 +1,15 @@
-import { ObjectSelectionOperator } from "../../image/selection";
+import { RectangularSelectionOperator } from "../../../../image/selection";
 import * as ReactKonva from "react-konva";
-import React, { useEffect, useState } from "react";
-import { useMarchingAnts } from "../../hooks";
+import React from "react";
+import { useMarchingAnts } from "../../../../hooks";
 
-type ObjectSelectionProps = {
-  operator: ObjectSelectionOperator;
+type RectangularSelectionProps = {
+  operator: RectangularSelectionOperator;
 };
 
-export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {
-  const [image, setImage] = useState<HTMLImageElement>();
-
-  useEffect(() => {
-    if (operator.prediction) {
-      const img = new Image();
-      img.src = operator.prediction.toDataURL();
-      setImage(img);
-    }
-  }, [operator.prediction]);
-
+export const RectangularSelection = ({
+  operator,
+}: RectangularSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
   if (!operator.origin || !operator.width || !operator.height) return null;
@@ -42,12 +34,6 @@ export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {
         stroke="white"
         strokeWidth={1}
         width={operator.width}
-        x={operator.origin.x}
-        y={operator.origin.y}
-      />
-
-      <ReactKonva.Image
-        image={image}
         x={operator.origin.x}
         y={operator.origin.y}
       />

@@ -25,6 +25,7 @@ import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
 import * as ImageJS from "image-js";
 import { ObjectSelection } from "./ObjectSelection";
+import { Selection } from "./Selection";
 
 type StageProps = {
   src: string;
@@ -156,36 +157,7 @@ export const Stage = ({ src }: StageProps) => {
       >
         <ReactKonva.Image ref={imageRef} image={image} />
 
-        {operator && operation === ImageViewerOperation.EllipticalSelection && (
-          <EllipticalSelection
-            operator={operator as EllipticalSelectionOperator}
-          />
-        )}
-
-        {operator && operation === ImageViewerOperation.LassoSelection && (
-          <LassoSelection operator={operator as LassoSelectionOperator} />
-        )}
-
-        {operator && operation === ImageViewerOperation.MagneticSelection && (
-          <MagneticSelection operator={operator as MagneticSelectionOperator} />
-        )}
-
-        {operator && operation === ImageViewerOperation.ObjectSelection && (
-          <ObjectSelection operator={operator as ObjectSelectionOperator} />
-        )}
-
-        {operator && operation === ImageViewerOperation.PolygonalSelection && (
-          <PolygonalSelection
-            operator={operator as PolygonalSelectionOperator}
-          />
-        )}
-
-        {operator &&
-          operation === ImageViewerOperation.RectangularSelection && (
-            <RectangularSelection
-              operator={operator as RectangularSelectionOperator}
-            />
-          )}
+        <Selection operation={operation} operator={operator} />
       </ReactKonva.Layer>
     </ReactKonva.Stage>
   );

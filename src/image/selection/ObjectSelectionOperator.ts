@@ -2,7 +2,6 @@ import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import { Category } from "../../types/Category";
 import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
-import { mooreNeighborhood } from "../imageHelper";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
   graph?: tensorflow.LayersModel;
@@ -89,14 +88,11 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
       tensorflow.browser
         .toPixels(prediction as tensorflow.Tensor3D)
         .then(async (clamped) => {
-          const output = new ImageJS.Image({
+          this.prediction = new ImageJS.Image({
             width: width,
             height: height,
             data: clamped,
           });
-          this.prediction = output;
-
-          // const boundaries = mooreNeighborhood(clamped, height, width, 4)
         });
     }
   }

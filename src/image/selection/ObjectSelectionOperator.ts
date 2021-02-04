@@ -2,10 +2,12 @@ import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import { Category } from "../../types/Category";
 import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
+import { RoiManager } from "image-js";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
   graph?: tensorflow.LayersModel;
   prediction?: ImageJS.Image;
+  points: Array<number> = [];
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -13,6 +15,12 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
 
   get mask(): string | undefined {
     return undefined;
+    // const mask = this.manager.fromMask(this.prediction);
+    //
+    // // index of object
+    // const index = 0;
+    //
+    // return this.manager.getMask()[index].getMask({ kind: "filled" }).toDataURL();
   }
 
   deselect() {}
@@ -93,6 +101,18 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
             height: height,
             data: clamped,
           });
+
+          const mask = this.manager.fromMask(this.prediction);
+          let maxSurface = Number.NEGATIVE_INFINITY;
+          let id = 0;
+          let largest: any;
+          mask.getRois().map((roi: any, idx: number) => {
+            if (roi.surface > maxSurface) {
+              maxSurface = roi.surface;
+              largest = roi;
+            }
+          });
+          const roiMask = largest.getMask({ kind: "contour" });
         });
     }
   }

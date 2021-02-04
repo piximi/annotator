@@ -47,11 +47,14 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
   private async predict() {
     if (!this.image || !this.origin || !this.width || !this.height) return;
 
+    const width = Math.floor(this.width);
+    const height = Math.floor(this.height);
+
     const crop = this.image.crop({
       x: this.origin.x,
       y: this.origin.y,
-      width: this.width,
-      height: this.height,
+      width: width,
+      height: height,
     });
 
     const prediction = tensorflow.tidy(() => {
@@ -76,7 +79,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
             .sub(0.3)
             .sign()
             .relu()
-            .resizeBilinear([this.height!, this.width!]);
+            .resizeBilinear([height, width]);
         }
       }
     });
@@ -86,8 +89,8 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
         .toPixels(prediction as tensorflow.Tensor3D)
         .then(async (clamped) => {
           const output = new ImageJS.Image({
-            width: this.width,
-            height: this.height,
+            width: width,
+            height: height,
             data: clamped,
           });
           this.prediction = output;

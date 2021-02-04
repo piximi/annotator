@@ -1,3 +1,2 @@
-export { flood } from "./flood";
-export { imread } from "./imread";
 export { slic } from "./slic";
+export { toRGBA } from "./toRGBA";

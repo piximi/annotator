@@ -1,7 +1,7 @@
 import { TypedArray } from "@tensorflow/tfjs";
 
 const findFirstWhitePixel = (
-  data: TypedArray,
+  data: Uint8ClampedArray,
   height: number,
   width: number,
   nchannels: number
@@ -20,7 +20,7 @@ const findFirstWhitePixel = (
 };
 
 export const mooreNeighborhood = (
-  data: TypedArray,
+  data: Uint8ClampedArray,
   height: number,
   width: number,
   nchannels: number
@@ -67,6 +67,7 @@ export const mooreNeighborhood = (
     candidate.x !== firstPointCoord.x ||
     candidate.y !== firstPointCoord.y
   ) {
+    debugger;
     if (data[idx(candidate.x, candidate.y, 0)] === 255) {
       boundaries.push(candidate);
       enteredFrom = currBoundary;

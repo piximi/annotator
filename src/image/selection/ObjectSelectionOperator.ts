@@ -109,19 +109,18 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
           const contour = roi.getMask({ kind: "contour" });
           const data = contour.getRGBAData();
 
-          // let x = 0;
-          // let y = 0;
-          // for (x; x < contour.width; x++) {
-          //   for (y; y < contour.height; y++) {
-          //     const current = data[( (y * contour.width) + x) * 4];
-          //     if (current)  {
-          //       this.points.push(x)
-          //       this.points.push(y)
-          //       const xx = x;
-          //       const yy = y;
-          //     }
-          //   }
-          // }
+          for (let x = 0; x < contour.width; x++) {
+            for (let y = 0; y < contour.height; y++) {
+              const current = data[(y * contour.width + x) * 4];
+              if (current) {
+                this.points.push(x);
+                this.points.push(y);
+                const xx = x;
+                const yy = y;
+              }
+            }
+          }
+          debugger;
         });
     }
   }

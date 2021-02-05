@@ -46,17 +46,17 @@ export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {
         y={operator.origin.y}
       />
 
-      <ReactKonva.Line
-        stroke="white"
-        points={operator.points}
-        strokeWidth={1}
-      />
-
-      {/*<ReactKonva.Image*/}
-      {/*  image={image}*/}
-      {/*  x={operator.origin.x}*/}
-      {/*  y={operator.origin.y}*/}
+      {/*<ReactKonva.Line*/}
+      {/*  stroke="white"*/}
+      {/*  points={operator.points}*/}
+      {/*  strokeWidth={1}*/}
       {/*/>*/}
+
+      <ReactKonva.Image
+        image={image}
+        x={operator.origin.x}
+        y={operator.origin.y}
+      />
     </ReactKonva.Group>
   );
 };

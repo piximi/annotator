@@ -2,7 +2,7 @@ import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import { Category } from "../../types/Category";
 import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
-import { RoiManager } from "image-js";
+import * as _ from "lodash";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
   graph?: tensorflow.LayersModel;
@@ -96,29 +96,37 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
       tensorflow.browser
         .toPixels(prediction as tensorflow.Tensor3D)
         .then(async (clamped) => {
-          this.prediction = new ImageJS.Image({
+          const output = new ImageJS.Image({
             width: width,
             height: height,
             data: clamped,
           });
 
-          const mask = this.prediction.grey().mask();
+          const mask = output.grey().mask();
           const rois = this.manager.fromMask(mask).getRois();
           rois.sort((a: any, b: any) => b.surface - a.surface);
           const roi = rois[0];
           const contour = roi.getMask({ kind: "contour" });
+
           const data = contour.getRGBAData();
 
-          for (let x = 0; x < contour.width; x++) {
-            for (let y = 0; y < contour.height; y++) {
-              const current = data[(y * contour.width + x) * 4];
-
-              if (current) {
-                this.points.push(x);
-                this.points.push(y);
+          const boundary = _.flatten(
+            _.chunk(data, 4).map((el, idx) => {
+              if (el[0] === 0) {
+                return [el[0], el[1], el[2], 0];
+              } else {
+                return el;
               }
-            }
-          }
+            })
+          );
+
+          const boundaryArray = Uint8Array.from(boundary as number[]);
+          const boundaryImage = new ImageJS.Image(
+            contour.width,
+            contour.height,
+            boundaryArray
+          );
+          this.prediction = boundaryImage;
         });
     }
   }

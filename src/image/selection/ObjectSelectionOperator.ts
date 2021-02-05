@@ -102,23 +102,25 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
             data: clamped,
           });
 
-          // get largest ROI
-          const rois = this.manager.fromMask(this.prediction).getRois();
+          const mask = this.prediction.grey().mask();
+          const rois = this.manager.fromMask(mask).getRois();
           rois.sort((a: any, b: any) => b.surface - a.surface);
-          const largest = rois[0];
+          const roi = rois[0];
+          const contour = roi.getMask({ kind: "contour" });
+          const data = contour.getRGBAData();
 
-          const roiContour = largest.contourMask;
-
-          // const roiData = Array.from(roiContour.data);
-          // let idx = 0;
-          //
-          // while (idx < roiData.length) {
-          //   if (roiData[idx] > 0) {
-          //     let y = Math.floor(idx / (4 * width));
-          //     let x = Math.floor((idx - y * roiContour.width * 4) / 4);
-          //     this.points.push(x + this.origin!.x, y + this.origin!.y);
+          // let x = 0;
+          // let y = 0;
+          // for (x; x < contour.width; x++) {
+          //   for (y; y < contour.height; y++) {
+          //     const current = data[( (y * contour.width) + x) * 4];
+          //     if (current)  {
+          //       this.points.push(x)
+          //       this.points.push(y)
+          //       const xx = x;
+          //       const yy = y;
+          //     }
           //   }
-          //   idx += 4;
           // }
         });
     }

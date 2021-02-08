@@ -17,8 +17,13 @@ export const drawLine = (
     step: number,
     i: number;
 
-  dx = q[0] - p[0];
-  dy = q[1] - p[1];
+  x1 = Math.round(p[0]);
+  y1 = Math.round(p[1]);
+  x2 = Math.round(q[0]);
+  y2 = Math.round(q[1]);
+
+  dx = x2 - x1;
+  dy = y2 - y1;
 
   step = Math.abs(dy);
 
@@ -28,14 +33,14 @@ export const drawLine = (
 
   dx = dx / step;
   dy = dy / step;
-  x = p[0];
-  y = p[1];
+  x = x1;
+  y = y1;
   i = 1;
 
   while (i <= step) {
     image.setPixelXY(x, y, [255, 255, 255, 255]);
-    x = x + dx;
-    y = y + dy;
+    x = x + Math.round(dx);
+    y = y + Math.round(dy);
     i = i + 1;
   }
 };

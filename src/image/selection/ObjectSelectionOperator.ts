@@ -8,6 +8,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
   graph?: tensorflow.LayersModel;
   prediction?: ImageJS.Image;
   points: Array<number> = [];
+  offset?: { x: number; y: number };
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -126,6 +127,11 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
             contour.height,
             boundaryArray
           );
+
+          this.offset = {
+            x: this.origin!.x + roi.minX,
+            y: this.origin!.y + roi.minY,
+          };
           this.prediction = boundaryImage;
         });
     }

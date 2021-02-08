@@ -52,11 +52,13 @@ export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {
       {/*  strokeWidth={1}*/}
       {/*/>*/}
 
-      <ReactKonva.Image
-        image={image}
-        x={operator.origin.x}
-        y={operator.origin.y}
-      />
+      {operator.offset && (
+        <ReactKonva.Image
+          image={image}
+          x={operator.offset.x}
+          y={operator.offset.y}
+        />
+      )}
     </ReactKonva.Group>
   );
 };

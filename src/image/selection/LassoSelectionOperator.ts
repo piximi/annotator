@@ -22,8 +22,21 @@ export class LassoSelectionOperator extends SelectionOperator {
     ];
   }
 
-  get mask(): string | undefined {
-    return "mask";
+  get mask() {
+    const foo = new ImageJS.Image({
+      width: this.image.width,
+      height: this.image.height,
+      bitDepth: 8,
+    });
+    _.chunk(this.points, 2).forEach((position: Array<number>) => {
+      foo.setPixelXY(Math.floor(position[0]), Math.floor(position[1]), [
+        255,
+        255,
+        255,
+        0,
+      ]);
+    });
+    return foo.toDataURL();
   }
 
   deselect() {
@@ -109,7 +122,7 @@ export class LassoSelectionOperator extends SelectionOperator {
       this.points = this.buffer;
 
       this.buffer = [];
-
+      const foo = this.mask;
       return;
     }
 

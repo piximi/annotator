@@ -1,3 +1,45 @@
+import * as _ from "lodash";
+import * as ImageJS from "image-js";
+
+export const drawLine = (
+  image: ImageJS.Image,
+  p: Array<number>,
+  q: Array<number>
+) => {
+  let x: number,
+    y: number,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    dx: number,
+    dy: number,
+    step: number,
+    i: number;
+
+  dx = q[0] - p[0];
+  dy = q[1] - p[1];
+
+  step = Math.abs(dy);
+
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    step = Math.abs(dx);
+  }
+
+  dx = dx / step;
+  dy = dy / step;
+  x = p[0];
+  y = p[1];
+  i = 1;
+
+  while (i <= step) {
+    image.setPixelXY(x, y, [255, 255, 255, 255]);
+    x = x + dx;
+    y = y + dy;
+    i = i + 1;
+  }
+};
+
 const findFirstWhitePixel = (
   data: Uint8ClampedArray,
   height: number,

@@ -124,8 +124,6 @@ export class LassoSelectionOperator extends SelectionOperator {
       this.points = this.buffer;
 
       this.buffer = [];
-      const foo = this.mask;
-      return;
     }
 
     if (this.anchor) {

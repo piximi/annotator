@@ -1,11 +1,25 @@
 import * as _ from "lodash";
 import * as ImageJS from "image-js";
 
-export const drawLine = (
-  image: ImageJS.Image,
-  p: Array<number>,
-  q: Array<number>
+export const connectPoints = (
+  coords: Array<Array<number>>,
+  image: ImageJS.Image
 ) => {
+  let connectedPoints: Array<Array<number>> = [];
+
+  coords.forEach((_position: Array<number>, index: number) => {
+    if (index < coords.length - 1) {
+      const points = drawLine(image, coords[index], coords[index + 1]);
+      connectedPoints = _.concat(connectedPoints, points);
+    }
+  });
+
+  return connectedPoints;
+};
+
+const drawLine = (image: ImageJS.Image, p: Array<number>, q: Array<number>) => {
+  const coords: Array<Array<number>> = [];
+
   let x: number,
     y: number,
     x1: number,
@@ -39,10 +53,13 @@ export const drawLine = (
 
   while (i <= step) {
     image.setPixelXY(Math.round(x), Math.round(y), [255, 255, 255, 255]);
+    coords.push([x, y]);
     x = Math.round(x + dx);
     y = Math.round(y + dy);
     i = i + 1;
   }
+
+  return coords;
 };
 
 const findFirstWhitePixel = (

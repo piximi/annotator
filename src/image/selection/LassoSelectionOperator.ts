@@ -2,7 +2,7 @@ import { SelectionOperator } from "./SelectionOperator";
 import * as _ from "lodash";
 import { Category } from "../../types/Category";
 import * as ImageJS from "image-js";
-import { drawLine } from "../imageHelper";
+import { connectPoints } from "../imageHelper";
 
 export class LassoSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
@@ -29,20 +29,10 @@ export class LassoSelectionOperator extends SelectionOperator {
       height: this.image.height,
       bitDepth: 8,
     });
-    // _.chunk(this.points, 2).forEach((position: Array<number>) => {
-    //   foo.setPixelXY(Math.floor(position[0]), Math.floor(position[1]), [
-    //     255,
-    //     255,
-    //     255,
-    //     0,
-    //   ]);
-    // });
+
     const coords = _.chunk(this.points, 2);
 
-    coords.forEach((_position: Array<number>, index) => {
-      if (index < coords.length - 1)
-        drawLine(foo, coords[index], coords[index + 1]);
-    });
+    const connectedPoints = connectPoints(coords, foo); // get coordinates of connected points and draw boundaries of mask
     debugger;
     return foo.toDataURL();
   }

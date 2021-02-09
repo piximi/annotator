@@ -53,7 +53,7 @@ const drawLine = (image: ImageJS.Image, p: Array<number>, q: Array<number>) => {
 
   while (i <= step) {
     image.setPixelXY(Math.round(x), Math.round(y), [255, 255, 255, 255]);
-    coords.push([x, y]);
+    coords.push([Math.round(x), Math.round(y)]);
     x = Math.round(x + dx);
     y = Math.round(y + dy);
     i = i + 1;

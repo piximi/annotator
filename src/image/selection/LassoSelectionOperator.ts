@@ -3,6 +3,7 @@ import * as _ from "lodash";
 import { Category } from "../../types/Category";
 import * as ImageJS from "image-js";
 import { connectPoints } from "../imageHelper";
+import { slpf } from "../polygon-fill/slpf";
 
 export class LassoSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
@@ -33,6 +34,7 @@ export class LassoSelectionOperator extends SelectionOperator {
     const coords = _.chunk(this.points, 2);
 
     const connectedPoints = connectPoints(coords, foo); // get coordinates of connected points and draw boundaries of mask
+    slpf(connectedPoints, foo);
     debugger;
     return foo.toDataURL();
   }

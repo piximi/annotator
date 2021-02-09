@@ -2,28 +2,25 @@
 
 import * as ImageJS from "image-js";
 
-const {
-  pointsToEdges,
-  getYMin,
-  getXofYMin,
+import {
   getXofYMax,
-  setPixel,
-  lerp,
+  getXofYMin,
   getYMax,
-} = require("./util");
+  getYMin,
+  lerp,
+  pointsToEdges,
+} from "./util";
 
 // Scnaline Polygon Fill
-module.exports = function slpf(
-  points: Array<Array<number>>,
-  img: ImageJS.Image
-) {
+export function slpf(points: Array<Array<number>>, img: ImageJS.Image) {
   if (points.length < 3) return;
 
   // initialize ET and AET
-  const ET = pointsToEdges(points).sort(
-    (e1: Array<number>, e2: Array<number>) => getYMin(e2) - getYMin(e1)
+  const ET: Array<Array<Array<number>>> = pointsToEdges(points).sort(
+    (e1: Array<Array<number>>, e2: Array<Array<number>>) =>
+      getYMin(e2) - getYMin(e1)
   );
-  const AET: Array<Array<number>> = [];
+  const AET: Array<Array<Array<number>>> = [];
   let yScan = getYMin(ET[ET.length - 1]);
 
   // repeat until both ET and AET are empty
@@ -40,21 +37,21 @@ module.exports = function slpf(
     drawSpans(spans, yScan, img);
     yScan++;
   }
-};
+}
 
 // move active edges from ET to AET
 function moveEdges(
   yScan: number,
-  ET: Array<Array<number>>,
-  AET: Array<Array<number>>
+  ET: Array<Array<Array<number>>>,
+  AET: Array<Array<Array<number>>>
 ) {
-  while (ET.length > 0 && yScan == getYMin(ET[ET.length - 1])) {
+  while (ET.length > 0 && yScan === getYMin(ET[ET.length - 1])) {
     AET.push(ET.pop()!);
   }
 }
 
 // remove inactive edges from AET
-function removeEdges(yScan: number, AET: Array<Array<number>>) {
+function removeEdges(yScan: number, AET: Array<Array<Array<number>>>) {
   for (let i = 0; i < AET.length; i++) {
     if (yScan >= getYMax(AET[i])) {
       const last = AET.pop();
@@ -67,7 +64,7 @@ function removeEdges(yScan: number, AET: Array<Array<number>>) {
 }
 
 // find spans along scanline
-function getSpans(yScan: number, AET: Array<Array<number>>) {
+function getSpans(yScan: number, AET: Array<Array<Array<number>>>) {
   const spans = [];
   for (const edge of AET) {
     spans.push(lerp(yScan, edge));

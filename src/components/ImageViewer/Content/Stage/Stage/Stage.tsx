@@ -113,7 +113,7 @@ export const Stage = ({ src }: StageProps) => {
       update();
     };
 
-    const throttled = _.throttle(func, 10);
+    const throttled = _.throttle(func, 5);
 
     return () => throttled();
   }, [operator]);

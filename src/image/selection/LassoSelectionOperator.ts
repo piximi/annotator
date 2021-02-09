@@ -37,7 +37,7 @@ export class LassoSelectionOperator extends SelectionOperator {
     const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
     simplify(connectedPoints, 1, true);
     slpf(connectedPoints, maskImage);
-    debugger;
+
     return maskImage.toDataURL();
   }
 

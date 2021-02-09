@@ -1,5 +1,7 @@
 import { SelectionOperator } from "./SelectionOperator";
 import { Category } from "../../types/Category";
+import * as ImageJS from "image-js";
+import { slpf } from "../polygon-fill/slpf";
 
 export class RectangularSelectionOperator extends SelectionOperator {
   origin?: { x: number; y: number };
@@ -19,7 +21,27 @@ export class RectangularSelectionOperator extends SelectionOperator {
   }
 
   get mask(): string | undefined {
-    return "mask";
+    const maskImage = new ImageJS.Image({
+      width: this.image.width,
+      height: this.image.height,
+      bitDepth: 8,
+    });
+
+    if (!this.width || !this.height || !this.origin) return;
+
+    const connectedPoints: Array<Array<number>> = [];
+    for (let x = 0; x < this.width; x++) {
+      for (let y = 0; y < this.height; y++) {
+        connectedPoints.push([
+          Math.floor(x + this.origin.x),
+          Math.floor(y + this.origin.y),
+        ]);
+      }
+    }
+
+    slpf(connectedPoints, maskImage);
+
+    return maskImage.toDataURL();
   }
 
   deselect() {

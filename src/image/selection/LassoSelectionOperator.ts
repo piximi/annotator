@@ -25,7 +25,7 @@ export class LassoSelectionOperator extends SelectionOperator {
   }
 
   get mask() {
-    const foo = new ImageJS.Image({
+    const maskImage = new ImageJS.Image({
       width: this.image.width,
       height: this.image.height,
       bitDepth: 8,
@@ -33,10 +33,10 @@ export class LassoSelectionOperator extends SelectionOperator {
 
     const coords = _.chunk(this.points, 2);
 
-    const connectedPoints = connectPoints(coords, foo); // get coordinates of connected points and draw boundaries of mask
-    slpf(connectedPoints, foo);
+    const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
+    slpf(connectedPoints, maskImage);
     debugger;
-    return foo.toDataURL();
+    return maskImage.toDataURL();
   }
 
   deselect() {

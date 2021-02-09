@@ -68,8 +68,6 @@ export class PolygonalSelectionOperator extends SelectionOperator {
 
       this.anchor = undefined;
       this.origin = undefined;
-
-      const foo = this.mask;
     }
 
     if (this.buffer && this.buffer.length === 0) {

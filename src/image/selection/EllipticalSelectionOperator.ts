@@ -30,19 +30,10 @@ export class EllipticalSelectionOperator extends SelectionOperator {
 
     let connectedPoints = this.convertToPoints();
 
-    if (!connectedPoints) return;
-    // connectedPoints = connectPoints(connectedPoints, maskImage); // get coordinates of connected points and draw boundaries of mask
-
-    connectedPoints.forEach((position) => {
-      maskImage.setPixelXY(position[0], position[1], [255, 255, 255, 255]);
-    });
-
-    debugger;
+    if (!connectedPoints) return undefined;
 
     slpf(connectedPoints, maskImage);
-    debugger;
 
-    // return maskImage.toDataURL();
     return maskImage.toDataURL();
   }
 
@@ -77,7 +68,6 @@ export class EllipticalSelectionOperator extends SelectionOperator {
     this.selected = true;
 
     this.selecting = false;
-    const foo = this.mask;
   }
 
   select(category: Category) {
@@ -96,10 +86,10 @@ export class EllipticalSelectionOperator extends SelectionOperator {
     const centerX = Math.round(this.center.x);
     const centerY = Math.round(this.center.y);
 
-    const connectedPoints: Array<Array<number>> = [];
+    const points: Array<Array<number>> = [];
     const foo: Array<Array<number>> = [];
     //first quadrant points
-    for (let y = centerY; y < this.center.y + this.radius.y; y++) {
+    for (let y = centerY; y < centerY + this.radius.y; y += 0.5) {
       const x =
         this.radius.x *
           Math.sqrt(
@@ -107,27 +97,28 @@ export class EllipticalSelectionOperator extends SelectionOperator {
               ((y - centerY) * (y - centerY)) / (this.radius.y * this.radius.y)
           ) +
         centerX;
-      connectedPoints.push([Math.round(x), Math.round(y)]);
+      points.push([Math.round(x), Math.round(y)]);
       foo.push([Math.round(x), Math.round(y)]);
     }
+    // const reversedFoo = _.reverse(foo);
     //second quadrant points
-    _.reverse(foo).forEach((position: Array<number>) => {
+    _.forEachRight(foo, (position: Array<number>) => {
       let x = 2 * centerX - position[0];
-      connectedPoints.push([x, position[1]]);
+      points.push([x, position[1]]);
     });
     //third quadrant points
-    foo.forEach((position: Array<number>) => {
+    _.forEach(foo, (position: Array<number>) => {
       let x = 2 * centerX - position[0];
       let y = 2 * centerY - position[1];
-      connectedPoints.push([x, y]);
+      points.push([x, y]);
     });
     //fourth quadant points
-    _.reverse(foo).forEach((position) => {
+    _.forEachRight(foo, (position: Array<number>) => {
       let y = 2 * centerY - position[1];
-      connectedPoints.push([position[0], y]);
+      points.push([position[0], y]);
     });
 
-    return connectedPoints;
+    return points;
   }
 
   private resize(position: { x: number; y: number }) {

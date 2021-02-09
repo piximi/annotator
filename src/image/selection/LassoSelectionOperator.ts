@@ -4,6 +4,7 @@ import { Category } from "../../types/Category";
 import * as ImageJS from "image-js";
 import { connectPoints } from "../imageHelper";
 import { slpf } from "../polygon-fill/slpf";
+import { simplify } from "../simplify/simplify";
 
 export class LassoSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
@@ -34,6 +35,7 @@ export class LassoSelectionOperator extends SelectionOperator {
     const coords = _.chunk(this.points, 2);
 
     const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
+    simplify(connectedPoints, 1, true);
     slpf(connectedPoints, maskImage);
     debugger;
     return maskImage.toDataURL();

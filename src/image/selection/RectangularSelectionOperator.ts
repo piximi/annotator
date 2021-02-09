@@ -27,17 +27,11 @@ export class RectangularSelectionOperator extends SelectionOperator {
       bitDepth: 8,
     });
 
-    if (!this.width || !this.height || !this.origin) return;
+    if (!this.width || !this.height || !this.origin) return undefined;
 
-    const connectedPoints: Array<Array<number>> = [];
-    for (let x = 0; x < this.width; x++) {
-      for (let y = 0; y < this.height; y++) {
-        connectedPoints.push([
-          Math.floor(x + this.origin.x),
-          Math.floor(y + this.origin.y),
-        ]);
-      }
-    }
+    const connectedPoints = this.convertToPoints();
+
+    if (!connectedPoints) return undefined;
 
     slpf(connectedPoints, maskImage);
 
@@ -85,6 +79,23 @@ export class RectangularSelectionOperator extends SelectionOperator {
       categoryId: category.id,
       mask: this.mask,
     };
+  }
+
+  private convertToPoints() {
+    if (!this.width || !this.height || !this.origin) return;
+
+    const points: Array<Array<number>> = [];
+
+    for (let x = 0; x < this.width; x++) {
+      for (let y = 0; y < this.height; y++) {
+        points.push([
+          Math.floor(x + this.origin.x),
+          Math.floor(y + this.origin.y),
+        ]);
+      }
+    }
+
+    return points;
   }
 
   private resize(position: { x: number; y: number }) {

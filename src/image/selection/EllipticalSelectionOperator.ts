@@ -3,6 +3,7 @@ import { Category } from "../../types/Category";
 import { slpf } from "../polygon-fill/slpf";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
+import { connectPoints } from "../imageHelper";
 
 export class EllipticalSelectionOperator extends SelectionOperator {
   center?: { x: number; y: number };
@@ -27,9 +28,16 @@ export class EllipticalSelectionOperator extends SelectionOperator {
       bitDepth: 8,
     });
 
-    const connectedPoints = this.convertToPoints();
+    let connectedPoints = this.convertToPoints();
 
     if (!connectedPoints) return;
+    // connectedPoints = connectPoints(connectedPoints, maskImage); // get coordinates of connected points and draw boundaries of mask
+
+    connectedPoints.forEach((position) => {
+      maskImage.setPixelXY(position[0], position[1], [255, 255, 255, 255]);
+    });
+
+    debugger;
 
     slpf(connectedPoints, maskImage);
     debugger;
@@ -91,7 +99,7 @@ export class EllipticalSelectionOperator extends SelectionOperator {
     const connectedPoints: Array<Array<number>> = [];
     const foo: Array<Array<number>> = [];
     //first quadrant points
-    for (let y = this.center.y; y < this.center.y + this.radius.y; y++) {
+    for (let y = centerY; y < this.center.y + this.radius.y; y++) {
       const x =
         this.radius.x *
           Math.sqrt(

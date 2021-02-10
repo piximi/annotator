@@ -68,12 +68,24 @@ export class RectangularSelectionOperator extends SelectionOperator {
 
     const points: Array<number> = [];
 
+    // four edges of the rectangle
     for (let x = 0; x < this.width; x++) {
-      for (let y = 0; y < this.height; y++) {
-        points.push(Math.floor(x + this.origin.x));
-        points.push(Math.floor(y + this.origin.y));
-      }
+      points.push(Math.round(x + this.origin.x));
+      points.push(Math.round(this.origin.y));
     }
+    for (let y = 0; y < this.height; y++) {
+      points.push(Math.round(this.origin.x + this.width - 1));
+      points.push(Math.round(y + this.origin.y));
+    }
+    for (let x = this.width - 1; x >= 0; x--) {
+      points.push(Math.round(x + this.origin.x));
+      points.push(Math.round(this.origin.y + this.height - 1));
+    }
+    for (let y = this.height - 1; y >= 0; y--) {
+      points.push(Math.round(this.origin.x));
+      points.push(Math.round(y + this.origin.y));
+    }
+
     return points;
   }
 

@@ -61,8 +61,6 @@ export class RectangularSelectionOperator extends SelectionOperator {
       categoryId: category.id,
       mask: this.mask,
     };
-
-    //image.instances =
   }
 
   private convertToPoints() {

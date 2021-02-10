@@ -1,7 +1,14 @@
 import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
 import Konva from "konva";
-import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import useImage from "use-image";
 import {
   ColorSelectionOperator,
@@ -150,14 +157,14 @@ export const Stage = ({ category, src }: StageProps) => {
     return () => throttled();
   }, [operator]);
 
-  const onSelect = () => {
-    if (!operator || !instances) return;
+  useEffect(() => {
+    if (!enterPress) return;
+
+    if (!instances || !operator) return;
 
     operator.select(category);
 
     if (!operator.selection) return;
-
-    console.info("Selected");
 
     dispatch(
       imageViewerSlice.actions.setImageViewerImageInstances({
@@ -166,11 +173,7 @@ export const Stage = ({ category, src }: StageProps) => {
     );
 
     operator.deselect();
-  };
-
-  useEffect(() => {
-    if (enterPress) onSelect();
-  }, [enterPress, onSelect]);
+  }, [enterPress]);
 
   return (
     <ReactKonva.Stage

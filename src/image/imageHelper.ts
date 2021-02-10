@@ -5,10 +5,12 @@ export const connectPoints = (
   coordinates: Array<Array<number>>,
   image: ImageJS.Image
 ) => {
-  return _.zip(
-    coordinates.slice(0, coordinates.length - 1),
-    coordinates.slice(1)
-  ).map(([current, next]) => {
+  return _.filter(
+    _.zip(coordinates.slice(0, coordinates.length - 1), coordinates.slice(1)),
+    ([current, next]) => {
+      return !_.isEqual(current, next);
+    }
+  ).map(([current, next], index) => {
     return _.flatten(drawLine(image, current!, next!));
   });
 };

@@ -4,7 +4,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { Chip } from "@material-ui/core";
 import { useStyles } from "./ImageViewerAppBar.css";
-import { OpenImageButton } from "../OpenImageButton";
+import { OpenImageButton } from "../OpenImageButton/OpenImageButton";
 
 export const ImageViewerAppBar = () => {
   const classes = useStyles();

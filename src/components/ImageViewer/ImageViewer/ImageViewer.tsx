@@ -160,7 +160,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
         onCategoryClick={onCategoryClick}
       />
 
-      {image && <Content />}
+      {image && <Content category={activeCategory} />}
 
       <OperationOptions
         description={

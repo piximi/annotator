@@ -15,17 +15,24 @@ import {
   SelectionOperator,
 } from "../../../../../image/selection";
 import { ImageViewerOperation } from "../../../../../types/ImageViewerOperation";
-import { imageViewerOperationSelector } from "../../../../../store/selectors";
-import { useSelector } from "react-redux";
+import {
+  imageViewerImageInstancesSelector,
+  imageViewerOperationSelector,
+} from "../../../../../store/selectors";
+import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
 import * as ImageJS from "image-js";
 import { Selection } from "../Selection";
+import { Category } from "../../../../../types/Category";
+import { imageViewerSlice } from "../../../../../store/slices";
+import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
 
 type StageProps = {
+  category: Category;
   src: string;
 };
 
-export const Stage = ({ src }: StageProps) => {
+export const Stage = ({ category, src }: StageProps) => {
   const [image] = useImage(src, "Anonymous");
 
   const imageRef = useRef<Konva.Image>(null);
@@ -38,6 +45,13 @@ export const Stage = ({ src }: StageProps) => {
   const [operator, setOperator] = useState<SelectionOperator>();
 
   const [, update] = useReducer((x) => x + 1, 0);
+
+  const dispatch = useDispatch();
+
+  const instances = useSelector(imageViewerImageInstancesSelector);
+
+  const enterPress = useKeyPress("Enter");
+  const escapePress = useKeyPress("escape");
 
   useEffect(() => {
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
@@ -135,6 +149,28 @@ export const Stage = ({ src }: StageProps) => {
 
     return () => throttled();
   }, [operator]);
+
+  const onSelect = () => {
+    if (!operator || !instances) return;
+
+    operator.select(category);
+
+    if (!operator.selection) return;
+
+    console.info("Selected");
+
+    dispatch(
+      imageViewerSlice.actions.setImageViewerImageInstances({
+        instances: [...instances, operator.selection],
+      })
+    );
+
+    operator.deselect();
+  };
+
+  useEffect(() => {
+    if (enterPress) onSelect();
+  }, [enterPress, onSelect]);
 
   return (
     <ReactKonva.Stage

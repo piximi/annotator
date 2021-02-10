@@ -3,8 +3,13 @@ import { Stage } from "../Stage";
 import { imageViewerImageSelector } from "../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
+import { Category } from "../../../../types/Category";
 
-export const Content = () => {
+type ContentProps = {
+  category: Category;
+};
+
+export const Content = ({ category }: ContentProps) => {
   const image = useSelector(imageViewerImageSelector);
 
   const classes = useStyles();
@@ -14,7 +19,7 @@ export const Content = () => {
       <div className={classes.toolbar} />
 
       <div className={classes.parent}>
-        <Stage src={image!.src} />
+        <Stage category={category} src={image!.src} />
       </div>
     </main>
   );

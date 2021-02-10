@@ -9,9 +9,13 @@ export const ExportButton = () => {
   const classes = useStyles();
 
   const onClick = () => {
-    const blob = new Blob(["{ foo: true }"], {
+    const blobParts = ["{ foo: true }"];
+
+    const options = {
       type: "text/json;charset=utf-8",
-    });
+    };
+
+    const blob = new Blob(blobParts, options);
 
     saveAs(blob, "foo.json");
   };

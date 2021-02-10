@@ -1,18 +1,37 @@
 import * as _ from "lodash";
 import * as ImageJS from "image-js";
 
+// export const connectPoints = (
+//   coordinates: Array<Array<number>>,
+//   image: ImageJS.Image
+// ) => {
+//   return _.filter(
+//     _.zip(coordinates.slice(0, coordinates.length - 1), coordinates.slice(1)),
+//     ([current, next]) => {
+//       return !_.isEqual(current, next);
+//     }
+//   ).map(([current, next], index) => {
+//     return _.flatten(drawLine(image, current!, next!));
+//   });
+// };
+
 export const connectPoints = (
   coordinates: Array<Array<number>>,
   image: ImageJS.Image
 ) => {
-  return _.filter(
+  let connectedPoints: Array<Array<number>> = [];
+
+  const foo = _.filter(
     _.zip(coordinates.slice(0, coordinates.length - 1), coordinates.slice(1)),
     ([current, next]) => {
       return !_.isEqual(current, next);
     }
-  ).map(([current, next], index) => {
-    return _.flatten(drawLine(image, current!, next!));
+  );
+  foo.forEach(([current, next]) => {
+    const points = drawLine(image, current!, next!);
+    connectedPoints = _.concat(connectedPoints, points);
   });
+  return connectedPoints;
 };
 
 const drawLine = (image: ImageJS.Image, p: Array<number>, q: Array<number>) => {

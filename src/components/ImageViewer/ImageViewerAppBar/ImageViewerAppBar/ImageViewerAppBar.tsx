@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import { Chip } from "@material-ui/core";
 import { useStyles } from "./ImageViewerAppBar.css";
 import { OpenImageButton } from "../OpenImageButton/OpenImageButton";
+import { ExportButton } from "../ExportButton";
 
 export const ImageViewerAppBar = () => {
   const classes = useStyles();
@@ -19,6 +20,8 @@ export const ImageViewerAppBar = () => {
         <div className={classes.grow} />
 
         <OpenImageButton />
+
+        <ExportButton />
       </Toolbar>
     </AppBar>
   );

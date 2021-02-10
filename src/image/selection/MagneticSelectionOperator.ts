@@ -1,9 +1,11 @@
 import { SelectionOperator } from "./SelectionOperator";
 import { createPathFinder, makeGraph, PiximiGraph } from "../GraphHelper";
-import { getIdx } from "../imageHelper";
+import { connectPoints, getIdx } from "../imageHelper";
 import * as ImageJS from "image-js";
 import { Category } from "../../types/Category";
 import * as _ from "lodash";
+import { simplify } from "../simplify/simplify";
+import { slpf } from "../polygon-fill/slpf";
 
 export class MagneticSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
@@ -53,7 +55,19 @@ export class MagneticSelectionOperator extends SelectionOperator {
   }
 
   get mask(): string | undefined {
-    return "mask";
+    const maskImage = new ImageJS.Image({
+      width: this.image.width,
+      height: this.image.height,
+      bitDepth: 8,
+    });
+
+    const coords = _.chunk(this.points, 2);
+
+    const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
+    simplify(connectedPoints, 1, true);
+    slpf(connectedPoints, maskImage);
+
+    return maskImage.toDataURL();
   }
 
   deselect() {

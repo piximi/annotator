@@ -1,9 +1,6 @@
 import { SelectionOperator } from "./SelectionOperator";
 import { Category } from "../../types/Category";
-import { slpf } from "../polygon-fill/slpf";
-import * as ImageJS from "image-js";
 import * as _ from "lodash";
-import { connectPoints } from "../imageHelper";
 
 export class EllipticalSelectionOperator extends SelectionOperator {
   center?: { x: number; y: number };
@@ -19,22 +16,6 @@ export class EllipticalSelectionOperator extends SelectionOperator {
       this.center.x + this.radius.x,
       this.center.y + this.radius.y,
     ];
-  }
-
-  get mask(): string | undefined {
-    const maskImage = new ImageJS.Image({
-      width: this.image.width,
-      height: this.image.height,
-      bitDepth: 8,
-    });
-
-    let connectedPoints = this.convertToPoints();
-
-    if (!connectedPoints) return undefined;
-
-    slpf(connectedPoints, maskImage);
-
-    return maskImage.toDataURL();
   }
 
   deselect() {
@@ -68,6 +49,8 @@ export class EllipticalSelectionOperator extends SelectionOperator {
     this.selected = true;
 
     this.selecting = false;
+
+    this.points = this.convertToPoints();
   }
 
   select(category: Category) {
@@ -86,7 +69,7 @@ export class EllipticalSelectionOperator extends SelectionOperator {
     const centerX = Math.round(this.center.x);
     const centerY = Math.round(this.center.y);
 
-    const points: Array<Array<number>> = [];
+    const points: Array<number> = [];
     const foo: Array<Array<number>> = [];
     //first quadrant points
     for (let y = centerY; y < centerY + this.radius.y; y += 0.5) {
@@ -97,25 +80,29 @@ export class EllipticalSelectionOperator extends SelectionOperator {
               ((y - centerY) * (y - centerY)) / (this.radius.y * this.radius.y)
           ) +
         centerX;
-      points.push([Math.round(x), Math.round(y)]);
+      points.push(Math.round(x));
+      points.push(Math.round(y));
       foo.push([Math.round(x), Math.round(y)]);
     }
     // const reversedFoo = _.reverse(foo);
     //second quadrant points
     _.forEachRight(foo, (position: Array<number>) => {
       let x = 2 * centerX - position[0];
-      points.push([x, position[1]]);
+      points.push(x);
+      points.push(position[1]);
     });
     //third quadrant points
     _.forEach(foo, (position: Array<number>) => {
       let x = 2 * centerX - position[0];
       let y = 2 * centerY - position[1];
-      points.push([x, y]);
+      points.push(x);
+      points.push(y);
     });
     //fourth quadant points
     _.forEachRight(foo, (position: Array<number>) => {
       let y = 2 * centerY - position[1];
-      points.push([position[0], y]);
+      points.push(position[0]);
+      points.push(y);
     });
 
     return points;

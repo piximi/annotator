@@ -9,7 +9,7 @@ import { slpf } from "../polygon-fill/slpf";
 export abstract class SelectionOperator {
   image: ImageJS.Image;
   manager: ImageJS.RoiManager;
-  points: Array<number> = [];
+  points?: Array<number> = [];
   selected: boolean = false;
   selecting: boolean = false;
   selection?: ImageViewerSelection;

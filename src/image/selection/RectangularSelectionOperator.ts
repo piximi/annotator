@@ -1,7 +1,5 @@
 import { SelectionOperator } from "./SelectionOperator";
 import { Category } from "../../types/Category";
-import * as ImageJS from "image-js";
-import { slpf } from "../polygon-fill/slpf";
 
 export class RectangularSelectionOperator extends SelectionOperator {
   origin?: { x: number; y: number };
@@ -18,24 +16,6 @@ export class RectangularSelectionOperator extends SelectionOperator {
       this.origin.x + this.width,
       this.origin.y + this.height,
     ];
-  }
-
-  get mask(): string | undefined {
-    const maskImage = new ImageJS.Image({
-      width: this.image.width,
-      height: this.image.height,
-      bitDepth: 8,
-    });
-
-    if (!this.width || !this.height || !this.origin) return undefined;
-
-    const connectedPoints = this.convertToPoints();
-
-    if (!connectedPoints) return undefined;
-
-    slpf(connectedPoints, maskImage);
-
-    return maskImage.toDataURL();
   }
 
   deselect() {
@@ -67,6 +47,8 @@ export class RectangularSelectionOperator extends SelectionOperator {
 
     this.resize(position);
 
+    this.points = this.convertToPoints();
+
     this.selected = true;
     this.selecting = false;
   }
@@ -84,17 +66,14 @@ export class RectangularSelectionOperator extends SelectionOperator {
   private convertToPoints() {
     if (!this.width || !this.height || !this.origin) return;
 
-    const points: Array<Array<number>> = [];
+    const points: Array<number> = [];
 
     for (let x = 0; x < this.width; x++) {
       for (let y = 0; y < this.height; y++) {
-        points.push([
-          Math.floor(x + this.origin.x),
-          Math.floor(y + this.origin.y),
-        ]);
+        points.push(Math.floor(x + this.origin.x));
+        points.push(Math.floor(y + this.origin.y));
       }
     }
-
     return points;
   }
 

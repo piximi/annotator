@@ -2,19 +2,15 @@ import * as _ from "lodash";
 import * as ImageJS from "image-js";
 
 export const connectPoints = (
-  coords: Array<Array<number>>,
+  coordinates: Array<Array<number>>,
   image: ImageJS.Image
 ) => {
-  let connectedPoints: Array<Array<number>> = [];
-
-  coords.forEach((_position: Array<number>, index: number) => {
-    if (index < coords.length - 1) {
-      const points = drawLine(image, coords[index], coords[index + 1]);
-      connectedPoints = _.concat(connectedPoints, points);
-    }
+  return _.zip(
+    coordinates.slice(0, coordinates.length - 1),
+    coordinates.slice(1)
+  ).map(([current, next]) => {
+    return _.flatten(drawLine(image, current!, next!));
   });
-
-  return connectedPoints;
 };
 
 const drawLine = (image: ImageJS.Image, p: Array<number>, q: Array<number>) => {

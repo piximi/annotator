@@ -47,8 +47,9 @@ export const Stage = ({ category, src }: StageProps) => {
   const imageRef = useRef<Konva.Image>(null);
   const stageRef = useRef<Konva.Stage>(null);
 
-  const transformerRef = useRef<Konva.Transformer>(null);
+  const transformerRef = useRef<Konva.Transformer | null>(null);
   const selectionRef = useRef<Konva.Line | null>(null);
+  const selectingRef = useRef<Konva.Line | null>(null);
 
   const classes = useStyles();
 
@@ -56,7 +57,8 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const [operator, setOperator] = useState<SelectionOperator>();
 
-  const [selected, setSelected] = useState<string>();
+  const [selection, setSelection] = useState<string>();
+  const [selected, setSelected] = useState<boolean>(false);
 
   const [, update] = useReducer((x) => x + 1, 0);
 
@@ -111,13 +113,26 @@ export const Stage = ({ category, src }: StageProps) => {
   }, [operation, src]);
 
   useEffect(() => {
-    if (!transformerRef || !transformerRef.current) return;
+    if (!operator) return;
 
-    if (!selectionRef || !selectionRef.current) return;
+    if (operator.selected) setSelected(operator.selected);
+  });
 
+  useEffect(() => {
+    if (!operator || !operator.contour) return;
+    selectingRef.current = new Konva.Line<Konva.LineConfig>({
+      points: operator.contour,
+    });
+  });
+
+  useEffect(() => {
     if (!selected) return;
 
-    transformerRef.current.nodes([selectionRef.current]);
+    if (!transformerRef || !transformerRef.current) return;
+
+    if (!selectingRef || !selectingRef.current) return;
+
+    transformerRef.current.nodes([selectingRef.current]);
 
     const layer = transformerRef.current.getLayer();
 
@@ -132,11 +147,11 @@ export const Stage = ({ category, src }: StageProps) => {
   ) => {
     if (operator) operator.deselect();
 
-    setSelected(instance.id);
+    setSelection(instance.id);
 
     selectionRef.current = event.target as Konva.Line;
     console.log(selectionRef);
-    console.log(selected);
+    console.log(selection);
     console.log(event);
   };
 
@@ -195,6 +210,8 @@ export const Stage = ({ category, src }: StageProps) => {
   }, [operator]);
 
   useEffect(() => {
+    if (!selected) return;
+
     if (!enterPress) return;
 
     if (!instances || !operator) return;
@@ -210,15 +227,21 @@ export const Stage = ({ category, src }: StageProps) => {
     );
 
     operator.deselect();
+
+    selectingRef.current = null;
+    transformerRef.current = null;
+    setSelected(false);
+    console.log(selectingRef);
+    console.log(transformerRef);
   }, [enterPress]);
-
-  useEffect(() => {
-    if (!escapePress) return;
-
-    if (!operator) return;
-
-    operator.deselect();
-  }, [escapePress]);
+  //
+  // useEffect(() => {
+  //   if (!escapePress) return;
+  //
+  //   if (!operator) return;
+  //
+  //   operator.deselect();
+  // }, [escapePress]);
 
   return (
     <ReactKonva.Stage
@@ -235,7 +258,16 @@ export const Stage = ({ category, src }: StageProps) => {
       >
         <ReactKonva.Image ref={imageRef} image={image} />
 
-        <Selection operation={operation} operator={operator} />
+        {!selected && <Selection operation={operation} operator={operator} />}
+
+        {selected && operator && operator.contour && (
+          <ReactKonva.Line
+            points={operator.contour}
+            ref={selectingRef}
+            stroke="white"
+            strokeWidth={1}
+          />
+        )}
 
         {instances &&
           instances.map((instance: Instance) => {

@@ -47,11 +47,16 @@ export const Stage = ({ category, src }: StageProps) => {
   const imageRef = useRef<Konva.Image>(null);
   const stageRef = useRef<Konva.Stage>(null);
 
+  const transformerRef = useRef<Konva.Transformer>(null);
+  const selectionRef = useRef<Konva.Line>(null);
+
   const classes = useStyles();
 
   const operation = useSelector(imageViewerOperationSelector);
 
   const [operator, setOperator] = useState<SelectionOperator>();
+
+  const [selected, setSelected] = useState<string>();
 
   const [, update] = useReducer((x) => x + 1, 0);
 
@@ -104,6 +109,29 @@ export const Stage = ({ category, src }: StageProps) => {
       }
     });
   }, [operation, src]);
+
+  useEffect(() => {
+    if (!transformerRef || !transformerRef.current) return;
+
+    if (!selectionRef || !selectionRef.current) return;
+
+    if (!selected) return;
+
+    transformerRef.current.nodes([selectionRef.current]);
+
+    const layer = transformerRef.current.getLayer();
+
+    if (!layer) return;
+
+    layer.batchDraw();
+  }, [selected]);
+
+  const onClick = (instance: Instance) => {
+    if (operator) operator.deselect();
+
+    setSelected(instance.id);
+    console.log(selected);
+  };
 
   const onMouseDown = useMemo(() => {
     const func = () => {
@@ -210,12 +238,15 @@ export const Stage = ({ category, src }: StageProps) => {
                 key={instance.id}
                 points={instance.contour}
                 fill={category.color}
+                onClick={(event) => onClick(instance)}
                 opacity={0.5}
                 stroke={shadeHex(category.color, 50)}
                 strokeWidth={1}
               />
             );
           })}
+
+        <ReactKonva.Transformer ref={transformerRef} />
       </ReactKonva.Layer>
     </ReactKonva.Stage>
   );

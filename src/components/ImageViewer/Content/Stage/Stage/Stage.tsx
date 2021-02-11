@@ -34,6 +34,7 @@ import { Category } from "../../../../../types/Category";
 import { imageViewerSlice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
 import { Instance } from "../../../../../types/Instance";
+import { shadeHex } from "../../../../../image/shade";
 
 type StageProps = {
   category: Category;
@@ -209,7 +210,8 @@ export const Stage = ({ category, src }: StageProps) => {
                 points={instance.contour}
                 fill={category.color}
                 opacity={0.5}
-                stroke={category.color}
+                stroke={shadeHex(category.color, 50)}
+                strokeWidth={1}
               />
             );
           })}

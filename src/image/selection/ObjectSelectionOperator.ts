@@ -8,11 +8,12 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
   graph?: tensorflow.LayersModel;
   prediction?: ImageJS.Image;
   points: Array<number> = [];
+  roi?: ImageJS.Roi;
   offset?: { x: number; y: number };
   output?: ImageJS.Image;
 
   get boundingBox(): [number, number, number, number] | undefined {
-    return undefined;
+    return [this.roi.minX, this.roi.minY, this.roi.maxX, this.roi.maxY];
   }
 
   get mask(): string | undefined {
@@ -28,7 +29,15 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     this.predict();
   }
 
-  select(category: Category) {}
+  select(category: Category) {
+    if (!this.boundingBox || !this.mask) return;
+
+    this.selection = {
+      boundingBox: this.boundingBox,
+      categoryId: category.id,
+      mask: this.mask,
+    };
+  }
 
   static async compile(image: ImageJS.Image) {
     const instance = new ObjectSelectionOperator(image);
@@ -107,8 +116,11 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
           const mask = this.output.grey().mask();
           const rois = this.manager.fromMask(mask).getRois();
           rois.sort((a: any, b: any) => b.surface - a.surface);
-          const roi = rois[0];
-          const contour = roi.getMask({ kind: "contour" });
+          this.roi = rois[0];
+
+          if (!this.roi) return;
+
+          const contour = this.roi.getMask({ kind: "contour" });
 
           const data = contour.getRGBAData();
 
@@ -130,9 +142,10 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
           );
 
           this.offset = {
-            x: roi.minX,
-            y: roi.minY,
+            x: this.roi.minX,
+            y: this.roi.minY,
           };
+
           this.prediction = boundaryImage;
         });
     }

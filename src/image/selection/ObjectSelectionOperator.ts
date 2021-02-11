@@ -21,7 +21,19 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     return this.output.toDataURL();
   }
 
-  deselect() {}
+  deselect() {
+    this.selected = false;
+    this.selecting = false;
+
+    this.prediction = undefined;
+    this.points = [];
+    this.roi = undefined;
+    this.offset = undefined;
+    this.output = undefined;
+
+    this.origin = undefined;
+    this.width = undefined;
+  }
 
   onMouseUp(position: { x: number; y: number }) {
     super.onMouseUp(position);

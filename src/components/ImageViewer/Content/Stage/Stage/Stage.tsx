@@ -58,7 +58,7 @@ export const Stage = ({ category, src }: StageProps) => {
   const instances = useSelector(imageViewerImageInstancesSelector);
 
   const enterPress = useKeyPress("Enter");
-  const escapePress = useKeyPress("escape");
+  const escapePress = useKeyPress("Escape");
 
   useEffect(() => {
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
@@ -174,6 +174,14 @@ export const Stage = ({ category, src }: StageProps) => {
 
     operator.deselect();
   }, [enterPress]);
+
+  useEffect(() => {
+    if (!escapePress) return;
+
+    if (!operator) return;
+
+    operator.deselect();
+  }, [escapePress]);
 
   return (
     <ReactKonva.Stage

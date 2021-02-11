@@ -205,6 +205,7 @@ export const Stage = ({ category, src }: StageProps) => {
           instances.map((instance: Instance) => {
             return (
               <ReactKonva.Line
+                closed={true}
                 points={instance.contour}
                 fill={category.color}
                 opacity={0.5}

@@ -22,6 +22,8 @@ export abstract class SelectionOperator {
 
   abstract get boundingBox(): [number, number, number, number] | undefined;
 
+  abstract get contour(): Array<number> | undefined;
+
   get mask(): string | undefined {
     const maskImage = new ImageJS.Image({
       width: this.image.width,

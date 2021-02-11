@@ -204,13 +204,11 @@ export const Stage = ({ category, src }: StageProps) => {
         {instances &&
           instances.map((instance: Instance) => {
             return (
-              <ReactKonva.Rect
-                x={instance.boundingBox[0]}
-                y={instance.boundingBox[1]}
-                width={instance.boundingBox[2] - instance.boundingBox[0]}
-                height={instance.boundingBox[3] - instance.boundingBox[1]}
+              <ReactKonva.Line
+                points={instance.contour}
                 fill={category.color}
                 opacity={0.5}
+                stroke={category.color}
               />
             );
           })}

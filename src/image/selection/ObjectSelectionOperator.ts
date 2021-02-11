@@ -16,6 +16,10 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     return [this.roi.minX, this.roi.minY, this.roi.maxX, this.roi.maxY];
   }
 
+  get contour() {
+    return [];
+  }
+
   get mask(): string | undefined {
     if (!this.output) return;
     return this.output.toDataURL();
@@ -47,6 +51,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     this.selection = {
       boundingBox: this.boundingBox,
       categoryId: category.id,
+      contour: this.contour,
       mask: this.mask,
     };
   }

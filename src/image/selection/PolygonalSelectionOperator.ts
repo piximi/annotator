@@ -21,6 +21,10 @@ export class PolygonalSelectionOperator extends SelectionOperator {
     ];
   }
 
+  get contour() {
+    return this.points;
+  }
+
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -135,11 +139,12 @@ export class PolygonalSelectionOperator extends SelectionOperator {
   }
 
   select(category: Category) {
-    if (!this.boundingBox || !this.mask) return;
+    if (!this.boundingBox || !this.contour || !this.mask) return;
 
     this.selection = {
       boundingBox: this.boundingBox,
       categoryId: category.id,
+      contour: this.contour,
       mask: this.mask,
     };
   }

@@ -33,6 +33,7 @@ import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
 import { imageViewerSlice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
+import { Instance } from "../../../../../types/Instance";
 
 type StageProps = {
   category: Category;
@@ -199,6 +200,20 @@ export const Stage = ({ category, src }: StageProps) => {
         <ReactKonva.Image ref={imageRef} image={image} />
 
         <Selection operation={operation} operator={operator} />
+
+        {instances &&
+          instances.map((instance: Instance) => {
+            return (
+              <ReactKonva.Rect
+                x={instance.boundingBox[0]}
+                y={instance.boundingBox[1]}
+                width={instance.boundingBox[2] - instance.boundingBox[0]}
+                height={instance.boundingBox[3] - instance.boundingBox[1]}
+                fill={category.color}
+                opacity={0.5}
+              />
+            );
+          })}
       </ReactKonva.Layer>
     </ReactKonva.Stage>
   );

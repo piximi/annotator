@@ -45,8 +45,8 @@ export class MagneticSelectionOperator extends SelectionOperator {
     const pairs = _.chunk(this.points, 2);
 
     return [
-      this.origin.x,
-      this.origin.y,
+      _.min(_.map(pairs, _.first))!,
+      _.min(_.map(pairs, _.last))!,
       _.max(_.map(pairs, _.first))!,
       _.max(_.map(pairs, _.last))!,
     ];
@@ -62,7 +62,6 @@ export class MagneticSelectionOperator extends SelectionOperator {
     this.buffer = [];
     this.graph = undefined;
     this.origin = undefined;
-    this.pathfinder = undefined;
     this.points = [];
     this.previous = [];
   }

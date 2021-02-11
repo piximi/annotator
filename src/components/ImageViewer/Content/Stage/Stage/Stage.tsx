@@ -48,7 +48,7 @@ export const Stage = ({ category, src }: StageProps) => {
   const stageRef = useRef<Konva.Stage>(null);
 
   const transformerRef = useRef<Konva.Transformer>(null);
-  const selectionRef = useRef<Konva.Line>(null);
+  const selectionRef = useRef<Konva.Line | null>(null);
 
   const classes = useStyles();
 
@@ -126,11 +126,18 @@ export const Stage = ({ category, src }: StageProps) => {
     layer.batchDraw();
   }, [selected]);
 
-  const onClick = (instance: Instance) => {
+  const onClick = (
+    event: Konva.KonvaEventObject<MouseEvent>,
+    instance: Instance
+  ) => {
     if (operator) operator.deselect();
 
     setSelected(instance.id);
+
+    selectionRef.current = event.target as Konva.Line;
+    console.log(selectionRef);
     console.log(selected);
+    console.log(event);
   };
 
   const onMouseDown = useMemo(() => {
@@ -238,8 +245,9 @@ export const Stage = ({ category, src }: StageProps) => {
                 key={instance.id}
                 points={instance.contour}
                 fill={category.color}
-                onClick={(event) => onClick(instance)}
+                onClick={(event) => onClick(event, instance)}
                 opacity={0.5}
+                ref={selectionRef}
                 stroke={shadeHex(category.color, 50)}
                 strokeWidth={1}
               />

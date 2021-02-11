@@ -57,17 +57,6 @@ export class RectangularSelectionOperator extends SelectionOperator {
     this.selecting = false;
   }
 
-  select(category: Category) {
-    if (!this.boundingBox || !this.contour || !this.mask) return;
-
-    this.selection = {
-      boundingBox: this.boundingBox,
-      categoryId: category.id,
-      contour: this.contour,
-      mask: this.mask,
-    };
-  }
-
   private convertToPoints() {
     if (!this.width || !this.height || !this.origin) return;
 

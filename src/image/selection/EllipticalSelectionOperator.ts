@@ -57,17 +57,6 @@ export class EllipticalSelectionOperator extends SelectionOperator {
     this.points = this.convertToPoints();
   }
 
-  select(category: Category) {
-    if (!this.boundingBox || !this.contour || !this.mask) return;
-
-    this.selection = {
-      boundingBox: this.boundingBox,
-      categoryId: category.id,
-      contour: this.contour,
-      mask: this.mask,
-    };
-  }
-
   private convertToPoints() {
     if (!this.radius || !this.origin || !this.center) return;
 

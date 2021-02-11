@@ -45,17 +45,6 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     this.predict();
   }
 
-  select(category: Category) {
-    if (!this.boundingBox || !this.mask) return;
-
-    this.selection = {
-      boundingBox: this.boundingBox,
-      categoryId: category.id,
-      contour: this.contour,
-      mask: this.mask,
-    };
-  }
-
   static async compile(image: ImageJS.Image) {
     const instance = new ObjectSelectionOperator(image);
 

@@ -5,6 +5,7 @@ import * as _ from "lodash";
 import { connectPoints } from "../imageHelper";
 import { simplify } from "../simplify/simplify";
 import { slpf } from "../polygon-fill/slpf";
+import * as uuid from "uuid";
 
 export abstract class SelectionOperator {
   image: ImageJS.Image;
@@ -48,5 +49,15 @@ export abstract class SelectionOperator {
 
   abstract onMouseUp(position: { x: number; y: number }): void;
 
-  abstract select(category: Category): void;
+  select(category: Category): void {
+    if (!this.boundingBox || !this.contour || !this.mask) return;
+
+    this.selection = {
+      boundingBox: this.boundingBox,
+      categoryId: category.id,
+      contour: this.contour,
+      id: uuid.v4(),
+      mask: this.mask,
+    };
+  }
 }

@@ -127,17 +127,6 @@ export class LassoSelectionOperator extends SelectionOperator {
     }
   }
 
-  select(category: Category) {
-    if (!this.boundingBox || !this.contour || !this.mask) return;
-
-    this.selection = {
-      boundingBox: this.boundingBox,
-      categoryId: category.id,
-      contour: this.contour,
-      mask: this.mask,
-    };
-  }
-
   private connected(
     position: { x: number; y: number },
     threshold: number = 4

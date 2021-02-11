@@ -4,5 +4,6 @@ export type Instance = {
   boundingBox: BoundingBox;
   categoryId?: string;
   contour: Array<number>;
-  mask: any; //modify later
+  id: string;
+  mask: string;
 };

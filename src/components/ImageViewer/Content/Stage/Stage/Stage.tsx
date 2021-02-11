@@ -207,6 +207,7 @@ export const Stage = ({ category, src }: StageProps) => {
             return (
               <ReactKonva.Line
                 closed={true}
+                key={instance.id}
                 points={instance.contour}
                 fill={category.color}
                 opacity={0.5}

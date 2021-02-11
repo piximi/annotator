@@ -9,19 +9,15 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
   prediction?: ImageJS.Image;
   points: Array<number> = [];
   offset?: { x: number; y: number };
+  output?: ImageJS.Image;
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
   }
 
   get mask(): string | undefined {
-    return undefined;
-    // const mask = this.manager.fromMask(this.prediction);
-    //
-    // // index of object
-    // const index = 0;
-    //
-    // return this.manager.getMask()[index].getMask({ kind: "filled" }).toDataURL();
+    if (!this.output) return;
+    return this.output.toDataURL();
   }
 
   deselect() {}
@@ -88,7 +84,12 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
             .sub(0.3)
             .sign()
             .relu()
-            .resizeBilinear([height, width]);
+            .resizeBilinear([height, width])
+            .pad([
+              [this.origin!.y, this.image.height - (this.origin!.y + height)],
+              [this.origin!.x, this.image.width - (this.origin!.x + width)],
+              [0, 0],
+            ]);
         }
       }
     });
@@ -97,13 +98,13 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
       tensorflow.browser
         .toPixels(prediction as tensorflow.Tensor3D)
         .then(async (clamped) => {
-          const output = new ImageJS.Image({
-            width: width,
-            height: height,
+          this.output = new ImageJS.Image({
+            width: this.image.width,
+            height: this.image.height,
             data: clamped,
           });
 
-          const mask = output.grey().mask();
+          const mask = this.output.grey().mask();
           const rois = this.manager.fromMask(mask).getRois();
           rois.sort((a: any, b: any) => b.surface - a.surface);
           const roi = rois[0];
@@ -129,8 +130,8 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
           );
 
           this.offset = {
-            x: this.origin!.x + roi.minX,
-            y: this.origin!.y + roi.minY,
+            x: roi.minX,
+            y: roi.minY,
           };
           this.prediction = boundaryImage;
         });

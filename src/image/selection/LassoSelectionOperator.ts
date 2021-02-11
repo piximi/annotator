@@ -9,13 +9,13 @@ export class LassoSelectionOperator extends SelectionOperator {
   points: Array<number> = [];
 
   get boundingBox(): [number, number, number, number] | undefined {
-    if (!this.origin || !this.points) return undefined;
+    if (!this.points) return undefined;
 
     const pairs = _.chunk(this.points, 2);
 
     return [
-      this.origin.x,
-      this.origin.y,
+      _.min(_.map(pairs, _.first))!,
+      _.min(_.map(pairs, _.last))!,
       _.max(_.map(pairs, _.first))!,
       _.max(_.map(pairs, _.last))!,
     ];

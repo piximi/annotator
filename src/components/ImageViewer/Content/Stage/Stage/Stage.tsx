@@ -35,6 +35,7 @@ import { imageViewerSlice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
 import { Instance } from "../../../../../types/Instance";
 import { shadeHex } from "../../../../../image/shade";
+import { useMarchingAnts } from "../../../../../hooks";
 
 type StageProps = {
   category: Category;
@@ -68,6 +69,8 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
+
+  const dashOffset = useMarchingAnts();
 
   useEffect(() => {
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
@@ -261,12 +264,24 @@ export const Stage = ({ category, src }: StageProps) => {
         {!selected && <Selection operation={operation} operator={operator} />}
 
         {selected && operator && operator.contour && (
-          <ReactKonva.Line
-            points={operator.contour}
-            ref={selectingRef}
-            stroke="white"
-            strokeWidth={1}
-          />
+          <React.Fragment>
+            <ReactKonva.Line
+              dash={[4, 2]}
+              dashOffset={-dashOffset}
+              points={operator.contour}
+              ref={selectingRef}
+              stroke="black"
+              strokeWidth={1}
+            />
+
+            <ReactKonva.Line
+              dash={[4, 2]}
+              dashOffset={-dashOffset}
+              points={operator.contour}
+              stroke="white"
+              strokeWidth={1}
+            />
+          </React.Fragment>
         )}
 
         {instances &&

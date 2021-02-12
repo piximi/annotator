@@ -232,14 +232,18 @@ export const Stage = ({ category, src }: StageProps) => {
     console.log(selectingRef);
     console.log(transformerRef);
   }, [enterPress]);
-  //
-  // useEffect(() => {
-  //   if (!escapePress) return;
-  //
-  //   if (!operator) return;
-  //
-  //   operator.deselect();
-  // }, [escapePress]);
+
+  useEffect(() => {
+    if (!selected) return;
+
+    if (!escapePress) return;
+
+    if (!operator) return;
+
+    operator.deselect();
+
+    transformerRef.current?.detach();
+  }, [escapePress]);
 
   return (
     <ReactKonva.Stage

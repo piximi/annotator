@@ -244,7 +244,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   useEffect(() => {
     if (selection) {
-      if (escapePress || deletePress) {
+      if (backspacePress || escapePress || deletePress) {
         dispatch(
           imageViewerSlice.actions.deleteImageViewerImageInstance({
             id: selection,

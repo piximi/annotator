@@ -63,6 +63,7 @@ export const Stage = ({ category, src }: StageProps) => {
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
   const deletePress = useKeyPress("Delete");
+  const backspacePress = useKeyPress("Backspace");
 
   const dashOffset = useMarchingAnts();
 
@@ -253,7 +254,7 @@ export const Stage = ({ category, src }: StageProps) => {
         transformerRef.current?.detach();
       }
     }
-  }, [deletePress, escapePress]);
+  }, [backspacePress, deletePress, escapePress]);
 
   return (
     <ReactKonva.Stage

@@ -13,7 +13,12 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
   output?: ImageJS.Image;
 
   get boundingBox(): [number, number, number, number] | undefined {
-    return [this.roi.minX, this.roi.minY, this.roi.maxX, this.roi.maxY];
+    return [
+      Math.round(this.roi.minX),
+      Math.round(this.roi.minY),
+      Math.round(this.roi.maxX),
+      Math.round(this.roi.maxY),
+    ];
   }
 
   get contour() {

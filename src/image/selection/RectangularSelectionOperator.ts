@@ -11,10 +11,10 @@ export class RectangularSelectionOperator extends SelectionOperator {
     if (!this.origin || !this.width || !this.height) return undefined;
 
     return [
-      this.origin.x,
-      this.origin.y,
-      this.origin.x + this.width,
-      this.origin.y + this.height,
+      Math.round(this.origin.x),
+      Math.round(this.origin.y),
+      Math.round(this.origin.x + this.width),
+      Math.round(this.origin.y + this.height),
     ];
   }
 

@@ -45,10 +45,10 @@ export class MagneticSelectionOperator extends SelectionOperator {
     const pairs = _.chunk(this.points, 2);
 
     return [
-      _.min(_.map(pairs, _.first))!,
-      _.min(_.map(pairs, _.last))!,
-      _.max(_.map(pairs, _.first))!,
-      _.max(_.map(pairs, _.last))!,
+      Math.round(_.min(_.map(pairs, _.first))!),
+      Math.round(_.min(_.map(pairs, _.last))!),
+      Math.round(_.max(_.map(pairs, _.first))!),
+      Math.round(_.max(_.map(pairs, _.last))!),
     ];
   }
 

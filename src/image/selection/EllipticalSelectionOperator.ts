@@ -11,10 +11,10 @@ export class EllipticalSelectionOperator extends SelectionOperator {
     if (!this.center || !this.origin || !this.radius) return undefined;
 
     return [
-      this.origin.x,
-      this.origin.y,
-      this.center.x + this.radius.x,
-      this.center.y + this.radius.y,
+      Math.round(this.origin.x),
+      Math.round(this.origin.y),
+      Math.round(this.center.x + this.radius.x),
+      Math.round(this.center.y + this.radius.y),
     ];
   }
 

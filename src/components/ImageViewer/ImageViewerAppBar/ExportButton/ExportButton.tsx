@@ -4,12 +4,35 @@ import React from "react";
 import Tooltip from "@material-ui/core/Tooltip";
 import { useStyles } from "./ExportButton.css";
 import { saveAs } from "file-saver";
+import { useSelector } from "react-redux";
+import {
+  categoriesSelector,
+  imageViewerImageSelector,
+} from "../../../../store/selectors";
+import * as _ from "lodash";
 
 export const ExportButton = () => {
   const classes = useStyles();
 
+  const image = useSelector(imageViewerImageSelector);
+  const projectCategories = useSelector(categoriesSelector);
+
   const onClick = () => {
-    const blobParts = ["{ foo: true }"];
+    if (!image) return;
+
+    const foo = {
+      src: image.src,
+      instances: image.instances.map((instance) => {
+        return {
+          boundingBox: instance.boundingBox,
+          category: _.find(projectCategories, (category) => {
+            return category.id === instance.categoryId;
+          })?.name,
+          mask: instance.mask,
+        };
+      }),
+    };
+    const blobParts = [JSON.stringify(foo)];
 
     const options = {
       type: "text/json;charset=utf-8",

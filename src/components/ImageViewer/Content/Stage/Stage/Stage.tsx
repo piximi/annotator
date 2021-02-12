@@ -143,7 +143,11 @@ export const Stage = ({ category, src }: StageProps) => {
     event: Konva.KonvaEventObject<MouseEvent>,
     instance: Instance
   ) => {
-    if (operator) operator.deselect();
+    if (!operator) return;
+
+    if (operator.selecting) return;
+
+    operator.deselect();
 
     setSelection(instance.id);
 

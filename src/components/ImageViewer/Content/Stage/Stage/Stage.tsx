@@ -224,6 +224,8 @@ export const Stage = ({ category, src }: StageProps) => {
 
     operator.deselect();
 
+    transformerRef.current?.detach();
+
     selectingRef.current = null;
     transformerRef.current = null;
     setSelected(false);

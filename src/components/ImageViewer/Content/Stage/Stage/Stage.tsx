@@ -146,6 +146,9 @@ export const Stage = ({ category, src }: StageProps) => {
     setSelection(instance.id);
 
     selectionRef.current = event.target as Konva.Line;
+
+    transformerRef.current?.nodes([selectionRef.current]);
+
     console.log(selectionRef);
     console.log(selection);
     console.log(event);

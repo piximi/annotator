@@ -62,6 +62,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
+  const deletePress = useKeyPress("Delete");
 
   const dashOffset = useMarchingAnts();
 
@@ -242,7 +243,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   useEffect(() => {
     if (selection) {
-      if (escapePress) {
+      if (escapePress || deletePress) {
         dispatch(
           imageViewerSlice.actions.deleteImageViewerImageInstance({
             id: selection,
@@ -252,7 +253,7 @@ export const Stage = ({ category, src }: StageProps) => {
         transformerRef.current?.detach();
       }
     }
-  }, [escapePress]);
+  }, [deletePress, escapePress]);
 
   return (
     <ReactKonva.Stage

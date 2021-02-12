@@ -148,10 +148,6 @@ export const Stage = ({ category, src }: StageProps) => {
     selectionRef.current = event.target as Konva.Line;
 
     transformerRef.current?.nodes([selectionRef.current]);
-
-    console.log(selectionRef);
-    console.log(selection);
-    console.log(event);
   };
 
   const onMouseDown = useMemo(() => {
@@ -242,6 +238,20 @@ export const Stage = ({ category, src }: StageProps) => {
     operator.deselect();
 
     transformerRef.current?.detach();
+  }, [escapePress]);
+
+  useEffect(() => {
+    if (selection) {
+      if (escapePress) {
+        dispatch(
+          imageViewerSlice.actions.deleteImageViewerImageInstance({
+            id: selection,
+          })
+        );
+
+        transformerRef.current?.detach();
+      }
+    }
   }, [escapePress]);
 
   return (

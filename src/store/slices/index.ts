@@ -29,6 +29,7 @@ export {
 } from "./classifierSlice";
 
 export {
+  deleteImageViewerImageInstance,
   imageViewerSlice,
   setImageViewerBrightness,
   setImageViewerContrast,

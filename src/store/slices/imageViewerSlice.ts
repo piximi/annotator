@@ -22,6 +22,16 @@ export const imageViewerSlice = createSlice({
   initialState: initialState,
   name: "image-viewer",
   reducers: {
+    deleteImageViewerImageInstance(
+      state: ImageViewerState,
+      action: PayloadAction<{ id: string }>
+    ) {
+      if (!state.image) return;
+
+      state.image.instances = state.image.instances.filter(
+        (instance: Instance) => instance.id !== action.payload.id
+      );
+    },
     setImageViewerBrightness(
       state: ImageViewerState,
       action: PayloadAction<{ brightness: number }>
@@ -94,6 +104,7 @@ export const imageViewerSlice = createSlice({
 });
 
 export const {
+  deleteImageViewerImageInstance,
   setImageViewerBrightness,
   setImageViewerContrast,
   setImageViewerExposure,

@@ -226,11 +226,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
     transformerRef.current?.detach();
 
-    selectingRef.current = null;
-    transformerRef.current = null;
     setSelected(false);
-    console.log(selectingRef);
-    console.log(transformerRef);
   }, [enterPress]);
 
   useEffect(() => {

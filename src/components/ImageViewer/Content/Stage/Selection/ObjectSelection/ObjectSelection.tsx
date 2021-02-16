@@ -8,16 +8,6 @@ type ObjectSelectionProps = {
 };
 
 export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {
-  const [image, setImage] = useState<HTMLImageElement>();
-
-  useEffect(() => {
-    if (operator.prediction) {
-      const img = new Image();
-      img.src = operator.prediction.toDataURL();
-      setImage(img);
-    }
-  }, [operator.prediction]);
-
   const dashOffset = useMarchingAnts();
 
   if (!operator.origin || !operator.width || !operator.height) return null;
@@ -46,19 +36,11 @@ export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {
         y={operator.origin.y}
       />
 
-      {/*<ReactKonva.Line*/}
-      {/*  stroke="white"*/}
-      {/*  points={operator.points}*/}
-      {/*  strokeWidth={1}*/}
-      {/*/>*/}
-
-      {operator.offset && (
-        <ReactKonva.Image
-          image={image}
-          x={operator.offset.x}
-          y={operator.offset.y}
-        />
-      )}
+      <ReactKonva.Line
+        stroke="white"
+        points={operator.points}
+        strokeWidth={1}
+      />
     </ReactKonva.Group>
   );
 };

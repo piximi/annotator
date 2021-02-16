@@ -3,6 +3,7 @@ import { Category } from "../../types/Category";
 import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
 import * as _ from "lodash";
+import { isoLines } from "marchingsquares";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
   graph?: tensorflow.LayersModel;
@@ -23,7 +24,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
   }
 
   get contour() {
-    return [];
+    return this.points;
   }
 
   get mask(): string | undefined {
@@ -125,41 +126,66 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
             data: clamped,
           });
 
-          const mask = this.output.grey().mask();
-          // @ts-ignore
-          const rois = this.manager.fromMask(mask).getRois();
-          rois.sort((a: any, b: any) => b.surface - a.surface);
-          this.roi = rois[0];
+          const data = this.output.grey().getMatrix().data;
+          const bar = data.map((el: Array<number>) => {
+            return Array.from(el);
+          });
+          const polygons = isoLines(bar, 1);
 
-          if (!this.roi) return;
+          polygons.sort((a: Array<number>, b: Array<number>) => {
+            if (a.length < b.length) {
+              return -1;
+            }
 
-          const contour = this.roi.getMask({ kind: "contour" });
+            if (a.length > b.length) {
+              return 1;
+            }
 
-          const data = contour.getRGBAData();
+            return 0;
+          });
+          const largest = polygons[polygons.length - 1];
+          const foo: Array<number> = _.flatten(largest);
+          this.points = foo.map((el: number) => {
+            return Math.round(el);
+          });
 
-          const boundary = _.flatten(
-            _.chunk(data, 4).map((el, idx) => {
-              if (el[0] === 0) {
-                return [el[0], el[1], el[2], 0];
-              } else {
-                return el;
-              }
-            })
-          );
-
-          const boundaryArray = Uint8Array.from(boundary as number[]);
-          const boundaryImage = new ImageJS.Image(
-            contour.width,
-            contour.height,
-            boundaryArray
-          );
-
-          this.offset = {
-            x: this.roi.minX,
-            y: this.roi.minY,
-          };
-
-          this.prediction = boundaryImage;
+          // const mask = this.output.grey().mask();
+          // // @ts-ignore
+          // const rois = this.manager.fromMask(mask).getRois();
+          // rois.sort((a: any, b: any) => b.surface - a.surface);
+          // this.roi = rois[0];
+          //
+          // if (!this.roi) return;
+          //
+          // const contour = this.roi.getMask({ kind: "contour" });
+          //
+          // const data = contour.getRGBAData();
+          //
+          // debugger;
+          //
+          // const boundary = _.flatten(
+          //   _.chunk(data, 4).map((el, idx) => {
+          //     if (el[0] === 0) {
+          //       return [el[0], el[1], el[2], 0];
+          //     } else {
+          //       return el;
+          //     }
+          //   })
+          // );
+          //
+          // const boundaryArray = Uint8Array.from(boundary as number[]);
+          // const boundaryImage = new ImageJS.Image(
+          //   contour.width,
+          //   contour.height,
+          //   boundaryArray
+          // );
+          //
+          // this.offset = {
+          //   x: this.roi.minX,
+          //   y: this.roi.minY,
+          // };
+          //
+          // this.prediction = boundaryImage;
         });
     }
   }

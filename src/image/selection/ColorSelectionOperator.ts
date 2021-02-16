@@ -21,6 +21,10 @@ export class ColorSelectionOperator extends SelectionOperator {
     return undefined;
   }
 
+  get contour() {
+    return [];
+  }
+
   get mask(): string | undefined {
     return undefined;
   }

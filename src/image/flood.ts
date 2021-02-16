@@ -113,12 +113,14 @@ export const floodPixels = ({
   let roi = overlay.getRoiManager();
 
   // Use the watershed function with a single seed to determine the selected region.
+  // @ts-ignore
   roi.fromWaterShed({
     image: image,
     fillMaxValue: tolerance,
     points: [[x, y]],
   });
 
+  // @ts-ignore
   let mask = roi.getMasks()[0];
 
   // roiPaint doesn't respect alpha, so we'll paint it ourselves.

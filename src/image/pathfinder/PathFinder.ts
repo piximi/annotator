@@ -145,7 +145,9 @@ function reconstructPath(
   width: number,
   factor: number = 1
 ) {
-  const [x, y] = fromIdxToCoord(searchNode.id, width);
+  if (!searchNode) return;
+
+  const [x, y] = fromIdxToCoord(searchNode.id as number, width);
   const newCoord = [x / factor, y / factor];
   let coords = [];
   const fromId = graph.fromId;

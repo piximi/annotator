@@ -51,30 +51,6 @@ export const projectSlice = createSlice({
       };
       state.images.push(image);
     },
-    createImageInstance(
-      state: Project,
-      action: PayloadAction<{
-        boundingBox: BoundingBox;
-        categoryId: string;
-        id: string;
-        mask: string;
-      }>
-    ) {
-      const instance: Instance = {
-        boundingBox: action.payload.boundingBox,
-        categoryId: action.payload.categoryId,
-        mask: action.payload.mask,
-      };
-
-      const index = findIndex(state.images, (image: Image) => {
-        return image.id === action.payload.id;
-      });
-
-      state.images[index].instances = [
-        ...state.images[index].instances,
-        instance,
-      ];
-    },
     createProject(state: Project, action: PayloadAction<{ project: Project }>) {
       state.categories = action.payload.project.categories;
       state.name = action.payload.project.name;
@@ -159,7 +135,6 @@ export const projectSlice = createSlice({
 export const {
   createCategory,
   createImage,
-  createImageInstance,
   createProject,
   deleteCategory,
   updateCategory,

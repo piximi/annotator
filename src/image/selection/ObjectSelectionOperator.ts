@@ -8,6 +8,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
   graph?: tensorflow.LayersModel;
   prediction?: ImageJS.Image;
   points: Array<number> = [];
+  // @ts-ignore
   roi?: ImageJS.Roi;
   offset?: { x: number; y: number };
   output?: ImageJS.Image;
@@ -125,6 +126,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
           });
 
           const mask = this.output.grey().mask();
+          // @ts-ignore
           const rois = this.manager.fromMask(mask).getRois();
           rois.sort((a: any, b: any) => b.surface - a.surface);
           this.roi = rois[0];

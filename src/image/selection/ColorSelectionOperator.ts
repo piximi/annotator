@@ -58,8 +58,6 @@ export class ColorSelectionOperator extends SelectionOperator {
   onMouseUp(position: { x: number; y: number }) {
     this.selected = true;
     this.selecting = false;
-
-    debugger;
   }
 
   select(category: Category) {

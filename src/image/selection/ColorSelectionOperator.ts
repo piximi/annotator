@@ -40,6 +40,8 @@ export class ColorSelectionOperator extends SelectionOperator {
     this.selected = false;
     this.selecting = false;
 
+    this.overlayData = "";
+
     this.roiMask = undefined;
     this.roiContour = undefined;
 
@@ -80,7 +82,7 @@ export class ColorSelectionOperator extends SelectionOperator {
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (!this.roiContour) return;
+    if (!this.roiContour || !this.roiMask) return;
 
     const greyData = _.chunk(this.roiContour.getRGBAData(), 4).map((chunk) => {
       if (chunk[0] === 255) {
@@ -98,36 +100,25 @@ export class ColorSelectionOperator extends SelectionOperator {
     const bar = maskData.map((el: Array<number>) => {
       return Array.from(el);
     });
-    const polygons: Array<Array<number>> = isoLines(bar, 1);
+    const polygons: Array<Array<number>>[] = isoLines(bar, 1);
 
-    polygons.sort((a: Array<number>, b: Array<number>) => {
+    polygons.sort((a: Array<Array<number>>, b: Array<Array<number>>) => {
       return b.length - a.length;
     });
 
-    this.points = _.flatten(polygons[0]).map((el: number) => {
-      return Math.round(el);
-    });
+    // @ts-ignore
+    const offsetX = this.roiMask.position[0];
+    // @ts-ignore
+    const offsetY = this.roiMask.position[1];
+
+    this.points = _.flatten(
+      polygons[0].map((coord) => {
+        return [Math.round(coord[0] + offsetX), Math.round(coord[1] + offsetY)];
+      })
+    );
 
     this.selected = true;
     this.selecting = false;
-  }
-
-  private updateOverlay(position: { x: any; y: any }) {
-    const roi = this.fromFlood({
-      x: Math.floor(position.x),
-      y: Math.floor(position.y),
-      image: this.toleranceMap!,
-      tolerance: this.tolerance,
-    });
-
-    // @ts-ignore
-    this.roiMask = roi.getMasks()[0];
-    // @ts-ignore
-    this.roiContour = roi.getMasks({ kind: "contour" })[0];
-
-    if (!this.roiMask) return;
-
-    this.overlayData = this.colorOverlay(this.roiMask, position, "red");
   }
 
   private colorOverlay(
@@ -196,4 +187,22 @@ export class ColorSelectionOperator extends SelectionOperator {
     });
     return roi;
   };
+
+  private updateOverlay(position: { x: any; y: any }) {
+    const roi = this.fromFlood({
+      x: Math.floor(position.x),
+      y: Math.floor(position.y),
+      image: this.toleranceMap!,
+      tolerance: this.tolerance,
+    });
+
+    // @ts-ignore
+    this.roiMask = roi.getMasks()[0];
+    // @ts-ignore
+    this.roiContour = roi.getMasks({ kind: "contour" })[0];
+
+    if (!this.roiMask) return;
+
+    this.overlayData = this.colorOverlay(this.roiMask, position, "red");
+  }
 }

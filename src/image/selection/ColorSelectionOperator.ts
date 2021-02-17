@@ -6,16 +6,9 @@ import { Category } from "../../types/Category";
 export class ColorSelectionOperator extends SelectionOperator {
   categoryColor?: string;
   overlayData: string = "";
-  // overlayImage: HTMLImageElement;
   initialPosition: { x: number; y: number } = { x: 0, y: 0 };
   tolerance: number = 1;
   toleranceMap?: ImageJS.Image;
-
-  // constructor(color: string, image: ImageJS.Image) {
-  //   super(image);
-  //   // this.overlayImage = new Image(image.width, image.height)
-  //   this.categoryColor = color;
-  // }
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -69,15 +62,12 @@ export class ColorSelectionOperator extends SelectionOperator {
   }
 
   private updateOverlay(position: { x: any; y: any }) {
-    if (!this.categoryColor) return;
-
     this.overlayData = floodPixels({
       x: Math.floor(position.x),
       y: Math.floor(position.y),
       image: this.toleranceMap!,
       tolerance: this.tolerance,
-      color: this.categoryColor,
+      color: "red",
     });
-    // this.overlayImage.src = this.overlayData;
   }
 }

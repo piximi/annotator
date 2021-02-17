@@ -1,0 +1,25 @@
+import { ColorSelectionOperator } from "../../../../../../image/selection";
+import * as ReactKonva from "react-konva";
+import React, { useEffect, useState } from "react";
+
+type ColorSelectionProps = {
+  operator: ColorSelectionOperator;
+};
+
+export const ColorSelection = ({ operator }: ColorSelectionProps) => {
+  const [image, setImage] = useState<HTMLImageElement>();
+
+  useEffect(() => {
+    const image = new Image();
+    image.src = operator.overlayData;
+    setImage(image);
+  }, [operator.overlayData]);
+
+  if (!operator.overlayData) return null;
+
+  return (
+    <ReactKonva.Group>
+      <ReactKonva.Image image={image} />
+    </ReactKonva.Group>
+  );
+};

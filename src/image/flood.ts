@@ -91,13 +91,11 @@ export const floodPixels = ({
   y,
   image,
   tolerance,
-  color,
 }: {
   x: number;
   y: number;
   image: ImageJS.Image;
   tolerance: number;
-  color: string;
 }) => {
   let overlay = new ImageJS.Image(
     image.width,
@@ -105,11 +103,6 @@ export const floodPixels = ({
     new Uint8ClampedArray(image.width * image.height * 4),
     { alpha: 1 }
   );
-  const r = parseInt(color.slice(1, 3), 16);
-  const g = parseInt(color.slice(3, 5), 16);
-  const b = parseInt(color.slice(5, 7), 16);
-  const fillColor = [r, g, b, 150];
-
   let roi = overlay.getRoiManager();
 
   // Use the watershed function with a single seed to determine the selected region.
@@ -123,20 +116,5 @@ export const floodPixels = ({
   // @ts-ignore
   let mask = roi.getMasks()[0];
 
-  // roiPaint doesn't respect alpha, so we'll paint it ourselves.
-  for (let x = 0; x < mask.width; x++) {
-    for (let y = 0; y < mask.height; y++) {
-      if (mask.getBitXY(x, y)) {
-        overlay.setPixelXY(
-          x + mask.position[0],
-          y + mask.position[1],
-          fillColor
-        );
-      }
-    }
-  }
-
-  // Set the origin point to white, for visibility.
-  overlay.setPixelXY(x, y, [255, 255, 255, 255]);
-  return overlay.toDataURL();
+  return mask;
 };

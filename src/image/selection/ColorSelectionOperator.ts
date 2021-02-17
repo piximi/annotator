@@ -4,6 +4,7 @@ import * as ImageJS from "image-js";
 import { Category } from "../../types/Category";
 
 export class ColorSelectionOperator extends SelectionOperator {
+  binaryMask?: ImageJS.Image;
   categoryColor?: string;
   overlayData: string = "";
   initialPosition: { x: number; y: number } = { x: 0, y: 0 };
@@ -19,7 +20,9 @@ export class ColorSelectionOperator extends SelectionOperator {
   }
 
   get mask(): string | undefined {
-    return undefined;
+    if (!this.binaryMask) return;
+
+    return this.binaryMask.toDataURL();
   }
 
   deselect() {}
@@ -55,6 +58,8 @@ export class ColorSelectionOperator extends SelectionOperator {
   onMouseUp(position: { x: number; y: number }) {
     this.selected = true;
     this.selecting = false;
+
+    debugger;
   }
 
   select(category: Category) {
@@ -62,12 +67,51 @@ export class ColorSelectionOperator extends SelectionOperator {
   }
 
   private updateOverlay(position: { x: any; y: any }) {
-    this.overlayData = floodPixels({
+    this.binaryMask = floodPixels({
       x: Math.floor(position.x),
       y: Math.floor(position.y),
       image: this.toleranceMap!,
       tolerance: this.tolerance,
-      color: "red",
     });
+
+    if (!this.binaryMask) return;
+
+    this.overlayData = this.colorOverlay(this.binaryMask, position, "red");
+  }
+
+  private colorOverlay(
+    mask: ImageJS.Image,
+    position: { x: number; y: number },
+    color: string
+  ) {
+    const r = parseInt(color.slice(1, 3), 16);
+    const g = parseInt(color.slice(3, 5), 16);
+    const b = parseInt(color.slice(5, 7), 16);
+    const fillColor = [r, g, b, 150];
+
+    let overlay = new ImageJS.Image(
+      mask.width,
+      mask.height,
+      new Uint8ClampedArray(mask.width * mask.height * 4),
+      { alpha: 1 }
+    );
+
+    // roiPaint doesn't respect alpha, so we'll paint it ourselves.
+    for (let x = 0; x < mask.width; x++) {
+      for (let y = 0; y < mask.height; y++) {
+        if (mask.getBitXY(x, y)) {
+          overlay.setPixelXY(
+            x + mask.position[0],
+            y + mask.position[1],
+            fillColor
+          );
+        }
+      }
+    }
+
+    // Set the origin point to white, for visibility.
+    overlay.setPixelXY(position.x, position.y, [255, 255, 255, 255]);
+
+    return overlay.toDataURL();
   }
 }

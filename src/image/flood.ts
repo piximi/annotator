@@ -85,36 +85,3 @@ export const makeFloodMap = ({
     components: 1,
   });
 };
-
-export const floodPixels = ({
-  x,
-  y,
-  image,
-  tolerance,
-}: {
-  x: number;
-  y: number;
-  image: ImageJS.Image;
-  tolerance: number;
-}) => {
-  let overlay = new ImageJS.Image(
-    image.width,
-    image.height,
-    new Uint8ClampedArray(image.width * image.height * 4),
-    { alpha: 1 }
-  );
-  let roi = overlay.getRoiManager();
-
-  // Use the watershed function with a single seed to determine the selected region.
-  // @ts-ignore
-  roi.fromWaterShed({
-    image: image,
-    fillMaxValue: tolerance,
-    points: [[x, y]],
-  });
-
-  // @ts-ignore
-  let mask = roi.getMasks()[0];
-
-  return mask;
-};

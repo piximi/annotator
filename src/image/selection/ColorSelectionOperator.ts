@@ -1,13 +1,12 @@
 import { SelectionOperator } from "./SelectionOperator";
-import { floodPixels, makeFloodMap } from "../flood";
+import { makeFloodMap } from "../flood";
 import * as ImageJS from "image-js";
-import { Category } from "../../types/Category";
 import * as _ from "lodash";
 import { isoLines } from "marchingsquares";
 
 export class ColorSelectionOperator extends SelectionOperator {
-  binaryMask?: ImageJS.Image;
-  categoryColor?: string;
+  roiContour?: ImageJS.Image;
+  roiMask?: ImageJS.Image;
   overlayData: string = "";
   points: Array<number> = [];
   initialPosition: { x: number; y: number } = { x: 0, y: 0 };
@@ -19,41 +18,29 @@ export class ColorSelectionOperator extends SelectionOperator {
   }
 
   get contour() {
-    if (!this.binaryMask) return;
-
-    const greyData = _.chunk(this.binaryMask.getRGBAData(), 4).map((chunk) => {
-      if (chunk[0] === 255) {
-        return 255;
-      } else return 0;
-    });
-    // @ts-ignore
-    const maskData = ImageJS.Image.createFrom(this.binaryMask, {
-      bitDepth: 8,
-      data: greyData,
-    }).getMatrix().data;
-
-    const bar = maskData.map((el: Array<number>) => {
-      return Array.from(el);
-    });
-    const polygons: Array<Array<number>> = isoLines(bar, 1);
-    polygons.sort((a: Array<number>, b: Array<number>) => {
-      return b.length - a.length;
-    });
-
-    this.points = _.flatten(polygons[0]).map((el: number) => {
-      return Math.round(el);
-    });
-
     return this.points;
   }
 
   get mask(): string | undefined {
-    if (!this.binaryMask) return;
+    if (!this.roiMask) return;
 
-    return this.binaryMask.toDataURL();
+    return this.roiMask.toDataURL();
   }
 
-  deselect() {}
+  deselect() {
+    this.selected = false;
+    this.selecting = false;
+
+    this.roiMask = undefined;
+    this.roiContour = undefined;
+
+    this.points = [];
+
+    this.initialPosition = { x: 0, y: 0 };
+
+    this.tolerance = 1;
+    this.toleranceMap = undefined;
+  }
 
   onMouseDown(position: { x: number; y: number }) {
     this.selected = false;
@@ -84,32 +71,52 @@ export class ColorSelectionOperator extends SelectionOperator {
   }
 
   onMouseUp(position: { x: number; y: number }) {
+    if (!this.roiContour) return;
+
+    const greyData = _.chunk(this.roiContour.getRGBAData(), 4).map((chunk) => {
+      if (chunk[0] === 255) {
+        return 255;
+      } else return 0;
+    });
+    // @ts-ignore
+    const maskData = ImageJS.Image.createFrom(this.roiMask, {
+      bitDepth: 8,
+      data: greyData,
+    }).getMatrix().data;
+
+    const bar = maskData.map((el: Array<number>) => {
+      return Array.from(el);
+    });
+    const polygons: Array<Array<number>> = isoLines(bar, 1);
+
+    polygons.sort((a: Array<number>, b: Array<number>) => {
+      return b.length - a.length;
+    });
+
+    this.points = _.flatten(polygons[0]).map((el: number) => {
+      return Math.round(el);
+    });
+
     this.selected = true;
     this.selecting = false;
-    console.log(this.contour);
-    debugger;
-  }
-
-  select(category: Category) {
-    this.categoryColor = category.color;
   }
 
   private updateOverlay(position: { x: any; y: any }) {
-    this.binaryMask = floodPixels({
+    const roi = this.fromFlood({
       x: Math.floor(position.x),
       y: Math.floor(position.y),
       image: this.toleranceMap!,
       tolerance: this.tolerance,
     });
 
-    if (!this.binaryMask) return;
-
-    // const mask = ImageJS.Image.createFrom(this.binaryMask, {bitDepth: 8, data: this.binaryMask.getRGBAData(), components: 3 });
-
     // @ts-ignore
-    // const data = this.binaryMask.grey().getMatrix().data;
+    this.roiMask = roi.getMasks()[0];
+    // @ts-ignore
+    this.roiContour = roi.getMasks({ kind: "contour" })[0];
 
-    this.overlayData = this.colorOverlay(this.binaryMask, position, "red");
+    if (!this.roiMask) return;
+
+    this.overlayData = this.colorOverlay(this.roiMask, position, "red");
   }
 
   private colorOverlay(
@@ -149,4 +156,33 @@ export class ColorSelectionOperator extends SelectionOperator {
 
     return overlay.toDataURL();
   }
+
+  private fromFlood = ({
+    x,
+    y,
+    image,
+    tolerance,
+  }: {
+    x: number;
+    y: number;
+    image: ImageJS.Image;
+    tolerance: number;
+  }) => {
+    let overlay = new ImageJS.Image(
+      image.width,
+      image.height,
+      new Uint8ClampedArray(image.width * image.height * 4),
+      { alpha: 1 }
+    );
+    let roi = overlay.getRoiManager();
+
+    // Use the watershed function with a single seed to determine the selected region.
+    // @ts-ignore
+    roi.fromWaterShed({
+      image: image,
+      fillMaxValue: tolerance,
+      points: [[x, y]],
+    });
+    return roi;
+  };
 }

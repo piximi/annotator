@@ -2,11 +2,14 @@ import { SelectionOperator } from "./SelectionOperator";
 import { floodPixels, makeFloodMap } from "../flood";
 import * as ImageJS from "image-js";
 import { Category } from "../../types/Category";
+import * as _ from "lodash";
+import { isoLines } from "marchingsquares";
 
 export class ColorSelectionOperator extends SelectionOperator {
   binaryMask?: ImageJS.Image;
   categoryColor?: string;
   overlayData: string = "";
+  points: Array<number> = [];
   initialPosition: { x: number; y: number } = { x: 0, y: 0 };
   tolerance: number = 1;
   toleranceMap?: ImageJS.Image;
@@ -16,7 +19,32 @@ export class ColorSelectionOperator extends SelectionOperator {
   }
 
   get contour() {
-    return [];
+    if (!this.binaryMask) return;
+
+    const greyData = _.chunk(this.binaryMask.getRGBAData(), 4).map((chunk) => {
+      if (chunk[0] === 255) {
+        return 255;
+      } else return 0;
+    });
+    // @ts-ignore
+    const maskData = ImageJS.Image.createFrom(this.binaryMask, {
+      bitDepth: 8,
+      data: greyData,
+    }).getMatrix().data;
+
+    const bar = maskData.map((el: Array<number>) => {
+      return Array.from(el);
+    });
+    const polygons: Array<Array<number>> = isoLines(bar, 1);
+    polygons.sort((a: Array<number>, b: Array<number>) => {
+      return b.length - a.length;
+    });
+
+    this.points = _.flatten(polygons[0]).map((el: number) => {
+      return Math.round(el);
+    });
+
+    return this.points;
   }
 
   get mask(): string | undefined {
@@ -58,6 +86,8 @@ export class ColorSelectionOperator extends SelectionOperator {
   onMouseUp(position: { x: number; y: number }) {
     this.selected = true;
     this.selecting = false;
+    console.log(this.contour);
+    debugger;
   }
 
   select(category: Category) {
@@ -73,6 +103,11 @@ export class ColorSelectionOperator extends SelectionOperator {
     });
 
     if (!this.binaryMask) return;
+
+    // const mask = ImageJS.Image.createFrom(this.binaryMask, {bitDepth: 8, data: this.binaryMask.getRGBAData(), components: 3 });
+
+    // @ts-ignore
+    // const data = this.binaryMask.grey().getMatrix().data;
 
     this.overlayData = this.colorOverlay(this.binaryMask, position, "red");
   }

@@ -14,7 +14,16 @@ export class ColorSelectionOperator extends SelectionOperator {
   toleranceMap?: ImageJS.Image;
 
   get boundingBox(): [number, number, number, number] | undefined {
-    return undefined;
+    if (!this.points) return undefined;
+
+    const pairs = _.chunk(this.points, 2);
+
+    return [
+      Math.round(_.min(_.map(pairs, _.first))!),
+      Math.round(_.min(_.map(pairs, _.last))!),
+      Math.round(_.max(_.map(pairs, _.first))!),
+      Math.round(_.max(_.map(pairs, _.last))!),
+    ];
   }
 
   get contour() {
@@ -79,10 +88,12 @@ export class ColorSelectionOperator extends SelectionOperator {
       } else return 0;
     });
     // @ts-ignore
-    const maskData = ImageJS.Image.createFrom(this.roiMask, {
+    const foo = ImageJS.Image.createFrom(this.roiMask, {
       bitDepth: 8,
       data: greyData,
-    }).getMatrix().data;
+    });
+    // @ts-ignore
+    const maskData = foo.getMatrix().data;
 
     const bar = maskData.map((el: Array<number>) => {
       return Array.from(el);

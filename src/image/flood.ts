@@ -73,7 +73,7 @@ export const makeFloodMap = ({
 
   const color = image.getPixelXY(x, y);
 
-  for (let i = 0; i < image.data.length; i += 4) {
+  for (let i = 0; i < image.data.length; i += image.channels) {
     const red = Math.abs(image.data[i] - color[0]);
     const green = Math.abs(image.data[i + 1] - color[1]);
     const blue = Math.abs(image.data[i + 2] - color[2]);

@@ -99,7 +99,9 @@ export class ColorSelectionOperator extends SelectionOperator {
       for (let y = 0; y < mask.height; y++) {
         if (mask.getBitXY(x, y)) {
           overlay.setPixelXY(
+            // @ts-ignore
             x + mask.position[0],
+            // @ts-ignore
             y + mask.position[1],
             fillColor
           );

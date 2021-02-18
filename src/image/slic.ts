@@ -4,7 +4,7 @@ export const slic = (
   height: number,
   regionSize: number = 40,
   minRegionSize?: number
-): { image: Uint8Array | Uint8ClampedArray; segmentation: Int32Array } => {
+): { map: Uint8Array | Uint8ClampedArray; segmentation: Int32Array } => {
   if (!minRegionSize) {
     minRegionSize = (regionSize * regionSize) / 4;
   }
@@ -392,7 +392,7 @@ export const slic = (
   }
 
   return {
-    image: data,
+    map: data,
     segmentation: segmentation,
   };
 };

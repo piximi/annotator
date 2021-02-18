@@ -1,9 +1,13 @@
 import { SelectionOperator } from "./SelectionOperator";
 import { SuperpixelArray } from "../../types/SuperpixelArray";
 import { slic } from "../slic";
+import * as ImageJS from "image-js";
 
 export class QuickSelectionOperator extends SelectionOperator {
-  private _superpixels: SuperpixelArray = {};
+  superpixels?: SuperpixelArray;
+
+  // maps pixel position to superpixel index
+  map?: Uint8Array | Uint8ClampedArray;
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -17,24 +21,25 @@ export class QuickSelectionOperator extends SelectionOperator {
     return undefined;
   }
 
-  get superpixels(): SuperpixelArray | undefined {
-    if (this._superpixels) return this._superpixels;
-
+  filter(): {
+    map: Uint8Array | Uint8ClampedArray;
+    superpixels: SuperpixelArray;
+  } {
     const data = this.image.getRGBAData();
 
-    const { image, segmentation } = slic(
+    const { map, segmentation } = slic(
       data,
       this.image.width,
       this.image.height
     );
 
-    let superpixelArray: SuperpixelArray = {};
+    let superpixels: SuperpixelArray = {};
 
     for (let index = 0; index < segmentation.length; index += 1) {
       const current = segmentation[index];
 
-      if (!superpixelArray.hasOwnProperty(current)) {
-        superpixelArray[current] = {
+      if (!superpixels.hasOwnProperty(current)) {
+        superpixels[current] = {
           count: 0,
           mask: {
             background: 0,
@@ -50,19 +55,19 @@ export class QuickSelectionOperator extends SelectionOperator {
         };
       }
 
-      superpixelArray[current].count += 1;
-      superpixelArray[current].mp[0] += data[4 * index];
-      superpixelArray[current].mp[1] += data[4 * index + 1];
-      superpixelArray[current].mp[2] += data[4 * index + 2];
+      superpixels[current].count += 1;
+      superpixels[current].mp[0] += data[4 * index];
+      superpixels[current].mp[1] += data[4 * index + 1];
+      superpixels[current].mp[2] += data[4 * index + 2];
     }
 
-    for (const superpixel in superpixelArray) {
-      superpixelArray[superpixel].mp[0] /= superpixelArray[superpixel].count;
-      superpixelArray[superpixel].mp[1] /= superpixelArray[superpixel].count;
-      superpixelArray[superpixel].mp[2] /= superpixelArray[superpixel].count;
+    for (const superpixel in superpixels) {
+      superpixels[superpixel].mp[0] /= superpixels[superpixel].count;
+      superpixels[superpixel].mp[1] /= superpixels[superpixel].count;
+      superpixels[superpixel].mp[2] /= superpixels[superpixel].count;
     }
 
-    Object.values(superpixelArray).forEach((superpixel) => {
+    Object.values(superpixels).forEach((superpixel) => {
       if (superpixel.mask.foreground > 0 && superpixel.mask.background === 0) {
         superpixel.role.foreground = true;
       } else if (
@@ -81,7 +86,7 @@ export class QuickSelectionOperator extends SelectionOperator {
     });
 
     for (let index = 0; index < segmentation.length; index += 1) {
-      if (superpixelArray[segmentation[index]].role.foreground) {
+      if (superpixels[segmentation[index]].role.foreground) {
         data[4 * index] = data[4 * index];
         data[4 * index + 1] = data[4 * index + 1];
         data[4 * index + 2] = data[4 * index + 2];
@@ -94,7 +99,7 @@ export class QuickSelectionOperator extends SelectionOperator {
     let superpixel;
 
     for (let index = 0; index < segmentation.length; ++index) {
-      superpixel = superpixelArray[segmentation[index]];
+      superpixel = superpixels[segmentation[index]];
 
       data[4 * index + 3] = 255;
 
@@ -109,12 +114,48 @@ export class QuickSelectionOperator extends SelectionOperator {
       }
     }
 
-    this._superpixels = superpixelArray;
+    return { map, superpixels };
   }
 
   deselect() {}
 
-  onMouseDown(position: { x: number; y: number }) {}
+  onMouseDown(position: { x: number; y: number }) {
+    if (this.selected) return;
+
+    if (!this.superpixels) {
+      const { map, superpixels } = this.filter();
+
+      this.map = map;
+
+      this.superpixels = superpixels;
+    }
+
+    const pixel = (position.x + position.y * this.image.width) * 4;
+
+    if (!this.map) return;
+
+    const index = this.map[pixel];
+
+    const superpixelMask = this.map.map((element: number, j: number) => {
+      if (element === index || (j + 1) % 4 === 0) {
+        return 255;
+      } else {
+        return 0;
+      }
+    });
+
+    const superpixel = new ImageJS.Image(
+      this.image.width,
+      this.image.height,
+      superpixelMask
+    );
+
+    console.info(superpixel.toDataURL());
+
+    debugger;
+
+    this.selecting = true;
+  }
 
   onMouseMove(position: { x: number; y: number }) {}
 

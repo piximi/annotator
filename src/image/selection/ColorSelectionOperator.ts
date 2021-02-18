@@ -7,6 +7,7 @@ import { isoLines } from "marchingsquares";
 export class ColorSelectionOperator extends SelectionOperator {
   roiContour?: ImageJS.Image;
   roiMask?: ImageJS.Image;
+  offset?: { x: number; y: number };
   overlayData: string = "";
   points: Array<number> = [];
   initialPosition: { x: number; y: number } = { x: 0, y: 0 };
@@ -134,7 +135,7 @@ export class ColorSelectionOperator extends SelectionOperator {
     let overlay = new ImageJS.Image(
       mask.width,
       mask.height,
-      new Uint8ClampedArray(mask.width * mask.height * 4),
+      new Uint8Array(mask.width * mask.height * 4),
       { alpha: 1 }
     );
 
@@ -142,13 +143,7 @@ export class ColorSelectionOperator extends SelectionOperator {
     for (let x = 0; x < mask.width; x++) {
       for (let y = 0; y < mask.height; y++) {
         if (mask.getBitXY(x, y)) {
-          overlay.setPixelXY(
-            // @ts-ignore
-            x + mask.position[0],
-            // @ts-ignore
-            y + mask.position[1],
-            fillColor
-          );
+          overlay.setPixelXY(x, y, fillColor);
         }
       }
     }
@@ -188,7 +183,7 @@ export class ColorSelectionOperator extends SelectionOperator {
     return roi;
   };
 
-  private updateOverlay(position: { x: any; y: any }) {
+  private updateOverlay(position: { x: number; y: number }) {
     const roi = this.fromFlood({
       x: Math.floor(position.x),
       y: Math.floor(position.y),
@@ -202,6 +197,9 @@ export class ColorSelectionOperator extends SelectionOperator {
     this.roiContour = roi.getMasks({ kind: "contour" })[0];
 
     if (!this.roiMask) return;
+
+    // @ts-ignore
+    this.offset = { x: this.roiMask.position[0], y: this.roiMask.position[1] };
 
     this.overlayData = this.colorOverlay(this.roiMask, position, "red");
   }

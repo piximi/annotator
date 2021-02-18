@@ -15,11 +15,15 @@ export const ColorSelection = ({ operator }: ColorSelectionProps) => {
     setImage(image);
   }, [operator.overlayData]);
 
-  if (!operator.overlayData) return null;
+  if (!operator.overlayData || !operator.offset) return null;
 
   return (
     <ReactKonva.Group>
-      <ReactKonva.Image image={image} />
+      <ReactKonva.Image
+        image={image}
+        x={operator.offset.x}
+        y={operator.offset.y}
+      />
     </ReactKonva.Group>
   );
 };

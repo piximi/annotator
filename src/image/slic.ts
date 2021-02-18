@@ -1,14 +1,16 @@
 export const slic = (
-  imageData: ImageData,
+  data: Uint8Array | Uint8ClampedArray,
+  width: number,
+  height: number,
   regionSize: number = 40,
   minRegionSize?: number
-) => {
+): { image: Uint8Array | Uint8ClampedArray; segmentation: Int32Array } => {
   if (!minRegionSize) {
     minRegionSize = (regionSize * regionSize) / 4;
   }
 
-  const imWidth = imageData.width;
-  const imHeight = imageData.height;
+  const imWidth = width;
+  const imHeight = height;
   const numRegionsX = parseInt(String(imWidth / regionSize), 10);
   const numRegionsY = parseInt(String(imHeight / regionSize), 10);
   const numRegions = parseInt(String(numRegionsX * numRegionsY), 10);
@@ -29,18 +31,15 @@ export const slic = (
   const gamma = 2.2;
 
   for (let i = 0; i < imWidth * imHeight; i++) {
-    const r = Math.pow(
-      parseFloat(String(imageData.data[4 * i])) * 0.00392156862,
-      gamma
-    );
+    const r = Math.pow(parseFloat(String(data[4 * i])) * 0.00392156862, gamma);
 
     const g = Math.pow(
-      parseFloat(String(imageData.data[4 * i + 1])) * 0.00392156862,
+      parseFloat(String(data[4 * i + 1])) * 0.00392156862,
       gamma
     );
 
     const b = Math.pow(
-      parseFloat(String(imageData.data[4 * i + 2])) * 0.00392156862,
+      parseFloat(String(data[4 * i + 2])) * 0.00392156862,
       gamma
     );
 
@@ -393,7 +392,7 @@ export const slic = (
   }
 
   return {
-    image: imageData,
+    image: data,
     segmentation: segmentation,
   };
 };

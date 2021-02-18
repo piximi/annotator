@@ -393,7 +393,7 @@ export const slic = (
   }
 
   return {
-    image: new Uint8Array(imageData.data),
+    image: imageData,
     segmentation: segmentation,
   };
 };

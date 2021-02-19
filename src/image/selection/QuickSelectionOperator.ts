@@ -7,10 +7,10 @@ import * as _ from "lodash";
 export class QuickSelectionOperator extends SelectionOperator {
   colorMasks?: Array<string>;
   superpixels?: Int32Array;
-  currentMask: string = "";
+  currentMask?: ImageJS.Image;
   // maps pixel position to superpixel index
   map?: Uint8Array | Uint8ClampedArray;
-  masks?: Array<Array<number | string | Int32Array>>;
+  masks?: Array<Array<number | ImageJS.Image | Int32Array>>;
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -35,7 +35,7 @@ export class QuickSelectionOperator extends SelectionOperator {
       data,
       this.image.width,
       this.image.height,
-      100
+      40
     );
 
     return { count, map, superpixels };
@@ -45,6 +45,22 @@ export class QuickSelectionOperator extends SelectionOperator {
 
   onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;
+
+    if (!this.superpixels || !this.masks) return;
+
+    const pixel =
+      Math.round(position.x) + Math.round(position.y) * this.image.width;
+
+    const superpixel = this.superpixels[pixel];
+
+    const mask = _.filter(this.masks, ([key, binaryMask, colorMask]) => {
+      return key === superpixel;
+      // if (key === superpixel) {
+      //   return colorMask as string;
+      // }
+    });
+
+    this.currentMask = mask[0][2] as ImageJS.Image;
 
     // if (!this.superpixels) {
     //
@@ -79,7 +95,7 @@ export class QuickSelectionOperator extends SelectionOperator {
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (!this.superpixels || !this.masks) return;
+    if (!this.superpixels || !this.masks || !this.currentMask) return;
 
     const pixel =
       Math.round(position.x) + Math.round(position.y) * this.image.width;
@@ -93,7 +109,9 @@ export class QuickSelectionOperator extends SelectionOperator {
       // }
     });
 
-    this.currentMask = mask[0][2] as string;
+    const colorMask = mask[0][2];
+
+    this.currentMask.add(colorMask, { channels: 4 });
   }
 
   onMouseUp(position: { x: number; y: number }) {}
@@ -123,7 +141,7 @@ export class QuickSelectionOperator extends SelectionOperator {
       }
     }
 
-    return overlay.toDataURL();
+    return overlay;
   }
 
   static setup(image: ImageJS.Image) {

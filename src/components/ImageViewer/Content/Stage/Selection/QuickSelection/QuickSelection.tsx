@@ -10,8 +10,10 @@ export const QuickSelection = ({ operator }: QuickSelectionProps) => {
   const [image, setImage] = useState<HTMLImageElement>();
 
   useEffect(() => {
+    if (!operator.currentMask) return;
+
     const image = new Image();
-    image.src = operator.currentMask;
+    image.src = operator.currentMask.toDataURL();
     setImage(image);
   }, [operator.currentMask]);
 

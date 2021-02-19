@@ -10,7 +10,7 @@ export class QuickSelectionOperator extends SelectionOperator {
   currentMask?: ImageJS.Image;
   // maps pixel position to superpixel index
   map?: Uint8Array | Uint8ClampedArray;
-  masks?: Array<Array<number | ImageJS.Image | Int32Array>>;
+  masks?: Array<Array<number | Int32Array | ImageJS.Image>>;
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -60,7 +60,7 @@ export class QuickSelectionOperator extends SelectionOperator {
       // }
     });
 
-    this.currentMask = mask[0][2] as ImageJS.Image;
+    this.currentMask = mask[0][3] as ImageJS.Image;
 
     // if (!this.superpixels) {
     //
@@ -109,9 +109,9 @@ export class QuickSelectionOperator extends SelectionOperator {
       // }
     });
 
-    const colorMask = mask[0][2];
+    const colorMask = mask[0][3];
 
-    this.currentMask.add(colorMask, { channels: 4 });
+    // this.currentMask.add(colorMask, { channels: 4 });
   }
 
   onMouseUp(position: { x: number; y: number }) {}
@@ -123,13 +123,23 @@ export class QuickSelectionOperator extends SelectionOperator {
     // const fillColor = [r, g, b, 150];
     const fillColor = [0, 255, 0, 150];
 
+    const foo: Array<Array<number>> = [];
+    for (let x = 0; x < mask.width; x++) {
+      for (let y = 0; y < mask.height; y++) {
+        if (mask.getPixelXY(x, y)[0] === 255) {
+          foo.push(fillColor);
+        } else {
+          foo.push([0, 0, 0, 0]);
+        }
+      }
+    }
+
     let overlay = new ImageJS.Image(
       mask.width,
       mask.height,
       new Uint8Array(mask.width * mask.height * 4),
       { alpha: 1 }
     );
-
     // roiPaint doesn't respect alpha, so we'll paint it ourselves.
     for (let x = 0; x < mask.width; x++) {
       for (let y = 0; y < mask.height; y++) {
@@ -141,7 +151,7 @@ export class QuickSelectionOperator extends SelectionOperator {
       }
     }
 
-    return overlay;
+    return [Int32Array.from(_.flatten(foo)), overlay];
   }
 
   static setup(image: ImageJS.Image) {
@@ -156,7 +166,7 @@ export class QuickSelectionOperator extends SelectionOperator {
     const unique = _.uniq(superpixels);
 
     const masks = unique.map((superpixel) => {
-      const binaryMask = superpixels.map((pixel: number) => {
+      const binaryData = superpixels.map((pixel: number) => {
         if (pixel === superpixel) {
           return 255;
         } else {
@@ -167,13 +177,16 @@ export class QuickSelectionOperator extends SelectionOperator {
       const binaryImage = new ImageJS.Image(
         image.width,
         image.height,
-        binaryMask,
+        binaryData,
         { components: 1, alpha: 0 }
       );
 
-      const colorMask = instance.colorSuperpixelMap(binaryImage, "green");
+      const [colorData, colorMask] = instance.colorSuperpixelMap(
+        binaryImage,
+        "green"
+      );
 
-      return [superpixel, binaryMask, colorMask];
+      return [superpixel, binaryData, colorData, colorMask];
     });
 
     instance.masks = masks;

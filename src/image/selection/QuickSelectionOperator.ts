@@ -10,7 +10,7 @@ export class QuickSelectionOperator extends SelectionOperator {
   currentMask: string = "";
   // maps pixel position to superpixel index
   map?: Uint8Array | Uint8ClampedArray;
-  masks?: Array<Array<string | Int32Array>>;
+  masks?: Array<Array<number | string | Int32Array>>;
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -86,7 +86,14 @@ export class QuickSelectionOperator extends SelectionOperator {
 
     const superpixel = this.superpixels[pixel];
 
-    this.currentMask = this.masks[superpixel][1] as string;
+    const mask = _.filter(this.masks, ([key, binaryMask, colorMask]) => {
+      return key === superpixel;
+      // if (key === superpixel) {
+      //   return colorMask as string;
+      // }
+    });
+
+    this.currentMask = mask[0][2] as string;
   }
 
   onMouseUp(position: { x: number; y: number }) {}
@@ -148,7 +155,7 @@ export class QuickSelectionOperator extends SelectionOperator {
 
       const colorMask = instance.colorSuperpixelMap(binaryImage, "green");
 
-      return [binaryMask, colorMask];
+      return [superpixel, binaryMask, colorMask];
     });
 
     instance.masks = masks;

@@ -99,7 +99,8 @@ export const Stage = ({ category, src }: StageProps) => {
 
           return;
         case ImageViewerOperation.QuickSelection:
-          setOperator(new QuickSelectionOperator(image));
+          const quickSelectionOperator = QuickSelectionOperator.setup(image);
+          setOperator(quickSelectionOperator);
 
           return;
         case ImageViewerOperation.RectangularSelection:

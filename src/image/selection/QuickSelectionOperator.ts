@@ -5,7 +5,8 @@ import * as ImageJS from "image-js";
 import * as _ from "lodash";
 
 export class QuickSelectionOperator extends SelectionOperator {
-  superpixels?: SuperpixelArray;
+  colorMasks?: Array<string>;
+  superpixels?: Int32Array;
   superpixelData: string = "";
   // maps pixel position to superpixel index
   map?: Uint8Array | Uint8ClampedArray;
@@ -36,87 +37,6 @@ export class QuickSelectionOperator extends SelectionOperator {
       100
     );
 
-    // let superpixels: SuperpixelArray = {};
-    //
-    // for (let index = 0; index < segmentation.length; index += 1) {
-    //   const current = segmentation[index];
-    //
-    //   if (!superpixels.hasOwnProperty(current)) {
-    //     superpixels[current] = {
-    //       count: 0,
-    //       mask: {
-    //         background: 0,
-    //         foreground: 0,
-    //       },
-    //       mp: [0, 0, 0],
-    //       role: {
-    //         background: false,
-    //         background_and_foreground: false,
-    //         foreground: false,
-    //         unknown: false,
-    //       },
-    //     };
-    //   }
-    //
-    //   superpixels[current].count += 1;
-    //   superpixels[current].mp[0] += data[4 * index];
-    //   superpixels[current].mp[1] += data[4 * index + 1];
-    //   superpixels[current].mp[2] += data[4 * index + 2];
-    // }
-    //
-    // for (const superpixel in superpixels) {
-    //   superpixels[superpixel].mp[0] /= superpixels[superpixel].count;
-    //   superpixels[superpixel].mp[1] /= superpixels[superpixel].count;
-    //   superpixels[superpixel].mp[2] /= superpixels[superpixel].count;
-    // }
-    //
-    // Object.values(superpixels).forEach((superpixel) => {
-    //   if (superpixel.mask.foreground > 0 && superpixel.mask.background === 0) {
-    //     superpixel.role.foreground = true;
-    //   } else if (
-    //     superpixel.mask.foreground === 0 &&
-    //     superpixel.mask.background > 0
-    //   ) {
-    //     superpixel.role.background = true;
-    //   } else if (
-    //     superpixel.mask.foreground > 0 &&
-    //     superpixel.mask.background > 0
-    //   ) {
-    //     superpixel.role.background_and_foreground = true;
-    //   } else {
-    //     superpixel.role.unknown = true;
-    //   }
-    // });
-    //
-    // for (let index = 0; index < segmentation.length; index += 1) {
-    //   if (superpixels[segmentation[index]].role.foreground) {
-    //     data[4 * index] = data[4 * index];
-    //     data[4 * index + 1] = data[4 * index + 1];
-    //     data[4 * index + 2] = data[4 * index + 2];
-    //     data[4 * index + 3] = 255;
-    //   } else {
-    //     data[4 * index + 3] = 0;
-    //   }
-    // }
-    //
-    // let superpixel;
-    //
-    // for (let index = 0; index < segmentation.length; ++index) {
-    //   superpixel = superpixels[segmentation[index]];
-    //
-    //   data[4 * index + 3] = 255;
-    //
-    //   if (segmentation[index] === segmentation[index + 1]) {
-    //     data[4 * index] = superpixel.mp[0];
-    //     data[4 * index + 1] = superpixel.mp[1];
-    //     data[4 * index + 2] = superpixel.mp[2];
-    //   } else {
-    //     data[4 * index] = 0;
-    //     data[4 * index + 1] = 0;
-    //     data[4 * index + 2] = 0;
-    //   }
-    // }
-
     return { count, map, superpixels };
   }
 
@@ -125,33 +45,9 @@ export class QuickSelectionOperator extends SelectionOperator {
   onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;
 
-    if (!this.superpixels) {
-      const { count, map, superpixels } = this.filter();
-
-      const pixel =
-        superpixels[
-          Math.round(position.x) + Math.round(position.y) * this.image.width
-        ];
-
-      const mask = superpixels.map((x: number) => {
-        if (x === pixel) {
-          return 255;
-        } else {
-          return 0;
-        }
-      });
-
-      const foo = new ImageJS.Image(512, 512, mask, {
-        alpha: 0,
-        components: 1,
-      });
-
-      debugger;
-
-      this.map = map;
-
-      // this.superpixels = superpixels;
-    }
+    // if (!this.superpixels) {
+    //
+    // }
 
     // if (!this.map) return;
     //
@@ -209,5 +105,41 @@ export class QuickSelectionOperator extends SelectionOperator {
     }
 
     return overlay.toDataURL();
+  }
+
+  static setup(image: ImageJS.Image) {
+    const instance = new QuickSelectionOperator(image);
+
+    const { count, map, superpixels } = instance.filter();
+
+    const pixels = _.range(0, image.height * image.width);
+
+    // const colorMasks = pixels.map( (pixel) => {
+    //
+    //   const superpixel = superpixels[pixel];
+    //
+    //   const maskData = superpixels.map((x: number) => {
+    //     if (x === superpixel) {
+    //       return 255;
+    //     } else {
+    //       return 0;
+    //     }
+    //   });
+    //
+    //   const binaryMask = new ImageJS.Image(512, 512, maskData, {
+    //     alpha: 0,
+    //     components: 1,
+    //   });
+    //
+    //   return instance.colorSuperpixelMap(binaryMask, "green");
+    // })
+    //
+    // instance.colorMasks = colorMasks;
+
+    // instance.map = map;
+    //
+    // instance.superpixels = superpixels;
+
+    return instance;
   }
 }

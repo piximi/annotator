@@ -2,6 +2,7 @@ import { SelectionOperator } from "./SelectionOperator";
 import { SuperpixelArray } from "../../types/SuperpixelArray";
 import { slic } from "../slic";
 import * as ImageJS from "image-js";
+import * as _ from "lodash";
 
 export class QuickSelectionOperator extends SelectionOperator {
   superpixels?: SuperpixelArray;
@@ -30,7 +31,8 @@ export class QuickSelectionOperator extends SelectionOperator {
     const { map, segmentation } = slic(
       data,
       this.image.width,
-      this.image.height
+      this.image.height,
+      20
     );
 
     let superpixels: SuperpixelArray = {};
@@ -130,29 +132,31 @@ export class QuickSelectionOperator extends SelectionOperator {
       this.superpixels = superpixels;
     }
 
-    const pixel = (position.x + position.y * this.image.width) * 4;
+    const pixel =
+      (Math.round(position.x) + Math.round(position.y) * this.image.width) * 4;
 
     if (!this.map) return;
 
-    const index = this.map[pixel];
+    const r = this.map[pixel];
+    const g = this.map[pixel + 1];
+    const b = this.map[pixel + 2];
 
-    const superpixelMask = this.map.map((element: number, j: number) => {
-      if (element === index || (j + 1) % 4 === 0) {
-        return 255;
-      } else {
-        return 0;
-      }
-    });
+    const superpixelMask = _.flatten(
+      _.chunk(this.map, 4).map(([red, green, blue, alpha]: Array<number>) => {
+        if (r === red && g === green && b === blue) {
+          return [255, 255, 255, 255];
+        } else {
+          return [0, 0, 0, 255];
+        }
+      })
+    );
 
     const superpixel = new ImageJS.Image(
       this.image.width,
       this.image.height,
-      superpixelMask
+      superpixelMask,
+      { components: 3 }
     );
-
-    console.info(superpixel.toDataURL());
-
-    debugger;
 
     this.selecting = true;
   }

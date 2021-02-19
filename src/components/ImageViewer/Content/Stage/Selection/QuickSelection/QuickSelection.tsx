@@ -11,11 +11,11 @@ export const QuickSelection = ({ operator }: QuickSelectionProps) => {
 
   useEffect(() => {
     const image = new Image();
-    image.src = operator.superpixelData;
+    image.src = operator.currentMask;
     setImage(image);
-  }, [operator.superpixelData]);
+  }, [operator.currentMask]);
 
-  if (!operator.superpixelData) return null;
+  if (!operator.currentMask) return null;
 
   return (
     <ReactKonva.Group>

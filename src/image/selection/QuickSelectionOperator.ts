@@ -7,7 +7,7 @@ import * as _ from "lodash";
 export class QuickSelectionOperator extends SelectionOperator {
   colorMasks?: Array<string>;
   superpixels?: Int32Array;
-  superpixelData: string = "";
+  currentMask: string = "";
   // maps pixel position to superpixel index
   map?: Uint8Array | Uint8ClampedArray;
   masks?: Array<Array<string | Int32Array>>;
@@ -78,7 +78,16 @@ export class QuickSelectionOperator extends SelectionOperator {
     // this.selecting = true;
   }
 
-  onMouseMove(position: { x: number; y: number }) {}
+  onMouseMove(position: { x: number; y: number }) {
+    if (!this.superpixels || !this.masks) return;
+
+    const pixel =
+      Math.round(position.x) + Math.round(position.y) * this.image.width;
+
+    const superpixel = this.superpixels[pixel];
+
+    this.currentMask = this.masks[superpixel][1] as string;
+  }
 
   onMouseUp(position: { x: number; y: number }) {}
 
@@ -102,7 +111,7 @@ export class QuickSelectionOperator extends SelectionOperator {
         if (mask.getPixelXY(x, y)[0] === 255) {
           overlay.setPixelXY(x, y, fillColor);
         } else {
-          overlay.setPixelXY(x, y, [0, 0, 0, 255]);
+          overlay.setPixelXY(x, y, [0, 0, 0, 0]);
         }
       }
     }

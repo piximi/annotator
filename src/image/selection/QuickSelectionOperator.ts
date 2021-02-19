@@ -6,7 +6,7 @@ import * as _ from "lodash";
 
 export class QuickSelectionOperator extends SelectionOperator {
   superpixels?: SuperpixelArray;
-
+  superpixelData: string = "";
   // maps pixel position to superpixel index
   map?: Uint8Array | Uint8ClampedArray;
 
@@ -158,10 +158,38 @@ export class QuickSelectionOperator extends SelectionOperator {
       { components: 3 }
     );
 
+    // this.superpixelData = this.colorSuperpixelMap(superpixel, "green");
+
     this.selecting = true;
   }
 
   onMouseMove(position: { x: number; y: number }) {}
 
   onMouseUp(position: { x: number; y: number }) {}
+
+  private colorSuperpixelMap(mask: ImageJS.Image, color: string) {
+    // const r = parseInt(color.slice(1, 3), 16);
+    // const g = parseInt(color.slice(3, 5), 16);
+    // const b = parseInt(color.slice(5, 7), 16);
+    // const fillColor = [r, g, b, 150];
+    const fillColor = [0, 255, 0, 150];
+
+    let overlay = new ImageJS.Image(
+      mask.width,
+      mask.height,
+      new Uint8Array(mask.width * mask.height * 4),
+      { alpha: 1 }
+    );
+
+    // roiPaint doesn't respect alpha, so we'll paint it ourselves.
+    for (let x = 0; x < mask.width; x++) {
+      for (let y = 0; y < mask.height; y++) {
+        if (mask.getPixelXY(x, y)[0] === 255) {
+          overlay.setPixelXY(x, y, fillColor);
+        }
+      }
+    }
+
+    return overlay.toDataURL();
+  }
 }

@@ -6,6 +6,7 @@ import {
   MagneticSelectionOperator,
   ObjectSelectionOperator,
   PolygonalSelectionOperator,
+  QuickSelectionOperator,
   RectangularSelectionOperator,
   SelectionOperator,
 } from "../../../../../../image/selection";
@@ -17,6 +18,7 @@ import { ObjectSelection } from "../ObjectSelection";
 import { PolygonalSelection } from "../PolygonalSelection";
 import { RectangularSelection } from "../RectangularSelection";
 import { ColorSelection } from "../ColorSelection/ColorSelection";
+import { QuickSelection } from "../QuickSelection/QuickSelection";
 
 type SelectionProps = {
   operation?: ImageViewerOperation;
@@ -53,6 +55,8 @@ export const Selection = ({ operation, operator }: SelectionProps) => {
           operator={operator as RectangularSelectionOperator}
         />
       );
+    case ImageViewerOperation.QuickSelection:
+      return <QuickSelection operator={operator as QuickSelectionOperator} />;
     default:
       return <React.Fragment />;
   }

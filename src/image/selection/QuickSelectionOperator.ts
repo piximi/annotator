@@ -10,6 +10,7 @@ export class QuickSelectionOperator extends SelectionOperator {
   superpixelData: string = "";
   // maps pixel position to superpixel index
   map?: Uint8Array | Uint8ClampedArray;
+  masks?: Array<Array<string | Int32Array>>;
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -100,6 +101,8 @@ export class QuickSelectionOperator extends SelectionOperator {
       for (let y = 0; y < mask.height; y++) {
         if (mask.getPixelXY(x, y)[0] === 255) {
           overlay.setPixelXY(x, y, fillColor);
+        } else {
+          overlay.setPixelXY(x, y, [0, 0, 0, 255]);
         }
       }
     }
@@ -112,33 +115,34 @@ export class QuickSelectionOperator extends SelectionOperator {
 
     const { count, map, superpixels } = instance.filter();
 
-    const pixels = _.range(0, image.height * image.width);
+    instance.map = map;
 
-    // const colorMasks = pixels.map( (pixel) => {
-    //
-    //   const superpixel = superpixels[pixel];
-    //
-    //   const maskData = superpixels.map((x: number) => {
-    //     if (x === superpixel) {
-    //       return 255;
-    //     } else {
-    //       return 0;
-    //     }
-    //   });
-    //
-    //   const binaryMask = new ImageJS.Image(512, 512, maskData, {
-    //     alpha: 0,
-    //     components: 1,
-    //   });
-    //
-    //   return instance.colorSuperpixelMap(binaryMask, "green");
-    // })
-    //
-    // instance.colorMasks = colorMasks;
+    instance.superpixels = superpixels;
 
-    // instance.map = map;
-    //
-    // instance.superpixels = superpixels;
+    const unique = _.uniq(superpixels);
+
+    const masks = unique.map((superpixel) => {
+      const binaryMask = superpixels.map((pixel: number) => {
+        if (pixel === superpixel) {
+          return 255;
+        } else {
+          return 0;
+        }
+      });
+
+      const binaryImage = new ImageJS.Image(
+        image.width,
+        image.height,
+        binaryMask,
+        { components: 1, alpha: 0 }
+      );
+
+      const colorMask = instance.colorSuperpixelMap(binaryImage, "green");
+
+      return [binaryMask, colorMask];
+    });
+
+    instance.masks = masks;
 
     return instance;
   }

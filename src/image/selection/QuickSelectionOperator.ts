@@ -5,6 +5,7 @@ import * as ImageJS from "image-js";
 import * as _ from "lodash";
 
 export class QuickSelectionOperator extends SelectionOperator {
+  currentData?: Int32Array;
   colorMasks?: Array<string>;
   superpixels?: Int32Array;
   currentMask?: ImageJS.Image;
@@ -55,47 +56,20 @@ export class QuickSelectionOperator extends SelectionOperator {
 
     const mask = _.filter(this.masks, ([key, binaryMask, colorMask]) => {
       return key === superpixel;
-      // if (key === superpixel) {
-      //   return colorMask as string;
-      // }
     });
 
     this.currentMask = mask[0][3] as ImageJS.Image;
-
-    // if (!this.superpixels) {
-    //
-    // }
-
-    // if (!this.map) return;
-    //
-    // const r = this.map[pixel];
-    // const g = this.map[pixel + 1];
-    // const b = this.map[pixel + 2];
-    //
-    // const superpixelMask = _.flatten(
-    //   _.chunk(this.map, 4).map(([red, green, blue, alpha]: Array<number>) => {
-    //     if (r === red && g === green && b === blue) {
-    //       return [255, 255, 255, 255];
-    //     } else {
-    //       return [0, 0, 0, 255];
-    //     }
-    //   })
-    // );
-    //
-    // const superpixel = new ImageJS.Image(
-    //   this.image.width,
-    //   this.image.height,
-    //   superpixelMask,
-    //   { components: 3 }
-    // );
-    //
-    // // this.superpixelData = this.colorSuperpixelMap(superpixel, "green");
-    //
-    // this.selecting = true;
+    this.currentData = mask[0][2] as Int32Array;
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (!this.superpixels || !this.masks || !this.currentMask) return;
+    if (
+      !this.superpixels ||
+      !this.masks ||
+      !this.currentMask ||
+      !this.currentData
+    )
+      return;
 
     const pixel =
       Math.round(position.x) + Math.round(position.y) * this.image.width;
@@ -104,14 +78,16 @@ export class QuickSelectionOperator extends SelectionOperator {
 
     const mask = _.filter(this.masks, ([key, binaryMask, colorMask]) => {
       return key === superpixel;
-      // if (key === superpixel) {
-      //   return colorMask as string;
-      // }
     });
 
-    const colorMask = mask[0][3];
+    const colorData = mask[0][2] as Int32Array;
 
-    // this.currentMask.add(colorMask, { channels: 4 });
+    this.currentData = this.addImages(colorData, this.currentData);
+    this.currentMask = new ImageJS.Image(
+      this.image.width,
+      this.image.height,
+      this.currentData
+    );
   }
 
   onMouseUp(position: { x: number; y: number }) {}
@@ -124,8 +100,8 @@ export class QuickSelectionOperator extends SelectionOperator {
     const fillColor = [0, 255, 0, 150];
 
     const foo: Array<Array<number>> = [];
-    for (let x = 0; x < mask.width; x++) {
-      for (let y = 0; y < mask.height; y++) {
+    for (let y = 0; y < mask.height; y++) {
+      for (let x = 0; x < mask.width; x++) {
         if (mask.getPixelXY(x, y)[0] === 255) {
           foo.push(fillColor);
         } else {
@@ -152,6 +128,17 @@ export class QuickSelectionOperator extends SelectionOperator {
     }
 
     return [Int32Array.from(_.flatten(foo)), overlay];
+  }
+
+  private addImages(foo: Int32Array, bar: Int32Array) {
+    return foo.map((el, i) => {
+      if ((i + 1) % 4 === 0) {
+        // opacity should not be added
+        return Math.max(el, bar[i]);
+      } else {
+        return Math.min(el + bar[i], 255); // color should not be more than 255
+      }
+    });
   }
 
   static setup(image: ImageJS.Image) {

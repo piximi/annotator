@@ -14,15 +14,46 @@ export class QuickSelectionOperator extends SelectionOperator {
   masks?: { [key: number]: Array<Int32Array | ImageJS.Image> };
 
   get boundingBox(): [number, number, number, number] | undefined {
-    return undefined;
+    if (!this.points) return undefined;
+
+    const pairs = _.chunk(this.points, 2);
+
+    return [
+      Math.round(_.min(_.map(pairs, _.first))!),
+      Math.round(_.min(_.map(pairs, _.last))!),
+      Math.round(_.max(_.map(pairs, _.first))!),
+      Math.round(_.max(_.map(pairs, _.last))!),
+    ];
   }
 
   get contour() {
-    return [];
+    return this.points;
   }
 
   get mask(): string | undefined {
-    return undefined;
+    if (!this.currentMask) return;
+
+    const greyData = this.currentMask.grey();
+
+    const binaryMask = new ImageJS.Image(
+      this.currentMask.width,
+      this.currentMask.height,
+      {
+        alpha: 0,
+        bitDepth: 1,
+        components: 1,
+      }
+    );
+
+    for (let x = 0; x < binaryMask.width; x++) {
+      for (let y = 0; y < binaryMask.height; y++) {
+        if (greyData.getPixelXY(x, y)[0] > 0) {
+          binaryMask.setBitXY(x, y);
+        }
+      }
+    }
+
+    return binaryMask.toDataURL();
   }
 
   filter(): {
@@ -98,9 +129,11 @@ export class QuickSelectionOperator extends SelectionOperator {
 
     if (!this.currentMask) return;
 
+    const greyData = this.currentMask.grey();
+
     // @ts-ignore
-    const greyData = this.currentMask.grey().getMatrix().data;
-    const bar = greyData.map((el: Array<number>) => {
+    const greyMatrix = greyData.getMatrix().data;
+    const bar = greyMatrix.map((el: Array<number>) => {
       return Array.from(el);
     });
     const polygons: Array<Array<number>>[] = isoLines(bar, 1);
@@ -112,9 +145,6 @@ export class QuickSelectionOperator extends SelectionOperator {
         return [Math.round(coord[0]), Math.round(coord[1])];
       })
     );
-    debugger;
-
-    //convert color mask to greyscale
 
     this.selected = true;
     this.selecting = false;

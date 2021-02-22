@@ -19,10 +19,8 @@ test("encode", () => {
   expect(encode(decoded)).toStrictEqual(encoded);
 });
 
-test("fromString", () => {
-  expect(true).toBe(true);
-});
+// TODO: mock ImageData
+test("fromString", () => {});
 
-test("toImageData", () => {
-  expect(true).toBe(true);
-});
+// TODO: mock ImageData
+test("toImageData", () => {});

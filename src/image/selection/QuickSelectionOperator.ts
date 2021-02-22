@@ -1,5 +1,4 @@
 import { SelectionOperator } from "./SelectionOperator";
-import { SuperpixelArray } from "../../types/SuperpixelArray";
 import { slic } from "../slic";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";

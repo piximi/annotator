@@ -19,7 +19,6 @@ import {
   unknownCategorySelector,
 } from "../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
-import { useStyles } from "./ImageViewer.css";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
 import { Categories } from "../Categories";
 import { OperationOptions } from "../OperationOptions";
@@ -28,6 +27,14 @@ import { Operations } from "../Operations";
 import { ZoomOptions } from "../ZoomOptions";
 import { imageViewerSlice } from "../../../store/slices";
 import { Content } from "../Content";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { useStyles } from "./ImageViewer.css";
+
+const theme = createMuiTheme({
+  palette: {
+    type: "dark",
+  },
+});
 
 type ImageViewerProps = {
   image?: Image;
@@ -150,43 +157,45 @@ export const ImageViewer = (props: ImageViewerProps) => {
   };
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
+    <ThemeProvider theme={theme}>
+      <div className={classes.root}>
+        <CssBaseline />
 
-      <ImageViewerAppBar />
+        <ImageViewerAppBar />
 
-      <Categories
-        activeCategory={activeCategory}
-        onCategoryClick={onCategoryClick}
-      />
+        <Categories
+          activeCategory={activeCategory}
+          onCategoryClick={onCategoryClick}
+        />
 
-      {image && <Content category={activeCategory} />}
+        {image && <Content category={activeCategory} />}
 
-      <OperationOptions
-        description={
-          operations[
-            operations.findIndex(
-              (operation) => operation.method === activeOperation
-            )
-          ].description
-        }
-        name={
-          operations[
-            operations.findIndex(
-              (operation) => operation.method === activeOperation
-            )
-          ].name
-        }
-        settings={
-          operations[
-            operations.findIndex(
-              (operation) => operation.method === activeOperation
-            )
-          ].settings
-        }
-      />
+        <OperationOptions
+          description={
+            operations[
+              operations.findIndex(
+                (operation) => operation.method === activeOperation
+              )
+            ].description
+          }
+          name={
+            operations[
+              operations.findIndex(
+                (operation) => operation.method === activeOperation
+              )
+            ].name
+          }
+          settings={
+            operations[
+              operations.findIndex(
+                (operation) => operation.method === activeOperation
+              )
+            ].settings
+          }
+        />
 
-      <Operations />
-    </div>
+        <Operations />
+      </div>
+    </ThemeProvider>
   );
 };

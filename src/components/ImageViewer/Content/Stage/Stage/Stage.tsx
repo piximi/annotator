@@ -29,6 +29,7 @@ import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
 import { Instance } from "../../../../../types/Instance";
 import { shadeHex } from "../../../../../image/shade";
 import { useMarchingAnts } from "../../../../../hooks";
+import { ImageViewerSelection } from "../../../../../types/ImageViewerSelection";
 
 type StageProps = {
   category: Category;
@@ -142,7 +143,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const onClick = (
     event: Konva.KonvaEventObject<MouseEvent>,
-    instance: Instance
+    instance: ImageViewerSelection
   ) => {
     if (!operator) return;
 
@@ -300,7 +301,7 @@ export const Stage = ({ category, src }: StageProps) => {
         )}
 
         {instances &&
-          instances.map((instance: Instance) => {
+          instances.map((instance: ImageViewerSelection) => {
             return (
               <ReactKonva.Line
                 closed={true}

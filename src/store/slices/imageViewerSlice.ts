@@ -4,7 +4,7 @@ import { Image } from "../../types/Image";
 import { ImageViewerSelectionMode } from "../../types/ImageViewerSelectionMode";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import { ImageViewerZoomMode } from "../../types/ImageViewerZoomMode";
-import { Instance } from "../../types/Instance";
+import { ImageViewerSelection } from "../../types/ImageViewerSelection";
 
 const initialState: ImageViewerState = {
   brightness: 0,
@@ -29,7 +29,7 @@ export const imageViewerSlice = createSlice({
       if (!state.image) return;
 
       state.image.instances = state.image.instances.filter(
-        (instance: Instance) => instance.id !== action.payload.id
+        (instance: ImageViewerSelection) => instance.id !== action.payload.id
       );
     },
     setImageViewerBrightness(
@@ -64,7 +64,7 @@ export const imageViewerSlice = createSlice({
     },
     setImageViewerImageInstances(
       state: ImageViewerState,
-      action: PayloadAction<{ instances: Array<Instance> }>
+      action: PayloadAction<{ instances: Array<ImageViewerSelection> }>
     ) {
       if (state.image) {
         state.image.instances = action.payload.instances;

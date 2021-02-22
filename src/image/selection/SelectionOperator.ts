@@ -6,6 +6,7 @@ import { connectPoints } from "../imageHelper";
 import { simplify } from "../simplify/simplify";
 import { slpf } from "../polygon-fill/slpf";
 import * as uuid from "uuid";
+import { encode } from "../rle";
 
 export abstract class SelectionOperator {
   image: ImageJS.Image;
@@ -25,7 +26,7 @@ export abstract class SelectionOperator {
 
   abstract get contour(): Array<number> | undefined;
 
-  get mask(): string | undefined {
+  get mask(): Array<number> | undefined {
     const maskImage = new ImageJS.Image({
       width: this.image.width,
       height: this.image.height,
@@ -38,7 +39,8 @@ export abstract class SelectionOperator {
     simplify(connectedPoints, 1, true);
     slpf(connectedPoints, maskImage);
 
-    return maskImage.toDataURL();
+    // @ts-ignore
+    return encode(maskImage.getChannel(0).data);
   }
 
   abstract deselect(): void;

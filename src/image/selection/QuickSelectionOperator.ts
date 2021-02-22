@@ -3,6 +3,7 @@ import { slic } from "../slic";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
 import { isoLines } from "marchingsquares";
+import { encode } from "../rle";
 
 export class QuickSelectionOperator extends SelectionOperator {
   currentData?: Int32Array;
@@ -30,7 +31,7 @@ export class QuickSelectionOperator extends SelectionOperator {
     return this.points;
   }
 
-  get mask(): string | undefined {
+  get mask(): Array<number> | undefined {
     if (!this.currentMask) return;
 
     const greyData = this.currentMask.grey();
@@ -53,7 +54,7 @@ export class QuickSelectionOperator extends SelectionOperator {
       }
     }
 
-    return binaryMask.toDataURL();
+    return encode(binaryMask.data as Uint8Array);
   }
 
   filter(): {

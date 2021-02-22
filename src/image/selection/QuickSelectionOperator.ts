@@ -9,9 +9,8 @@ export class QuickSelectionOperator extends SelectionOperator {
   currentSuperpixel?: number;
   superpixels?: Int32Array;
   currentMask?: ImageJS.Image;
-  // maps pixel position to superpixel index
   map?: Uint8Array | Uint8ClampedArray;
-  masks?: Array<Array<number | Int32Array | ImageJS.Image>>;
+  masks?: { [key: number]: Array<Int32Array | ImageJS.Image> };
 
   get boundingBox(): [number, number, number, number] | undefined {
     return undefined;
@@ -36,7 +35,7 @@ export class QuickSelectionOperator extends SelectionOperator {
       data,
       this.image.width,
       this.image.height,
-      100
+      40
     );
 
     return { count, map, superpixels };
@@ -52,15 +51,12 @@ export class QuickSelectionOperator extends SelectionOperator {
     const pixel =
       Math.round(position.x) + Math.round(position.y) * this.image.width;
 
-    const superpixel = this.superpixels[pixel];
+    this.currentSuperpixel = this.superpixels[pixel];
 
-    const mask = _.filter(this.masks, ([key, binaryMask, colorMask]) => {
-      return key === superpixel;
-    });
+    const mask = this.masks[this.currentSuperpixel];
 
-    this.currentMask = mask[0][3] as ImageJS.Image;
-    this.currentData = mask[0][2] as Int32Array;
-    this.currentSuperpixel = mask[0][0] as number;
+    this.currentMask = mask[2] as ImageJS.Image;
+    this.currentData = mask[1] as Int32Array;
   }
 
   onMouseMove(position: { x: number; y: number }) {
@@ -70,20 +66,17 @@ export class QuickSelectionOperator extends SelectionOperator {
       Math.round(position.x) + Math.round(position.y) * this.image.width;
     const superpixel = this.superpixels[pixel];
 
-    if (superpixel === this.currentSuperpixel) {
-      console.info("Not drawing");
-      return;
-    } // don't draw superpixel mask if already on that superpixel
+    if (superpixel === this.currentSuperpixel) return; // don't draw superpixel mask if already on that superpixel
 
-    const mask = _.filter(this.masks, ([key, binaryMask, colorMask]) => {
-      return key === superpixel;
-    });
+    this.currentSuperpixel = superpixel;
 
-    this.currentMask = mask[0][3] as ImageJS.Image;
+    const mask = this.masks[superpixel];
+
+    this.currentMask = mask[2] as ImageJS.Image;
 
     if (!this.currentMask || !this.currentData) return;
 
-    const colorData = mask[0][2] as Int32Array;
+    const colorData = mask[1] as Int32Array;
 
     this.currentData = this.addImages(colorData, this.currentData);
     this.currentMask = new ImageJS.Image(
@@ -91,7 +84,6 @@ export class QuickSelectionOperator extends SelectionOperator {
       this.image.height,
       this.currentData
     );
-    this.currentSuperpixel = mask[0][0] as number;
   }
 
   onMouseUp(position: { x: number; y: number }) {}
@@ -152,7 +144,9 @@ export class QuickSelectionOperator extends SelectionOperator {
 
     const unique = _.uniq(superpixels);
 
-    const masks = unique.map((superpixel) => {
+    const masks: { [key: number]: Array<Int32Array | ImageJS.Image> } = {};
+
+    _.forEach(unique, (superpixel) => {
       const binaryData = superpixels.map((pixel: number) => {
         if (pixel === superpixel) {
           return 255;
@@ -173,7 +167,7 @@ export class QuickSelectionOperator extends SelectionOperator {
         "green"
       );
 
-      return [superpixel, binaryData, colorData, colorMask];
+      masks[superpixel] = [binaryData, colorData, colorMask];
     });
 
     instance.masks = masks;

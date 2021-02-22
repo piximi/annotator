@@ -26,10 +26,10 @@ import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
 import { imageViewerSlice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
-import { Instance } from "../../../../../types/Instance";
 import { shadeHex } from "../../../../../image/shade";
 import { useMarchingAnts } from "../../../../../hooks";
 import { ImageViewerSelection } from "../../../../../types/ImageViewerSelection";
+import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 
 type StageProps = {
   category: Category;
@@ -93,6 +93,10 @@ export const Stage = ({ category, src }: StageProps) => {
               setOperator(operator);
             }
           );
+
+          return;
+        case ImageViewerOperation.PenSelection:
+          setOperator(new PenSelectionOperator(image));
 
           return;
         case ImageViewerOperation.PolygonalSelection:

@@ -11,6 +11,7 @@ import { ReactComponent as HandIcon } from "../../icons/Hand.svg";
 import { ReactComponent as MagneticIcon } from "../../icons/MagneticSelection.svg";
 import { ReactComponent as QuickIcon } from "../../icons/QuickSelection.svg";
 import { ReactComponent as ObjectSelectionIcon } from "../../icons/ObjectSelection.svg";
+import { ReactComponent as PolygonalSelectionIcon } from "../../icons/PolygonalSelection.svg";
 import { ReactComponent as RectangularIcon } from "../../icons/RectangularSelection.svg";
 import { ImageViewerOperation } from "../../../types/ImageViewerOperation";
 import {
@@ -71,9 +72,9 @@ export const ImageViewer = (props: ImageViewerProps) => {
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
-      icon: <EllipticalIcon />,
-      method: ImageViewerOperation.PolygonalSelection,
-      name: "Polygonal selection",
+      icon: <LassoIcon />,
+      method: ImageViewerOperation.PenSelection,
+      name: "Pen selection",
       settings: <SelectionOptions />,
     },
     {
@@ -81,6 +82,13 @@ export const ImageViewer = (props: ImageViewerProps) => {
       icon: <LassoIcon />,
       method: ImageViewerOperation.LassoSelection,
       name: "Lasso selection",
+      settings: <SelectionOptions />,
+    },
+    {
+      description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
+      icon: <PolygonalSelectionIcon />,
+      method: ImageViewerOperation.PolygonalSelection,
+      name: "Polygonal selection",
       settings: <SelectionOptions />,
     },
     {

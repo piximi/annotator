@@ -6,6 +6,7 @@ export enum ImageViewerOperation {
   LassoSelection,
   MagneticSelection,
   ObjectSelection,
+  PenSelection,
   PolygonalSelection,
   QuickSelection,
   RectangularSelection,

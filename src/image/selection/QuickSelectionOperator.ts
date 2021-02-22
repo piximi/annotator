@@ -88,11 +88,7 @@ export class QuickSelectionOperator extends SelectionOperator {
   onMouseUp(position: { x: number; y: number }) {}
 
   private colorSuperpixelMap(mask: ImageJS.Image, color: string) {
-    // const r = parseInt(color.slice(1, 3), 16);
-    // const g = parseInt(color.slice(3, 5), 16);
-    // const b = parseInt(color.slice(5, 7), 16);
-    // const fillColor = [r, g, b, 150];
-    const fillColor = [0, 255, 0, 150];
+    const fillColor = [255, 0, 0, 150];
 
     const foo: Array<Array<number>> = [];
     for (let y = 0; y < mask.height; y++) {

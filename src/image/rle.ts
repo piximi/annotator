@@ -47,7 +47,7 @@ export namespace RLE {
     return encoded;
   };
 
-  const fromString = (s: Array<number>) => {
+  export const fromString = (s: Array<number>) => {
     let counts = [];
     let m = 0;
     let p = 0;

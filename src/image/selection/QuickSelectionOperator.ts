@@ -57,9 +57,13 @@ export class QuickSelectionOperator extends SelectionOperator {
 
     this.currentMask = mask[2] as ImageJS.Image;
     this.currentData = mask[1] as Int32Array;
+
+    this.selecting = true;
   }
 
   onMouseMove(position: { x: number; y: number }) {
+    if (this.selected) return;
+
     if (!this.superpixels || !this.masks) return;
 
     const pixel =
@@ -74,7 +78,9 @@ export class QuickSelectionOperator extends SelectionOperator {
 
     this.currentMask = mask[2] as ImageJS.Image;
 
-    if (!this.currentMask || !this.currentData) return;
+    if (!this.selecting) return;
+
+    if (!this.currentData) return;
 
     const colorData = mask[1] as Int32Array;
 
@@ -86,7 +92,12 @@ export class QuickSelectionOperator extends SelectionOperator {
     );
   }
 
-  onMouseUp(position: { x: number; y: number }) {}
+  onMouseUp(position: { x: number; y: number }) {
+    if (this.selected || !this.selecting) return;
+
+    this.selected = true;
+    this.selecting = false;
+  }
 
   private colorSuperpixelMap(mask: ImageJS.Image, color: string) {
     const fillColor = [255, 0, 0, 150];

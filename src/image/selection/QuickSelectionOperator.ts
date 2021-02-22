@@ -6,6 +6,7 @@ import * as _ from "lodash";
 export class QuickSelectionOperator extends SelectionOperator {
   currentData?: Int32Array;
   colorMasks?: Array<string>;
+  currentSuperpixel?: number;
   superpixels?: Int32Array;
   currentMask?: ImageJS.Image;
   // maps pixel position to superpixel index
@@ -59,6 +60,7 @@ export class QuickSelectionOperator extends SelectionOperator {
 
     this.currentMask = mask[0][3] as ImageJS.Image;
     this.currentData = mask[0][2] as Int32Array;
+    this.currentSuperpixel = mask[0][0] as number;
   }
 
   onMouseMove(position: { x: number; y: number }) {
@@ -67,6 +69,12 @@ export class QuickSelectionOperator extends SelectionOperator {
     const pixel =
       Math.round(position.x) + Math.round(position.y) * this.image.width;
     const superpixel = this.superpixels[pixel];
+
+    if (superpixel === this.currentSuperpixel) {
+      console.info("Not drawing");
+      return;
+    } // don't draw superpixel mask if already on that superpixel
+
     const mask = _.filter(this.masks, ([key, binaryMask, colorMask]) => {
       return key === superpixel;
     });
@@ -83,6 +91,7 @@ export class QuickSelectionOperator extends SelectionOperator {
       this.image.height,
       this.currentData
     );
+    this.currentSuperpixel = mask[0][0] as number;
   }
 
   onMouseUp(position: { x: number; y: number }) {}

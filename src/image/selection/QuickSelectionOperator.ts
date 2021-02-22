@@ -36,7 +36,7 @@ export class QuickSelectionOperator extends SelectionOperator {
       data,
       this.image.width,
       this.image.height,
-      40
+      100
     );
 
     return { count, map, superpixels };
@@ -63,22 +63,18 @@ export class QuickSelectionOperator extends SelectionOperator {
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (
-      !this.superpixels ||
-      !this.masks ||
-      !this.currentMask ||
-      !this.currentData
-    )
-      return;
+    if (!this.superpixels || !this.masks) return;
 
     const pixel =
       Math.round(position.x) + Math.round(position.y) * this.image.width;
-
     const superpixel = this.superpixels[pixel];
-
     const mask = _.filter(this.masks, ([key, binaryMask, colorMask]) => {
       return key === superpixel;
     });
+
+    this.currentMask = mask[0][3] as ImageJS.Image;
+
+    if (!this.currentMask || !this.currentData) return;
 
     const colorData = mask[0][2] as Int32Array;
 

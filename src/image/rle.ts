@@ -18,7 +18,9 @@ export const decode = (encoded: Array<number>): Uint8ClampedArray => {
   return new Uint8ClampedArray(decoded);
 };
 
-export const encode = (decoded: Uint8ClampedArray): Array<number> => {
+export const encode = (
+  decoded: Uint8Array | Uint8ClampedArray
+): Array<number> => {
   let lastElement = decoded[0];
 
   let lastSequenceSize = 1;

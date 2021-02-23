@@ -90,6 +90,20 @@ export const Operations = () => {
         </Operation>
 
         <Operation
+          name="Pen selection"
+          onClick={() =>
+            dispatch(
+              imageViewerSlice.actions.setImageViewerOperation({
+                operation: ImageViewerOperation.PenSelection,
+              })
+            )
+          }
+          selected={activeOperation === ImageViewerOperation.PenSelection}
+        >
+          <LassoSelectionIcon />
+        </Operation>
+
+        <Operation
           name="Lasso selection"
           onClick={() =>
             dispatch(

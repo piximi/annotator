@@ -3,6 +3,7 @@ import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
 import * as _ from "lodash";
 import { isoLines } from "marchingsquares";
+import { encode } from "../rle";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
   graph?: tensorflow.LayersModel;
@@ -30,9 +31,11 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     return this.points;
   }
 
-  get mask(): string | undefined {
+  get mask(): Array<number> | undefined {
     if (!this.output) return;
-    return this.output.toDataURL();
+
+    // @ts-ignore
+    return encode(this.output.getChannel(0).data);
   }
 
   deselect() {

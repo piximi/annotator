@@ -3,6 +3,7 @@ import { makeFloodMap } from "../flood";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
 import { isoLines } from "marchingsquares";
+import { encode } from "../rle";
 
 export class ColorSelectionOperator extends SelectionOperator {
   roiContour?: ImageJS.Image;
@@ -31,10 +32,11 @@ export class ColorSelectionOperator extends SelectionOperator {
     return this.points;
   }
 
-  get mask(): string | undefined {
+  get mask(): Array<number> | undefined {
     if (!this.roiMask) return;
 
-    return this.roiMask.toDataURL();
+    // @ts-ignore
+    return encode(this.roiMask.data as Uint8Array);
   }
 
   deselect() {

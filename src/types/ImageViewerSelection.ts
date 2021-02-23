@@ -3,5 +3,5 @@ export type ImageViewerSelection = {
   categoryId: string;
   contour: Array<number>;
   id: string;
-  mask: string;
+  mask: Array<number>;
 };

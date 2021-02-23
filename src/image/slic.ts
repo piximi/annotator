@@ -1,19 +1,3 @@
-// function remapLabels(segmentation: Int32Array) {
-//   let map = {},
-//       index = 0;
-//
-//   for (let i = 0; i < segmentation.length; ++i) {
-//     const label = segmentation[i];
-//
-//     if (map[label] === undefined)
-//       map[label] = index++;
-//
-//     segmentation[i] = map[label];
-//   }
-//
-//   return index;
-// }
-
 export const slic = (
   data: Uint8Array | Uint8ClampedArray,
   width: number,

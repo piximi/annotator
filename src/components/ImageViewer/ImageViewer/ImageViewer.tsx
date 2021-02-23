@@ -11,6 +11,7 @@ import { ReactComponent as HandIcon } from "../../icons/Hand.svg";
 import { ReactComponent as MagneticIcon } from "../../icons/MagneticSelection.svg";
 import { ReactComponent as QuickIcon } from "../../icons/QuickSelection.svg";
 import { ReactComponent as ObjectSelectionIcon } from "../../icons/ObjectSelection.svg";
+import { ReactComponent as PolygonalSelectionIcon } from "../../icons/PolygonalSelection.svg";
 import { ReactComponent as RectangularIcon } from "../../icons/RectangularSelection.svg";
 import { ImageViewerOperation } from "../../../types/ImageViewerOperation";
 import {
@@ -19,7 +20,6 @@ import {
   unknownCategorySelector,
 } from "../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
-import { useStyles } from "./ImageViewer.css";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
 import { Categories } from "../Categories";
 import { OperationOptions } from "../OperationOptions";
@@ -28,6 +28,14 @@ import { Operations } from "../Operations";
 import { ZoomOptions } from "../ZoomOptions";
 import { imageViewerSlice } from "../../../store/slices";
 import { Content } from "../Content";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { useStyles } from "./ImageViewer.css";
+
+const theme = createMuiTheme({
+  palette: {
+    type: "dark",
+  },
+});
 
 type ImageViewerProps = {
   image?: Image;
@@ -64,9 +72,9 @@ export const ImageViewer = (props: ImageViewerProps) => {
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
-      icon: <EllipticalIcon />,
-      method: ImageViewerOperation.PolygonalSelection,
-      name: "Polygonal selection",
+      icon: <LassoIcon />,
+      method: ImageViewerOperation.PenSelection,
+      name: "Pen selection",
       settings: <SelectionOptions />,
     },
     {
@@ -74,6 +82,13 @@ export const ImageViewer = (props: ImageViewerProps) => {
       icon: <LassoIcon />,
       method: ImageViewerOperation.LassoSelection,
       name: "Lasso selection",
+      settings: <SelectionOptions />,
+    },
+    {
+      description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
+      icon: <PolygonalSelectionIcon />,
+      method: ImageViewerOperation.PolygonalSelection,
+      name: "Polygonal selection",
       settings: <SelectionOptions />,
     },
     {
@@ -150,43 +165,45 @@ export const ImageViewer = (props: ImageViewerProps) => {
   };
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
+    <ThemeProvider theme={theme}>
+      <div className={classes.root}>
+        <CssBaseline />
 
-      <ImageViewerAppBar />
+        <ImageViewerAppBar />
 
-      <Categories
-        activeCategory={activeCategory}
-        onCategoryClick={onCategoryClick}
-      />
+        <Categories
+          activeCategory={activeCategory}
+          onCategoryClick={onCategoryClick}
+        />
 
-      {image && <Content category={activeCategory} />}
+        {image && <Content category={activeCategory} />}
 
-      <OperationOptions
-        description={
-          operations[
-            operations.findIndex(
-              (operation) => operation.method === activeOperation
-            )
-          ].description
-        }
-        name={
-          operations[
-            operations.findIndex(
-              (operation) => operation.method === activeOperation
-            )
-          ].name
-        }
-        settings={
-          operations[
-            operations.findIndex(
-              (operation) => operation.method === activeOperation
-            )
-          ].settings
-        }
-      />
+        <OperationOptions
+          description={
+            operations[
+              operations.findIndex(
+                (operation) => operation.method === activeOperation
+              )
+            ].description
+          }
+          name={
+            operations[
+              operations.findIndex(
+                (operation) => operation.method === activeOperation
+              )
+            ].name
+          }
+          settings={
+            operations[
+              operations.findIndex(
+                (operation) => operation.method === activeOperation
+              )
+            ].settings
+          }
+        />
 
-      <Operations />
-    </div>
+        <Operations />
+      </div>
+    </ThemeProvider>
   );
 };

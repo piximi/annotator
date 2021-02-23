@@ -20,7 +20,7 @@ export const ExportButton = () => {
   const onClick = () => {
     if (!image) return;
 
-    const foo = {
+    const content = {
       src: image.src,
       instances: image.instances.map((instance) => {
         return {
@@ -32,7 +32,8 @@ export const ExportButton = () => {
         };
       }),
     };
-    const blobParts = [JSON.stringify(foo)];
+
+    const blobParts = [JSON.stringify(content)];
 
     const options = {
       type: "text/json;charset=utf-8",

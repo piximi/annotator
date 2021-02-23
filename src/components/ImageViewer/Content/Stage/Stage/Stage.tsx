@@ -16,6 +16,7 @@ import {
 } from "../../../../../image/selection";
 import { ImageViewerOperation } from "../../../../../types/ImageViewerOperation";
 import {
+  categoriesSelector,
   imageViewerImageInstancesSelector,
   imageViewerOperationSelector,
 } from "../../../../../store/selectors";
@@ -26,9 +27,10 @@ import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
 import { imageViewerSlice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
-import { Instance } from "../../../../../types/Instance";
 import { shadeHex } from "../../../../../image/shade";
 import { useMarchingAnts } from "../../../../../hooks";
+import { ImageViewerSelection } from "../../../../../types/ImageViewerSelection";
+import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 
 type StageProps = {
   category: Category;
@@ -60,12 +62,35 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const instances = useSelector(imageViewerImageInstancesSelector);
 
+  const categories = useSelector(categoriesSelector);
+
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
   const deletePress = useKeyPress("Delete");
   const backspacePress = useKeyPress("Backspace");
 
   const dashOffset = useMarchingAnts();
+
+  useEffect(() => {
+    if (!selection) return;
+
+    const others = instances?.filter(
+      (instance: ImageViewerSelection) => instance.id !== selection
+    );
+
+    const updated: ImageViewerSelection = {
+      ...instances?.filter(
+        (instance: ImageViewerSelection) => instance.id === selection
+      )[0],
+      categoryId: category.id,
+    } as ImageViewerSelection;
+
+    dispatch(
+      imageViewerSlice.actions.setImageViewerImageInstances({
+        instances: [...(others as Array<ImageViewerSelection>), updated],
+      })
+    );
+  }, [category]);
 
   useEffect(() => {
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
@@ -92,6 +117,10 @@ export const Stage = ({ category, src }: StageProps) => {
               setOperator(operator);
             }
           );
+
+          return;
+        case ImageViewerOperation.PenSelection:
+          setOperator(new PenSelectionOperator(image));
 
           return;
         case ImageViewerOperation.PolygonalSelection:
@@ -142,7 +171,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const onClick = (
     event: Konva.KonvaEventObject<MouseEvent>,
-    instance: Instance
+    instance: ImageViewerSelection
   ) => {
     if (!operator) return;
 
@@ -300,13 +329,18 @@ export const Stage = ({ category, src }: StageProps) => {
         )}
 
         {instances &&
-          instances.map((instance: Instance) => {
+          instances.map((instance: ImageViewerSelection) => {
             return (
               <ReactKonva.Line
                 closed={true}
                 key={instance.id}
                 points={instance.contour}
-                fill={category.color}
+                fill={
+                  _.find(
+                    categories,
+                    (category: Category) => category.id === instance.categoryId
+                  )?.color
+                }
                 onClick={(event) => onClick(event, instance)}
                 opacity={0.5}
                 ref={selectionRef}

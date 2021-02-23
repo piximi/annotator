@@ -2,6 +2,8 @@ import { SelectionOperator } from "./SelectionOperator";
 import { slic } from "../slic";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
+import { isoLines } from "marchingsquares";
+import { encode } from "../rle";
 
 export class QuickSelectionOperator extends SelectionOperator {
   currentData?: Int32Array;
@@ -13,15 +15,46 @@ export class QuickSelectionOperator extends SelectionOperator {
   masks?: { [key: number]: Array<Int32Array | ImageJS.Image> };
 
   get boundingBox(): [number, number, number, number] | undefined {
-    return undefined;
+    if (!this.points) return undefined;
+
+    const pairs = _.chunk(this.points, 2);
+
+    return [
+      Math.round(_.min(_.map(pairs, _.first))!),
+      Math.round(_.min(_.map(pairs, _.last))!),
+      Math.round(_.max(_.map(pairs, _.first))!),
+      Math.round(_.max(_.map(pairs, _.last))!),
+    ];
   }
 
   get contour() {
-    return [];
+    return this.points;
   }
 
-  get mask(): string | undefined {
-    return undefined;
+  get mask(): Array<number> | undefined {
+    if (!this.currentMask) return;
+
+    const greyData = this.currentMask.grey();
+
+    const binaryMask = new ImageJS.Image(
+      this.currentMask.width,
+      this.currentMask.height,
+      {
+        alpha: 0,
+        bitDepth: 1,
+        components: 1,
+      }
+    );
+
+    for (let x = 0; x < binaryMask.width; x++) {
+      for (let y = 0; y < binaryMask.height; y++) {
+        if (greyData.getPixelXY(x, y)[0] > 0) {
+          binaryMask.setBitXY(x, y);
+        }
+      }
+    }
+
+    return encode(binaryMask.data as Uint8Array);
   }
 
   filter(): {
@@ -95,6 +128,25 @@ export class QuickSelectionOperator extends SelectionOperator {
   onMouseUp(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
 
+    if (!this.currentMask) return;
+
+    const greyData = this.currentMask.grey();
+
+    // @ts-ignore
+    const greyMatrix = greyData.getMatrix().data;
+    const bar = greyMatrix.map((el: Array<number>) => {
+      return Array.from(el);
+    });
+    const polygons: Array<Array<number>>[] = isoLines(bar, 1);
+    polygons.sort((a: Array<Array<number>>, b: Array<Array<number>>) => {
+      return b.length - a.length;
+    });
+    this.points = _.flatten(
+      polygons[0].map((coord) => {
+        return [Math.round(coord[0]), Math.round(coord[1])];
+      })
+    );
+
     this.selected = true;
     this.selecting = false;
   }
@@ -139,7 +191,7 @@ export class QuickSelectionOperator extends SelectionOperator {
         // opacity should not be added
         return Math.max(el, bar[i]);
       } else {
-        return Math.min(el + bar[i], 255); // color should not be more than 255
+        return Math.min(el + bar[i], 255); //FIXME this is going to be wrong for mixed colors (not just R, G or B)
       }
     });
   }

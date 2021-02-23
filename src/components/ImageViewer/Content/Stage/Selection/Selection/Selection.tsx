@@ -19,6 +19,8 @@ import { PolygonalSelection } from "../PolygonalSelection";
 import { RectangularSelection } from "../RectangularSelection";
 import { ColorSelection } from "../ColorSelection/ColorSelection";
 import { QuickSelection } from "../QuickSelection/QuickSelection";
+import { PenSelection } from "../PenSelection";
+import { PenSelectionOperator } from "../../../../../../image/selection/PenSelectionOperator";
 
 type SelectionProps = {
   operation?: ImageViewerOperation;
@@ -45,6 +47,8 @@ export const Selection = ({ operation, operator }: SelectionProps) => {
       );
     case ImageViewerOperation.ObjectSelection:
       return <ObjectSelection operator={operator as ObjectSelectionOperator} />;
+    case ImageViewerOperation.PenSelection:
+      return <PenSelection operator={operator as PenSelectionOperator} />;
     case ImageViewerOperation.PolygonalSelection:
       return (
         <PolygonalSelection operator={operator as PolygonalSelectionOperator} />

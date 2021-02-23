@@ -6,7 +6,7 @@ import { useStyles } from "./ExportButton.css";
 import { saveAs } from "file-saver";
 import { useSelector } from "react-redux";
 import {
-  categoriesSelector,
+  imageViewerCategoriesSelector,
   imageViewerImageSelector,
 } from "../../../../store/selectors";
 import * as _ from "lodash";
@@ -15,7 +15,7 @@ export const ExportButton = () => {
   const classes = useStyles();
 
   const image = useSelector(imageViewerImageSelector);
-  const projectCategories = useSelector(categoriesSelector);
+  const projectCategories = useSelector(imageViewerCategoriesSelector);
 
   const onClick = () => {
     if (!image) return;

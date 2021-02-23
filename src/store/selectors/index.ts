@@ -4,6 +4,7 @@ export { createdCategoriesSelector } from "./createdCategoriesSelector";
 export { imageViewerBrightnessSelector } from "./imageViewerBrightnessSelector";
 export { imageViewerCategoriesSelector } from "./imageViewerCategoriesSelector";
 export { imageViewerContrastSelector } from "./imageViewerContrastSelector";
+export { imageViewerCreatedCategoriesSelector } from "./imageViewerCreatedCategoriesSelector";
 export { imageViewerExposureSelector } from "./imageViewerExposureSelector";
 export { imageViewerHueSelector } from "./imageViewerHueSelector";
 export { imageViewerImageInstancesSelector } from "./imageViewerImageInstancesSelector";

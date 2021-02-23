@@ -4,9 +4,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
 import { Category } from "../../../../types/Category";
 import {
-  createdCategoriesSelector,
+  imageViewerCreatedCategoriesSelector,
   imageViewerUnknownCategroySelector,
-  unknownCategorySelector,
 } from "../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Categories.css";
@@ -20,7 +19,6 @@ import { CategoryMenu } from "../CategoryMenu";
 import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog, useMenu } from "../../../../hooks";
-import { imageViewerCategoriesSelector } from "../../../../store/selectors";
 
 type CategoriesProps = {
   activeCategory: Category;
@@ -36,9 +34,13 @@ export const Categories = ({
 }: CategoriesProps) => {
   const classes = useStyles();
 
-  const categories = useSelector(imageViewerCategoriesSelector);
+  const categories: Array<Category> = useSelector(
+    imageViewerCreatedCategoriesSelector
+  );
 
-  const unknownCategory = useSelector(imageViewerUnknownCategroySelector);
+  const unknownCategory: Category = useSelector(
+    imageViewerUnknownCategroySelector
+  );
 
   const {
     onClose: onCloseDeleteCategoryDialog,

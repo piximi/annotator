@@ -1,5 +1,4 @@
 import { ImageViewerState } from "../../types/ImageViewerState";
-import * as _ from "lodash";
 import { Category } from "../../types/Category";
 
 export const imageViewerUnknownCategroySelector = ({
@@ -7,9 +6,7 @@ export const imageViewerUnknownCategroySelector = ({
 }: {
   imageViewer: ImageViewerState;
 }) => {
-  const category = _.find(imageViewer.categories, (category: Category) => {
+  return imageViewer.categories.find((category: Category) => {
     return category.id === "00000000-0000-0000-0000-000000000000";
-  });
-
-  return category!;
+  })!;
 };

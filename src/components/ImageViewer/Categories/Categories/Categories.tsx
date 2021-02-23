@@ -19,6 +19,7 @@ import { CategoryMenu } from "../CategoryMenu/CategoryMenu";
 import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog, useMenu } from "../../../../hooks";
+import { imageViewerCategoriesSelector } from "../../../../store/selectors/imageViewerCategoriesSelector";
 
 type CategoriesProps = {
   activeCategory: Category;
@@ -34,7 +35,7 @@ export const Categories = ({
 }: CategoriesProps) => {
   const classes = useStyles();
 
-  const categories = useSelector(createdCategoriesSelector);
+  const categories = useSelector(imageViewerCategoriesSelector);
   const unknownCategory = useSelector(unknownCategorySelector);
 
   const {

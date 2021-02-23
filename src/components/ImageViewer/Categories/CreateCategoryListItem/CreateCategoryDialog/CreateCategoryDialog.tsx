@@ -5,13 +5,16 @@ import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import React, { ChangeEvent, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ColorIcon } from "../../ColorIcon";
 import Grid from "@material-ui/core/Grid";
 import { useStyles } from "./CreateCategoryDialog.css";
 import { ColorResult } from "react-color";
 import { sample } from "underscore";
-import { createCategory } from "../../../../../store/slices";
+import { createCategory, imageViewerSlice } from "../../../../../store/slices";
+import { v4 } from "uuid";
+import { Category } from "../../../../../types/Category";
+import { imageViewerCategoriesSelector } from "../../../../../store/selectors";
 
 const COLORS = [
   "#f44336",
@@ -45,6 +48,8 @@ export const CreateCategoryDialog = ({
 }: CreateCategoryDialogProps) => {
   const dispatch = useDispatch();
 
+  const categories = useSelector(imageViewerCategoriesSelector);
+
   const [color, setColor] = React.useState<string>(sample(COLORS)!);
 
   const [name, setName] = useState<string>("");
@@ -52,7 +57,18 @@ export const CreateCategoryDialog = ({
   const classes = useStyles();
 
   const onCreate = () => {
-    dispatch(createCategory({ name: name ? name : "Unnamed", color: color }));
+    const category: Category = {
+      color: color,
+      id: v4().toString(),
+      name: name ? name : "Unnamed",
+      visible: true,
+    };
+
+    dispatch(
+      imageViewerSlice.actions.setImageViewerCategories({
+        categories: [...categories, category],
+      })
+    );
 
     onClose();
 

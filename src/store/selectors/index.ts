@@ -12,6 +12,7 @@ export { imageViewerOperationSelector } from "./imageViewerOperationSelector";
 export { imageViewerSaturationSelector } from "./imageViewerSaturationSelector";
 export { imageViewerSelectedCategroySelector } from "./imageViewerSelectedCategroySelector";
 export { imageViewerSelectionModeSelector } from "./imageViewerSelectionModeSelector";
+export { imageViewerUnknownCategroySelector } from "./imageViewerUnknownCategroySelector";
 export { imageViewerVibranceSelector } from "./imageViewerVibranceSelector";
 export { imageViewerZoomModeSelector } from "./imageViewerZoomModeSelector";
 export { projectSelector } from "./projectSelector";

@@ -3,10 +3,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Category } from "../../types/Category";
 import { v4 } from "uuid";
 import { Image } from "../../types/Image";
-import { findIndex, filter } from "underscore";
+import { filter, findIndex } from "underscore";
 import { Shape } from "../../types/Shape";
-import { BoundingBox } from "../../types/BoundingBox";
-import { Instance } from "../../types/Instance";
 
 const initialState: Project = {
   categories: [

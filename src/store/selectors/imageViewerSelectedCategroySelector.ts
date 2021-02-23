@@ -9,5 +9,5 @@ export const imageViewerSelectedCategroySelector = ({
 }) => {
   return _.find(imageViewer.categories, (category: Category) => {
     return category.id === imageViewer.selectedCategoryId;
-  });
+  })!;
 };

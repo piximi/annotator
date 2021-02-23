@@ -70,6 +70,12 @@ export const CreateCategoryDialog = ({
       })
     );
 
+    dispatch(
+      imageViewerSlice.actions.setImageViewerSeletedCategoryId({
+        selectedCategoryId: category.id,
+      })
+    );
+
     onClose();
 
     setColor(sample(COLORS)!);

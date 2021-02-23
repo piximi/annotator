@@ -17,6 +17,7 @@ import { ImageViewerOperation } from "../../../types/ImageViewerOperation";
 import {
   imageViewerImageSelector,
   imageViewerOperationSelector,
+  imageViewerSelectedCategroySelector,
   unknownCategorySelector,
 } from "../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
@@ -153,15 +154,17 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
   const unknownCategory = useSelector(unknownCategorySelector);
 
-  const [activeCategory, setActiveCategory] = useState<Category>(
-    unknownCategory
-  );
+  const activeCategory = useSelector(imageViewerSelectedCategroySelector);
 
   const onCategoryClick = (
     event: React.MouseEvent<HTMLDivElement>,
     category: Category
   ) => {
-    setActiveCategory(category);
+    dispatch(
+      imageViewerSlice.actions.setImageViewerSeletedCategoryId({
+        selectedCategoryId: category.id,
+      })
+    );
   };
 
   return (

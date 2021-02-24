@@ -11,7 +11,17 @@ export class Selection {
     this.mask = mask;
   }
 
-  add(selection: Selection) {}
+  /*
+   * Adding to a selection adds any new areas you select to your existing
+   * selection.
+   */
+  add(selection: Selection) {
+    selection.mask.data.forEach((currentValue: number, index: number) => {
+      if (currentValue === 255) {
+        this.mask.data[index] = 255;
+      }
+    });
+  }
 
   subtract(selection: Selection) {}
 

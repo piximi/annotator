@@ -78,12 +78,12 @@ export const Stage = ({ category, src }: StageProps) => {
       (instance: SelectionType) => instance.id !== selection
     );
 
-    const updated: Selection = {
+    const updated: SelectionType = {
       ...instances?.filter(
         (instance: SelectionType) => instance.id === selection
       )[0],
       categoryId: category.id,
-    } as Selection;
+    } as SelectionType;
 
     dispatch(
       slice.actions.setImageInstances({

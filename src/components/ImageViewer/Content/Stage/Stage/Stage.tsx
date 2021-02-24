@@ -14,7 +14,7 @@ import {
   RectangularSelectionOperator,
   SelectionOperator,
 } from "../../../../../image/selection";
-import { Operation } from "../../../../../types/ImageViewerOperation";
+import { Operation } from "../../../../../types/Operation";
 import {
   categoriesSelector,
   imageInstancesSelector,
@@ -29,7 +29,7 @@ import { slice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
 import { shadeHex } from "../../../../../image/shade";
 import { useMarchingAnts } from "../../../../../hooks";
-import { Selection } from "../../../../../types/ImageViewerSelection";
+import { Selection as SelectionType } from "../../../../../types/Selection";
 import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 
 type StageProps = {

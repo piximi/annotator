@@ -11,7 +11,7 @@ import {
   SelectionOperator,
 } from "../../../../../../image/selection";
 import { EllipticalSelection } from "../EllipticalSelection";
-import { Operation } from "../../../../../../types/ImageViewerOperation";
+import { Operation } from "../../../../../../types/Operation";
 import { LassoSelection } from "../LassoSelection";
 import { MagneticSelection } from "../MagneticSelection";
 import { ObjectSelection } from "../ObjectSelection";

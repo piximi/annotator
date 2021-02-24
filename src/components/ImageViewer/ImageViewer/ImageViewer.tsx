@@ -13,7 +13,7 @@ import { ReactComponent as QuickIcon } from "../../icons/QuickSelection.svg";
 import { ReactComponent as ObjectSelectionIcon } from "../../icons/ObjectSelection.svg";
 import { ReactComponent as PolygonalSelectionIcon } from "../../icons/PolygonalSelection.svg";
 import { ReactComponent as RectangularIcon } from "../../icons/RectangularSelection.svg";
-import { Operation } from "../../../types/ImageViewerOperation";
+import { Operation } from "../../../types/Operation";
 import {
   imageSelector,
   operationSelector,

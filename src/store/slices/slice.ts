@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { State } from "../../types/ImageViewerState";
-import { Image } from "../../types/Image";
-import { SelectionMode } from "../../types/ImageViewerSelectionMode";
-import { Operation } from "../../types/ImageViewerOperation";
-import { ZoomMode } from "../../types/ImageViewerZoomMode";
-import { Selection } from "../../types/ImageViewerSelection";
 import { Category } from "../../types/Category";
+import { Image } from "../../types/Image";
+import { Operation } from "../../types/Operation";
+import { Selection } from "../../types/Selection";
+import { SelectionMode } from "../../types/SelectionMode";
+import { State } from "../../types/State";
+import { ZoomMode } from "../../types/ZoomMode";
 
 const initialState: State = {
   brightness: 0,

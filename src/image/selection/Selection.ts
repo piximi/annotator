@@ -11,5 +11,10 @@ export class Selection {
 
   subtract(selection: Selection) {}
 
-  intersect(selection: Selection) {}
+  intersect(selection: Selection) {
+    // @ts-ignore
+    const intersection = this.mask.getIntersection(selection.mask);
+
+    return new Selection(intersection);
+  }
 }

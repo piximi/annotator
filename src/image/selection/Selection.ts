@@ -17,8 +17,12 @@ export class Selection {
 
   intersect(selection: Selection) {
     // @ts-ignore
-    const mask = this.mask.getIntersection(selection.mask);
+    this.mask = this.mask.getIntersection(selection.mask);
+  }
 
-    return new Selection(this.category, mask);
+  invert() {
+    this.mask.data.forEach((_: number, index: number) => {
+      this.mask.data[index] = ~this.mask.data[index];
+    });
   }
 }

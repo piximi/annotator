@@ -129,9 +129,9 @@ export class ColorSelectionOperator extends SelectionOperator {
     position: { x: number; y: number },
     color: string
   ) {
-    const r = parseInt(color.slice(1, 3), 16);
-    const g = parseInt(color.slice(3, 5), 16);
-    const b = parseInt(color.slice(5, 7), 16);
+    const r = parseInt(color.state(1, 3), 16);
+    const g = parseInt(color.state(3, 5), 16);
+    const b = parseInt(color.state(5, 7), 16);
     const fillColor = [r, g, b, 150];
 
     let overlay = new ImageJS.Image(

@@ -1,9 +1,9 @@
 import { ImageViewerState } from "../../types/ImageViewerState";
 
 export const imageInstancesSelector = ({
-  imageViewer,
+  state,
 }: {
-  imageViewer: ImageViewerState;
+  state: ImageViewerState;
 }) => {
-  return imageViewer.image?.instances;
+  return state.image?.instances;
 };

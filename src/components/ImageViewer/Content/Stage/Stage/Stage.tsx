@@ -25,7 +25,7 @@ import { useStyles } from "../../Content/Content.css";
 import * as ImageJS from "image-js";
 import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
-import { imageViewerSlice } from "../../../../../store/slices";
+import { slice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
 import { shadeHex } from "../../../../../image/shade";
 import { useMarchingAnts } from "../../../../../hooks";
@@ -86,7 +86,7 @@ export const Stage = ({ category, src }: StageProps) => {
     } as ImageViewerSelection;
 
     dispatch(
-      imageViewerSlice.actions.setImageViewerImageInstances({
+      slice.actions.setImageInstances({
         instances: [...(others as Array<ImageViewerSelection>), updated],
       })
     );
@@ -182,7 +182,7 @@ export const Stage = ({ category, src }: StageProps) => {
     setSelection(instance.id);
 
     dispatch(
-      imageViewerSlice.actions.setImageViewerSeletedCategoryId({
+      slice.actions.setSeletedCategoryId({
         selectedCategoryId: instance.categoryId,
       })
     );
@@ -258,7 +258,7 @@ export const Stage = ({ category, src }: StageProps) => {
     if (!operator.selection) return;
 
     dispatch(
-      imageViewerSlice.actions.setImageViewerImageInstances({
+      slice.actions.setImageInstances({
         instances: [...instances, operator.selection],
       })
     );
@@ -286,7 +286,7 @@ export const Stage = ({ category, src }: StageProps) => {
     if (selection) {
       if (backspacePress || escapePress || deletePress) {
         dispatch(
-          imageViewerSlice.actions.deleteImageViewerImageInstance({
+          slice.actions.deleteImageInstance({
             id: selection,
           })
         );

@@ -7,7 +7,7 @@ import { Operation } from "../Operation";
 import { useStyles } from "./Operations.css";
 import { useDispatch, useSelector } from "react-redux";
 import { operationSelector } from "../../../../store/selectors";
-import { imageViewerSlice } from "../../../../store/slices";
+import { slice } from "../../../../store/slices";
 import {
   ColorAdjustmentIcon,
   ColorSelectionIcon,
@@ -45,7 +45,7 @@ export const Operations = () => {
           name="Color adjustment"
           onClick={() =>
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.ColorAdjustment,
               })
             )
@@ -61,7 +61,7 @@ export const Operations = () => {
           name="Rectangular selection"
           onClick={() =>
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.RectangularSelection,
               })
             )
@@ -77,7 +77,7 @@ export const Operations = () => {
           name="Elliptical selection"
           onClick={() =>
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.EllipticalSelection,
               })
             )
@@ -93,7 +93,7 @@ export const Operations = () => {
           name="Pen selection"
           onClick={() =>
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.PenSelection,
               })
             )
@@ -107,7 +107,7 @@ export const Operations = () => {
           name="Lasso selection"
           onClick={() =>
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.LassoSelection,
               })
             )
@@ -121,7 +121,7 @@ export const Operations = () => {
           name="Polygonal selection"
           onClick={() =>
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.PolygonalSelection,
               })
             )
@@ -135,7 +135,7 @@ export const Operations = () => {
           name="Magnetic selection"
           onClick={() =>
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.MagneticSelection,
               })
             )
@@ -149,7 +149,7 @@ export const Operations = () => {
           name="Color selection"
           onClick={() =>
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.ColorSelection,
               })
             )
@@ -163,7 +163,7 @@ export const Operations = () => {
           name="Quick selection"
           onClick={() =>
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.QuickSelection,
               })
             )
@@ -177,7 +177,7 @@ export const Operations = () => {
           name="Object selection"
           onClick={() =>
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.ObjectSelection,
               })
             )
@@ -193,7 +193,7 @@ export const Operations = () => {
           name="Zoom"
           onClick={() => {
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.Zoom,
               })
             );
@@ -207,7 +207,7 @@ export const Operations = () => {
           name="Hand"
           onClick={() => {
             dispatch(
-              imageViewerSlice.actions.setImageViewerOperation({
+              slice.actions.setOperation({
                 operation: ImageViewerOperation.Hand,
               })
             );

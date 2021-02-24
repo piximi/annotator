@@ -3,11 +3,11 @@ import * as _ from "lodash";
 import { Category } from "../../types/Category";
 
 export const selectedCategroySelector = ({
-  imageViewer,
+  state,
 }: {
-  imageViewer: ImageViewerState;
+  state: ImageViewerState;
 }) => {
-  return _.find(imageViewer.categories, (category: Category) => {
-    return category.id === imageViewer.selectedCategoryId;
+  return _.find(state.categories, (category: Category) => {
+    return category.id === state.selectedCategoryId;
   })!;
 };

@@ -1,7 +1,7 @@
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 import { Shape } from "../../../../../types/Shape";
-import { setImageViewerImage } from "../../../../../store/slices";
+import { setImage } from "../../../../../store/slices";
 import { useDispatch } from "react-redux";
 
 type ComputerMenuItemProps = {
@@ -37,7 +37,7 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
             };
 
             dispatch(
-              setImageViewerImage({
+              setImage({
                 image: {
                   id: "",
                   instances: [],

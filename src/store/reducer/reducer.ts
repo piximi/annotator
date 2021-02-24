@@ -1,9 +1,8 @@
 import { combineReducers } from "redux";
-import { imageViewerSlice, projectSlice } from "../slices";
+import { slice } from "../slices";
 
 const reducers = {
-  imageViewer: imageViewerSlice.reducer,
-  project: projectSlice.reducer,
+  state: slice.reducer,
 };
 
 export const reducer = combineReducers(reducers);

@@ -1,9 +1,5 @@
 import { ImageViewerState } from "../../types/ImageViewerState";
 
-export const exposureSelector = ({
-  imageViewer,
-}: {
-  imageViewer: ImageViewerState;
-}) => {
-  return imageViewer.exposure;
+export const exposureSelector = ({ state }: { state: ImageViewerState }) => {
+  return state.exposure;
 };

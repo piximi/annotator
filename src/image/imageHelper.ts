@@ -22,7 +22,7 @@ export const connectPoints = (
   let connectedPoints: Array<Array<number>> = [];
 
   const foo = _.filter(
-    _.zip(coordinates.slice(0, coordinates.length - 1), coordinates.slice(1)),
+    _.zip(coordinates.state(0, coordinates.length - 1), coordinates.state(1)),
     ([current, next]) => {
       return !_.isEqual(current, next);
     }

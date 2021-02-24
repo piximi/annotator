@@ -1,9 +1,5 @@
 import { ImageViewerState } from "../../types/ImageViewerState";
 
-export const vibranceSelector = ({
-  imageViewer,
-}: {
-  imageViewer: ImageViewerState;
-}) => {
-  return imageViewer.vibrance;
+export const vibranceSelector = ({ state }: { state: ImageViewerState }) => {
+  return state.vibrance;
 };

@@ -2,9 +2,9 @@ import { ImageViewerState } from "../../types/ImageViewerState";
 import { ImageViewerSelectionMode } from "../../types/ImageViewerSelectionMode";
 
 export const selectionModeSelector = ({
-  imageViewer,
+  state,
 }: {
-  imageViewer: ImageViewerState;
+  state: ImageViewerState;
 }): ImageViewerSelectionMode => {
-  return imageViewer.selectionMode;
+  return state.selectionMode;
 };

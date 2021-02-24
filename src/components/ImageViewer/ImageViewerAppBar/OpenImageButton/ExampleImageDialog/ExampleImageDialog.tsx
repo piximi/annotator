@@ -1,7 +1,7 @@
 import Dialog from "@material-ui/core/Dialog";
 import React from "react";
 import { Shape } from "../../../../../types/Shape";
-import { setImageViewerImage } from "../../../../../store/slices";
+import { setImage } from "../../../../../store/slices";
 import { useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -52,7 +52,7 @@ export const ExampleImageDialog = ({
     };
 
     dispatch(
-      setImageViewerImage({
+      setImage({
         image: {
           id: "",
           instances: [],

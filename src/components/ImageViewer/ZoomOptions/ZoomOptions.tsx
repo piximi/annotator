@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { zoomModeSelector } from "../../../store/selectors";
 import { ImageViewerZoomMode } from "../../../types/ImageViewerZoomMode";
-import { imageViewerSlice } from "../../../store/slices";
+import { slice } from "../../../store/slices";
 
 type ZoomOptionsProps = {
   handleRevert: () => void;
@@ -24,7 +24,7 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
     const value = parseInt((event.target as HTMLInputElement).value);
 
     dispatch(
-      imageViewerSlice.actions.setImageViewerZoomMode({
+      slice.actions.setZoomMode({
         zoomMode: value as ImageViewerZoomMode,
       })
     );

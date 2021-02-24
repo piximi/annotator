@@ -11,7 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import { useStyles } from "./CreateCategoryDialog.css";
 import { ColorResult } from "react-color";
 import { sample } from "underscore";
-import { imageViewerSlice } from "../../../../../store/slices";
+import { slice } from "../../../../../store/slices";
 import { v4 } from "uuid";
 import { Category } from "../../../../../types/Category";
 import { categoriesSelector } from "../../../../../store/selectors";
@@ -65,13 +65,13 @@ export const CreateCategoryDialog = ({
     };
 
     dispatch(
-      imageViewerSlice.actions.setImageViewerCategories({
+      slice.actions.setCategories({
         categories: [...categories, category],
       })
     );
 
     dispatch(
-      imageViewerSlice.actions.setImageViewerSeletedCategoryId({
+      slice.actions.setSeletedCategoryId({
         selectedCategoryId: category.id,
       })
     );

@@ -1,4 +1,3 @@
-import { reducer } from "../reducer";
 import {
   configureStore,
   EnhancedStore,
@@ -6,6 +5,7 @@ import {
   StoreEnhancer,
 } from "@reduxjs/toolkit";
 import logger from "redux-logger";
+import { reducer } from "../reducer";
 
 const enhancers: StoreEnhancer[] = [];
 

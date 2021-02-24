@@ -2,9 +2,9 @@ import { ImageViewerState } from "../../types/ImageViewerState";
 import { ImageViewerZoomMode } from "../../types/ImageViewerZoomMode";
 
 export const zoomModeSelector = ({
-  imageViewer,
+  state,
 }: {
-  imageViewer: ImageViewerState;
+  state: ImageViewerState;
 }): ImageViewerZoomMode => {
-  return imageViewer.zoomMode;
+  return state.zoomMode;
 };

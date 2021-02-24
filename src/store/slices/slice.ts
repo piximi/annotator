@@ -28,11 +28,11 @@ const initialState: ImageViewerState = {
   zoomMode: ImageViewerZoomMode.In,
 };
 
-export const imageViewerSlice = createSlice({
+export const slice = createSlice({
   initialState: initialState,
   name: "image-viewer",
   reducers: {
-    deleteImageViewerImageInstance(
+    deleteImageInstance(
       state: ImageViewerState,
       action: PayloadAction<{ id: string }>
     ) {
@@ -42,43 +42,37 @@ export const imageViewerSlice = createSlice({
         (instance: ImageViewerSelection) => instance.id !== action.payload.id
       );
     },
-    setImageViewerBrightness(
+    setBrightness(
       state: ImageViewerState,
       action: PayloadAction<{ brightness: number }>
     ) {
       state.brightness = action.payload.brightness;
     },
-    setImageViewerCategories(
+    setCategories(
       state: ImageViewerState,
       action: PayloadAction<{ categories: Array<Category> }>
     ) {
       state.categories = action.payload.categories;
     },
-    setImageViewerContrast(
+    setContrast(
       state: ImageViewerState,
       action: PayloadAction<{ contrast: number }>
     ) {
       state.contrast = action.payload.contrast;
     },
-    setImageViewerExposure(
+    setExposure(
       state: ImageViewerState,
       action: PayloadAction<{ exposure: number }>
     ) {
       state.exposure = action.payload.exposure;
     },
-    setImageViewerHue(
-      state: ImageViewerState,
-      action: PayloadAction<{ hue: number }>
-    ) {
+    setHue(state: ImageViewerState, action: PayloadAction<{ hue: number }>) {
       state.hue = action.payload.hue;
     },
-    setImageViewerImage(
-      state: ImageViewerState,
-      action: PayloadAction<{ image: Image }>
-    ) {
+    setImage(state: ImageViewerState, action: PayloadAction<{ image: Image }>) {
       state.image = action.payload.image;
     },
-    setImageViewerImageInstances(
+    setImageInstances(
       state: ImageViewerState,
       action: PayloadAction<{ instances: Array<ImageViewerSelection> }>
     ) {
@@ -86,37 +80,37 @@ export const imageViewerSlice = createSlice({
         state.image.instances = action.payload.instances;
       }
     },
-    setImageViewerOperation(
+    setOperation(
       state: ImageViewerState,
       action: PayloadAction<{ operation: ImageViewerOperation }>
     ) {
       state.operation = action.payload.operation;
     },
-    setImageViewerSaturation(
+    setSaturation(
       state: ImageViewerState,
       action: PayloadAction<{ saturation: number }>
     ) {
       state.saturation = action.payload.saturation;
     },
-    setImageViewerSeletedCategoryId(
+    setSeletedCategoryId(
       state: ImageViewerState,
       action: PayloadAction<{ selectedCategoryId: string }>
     ) {
       state.selectedCategoryId = action.payload.selectedCategoryId;
     },
-    setImageViewerSelectionMode(
+    setSelectionMode(
       state: ImageViewerState,
       action: PayloadAction<{ selectionMode: ImageViewerSelectionMode }>
     ) {
       state.selectionMode = action.payload.selectionMode;
     },
-    setImageViewerVibrance(
+    setVibrance(
       state: ImageViewerState,
       action: PayloadAction<{ vibrance: number }>
     ) {
       state.vibrance = action.payload.vibrance;
     },
-    setImageViewerZoomMode(
+    setZoomMode(
       state: ImageViewerState,
       action: PayloadAction<{ zoomMode: ImageViewerZoomMode }>
     ) {
@@ -126,18 +120,18 @@ export const imageViewerSlice = createSlice({
 });
 
 export const {
-  deleteImageViewerImageInstance,
-  setImageViewerBrightness,
-  setImageViewerCategories,
-  setImageViewerContrast,
-  setImageViewerExposure,
-  setImageViewerHue,
-  setImageViewerImage,
-  setImageViewerImageInstances,
-  setImageViewerOperation,
-  setImageViewerSaturation,
-  setImageViewerSelectionMode,
-  setImageViewerSeletedCategoryId,
-  setImageViewerVibrance,
-  setImageViewerZoomMode,
-} = imageViewerSlice.actions;
+  deleteImageInstance,
+  setBrightness,
+  setCategories,
+  setContrast,
+  setExposure,
+  setHue,
+  setImage,
+  setImageInstances,
+  setOperation,
+  setSaturation,
+  setSelectionMode,
+  setSeletedCategoryId,
+  setVibrance,
+  setZoomMode,
+} = slice.actions;

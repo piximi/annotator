@@ -27,7 +27,7 @@ import { OperationOptions } from "../OperationOptions";
 import { SelectionOptions } from "../SelectionOptions";
 import { Operations } from "../Operations";
 import { ZoomOptions } from "../ZoomOptions";
-import { imageViewerSlice } from "../../../store/slices";
+import { slice } from "../../../store/slices";
 import { Content } from "../Content";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
@@ -140,9 +140,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
   useEffect(() => {
     if (props.image) {
-      dispatch(
-        imageViewerSlice.actions.setImageViewerImage({ image: props.image })
-      );
+      dispatch(slice.actions.setImage({ image: props.image }));
     }
   }, [dispatch, props.image]);
 
@@ -161,7 +159,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
     category: Category
   ) => {
     dispatch(
-      imageViewerSlice.actions.setImageViewerSeletedCategoryId({
+      slice.actions.setSeletedCategoryId({
         selectedCategoryId: category.id,
       })
     );

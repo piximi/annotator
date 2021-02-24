@@ -91,7 +91,7 @@ export const SelectionOptions = () => {
             </ListItemIcon>
 
             <ListItemText
-              primary="Intersectit"
+              primary="Intersect"
               secondary="Constrain the boundary of the new selection to the existing selection."
             />
           </ListItem>

@@ -1,10 +1,10 @@
 import {Provider} from "react-redux";
 import React from "react";
-import {productionStore} from "../src/store";
+import {store} from "../src/store";
 
 export const decorators = [
   (Story) => (
-      <Provider store={productionStore}>
+      <Provider store={store}>
         <Story />
       </Provider>
   ),

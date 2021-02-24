@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import { ImageViewer } from "./components";
 import { Provider } from "react-redux";
-import { productionStore } from "./store";
+import { store } from "./store";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={productionStore}>
+    <Provider store={store}>
       <ImageViewer />
     </Provider>
   </React.StrictMode>,

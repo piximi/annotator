@@ -21,4 +21,4 @@ const options = {
   reducer: reducer,
 };
 
-export const productionStore: EnhancedStore = configureStore(options);
+export const store: EnhancedStore = configureStore(options);

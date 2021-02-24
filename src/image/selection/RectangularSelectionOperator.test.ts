@@ -1,9 +1,12 @@
 import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import { test } from "@jest/globals";
 import { Category } from "../../types/Category";
+import * as ImageJS from "image-js";
 
 test("deselect", () => {
-  const selectionOperator = new RectangularSelectionOperator();
+  const image = new ImageJS.Image(224, 224);
+
+  const selectionOperator = new RectangularSelectionOperator(image);
 
   selectionOperator.selected = true;
 
@@ -26,7 +29,9 @@ test("deselect", () => {
 });
 
 test("onMouseDown", () => {
-  const selectionOperator = new RectangularSelectionOperator();
+  const image = new ImageJS.Image(224, 224);
+
+  const selectionOperator = new RectangularSelectionOperator(image);
 
   selectionOperator.onMouseDown({ x: 0, y: 0 });
 
@@ -42,7 +47,9 @@ test("onMouseDown", () => {
 });
 
 test("onMouseMove", () => {
-  const selectionOperator = new RectangularSelectionOperator();
+  const image = new ImageJS.Image(224, 224);
+
+  const selectionOperator = new RectangularSelectionOperator(image);
 
   selectionOperator.selecting = true;
 
@@ -62,7 +69,9 @@ test("onMouseMove", () => {
 });
 
 test("onMouseUp", () => {
-  const selectionOperator = new RectangularSelectionOperator();
+  const image = new ImageJS.Image(224, 224);
+
+  const selectionOperator = new RectangularSelectionOperator(image);
 
   selectionOperator.selecting = true;
 
@@ -82,7 +91,9 @@ test("onMouseUp", () => {
 });
 
 test("select", () => {
-  const selectionOperator = new RectangularSelectionOperator();
+  const image = new ImageJS.Image(224, 224);
+
+  const selectionOperator = new RectangularSelectionOperator(image);
 
   selectionOperator.selected = true;
 

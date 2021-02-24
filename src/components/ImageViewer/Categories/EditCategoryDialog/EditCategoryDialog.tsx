@@ -10,7 +10,6 @@ import Grid from "@material-ui/core/Grid";
 import { ColorIcon } from "../ColorIcon";
 import { useStyles } from "./EditCategoryDialog.css";
 import { Category } from "../../../../types/Category";
-import { updateCategory } from "../../../../store/slices";
 
 type EditCategoryDialogProps = {
   category: Category;
@@ -40,13 +39,7 @@ export const EditCategoryDialog = ({
   };
 
   const onEdit = () => {
-    dispatch(
-      updateCategory({
-        id: category.id,
-        name: name,
-        color: color,
-      })
-    );
+    // TODO: dispatch edit category action
 
     onCloseDialog();
   };

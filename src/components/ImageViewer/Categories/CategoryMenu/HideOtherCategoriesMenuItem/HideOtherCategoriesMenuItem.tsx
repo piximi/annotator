@@ -2,8 +2,6 @@ import React from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import { Category } from "../../../../../types/Category";
-import { useDispatch } from "react-redux";
-import { updateOtherCategoryVisibility } from "../../../../../store/slices";
 
 type HideOtherCategoriesMenuItemProps = {
   category: Category;
@@ -16,12 +14,10 @@ export const HideOtherCategoriesMenuItem = ({
   category,
   onCloseCategoryMenu,
 }: HideOtherCategoriesMenuItemProps) => {
-  const dispatch = useDispatch();
-
   const onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     onCloseCategoryMenu(event);
 
-    dispatch(updateOtherCategoryVisibility({ id: category.id }));
+    // TODO: dispatch hide category action
   };
 
   return (

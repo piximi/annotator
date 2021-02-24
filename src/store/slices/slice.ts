@@ -64,9 +64,9 @@ export const slice = createSlice({
       state: State,
       action: PayloadAction<{ instances: Array<Selection> }>
     ) {
-      if (state.image) {
-        state.image.instances = action.payload.instances;
-      }
+      if (!state.image) return;
+
+      state.image.instances = action.payload.instances;
     },
     setOperation(
       state: State,

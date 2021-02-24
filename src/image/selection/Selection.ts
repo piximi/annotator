@@ -23,8 +23,23 @@ export class Selection {
     });
   }
 
-  subtract(selection: Selection) {}
+  /*
+   * Subtracting from a selection deselects the areas you draw over, keeping
+   * the rest of your existing selection.
+   */
+  subtract(selection: Selection) {
+    selection.mask.data.forEach((currentValue: number, index: number) => {
+      if (currentValue === 0) {
+        this.mask.data[index] = 0;
+      }
+    });
+  }
 
+  /*
+   * When using the Intersect selection mode, any currently selected areas you
+   * select over will be kept and any currently selected areas outside your
+   * new selection will be removed from the selection.
+   */
   intersect(selection: Selection) {
     // @ts-ignore
     this.mask = this.mask.getIntersection(selection.mask);

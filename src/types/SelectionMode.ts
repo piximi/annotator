@@ -1,6 +1,6 @@
 export enum SelectionMode {
-  Addition,
-  Intersection,
+  Add,
+  Intersect,
   New,
-  Subtraction,
+  Subtract,
 }

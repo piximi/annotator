@@ -1,6 +1,5 @@
 import { SelectionOperator } from "./SelectionOperator";
 import * as _ from "lodash";
-import { Category } from "../../types/Category";
 
 export class PolygonalSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };

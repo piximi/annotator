@@ -6,7 +6,7 @@ import { ImageViewerOperation } from "../../../../types/ImageViewerOperation";
 import { Operation } from "../Operation";
 import { useStyles } from "./Operations.css";
 import { useDispatch, useSelector } from "react-redux";
-import { imageViewerOperationSelector } from "../../../../store/selectors";
+import { operationSelector } from "../../../../store/selectors";
 import { imageViewerSlice } from "../../../../store/slices";
 import {
   ColorAdjustmentIcon,
@@ -27,7 +27,7 @@ export const Operations = () => {
 
   const dispatch = useDispatch();
 
-  const activeOperation = useSelector(imageViewerOperationSelector);
+  const activeOperation = useSelector(operationSelector);
 
   return (
     <Drawer

@@ -1,4 +1,3 @@
-import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import { test } from "@jest/globals";
 import { Image } from "image-js";
 import { ObjectSelectionOperator } from "./ObjectSelectionOperator";

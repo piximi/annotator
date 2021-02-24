@@ -1,6 +1,6 @@
 import React from "react";
 import { Stage } from "../Stage";
-import { imageViewerImageSelector } from "../../../../store/selectors";
+import { imageSelector } from "../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
 import { Category } from "../../../../types/Category";
@@ -10,7 +10,7 @@ type ContentProps = {
 };
 
 export const Content = ({ category }: ContentProps) => {
-  const image = useSelector(imageViewerImageSelector);
+  const image = useSelector(imageSelector);
 
   const classes = useStyles();
 

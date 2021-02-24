@@ -1,7 +1,7 @@
 import { ImageViewerState } from "../../types/ImageViewerState";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 
-export const imageViewerOperationSelector = ({
+export const operationSelector = ({
   imageViewer,
 }: {
   imageViewer: ImageViewerState;

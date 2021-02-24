@@ -15,10 +15,10 @@ import { ReactComponent as PolygonalSelectionIcon } from "../../icons/PolygonalS
 import { ReactComponent as RectangularIcon } from "../../icons/RectangularSelection.svg";
 import { ImageViewerOperation } from "../../../types/ImageViewerOperation";
 import {
-  imageViewerImageSelector,
-  imageViewerOperationSelector,
-  imageViewerSelectedCategroySelector,
-  unknownCategorySelector,
+  imageSelector,
+  operationSelector,
+  selectedCategroySelector,
+  unknownCategroySelector,
 } from "../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
@@ -146,15 +146,15 @@ export const ImageViewer = (props: ImageViewerProps) => {
     }
   }, [dispatch, props.image]);
 
-  const image = useSelector(imageViewerImageSelector);
+  const image = useSelector(imageSelector);
 
-  const activeOperation = useSelector(imageViewerOperationSelector);
+  const activeOperation = useSelector(operationSelector);
 
   const classes = useStyles();
 
-  const unknownCategory = useSelector(unknownCategorySelector);
+  const unknownCategory = useSelector(unknownCategroySelector);
 
-  const activeCategory = useSelector(imageViewerSelectedCategroySelector);
+  const activeCategory = useSelector(selectedCategroySelector);
 
   const onCategoryClick = (
     event: React.MouseEvent<HTMLDivElement>,

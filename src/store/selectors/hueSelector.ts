@@ -1,9 +1,9 @@
 import { ImageViewerState } from "../../types/ImageViewerState";
 
-export const imageViewerContrastSelector = ({
+export const hueSelector = ({
   imageViewer,
 }: {
   imageViewer: ImageViewerState;
 }) => {
-  return imageViewer.contrast;
+  return imageViewer.hue;
 };

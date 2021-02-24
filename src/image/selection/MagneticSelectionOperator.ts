@@ -2,7 +2,6 @@ import { SelectionOperator } from "./SelectionOperator";
 import { createPathFinder, makeGraph, PiximiGraph } from "../GraphHelper";
 import { getIdx } from "../imageHelper";
 import * as ImageJS from "image-js";
-import { Category } from "../../types/Category";
 import * as _ from "lodash";
 
 export class MagneticSelectionOperator extends SelectionOperator {

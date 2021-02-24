@@ -1,7 +1,7 @@
 import { ImageViewerState } from "../../types/ImageViewerState";
 import { Category } from "../../types/Category";
 
-export const imageViewerUnknownCategroySelector = ({
+export const unknownCategroySelector = ({
   imageViewer,
 }: {
   imageViewer: ImageViewerState;

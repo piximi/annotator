@@ -1,9 +1,9 @@
 import { ImageViewerState } from "../../types/ImageViewerState";
 
-export const imageViewerImageSelector = ({
+export const brightnessSelector = ({
   imageViewer,
 }: {
   imageViewer: ImageViewerState;
 }) => {
-  return imageViewer.image;
+  return imageViewer.brightness;
 };

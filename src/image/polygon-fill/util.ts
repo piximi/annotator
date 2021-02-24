@@ -1,5 +1,4 @@
 // Code from: https://github.com/kamoroso94/polygon-fill-benchmark
-import * as ImageJS from "image-js";
 
 // linear interpolation
 // finds x-value from scanline intersecting edge

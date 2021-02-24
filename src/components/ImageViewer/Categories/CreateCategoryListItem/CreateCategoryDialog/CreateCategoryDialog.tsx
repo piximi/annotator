@@ -11,10 +11,10 @@ import Grid from "@material-ui/core/Grid";
 import { useStyles } from "./CreateCategoryDialog.css";
 import { ColorResult } from "react-color";
 import { sample } from "underscore";
-import { createCategory, imageViewerSlice } from "../../../../../store/slices";
+import { imageViewerSlice } from "../../../../../store/slices";
 import { v4 } from "uuid";
 import { Category } from "../../../../../types/Category";
-import { imageViewerCategoriesSelector } from "../../../../../store/selectors";
+import { categoriesSelector } from "../../../../../store/selectors";
 
 const COLORS = [
   "#f44336",
@@ -48,7 +48,7 @@ export const CreateCategoryDialog = ({
 }: CreateCategoryDialogProps) => {
   const dispatch = useDispatch();
 
-  const categories = useSelector(imageViewerCategoriesSelector);
+  const categories = useSelector(categoriesSelector);
 
   const [color, setColor] = React.useState<string>(sample(COLORS)!);
 

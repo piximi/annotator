@@ -1,6 +1,6 @@
 import { ObjectSelectionOperator } from "../../../../../../image/selection";
 import * as ReactKonva from "react-konva";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type ObjectSelectionProps = {

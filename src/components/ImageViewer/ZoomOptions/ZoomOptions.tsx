@@ -7,7 +7,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { imageViewerZoomModeSelector } from "../../../store/selectors";
+import { zoomModeSelector } from "../../../store/selectors";
 import { ImageViewerZoomMode } from "../../../types/ImageViewerZoomMode";
 import { imageViewerSlice } from "../../../store/slices";
 
@@ -18,7 +18,7 @@ type ZoomOptionsProps = {
 export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
   const dispatch = useDispatch();
 
-  const zoomMode = useSelector(imageViewerZoomModeSelector);
+  const zoomMode = useSelector(zoomModeSelector);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt((event.target as HTMLInputElement).value);

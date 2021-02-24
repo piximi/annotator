@@ -1,10 +1,9 @@
-import { Project } from "../../types/Project";
-import { Category } from "../../types/Category";
+import { ImageViewerState } from "../../types/ImageViewerState";
 
 export const categoriesSelector = ({
-  project,
+  imageViewer,
 }: {
-  project: Project;
-}): Array<Category> => {
-  return project.categories;
+  imageViewer: ImageViewerState;
+}) => {
+  return imageViewer.categories;
 };

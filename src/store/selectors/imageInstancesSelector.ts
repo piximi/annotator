@@ -1,9 +1,9 @@
 import { ImageViewerState } from "../../types/ImageViewerState";
 
-export const imageViewerHueSelector = ({
+export const imageInstancesSelector = ({
   imageViewer,
 }: {
   imageViewer: ImageViewerState;
 }) => {
-  return imageViewer.hue;
+  return imageViewer.image?.instances;
 };

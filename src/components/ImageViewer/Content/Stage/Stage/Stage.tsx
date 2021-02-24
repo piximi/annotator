@@ -17,9 +17,8 @@ import {
 import { ImageViewerOperation } from "../../../../../types/ImageViewerOperation";
 import {
   categoriesSelector,
-  imageViewerCategoriesSelector,
-  imageViewerImageInstancesSelector,
-  imageViewerOperationSelector,
+  imageInstancesSelector,
+  operationSelector,
 } from "../../../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
@@ -50,7 +49,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const classes = useStyles();
 
-  const operation = useSelector(imageViewerOperationSelector);
+  const operation = useSelector(operationSelector);
 
   const [operator, setOperator] = useState<SelectionOperator>();
 
@@ -61,9 +60,9 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const dispatch = useDispatch();
 
-  const instances = useSelector(imageViewerImageInstancesSelector);
+  const instances = useSelector(imageInstancesSelector);
 
-  const categories = useSelector(imageViewerCategoriesSelector);
+  const categories = useSelector(categoriesSelector);
 
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");

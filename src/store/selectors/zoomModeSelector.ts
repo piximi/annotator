@@ -1,7 +1,7 @@
 import { ImageViewerState } from "../../types/ImageViewerState";
 import { ImageViewerZoomMode } from "../../types/ImageViewerZoomMode";
 
-export const imageViewerZoomModeSelector = ({
+export const zoomModeSelector = ({
   imageViewer,
 }: {
   imageViewer: ImageViewerState;

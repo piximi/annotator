@@ -5,17 +5,14 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { useStyles } from "./ExportButton.css";
 import { saveAs } from "file-saver";
 import { useSelector } from "react-redux";
-import {
-  imageViewerCategoriesSelector,
-  imageViewerImageSelector,
-} from "../../../../store/selectors";
+import { categoriesSelector, imageSelector } from "../../../../store/selectors";
 import * as _ from "lodash";
 
 export const ExportButton = () => {
   const classes = useStyles();
 
-  const image = useSelector(imageViewerImageSelector);
-  const projectCategories = useSelector(imageViewerCategoriesSelector);
+  const image = useSelector(imageSelector);
+  const projectCategories = useSelector(categoriesSelector);
 
   const onClick = () => {
     if (!image) return;

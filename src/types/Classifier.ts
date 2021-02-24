@@ -1,9 +1,9 @@
+import * as tensorflow from "@tensorflow/tfjs";
 import { History, LayersModel, Scalar, Tensor } from "@tensorflow/tfjs";
 import { LossFunction } from "./LossFunction";
 import { Metric } from "./Metric";
 import { OptimizationAlgorithm } from "./OptimizationAlgorithm";
 import { FitOptions } from "./FitOptions";
-import * as tensorflow from "@tensorflow/tfjs";
 
 export type Classifier = {
   compiled?: LayersModel;

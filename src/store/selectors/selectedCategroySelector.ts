@@ -2,7 +2,7 @@ import { ImageViewerState } from "../../types/ImageViewerState";
 import * as _ from "lodash";
 import { Category } from "../../types/Category";
 
-export const imageViewerSelectedCategroySelector = ({
+export const selectedCategroySelector = ({
   imageViewer,
 }: {
   imageViewer: ImageViewerState;

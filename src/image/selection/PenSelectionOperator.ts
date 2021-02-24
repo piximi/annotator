@@ -1,7 +1,6 @@
 import { SelectionOperator } from "./SelectionOperator";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
-import { encode } from "../rle";
 
 export class PenSelectionOperator extends SelectionOperator {
   brushSize: number = 8;

@@ -75,19 +75,19 @@ export const Stage = ({ category, src }: StageProps) => {
     if (!selection) return;
 
     const others = instances?.filter(
-      (instance: Selection) => instance.id !== selection
+      (instance: SelectionType) => instance.id !== selection
     );
 
     const updated: Selection = {
       ...instances?.filter(
-        (instance: Selection) => instance.id === selection
+        (instance: SelectionType) => instance.id === selection
       )[0],
       categoryId: category.id,
     } as Selection;
 
     dispatch(
       slice.actions.setImageInstances({
-        instances: [...(others as Array<Selection>), updated],
+        instances: [...(others as Array<SelectionType>), updated],
       })
     );
   }, [category]);
@@ -171,7 +171,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const onClick = (
     event: Konva.KonvaEventObject<MouseEvent>,
-    instance: Selection
+    instance: SelectionType
   ) => {
     if (!operator) return;
 
@@ -335,7 +335,7 @@ export const Stage = ({ category, src }: StageProps) => {
         )}
 
         {instances &&
-          instances.map((instance: Selection) => {
+          instances.map((instance: SelectionType) => {
             return (
               <ReactKonva.Line
                 closed={true}

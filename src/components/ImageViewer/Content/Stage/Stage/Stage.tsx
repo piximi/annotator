@@ -17,6 +17,7 @@ import {
 import { ImageViewerOperation } from "../../../../../types/ImageViewerOperation";
 import {
   categoriesSelector,
+  imageViewerCategoriesSelector,
   imageViewerImageInstancesSelector,
   imageViewerOperationSelector,
 } from "../../../../../store/selectors";
@@ -62,7 +63,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const instances = useSelector(imageViewerImageInstancesSelector);
 
-  const categories = useSelector(categoriesSelector);
+  const categories = useSelector(imageViewerCategoriesSelector);
 
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
@@ -180,6 +181,12 @@ export const Stage = ({ category, src }: StageProps) => {
     operator.deselect();
 
     setSelection(instance.id);
+
+    dispatch(
+      imageViewerSlice.actions.setImageViewerSeletedCategoryId({
+        selectedCategoryId: instance.categoryId,
+      })
+    );
 
     selectionRef.current = event.target as Konva.Line;
 

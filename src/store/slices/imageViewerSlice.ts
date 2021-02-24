@@ -5,14 +5,24 @@ import { ImageViewerSelectionMode } from "../../types/ImageViewerSelectionMode";
 import { ImageViewerOperation } from "../../types/ImageViewerOperation";
 import { ImageViewerZoomMode } from "../../types/ImageViewerZoomMode";
 import { ImageViewerSelection } from "../../types/ImageViewerSelection";
+import { Category } from "../../types/Category";
 
 const initialState: ImageViewerState = {
   brightness: 0,
+  categories: [
+    {
+      color: "#AAAAAA",
+      id: "00000000-0000-0000-0000-000000000000",
+      name: "Unknown",
+      visible: true,
+    },
+  ],
   contrast: 0,
   exposure: 0,
   hue: 0,
   operation: ImageViewerOperation.RectangularSelection,
   saturation: 0,
+  selectedCategoryId: "00000000-0000-0000-0000-000000000000",
   selectionMode: ImageViewerSelectionMode.New,
   vibrance: 0,
   zoomMode: ImageViewerZoomMode.In,
@@ -37,6 +47,12 @@ export const imageViewerSlice = createSlice({
       action: PayloadAction<{ brightness: number }>
     ) {
       state.brightness = action.payload.brightness;
+    },
+    setImageViewerCategories(
+      state: ImageViewerState,
+      action: PayloadAction<{ categories: Array<Category> }>
+    ) {
+      state.categories = action.payload.categories;
     },
     setImageViewerContrast(
       state: ImageViewerState,
@@ -82,6 +98,12 @@ export const imageViewerSlice = createSlice({
     ) {
       state.saturation = action.payload.saturation;
     },
+    setImageViewerSeletedCategoryId(
+      state: ImageViewerState,
+      action: PayloadAction<{ selectedCategoryId: string }>
+    ) {
+      state.selectedCategoryId = action.payload.selectedCategoryId;
+    },
     setImageViewerSelectionMode(
       state: ImageViewerState,
       action: PayloadAction<{ selectionMode: ImageViewerSelectionMode }>
@@ -106,6 +128,7 @@ export const imageViewerSlice = createSlice({
 export const {
   deleteImageViewerImageInstance,
   setImageViewerBrightness,
+  setImageViewerCategories,
   setImageViewerContrast,
   setImageViewerExposure,
   setImageViewerHue,
@@ -114,6 +137,7 @@ export const {
   setImageViewerOperation,
   setImageViewerSaturation,
   setImageViewerSelectionMode,
+  setImageViewerSeletedCategoryId,
   setImageViewerVibrance,
   setImageViewerZoomMode,
 } = imageViewerSlice.actions;

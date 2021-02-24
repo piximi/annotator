@@ -32,6 +32,7 @@ export {
   deleteImageViewerImageInstance,
   imageViewerSlice,
   setImageViewerBrightness,
+  setImageViewerCategories,
   setImageViewerContrast,
   setImageViewerExposure,
   setImageViewerHue,
@@ -40,6 +41,7 @@ export {
   setImageViewerOperation,
   setImageViewerSaturation,
   setImageViewerSelectionMode,
+  setImageViewerSeletedCategoryId,
   setImageViewerVibrance,
   setImageViewerZoomMode,
 } from "./imageViewerSlice";

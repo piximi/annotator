@@ -84,10 +84,10 @@ export const fromString = (s: Array<number>) => {
 };
 
 export const toImageData = (
-  decoded: Array<number>,
+  decoded: Uint8ClampedArray,
   width: number,
   height: number
-): ImageData => {
+) => {
   let data = [];
 
   for (let i = 0; i < decoded.length; i++) {

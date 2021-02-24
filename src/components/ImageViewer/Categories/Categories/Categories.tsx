@@ -4,18 +4,18 @@ import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
 import { Category } from "../../../../types/Category";
 import {
-  createdCategoriesSelector,
-  unknownCategorySelector,
+  imageViewerCreatedCategoriesSelector,
+  imageViewerUnknownCategroySelector,
 } from "../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Categories.css";
 import { CollapsibleList } from "../CollapsibleList";
-import { CreateCategoryListItem } from "../CreateCategoryListItem/CreateCategoryListItem";
+import { CreateCategoryListItem } from "../CreateCategoryListItem";
 import { CategoryListItemCheckbox } from "../CategoryListItemCheckbox";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import { CategoryMenu } from "../CategoryMenu/CategoryMenu";
+import { CategoryMenu } from "../CategoryMenu";
 import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog, useMenu } from "../../../../hooks";
@@ -34,8 +34,13 @@ export const Categories = ({
 }: CategoriesProps) => {
   const classes = useStyles();
 
-  const categories = useSelector(createdCategoriesSelector);
-  const unknownCategory = useSelector(unknownCategorySelector);
+  const categories: Array<Category> = useSelector(
+    imageViewerCreatedCategoriesSelector
+  );
+
+  const unknownCategory: Category = useSelector(
+    imageViewerUnknownCategroySelector
+  );
 
   const {
     onClose: onCloseDeleteCategoryDialog,

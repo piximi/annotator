@@ -1,4 +1,4 @@
-import { State } from "../../types/ImageViewerState";
+import { State } from "../../types/State";
 import * as _ from "lodash";
 import { Category } from "../../types/Category";
 

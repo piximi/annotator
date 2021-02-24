@@ -1,4 +1,4 @@
-import { State } from "../../types/ImageViewerState";
+import { State } from "../../types/State";
 import { Category } from "../../types/Category";
 
 export const unknownCategroySelector = ({ state }: { state: State }) => {

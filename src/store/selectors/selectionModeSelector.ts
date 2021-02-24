@@ -1,5 +1,5 @@
-import { State } from "../../types/ImageViewerState";
-import { SelectionMode } from "../../types/ImageViewerSelectionMode";
+import { State } from "../../types/State";
+import { SelectionMode } from "../../types/SelectionMode";
 
 export const selectionModeSelector = ({
   state,

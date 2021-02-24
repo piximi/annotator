@@ -11,6 +11,10 @@ export class Selection {
     this.mask = mask;
   }
 
+  get boundingBox(): [number, number, number, number] {
+    return [0, 0, 0, 0];
+  }
+
   /*
    * Adding to a selection adds any new areas you select to your existing
    * selection.
@@ -46,7 +50,7 @@ export class Selection {
   }
 
   invert() {
-    this.mask.data.forEach((_: number, index: number) => {
+    this.mask.data.forEach((currentValue: number, index: number) => {
       this.mask.data[index] = ~this.mask.data[index];
     });
   }

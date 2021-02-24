@@ -22,7 +22,7 @@ const initialState: State = {
   hue: 0,
   operation: Operation.RectangularSelection,
   saturation: 0,
-  selectedCategoryId: "00000000-0000-0000-0000-000000000000",
+  selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: SelectionMode.New,
   vibrance: 0,
   zoomMode: ZoomMode.In,
@@ -77,11 +77,11 @@ export const slice = createSlice({
     setSaturation(state: State, action: PayloadAction<{ saturation: number }>) {
       state.saturation = action.payload.saturation;
     },
-    setSeletedCategoryId(
+    setSeletedCategory(
       state: State,
-      action: PayloadAction<{ selectedCategoryId: string }>
+      action: PayloadAction<{ selectedCategory: string }>
     ) {
-      state.selectedCategoryId = action.payload.selectedCategoryId;
+      state.selectedCategory = action.payload.selectedCategory;
     },
     setSelectionMode(
       state: State,
@@ -110,7 +110,7 @@ export const {
   setOperation,
   setSaturation,
   setSelectionMode,
-  setSeletedCategoryId,
+  setSeletedCategory,
   setVibrance,
   setZoomMode,
 } = slice.actions;

@@ -159,8 +159,8 @@ export const ImageViewer = (props: ImageViewerProps) => {
     category: Category
   ) => {
     dispatch(
-      slice.actions.setSeletedCategoryId({
-        selectedCategoryId: category.id,
+      slice.actions.setSeletedCategory({
+        selectedCategory: category.id,
       })
     );
   };

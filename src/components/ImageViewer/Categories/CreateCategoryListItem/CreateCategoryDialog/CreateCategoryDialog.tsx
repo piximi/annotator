@@ -71,8 +71,8 @@ export const CreateCategoryDialog = ({
     );
 
     dispatch(
-      slice.actions.setSeletedCategoryId({
-        selectedCategoryId: category.id,
+      slice.actions.setSeletedCategory({
+        selectedCategory: category.id,
       })
     );
 

@@ -1,8 +1,8 @@
-import { Image } from "./Image";
-import { Operation } from "./ImageViewerOperation";
-import { SelectionMode } from "./ImageViewerSelectionMode";
-import { ZoomMode } from "./ImageViewerZoomMode";
 import { Category } from "./Category";
+import { Image } from "./Image";
+import { Operation } from "./Operation";
+import { SelectionMode } from "./SelectionMode";
+import { ZoomMode } from "./ZoomMode";
 
 export type State = {
   brightness: number;
@@ -13,7 +13,7 @@ export type State = {
   image?: Image;
   operation: Operation;
   saturation: number;
-  selectedCategoryId: string;
+  selectedCategory: string;
   selectionMode: SelectionMode;
   vibrance: number;
   zoomMode: ZoomMode;

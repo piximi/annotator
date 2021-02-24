@@ -11,7 +11,7 @@ export {
   setOperation,
   setSaturation,
   setSelectionMode,
-  setSeletedCategoryId,
+  setSeletedCategory,
   setVibrance,
   setZoomMode,
 } from "./slice";

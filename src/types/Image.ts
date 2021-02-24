@@ -1,5 +1,5 @@
 import { Shape } from "./Shape";
-import { Selection } from "./ImageViewerSelection";
+import { Selection } from "./Selection";
 
 export type Image = {
   categoryId?: string;

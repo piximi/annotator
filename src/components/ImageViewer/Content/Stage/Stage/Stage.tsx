@@ -182,8 +182,8 @@ export const Stage = ({ category, src }: StageProps) => {
     setSelection(instance.id);
 
     dispatch(
-      slice.actions.setSeletedCategoryId({
-        selectedCategoryId: instance.categoryId,
+      slice.actions.setSeletedCategory({
+        selectedCategory: instance.categoryId,
       })
     );
 

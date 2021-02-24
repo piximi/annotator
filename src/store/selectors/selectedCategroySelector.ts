@@ -4,6 +4,6 @@ import { Category } from "../../types/Category";
 
 export const selectedCategroySelector = ({ state }: { state: State }) => {
   return _.find(state.categories, (category: Category) => {
-    return category.id === state.selectedCategoryId;
+    return category.id === state.selectedCategory;
   })!;
 };

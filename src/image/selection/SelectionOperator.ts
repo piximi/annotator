@@ -1,4 +1,4 @@
-import { Selection } from "../../types/ImageViewerSelection";
+import { Selection } from "../../types/Selection";
 import * as ImageJS from "image-js";
 import { Category } from "../../types/Category";
 import * as _ from "lodash";

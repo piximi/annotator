@@ -1,4 +1,4 @@
-export enum ImageViewerSelectionMode {
+export enum SelectionMode {
   Addition,
   Intersection,
   New,

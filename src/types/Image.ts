@@ -1,5 +1,5 @@
 import { Shape } from "./Shape";
-import { ImageViewerSelection } from "./ImageViewerSelection";
+import { Selection } from "./ImageViewerSelection";
 
 export type Image = {
   categoryId?: string;
@@ -7,5 +7,5 @@ export type Image = {
   name: string;
   src: string;
   shape?: Shape;
-  instances: Array<ImageViewerSelection>;
+  instances: Array<Selection>;
 };

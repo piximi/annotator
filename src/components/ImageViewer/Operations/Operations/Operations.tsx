@@ -2,7 +2,7 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import React from "react";
-import { ImageViewerOperation } from "../../../../types/ImageViewerOperation";
+import { Operation } from "../../../../types/ImageViewerOperation";
 import { Operation } from "../Operation";
 import { useStyles } from "./Operations.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,11 +46,11 @@ export const Operations = () => {
           onClick={() =>
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.ColorAdjustment,
+                operation: Operation.ColorAdjustment,
               })
             )
           }
-          selected={activeOperation === ImageViewerOperation.ColorAdjustment}
+          selected={activeOperation === Operation.ColorAdjustment}
         >
           <ColorAdjustmentIcon />
         </Operation>
@@ -62,13 +62,11 @@ export const Operations = () => {
           onClick={() =>
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.RectangularSelection,
+                operation: Operation.RectangularSelection,
               })
             )
           }
-          selected={
-            activeOperation === ImageViewerOperation.RectangularSelection
-          }
+          selected={activeOperation === Operation.RectangularSelection}
         >
           <RectangularSelectionIcon />
         </Operation>
@@ -78,13 +76,11 @@ export const Operations = () => {
           onClick={() =>
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.EllipticalSelection,
+                operation: Operation.EllipticalSelection,
               })
             )
           }
-          selected={
-            activeOperation === ImageViewerOperation.EllipticalSelection
-          }
+          selected={activeOperation === Operation.EllipticalSelection}
         >
           <EllipticalSelectionIcon />
         </Operation>
@@ -94,11 +90,11 @@ export const Operations = () => {
           onClick={() =>
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.PenSelection,
+                operation: Operation.PenSelection,
               })
             )
           }
-          selected={activeOperation === ImageViewerOperation.PenSelection}
+          selected={activeOperation === Operation.PenSelection}
         >
           <LassoSelectionIcon />
         </Operation>
@@ -108,11 +104,11 @@ export const Operations = () => {
           onClick={() =>
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.LassoSelection,
+                operation: Operation.LassoSelection,
               })
             )
           }
-          selected={activeOperation === ImageViewerOperation.LassoSelection}
+          selected={activeOperation === Operation.LassoSelection}
         >
           <LassoSelectionIcon />
         </Operation>
@@ -122,11 +118,11 @@ export const Operations = () => {
           onClick={() =>
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.PolygonalSelection,
+                operation: Operation.PolygonalSelection,
               })
             )
           }
-          selected={activeOperation === ImageViewerOperation.PolygonalSelection}
+          selected={activeOperation === Operation.PolygonalSelection}
         >
           <PolygonalSelectionIcon />
         </Operation>
@@ -136,11 +132,11 @@ export const Operations = () => {
           onClick={() =>
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.MagneticSelection,
+                operation: Operation.MagneticSelection,
               })
             )
           }
-          selected={activeOperation === ImageViewerOperation.MagneticSelection}
+          selected={activeOperation === Operation.MagneticSelection}
         >
           <MagneticSelectionIcon />
         </Operation>
@@ -150,11 +146,11 @@ export const Operations = () => {
           onClick={() =>
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.ColorSelection,
+                operation: Operation.ColorSelection,
               })
             )
           }
-          selected={activeOperation === ImageViewerOperation.ColorSelection}
+          selected={activeOperation === Operation.ColorSelection}
         >
           <ColorSelectionIcon />
         </Operation>
@@ -164,11 +160,11 @@ export const Operations = () => {
           onClick={() =>
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.QuickSelection,
+                operation: Operation.QuickSelection,
               })
             )
           }
-          selected={activeOperation === ImageViewerOperation.QuickSelection}
+          selected={activeOperation === Operation.QuickSelection}
         >
           <QuickSelectionIcon />
         </Operation>
@@ -178,11 +174,11 @@ export const Operations = () => {
           onClick={() =>
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.ObjectSelection,
+                operation: Operation.ObjectSelection,
               })
             )
           }
-          selected={activeOperation === ImageViewerOperation.ObjectSelection}
+          selected={activeOperation === Operation.ObjectSelection}
         >
           <ObjectSelectionIcon />
         </Operation>
@@ -194,11 +190,11 @@ export const Operations = () => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.Zoom,
+                operation: Operation.Zoom,
               })
             );
           }}
-          selected={activeOperation === ImageViewerOperation.Zoom}
+          selected={activeOperation === Operation.Zoom}
         >
           <ZoomIcon />
         </Operation>
@@ -208,11 +204,11 @@ export const Operations = () => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: ImageViewerOperation.Hand,
+                operation: Operation.Hand,
               })
             );
           }}
-          selected={activeOperation === ImageViewerOperation.Hand}
+          selected={activeOperation === Operation.Hand}
         >
           <HandIcon />
         </Operation>

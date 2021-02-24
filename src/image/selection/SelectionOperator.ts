@@ -1,4 +1,4 @@
-import { ImageViewerSelection } from "../../types/ImageViewerSelection";
+import { Selection } from "../../types/ImageViewerSelection";
 import * as ImageJS from "image-js";
 import { Category } from "../../types/Category";
 import * as _ from "lodash";
@@ -14,7 +14,7 @@ export abstract class SelectionOperator {
   points?: Array<number> = [];
   selected: boolean = false;
   selecting: boolean = false;
-  selection?: ImageViewerSelection;
+  selection?: Selection;
 
   constructor(image: ImageJS.Image) {
     this.image = image;

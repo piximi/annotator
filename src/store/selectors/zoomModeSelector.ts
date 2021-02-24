@@ -1,10 +1,6 @@
-import { ImageViewerState } from "../../types/ImageViewerState";
-import { ImageViewerZoomMode } from "../../types/ImageViewerZoomMode";
+import { State } from "../../types/ImageViewerState";
+import { ZoomMode } from "../../types/ImageViewerZoomMode";
 
-export const zoomModeSelector = ({
-  state,
-}: {
-  state: ImageViewerState;
-}): ImageViewerZoomMode => {
+export const zoomModeSelector = ({ state }: { state: State }): ZoomMode => {
   return state.zoomMode;
 };

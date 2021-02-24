@@ -1,5 +1,5 @@
-import { ImageViewerState } from "../../types/ImageViewerState";
+import { State } from "../../types/ImageViewerState";
 
-export const vibranceSelector = ({ state }: { state: ImageViewerState }) => {
+export const vibranceSelector = ({ state }: { state: State }) => {
   return state.vibrance;
 };

@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ImageViewerState } from "../../types/ImageViewerState";
+import { State } from "../../types/ImageViewerState";
 import { Image } from "../../types/Image";
-import { ImageViewerSelectionMode } from "../../types/ImageViewerSelectionMode";
-import { ImageViewerOperation } from "../../types/ImageViewerOperation";
-import { ImageViewerZoomMode } from "../../types/ImageViewerZoomMode";
-import { ImageViewerSelection } from "../../types/ImageViewerSelection";
+import { SelectionMode } from "../../types/ImageViewerSelectionMode";
+import { Operation } from "../../types/ImageViewerOperation";
+import { ZoomMode } from "../../types/ImageViewerZoomMode";
+import { Selection } from "../../types/ImageViewerSelection";
 import { Category } from "../../types/Category";
 
-const initialState: ImageViewerState = {
+const initialState: State = {
   brightness: 0,
   categories: [
     {
@@ -20,100 +20,79 @@ const initialState: ImageViewerState = {
   contrast: 0,
   exposure: 0,
   hue: 0,
-  operation: ImageViewerOperation.RectangularSelection,
+  operation: Operation.RectangularSelection,
   saturation: 0,
   selectedCategoryId: "00000000-0000-0000-0000-000000000000",
-  selectionMode: ImageViewerSelectionMode.New,
+  selectionMode: SelectionMode.New,
   vibrance: 0,
-  zoomMode: ImageViewerZoomMode.In,
+  zoomMode: ZoomMode.In,
 };
 
 export const slice = createSlice({
   initialState: initialState,
   name: "image-viewer",
   reducers: {
-    deleteImageInstance(
-      state: ImageViewerState,
-      action: PayloadAction<{ id: string }>
-    ) {
+    deleteImageInstance(state: State, action: PayloadAction<{ id: string }>) {
       if (!state.image) return;
 
       state.image.instances = state.image.instances.filter(
-        (instance: ImageViewerSelection) => instance.id !== action.payload.id
+        (instance: Selection) => instance.id !== action.payload.id
       );
     },
-    setBrightness(
-      state: ImageViewerState,
-      action: PayloadAction<{ brightness: number }>
-    ) {
+    setBrightness(state: State, action: PayloadAction<{ brightness: number }>) {
       state.brightness = action.payload.brightness;
     },
     setCategories(
-      state: ImageViewerState,
+      state: State,
       action: PayloadAction<{ categories: Array<Category> }>
     ) {
       state.categories = action.payload.categories;
     },
-    setContrast(
-      state: ImageViewerState,
-      action: PayloadAction<{ contrast: number }>
-    ) {
+    setContrast(state: State, action: PayloadAction<{ contrast: number }>) {
       state.contrast = action.payload.contrast;
     },
-    setExposure(
-      state: ImageViewerState,
-      action: PayloadAction<{ exposure: number }>
-    ) {
+    setExposure(state: State, action: PayloadAction<{ exposure: number }>) {
       state.exposure = action.payload.exposure;
     },
-    setHue(state: ImageViewerState, action: PayloadAction<{ hue: number }>) {
+    setHue(state: State, action: PayloadAction<{ hue: number }>) {
       state.hue = action.payload.hue;
     },
-    setImage(state: ImageViewerState, action: PayloadAction<{ image: Image }>) {
+    setImage(state: State, action: PayloadAction<{ image: Image }>) {
       state.image = action.payload.image;
     },
     setImageInstances(
-      state: ImageViewerState,
-      action: PayloadAction<{ instances: Array<ImageViewerSelection> }>
+      state: State,
+      action: PayloadAction<{ instances: Array<Selection> }>
     ) {
       if (state.image) {
         state.image.instances = action.payload.instances;
       }
     },
     setOperation(
-      state: ImageViewerState,
-      action: PayloadAction<{ operation: ImageViewerOperation }>
+      state: State,
+      action: PayloadAction<{ operation: Operation }>
     ) {
       state.operation = action.payload.operation;
     },
-    setSaturation(
-      state: ImageViewerState,
-      action: PayloadAction<{ saturation: number }>
-    ) {
+    setSaturation(state: State, action: PayloadAction<{ saturation: number }>) {
       state.saturation = action.payload.saturation;
     },
     setSeletedCategoryId(
-      state: ImageViewerState,
+      state: State,
       action: PayloadAction<{ selectedCategoryId: string }>
     ) {
       state.selectedCategoryId = action.payload.selectedCategoryId;
     },
     setSelectionMode(
-      state: ImageViewerState,
-      action: PayloadAction<{ selectionMode: ImageViewerSelectionMode }>
+      state: State,
+      action: PayloadAction<{ selectionMode: SelectionMode }>
     ) {
       state.selectionMode = action.payload.selectionMode;
     },
-    setVibrance(
-      state: ImageViewerState,
-      action: PayloadAction<{ vibrance: number }>
-    ) {
+    setVibrance(state: State, action: PayloadAction<{ vibrance: number }>) {
       state.vibrance = action.payload.vibrance;
     },
-    setZoomMode(
-      state: ImageViewerState,
-      action: PayloadAction<{ zoomMode: ImageViewerZoomMode }>
-    ) {
+    setZoomMode(state: State, action: PayloadAction<{ zoomMode: ZoomMode }>) {
       state.zoomMode = action.payload.zoomMode;
     },
   },

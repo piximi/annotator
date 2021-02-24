@@ -14,7 +14,7 @@ import {
   RectangularSelectionOperator,
   SelectionOperator,
 } from "../../../../../image/selection";
-import { ImageViewerOperation } from "../../../../../types/ImageViewerOperation";
+import { Operation } from "../../../../../types/ImageViewerOperation";
 import {
   categoriesSelector,
   imageInstancesSelector,
@@ -29,7 +29,7 @@ import { slice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
 import { shadeHex } from "../../../../../image/shade";
 import { useMarchingAnts } from "../../../../../hooks";
-import { ImageViewerSelection } from "../../../../../types/ImageViewerSelection";
+import { Selection } from "../../../../../types/ImageViewerSelection";
 import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 
 type StageProps = {
@@ -75,19 +75,19 @@ export const Stage = ({ category, src }: StageProps) => {
     if (!selection) return;
 
     const others = instances?.filter(
-      (instance: ImageViewerSelection) => instance.id !== selection
+      (instance: Selection) => instance.id !== selection
     );
 
-    const updated: ImageViewerSelection = {
+    const updated: Selection = {
       ...instances?.filter(
-        (instance: ImageViewerSelection) => instance.id === selection
+        (instance: Selection) => instance.id === selection
       )[0],
       categoryId: category.id,
-    } as ImageViewerSelection;
+    } as Selection;
 
     dispatch(
       slice.actions.setImageInstances({
-        instances: [...(others as Array<ImageViewerSelection>), updated],
+        instances: [...(others as Array<Selection>), updated],
       })
     );
   }, [category]);
@@ -95,23 +95,23 @@ export const Stage = ({ category, src }: StageProps) => {
   useEffect(() => {
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
       switch (operation) {
-        case ImageViewerOperation.ColorSelection:
+        case Operation.ColorSelection:
           setOperator(new ColorSelectionOperator(image));
 
           return;
-        case ImageViewerOperation.EllipticalSelection:
+        case Operation.EllipticalSelection:
           setOperator(new EllipticalSelectionOperator(image));
 
           return;
-        case ImageViewerOperation.LassoSelection:
+        case Operation.LassoSelection:
           setOperator(new LassoSelectionOperator(image));
 
           return;
-        case ImageViewerOperation.MagneticSelection:
+        case Operation.MagneticSelection:
           setOperator(new MagneticSelectionOperator(image));
 
           return;
-        case ImageViewerOperation.ObjectSelection:
+        case Operation.ObjectSelection:
           ObjectSelectionOperator.compile(image).then(
             (operator: ObjectSelectionOperator) => {
               setOperator(operator);
@@ -119,20 +119,20 @@ export const Stage = ({ category, src }: StageProps) => {
           );
 
           return;
-        case ImageViewerOperation.PenSelection:
+        case Operation.PenSelection:
           setOperator(new PenSelectionOperator(image));
 
           return;
-        case ImageViewerOperation.PolygonalSelection:
+        case Operation.PolygonalSelection:
           setOperator(new PolygonalSelectionOperator(image));
 
           return;
-        case ImageViewerOperation.QuickSelection:
+        case Operation.QuickSelection:
           const quickSelectionOperator = QuickSelectionOperator.setup(image);
           setOperator(quickSelectionOperator);
 
           return;
-        case ImageViewerOperation.RectangularSelection:
+        case Operation.RectangularSelection:
           setOperator(new RectangularSelectionOperator(image));
 
           return;
@@ -171,7 +171,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const onClick = (
     event: Konva.KonvaEventObject<MouseEvent>,
-    instance: ImageViewerSelection
+    instance: Selection
   ) => {
     if (!operator) return;
 
@@ -335,7 +335,7 @@ export const Stage = ({ category, src }: StageProps) => {
         )}
 
         {instances &&
-          instances.map((instance: ImageViewerSelection) => {
+          instances.map((instance: Selection) => {
             return (
               <ReactKonva.Line
                 closed={true}

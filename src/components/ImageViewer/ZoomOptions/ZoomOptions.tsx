@@ -8,7 +8,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { zoomModeSelector } from "../../../store/selectors";
-import { ImageViewerZoomMode } from "../../../types/ImageViewerZoomMode";
+import { ZoomMode } from "../../../types/ImageViewerZoomMode";
 import { slice } from "../../../store/slices";
 
 type ZoomOptionsProps = {
@@ -25,7 +25,7 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
 
     dispatch(
       slice.actions.setZoomMode({
-        zoomMode: value as ImageViewerZoomMode,
+        zoomMode: value as ZoomMode,
       })
     );
   };
@@ -36,7 +36,7 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
         <ListItemText primary={"Mode"} secondary={"Select the zoom mode."} />
 
         <RadioGroup
-          defaultValue={ImageViewerZoomMode.In}
+          defaultValue={ZoomMode.In}
           name="zoom-mode"
           onChange={onChange}
           value={zoomMode}
@@ -44,13 +44,13 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
           <FormControlLabel
             control={<Radio tabIndex={-1} />}
             label="Zoom In"
-            value={ImageViewerZoomMode.In}
+            value={ZoomMode.In}
           />
 
           <FormControlLabel
             control={<Radio tabIndex={-1} />}
             label="Zoom out"
-            value={ImageViewerZoomMode.Out}
+            value={ZoomMode.Out}
           />
         </RadioGroup>
       </ListItem>

@@ -1,5 +1,5 @@
-import { ImageViewerState } from "../../types/ImageViewerState";
+import { State } from "../../types/ImageViewerState";
 
-export const hueSelector = ({ state }: { state: ImageViewerState }) => {
+export const hueSelector = ({ state }: { state: State }) => {
   return state.hue;
 };

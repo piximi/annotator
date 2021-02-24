@@ -1,4 +1,4 @@
-export type ImageViewerSelection = {
+export type Selection = {
   boundingBox: [number, number, number, number];
   categoryId: string;
   contour: Array<number>;

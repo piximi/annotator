@@ -1,11 +1,7 @@
-import { ImageViewerState } from "../../types/ImageViewerState";
+import { State } from "../../types/ImageViewerState";
 import { Category } from "../../types/Category";
 
-export const unknownCategroySelector = ({
-  state,
-}: {
-  state: ImageViewerState;
-}) => {
+export const unknownCategroySelector = ({ state }: { state: State }) => {
   return state.categories.find((category: Category) => {
     return category.id === "00000000-0000-0000-0000-000000000000";
   })!;

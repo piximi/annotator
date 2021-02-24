@@ -11,7 +11,7 @@ import {
   SelectionOperator,
 } from "../../../../../../image/selection";
 import { EllipticalSelection } from "../EllipticalSelection";
-import { ImageViewerOperation } from "../../../../../../types/ImageViewerOperation";
+import { Operation } from "../../../../../../types/ImageViewerOperation";
 import { LassoSelection } from "../LassoSelection";
 import { MagneticSelection } from "../MagneticSelection";
 import { ObjectSelection } from "../ObjectSelection";
@@ -23,7 +23,7 @@ import { PenSelection } from "../PenSelection";
 import { PenSelectionOperator } from "../../../../../../image/selection/PenSelectionOperator";
 
 type SelectionProps = {
-  operation?: ImageViewerOperation;
+  operation?: Operation;
   operator?: SelectionOperator;
 };
 
@@ -31,35 +31,35 @@ export const Selection = ({ operation, operator }: SelectionProps) => {
   if (!operation || !operator) return <React.Fragment />;
 
   switch (operation) {
-    case ImageViewerOperation.ColorSelection:
+    case Operation.ColorSelection:
       return <ColorSelection operator={operator as ColorSelectionOperator} />;
-    case ImageViewerOperation.EllipticalSelection:
+    case Operation.EllipticalSelection:
       return (
         <EllipticalSelection
           operator={operator as EllipticalSelectionOperator}
         />
       );
-    case ImageViewerOperation.LassoSelection:
+    case Operation.LassoSelection:
       return <LassoSelection operator={operator as LassoSelectionOperator} />;
-    case ImageViewerOperation.MagneticSelection:
+    case Operation.MagneticSelection:
       return (
         <MagneticSelection operator={operator as MagneticSelectionOperator} />
       );
-    case ImageViewerOperation.ObjectSelection:
+    case Operation.ObjectSelection:
       return <ObjectSelection operator={operator as ObjectSelectionOperator} />;
-    case ImageViewerOperation.PenSelection:
+    case Operation.PenSelection:
       return <PenSelection operator={operator as PenSelectionOperator} />;
-    case ImageViewerOperation.PolygonalSelection:
+    case Operation.PolygonalSelection:
       return (
         <PolygonalSelection operator={operator as PolygonalSelectionOperator} />
       );
-    case ImageViewerOperation.RectangularSelection:
+    case Operation.RectangularSelection:
       return (
         <RectangularSelection
           operator={operator as RectangularSelectionOperator}
         />
       );
-    case ImageViewerOperation.QuickSelection:
+    case Operation.QuickSelection:
       return <QuickSelection operator={operator as QuickSelectionOperator} />;
     default:
       return <React.Fragment />;

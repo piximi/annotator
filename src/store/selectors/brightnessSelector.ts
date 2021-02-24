@@ -1,5 +1,5 @@
-import { ImageViewerState } from "../../types/ImageViewerState";
+import { State } from "../../types/ImageViewerState";
 
-export const brightnessSelector = ({ state }: { state: ImageViewerState }) => {
+export const brightnessSelector = ({ state }: { state: State }) => {
   return state.brightness;
 };

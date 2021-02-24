@@ -1,4 +1,4 @@
-export enum ImageViewerOperation {
+export enum Operation {
   ColorAdjustment,
   ColorSelection,
   EllipticalSelection,

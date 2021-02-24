@@ -1,12 +1,8 @@
-import { ImageViewerState } from "../../types/ImageViewerState";
+import { State } from "../../types/ImageViewerState";
 import { Category } from "../../types/Category";
 import { sortBy } from "underscore";
 
-export const createdCategoriesSelector = ({
-  state,
-}: {
-  state: ImageViewerState;
-}) => {
+export const createdCategoriesSelector = ({ state }: { state: State }) => {
   const categories = state.categories.filter((category: Category) => {
     return category.id !== "00000000-0000-0000-0000-000000000000";
   });

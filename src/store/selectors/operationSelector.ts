@@ -1,10 +1,6 @@
-import { ImageViewerState } from "../../types/ImageViewerState";
-import { ImageViewerOperation } from "../../types/ImageViewerOperation";
+import { State } from "../../types/ImageViewerState";
+import { Operation } from "../../types/ImageViewerOperation";
 
-export const operationSelector = ({
-  state,
-}: {
-  state: ImageViewerState;
-}): ImageViewerOperation => {
+export const operationSelector = ({ state }: { state: State }): Operation => {
   return state.operation;
 };

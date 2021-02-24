@@ -25,8 +25,6 @@ export class PenSelectionOperator extends SelectionOperator {
       mask.setPixelXY(position[0], position[1], [255]);
     });
 
-    debugger;
-
     return [];
     // return encode(mask.data);
   }

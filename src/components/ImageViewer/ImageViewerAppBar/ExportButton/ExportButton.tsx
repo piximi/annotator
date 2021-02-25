@@ -23,7 +23,7 @@ export const ExportButton = () => {
         return {
           boundingBox: instance.boundingBox,
           category: _.find(projectCategories, (category) => {
-            return category.id === instance.categoryId;
+            return category.id === instance.category.id;
           })?.name,
           mask: instance.mask,
         };

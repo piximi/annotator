@@ -54,6 +54,6 @@ export abstract class SelectionOperator {
   select(category: Category): void {
     if (!this.boundingBox || !this.contour || !this.mask) return;
 
-    this.selection = new Selection(category, this.mask);
+    this.selection = new Selection(category, this.contour, this.mask);
   }
 }

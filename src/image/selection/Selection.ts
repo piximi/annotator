@@ -3,11 +3,14 @@ import * as uuid from "uuid";
 
 export class Selection {
   category: Category;
+  contour: Array<number>;
   id: string;
   mask: Array<number>;
 
-  constructor(category: Category, mask: Array<number>) {
+  constructor(category: Category, contour: Array<number>, mask: Array<number>) {
     this.category = category;
+
+    this.contour = contour;
 
     this.id = uuid.v4();
 
@@ -18,9 +21,9 @@ export class Selection {
     return [0, 0, 0, 0];
   }
 
-  get contour(): Array<number> {
-    return [];
-  }
+  // get contour(): Array<number> {
+  //   return [];
+  // }
 
   /*
    * Adding to a selection adds any new areas you select to your existing

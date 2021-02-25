@@ -316,12 +316,12 @@ export const Stage = ({ category, src }: StageProps) => {
           <SelectionComponent operation={operation} operator={operator} />
         )}
 
-        {selected && selection && selection.contour && (
+        {selected && operator && operator.contour && (
           <React.Fragment>
             <ReactKonva.Line
               dash={[4, 2]}
               dashOffset={-dashOffset}
-              points={selection.contour}
+              points={operator.contour}
               ref={selectingRef}
               stroke="black"
               strokeWidth={1}
@@ -330,7 +330,7 @@ export const Stage = ({ category, src }: StageProps) => {
             <ReactKonva.Line
               dash={[4, 2]}
               dashOffset={-dashOffset}
-              points={selection.contour}
+              points={operator.contour}
               stroke="white"
               strokeWidth={1}
             />

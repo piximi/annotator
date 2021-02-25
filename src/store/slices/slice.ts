@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Category } from "../../types/Category";
 import { Image } from "../../types/Image";
 import { Operation } from "../../types/Operation";
-import { Selection } from "../../types/Selection";
 import { SelectionMode } from "../../types/SelectionMode";
 import { State } from "../../types/State";
 import { ZoomMode } from "../../types/ZoomMode";
+import { Selection } from "../../image/selection/Selection";
 
 const initialState: State = {
   brightness: 0,

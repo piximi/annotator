@@ -6,4 +6,5 @@ export { ObjectSelectionOperator } from "./ObjectSelectionOperator";
 export { PolygonalSelectionOperator } from "./PolygonalSelectionOperator";
 export { QuickSelectionOperator } from "./QuickSelectionOperator";
 export { RectangularSelectionOperator } from "./RectangularSelectionOperator";
+export { Selection } from "./Selection";
 export { SelectionOperator } from "./SelectionOperator";

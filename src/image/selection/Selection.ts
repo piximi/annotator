@@ -1,12 +1,15 @@
-import * as ImageJS from "image-js";
 import { Category } from "../../types/Category";
+import * as uuid from "uuid";
 
 export class Selection {
   category: Category;
-  mask: ImageJS.Image;
+  id: string;
+  mask: Array<number>;
 
-  constructor(category: Category, mask: ImageJS.Image) {
+  constructor(category: Category, mask: Array<number>) {
     this.category = category;
+
+    this.id = uuid.v4();
 
     this.mask = mask;
   }
@@ -15,14 +18,18 @@ export class Selection {
     return [0, 0, 0, 0];
   }
 
+  get contour(): Array<number> {
+    return [];
+  }
+
   /*
    * Adding to a selection adds any new areas you select to your existing
    * selection.
    */
   add(selection: Selection) {
-    selection.mask.data.forEach((currentValue: number, index: number) => {
+    selection.mask.forEach((currentValue: number, index: number) => {
       if (currentValue === 255) {
-        this.mask.data[index] = 255;
+        this.mask[index] = 255;
       }
     });
   }
@@ -32,9 +39,9 @@ export class Selection {
    * the rest of your existing selection.
    */
   subtract(selection: Selection) {
-    selection.mask.data.forEach((currentValue: number, index: number) => {
+    selection.mask.forEach((currentValue: number, index: number) => {
       if (currentValue === 0) {
-        this.mask.data[index] = 0;
+        this.mask[index] = 0;
       }
     });
   }
@@ -44,14 +51,11 @@ export class Selection {
    * select over will be kept and any currently selected areas outside your
    * new selection will be removed from the selection.
    */
-  intersect(selection: Selection) {
-    // @ts-ignore
-    this.mask = this.mask.getIntersection(selection.mask);
-  }
+  intersect(selection: Selection) {}
 
   invert() {
-    this.mask.data.forEach((currentValue: number, index: number) => {
-      this.mask.data[index] = ~this.mask.data[index];
+    this.mask.forEach((currentValue: number, index: number) => {
+      this.mask[index] = ~this.mask[index];
     });
   }
 }

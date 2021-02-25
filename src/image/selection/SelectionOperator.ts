@@ -1,4 +1,3 @@
-import { Selection } from "../../types/Selection";
 import * as ImageJS from "image-js";
 import { Category } from "../../types/Category";
 import * as _ from "lodash";
@@ -7,6 +6,7 @@ import { simplify } from "../simplify/simplify";
 import { slpf } from "../polygon-fill/slpf";
 import * as uuid from "uuid";
 import { encode } from "../rle";
+import { Selection } from "./Selection";
 
 export abstract class SelectionOperator {
   image: ImageJS.Image;
@@ -54,12 +54,6 @@ export abstract class SelectionOperator {
   select(category: Category): void {
     if (!this.boundingBox || !this.contour || !this.mask) return;
 
-    this.selection = {
-      boundingBox: this.boundingBox,
-      categoryId: category.id,
-      contour: this.contour,
-      id: uuid.v4(),
-      mask: this.mask,
-    };
+    this.selection = new Selection(category, this.mask);
   }
 }

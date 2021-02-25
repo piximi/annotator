@@ -13,6 +13,7 @@ import {
   QuickSelectionOperator,
   RectangularSelectionOperator,
   SelectionOperator,
+  Selection,
 } from "../../../../../image/selection";
 import { Operation } from "../../../../../types/Operation";
 import {
@@ -23,13 +24,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
 import * as ImageJS from "image-js";
-import { Selection } from "../Selection";
+import { Selection as SelectionComponent } from "../Selection";
 import { Category } from "../../../../../types/Category";
 import { slice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
 import { shadeHex } from "../../../../../image/shade";
 import { useMarchingAnts } from "../../../../../hooks";
-import { Selection as SelectionType } from "../../../../../types/Selection";
 import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 
 type StageProps = {
@@ -53,7 +53,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const [operator, setOperator] = useState<SelectionOperator>();
 
-  const [selection, setSelection] = useState<string>();
+  const [selection, setSelection] = useState<Selection>();
   const [selected, setSelected] = useState<boolean>(false);
 
   const [, update] = useReducer((x) => x + 1, 0);
@@ -75,19 +75,20 @@ export const Stage = ({ category, src }: StageProps) => {
     if (!selection) return;
 
     const others = instances?.filter(
-      (instance: SelectionType) => instance.id !== selection
+      (instance: Selection) => instance.id !== selection.id
     );
 
-    const updated: SelectionType = {
-      ...instances?.filter(
-        (instance: SelectionType) => instance.id === selection
-      )[0],
-      categoryId: category.id,
-    } as SelectionType;
+    const updated = instances?.filter(
+      (instance: Selection) => instance.id === selection.id
+    )[0];
+
+    if (!updated) return;
+
+    updated.category = category;
 
     dispatch(
       slice.actions.setImageInstances({
-        instances: [...(others as Array<SelectionType>), updated],
+        instances: [...(others as Array<Selection>), updated],
       })
     );
   }, [category]);
@@ -171,7 +172,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const onClick = (
     event: Konva.KonvaEventObject<MouseEvent>,
-    instance: SelectionType
+    instance: Selection
   ) => {
     if (!operator) return;
 
@@ -179,11 +180,11 @@ export const Stage = ({ category, src }: StageProps) => {
 
     operator.deselect();
 
-    setSelection(instance.id);
+    setSelection(instance);
 
     dispatch(
       slice.actions.setSeletedCategory({
-        selectedCategory: instance.categoryId,
+        selectedCategory: instance.category.id,
       })
     );
 
@@ -287,7 +288,7 @@ export const Stage = ({ category, src }: StageProps) => {
       if (backspacePress || escapePress || deletePress) {
         dispatch(
           slice.actions.deleteImageInstance({
-            id: selection,
+            id: selection.id,
           })
         );
 
@@ -311,14 +312,16 @@ export const Stage = ({ category, src }: StageProps) => {
       >
         <ReactKonva.Image ref={imageRef} image={image} />
 
-        {!selected && <Selection operation={operation} operator={operator} />}
+        {!selected && (
+          <SelectionComponent operation={operation} operator={operator} />
+        )}
 
-        {selected && operator && operator.contour && (
+        {selected && selection && selection.contour && (
           <React.Fragment>
             <ReactKonva.Line
               dash={[4, 2]}
               dashOffset={-dashOffset}
-              points={operator.contour}
+              points={selection.contour}
               ref={selectingRef}
               stroke="black"
               strokeWidth={1}
@@ -327,7 +330,7 @@ export const Stage = ({ category, src }: StageProps) => {
             <ReactKonva.Line
               dash={[4, 2]}
               dashOffset={-dashOffset}
-              points={operator.contour}
+              points={selection.contour}
               stroke="white"
               strokeWidth={1}
             />
@@ -335,7 +338,7 @@ export const Stage = ({ category, src }: StageProps) => {
         )}
 
         {instances &&
-          instances.map((instance: SelectionType) => {
+          instances.map((instance: Selection) => {
             return (
               <ReactKonva.Line
                 closed={true}
@@ -344,7 +347,7 @@ export const Stage = ({ category, src }: StageProps) => {
                 fill={
                   _.find(
                     categories,
-                    (category: Category) => category.id === instance.categoryId
+                    (category: Category) => category.id === instance.category.id
                   )?.color
                 }
                 onClick={(event) => onClick(event, instance)}

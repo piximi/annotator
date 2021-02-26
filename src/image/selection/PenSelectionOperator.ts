@@ -3,9 +3,11 @@ import * as ImageJS from "image-js";
 import * as _ from "lodash";
 import { connectPoints } from "../imageHelper";
 import { encode } from "../rle";
+import { isoLines } from "marchingsquares";
 
 export class PenSelectionOperator extends SelectionOperator {
   brushSize: number = 8;
+  circles: Uint8ClampedArray | Uint8Array | undefined = undefined;
   buffer: Array<number> = [];
   points: Array<number> = [];
 
@@ -13,7 +15,7 @@ export class PenSelectionOperator extends SelectionOperator {
     return undefined;
   }
 
-  get circleData(): Uint8Array | Uint8ClampedArray | undefined {
+  computeCircleData(): Uint8Array | Uint8ClampedArray | undefined {
     const canvas = document.createElement("canvas");
     canvas.width = this.image.width;
     canvas.height = this.image.height;
@@ -40,17 +42,30 @@ export class PenSelectionOperator extends SelectionOperator {
 
     const rgbMask = ImageJS.Image.fromCanvas(canvas);
     // @ts-ignore
-    return rgbMask.getChannel(3).data;
+    this.circles = rgbMask.getChannel(3).data;
   }
 
   get contour(): Array<number> | undefined {
-    return undefined;
+    if (!this.circles) return;
+
+    const bar = _.map(
+      _.chunk(this.circles, this.image.width),
+      (el: Array<number>) => {
+        return Array.from(el);
+      }
+    );
+    const polygons = isoLines(bar, 1);
+    polygons.sort((a: Array<number>, b: Array<number>) => {
+      return b.length - a.length;
+    });
+    const largest = polygons[0];
+    return _.flatten(largest);
   }
 
   get mask(): Array<number> | undefined {
-    if (!this.circleData) return;
+    if (!this.circles) return;
 
-    return encode(this.circleData);
+    return encode(this.circles);
   }
 
   deselect() {}
@@ -77,5 +92,11 @@ export class PenSelectionOperator extends SelectionOperator {
     this.selecting = false;
 
     this.points = this.buffer;
+
+    const circles = this.computeCircleData();
+
+    if (!circles) return;
+
+    this.circles = circles;
   }
 }

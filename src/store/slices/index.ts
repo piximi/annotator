@@ -1,4 +1,5 @@
 export {
+  deleteCategory,
   deleteImageInstance,
   slice,
   setBrightness,

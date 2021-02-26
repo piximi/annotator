@@ -34,6 +34,14 @@ export const slice = createSlice({
   initialState: initialState,
   name: "image-viewer",
   reducers: {
+    deleteCategory(
+      state: State,
+      action: PayloadAction<{ category: Category }>
+    ) {
+      state.categories = state.categories.filter(
+        (category: Category) => category.id !== action.payload.category.id
+      );
+    },
     deleteImageInstance(state: State, action: PayloadAction<{ id: string }>) {
       if (!state.image) return;
 
@@ -117,6 +125,7 @@ export const slice = createSlice({
 });
 
 export const {
+  deleteCategory,
   deleteImageInstance,
   setBrightness,
   setCategories,

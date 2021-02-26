@@ -67,7 +67,15 @@ export class PenSelectionOperator extends SelectionOperator {
     return encode(this.circles);
   }
 
-  deselect() {}
+  deselect() {
+    this.selected = false;
+    this.selecting = false;
+
+    this.circles = undefined;
+    this.buffer = [];
+    this.outline = [];
+    this.points = [];
+  }
 
   onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;

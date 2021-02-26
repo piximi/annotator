@@ -72,6 +72,7 @@ export const ExampleImageDialog = ({
             <ListItem
               button
               divider
+              key={index}
               role="listitem"
               onClick={() => onClick(example)}
             >

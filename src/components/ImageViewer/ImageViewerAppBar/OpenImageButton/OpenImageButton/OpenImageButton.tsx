@@ -12,6 +12,21 @@ type OpenImageMenuProps = {
   onClose: () => void;
 };
 
+type ComputerMenuItemProps = {
+  onClose: () => void;
+};
+
+type ExampleMenuItemProps = {
+  onClose: () => void;
+};
+
+const ComputerMenuItemRef = React.forwardRef<any, ComputerMenuItemProps>(
+  ({ onClose }, ref) => <ComputerMenuItem onClose={onClose} />
+);
+const ExampleMenuItemRef = React.forwardRef<any, ExampleMenuItemProps>(
+  ({ onClose }, ref) => <ExampleMenuItem onClose={onClose} />
+);
+
 const OpenImageMenu = ({ anchorEl, onClose }: OpenImageMenuProps) => {
   return (
     <Menu
@@ -20,9 +35,9 @@ const OpenImageMenu = ({ anchorEl, onClose }: OpenImageMenuProps) => {
       onClose={onClose}
       open={Boolean(anchorEl)}
     >
-      <ComputerMenuItem onClose={onClose} />
+      <ComputerMenuItemRef onClose={onClose} />
 
-      <ExampleMenuItem onClose={onClose} />
+      <ExampleMenuItemRef onClose={onClose} />
     </Menu>
   );
 };

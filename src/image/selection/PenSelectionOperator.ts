@@ -7,7 +7,7 @@ import { isoLines } from "marchingsquares";
 
 export class PenSelectionOperator extends SelectionOperator {
   brushSize: number = 8;
-  circles: Uint8ClampedArray | Uint8Array | undefined = undefined;
+  circlesData: Uint8ClampedArray | Uint8Array | undefined = undefined;
   buffer: Array<number> = [];
   outline: Array<number> = [];
   points: Array<number> = [];
@@ -52,7 +52,7 @@ export class PenSelectionOperator extends SelectionOperator {
 
     const rgbMask = ImageJS.Image.fromCanvas(canvas);
     // @ts-ignore
-    this.circles = rgbMask.getChannel(3).data;
+    this.circlesData = rgbMask.getChannel(3).data;
   }
 
   get contour(): Array<number> | undefined {
@@ -62,16 +62,16 @@ export class PenSelectionOperator extends SelectionOperator {
   }
 
   get mask(): Array<number> | undefined {
-    if (!this.circles) return;
+    if (!this.circlesData) return;
 
-    return encode(this.circles);
+    return encode(this.circlesData);
   }
 
   deselect() {
     this.selected = false;
     this.selecting = false;
 
-    this.circles = undefined;
+    this.circlesData = undefined;
     this.buffer = [];
     this.outline = [];
     this.points = [];
@@ -102,10 +102,10 @@ export class PenSelectionOperator extends SelectionOperator {
 
     this.computeCircleData();
 
-    if (!this.circles) return;
+    if (!this.circlesData) return;
 
     const bar = _.map(
-      _.chunk(this.circles, this.image.width),
+      _.chunk(this.circlesData, this.image.width),
       (el: Array<number>) => {
         return Array.from(el);
       }

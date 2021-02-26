@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
 import LabelIcon from "@material-ui/icons/Label";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
 import { Category } from "../../../../types/Category";
+import { useDispatch } from "react-redux";
+import { slice } from "../../../../store/slices/slice";
 
 type CategoryListItemCheckboxProps = {
   category: Category;
@@ -12,6 +14,17 @@ type CategoryListItemCheckboxProps = {
 export const CategoryListItemCheckbox = ({
   category,
 }: CategoryListItemCheckboxProps) => {
+  const dispatch = useDispatch();
+
+  const onCheckboxClick = () => {
+    dispatch(
+      slice.actions.setCategoryVisibility({
+        category: category,
+        visible: !category.visible,
+      })
+    );
+  };
+
   return (
     <ListItemIcon>
       <Checkbox
@@ -20,6 +33,7 @@ export const CategoryListItemCheckbox = ({
         disableRipple
         edge="start"
         icon={<LabelOutlinedIcon style={{ color: category.color }} />}
+        onClick={onCheckboxClick}
         tabIndex={-1}
       />
     </ListItemIcon>

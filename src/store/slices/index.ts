@@ -3,6 +3,7 @@ export {
   slice,
   setBrightness,
   setCategories,
+  setCategoryVisibility,
   setContrast,
   setExposure,
   setHue,

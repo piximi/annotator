@@ -6,6 +6,8 @@ import { Selection } from "../../types/Selection";
 import { SelectionMode } from "../../types/SelectionMode";
 import { State } from "../../types/State";
 import { ZoomMode } from "../../types/ZoomMode";
+import * as _ from "lodash";
+import { visibleCategoriesSelector } from "../selectors/visibleCategoriesSelector";
 
 const initialState: State = {
   brightness: 0,
@@ -47,6 +49,22 @@ export const slice = createSlice({
       action: PayloadAction<{ categories: Array<Category> }>
     ) {
       state.categories = action.payload.categories;
+    },
+    setCategoryVisibility(
+      state: State,
+      action: PayloadAction<{ category: Category; visible: boolean }>
+    ) {
+      const category = _.find(state.categories, (category) => {
+        return category.id === action.payload.category.id;
+      });
+      if (!category) return;
+      category.visible = action.payload.visible;
+      state.categories = [
+        ...state.categories.filter((category) => {
+          return category.id !== action.payload.category.id;
+        }),
+        category,
+      ];
     },
     setContrast(state: State, action: PayloadAction<{ contrast: number }>) {
       state.contrast = action.payload.contrast;
@@ -102,6 +120,7 @@ export const {
   deleteImageInstance,
   setBrightness,
   setCategories,
+  setCategoryVisibility,
   setContrast,
   setExposure,
   setHue,

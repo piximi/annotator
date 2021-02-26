@@ -31,6 +31,7 @@ import { shadeHex } from "../../../../../image/shade";
 import { useMarchingAnts } from "../../../../../hooks";
 import { Selection as SelectionType } from "../../../../../types/Selection";
 import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
+import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 
 type StageProps = {
   category: Category;
@@ -63,6 +64,7 @@ export const Stage = ({ category, src }: StageProps) => {
   const instances = useSelector(imageInstancesSelector);
 
   const categories = useSelector(categoriesSelector);
+  const visibleCategories = useSelector(visibleCategoriesSelector);
 
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
@@ -336,24 +338,29 @@ export const Stage = ({ category, src }: StageProps) => {
 
         {instances &&
           instances.map((instance: SelectionType) => {
-            return (
-              <ReactKonva.Line
-                closed={true}
-                key={instance.id}
-                points={instance.contour}
-                fill={
-                  _.find(
-                    categories,
-                    (category: Category) => category.id === instance.categoryId
-                  )?.color
-                }
-                onClick={(event) => onClick(event, instance)}
-                opacity={0.5}
-                ref={selectionRef}
-                stroke={shadeHex(category.color, 50)}
-                strokeWidth={1}
-              />
-            );
+            if (visibleCategories.includes(instance.categoryId)) {
+              return (
+                <ReactKonva.Line
+                  closed={true}
+                  key={instance.id}
+                  points={instance.contour}
+                  fill={
+                    _.find(
+                      categories,
+                      (category: Category) =>
+                        category.id === instance.categoryId
+                    )?.color
+                  }
+                  onClick={(event) => onClick(event, instance)}
+                  opacity={0.5}
+                  ref={selectionRef}
+                  stroke={shadeHex(category.color, 50)}
+                  strokeWidth={1}
+                />
+              );
+            } else {
+              return <React.Fragment />;
+            }
           })}
 
         <ReactKonva.Transformer ref={transformerRef} />

@@ -13,16 +13,14 @@ export class PenSelectionOperator extends SelectionOperator {
     return undefined;
   }
 
-  get contour(): Array<number> | undefined {
-    return undefined;
-  }
-
-  get mask(): Array<number> | undefined {
+  get circleData(): Uint8Array | Uint8ClampedArray | undefined {
     const canvas = document.createElement("canvas");
     canvas.width = this.image.width;
     canvas.height = this.image.height;
     const ctx = canvas.getContext("2d");
-    if (!ctx) return [];
+
+    if (!ctx) return undefined;
+
     const connected = connectPoints(
       _.chunk(this.points, 2),
       new ImageJS.Image(this.image.width, this.image.height)
@@ -42,8 +40,17 @@ export class PenSelectionOperator extends SelectionOperator {
 
     const rgbMask = ImageJS.Image.fromCanvas(canvas);
     // @ts-ignore
-    const binaryMask = rgbMask.getChannel(3); //returning opacity channel gives binary image
-    return encode(binaryMask.data);
+    return rgbMask.getChannel(3).data;
+  }
+
+  get contour(): Array<number> | undefined {
+    return undefined;
+  }
+
+  get mask(): Array<number> | undefined {
+    if (!this.circleData) return;
+
+    return encode(this.circleData);
   }
 
   deselect() {}
@@ -70,7 +77,5 @@ export class PenSelectionOperator extends SelectionOperator {
     this.selecting = false;
 
     this.points = this.buffer;
-
-    console.info(this.mask);
   }
 }

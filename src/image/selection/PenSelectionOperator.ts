@@ -9,10 +9,20 @@ export class PenSelectionOperator extends SelectionOperator {
   brushSize: number = 8;
   circles: Uint8ClampedArray | Uint8Array | undefined = undefined;
   buffer: Array<number> = [];
+  outline: Array<number> = [];
   points: Array<number> = [];
 
   get boundingBox(): [number, number, number, number] | undefined {
-    return undefined;
+    if (!this.outline) return undefined;
+
+    const pairs = _.chunk(this.outline, 2);
+
+    return [
+      Math.round(_.min(_.map(pairs, _.first))!),
+      Math.round(_.min(_.map(pairs, _.last))!),
+      Math.round(_.max(_.map(pairs, _.first))!),
+      Math.round(_.max(_.map(pairs, _.last))!),
+    ];
   }
 
   computeCircleData(): Uint8Array | Uint8ClampedArray | undefined {
@@ -46,20 +56,9 @@ export class PenSelectionOperator extends SelectionOperator {
   }
 
   get contour(): Array<number> | undefined {
-    if (!this.circles) return;
+    if (!this.outline) return [];
 
-    const bar = _.map(
-      _.chunk(this.circles, this.image.width),
-      (el: Array<number>) => {
-        return Array.from(el);
-      }
-    );
-    const polygons = isoLines(bar, 1);
-    polygons.sort((a: Array<number>, b: Array<number>) => {
-      return b.length - a.length;
-    });
-    const largest = polygons[0];
-    return _.flatten(largest);
+    return this.outline;
   }
 
   get mask(): Array<number> | undefined {
@@ -93,10 +92,20 @@ export class PenSelectionOperator extends SelectionOperator {
 
     this.points = this.buffer;
 
-    const circles = this.computeCircleData();
+    this.computeCircleData();
 
-    if (!circles) return;
+    if (!this.circles) return;
 
-    this.circles = circles;
+    const bar = _.map(
+      _.chunk(this.circles, this.image.width),
+      (el: Array<number>) => {
+        return Array.from(el);
+      }
+    );
+    const polygons = isoLines(bar, 1);
+    polygons.sort((a: Array<number>, b: Array<number>) => {
+      return b.length - a.length;
+    });
+    this.outline = _.flatten(polygons[0]);
   }
 }

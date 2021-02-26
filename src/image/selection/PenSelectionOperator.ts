@@ -2,7 +2,7 @@ import { SelectionOperator } from "./SelectionOperator";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
 import { connectPoints } from "../imageHelper";
-import { decode, encode } from "../rle";
+import { encode } from "../rle";
 
 export class PenSelectionOperator extends SelectionOperator {
   brushSize: number = 8;
@@ -22,7 +22,7 @@ export class PenSelectionOperator extends SelectionOperator {
     canvas.width = this.image.width;
     canvas.height = this.image.height;
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) return [];
     const connected = connectPoints(
       _.chunk(this.points, 2),
       new ImageJS.Image(this.image.width, this.image.height)

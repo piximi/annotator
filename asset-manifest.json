@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.js": "/image-viewer/static/js/main.df451c55.chunk.js",
-    "main.js.map": "/image-viewer/static/js/main.df451c55.chunk.js.map",
+    "main.js": "/image-viewer/static/js/main.87599253.chunk.js",
+    "main.js.map": "/image-viewer/static/js/main.87599253.chunk.js.map",
     "runtime-main.js": "/image-viewer/static/js/runtime-main.93ab3744.js",
     "runtime-main.js.map": "/image-viewer/static/js/runtime-main.93ab3744.js.map",
-    "static/js/2.269730cd.chunk.js": "/image-viewer/static/js/2.269730cd.chunk.js",
-    "static/js/2.269730cd.chunk.js.map": "/image-viewer/static/js/2.269730cd.chunk.js.map",
+    "static/js/2.f888fe53.chunk.js": "/image-viewer/static/js/2.f888fe53.chunk.js",
+    "static/js/2.f888fe53.chunk.js.map": "/image-viewer/static/js/2.f888fe53.chunk.js.map",
     "static/js/3.a4a450bd.chunk.js": "/image-viewer/static/js/3.a4a450bd.chunk.js",
     "static/js/3.a4a450bd.chunk.js.map": "/image-viewer/static/js/3.a4a450bd.chunk.js.map",
     "index.html": "/image-viewer/index.html",
-    "static/js/2.269730cd.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.269730cd.chunk.js.LICENSE.txt",
+    "static/js/2.f888fe53.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.f888fe53.chunk.js.LICENSE.txt",
     "static/media/ColorAdjustment.8a0207c6.svg": "/image-viewer/static/media/ColorAdjustment.8a0207c6.svg",
     "static/media/ColorSelection.5fc0cb3e.svg": "/image-viewer/static/media/ColorSelection.5fc0cb3e.svg",
     "static/media/EllipticalSelection.de55058f.svg": "/image-viewer/static/media/EllipticalSelection.de55058f.svg",
@@ -28,7 +28,7 @@
   },
   "entrypoints": [
     "static/js/runtime-main.93ab3744.js",
-    "static/js/2.269730cd.chunk.js",
-    "static/js/main.df451c55.chunk.js"
+    "static/js/2.f888fe53.chunk.js",
+    "static/js/main.87599253.chunk.js"
   ]
 }

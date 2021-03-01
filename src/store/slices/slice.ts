@@ -8,6 +8,7 @@ import { State } from "../../types/State";
 import { ZoomMode } from "../../types/ZoomMode";
 import * as _ from "lodash";
 import { visibleCategoriesSelector } from "../selectors/visibleCategoriesSelector";
+import colorImage from "../../images/colorImage.png";
 
 const initialState: State = {
   brightness: 0,
@@ -22,6 +23,13 @@ const initialState: State = {
   contrast: 0,
   exposure: 0,
   hue: 0,
+  image: {
+    id: "",
+    instances: [],
+    name: "foo.png",
+    shape: { c: 512, channels: 3, r: 512 },
+    src: colorImage,
+  },
   operation: Operation.RectangularSelection,
   penSelectionBrushSize: 1,
   saturation: 0,

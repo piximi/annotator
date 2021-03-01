@@ -2,7 +2,7 @@ import { SelectionOperator } from "./SelectionOperator";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
 import { connectPoints } from "../imageHelper";
-import { encode } from "../rle";
+import { decode, encode } from "../rle";
 import { isoLines } from "marchingsquares";
 
 export class PenSelectionOperator extends SelectionOperator {
@@ -42,17 +42,17 @@ export class PenSelectionOperator extends SelectionOperator {
       ctx.arc(
         Math.floor(position[0]),
         Math.floor(position[1]),
-        this.brushSize,
+        this.brushSize / 2,
         0,
         Math.PI * 2,
         true
-      ); //FIXME radius should determined by the tool
+      );
       ctx.fill();
     });
 
     const rgbMask = ImageJS.Image.fromCanvas(canvas);
     // @ts-ignore
-    this.circlesData = rgbMask.getChannel(3).data;
+    this.circlesData = this.thresholdMask(rgbMask.getChannel(3)).data;
   }
 
   get contour(): Array<number> | undefined {
@@ -62,7 +62,7 @@ export class PenSelectionOperator extends SelectionOperator {
   }
 
   get mask(): Array<number> | undefined {
-    if (!this.circlesData) return;
+    if (!this.circlesData) return [];
 
     return encode(this.circlesData);
   }
@@ -102,6 +102,8 @@ export class PenSelectionOperator extends SelectionOperator {
 
     this.computeCircleData();
 
+    const baz = this.mask;
+
     if (!this.circlesData) return;
 
     const bar = _.map(
@@ -124,4 +126,15 @@ export class PenSelectionOperator extends SelectionOperator {
 
     return operator;
   }
+
+  private thresholdMask = (mask: ImageJS.Image) => {
+    for (let x = 0; x < mask.width; x++) {
+      for (let y = 0; y < mask.height; y++) {
+        if (mask.getPixelXY(x, y)[0] > 1) {
+          mask.setPixelXY(x, y, [255]);
+        }
+      }
+    }
+    return mask;
+  };
 }

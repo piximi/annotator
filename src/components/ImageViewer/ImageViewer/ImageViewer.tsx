@@ -18,11 +18,12 @@ import { Operations } from "../Operations";
 import { ZoomOptions } from "../OperationOptions/ZoomOptions";
 import { slice } from "../../../store/slices";
 import { Content } from "../Content";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
 import { PenSelectionOptions } from "../OperationOptions/PenSelectionOptions";
 import {
   ColorAdjustmentIcon,
+  ColorSelectionIcon,
   EllipticalSelectionIcon,
   HandIcon,
   LassoSelectionIcon,
@@ -31,7 +32,6 @@ import {
   PenSelectionIcon,
   PolygonalSelectionIcon,
   QuickSelectionIcon,
-  ColorSelectionIcon,
   RectangularSelectionIcon,
   ZoomIcon,
 } from "../../icons";

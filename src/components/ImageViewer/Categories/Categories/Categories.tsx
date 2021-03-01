@@ -18,7 +18,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { CategoryMenu } from "../CategoryMenu";
 import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
-import { useDialog, useMenu } from "../../../../hooks";
+import { useDialog } from "../../../../hooks";
 
 type CategoriesProps = {
   activeCategory: Category;

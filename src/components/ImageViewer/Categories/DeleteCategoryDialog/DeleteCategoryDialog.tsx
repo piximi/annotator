@@ -9,7 +9,6 @@ import { Category } from "../../../../types/Category";
 import { Selection } from "../../../../types/Selection";
 import { slice } from "../../../../store/slices/slice";
 import {
-  categoriesSelector,
   imageInstancesSelector,
   selectedCategroySelector,
 } from "../../../../store/selectors";

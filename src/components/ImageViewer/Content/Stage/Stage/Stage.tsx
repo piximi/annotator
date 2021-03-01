@@ -156,6 +156,13 @@ export const Stage = ({ category, src }: StageProps) => {
   });
 
   useEffect(() => {
+    if (operation !== Operation.PenSelection) return;
+
+    // @ts-ignore
+    operator.brushSize = penSelectionBrushSize;
+  }, [penSelectionBrushSize]);
+
+  useEffect(() => {
     if (!operator || !operator.contour) return;
     selectingRef.current = new Konva.Line<Konva.LineConfig>({
       points: operator.contour,

@@ -26,7 +26,7 @@ export const PenSelectionOptions = () => {
       <Divider />
 
       <Slider
-        aria-labelledby="brush-size"
+        aria-labelledby="pen-selection-brush-size"
         onChange={onChange}
         value={penSelectionBrushSizeBrushSize}
       />

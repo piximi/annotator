@@ -42,11 +42,11 @@ export class PenSelectionOperator extends SelectionOperator {
       ctx.arc(
         Math.floor(position[0]),
         Math.floor(position[1]),
-        this.brushSize,
+        this.brushSize / 2,
         0,
         Math.PI * 2,
         true
-      ); //FIXME radius should determined by the tool
+      );
       ctx.fill();
     });
 

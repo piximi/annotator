@@ -2,17 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Category } from "../../../types/Category";
 import { CssBaseline } from "@material-ui/core";
 import { Image } from "../../../types/Image";
-import { ReactComponent as ColorAdjustmentIcon } from "../../icons/ColorAdjustment.svg";
-import { ReactComponent as EllipticalIcon } from "../../icons/EllipticalSelection.svg";
-import { ReactComponent as LassoIcon } from "../../icons/LassoSelection.svg";
-import { ReactComponent as MagicWandIcon } from "../../icons/ColorSelection.svg";
-import { ReactComponent as ZoomIcon } from "../../icons/Zoom.svg";
-import { ReactComponent as HandIcon } from "../../icons/Hand.svg";
-import { ReactComponent as MagneticIcon } from "../../icons/MagneticSelection.svg";
-import { ReactComponent as QuickIcon } from "../../icons/QuickSelection.svg";
-import { ReactComponent as ObjectSelectionIcon } from "../../icons/ObjectSelection.svg";
-import { ReactComponent as PolygonalSelectionIcon } from "../../icons/PolygonalSelection.svg";
-import { ReactComponent as RectangularIcon } from "../../icons/RectangularSelection.svg";
 import { Operation } from "../../../types/Operation";
 import {
   imageSelector,
@@ -32,8 +21,20 @@ import { Content } from "../Content";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
 import { PenSelectionOptions } from "../OperationOptions/PenSelectionOptions";
-import { PenSelection } from "../Content/Stage/Selection/PenSelection";
-import { PenSelectionIcon } from "../../icons";
+import {
+  ColorAdjustmentIcon,
+  EllipticalSelectionIcon,
+  HandIcon,
+  LassoSelectionIcon,
+  MagneticSelectionIcon,
+  ObjectSelectionIcon,
+  PenSelectionIcon,
+  PolygonalSelectionIcon,
+  QuickSelectionIcon,
+  ColorSelectionIcon,
+  RectangularSelectionIcon,
+  ZoomIcon,
+} from "../../icons";
 
 const theme = createMuiTheme({
   overrides: {
@@ -98,14 +99,14 @@ export const ImageViewer = (props: ImageViewerProps) => {
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
-      icon: <RectangularIcon />,
+      icon: <RectangularSelectionIcon />,
       method: Operation.RectangularSelection,
       name: "Rectangular selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
-      icon: <EllipticalIcon />,
+      icon: <EllipticalSelectionIcon />,
       method: Operation.EllipticalSelection,
       name: "Elliptical selection",
       options: <SelectionOptions />,
@@ -119,7 +120,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
-      icon: <LassoIcon />,
+      icon: <LassoSelectionIcon />,
       method: Operation.LassoSelection,
       name: "Lasso selection",
       options: <SelectionOptions />,
@@ -133,21 +134,21 @@ export const ImageViewer = (props: ImageViewerProps) => {
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
-      icon: <MagneticIcon />,
+      icon: <MagneticSelectionIcon />,
       method: Operation.MagneticSelection,
       name: "Magnetic selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
-      icon: <MagicWandIcon />,
+      icon: <ColorSelectionIcon />,
       method: Operation.ColorSelection,
       name: "Color selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
-      icon: <QuickIcon />,
+      icon: <QuickSelectionIcon />,
       method: Operation.QuickSelection,
       name: "Quick selection",
       options: <SelectionOptions />,

@@ -34,6 +34,19 @@ import { useStyles } from "./ImageViewer.css";
 import { PenSelectionOptions } from "../OperationOptions/PenSelectionOptions";
 
 const theme = createMuiTheme({
+  overrides: {
+    MuiSlider: {
+      rail: {
+        color: "black",
+      },
+      thumb: {
+        color: "yellow",
+      },
+      track: {
+        color: "red",
+      },
+    },
+  },
   palette: {
     type: "dark",
   },

@@ -7,16 +7,11 @@ import React from "react";
 import { useStyles } from "./OperationOptions.css";
 
 type OperationOptionsProps = {
-  description: string;
   name: string;
   settings: React.ReactNode;
 };
 
-export const OperationOptions = ({
-  description,
-  name,
-  settings,
-}: OperationOptionsProps) => {
+export const OperationOptions = ({ name, settings }: OperationOptionsProps) => {
   const classes = useStyles();
 
   return (
@@ -30,7 +25,7 @@ export const OperationOptions = ({
 
       <List>
         <ListItem dense>
-          <ListItemText primary={name} secondary={description} />
+          <ListItemText primary={name} />
         </ListItem>
       </List>
 

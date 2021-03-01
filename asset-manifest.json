@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/image-viewer/static/js/main.81a32a94.chunk.js",
-    "main.js.map": "/image-viewer/static/js/main.81a32a94.chunk.js.map",
+    "main.js": "/image-viewer/static/js/main.3c646546.chunk.js",
+    "main.js.map": "/image-viewer/static/js/main.3c646546.chunk.js.map",
     "runtime-main.js": "/image-viewer/static/js/runtime-main.93ab3744.js",
     "runtime-main.js.map": "/image-viewer/static/js/runtime-main.93ab3744.js.map",
     "static/js/2.67943dd2.chunk.js": "/image-viewer/static/js/2.67943dd2.chunk.js",
@@ -11,22 +11,22 @@
     "index.html": "/image-viewer/index.html",
     "static/js/2.67943dd2.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.67943dd2.chunk.js.LICENSE.txt",
     "static/media/ColorAdjustment.a3674723.svg": "/image-viewer/static/media/ColorAdjustment.a3674723.svg",
-    "static/media/ColorSelection.c38a0d1d.svg": "/image-viewer/static/media/ColorSelection.c38a0d1d.svg",
+    "static/media/ColorSelection.82c17a7f.svg": "/image-viewer/static/media/ColorSelection.82c17a7f.svg",
     "static/media/EllipticalSelection.23cdf185.svg": "/image-viewer/static/media/EllipticalSelection.23cdf185.svg",
     "static/media/Hand.2c9245f1.svg": "/image-viewer/static/media/Hand.2c9245f1.svg",
     "static/media/InvertSelection.7649974a.svg": "/image-viewer/static/media/InvertSelection.7649974a.svg",
-    "static/media/LassoSelection.e96c4ed1.svg": "/image-viewer/static/media/LassoSelection.e96c4ed1.svg",
-    "static/media/MagneticSelection.4c89e28a.svg": "/image-viewer/static/media/MagneticSelection.4c89e28a.svg",
+    "static/media/LassoSelection.84b13a05.svg": "/image-viewer/static/media/LassoSelection.84b13a05.svg",
+    "static/media/MagneticSelection.983ebb64.svg": "/image-viewer/static/media/MagneticSelection.983ebb64.svg",
     "static/media/ObjectSelection.560d8a03.svg": "/image-viewer/static/media/ObjectSelection.560d8a03.svg",
     "static/media/PolygonalSelection.8f7977ea.svg": "/image-viewer/static/media/PolygonalSelection.8f7977ea.svg",
-    "static/media/QuickSelection.08edf264.svg": "/image-viewer/static/media/QuickSelection.08edf264.svg",
-    "static/media/RectangularSelection.9ae47ebf.svg": "/image-viewer/static/media/RectangularSelection.9ae47ebf.svg",
+    "static/media/QuickSelection.790aa931.svg": "/image-viewer/static/media/QuickSelection.790aa931.svg",
+    "static/media/RectangularSelection.a4a78599.svg": "/image-viewer/static/media/RectangularSelection.a4a78599.svg",
     "static/media/Zoom.2018744e.svg": "/image-viewer/static/media/Zoom.2018744e.svg",
     "static/media/malaria.5b73ad75.png": "/image-viewer/static/media/malaria.5b73ad75.png"
   },
   "entrypoints": [
     "static/js/runtime-main.93ab3744.js",
     "static/js/2.67943dd2.chunk.js",
-    "static/js/main.81a32a94.chunk.js"
+    "static/js/main.3c646546.chunk.js"
   ]
 }

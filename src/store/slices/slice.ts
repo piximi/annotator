@@ -7,7 +7,6 @@ import { SelectionMode } from "../../types/SelectionMode";
 import { State } from "../../types/State";
 import { ZoomMode } from "../../types/ZoomMode";
 import * as _ from "lodash";
-import { visibleCategoriesSelector } from "../selectors/visibleCategoriesSelector";
 import colorImage from "../../images/colorImage.png";
 
 const initialState: State = {

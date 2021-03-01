@@ -50,12 +50,15 @@ export const Categories = ({
     open: openEditCategoryDialog,
   } = useDialog();
 
-  const {
-    anchorEl: anchorElCategoryMenu,
-    onClose: onCloseCategoryMenu,
-    onOpen: onOpenCategoryMenu,
-    open: openCategoryMenu,
-  } = useMenu();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const onCategoryMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const onCategoryMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Drawer
@@ -88,20 +91,20 @@ export const Categories = ({
                 />
 
                 <ListItemSecondaryAction>
-                  <IconButton edge="end" onClick={onOpenCategoryMenu}>
+                  <IconButton edge="end" onClick={onCategoryMenuOpen}>
                     <MoreHorizIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>
 
               <CategoryMenu
-                anchorElCategoryMenu={anchorElCategoryMenu}
+                anchorElCategoryMenu={anchorEl}
                 category={category}
-                onCloseCategoryMenu={onCloseCategoryMenu}
-                onOpenCategoryMenu={onOpenCategoryMenu}
+                onCloseCategoryMenu={onCategoryMenuClose}
+                onOpenCategoryMenu={onCategoryMenuOpen}
                 onOpenDeleteCategoryDialog={onOpenDeleteCategoryDialog}
                 onOpenEditCategoryDialog={onOpenEditCategoryDialog}
-                openCategoryMenu={openCategoryMenu}
+                openCategoryMenu={Boolean(anchorEl)}
               />
 
               <DeleteCategoryDialog

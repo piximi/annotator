@@ -6,9 +6,11 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { Category } from "../../../../types/Category";
+import { Selection } from "../../../../types/Selection";
 import { slice } from "../../../../store/slices/slice";
 import {
   categoriesSelector,
+  imageInstancesSelector,
   selectedCategroySelector,
 } from "../../../../store/selectors";
 
@@ -27,6 +29,8 @@ export const DeleteCategoryDialog = ({
 
   const activeCategory = useSelector(selectedCategroySelector);
 
+  const selections = useSelector(imageInstancesSelector);
+
   const onDelete = () => {
     //change activeCategory if we are about to delete it
     if (activeCategory.id === category.id) {
@@ -36,7 +40,26 @@ export const DeleteCategoryDialog = ({
         })
       );
     }
+
     dispatch(slice.actions.deleteCategory({ category: category }));
+
+    const instances = selections?.map((instance: Selection) => {
+      if (instance.categoryId === category.id) {
+        return {
+          ...instance,
+          categoryId: "00000000-0000-0000-0000-000000000000",
+        };
+      } else {
+        return instance;
+      }
+    });
+
+    dispatch(
+      slice.actions.setImageInstances({
+        instances: instances as Array<Selection>,
+      })
+    );
+
     onClose();
   };
 

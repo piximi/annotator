@@ -32,6 +32,7 @@ import { useMarchingAnts } from "../../../../../hooks";
 import { Selection as SelectionType } from "../../../../../types/Selection";
 import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
+import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 
 type StageProps = {
   category: Category;
@@ -51,6 +52,8 @@ export const Stage = ({ category, src }: StageProps) => {
   const classes = useStyles();
 
   const operation = useSelector(operationSelector);
+
+  const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
 
   const [operator, setOperator] = useState<SelectionOperator>();
 
@@ -122,7 +125,11 @@ export const Stage = ({ category, src }: StageProps) => {
 
           return;
         case Operation.PenSelection:
-          setOperator(new PenSelectionOperator(image));
+          PenSelectionOperator.setup(image, penSelectionBrushSize).then(
+            (operator: PenSelectionOperator) => {
+              setOperator(operator);
+            }
+          );
 
           return;
         case Operation.PolygonalSelection:

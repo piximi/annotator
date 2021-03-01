@@ -42,7 +42,7 @@ export class PenSelectionOperator extends SelectionOperator {
       ctx.arc(
         Math.floor(position[0]),
         Math.floor(position[1]),
-        5,
+        this.brushSize,
         0,
         Math.PI * 2,
         true
@@ -115,5 +115,13 @@ export class PenSelectionOperator extends SelectionOperator {
       return b.length - a.length;
     });
     this.outline = _.flatten(polygons[0]);
+  }
+
+  static async setup(image: ImageJS.Image, brushSize: number) {
+    const operator = new PenSelectionOperator(image);
+
+    operator.brushSize = brushSize;
+
+    return operator;
   }
 }

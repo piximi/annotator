@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Polygonal selection</title>
     <g id="Polygonal-selection" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(-0.000000, -0.000000)">
-            <g stroke-linecap="round" stroke-linejoin="round" transform="translate(1.000000, 1.000000)" id="Path" stroke="#323232" stroke-width="1.5">
-                <line x1="9.93933986" y1="21.0606603" x2="12.0606602" y2="18.9393399"></line>
-                <line x1="12.0606602" y1="0.939339835" x2="9.93933986" y2="3.06066018"></line>
-                <line x1="21.0606602" y1="12.0606602" x2="18.9393399" y2="9.93933987"></line>
-                <line x1="0.939339826" y1="9.93933987" x2="3.06066017" y2="12.0606602"></line>
-                <path d="M20.0000001,6 L20.0000001,4 C20.0000001,2.89500001 19.1050001,2 18.0000001,2 L16.0000001,2" transform="translate(18.000000, 4.000000) rotate(-315.000000) translate(-18.000000, -4.000000) "></path>
-                <path d="M2,16.0000001 L2,18.0000001 C2,19.1050001 2.89500001,20.0000001 4,20.0000001 L6,20.0000001" transform="translate(4.000000, 18.000000) rotate(-315.000000) translate(-4.000000, -18.000000) "></path>
-                <path d="M6,2 L4,2 C2.89500001,2 2,2.89500001 2,4 L2,6" transform="translate(4.000000, 4.000000) rotate(-315.000000) translate(-4.000000, -4.000000) "></path>
-                <path d="M16.0000001,20.0000001 L18.0000001,20.0000001 C19.1050001,20.0000001 20.0000001,19.1050001 20.0000001,18.0000001 L20.0000001,16.0000001" transform="translate(18.000000, 18.000000) rotate(-315.000000) translate(-18.000000, -18.000000) "></path>
-            </g>
+            <path d="M10.922,3.63000002 L3.68100002,8.89100004 C3.03800001,9.35800004 2.77000001,10.185 3.01500001,10.941 L5.78100002,19.4540001 C6.02600003,20.2090001 6.73000003,20.7210001 7.52500003,20.7210001 L16.4760001,20.7210001 C17.2700001,20.7210001 17.9740001,20.2100001 18.2200001,19.4540001 L20.9860001,10.941 C21.2310001,10.186 20.9630001,9.35800004 20.3200001,8.89100004 L13.0780001,3.63000002 C12.4350001,3.16300001 11.565,3.16300001 10.922,3.63000002 L10.922,3.63000002 Z" id="Path" stroke="#BABABA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
             <polygon id="Path" points="0 0 24.0000001 0 24.0000001 24.0000001 0 24.0000001"></polygon>
         </g>
     </g>

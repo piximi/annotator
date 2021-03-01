@@ -5,6 +5,7 @@ export { ReactComponent as HandIcon } from "./Hand.svg";
 export { ReactComponent as LassoSelectionIcon } from "./LassoSelection.svg";
 export { ReactComponent as MagneticSelectionIcon } from "./MagneticSelection.svg";
 export { ReactComponent as ObjectSelectionIcon } from "./ObjectSelection.svg";
+export { ReactComponent as PenSelectionIcon } from "./PenSelection.svg";
 export { ReactComponent as PolygonalSelectionIcon } from "./PolygonalSelection.svg";
 export { ReactComponent as QuickSelectionIcon } from "./QuickSelection.svg";
 export { ReactComponent as RectangularSelectionIcon } from "./RectangularSelection.svg";

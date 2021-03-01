@@ -32,6 +32,8 @@ import { Content } from "../Content";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
 import { PenSelectionOptions } from "../OperationOptions/PenSelectionOptions";
+import { PenSelection } from "../Content/Stage/Selection/PenSelection";
+import { PenSelectionIcon } from "../../icons";
 
 const theme = createMuiTheme({
   overrides: {
@@ -110,7 +112,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
-      icon: <LassoIcon />,
+      icon: <PenSelectionIcon />,
       method: Operation.PenSelection,
       name: "Pen selection",
       options: <PenSelectionOptions />,

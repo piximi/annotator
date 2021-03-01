@@ -49,7 +49,7 @@ const theme = createMuiTheme({
     MuiListItem: {
       root: {
         "&$selected": {
-          backgroundColor: "rgba(60, 61, 62gi)",
+          backgroundColor: "rgba(60, 61, 62)",
         },
       },
     },

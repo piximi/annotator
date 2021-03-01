@@ -24,13 +24,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
 import { Categories } from "../Categories";
 import { OperationOptions } from "../OperationOptions";
-import { SelectionOptions } from "../SelectionOptions";
+import { SelectionOptions } from "../OperationOptions/SelectionOptions";
 import { Operations } from "../Operations";
-import { ZoomOptions } from "../ZoomOptions";
+import { ZoomOptions } from "../OperationOptions/ZoomOptions";
 import { slice } from "../../../store/slices";
 import { Content } from "../Content";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
+import { PenSelectionOptions } from "../OperationOptions/PenSelectionOptions";
 
 const theme = createMuiTheme({
   palette: {
@@ -55,84 +56,84 @@ export const ImageViewer = (props: ImageViewerProps) => {
       icon: <ColorAdjustmentIcon />,
       method: Operation.ColorAdjustment,
       name: "Color adjustment",
-      settings: <React.Fragment />,
+      options: <React.Fragment />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <RectangularIcon />,
       method: Operation.RectangularSelection,
       name: "Rectangular selection",
-      settings: <SelectionOptions />,
+      options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <EllipticalIcon />,
       method: Operation.EllipticalSelection,
       name: "Elliptical selection",
-      settings: <SelectionOptions />,
+      options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <LassoIcon />,
       method: Operation.PenSelection,
       name: "Pen selection",
-      settings: <SelectionOptions />,
+      options: <PenSelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <LassoIcon />,
       method: Operation.LassoSelection,
       name: "Lasso selection",
-      settings: <SelectionOptions />,
+      options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <PolygonalSelectionIcon />,
       method: Operation.PolygonalSelection,
       name: "Polygonal selection",
-      settings: <SelectionOptions />,
+      options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <MagneticIcon />,
       method: Operation.MagneticSelection,
       name: "Magnetic selection",
-      settings: <SelectionOptions />,
+      options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <MagicWandIcon />,
       method: Operation.ColorSelection,
       name: "Color selection",
-      settings: <SelectionOptions />,
+      options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <QuickIcon />,
       method: Operation.QuickSelection,
       name: "Quick selection",
-      settings: <SelectionOptions />,
+      options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <ObjectSelectionIcon />,
       method: Operation.ObjectSelection,
       name: "Object selection",
-      settings: <SelectionOptions />,
+      options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <HandIcon />,
       method: Operation.Hand,
       name: "Hand",
-      settings: <React.Fragment />,
+      options: <React.Fragment />,
     },
     {
       description: "Description of zoom here.",
       icon: <ZoomIcon />,
       method: Operation.Zoom,
       name: "Zoom",
-      settings: <ZoomOptions handleRevert={handleRevertZoom} />,
+      options: <ZoomOptions handleRevert={handleRevertZoom} />,
     },
   ];
 
@@ -199,7 +200,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
               operations.findIndex(
                 (operation) => operation.method === activeOperation
               )
-            ].settings
+            ].options
           }
         />
 

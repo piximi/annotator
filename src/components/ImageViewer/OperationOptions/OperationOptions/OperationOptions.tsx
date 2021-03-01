@@ -22,7 +22,7 @@ export const OperationOptions = ({
   return (
     <Drawer
       anchor="right"
-      className={classes.settings}
+      className={classes.options}
       classes={{ paper: classes.settingsPaper }}
       variant="permanent"
     >

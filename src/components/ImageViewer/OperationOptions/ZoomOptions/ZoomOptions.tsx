@@ -7,9 +7,9 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { zoomModeSelector } from "../../../store/selectors";
-import { ZoomMode } from "../../../types/ZoomMode";
-import { slice } from "../../../store/slices";
+import { zoomModeSelector } from "../../../../store/selectors";
+import { ZoomMode } from "../../../../types/ZoomMode";
+import { slice } from "../../../../store/slices";
 
 type ZoomOptionsProps = {
   handleRevert: () => void;

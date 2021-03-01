@@ -16,7 +16,7 @@ export const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     width: "100%",
   },
-  settings: {
+  options: {
     width: settingsWidth,
     flexShrink: 0,
   },

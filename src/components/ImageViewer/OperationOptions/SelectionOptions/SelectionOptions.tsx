@@ -6,12 +6,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Radio from "@material-ui/core/Radio";
 import React from "react";
 import SvgIcon from "@material-ui/core/SvgIcon";
-import { ReactComponent as InvertSelectionIcon } from "../../icons/InvertSelection.svg";
+import { ReactComponent as InvertSelectionIcon } from "../../../icons/InvertSelection.svg";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { useDispatch, useSelector } from "react-redux";
-import { selectionModeSelector } from "../../../store/selectors";
-import { slice } from "../../../store/slices";
-import { SelectionMode } from "../../../types/SelectionMode";
+import { selectionModeSelector } from "../../../../store/selectors";
+import { slice } from "../../../../store/slices";
+import { SelectionMode } from "../../../../types/SelectionMode";
 
 export const SelectionOptions = () => {
   const dispatch = useDispatch();

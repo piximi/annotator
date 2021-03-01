@@ -5,11 +5,13 @@ import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import React, { ChangeEvent, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import { ColorIcon } from "../ColorIcon";
 import { useStyles } from "./EditCategoryDialog.css";
 import { Category } from "../../../../types/Category";
+import { slice } from "../../../../store/slices";
+import { categoriesSelector } from "../../../../store/selectors";
 
 type EditCategoryDialogProps = {
   category: Category;
@@ -38,8 +40,21 @@ export const EditCategoryDialog = ({
     setName(event.target.value);
   };
 
+  const categories = useSelector(categoriesSelector);
+
   const onEdit = () => {
-    // TODO: dispatch edit category action
+    const updatedCategories = categories?.map((v: Category) => {
+      if (v.id === category.id) {
+        return {
+          ...category,
+          color: color,
+          name: name,
+        };
+      } else {
+        return v;
+      }
+    });
+    dispatch(slice.actions.setCategories({ categories: updatedCategories }));
 
     onCloseDialog();
   };

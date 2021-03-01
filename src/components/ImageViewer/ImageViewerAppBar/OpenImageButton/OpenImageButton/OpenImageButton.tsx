@@ -23,6 +23,7 @@ type ExampleMenuItemProps = {
 const ComputerMenuItemRef = React.forwardRef<any, ComputerMenuItemProps>(
   ({ onClose }, ref) => <ComputerMenuItem onClose={onClose} />
 );
+
 const ExampleMenuItemRef = React.forwardRef<any, ExampleMenuItemProps>(
   ({ onClose }, ref) => <ExampleMenuItem onClose={onClose} />
 );

@@ -50,12 +50,15 @@ export const Categories = ({
     open: openEditCategoryDialog,
   } = useDialog();
 
-  const {
-    anchorEl: anchorElCategoryMenu,
-    onClose: onCloseCategoryMenu,
-    onOpen: onOpenCategoryMenu,
-    open: openCategoryMenu,
-  } = useMenu();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const onCategoryMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const onCategoryMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Drawer
@@ -70,12 +73,11 @@ export const Categories = ({
       <CollapsibleList primary="Categories">
         {categories.map((category: Category) => {
           return (
-            <React.Fragment>
+            <div key={category.id}>
               <ListItem
                 button
                 dense
                 id={category.id}
-                key={category.id}
                 onClick={(event) => onCategoryClick(event, category)}
                 selected={category.id === activeCategory.id}
               >
@@ -88,20 +90,20 @@ export const Categories = ({
                 />
 
                 <ListItemSecondaryAction>
-                  <IconButton edge="end" onClick={onOpenCategoryMenu}>
+                  <IconButton edge="end" onClick={onCategoryMenuOpen}>
                     <MoreHorizIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>
 
               <CategoryMenu
-                anchorElCategoryMenu={anchorElCategoryMenu}
+                anchorElCategoryMenu={anchorEl}
                 category={category}
-                onCloseCategoryMenu={onCloseCategoryMenu}
-                onOpenCategoryMenu={onOpenCategoryMenu}
+                onCloseCategoryMenu={onCategoryMenuClose}
+                onOpenCategoryMenu={onCategoryMenuOpen}
                 onOpenDeleteCategoryDialog={onOpenDeleteCategoryDialog}
                 onOpenEditCategoryDialog={onOpenEditCategoryDialog}
-                openCategoryMenu={openCategoryMenu}
+                openCategoryMenu={Boolean(anchorEl)}
               />
 
               <DeleteCategoryDialog
@@ -115,7 +117,7 @@ export const Categories = ({
                 onCloseDialog={onCloseEditCategoryDialog}
                 openDialog={openEditCategoryDialog}
               />
-            </React.Fragment>
+            </div>
           );
         })}
 
@@ -123,7 +125,6 @@ export const Categories = ({
           button
           dense
           id={unknownCategory.id}
-          key={unknownCategory.id}
           onClick={(event) => onCategoryClick(event, unknownCategory)}
           selected={unknownCategory.id === activeCategory.id}
         >

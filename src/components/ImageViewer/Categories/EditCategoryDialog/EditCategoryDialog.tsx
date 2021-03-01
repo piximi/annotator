@@ -43,21 +43,18 @@ export const EditCategoryDialog = ({
   const categories = useSelector(categoriesSelector);
 
   const onEdit = () => {
-    // TODO: dispatch edit category action
-
-    categories?.map((v: Category) => {
+    const updatedCategories = categories?.map((v: Category) => {
       if (v.id === category.id) {
         return {
           ...category,
-          color: category.color,
-          name: category.name,
+          color: color,
+          name: name,
         };
       } else {
-        return category;
+        return v;
       }
     });
-
-    dispatch(slice.actions.setCategories({ categories: [] }));
+    dispatch(slice.actions.setCategories({ categories: updatedCategories }));
 
     onCloseDialog();
   };

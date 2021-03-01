@@ -1,7 +1,6 @@
 export {
   deleteCategory,
   deleteImageInstance,
-  slice,
   setBrightness,
   setCategories,
   setCategoryVisibility,
@@ -11,9 +10,11 @@ export {
   setImage,
   setImageInstances,
   setOperation,
+  setPenSelectionBrushSize,
   setSaturation,
   setSelectionMode,
   setSeletedCategory,
   setVibrance,
   setZoomMode,
+  slice,
 } from "./slice";

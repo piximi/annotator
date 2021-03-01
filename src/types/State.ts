@@ -12,6 +12,7 @@ export type State = {
   hue: number;
   image?: Image;
   operation: Operation;
+  penSelectionBrushSize: number;
   saturation: number;
   selectedCategory: string;
   selectionMode: SelectionMode;

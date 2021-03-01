@@ -23,6 +23,7 @@ const initialState: State = {
   exposure: 0,
   hue: 0,
   operation: Operation.RectangularSelection,
+  penSelectionBrushSize: 1,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: SelectionMode.New,
@@ -100,6 +101,12 @@ export const slice = createSlice({
     ) {
       state.operation = action.payload.operation;
     },
+    setPenSelectionBrushSize(
+      state: State,
+      action: PayloadAction<{ penSelectionBrushSize: number }>
+    ) {
+      state.penSelectionBrushSize = action.payload.penSelectionBrushSize;
+    },
     setSaturation(state: State, action: PayloadAction<{ saturation: number }>) {
       state.saturation = action.payload.saturation;
     },
@@ -136,6 +143,7 @@ export const {
   setImage,
   setImageInstances,
   setOperation,
+  setPenSelectionBrushSize,
   setSaturation,
   setSelectionMode,
   setSeletedCategory,

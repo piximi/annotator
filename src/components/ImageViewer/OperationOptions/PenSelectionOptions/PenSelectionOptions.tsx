@@ -2,12 +2,21 @@ import React, { useState } from "react";
 import { SelectionOptions } from "../SelectionOptions";
 import Divider from "@material-ui/core/Divider";
 import Slider from "@material-ui/core/Slider";
+import { useDispatch, useSelector } from "react-redux";
+import { slice } from "../../../../store/slices";
+import { penSelectionBrushSizeSelector } from "../../../../store/selectors/penSelectionBrushSizeSelector";
 
 export const PenSelectionOptions = () => {
-  const [value, setValue] = useState<number>(1);
+  const dispatch = useDispatch();
+
+  const penSelectionBrushSizeBrushSize = useSelector(
+    penSelectionBrushSizeSelector
+  );
 
   const onChange = (event: any, changed: number | number[]) => {
-    setValue(changed as number);
+    const payload = { penSelectionBrushSize: changed as number };
+
+    dispatch(slice.actions.setPenSelectionBrushSize(payload));
   };
 
   return (
@@ -16,7 +25,11 @@ export const PenSelectionOptions = () => {
 
       <Divider />
 
-      <Slider aria-labelledby="brush-size" onChange={onChange} value={value} />
+      <Slider
+        aria-labelledby="brush-size"
+        onChange={onChange}
+        value={penSelectionBrushSizeBrushSize}
+      />
     </React.Fragment>
   );
 };

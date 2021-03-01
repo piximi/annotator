@@ -73,12 +73,11 @@ export const Categories = ({
       <CollapsibleList primary="Categories">
         {categories.map((category: Category) => {
           return (
-            <React.Fragment>
+            <div key={category.id}>
               <ListItem
                 button
                 dense
                 id={category.id}
-                key={category.id}
                 onClick={(event) => onCategoryClick(event, category)}
                 selected={category.id === activeCategory.id}
               >
@@ -118,7 +117,7 @@ export const Categories = ({
                 onCloseDialog={onCloseEditCategoryDialog}
                 openDialog={openEditCategoryDialog}
               />
-            </React.Fragment>
+            </div>
           );
         })}
 
@@ -126,7 +125,6 @@ export const Categories = ({
           button
           dense
           id={unknownCategory.id}
-          key={unknownCategory.id}
           onClick={(event) => onCategoryClick(event, unknownCategory)}
           selected={unknownCategory.id === activeCategory.id}
         >

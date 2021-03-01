@@ -151,7 +151,7 @@ export class QuickSelectionOperator extends SelectionOperator {
     this.selecting = false;
   }
 
-  private colorSuperpixelMap(mask: ImageJS.Image, color: string) {
+  private static colorSuperpixelMap(mask: ImageJS.Image, color: string) {
     const fillColor = [255, 0, 0, 150];
 
     const foo: Array<Array<number>> = [];
@@ -225,7 +225,7 @@ export class QuickSelectionOperator extends SelectionOperator {
         { components: 1, alpha: 0 }
       );
 
-      const [colorData, colorMask] = instance.colorSuperpixelMap(
+      const [colorData, colorMask] = QuickSelectionOperator.colorSuperpixelMap(
         binaryImage,
         "green"
       );

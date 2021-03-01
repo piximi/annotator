@@ -124,7 +124,7 @@ export class ColorSelectionOperator extends SelectionOperator {
     this.selecting = false;
   }
 
-  private colorOverlay(
+  private static colorOverlay(
     mask: ImageJS.Image,
     position: { x: number; y: number },
     color: string
@@ -203,6 +203,10 @@ export class ColorSelectionOperator extends SelectionOperator {
     // @ts-ignore
     this.offset = { x: this.roiMask.position[0], y: this.roiMask.position[1] };
 
-    this.overlayData = this.colorOverlay(this.roiMask, position, "red");
+    this.overlayData = ColorSelectionOperator.colorOverlay(
+      this.roiMask,
+      position,
+      "red"
+    );
   }
 }

@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { Category } from "../../../../types/Category";
 import { Selection } from "../../../../types/Selection";
-import { slice } from "../../../../store/slices/slice";
+import { slice } from "../../../../store/slices";
 import {
   imageInstancesSelector,
   selectedCategroySelector,

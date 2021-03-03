@@ -2,7 +2,6 @@ import { SelectionOperator } from "./SelectionOperator";
 import { slic } from "../slic";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
-import { isoLines } from "marchingsquares";
 import { encode } from "../rle";
 
 export class QuickSelectionOperator extends SelectionOperator {
@@ -133,12 +132,10 @@ export class QuickSelectionOperator extends SelectionOperator {
     const bar = greyMatrix.map((el: Array<number>) => {
       return Array.from(el);
     });
-    const polygons: Array<Array<number>>[] = isoLines(bar, 1);
-    polygons.sort((a: Array<Array<number>>, b: Array<Array<number>>) => {
-      return b.length - a.length;
-    });
+    const largest: Array<Array<number>> = this.computeContours(bar);
+
     this.points = _.flatten(
-      polygons[0].map((coord) => {
+      largest.map((coord) => {
         return [Math.round(coord[0]), Math.round(coord[1])];
       })
     );

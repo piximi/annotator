@@ -2,7 +2,6 @@ import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
 import * as _ from "lodash";
-import { isoLines } from "marchingsquares";
 import { encode } from "../rle";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
@@ -126,20 +125,9 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
           const bar = data.map((el: Array<number>) => {
             return Array.from(el);
           });
-          const polygons = isoLines(bar, 1);
 
-          polygons.sort((a: Array<number>, b: Array<number>) => {
-            if (a.length < b.length) {
-              return -1;
-            }
+          const largest = this.computeContours(bar);
 
-            if (a.length > b.length) {
-              return 1;
-            }
-
-            return 0;
-          });
-          const largest = polygons[polygons.length - 1];
           const foo: Array<number> = _.flatten(largest);
           this.points = foo.map((el: number) => {
             return Math.round(el);

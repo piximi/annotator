@@ -102,11 +102,10 @@ export class PenSelectionOperator extends SelectionOperator {
         return Array.from(el);
       }
     );
-    const polygons = isoLines(bar, 1);
-    polygons.sort((a: Array<number>, b: Array<number>) => {
-      return b.length - a.length;
-    });
-    this.outline = _.flatten(polygons[0]);
+
+    const largest = this.computeContours(bar);
+
+    this.outline = _.flatten(largest);
 
     this._contour = this.outline;
   }

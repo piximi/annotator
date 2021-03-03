@@ -38,7 +38,11 @@ export abstract class SelectionOperator {
       } else return 0;
     });
 
-    const contours = this.computeContours(Array.from(data));
+    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
+      return Array.from(el);
+    });
+
+    const contours = this.computeContours(mat);
 
     return [encode(data), _.flatten(contours)];
   }
@@ -55,23 +59,20 @@ export abstract class SelectionOperator {
       } else return oldMaskData[index];
     });
 
-    const contours = this.computeContours(Array.from(data));
+    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
+      return Array.from(el);
+    });
+    const contours = this.computeContours(mat);
 
     return [encode(data), _.flatten(contours)];
   }
 
   abstract get boundingBox(): [number, number, number, number] | undefined;
 
-  computeContours(data: Array<number>) {
-    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
-      return Array.from(el);
-    });
-    const contours = isoLines(mat, 1).sort(
-      (a: Array<number>, b: Array<number>) => {
-        return b.length - a.length;
-      }
-    )[0];
-    return contours;
+  computeContours(data: Array<Array<number>>) {
+    return isoLines(data, 1).sort((a: Array<number>, b: Array<number>) => {
+      return b.length - a.length;
+    })[0];
   }
 
   computeMask() {

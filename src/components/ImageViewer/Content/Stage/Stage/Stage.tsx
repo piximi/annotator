@@ -61,7 +61,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const [operator, setOperator] = useState<SelectionOperator>();
 
-  const [selection, setSelection] = useState<string>();
+  const [selectionId, setSelectionId] = useState<string>();
   const [selectionMask, setSelectionMask] = useState<Array<number>>([]);
   const [selected, setSelected] = useState<boolean>(false);
 
@@ -84,7 +84,7 @@ export const Stage = ({ category, src }: StageProps) => {
   useEffect(() => {
     if (selectionMode === 2) return; // "New" mode
 
-    if (!selected || !operator) return;
+    if (!selected || !operator || !selectionId) return;
 
     if (selectionMode === 0) {
       const [combinedMask, combinedContour] = operator.add(selectionMask);
@@ -92,20 +92,24 @@ export const Stage = ({ category, src }: StageProps) => {
       operator.mask = combinedMask;
       operator.contour = combinedContour;
 
-      //FIXME: the previous istance (corresponding to selectionMask) should be deleted from image instances
+      dispatch(
+        slice.actions.deleteImageInstance({
+          id: selectionId,
+        })
+      );
     }
   }, [selectionMode, selected]);
 
   useEffect(() => {
-    if (!selection) return;
+    if (!selectionId) return;
 
     const others = instances?.filter(
-      (instance: SelectionType) => instance.id !== selection
+      (instance: SelectionType) => instance.id !== selectionId
     );
 
     const updated: SelectionType = {
       ...instances?.filter(
-        (instance: SelectionType) => instance.id === selection
+        (instance: SelectionType) => instance.id === selectionId
       )[0],
       categoryId: category.id,
     } as SelectionType;
@@ -215,7 +219,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
     operator.deselect();
 
-    setSelection(instance.id);
+    setSelectionId(instance.id);
     setSelectionMask(instance.mask);
 
     dispatch(
@@ -320,11 +324,11 @@ export const Stage = ({ category, src }: StageProps) => {
   }, [escapePress]);
 
   useEffect(() => {
-    if (selection) {
+    if (selectionId) {
       if (backspacePress || escapePress || deletePress) {
         dispatch(
           slice.actions.deleteImageInstance({
-            id: selection,
+            id: selectionId,
           })
         );
 

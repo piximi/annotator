@@ -87,9 +87,11 @@ export const Stage = ({ category, src }: StageProps) => {
     if (!selected || !operator) return;
 
     if (selectionMode === 0) {
+      // "Add" mode
       const combinedMask = operator.add(selectionMask);
-
-      //the currect instance shousld use this new mask
+      if (!combinedMask) return;
+      operator.mask = combinedMask;
+      if (!operator.mask) return;
     }
   }, [selectionMode, selected]);
 

@@ -27,10 +27,6 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     ];
   }
 
-  get contour() {
-    return this.points;
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -151,6 +147,7 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
 
           // @ts-ignore
           this._mask = encode(this.output.getChannel(0).data);
+          this._contour = this.points;
         });
     }
   }

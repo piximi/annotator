@@ -27,10 +27,6 @@ export class QuickSelectionOperator extends SelectionOperator {
     ];
   }
 
-  get contour() {
-    return this.points;
-  }
-
   computeObjectSelectionMask(): Array<number> | undefined {
     if (!this.currentMask) return;
 
@@ -147,6 +143,7 @@ export class QuickSelectionOperator extends SelectionOperator {
       })
     );
 
+    this._contour = this.points;
     this._mask = this.computeObjectSelectionMask();
 
     this.selected = true;

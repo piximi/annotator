@@ -55,12 +55,6 @@ export class PenSelectionOperator extends SelectionOperator {
     this.circlesData = this.thresholdMask(rgbMask.getChannel(3)).data;
   }
 
-  get contour(): Array<number> | undefined {
-    if (!this.outline) return [];
-
-    return this.outline;
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -113,6 +107,8 @@ export class PenSelectionOperator extends SelectionOperator {
       return b.length - a.length;
     });
     this.outline = _.flatten(polygons[0]);
+
+    this._contour = this.outline;
   }
 
   static async setup(image: ImageJS.Image, brushSize: number) {

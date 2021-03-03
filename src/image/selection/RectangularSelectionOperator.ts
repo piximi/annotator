@@ -23,10 +23,6 @@ export class RectangularSelectionOperator extends SelectionOperator {
     ];
   }
 
-  get contour() {
-    return this.convertToPoints();
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -56,6 +52,7 @@ export class RectangularSelectionOperator extends SelectionOperator {
     this.resize(position);
     this.points = this.convertToPoints();
 
+    this._contour = this.points;
     this._mask = this.computeMask();
 
     this.selected = true;

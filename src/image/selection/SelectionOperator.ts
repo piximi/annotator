@@ -16,7 +16,7 @@ export abstract class SelectionOperator {
   selecting: boolean = false;
   selection?: Selection;
 
-  private _contour?: Array<number>;
+  protected _contour?: Array<number>;
   protected _mask?: Array<number>;
 
   constructor(image: ImageJS.Image) {
@@ -56,6 +56,10 @@ export abstract class SelectionOperator {
 
     //@ts-ignore
     return encode(maskImage.getChannel(0).data);
+  }
+
+  get contour(): Array<number> | undefined {
+    return this._contour;
   }
 
   set contour(updatedContours: Array<number> | undefined) {

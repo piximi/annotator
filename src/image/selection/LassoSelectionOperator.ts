@@ -25,10 +25,6 @@ export class LassoSelectionOperator extends SelectionOperator {
     ];
   }
 
-  get contour() {
-    return this.points;
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -54,6 +50,7 @@ export class LassoSelectionOperator extends SelectionOperator {
 
       this.points = this.buffer;
 
+      this._contour = this.points;
       this._mask = this.computeMask();
 
       this.anchor = undefined;
@@ -112,6 +109,7 @@ export class LassoSelectionOperator extends SelectionOperator {
       this.selecting = false;
 
       this.points = this.buffer;
+      this._contour = this.points;
 
       this._mask = this.computeMask();
 

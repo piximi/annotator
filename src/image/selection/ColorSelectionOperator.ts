@@ -28,10 +28,6 @@ export class ColorSelectionOperator extends SelectionOperator {
     ];
   }
 
-  get contour() {
-    return this.points;
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -113,8 +109,7 @@ export class ColorSelectionOperator extends SelectionOperator {
       })
     );
 
-    if (!this.roiMask) return;
-
+    this._contour = this.points;
     // @ts-ignore
     this._mask = encode(this.roiMask.data as Uint8Array);
 

@@ -16,6 +16,9 @@ export abstract class SelectionOperator {
   selecting: boolean = false;
   selection?: Selection;
 
+  private _contour?: Array<number>;
+  protected _mask?: Array<number>;
+
   constructor(image: ImageJS.Image) {
     this.image = image;
 
@@ -23,10 +26,10 @@ export abstract class SelectionOperator {
   }
 
   add(oldMask: Array<number>) {
-    if (!this.mask) return;
+    if (!this._mask) return;
 
     const oldMaskData = decode(oldMask);
-    const maskData = decode(this.mask);
+    const maskData = decode(this._mask);
 
     const data = maskData.map((currentValue: number, index: number) => {
       if (currentValue === 255 || oldMaskData[index] === 255) {
@@ -38,9 +41,7 @@ export abstract class SelectionOperator {
 
   abstract get boundingBox(): [number, number, number, number] | undefined;
 
-  abstract get contour(): Array<number> | undefined;
-
-  get mask(): Array<number> | undefined {
+  computeMask() {
     const maskImage = new ImageJS.Image({
       width: this.image.width,
       height: this.image.height,
@@ -53,8 +54,20 @@ export abstract class SelectionOperator {
     simplify(connectedPoints, 1, true);
     slpf(connectedPoints, maskImage);
 
-    // @ts-ignore
+    //@ts-ignore
     return encode(maskImage.getChannel(0).data);
+  }
+
+  set contour(updatedContours: Array<number> | undefined) {
+    this._contour = updatedContours;
+  }
+
+  get mask(): Array<number> | undefined {
+    return this._mask;
+  }
+
+  set mask(updatedMask: Array<number> | undefined) {
+    this._mask = updatedMask;
   }
 
   abstract deselect(): void;

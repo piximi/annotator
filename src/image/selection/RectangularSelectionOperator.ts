@@ -1,4 +1,10 @@
 import { SelectionOperator } from "./SelectionOperator";
+import * as ImageJS from "image-js";
+import * as _ from "lodash";
+import { connectPoints } from "../imageHelper";
+import { simplify } from "../simplify/simplify";
+import { slpf } from "../polygon-fill/slpf";
+import { encode } from "../rle";
 
 export class RectangularSelectionOperator extends SelectionOperator {
   origin?: { x: number; y: number };
@@ -49,7 +55,8 @@ export class RectangularSelectionOperator extends SelectionOperator {
     if (this.selected || !this.selecting) return;
     this.resize(position);
     this.points = this.convertToPoints();
-    console.info(this.points);
+
+    this._mask = this.computeMask();
 
     this.selected = true;
     this.selecting = false;

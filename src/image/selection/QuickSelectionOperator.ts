@@ -31,7 +31,7 @@ export class QuickSelectionOperator extends SelectionOperator {
     return this.points;
   }
 
-  get mask(): Array<number> | undefined {
+  computeObjectSelectionMask(): Array<number> | undefined {
     if (!this.currentMask) return;
 
     const greyData = this.currentMask.grey();
@@ -146,6 +146,8 @@ export class QuickSelectionOperator extends SelectionOperator {
         return [Math.round(coord[0]), Math.round(coord[1])];
       })
     );
+
+    this._mask = this.computeObjectSelectionMask();
 
     this.selected = true;
     this.selecting = false;

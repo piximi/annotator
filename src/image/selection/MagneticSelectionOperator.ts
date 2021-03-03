@@ -1,8 +1,11 @@
 import { SelectionOperator } from "./SelectionOperator";
 import { createPathFinder, makeGraph, PiximiGraph } from "../GraphHelper";
-import { getIdx } from "../imageHelper";
+import { connectPoints, getIdx } from "../imageHelper";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
+import { simplify } from "../simplify/simplify";
+import { slpf } from "../polygon-fill/slpf";
+import { encode } from "../rle";
 
 export class MagneticSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
@@ -81,6 +84,8 @@ export class MagneticSelectionOperator extends SelectionOperator {
       this.selecting = false;
 
       this.points = this.buffer;
+
+      this._mask = this.computeMask();
     }
 
     if (this.buffer && this.buffer.length === 0) {
@@ -172,6 +177,8 @@ export class MagneticSelectionOperator extends SelectionOperator {
       this.selecting = false;
 
       this.points = this.buffer;
+
+      this._mask = this.computeMask();
 
       this.buffer = [];
 

@@ -32,13 +32,6 @@ export class ColorSelectionOperator extends SelectionOperator {
     return this.points;
   }
 
-  get mask(): Array<number> | undefined {
-    if (!this.roiMask) return;
-
-    // @ts-ignore
-    return encode(this.roiMask.data as Uint8Array);
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -119,6 +112,11 @@ export class ColorSelectionOperator extends SelectionOperator {
         return [Math.round(coord[0] + offsetX), Math.round(coord[1] + offsetY)];
       })
     );
+
+    if (!this.roiMask) return;
+
+    // @ts-ignore
+    this._mask = encode(this.roiMask.data as Uint8Array);
 
     this.selected = true;
     this.selecting = false;

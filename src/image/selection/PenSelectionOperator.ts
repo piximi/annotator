@@ -61,12 +61,6 @@ export class PenSelectionOperator extends SelectionOperator {
     return this.outline;
   }
 
-  get mask(): Array<number> | undefined {
-    if (!this.circlesData) return [];
-
-    return encode(this.circlesData);
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -102,7 +96,9 @@ export class PenSelectionOperator extends SelectionOperator {
 
     this.computeCircleData();
 
-    const baz = this.mask;
+    if (!this.circlesData) return [];
+
+    this._mask = encode(this.circlesData);
 
     if (!this.circlesData) return;
 

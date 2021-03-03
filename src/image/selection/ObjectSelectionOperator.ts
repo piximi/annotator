@@ -31,13 +31,6 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
     return this.points;
   }
 
-  get mask(): Array<number> | undefined {
-    if (!this.output) return;
-
-    // @ts-ignore
-    return encode(this.output.getChannel(0).data);
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -155,6 +148,9 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
           this.points = foo.map((el: number) => {
             return Math.round(el);
           });
+
+          // @ts-ignore
+          this._mask = encode(this.output.getChannel(0).data);
         });
     }
   }

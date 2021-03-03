@@ -7,6 +7,7 @@ import { simplify } from "../simplify/simplify";
 import { slpf } from "../polygon-fill/slpf";
 import * as uuid from "uuid";
 import { decode, encode } from "../rle";
+import { isoLines } from "marchingsquares";
 
 export abstract class SelectionOperator {
   image: ImageJS.Image;
@@ -25,8 +26,8 @@ export abstract class SelectionOperator {
     this.manager = image.getRoiManager();
   }
 
-  add(oldMask: Array<number>) {
-    if (!this._mask) return;
+  add(oldMask: Array<number>): [Array<number>, Array<number>] {
+    if (!this._mask) return [[], []];
 
     const oldMaskData = decode(oldMask);
     const maskData = decode(this._mask);
@@ -36,7 +37,17 @@ export abstract class SelectionOperator {
         return 255;
       } else return 0;
     });
-    return encode(data);
+
+    //compute contours
+    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
+      return Array.from(el);
+    });
+    const contours = isoLines(mat, 1).sort(
+      (a: Array<number>, b: Array<number>) => {
+        return b.length - a.length;
+      }
+    )[0];
+    return [encode(data), _.flatten(contours)];
   }
 
   abstract get boundingBox(): [number, number, number, number] | undefined;

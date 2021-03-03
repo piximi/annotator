@@ -87,11 +87,12 @@ export const Stage = ({ category, src }: StageProps) => {
     if (!selected || !operator) return;
 
     if (selectionMode === 0) {
-      // "Add" mode
-      const combinedMask = operator.add(selectionMask);
-      if (!combinedMask) return;
+      const [combinedMask, combinedContour] = operator.add(selectionMask);
+
       operator.mask = combinedMask;
-      if (!operator.mask) return;
+      operator.contour = combinedContour;
+
+      //FIXME: the previous istance (corresponding to selectionMask) should be deleted from image instances
     }
   }, [selectionMode, selected]);
 

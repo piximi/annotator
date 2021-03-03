@@ -26,6 +26,10 @@ export abstract class SelectionOperator {
     this.manager = image.getRoiManager();
   }
 
+  /*
+   * Adding to a selection adds any new areas you select to your existing
+   * selection.
+   */
   add(oldMask: Array<number>): [Array<number>, Array<number>] {
     if (!this._mask) return [[], []];
 
@@ -47,6 +51,11 @@ export abstract class SelectionOperator {
     return [encode(data), _.flatten(contours)];
   }
 
+  /*
+   * When using the Intersect selection mode, any currently selected areas you
+   * select over will be kept and any currently selected areas outside your
+   * new selection will be removed from the selection.
+   */
   intersect(oldMask: Array<number>): [Array<number>, Array<number>] {
     if (!this._mask) return [[], []];
 
@@ -67,6 +76,10 @@ export abstract class SelectionOperator {
     return [encode(data), _.flatten(contours)];
   }
 
+  /*
+   * Subtracting from a selection deselects the areas you draw over, keeping
+   * the rest of your existing selection.
+   */
   subtract(oldMask: Array<number>): [Array<number>, Array<number>] {
     if (!this._mask) return [[], []];
 

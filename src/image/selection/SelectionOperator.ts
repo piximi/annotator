@@ -38,7 +38,31 @@ export abstract class SelectionOperator {
       } else return 0;
     });
 
-    //compute contours
+    const contours = this.computeContours(Array.from(data));
+
+    return [encode(data), _.flatten(contours)];
+  }
+
+  subtract(oldMask: Array<number>): [Array<number>, Array<number>] {
+    if (!this._mask) return [[], []];
+
+    const oldMaskData = decode(oldMask);
+    const maskData = decode(this._mask);
+
+    const data = maskData.map((currentValue: number, index: number) => {
+      if (currentValue === 255 && oldMaskData[index] === 255) {
+        return 0;
+      } else return oldMaskData[index];
+    });
+
+    const contours = this.computeContours(Array.from(data));
+
+    return [encode(data), _.flatten(contours)];
+  }
+
+  abstract get boundingBox(): [number, number, number, number] | undefined;
+
+  computeContours(data: Array<number>) {
     const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
       return Array.from(el);
     });
@@ -47,10 +71,8 @@ export abstract class SelectionOperator {
         return b.length - a.length;
       }
     )[0];
-    return [encode(data), _.flatten(contours)];
+    return contours;
   }
-
-  abstract get boundingBox(): [number, number, number, number] | undefined;
 
   computeMask() {
     const maskImage = new ImageJS.Image({

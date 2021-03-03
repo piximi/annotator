@@ -87,16 +87,18 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!selected || !operator || !selectionId) return;
 
-    if (selectionMode === SelectionMode.Add) {
-      const [combinedMask, combinedContour] = operator.add(selectionMask);
+    let combinedMask, combinedContour;
 
-      operator.mask = combinedMask;
-      operator.contour = combinedContour;
+    if (selectionMode === SelectionMode.Add) {
+      [combinedMask, combinedContour] = operator.add(selectionMask);
     } else if (selectionMode === SelectionMode.Subtract) {
-      return;
+      [combinedMask, combinedContour] = operator.subtract(selectionMask);
     } else if (selectionMode === SelectionMode.Intersect) {
       return;
     }
+
+    operator.mask = combinedMask;
+    operator.contour = combinedContour;
 
     //remove the existing selection since it's essentially been replaced
     dispatch(

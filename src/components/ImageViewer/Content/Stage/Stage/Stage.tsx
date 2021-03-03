@@ -65,7 +65,6 @@ export const Stage = ({ category, src }: StageProps) => {
   const [operator, setOperator] = useState<SelectionOperator>();
 
   const [selectionId, setSelectionId] = useState<string>();
-  const [selectionMask, setSelectionMask] = useState<Array<number>>([]);
   const [selected, setSelected] = useState<boolean>(false);
 
   const [, update] = useReducer((x) => x + 1, 0);
@@ -85,16 +84,25 @@ export const Stage = ({ category, src }: StageProps) => {
   const dashOffset = useMarchingAnts();
 
   useEffect(() => {
-    if (!selectionMask || !selectionId || !operator) return;
+    if (!selectionId || !operator) return;
 
     if (!instances) return;
 
-    const invertedMask = operator.invert(selectionMask, true);
+    const selectedInstance: SelectionType = instances.filter(
+      (instance: SelectionType) => {
+        return instance.id === selectionId;
+      }
+    )[0];
+
+    const invertedMask = operator.invert(selectedInstance.mask, true);
+
+    const invertedContour = operator.invertContour(selectedInstance.contour);
 
     const updatedInstances = instances.map((instance: SelectionType) => {
       if (instance.id === selectionId) {
         return {
           ...instance,
+          contour: invertedContour,
           mask: invertedMask,
         };
       } else {
@@ -110,16 +118,26 @@ export const Stage = ({ category, src }: StageProps) => {
   useEffect(() => {
     if (selectionMode === SelectionMode.New) return; // "New" mode
 
-    if (!selected || !operator || !selectionId) return;
+    if (!selected || !operator || !selectionId || !instances) return;
 
     let combinedMask, combinedContour;
 
+    const selectedInstance: SelectionType = instances.filter(
+      (instance: SelectionType) => {
+        return instance.id === selectionId;
+      }
+    )[0];
+
     if (selectionMode === SelectionMode.Add) {
-      [combinedMask, combinedContour] = operator.add(selectionMask);
+      [combinedMask, combinedContour] = operator.add(selectedInstance.mask);
     } else if (selectionMode === SelectionMode.Subtract) {
-      [combinedMask, combinedContour] = operator.subtract(selectionMask);
+      [combinedMask, combinedContour] = operator.subtract(
+        selectedInstance.mask
+      );
     } else if (selectionMode === SelectionMode.Intersect) {
-      [combinedMask, combinedContour] = operator.intersect(selectionMask);
+      [combinedMask, combinedContour] = operator.intersect(
+        selectedInstance.mask
+      );
     }
 
     operator.mask = combinedMask;
@@ -253,7 +271,6 @@ export const Stage = ({ category, src }: StageProps) => {
     operator.deselect();
 
     setSelectionId(instance.id);
-    setSelectionMask(instance.mask);
 
     dispatch(
       slice.actions.setSeletedCategory({
@@ -426,7 +443,7 @@ export const Stage = ({ category, src }: StageProps) => {
                   onClick={(event) => onClick(event, instance)}
                   opacity={0.5}
                   ref={selectionRef}
-                  stroke={shadeHex(category.color, 50)}
+                  // stroke={shadeHex(category.color, 50)}
                   strokeWidth={1}
                 />
               );

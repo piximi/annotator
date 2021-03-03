@@ -96,6 +96,13 @@ export abstract class SelectionOperator {
     return mask;
   }
 
+  invertContour(contour: Array<number>): Array<number> {
+    //using https://jsbin.com/tevejujafi/3/edit?html,js,output and https://en.wikipedia.org/wiki/Nonzero-rule
+    const frame = [0, 0, 512, 0, 512, 512, 0, 512, 0, 0];
+    const counterClockWiseContours = _.flatten(_.reverse(_.chunk(contour, 2)));
+    return _.concat(frame, counterClockWiseContours);
+  }
+
   /*
    * Subtracting from a selection deselects the areas you draw over, keeping
    * the rest of your existing selection.

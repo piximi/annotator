@@ -47,10 +47,10 @@ export class RectangularSelectionOperator extends SelectionOperator {
 
   onMouseUp(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
-
     this.resize(position);
-
+    debugger;
     this.points = this.convertToPoints();
+    console.info(this.points);
 
     this.selected = true;
     this.selecting = false;
@@ -61,22 +61,36 @@ export class RectangularSelectionOperator extends SelectionOperator {
 
     const points: Array<number> = [];
 
+    const origin = { x: this.origin.x, y: this.origin.y };
+    let width = this.width;
+    let height = this.height;
+
+    //negative height and width may happen if the rectangle was drawn from right to left
+    if (this.width < 0) {
+      width = Math.abs(this.width);
+      origin.x = this.origin.x - width;
+    }
+    if (this.height < 0) {
+      height = Math.abs(this.height);
+      origin.y = this.origin.y - height;
+    }
+
     // four edges of the rectangle
-    for (let x = 0; x < this.width; x++) {
-      points.push(Math.round(x + this.origin.x));
-      points.push(Math.round(this.origin.y));
+    for (let x = 0; x < width; x++) {
+      points.push(Math.round(x + origin.x));
+      points.push(Math.round(origin.y));
     }
-    for (let y = 0; y < this.height; y++) {
-      points.push(Math.round(this.origin.x + this.width - 1));
-      points.push(Math.round(y + this.origin.y));
+    for (let y = 0; y < height; y++) {
+      points.push(Math.round(origin.x + width - 1));
+      points.push(Math.round(y + origin.y));
     }
-    for (let x = this.width - 1; x >= 0; x--) {
-      points.push(Math.round(x + this.origin.x));
-      points.push(Math.round(this.origin.y + this.height - 1));
+    for (let x = width - 1; x >= 0; x--) {
+      points.push(Math.round(x + origin.x));
+      points.push(Math.round(origin.y + height - 1));
     }
-    for (let y = this.height - 1; y >= 0; y--) {
-      points.push(Math.round(this.origin.x));
-      points.push(Math.round(y + this.origin.y));
+    for (let y = height - 1; y >= 0; y--) {
+      points.push(Math.round(origin.x));
+      points.push(Math.round(y + origin.y));
     }
 
     return points;

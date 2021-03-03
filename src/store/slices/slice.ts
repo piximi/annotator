@@ -29,6 +29,7 @@ const initialState: State = {
     shape: { c: 512, channels: 3, r: 512 },
     src: colorImage,
   },
+  invertMode: false,
   operation: Operation.RectangularSelection,
   penSelectionBrushSize: 1,
   saturation: 0,
@@ -102,6 +103,12 @@ export const slice = createSlice({
 
       state.image.instances = action.payload.instances;
     },
+    setInvertMode(
+      state: State,
+      action: PayloadAction<{ invertMode: boolean }>
+    ) {
+      state.invertMode = action.payload.invertMode;
+    },
     setOperation(
       state: State,
       action: PayloadAction<{ operation: Operation }>
@@ -149,6 +156,7 @@ export const {
   setHue,
   setImage,
   setImageInstances,
+  setInvertMode,
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,

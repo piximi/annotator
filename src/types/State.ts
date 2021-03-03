@@ -11,6 +11,7 @@ export type State = {
   exposure: number;
   hue: number;
   image?: Image;
+  invertMode: boolean;
   operation: Operation;
   penSelectionBrushSize: number;
   saturation: number;

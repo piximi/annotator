@@ -19,6 +19,7 @@ import {
   categoriesSelector,
   imageInstancesSelector,
   operationSelector,
+  selectionModeSelector,
 } from "../../../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
@@ -33,6 +34,7 @@ import { Selection as SelectionType } from "../../../../../types/Selection";
 import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
+import { decode } from "../../../../../image/rle";
 
 type StageProps = {
   category: Category;
@@ -55,9 +57,12 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
 
+  const selectionMode = useSelector(selectionModeSelector);
+
   const [operator, setOperator] = useState<SelectionOperator>();
 
   const [selection, setSelection] = useState<string>();
+  const [selectionMask, setSelectionMask] = useState<Array<number>>([]);
   const [selected, setSelected] = useState<boolean>(false);
 
   const [, update] = useReducer((x) => x + 1, 0);
@@ -75,6 +80,18 @@ export const Stage = ({ category, src }: StageProps) => {
   const backspacePress = useKeyPress("Backspace");
 
   const dashOffset = useMarchingAnts();
+
+  useEffect(() => {
+    if (selectionMode === 2) return; // "New" mode
+
+    if (!selected || !operator) return;
+
+    if (selectionMode === 0) {
+      const combinedMask = operator.add(selectionMask);
+
+      //the currect instance shousld use this new mask
+    }
+  }, [selectionMode, selected]);
 
   useEffect(() => {
     if (!selection) return;
@@ -196,6 +213,7 @@ export const Stage = ({ category, src }: StageProps) => {
     operator.deselect();
 
     setSelection(instance.id);
+    setSelectionMask(instance.mask);
 
     dispatch(
       slice.actions.setSeletedCategory({

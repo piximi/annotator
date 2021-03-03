@@ -48,7 +48,6 @@ export class RectangularSelectionOperator extends SelectionOperator {
   onMouseUp(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
     this.resize(position);
-    debugger;
     this.points = this.convertToPoints();
     console.info(this.points);
 

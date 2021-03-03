@@ -47,6 +47,26 @@ export abstract class SelectionOperator {
     return [encode(data), _.flatten(contours)];
   }
 
+  intersect(oldMask: Array<number>): [Array<number>, Array<number>] {
+    if (!this._mask) return [[], []];
+
+    const oldMaskData = decode(oldMask);
+    const maskData = decode(this._mask);
+
+    const data = maskData.map((currentValue: number, index: number) => {
+      if (currentValue === 255 && oldMaskData[index] === 255) {
+        return 255;
+      } else return 0;
+    });
+
+    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
+      return Array.from(el);
+    });
+    const contours = this.computeContours(mat);
+
+    return [encode(data), _.flatten(contours)];
+  }
+
   subtract(oldMask: Array<number>): [Array<number>, Array<number>] {
     if (!this._mask) return [[], []];
 

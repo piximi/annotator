@@ -94,7 +94,7 @@ export const Stage = ({ category, src }: StageProps) => {
     } else if (selectionMode === SelectionMode.Subtract) {
       [combinedMask, combinedContour] = operator.subtract(selectionMask);
     } else if (selectionMode === SelectionMode.Intersect) {
-      return;
+      [combinedMask, combinedContour] = operator.intersect(selectionMask);
     }
 
     operator.mask = combinedMask;

@@ -18,6 +18,7 @@ import { Operation } from "../../../../../types/Operation";
 import {
   categoriesSelector,
   imageInstancesSelector,
+  invertModeSelector,
   operationSelector,
   selectionModeSelector,
 } from "../../../../../store/selectors";
@@ -59,6 +60,8 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const selectionMode = useSelector(selectionModeSelector);
 
+  const invertMode = useSelector(invertModeSelector);
+
   const [operator, setOperator] = useState<SelectionOperator>();
 
   const [selectionId, setSelectionId] = useState<string>();
@@ -80,6 +83,29 @@ export const Stage = ({ category, src }: StageProps) => {
   const backspacePress = useKeyPress("Backspace");
 
   const dashOffset = useMarchingAnts();
+
+  useEffect(() => {
+    if (!selectionMask || !selectionId || !operator) return;
+
+    if (!instances) return;
+
+    const invertedMask = operator.invert(selectionMask, true);
+
+    const updatedInstances = instances.map((instance: SelectionType) => {
+      if (instance.id === selectionId) {
+        return {
+          ...instance,
+          mask: invertedMask,
+        };
+      } else {
+        return instance;
+      }
+    });
+
+    if (!updatedInstances) return;
+
+    dispatch(slice.actions.setImageInstances({ instances: updatedInstances }));
+  }, [invertMode]);
 
   useEffect(() => {
     if (selectionMode === SelectionMode.New) return; // "New" mode

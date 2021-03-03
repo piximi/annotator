@@ -76,6 +76,26 @@ export abstract class SelectionOperator {
     return [encode(data), _.flatten(contours)];
   }
 
+  invert(mask: Array<number>, encoded = false): Array<number> {
+    if (encoded) {
+      mask = Array.from(decode(mask));
+    }
+
+    mask.forEach((currentValue: number, index: number) => {
+      if (currentValue === 255) {
+        mask[index] = 0;
+      } else mask[index] = 255;
+    });
+
+    const a = new ImageJS.Image(512, 512, mask, { components: 1, alpha: 0 });
+    console.info(a.toDataURL());
+
+    if (encoded) {
+      mask = encode(Uint8Array.from(mask));
+    }
+    return mask;
+  }
+
   /*
    * Subtracting from a selection deselects the areas you draw over, keeping
    * the rest of your existing selection.

@@ -92,17 +92,18 @@ export const Stage = ({ category, src }: StageProps) => {
 
       operator.mask = combinedMask;
       operator.contour = combinedContour;
-
-      dispatch(
-        slice.actions.deleteImageInstance({
-          id: selectionId,
-        })
-      );
     } else if (selectionMode === SelectionMode.Subtract) {
       return;
     } else if (selectionMode === SelectionMode.Intersect) {
       return;
     }
+
+    //remove the existing selection since it's essentially been replaced
+    dispatch(
+      slice.actions.deleteImageInstance({
+        id: selectionId,
+      })
+    );
   }, [selectionMode, selected]);
 
   useEffect(() => {

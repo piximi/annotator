@@ -1,10 +1,5 @@
 import { SelectionOperator } from "./SelectionOperator";
 import * as _ from "lodash";
-import * as ImageJS from "image-js";
-import { connectPoints } from "../imageHelper";
-import { simplify } from "../simplify/simplify";
-import { slpf } from "../polygon-fill/slpf";
-import { encode } from "../rle";
 
 export class EllipticalSelectionOperator extends SelectionOperator {
   center?: { x: number; y: number };

@@ -35,6 +35,7 @@ import { PenSelectionOperator } from "../../../../../image/selection/PenSelectio
 import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { decode } from "../../../../../image/rle";
+import { SelectionMode } from "../../../../../types/SelectionMode";
 
 type StageProps = {
   category: Category;
@@ -82,11 +83,11 @@ export const Stage = ({ category, src }: StageProps) => {
   const dashOffset = useMarchingAnts();
 
   useEffect(() => {
-    if (selectionMode === 2) return; // "New" mode
+    if (selectionMode === SelectionMode.New) return; // "New" mode
 
     if (!selected || !operator || !selectionId) return;
 
-    if (selectionMode === 0) {
+    if (selectionMode === SelectionMode.Add) {
       const [combinedMask, combinedContour] = operator.add(selectionMask);
 
       operator.mask = combinedMask;
@@ -97,6 +98,10 @@ export const Stage = ({ category, src }: StageProps) => {
           id: selectionId,
         })
       );
+    } else if (selectionMode === SelectionMode.Subtract) {
+      return;
+    } else if (selectionMode === SelectionMode.Intersect) {
+      return;
     }
   }, [selectionMode, selected]);
 

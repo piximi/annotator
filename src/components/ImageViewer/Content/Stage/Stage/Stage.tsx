@@ -34,7 +34,6 @@ import { Selection as SelectionType } from "../../../../../types/Selection";
 import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
-import { decode } from "../../../../../image/rle";
 import { SelectionMode } from "../../../../../types/SelectionMode";
 
 type StageProps = {

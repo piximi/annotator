@@ -30,14 +30,14 @@ export abstract class SelectionOperator {
    * Adding to a selection adds any new areas you select to your existing
    * selection.
    */
-  add(oldMask: Array<number>): [Array<number>, Array<number>] {
+  add(selectedMask: Array<number>): [Array<number>, Array<number>] {
     if (!this._mask) return [[], []];
 
-    const oldMaskData = decode(oldMask);
+    const selectedMaskData = decode(selectedMask);
     const maskData = decode(this._mask);
 
     const data = maskData.map((currentValue: number, index: number) => {
-      if (currentValue === 255 || oldMaskData[index] === 255) {
+      if (currentValue === 255 || selectedMaskData[index] === 255) {
         return 255;
       } else return 0;
     });
@@ -56,14 +56,14 @@ export abstract class SelectionOperator {
    * select over will be kept and any currently selected areas outside your
    * new selection will be removed from the selection.
    */
-  intersect(oldMask: Array<number>): [Array<number>, Array<number>] {
+  intersect(selectedMask: Array<number>): [Array<number>, Array<number>] {
     if (!this._mask) return [[], []];
 
-    const oldMaskData = decode(oldMask);
+    const selectedMaskData = decode(selectedMask);
     const maskData = decode(this._mask);
 
     const data = maskData.map((currentValue: number, index: number) => {
-      if (currentValue === 255 && oldMaskData[index] === 255) {
+      if (currentValue === 255 && selectedMaskData[index] === 255) {
         return 255;
       } else return 0;
     });
@@ -107,16 +107,16 @@ export abstract class SelectionOperator {
    * Subtracting from a selection deselects the areas you draw over, keeping
    * the rest of your existing selection.
    */
-  subtract(oldMask: Array<number>): [Array<number>, Array<number>] {
+  subtract(selectedMask: Array<number>): [Array<number>, Array<number>] {
     if (!this._mask) return [[], []];
 
-    const oldMaskData = decode(oldMask);
+    const selectedMaskData = decode(selectedMask);
     const maskData = decode(this._mask);
 
     const data = maskData.map((currentValue: number, index: number) => {
-      if (currentValue === 255 && oldMaskData[index] === 255) {
+      if (currentValue === 255 && selectedMaskData[index] === 255) {
         return 0;
-      } else return oldMaskData[index];
+      } else return selectedMaskData[index];
     });
 
     const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {

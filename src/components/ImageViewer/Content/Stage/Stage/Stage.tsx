@@ -128,6 +128,8 @@ export const Stage = ({ category, src }: StageProps) => {
       }
     )[0];
 
+    if (!selectedInstance) return;
+
     if (selectionMode === SelectionMode.Add) {
       [combinedMask, combinedContour] = operator.add(selectedInstance.mask);
     } else if (selectionMode === SelectionMode.Subtract) {

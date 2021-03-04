@@ -262,10 +262,12 @@ export const Stage = ({ category, src }: StageProps) => {
     layer.batchDraw();
   }, [selected]);
 
-  const onClick = (
+  const onContextMenuClick = (
     event: Konva.KonvaEventObject<MouseEvent>,
     instance: SelectionType
   ) => {
+    event.evt.preventDefault();
+
     if (!operator) return;
 
     if (operator.selecting) return;
@@ -285,8 +287,10 @@ export const Stage = ({ category, src }: StageProps) => {
     transformerRef.current?.nodes([selectionRef.current]);
   };
 
-  const onMouseDown = useMemo(() => {
-    const func = () => {
+  //FIXME not using useMemo() because could not pass event argument to it
+  const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
+    if (event.evt.button === 0) {
+      // left click only
       if (!operator || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
@@ -296,12 +300,8 @@ export const Stage = ({ category, src }: StageProps) => {
       operator.onMouseDown(position);
 
       update();
-    };
-
-    const throttled = _.throttle(func, 10);
-
-    return () => throttled();
-  }, [operator]);
+    }
+  };
 
   const onMouseMove = useMemo(() => {
     const func = () => {
@@ -398,7 +398,7 @@ export const Stage = ({ category, src }: StageProps) => {
       width={512}
     >
       <ReactKonva.Layer
-        onMouseDown={onMouseDown}
+        onMouseDown={(event) => onMouseDown(event)}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
       >
@@ -442,7 +442,7 @@ export const Stage = ({ category, src }: StageProps) => {
                         category.id === instance.categoryId
                     )?.color
                   }
-                  onClick={(event) => onClick(event, instance)}
+                  onContextMenu={(event) => onContextMenuClick(event, instance)}
                   opacity={0.5}
                   ref={selectionRef}
                   // stroke={shadeHex(category.color, 50)}

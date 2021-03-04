@@ -87,8 +87,6 @@ export abstract class SelectionOperator {
       } else mask[index] = 255;
     });
 
-    const a = new ImageJS.Image(512, 512, mask, { components: 1, alpha: 0 });
-
     if (encoded) {
       mask = encode(Uint8Array.from(mask));
     }

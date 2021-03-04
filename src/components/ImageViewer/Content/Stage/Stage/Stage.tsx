@@ -266,19 +266,19 @@ export const Stage = ({ category, src }: StageProps) => {
 
     transformerRef.current.nodes([selectingRef.current]);
 
-    if (!operator || !operator.contour) return;
-
-    operator.select(category);
-
-    if (!operator || !operator.selection || !operator.selection.id) return;
-
-    selectionInstanceRef.current = operator.selection;
-
     const layer = transformerRef.current.getLayer();
 
     if (!layer) return;
 
     layer.batchDraw();
+
+    if (!operator) return;
+
+    operator.select(category);
+
+    if (!operator.selection) return;
+
+    selectionInstanceRef.current = operator.selection;
   }, [selected]);
 
   const onContextMenuClick = (

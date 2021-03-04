@@ -95,6 +95,7 @@ export class ColorSelectionOperator extends SelectionOperator {
     );
 
     this._contour = this.points;
+    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
     // @ts-ignore
     this._mask = encode(this.roiMask.data as Uint8Array);
 

@@ -12,7 +12,7 @@ export class PenSelectionOperator extends SelectionOperator {
   outline: Array<number> = [];
   points: Array<number> = [];
 
-  get boundingBox(): [number, number, number, number] | undefined {
+  computeBoundingBox(): [number, number, number, number] | undefined {
     if (!this.outline) return undefined;
 
     const pairs = _.chunk(this.outline, 2);
@@ -108,6 +108,8 @@ export class PenSelectionOperator extends SelectionOperator {
     this.outline = _.flatten(largest);
 
     this._contour = this.outline;
+
+    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
   }
 
   static async setup(image: ImageJS.Image, brushSize: number) {

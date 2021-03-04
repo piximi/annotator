@@ -34,6 +34,7 @@ export class PolygonalSelectionOperator extends SelectionOperator {
 
       this._contour = this.points;
       this._mask = this.computeMask();
+      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
       this.anchor = undefined;
       this.origin = undefined;
@@ -97,6 +98,7 @@ export class PolygonalSelectionOperator extends SelectionOperator {
 
       this._contour = this.points;
       this._mask = this.computeMask();
+      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
       this.buffer = [];
 

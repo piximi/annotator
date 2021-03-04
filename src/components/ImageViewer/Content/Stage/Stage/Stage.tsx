@@ -162,6 +162,11 @@ export const Stage = ({ category, src }: StageProps) => {
     operator.mask = combinedMask;
     operator.contour = combinedContour;
 
+    if (!combinedContour) return;
+    operator.boundingBox = operator.computeBoundingBoxFromContours(
+      combinedContour
+    );
+
     //remove the existing selection since it's essentially been replaced
     dispatch(
       slice.actions.deleteImageInstance({

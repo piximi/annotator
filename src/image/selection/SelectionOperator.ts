@@ -17,6 +17,7 @@ export abstract class SelectionOperator {
   selecting: boolean = false;
   selection?: Selection;
 
+  protected _boundingBox?: [number, number, number, number];
   protected _contour?: Array<number>;
   protected _mask?: Array<number>;
 
@@ -125,9 +126,16 @@ export abstract class SelectionOperator {
   }
 
   get boundingBox(): [number, number, number, number] | undefined {
-    if (!this._contour) return undefined;
+    return this._boundingBox;
+    // if (!this._contour) return undefined;
+    //
+    // return this.computeBoundingBoxFromContours(this._contour);
+  }
 
-    return this.computeBoundingBoxFromContours(this._contour);
+  set boundingBox(
+    updatedBoundingBox: [number, number, number, number] | undefined
+  ) {
+    this._boundingBox = updatedBoundingBox;
   }
 
   computeBoundingBoxFromContours(

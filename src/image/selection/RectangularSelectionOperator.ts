@@ -6,7 +6,7 @@ export class RectangularSelectionOperator extends SelectionOperator {
   width?: number;
   height?: number;
 
-  get boundingBox(): [number, number, number, number] | undefined {
+  computeBoundingBox(): [number, number, number, number] | undefined {
     if (!this.origin || !this.width || !this.height) return undefined;
 
     return [
@@ -48,6 +48,7 @@ export class RectangularSelectionOperator extends SelectionOperator {
 
     this._contour = this.points;
     this._mask = this.computeMask();
+    this._boundingBox = this.computeBoundingBox();
 
     this.selected = true;
     this.selecting = false;

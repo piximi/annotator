@@ -123,6 +123,9 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
           // @ts-ignore
           this._mask = encode(this.output.getChannel(0).data);
           this._contour = this.points;
+          this._boundingBox = this.computeBoundingBoxFromContours(
+            this._contour
+          );
         });
     }
   }

@@ -6,7 +6,7 @@ export class EllipticalSelectionOperator extends SelectionOperator {
   origin?: { x: number; y: number };
   radius?: { x: number; y: number };
 
-  get boundingBox(): [number, number, number, number] | undefined {
+  computeBoundingBox(): [number, number, number, number] | undefined {
     if (!this.center || !this.origin || !this.radius) return undefined;
 
     return [
@@ -54,6 +54,8 @@ export class EllipticalSelectionOperator extends SelectionOperator {
     this._contour = this.points;
 
     this._mask = this.computeMask();
+
+    this._boundingBox = this.computeBoundingBox();
   }
 
   private convertToPoints() {

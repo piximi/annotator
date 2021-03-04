@@ -67,6 +67,7 @@ export class MagneticSelectionOperator extends SelectionOperator {
 
       this._contour = this.points;
       this._mask = this.computeMask();
+      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
     }
 
     if (this.buffer && this.buffer.length === 0) {
@@ -161,6 +162,7 @@ export class MagneticSelectionOperator extends SelectionOperator {
 
       this._contour = this.points;
       this._mask = this.computeMask();
+      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
       this.buffer = [];
 

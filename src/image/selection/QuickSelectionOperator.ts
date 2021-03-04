@@ -129,6 +129,7 @@ export class QuickSelectionOperator extends SelectionOperator {
 
     this._contour = this.points;
     this._mask = this.computeObjectSelectionMask();
+    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
     this.selected = true;
     this.selecting = false;

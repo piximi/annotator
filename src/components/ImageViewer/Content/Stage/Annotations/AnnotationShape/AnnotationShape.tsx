@@ -12,7 +12,7 @@ type AnnotationProps = {
   selection: Selection;
 };
 
-export const Annotation = ({ selection }: AnnotationProps) => {
+export const AnnotationShape = ({ selection }: AnnotationProps) => {
   const categories = useSelector(categoriesSelector);
 
   const fill = _.find(

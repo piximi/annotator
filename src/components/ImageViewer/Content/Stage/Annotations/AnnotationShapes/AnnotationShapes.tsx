@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Selection } from "../../../../../../types/Selection";
 import { useSelector } from "react-redux";
 import { visibleCategoriesSelector } from "../../../../../../store/selectors/visibleCategoriesSelector";
-import { Annotation } from "../Annotation";
+import { AnnotationShape } from "../AnnotationShape";
 
-type AnnotationsProps = {
+type AnnotationShapesProps = {
   annotations: Array<Selection>;
 };
 
-export const Annotations = ({ annotations }: AnnotationsProps) => {
+export const AnnotationShapes = ({ annotations }: AnnotationShapesProps) => {
   const categories = useSelector(visibleCategoriesSelector);
 
   const [visible, setVisible] = useState<Array<Selection>>([]);
@@ -23,9 +23,9 @@ export const Annotations = ({ annotations }: AnnotationsProps) => {
 
   return (
     <React.Fragment>
-      {visible.map((annotation: Selection) => {
-        return <Annotation selection={annotation} />;
-      })}
+      {visible.map((annotation) => (
+        <AnnotationShape selection={annotation} />
+      ))}
     </React.Fragment>
   );
 };

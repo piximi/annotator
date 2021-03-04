@@ -9,15 +9,15 @@ import Konva from "konva";
 import KonvaEventObject = Konva.KonvaEventObject;
 
 type AnnotationShapeProps = {
-  selection: Selection;
+  annotation: Selection;
 };
 
-export const AnnotationShape = ({ selection }: AnnotationShapeProps) => {
+export const AnnotationShape = ({ annotation }: AnnotationShapeProps) => {
   const categories = useSelector(categoriesSelector);
 
   const fill = _.find(
     categories,
-    (category: Category) => category.id === selection.categoryId
+    (category: Category) => category.id === annotation.categoryId
   )?.color;
 
   const onContextMenu = (event: KonvaEventObject<PointerEvent>) => {};
@@ -26,10 +26,9 @@ export const AnnotationShape = ({ selection }: AnnotationShapeProps) => {
     <ReactKonva.Line
       closed
       fill={fill}
-      key={selection.id}
       onContextMenu={onContextMenu}
       opacity={0.5}
-      points={selection.contour}
+      points={annotation.contour}
       strokeWidth={1}
     />
   );

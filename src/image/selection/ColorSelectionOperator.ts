@@ -94,6 +94,8 @@ export class ColorSelectionOperator extends SelectionOperator {
 
     const largest: Array<Array<number>> = this.computeContours(bar);
 
+    if (!largest) return;
+
     // @ts-ignore
     const offsetX = this.roiMask.position[0];
     // @ts-ignore

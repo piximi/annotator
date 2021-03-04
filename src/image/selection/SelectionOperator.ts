@@ -48,6 +48,8 @@ export abstract class SelectionOperator {
 
     const contours = this.computeContours(mat);
 
+    // const boundingBox =
+
     return [encode(data), _.flatten(contours)];
   }
 
@@ -124,7 +126,18 @@ export abstract class SelectionOperator {
     return [encode(data), _.flatten(contours)];
   }
 
-  abstract get boundingBox(): [number, number, number, number] | undefined;
+  get boundingBox(): [number, number, number, number] | undefined {
+    if (!this.points) return undefined;
+
+    const pairs = _.chunk(this.points, 2);
+
+    return [
+      Math.round(_.min(_.map(pairs, _.first))!),
+      Math.round(_.min(_.map(pairs, _.last))!),
+      Math.round(_.max(_.map(pairs, _.first))!),
+      Math.round(_.max(_.map(pairs, _.last))!),
+    ];
+  }
 
   computeContours(data: Array<Array<number>>) {
     return isoLines(data, 1).sort((a: Array<number>, b: Array<number>) => {

@@ -7,19 +7,6 @@ export class LassoSelectionOperator extends SelectionOperator {
   origin?: { x: number; y: number };
   points: Array<number> = [];
 
-  get boundingBox(): [number, number, number, number] | undefined {
-    if (!this.points) return undefined;
-
-    const pairs = _.chunk(this.points, 2);
-
-    return [
-      Math.round(_.min(_.map(pairs, _.first))!),
-      Math.round(_.min(_.map(pairs, _.last))!),
-      Math.round(_.max(_.map(pairs, _.first))!),
-      Math.round(_.max(_.map(pairs, _.last))!),
-    ];
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;

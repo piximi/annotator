@@ -36,6 +36,7 @@ import { PenSelectionOperator } from "../../../../../image/selection/PenSelectio
 import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { SelectionMode } from "../../../../../types/SelectionMode";
+import { SelectedContour } from "../SelectedContour";
 
 type StageProps = {
   category: Category;
@@ -411,24 +412,7 @@ export const Stage = ({ category, src }: StageProps) => {
         {!selected && <Selection operation={operation} operator={operator} />}
 
         {selected && operator && operator.contour && (
-          <React.Fragment>
-            <ReactKonva.Line
-              dash={[4, 2]}
-              dashOffset={-dashOffset}
-              points={operator.contour}
-              ref={selectingRef}
-              stroke="black"
-              strokeWidth={1}
-            />
-
-            <ReactKonva.Line
-              dash={[4, 2]}
-              dashOffset={-dashOffset}
-              points={operator.contour}
-              stroke="white"
-              strokeWidth={1}
-            />
-          </React.Fragment>
+          <SelectedContour points={operator.contour} />
         )}
 
         {instances &&

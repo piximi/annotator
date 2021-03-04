@@ -84,8 +84,6 @@ export const Stage = ({ category, src }: StageProps) => {
   const deletePress = useKeyPress("Delete");
   const backspacePress = useKeyPress("Backspace");
 
-  const dashOffset = useMarchingAnts();
-
   useEffect(() => {
     if (!selectionId || !operator) return;
 

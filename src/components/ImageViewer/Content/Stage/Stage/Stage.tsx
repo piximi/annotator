@@ -29,13 +29,13 @@ import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
 import { slice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
-import { shadeHex } from "../../../../../image/shade";
 import { useMarchingAnts } from "../../../../../hooks";
 import { Selection as SelectionType } from "../../../../../types/Selection";
 import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { SelectionMode } from "../../../../../types/SelectionMode";
+import { decode } from "../../../../../image/rle";
 
 type StageProps = {
   category: Category;
@@ -49,8 +49,10 @@ export const Stage = ({ category, src }: StageProps) => {
   const stageRef = useRef<Konva.Stage>(null);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
-  const selectionRef = useRef<Konva.Line | null>(null);
+  const selectionLineRef = useRef<Konva.Line | null>(null);
   const selectingRef = useRef<Konva.Line | null>(null);
+
+  const selectionInstanceRef = useRef<SelectionType | null>(null);
 
   const classes = useStyles();
 
@@ -94,25 +96,34 @@ export const Stage = ({ category, src }: StageProps) => {
       }
     )[0];
 
+    if (
+      !selectedInstance ||
+      !selectedInstance.mask ||
+      !selectedInstance.contour
+    )
+      return;
+
     const invertedMask = operator.invert(selectedInstance.mask, true);
 
     const invertedContour = operator.invertContour(selectedInstance.contour);
 
-    const updatedInstances = instances.map((instance: SelectionType) => {
-      if (instance.id === selectionId) {
-        return {
-          ...instance,
-          contour: invertedContour,
-          mask: invertedMask,
-        };
-      } else {
-        return instance;
-      }
-    });
+    const instance = instances.filter((instance: SelectionType) => {
+      return instance.id === selectionId;
+    })[0];
 
-    if (!updatedInstances) return;
+    if (!selectionInstanceRef || !selectionInstanceRef.current) return;
 
-    dispatch(slice.actions.setImageInstances({ instances: updatedInstances }));
+    selectionInstanceRef.current = {
+      ...instance,
+      contour: invertedContour,
+      mask: invertedMask,
+    };
+
+    dispatch(
+      slice.actions.deleteImageInstance({
+        id: selectionId,
+      })
+    );
   }, [invertMode]);
 
   useEffect(() => {
@@ -253,9 +264,15 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!selectingRef || !selectingRef.current) return;
 
+    transformerRef.current.nodes([selectingRef.current]);
+
     if (!operator || !operator.contour) return;
 
-    transformerRef.current.nodes([selectingRef.current]);
+    operator.select(category);
+
+    if (!operator || !operator.selection || !operator.selection.id) return;
+
+    selectionInstanceRef.current = operator.selection;
 
     const layer = transformerRef.current.getLayer();
 
@@ -274,7 +291,16 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (operator.selecting) return;
 
+    if (!instances) return;
+
     operator.deselect();
+
+    selectionInstanceRef.current = instances.filter((v: SelectionType) => {
+      // @ts-ignore
+      return v.id === instance.id;
+    })[0];
+
+    setSelected(true);
 
     setSelectionId(instance.id);
 
@@ -284,9 +310,11 @@ export const Stage = ({ category, src }: StageProps) => {
       })
     );
 
-    selectionRef.current = event.target as Konva.Line;
+    setSelected(false);
 
-    transformerRef.current?.nodes([selectionRef.current]);
+    selectionLineRef.current = event.target as Konva.Line;
+
+    transformerRef.current?.nodes([selectionLineRef.current]);
   };
 
   //FIXME not using useMemo() because could not pass event argument to it
@@ -342,21 +370,27 @@ export const Stage = ({ category, src }: StageProps) => {
   }, [operator]);
 
   useEffect(() => {
-    if (!selected) return;
-
     if (!enterPress) return;
 
     if (!instances || !operator) return;
 
-    operator.select(category);
+    if (!selectionInstanceRef || !selectionInstanceRef.current) return;
 
-    if (!operator.selection) return;
+    console.info(selectionInstanceRef.current.mask);
 
     dispatch(
       slice.actions.setImageInstances({
-        instances: [...instances, operator.selection],
+        instances: [...instances, selectionInstanceRef.current],
       })
     );
+
+    const mask = selectionInstanceRef.current.mask;
+    const decoded = decode(mask);
+    const img = new ImageJS.Image(512, 512, decoded, {
+      components: 1,
+      alpha: 0,
+    });
+    console.info(img.toDataURL());
 
     operator.deselect();
 
@@ -448,7 +482,7 @@ export const Stage = ({ category, src }: StageProps) => {
                   }
                   onContextMenu={(event) => onContextMenuClick(event, instance)}
                   opacity={0.5}
-                  ref={selectionRef}
+                  ref={selectionLineRef}
                   // stroke={shadeHex(category.color, 50)}
                   strokeWidth={1}
                 />

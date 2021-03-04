@@ -3,17 +3,6 @@ import * as _ from "lodash";
 import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import useImage from "use-image";
-import {
-  ColorSelectionOperator,
-  EllipticalSelectionOperator,
-  LassoSelectionOperator,
-  MagneticSelectionOperator,
-  ObjectSelectionOperator,
-  PolygonalSelectionOperator,
-  QuickSelectionOperator,
-  RectangularSelectionOperator,
-  SelectionOperator,
-} from "../../../../../image/selection";
 import { Operation } from "../../../../../types/Operation";
 import {
   categoriesSelector,
@@ -24,15 +13,12 @@ import {
 } from "../../../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
-import * as ImageJS from "image-js";
 import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
 import { slice } from "../../../../../store/slices";
-import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
-import { shadeHex } from "../../../../../image/shade";
-import { useMarchingAnts } from "../../../../../hooks";
+import { useKeyPress } from "../../../../../hooks/useKeyPress";
+import { useSelectionOperator } from "../../../../../hooks";
 import { Selection as SelectionType } from "../../../../../types/Selection";
-import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { SelectionMode } from "../../../../../types/SelectionMode";
@@ -65,7 +51,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const invertMode = useSelector(invertModeSelector);
 
-  const [operator, setOperator] = useState<SelectionOperator>();
+  const [operator] = useSelectionOperator(src);
 
   const [selectionId, setSelectionId] = useState<string>();
   const [selected, setSelected] = useState<boolean>(false);
@@ -193,58 +179,6 @@ export const Stage = ({ category, src }: StageProps) => {
       })
     );
   }, [category]);
-
-  useEffect(() => {
-    ImageJS.Image.load(src).then((image: ImageJS.Image) => {
-      switch (operation) {
-        case Operation.ColorSelection:
-          setOperator(new ColorSelectionOperator(image));
-
-          return;
-        case Operation.EllipticalSelection:
-          setOperator(new EllipticalSelectionOperator(image));
-
-          return;
-        case Operation.LassoSelection:
-          setOperator(new LassoSelectionOperator(image));
-
-          return;
-        case Operation.MagneticSelection:
-          setOperator(new MagneticSelectionOperator(image));
-
-          return;
-        case Operation.ObjectSelection:
-          ObjectSelectionOperator.compile(image).then(
-            (operator: ObjectSelectionOperator) => {
-              setOperator(operator);
-            }
-          );
-
-          return;
-        case Operation.PenSelection:
-          PenSelectionOperator.setup(image, penSelectionBrushSize).then(
-            (operator: PenSelectionOperator) => {
-              setOperator(operator);
-            }
-          );
-
-          return;
-        case Operation.PolygonalSelection:
-          setOperator(new PolygonalSelectionOperator(image));
-
-          return;
-        case Operation.QuickSelection:
-          const quickSelectionOperator = QuickSelectionOperator.setup(image);
-          setOperator(quickSelectionOperator);
-
-          return;
-        case Operation.RectangularSelection:
-          setOperator(new RectangularSelectionOperator(image));
-
-          return;
-      }
-    });
-  }, [operation, src]);
 
   useEffect(() => {
     if (!operator) return;

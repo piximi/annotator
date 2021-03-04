@@ -127,7 +127,13 @@ export abstract class SelectionOperator {
   get boundingBox(): [number, number, number, number] | undefined {
     if (!this._contour) return undefined;
 
-    const pairs = _.chunk(this._contour, 2);
+    return this.computeBoundingBoxFromContours(this._contour);
+  }
+
+  computeBoundingBoxFromContours(
+    contour: Array<number>
+  ): [number, number, number, number] {
+    const pairs = _.chunk(contour, 2);
 
     return [
       Math.round(_.min(_.map(pairs, _.first))!),

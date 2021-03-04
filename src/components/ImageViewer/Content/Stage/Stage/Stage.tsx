@@ -108,6 +108,10 @@ export const Stage = ({ category, src }: StageProps) => {
 
     const invertedContour = operator.invertContour(selectedInstance.contour);
 
+    const invertedBoundingBox = operator.computeBoundingBoxFromContours(
+      invertedContour
+    );
+
     const instance = instances.filter((instance: SelectionType) => {
       return instance.id === selectionId;
     })[0];
@@ -116,6 +120,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
     selectionInstanceRef.current = {
       ...instance,
+      boundingBox: invertedBoundingBox,
       contour: invertedContour,
       mask: invertedMask,
     };

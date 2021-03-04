@@ -253,6 +253,8 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!selectingRef || !selectingRef.current) return;
 
+    if (!operator || !operator.contour) return;
+
     transformerRef.current.nodes([selectingRef.current]);
 
     const layer = transformerRef.current.getLayer();
@@ -361,6 +363,8 @@ export const Stage = ({ category, src }: StageProps) => {
     transformerRef.current?.detach();
 
     setSelected(false);
+
+    selectingRef.current = null;
   }, [enterPress]);
 
   useEffect(() => {

@@ -9,21 +9,23 @@ type AnnotationShapesProps = {
 };
 
 export const AnnotationShapes = ({ annotations }: AnnotationShapesProps) => {
-  const categories = useSelector(visibleCategoriesSelector);
+  const visibleCategories = useSelector(visibleCategoriesSelector);
 
-  const [visible, setVisible] = useState<Array<Selection>>([]);
+  const [visibleAnnotations, setVisibleAnnotations] = useState<
+    Array<Selection>
+  >([]);
 
   useEffect(() => {
-    setVisible(
+    setVisibleAnnotations(
       annotations.filter((annotation: Selection) =>
-        categories.includes(annotation.categoryId)
+        visibleCategories.includes(annotation.categoryId)
       )
     );
-  }, [annotations, categories]);
+  }, [annotations, visibleCategories]);
 
   return (
     <React.Fragment>
-      {visible.map((annotation) => (
+      {visibleAnnotations.map((annotation: Selection) => (
         <AnnotationShape selection={annotation} />
       ))}
     </React.Fragment>

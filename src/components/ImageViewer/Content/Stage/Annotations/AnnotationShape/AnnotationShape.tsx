@@ -8,11 +8,11 @@ import { categoriesSelector } from "../../../../../../store/selectors";
 import Konva from "konva";
 import KonvaEventObject = Konva.KonvaEventObject;
 
-type AnnotationProps = {
+type AnnotationShapeProps = {
   selection: Selection;
 };
 
-export const AnnotationShape = ({ selection }: AnnotationProps) => {
+export const AnnotationShape = ({ selection }: AnnotationShapeProps) => {
   const categories = useSelector(categoriesSelector);
 
   const fill = _.find(

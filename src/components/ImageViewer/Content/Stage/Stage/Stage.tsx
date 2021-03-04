@@ -29,13 +29,14 @@ import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
 import { slice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress/useKeyPress";
+import { shadeHex } from "../../../../../image/shade";
 import { useMarchingAnts } from "../../../../../hooks";
 import { Selection as SelectionType } from "../../../../../types/Selection";
 import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { SelectionMode } from "../../../../../types/SelectionMode";
-import { decode } from "../../../../../image/rle";
+import { SelectedContour } from "../SelectedContour";
 
 type StageProps = {
   category: Category;
@@ -264,6 +265,8 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!selectingRef || !selectingRef.current) return;
 
+    if (!operator || !operator.contour) return;
+
     transformerRef.current.nodes([selectingRef.current]);
 
     const layer = transformerRef.current.getLayer();
@@ -384,14 +387,6 @@ export const Stage = ({ category, src }: StageProps) => {
       })
     );
 
-    const mask = selectionInstanceRef.current.mask;
-    const decoded = decode(mask);
-    const img = new ImageJS.Image(512, 512, decoded, {
-      components: 1,
-      alpha: 0,
-    });
-    console.info(img.toDataURL());
-
     operator.deselect();
 
     transformerRef.current?.detach();
@@ -445,24 +440,7 @@ export const Stage = ({ category, src }: StageProps) => {
         {!selected && <Selection operation={operation} operator={operator} />}
 
         {selected && operator && operator.contour && (
-          <React.Fragment>
-            <ReactKonva.Line
-              dash={[4, 2]}
-              dashOffset={-dashOffset}
-              points={operator.contour}
-              ref={selectingRef}
-              stroke="black"
-              strokeWidth={1}
-            />
-
-            <ReactKonva.Line
-              dash={[4, 2]}
-              dashOffset={-dashOffset}
-              points={operator.contour}
-              stroke="white"
-              strokeWidth={1}
-            />
-          </React.Fragment>
+          <SelectedContour points={operator.contour} />
         )}
 
         {instances &&

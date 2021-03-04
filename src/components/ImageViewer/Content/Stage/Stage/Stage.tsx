@@ -379,8 +379,6 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!selectionInstanceRef || !selectionInstanceRef.current) return;
 
-    console.info(selectionInstanceRef.current.mask);
-
     dispatch(
       slice.actions.setImageInstances({
         instances: [...instances, selectionInstanceRef.current],

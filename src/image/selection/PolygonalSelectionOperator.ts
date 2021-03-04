@@ -20,10 +20,6 @@ export class PolygonalSelectionOperator extends SelectionOperator {
     ];
   }
 
-  get contour() {
-    return this.points;
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -48,6 +44,9 @@ export class PolygonalSelectionOperator extends SelectionOperator {
       this.selecting = false;
 
       this.points = this.buffer;
+
+      this._contour = this.points;
+      this._mask = this.computeMask();
 
       this.anchor = undefined;
       this.origin = undefined;
@@ -109,12 +108,13 @@ export class PolygonalSelectionOperator extends SelectionOperator {
 
       this.points = this.buffer;
 
+      this._contour = this.points;
+      this._mask = this.computeMask();
+
       this.buffer = [];
 
       this.anchor = undefined;
       this.origin = undefined;
-
-      console.log(this.anchor, this.origin);
 
       return;
     }

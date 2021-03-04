@@ -9,6 +9,7 @@ export {
   setHue,
   setImage,
   setImageInstances,
+  setInvertMode,
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,

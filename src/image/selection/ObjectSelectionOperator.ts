@@ -2,7 +2,6 @@ import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
 import * as _ from "lodash";
-import { isoLines } from "marchingsquares";
 import { encode } from "../rle";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
@@ -25,17 +24,6 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
       Math.round(_.max(_.map(pairs, _.first))!),
       Math.round(_.max(_.map(pairs, _.last))!),
     ];
-  }
-
-  get contour() {
-    return this.points;
-  }
-
-  get mask(): Array<number> | undefined {
-    if (!this.output) return;
-
-    // @ts-ignore
-    return encode(this.output.getChannel(0).data);
   }
 
   deselect() {
@@ -137,24 +125,17 @@ export class ObjectSelectionOperator extends RectangularSelectionOperator {
           const bar = data.map((el: Array<number>) => {
             return Array.from(el);
           });
-          const polygons = isoLines(bar, 1);
 
-          polygons.sort((a: Array<number>, b: Array<number>) => {
-            if (a.length < b.length) {
-              return -1;
-            }
+          const largest = this.computeContours(bar);
 
-            if (a.length > b.length) {
-              return 1;
-            }
-
-            return 0;
-          });
-          const largest = polygons[polygons.length - 1];
           const foo: Array<number> = _.flatten(largest);
           this.points = foo.map((el: number) => {
             return Math.round(el);
           });
+
+          // @ts-ignore
+          this._mask = encode(this.output.getChannel(0).data);
+          this._contour = this.points;
         });
     }
   }

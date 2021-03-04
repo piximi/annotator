@@ -55,18 +55,6 @@ export class PenSelectionOperator extends SelectionOperator {
     this.circlesData = this.thresholdMask(rgbMask.getChannel(3)).data;
   }
 
-  get contour(): Array<number> | undefined {
-    if (!this.outline) return [];
-
-    return this.outline;
-  }
-
-  get mask(): Array<number> | undefined {
-    if (!this.circlesData) return [];
-
-    return encode(this.circlesData);
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -102,7 +90,9 @@ export class PenSelectionOperator extends SelectionOperator {
 
     this.computeCircleData();
 
-    const baz = this.mask;
+    if (!this.circlesData) return [];
+
+    this._mask = encode(this.circlesData);
 
     if (!this.circlesData) return;
 
@@ -112,11 +102,12 @@ export class PenSelectionOperator extends SelectionOperator {
         return Array.from(el);
       }
     );
-    const polygons = isoLines(bar, 1);
-    polygons.sort((a: Array<number>, b: Array<number>) => {
-      return b.length - a.length;
-    });
-    this.outline = _.flatten(polygons[0]);
+
+    const largest = this.computeContours(bar);
+
+    this.outline = _.flatten(largest);
+
+    this._contour = this.outline;
   }
 
   static async setup(image: ImageJS.Image, brushSize: number) {

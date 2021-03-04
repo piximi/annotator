@@ -9,7 +9,10 @@ import SvgIcon from "@material-ui/core/SvgIcon";
 import { ReactComponent as InvertSelectionIcon } from "../../../icons/InvertSelection.svg";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { useDispatch, useSelector } from "react-redux";
-import { selectionModeSelector } from "../../../../store/selectors";
+import {
+  invertModeSelector,
+  selectionModeSelector,
+} from "../../../../store/selectors";
 import { slice } from "../../../../store/slices";
 import { SelectionMode } from "../../../../types/SelectionMode";
 
@@ -18,12 +21,18 @@ export const SelectionOptions = () => {
 
   const selectionMode = useSelector(selectionModeSelector);
 
+  const invertMode = useSelector(invertModeSelector);
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const payload = {
       selectionMode: parseInt((event.target as HTMLInputElement).value),
     };
 
     dispatch(slice.actions.setSelectionMode(payload));
+  };
+
+  const onInvertClick = () => {
+    dispatch(slice.actions.setInvertMode({ invertMode: !invertMode }));
   };
 
   return (
@@ -101,7 +110,7 @@ export const SelectionOptions = () => {
       <Divider />
 
       <List>
-        <ListItem button dense>
+        <ListItem button onClick={onInvertClick} dense>
           <ListItemIcon>
             <SvgIcon>
               <InvertSelectionIcon />

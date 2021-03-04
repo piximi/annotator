@@ -18,7 +18,9 @@ import { Operation } from "../../../../../types/Operation";
 import {
   categoriesSelector,
   imageInstancesSelector,
+  invertModeSelector,
   operationSelector,
+  selectionModeSelector,
 } from "../../../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
@@ -33,6 +35,7 @@ import { Selection as SelectionType } from "../../../../../types/Selection";
 import { PenSelectionOperator } from "../../../../../image/selection/PenSelectionOperator";
 import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
+import { SelectionMode } from "../../../../../types/SelectionMode";
 
 type StageProps = {
   category: Category;
@@ -55,9 +58,13 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
 
+  const selectionMode = useSelector(selectionModeSelector);
+
+  const invertMode = useSelector(invertModeSelector);
+
   const [operator, setOperator] = useState<SelectionOperator>();
 
-  const [selection, setSelection] = useState<string>();
+  const [selectionId, setSelectionId] = useState<string>();
   const [selected, setSelected] = useState<boolean>(false);
 
   const [, update] = useReducer((x) => x + 1, 0);
@@ -77,15 +84,85 @@ export const Stage = ({ category, src }: StageProps) => {
   const dashOffset = useMarchingAnts();
 
   useEffect(() => {
-    if (!selection) return;
+    if (!selectionId || !operator) return;
+
+    if (!instances) return;
+
+    const selectedInstance: SelectionType = instances.filter(
+      (instance: SelectionType) => {
+        return instance.id === selectionId;
+      }
+    )[0];
+
+    const invertedMask = operator.invert(selectedInstance.mask, true);
+
+    const invertedContour = operator.invertContour(selectedInstance.contour);
+
+    const updatedInstances = instances.map((instance: SelectionType) => {
+      if (instance.id === selectionId) {
+        return {
+          ...instance,
+          contour: invertedContour,
+          mask: invertedMask,
+        };
+      } else {
+        return instance;
+      }
+    });
+
+    if (!updatedInstances) return;
+
+    dispatch(slice.actions.setImageInstances({ instances: updatedInstances }));
+  }, [invertMode]);
+
+  useEffect(() => {
+    if (selectionMode === SelectionMode.New) return; // "New" mode
+
+    if (!selected || !operator || !selectionId || !instances) return;
+
+    let combinedMask, combinedContour;
+
+    const selectedInstance: SelectionType = instances.filter(
+      (instance: SelectionType) => {
+        return instance.id === selectionId;
+      }
+    )[0];
+
+    if (!selectedInstance) return;
+
+    if (selectionMode === SelectionMode.Add) {
+      [combinedMask, combinedContour] = operator.add(selectedInstance.mask);
+    } else if (selectionMode === SelectionMode.Subtract) {
+      [combinedMask, combinedContour] = operator.subtract(
+        selectedInstance.mask
+      );
+    } else if (selectionMode === SelectionMode.Intersect) {
+      [combinedMask, combinedContour] = operator.intersect(
+        selectedInstance.mask
+      );
+    }
+
+    operator.mask = combinedMask;
+    operator.contour = combinedContour;
+
+    //remove the existing selection since it's essentially been replaced
+    dispatch(
+      slice.actions.deleteImageInstance({
+        id: selectionId,
+      })
+    );
+  }, [selectionMode, selected]);
+
+  useEffect(() => {
+    if (!selectionId) return;
 
     const others = instances?.filter(
-      (instance: SelectionType) => instance.id !== selection
+      (instance: SelectionType) => instance.id !== selectionId
     );
 
     const updated: SelectionType = {
       ...instances?.filter(
-        (instance: SelectionType) => instance.id === selection
+        (instance: SelectionType) => instance.id === selectionId
       )[0],
       categoryId: category.id,
     } as SelectionType;
@@ -195,7 +272,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
     operator.deselect();
 
-    setSelection(instance.id);
+    setSelectionId(instance.id);
 
     dispatch(
       slice.actions.setSeletedCategory({
@@ -299,11 +376,11 @@ export const Stage = ({ category, src }: StageProps) => {
   }, [escapePress]);
 
   useEffect(() => {
-    if (selection) {
+    if (selectionId) {
       if (backspacePress || escapePress || deletePress) {
         dispatch(
           slice.actions.deleteImageInstance({
-            id: selection,
+            id: selectionId,
           })
         );
 
@@ -368,7 +445,7 @@ export const Stage = ({ category, src }: StageProps) => {
                   onClick={(event) => onClick(event, instance)}
                   opacity={0.5}
                   ref={selectionRef}
-                  stroke={shadeHex(category.color, 50)}
+                  // stroke={shadeHex(category.color, 50)}
                   strokeWidth={1}
                 />
               );

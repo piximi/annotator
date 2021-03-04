@@ -6,6 +6,7 @@ export { exposureSelector } from "./exposureSelector";
 export { hueSelector } from "./hueSelector";
 export { imageInstancesSelector } from "./imageInstancesSelector";
 export { imageSelector } from "./imageSelector";
+export { invertModeSelector } from "./invertModeSelector";
 export { operationSelector } from "./operationSelector";
 export { saturationSelector } from "./saturationSelector";
 export { selectedCategroySelector } from "./selectedCategroySelector";

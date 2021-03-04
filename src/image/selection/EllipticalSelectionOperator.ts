@@ -17,10 +17,6 @@ export class EllipticalSelectionOperator extends SelectionOperator {
     ];
   }
 
-  get contour() {
-    return this.convertToPoints();
-  }
-
   deselect() {
     this.selected = false;
     this.selecting = false;
@@ -54,6 +50,10 @@ export class EllipticalSelectionOperator extends SelectionOperator {
     this.selecting = false;
 
     this.points = this.convertToPoints();
+
+    this._contour = this.points;
+
+    this._mask = this.computeMask();
   }
 
   private convertToPoints() {

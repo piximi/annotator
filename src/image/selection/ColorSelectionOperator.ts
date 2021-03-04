@@ -2,7 +2,6 @@ import { SelectionOperator } from "./SelectionOperator";
 import { makeFloodMap } from "../flood";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
-import { isoLines } from "marchingsquares";
 import { encode } from "../rle";
 
 export class ColorSelectionOperator extends SelectionOperator {
@@ -26,17 +25,6 @@ export class ColorSelectionOperator extends SelectionOperator {
       Math.round(_.max(_.map(pairs, _.first))!),
       Math.round(_.max(_.map(pairs, _.last))!),
     ];
-  }
-
-  get contour() {
-    return this.points;
-  }
-
-  get mask(): Array<number> | undefined {
-    if (!this.roiMask) return;
-
-    // @ts-ignore
-    return encode(this.roiMask.data as Uint8Array);
   }
 
   deselect() {
@@ -103,11 +91,8 @@ export class ColorSelectionOperator extends SelectionOperator {
     const bar = maskData.map((el: Array<number>) => {
       return Array.from(el);
     });
-    const polygons: Array<Array<number>>[] = isoLines(bar, 1);
 
-    polygons.sort((a: Array<Array<number>>, b: Array<Array<number>>) => {
-      return b.length - a.length;
-    });
+    const largest: Array<Array<number>> = this.computeContours(bar);
 
     // @ts-ignore
     const offsetX = this.roiMask.position[0];
@@ -115,10 +100,14 @@ export class ColorSelectionOperator extends SelectionOperator {
     const offsetY = this.roiMask.position[1];
 
     this.points = _.flatten(
-      polygons[0].map((coord) => {
+      largest.map((coord) => {
         return [Math.round(coord[0] + offsetX), Math.round(coord[1] + offsetY)];
       })
     );
+
+    this._contour = this.points;
+    // @ts-ignore
+    this._mask = encode(this.roiMask.data as Uint8Array);
 
     this.selected = true;
     this.selecting = false;

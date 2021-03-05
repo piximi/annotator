@@ -26,7 +26,7 @@ export const AnnotationShapes = ({ annotations }: AnnotationShapesProps) => {
   return (
     <React.Fragment>
       {visibleAnnotations.map((annotation: Selection) => (
-        <AnnotationShape key={annotation.id} annotation={annotation} />
+        <AnnotationShape annotation={annotation} key={annotation.id} />
       ))}
     </React.Fragment>
   );

@@ -126,11 +126,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
     let combinedMask, combinedContour;
 
-    const selectedInstance: SelectionType = instances.filter(
-      (instance: SelectionType) => {
-        return instance.id === selectionId;
-      }
-    )[0];
+    const selectedInstance = selectionInstanceRef.current;
 
     if (!selectedInstance) return;
 
@@ -153,13 +149,6 @@ export const Stage = ({ category, src }: StageProps) => {
     operator.boundingBox = operator.computeBoundingBoxFromContours(
       combinedContour
     );
-
-    //remove the existing selection since it's essentially been replaced
-    dispatch(
-      slice.actions.deleteImageInstance({
-        id: selectionId,
-      })
-    );
   }, [selectionMode, selected]);
 
   useEffect(() => {
@@ -167,7 +156,16 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!selecting) return;
 
+    if (!selectionId) return;
+
     transformerRef.current?.detach();
+
+    //remove the existing selection since it's essentially been replaced
+    dispatch(
+      slice.actions.deleteImageInstance({
+        id: selectionId,
+      })
+    );
   }, [selecting]);
 
   useEffect(() => {

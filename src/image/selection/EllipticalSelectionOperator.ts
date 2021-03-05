@@ -29,9 +29,25 @@ export class EllipticalSelectionOperator extends SelectionOperator {
   onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;
 
-    this.origin = position;
+    if (!this.radius) {
+      this.origin = position;
 
-    this.selecting = true;
+      this.selecting = true;
+    } else {
+      this.resize(position);
+
+      this.selected = true;
+
+      this.selecting = false;
+
+      this.points = this.convertToPoints();
+
+      this._contour = this.points;
+
+      this._mask = this.computeMask();
+
+      this._boundingBox = this.computeBoundingBox();
+    }
   }
 
   onMouseMove(position: { x: number; y: number }) {
@@ -43,19 +59,21 @@ export class EllipticalSelectionOperator extends SelectionOperator {
   onMouseUp(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
 
-    this.resize(position);
+    if (this.radius) {
+      this.resize(position);
 
-    this.selected = true;
+      this.selected = true;
 
-    this.selecting = false;
+      this.selecting = false;
 
-    this.points = this.convertToPoints();
+      this.points = this.convertToPoints();
 
-    this._contour = this.points;
+      this._contour = this.points;
 
-    this._mask = this.computeMask();
+      this._mask = this.computeMask();
 
-    this._boundingBox = this.computeBoundingBox();
+      this._boundingBox = this.computeBoundingBox();
+    }
   }
 
   private convertToPoints() {

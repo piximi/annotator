@@ -235,7 +235,6 @@ export const Stage = ({ category, src }: StageProps) => {
     operator.select(category);
 
     if (!operator.selection) return;
-
     selectionInstanceRef.current = operator.selection;
   }, [selected]);
 
@@ -258,8 +257,6 @@ export const Stage = ({ category, src }: StageProps) => {
       return v.id === instance.id;
     })[0];
 
-    setSelected(true);
-
     setSelectionId(instance.id);
 
     dispatch(
@@ -267,8 +264,6 @@ export const Stage = ({ category, src }: StageProps) => {
         selectedCategory: instance.categoryId,
       })
     );
-
-    setSelected(false);
 
     selectionLineRef.current = event.target as Konva.Line;
 
@@ -334,11 +329,13 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!selectionInstanceRef || !selectionInstanceRef.current) return;
 
-    dispatch(
-      slice.actions.setImageInstances({
-        instances: [...instances, selectionInstanceRef.current],
-      })
-    );
+    if (selectionId !== selectionInstanceRef.current.id) {
+      dispatch(
+        slice.actions.setImageInstances({
+          instances: [...instances, selectionInstanceRef.current],
+        })
+      );
+    }
 
     operator.deselect();
 

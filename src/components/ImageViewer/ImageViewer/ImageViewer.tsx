@@ -36,6 +36,7 @@ import {
   ZoomIcon,
 } from "../../icons";
 import { theme } from "./theme";
+import Collapse from "@material-ui/core/Collapse";
 
 type ImageViewerProps = {
   image?: Image;
@@ -164,6 +165,12 @@ export const ImageViewer = (props: ImageViewerProps) => {
     );
   };
 
+  const [collapsed, setCollapsed] = React.useState(false);
+
+  const handleCollapse = (isCollapsed: boolean) => {
+    setCollapsed(isCollapsed);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
@@ -178,24 +185,27 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
         {image && <Content category={activeCategory} />}
 
-        <OperationOptions
-          name={
-            operations[
-              operations.findIndex(
-                (operation) => operation.method === activeOperation
-              )
-            ].name
-          }
-          settings={
-            operations[
-              operations.findIndex(
-                (operation) => operation.method === activeOperation
-              )
-            ].options
-          }
-        />
+        <Collapse in={collapsed} timeout="auto" unmountOnExit>
+          <OperationOptions
+            handleCollapse={handleCollapse}
+            name={
+              operations[
+                operations.findIndex(
+                  (operation) => operation.method === activeOperation
+                )
+              ].name
+            }
+            settings={
+              operations[
+                operations.findIndex(
+                  (operation) => operation.method === activeOperation
+                )
+              ].options
+            }
+          />
+        </Collapse>
 
-        <Operations />
+        <Operations handleCollapse={handleCollapse} />
       </div>
     </ThemeProvider>
   );

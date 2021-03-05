@@ -22,7 +22,11 @@ import {
   ZoomIcon,
 } from "../../../icons";
 
-export const Operations = () => {
+type OperationsProps = {
+  handleCollapse: (b: boolean) => void;
+};
+
+export const Operations = ({ handleCollapse }: OperationsProps) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -43,13 +47,14 @@ export const Operations = () => {
       <List>
         <Operation
           name="Color adjustment"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               slice.actions.setOperation({
                 operation: OperationType.ColorAdjustment,
               })
-            )
-          }
+            );
+            handleCollapse(true);
+          }}
           selected={activeOperation === OperationType.ColorAdjustment}
         >
           <ColorAdjustmentIcon />
@@ -59,13 +64,14 @@ export const Operations = () => {
 
         <Operation
           name="Rectangular selection"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               slice.actions.setOperation({
                 operation: OperationType.RectangularSelection,
               })
-            )
-          }
+            );
+            handleCollapse(true);
+          }}
           selected={activeOperation === OperationType.RectangularSelection}
         >
           <RectangularSelectionIcon />
@@ -73,13 +79,14 @@ export const Operations = () => {
 
         <Operation
           name="Elliptical selection"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               slice.actions.setOperation({
                 operation: OperationType.EllipticalSelection,
               })
-            )
-          }
+            );
+            handleCollapse(true);
+          }}
           selected={activeOperation === OperationType.EllipticalSelection}
         >
           <EllipticalSelectionIcon />
@@ -87,13 +94,14 @@ export const Operations = () => {
 
         <Operation
           name="Pen selection"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               slice.actions.setOperation({
                 operation: OperationType.PenSelection,
               })
-            )
-          }
+            );
+            handleCollapse(true);
+          }}
           selected={activeOperation === OperationType.PenSelection}
         >
           <LassoSelectionIcon />
@@ -101,13 +109,14 @@ export const Operations = () => {
 
         <Operation
           name="Lasso selection"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: OperationType.LassoSelection,
+                operation: OperationType.PenSelection,
               })
-            )
-          }
+            );
+            handleCollapse(true);
+          }}
           selected={activeOperation === OperationType.LassoSelection}
         >
           <LassoSelectionIcon />
@@ -115,13 +124,14 @@ export const Operations = () => {
 
         <Operation
           name="Polygonal selection"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               slice.actions.setOperation({
                 operation: OperationType.PolygonalSelection,
               })
-            )
-          }
+            );
+            handleCollapse(true);
+          }}
           selected={activeOperation === OperationType.PolygonalSelection}
         >
           <PolygonalSelectionIcon />
@@ -129,13 +139,14 @@ export const Operations = () => {
 
         <Operation
           name="Magnetic selection"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               slice.actions.setOperation({
                 operation: OperationType.MagneticSelection,
               })
-            )
-          }
+            );
+            handleCollapse(true);
+          }}
           selected={activeOperation === OperationType.MagneticSelection}
         >
           <MagneticSelectionIcon />
@@ -143,13 +154,14 @@ export const Operations = () => {
 
         <Operation
           name="Color selection"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               slice.actions.setOperation({
                 operation: OperationType.ColorSelection,
               })
-            )
-          }
+            );
+            handleCollapse(true);
+          }}
           selected={activeOperation === OperationType.ColorSelection}
         >
           <ColorSelectionIcon />
@@ -157,13 +169,14 @@ export const Operations = () => {
 
         <Operation
           name="Quick selection"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               slice.actions.setOperation({
                 operation: OperationType.QuickSelection,
               })
-            )
-          }
+            );
+            handleCollapse(true);
+          }}
           selected={activeOperation === OperationType.QuickSelection}
         >
           <QuickSelectionIcon />
@@ -171,13 +184,14 @@ export const Operations = () => {
 
         <Operation
           name="Object selection"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               slice.actions.setOperation({
                 operation: OperationType.ObjectSelection,
               })
-            )
-          }
+            );
+            handleCollapse(true);
+          }}
           selected={activeOperation === OperationType.ObjectSelection}
         >
           <ObjectSelectionIcon />
@@ -193,6 +207,7 @@ export const Operations = () => {
                 operation: OperationType.Zoom,
               })
             );
+            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.Zoom}
         >
@@ -207,6 +222,7 @@ export const Operations = () => {
                 operation: OperationType.Hand,
               })
             );
+            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.Hand}
         >

@@ -115,6 +115,17 @@ export const Stage = ({ category, src }: StageProps) => {
         id: selectionId,
       })
     );
+
+    //dispatch call is async so let's make sure we don't add the same instance twice
+    const otherInstances = instances.filter((v) => {
+      return v.id !== selectionId;
+    });
+
+    dispatch(
+      slice.actions.setImageInstances({
+        instances: [...otherInstances, selectionInstanceRef.current],
+      })
+    );
   }, [invertMode]);
 
   useEffect(() => {

@@ -30,9 +30,22 @@ export class RectangularSelectionOperator extends SelectionOperator {
   onMouseDown(position: { x: number; y: number }) {
     if (this.selected) return;
 
-    this.origin = position;
+    if (!this.width) {
+      this.origin = position;
 
-    this.selecting = true;
+      this.selecting = true;
+    } else {
+      this.resize(position);
+
+      this.points = this.convertToPoints();
+
+      this._contour = this.points;
+      this._mask = this.computeMask();
+      this._boundingBox = this.computeBoundingBox();
+
+      this.selected = true;
+      this.selecting = false;
+    }
   }
 
   onMouseMove(position: { x: number; y: number }) {
@@ -43,15 +56,18 @@ export class RectangularSelectionOperator extends SelectionOperator {
 
   onMouseUp(position: { x: number; y: number }) {
     if (this.selected || !this.selecting) return;
-    this.resize(position);
-    this.points = this.convertToPoints();
 
-    this._contour = this.points;
-    this._mask = this.computeMask();
-    this._boundingBox = this.computeBoundingBox();
+    if (this.width) {
+      this.resize(position);
+      this.points = this.convertToPoints();
 
-    this.selected = true;
-    this.selecting = false;
+      this._contour = this.points;
+      this._mask = this.computeMask();
+      this._boundingBox = this.computeBoundingBox();
+
+      this.selected = true;
+      this.selecting = false;
+    }
   }
 
   private convertToPoints() {

@@ -112,7 +112,7 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: OperationType.PenSelection,
+                operation: OperationType.LassoSelection,
               })
             );
             handleCollapse(true);

@@ -16,7 +16,7 @@ import { PenSelectionOperator } from "../../image/selection/PenSelectionOperator
 import { useSelector } from "react-redux";
 import { operationSelector } from "../../store/selectors";
 
-export const useSelectionOperator = (src: string) => {
+export const useOperator = (src: string) => {
   const operation = useSelector(operationSelector);
 
   const [operator, setOperator] = useState<SelectionOperator>();

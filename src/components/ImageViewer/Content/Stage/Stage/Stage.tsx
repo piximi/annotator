@@ -17,7 +17,7 @@ import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
 import { slice } from "../../../../../store/slices";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
-import { useSelectionOperator } from "../../../../../hooks";
+import { useOperator } from "../../../../../hooks";
 import { Selection as SelectionType } from "../../../../../types/Selection";
 import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
@@ -51,7 +51,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const invertMode = useSelector(invertModeSelector);
 
-  const [operator] = useSelectionOperator(src);
+  const [operator] = useOperator(src);
 
   const [selectionId, setSelectionId] = useState<string>();
   const [selected, setSelected] = useState<boolean>(false);

@@ -351,6 +351,7 @@ export const Stage = ({ category, src }: StageProps) => {
     operator.deselect();
 
     transformerRef.current?.detach();
+    transformerRef.current?.getLayer()?.batchDraw();
 
     setSelected(false);
 

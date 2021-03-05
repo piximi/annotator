@@ -55,6 +55,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const [selectionId, setSelectionId] = useState<string>();
   const [selected, setSelected] = useState<boolean>(false);
+  const [selecting, setSelecting] = useState<boolean>(false);
 
   const [, update] = useReducer((x) => x + 1, 0);
 
@@ -119,6 +120,8 @@ export const Stage = ({ category, src }: StageProps) => {
   useEffect(() => {
     if (selectionMode === SelectionMode.New) return; // "New" mode
 
+    setSelecting(false);
+
     if (!selected || !operator || !selectionId || !instances) return;
 
     let combinedMask, combinedContour;
@@ -160,6 +163,14 @@ export const Stage = ({ category, src }: StageProps) => {
   }, [selectionMode, selected]);
 
   useEffect(() => {
+    if (selectionMode === SelectionMode.New) return;
+
+    if (!selecting) return;
+
+    transformerRef.current?.detach();
+  }, [selecting]);
+
+  useEffect(() => {
     if (!selectionId) return;
 
     const others = instances?.filter(
@@ -184,6 +195,10 @@ export const Stage = ({ category, src }: StageProps) => {
     if (!operator) return;
 
     if (operator.selected) setSelected(operator.selected);
+
+    if (selectionMode === SelectionMode.New) return;
+
+    if (operator.selecting) setSelecting(operator.selecting);
   });
 
   useEffect(() => {
@@ -334,6 +349,8 @@ export const Stage = ({ category, src }: StageProps) => {
     setSelected(false);
 
     selectingRef.current = null;
+
+    selectionInstanceRef.current = null;
   }, [enterPress]);
 
   useEffect(() => {
@@ -358,6 +375,8 @@ export const Stage = ({ category, src }: StageProps) => {
         );
 
         transformerRef.current?.detach();
+
+        selectionInstanceRef.current = null;
       }
     }
   }, [backspacePress, deletePress, escapePress]);
@@ -382,6 +401,15 @@ export const Stage = ({ category, src }: StageProps) => {
         {selected && operator && operator.contour && (
           <SelectedContour points={operator.contour} />
         )}
+
+        {selectionMode !== SelectionMode.New &&
+          operator &&
+          operator.selecting &&
+          !operator.selected &&
+          selectionInstanceRef &&
+          selectionInstanceRef.current && (
+            <SelectedContour points={selectionInstanceRef.current.contour} />
+          )}
 
         {instances &&
           instances.map((instance: SelectionType) => {

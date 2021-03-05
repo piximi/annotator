@@ -1,1 +1,1 @@
-export { useSelectionOperator } from "./useSelectionOperator";
+export { useOperator } from "./useOperator";

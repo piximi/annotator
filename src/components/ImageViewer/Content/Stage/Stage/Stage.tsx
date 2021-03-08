@@ -415,8 +415,8 @@ export const Stage = ({ category, src }: StageProps) => {
           ref={imageRef}
           image={image}
           position={{ x: 128, y: 128 }}
-          width={256}
-          height={256}
+          width={512}
+          height={512}
         />
 
         {!selected && <Selection operation={operation} operator={operator} />}

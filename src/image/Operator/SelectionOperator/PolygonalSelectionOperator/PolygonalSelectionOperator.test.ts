@@ -1,6 +1,6 @@
 import { test } from "@jest/globals";
 import { PolygonalSelectionOperator } from "./PolygonalSelectionOperator";
-import { Category } from "../../types/Category";
+import { Category } from "../../../../types/Category";
 
 test("deselect", () => {
   const operator = new PolygonalSelectionOperator();

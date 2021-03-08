@@ -174,7 +174,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
     transformerRef.current?.detach();
 
-    //remove the existing selection since it's essentially been replaced
+    //remove the existing Operator since it's essentially been replaced
     dispatch(
       slice.actions.deleteImageInstance({
         id: selectionId,

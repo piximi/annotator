@@ -1,6 +1,6 @@
 import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
 import { test } from "@jest/globals";
-import { Category } from "../../types/Category";
+import { Category } from "../../../../types/Category";
 import * as ImageJS from "image-js";
 
 test("deselect", () => {

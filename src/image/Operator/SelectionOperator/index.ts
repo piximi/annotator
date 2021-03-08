@@ -3,6 +3,7 @@ export { EllipticalSelectionOperator } from "./EllipticalSelectionOperator";
 export { LassoSelectionOperator } from "./LassoSelectionOperator";
 export { MagneticSelectionOperator } from "./MagneticSelectionOperator";
 export { ObjectSelectionOperator } from "./ObjectSelectionOperator";
+export { PenSelectionOperator } from "./PenSelectionOperator";
 export { PolygonalSelectionOperator } from "./PolygonalSelectionOperator";
 export { QuickSelectionOperator } from "./QuickSelectionOperator";
 export { RectangularSelectionOperator } from "./RectangularSelectionOperator";

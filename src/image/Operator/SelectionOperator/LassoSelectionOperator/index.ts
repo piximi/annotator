@@ -1,0 +1,1 @@
+export { LassoSelectionOperator } from "./LassoSelectionOperator";

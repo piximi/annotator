@@ -1,8 +1,8 @@
-import { SelectionOperator } from "./SelectionOperator";
-import { makeFloodMap } from "../flood";
+import { SelectionOperator } from "../SelectionOperator/SelectionOperator";
+import { makeFloodMap } from "../../../flood";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
-import { encode } from "../rle";
+import { encode } from "../../../rle";
 
 export class ColorSelectionOperator extends SelectionOperator {
   roiContour?: ImageJS.Image;

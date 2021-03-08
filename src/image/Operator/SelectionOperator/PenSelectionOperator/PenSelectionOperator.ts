@@ -1,8 +1,8 @@
-import { SelectionOperator } from "./SelectionOperator";
+import { SelectionOperator } from "../SelectionOperator/SelectionOperator";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
-import { connectPoints } from "../imageHelper";
-import { encode } from "../rle";
+import { connectPoints } from "../../../imageHelper";
+import { encode } from "../../../rle";
 import { isoLines } from "marchingsquares";
 
 export class PenSelectionOperator extends SelectionOperator {

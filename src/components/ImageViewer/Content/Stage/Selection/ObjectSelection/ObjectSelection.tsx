@@ -1,4 +1,4 @@
-import { ObjectSelectionOperator } from "../../../../../../image/selection";
+import { ObjectSelectionOperator } from "../../../../../../image/Operator/SelectionOperator";
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";

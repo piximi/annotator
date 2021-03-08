@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { PolygonalSelectionOperator } from "../../../../../../image/selection";
+import { PolygonalSelectionOperator } from "../../../../../../image/Operator/SelectionOperator";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type PolygonalSelectionProps = {

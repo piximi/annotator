@@ -1,4 +1,4 @@
-import { SelectionOperator } from "./SelectionOperator";
+import { SelectionOperator } from "../SelectionOperator/SelectionOperator";
 import * as _ from "lodash";
 
 export class EllipticalSelectionOperator extends SelectionOperator {

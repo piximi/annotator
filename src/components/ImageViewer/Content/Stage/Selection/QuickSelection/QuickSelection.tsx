@@ -1,4 +1,4 @@
-import { QuickSelectionOperator } from "../../../../../../image/selection";
+import { QuickSelectionOperator } from "../../../../../../image/Operator/SelectionOperator";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 

@@ -1,4 +1,4 @@
-import { EllipticalSelectionOperator } from "../../../../../../image/selection";
+import { EllipticalSelectionOperator } from "../../../../../../image/Operator/SelectionOperator";
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";

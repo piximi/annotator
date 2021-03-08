@@ -1,7 +1,7 @@
 import { ColorSelectionOperator } from "./ColorSelectionOperator";
 import { test } from "@jest/globals";
 import { Image } from "image-js";
-import { makeFloodMap } from "../flood";
+import { makeFloodMap } from "../../../flood";
 
 test("onMouseDown", async () => {
   const src =
@@ -66,6 +66,6 @@ test("onMouseMove", async () => {
 //     expect(operator.selected).toBe(true);
 //     expect(operator.selecting).toBe(false);
 //
-//     expect(operator.selection).toBe(undefined);
+//     expect(operator.Operator).toBe(undefined);
 //
 // });

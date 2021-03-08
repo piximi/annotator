@@ -1,9 +1,12 @@
 import { test } from "@jest/globals";
 import { LassoSelectionOperator } from "./LassoSelectionOperator";
-import { Category } from "../../types/Category";
+import { Category } from "../../../../types/Category";
+import * as ImageJS from "image-js";
 
 test("deselect", () => {
-  const operator = new LassoSelectionOperator();
+  const image = new ImageJS.Image();
+
+  const operator = new LassoSelectionOperator(image);
 
   operator.selected = true;
 
@@ -28,7 +31,9 @@ test("deselect", () => {
 });
 
 test("onMouseDown", () => {
-  const operator = new LassoSelectionOperator();
+  const image = new ImageJS.Image();
+
+  const operator = new LassoSelectionOperator(image);
 
   operator.onMouseDown({ x: 0, y: 0 });
 
@@ -44,7 +49,9 @@ test("onMouseDown", () => {
 });
 
 test("onMouseDown (subsequent, unconnected)", () => {
-  const operator = new LassoSelectionOperator();
+  const image = new ImageJS.Image();
+
+  const operator = new LassoSelectionOperator(image);
 
   operator.origin = { x: 0, y: 0 };
 
@@ -62,7 +69,9 @@ test("onMouseDown (subsequent, unconnected)", () => {
 });
 
 test("onMouseDown (subsequent, connected)", () => {
-  const operator = new LassoSelectionOperator();
+  const image = new ImageJS.Image();
+
+  const operator = new LassoSelectionOperator(image);
 
   operator.anchor = { x: 0, y: 100 };
   operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
@@ -82,7 +91,9 @@ test("onMouseDown (subsequent, connected)", () => {
 });
 
 test("onMouseMove", () => {
-  const operator = new LassoSelectionOperator();
+  const image = new ImageJS.Image();
+
+  const operator = new LassoSelectionOperator(image);
 
   operator.selecting = true;
 
@@ -104,7 +115,9 @@ test("onMouseMove", () => {
 });
 
 test("onMouseMove (with anchor)", () => {
-  const operator = new LassoSelectionOperator();
+  const image = new ImageJS.Image();
+
+  const operator = new LassoSelectionOperator(image);
 
   operator.selecting = true;
 
@@ -126,7 +139,9 @@ test("onMouseMove (with anchor)", () => {
 });
 
 test("onMouseUp (unconnected, with anchor)", () => {
-  const operator = new LassoSelectionOperator();
+  const image = new ImageJS.Image();
+
+  const operator = new LassoSelectionOperator(image);
 
   operator.selecting = true;
 
@@ -148,7 +163,9 @@ test("onMouseUp (unconnected, with anchor)", () => {
 });
 
 test("onMouseUp (unconnected, without anchor)", () => {
-  const operator = new LassoSelectionOperator();
+  const image = new ImageJS.Image();
+
+  const operator = new LassoSelectionOperator(image);
 
   operator.selecting = true;
 
@@ -169,7 +186,9 @@ test("onMouseUp (unconnected, without anchor)", () => {
 });
 
 test("select", () => {
-  const operator = new LassoSelectionOperator();
+  const image = new ImageJS.Image();
+
+  const operator = new LassoSelectionOperator(image);
 
   operator.selected = true;
 

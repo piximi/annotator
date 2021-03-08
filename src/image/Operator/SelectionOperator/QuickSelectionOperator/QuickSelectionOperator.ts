@@ -1,8 +1,8 @@
-import { SelectionOperator } from "./SelectionOperator";
-import { slic } from "../slic";
+import { SelectionOperator } from "../SelectionOperator/SelectionOperator";
+import { slic } from "../../../slic";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
-import { encode } from "../rle";
+import { encode } from "../../../rle";
 
 export class QuickSelectionOperator extends SelectionOperator {
   currentData?: Int32Array;

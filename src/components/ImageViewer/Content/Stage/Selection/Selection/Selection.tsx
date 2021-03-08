@@ -9,7 +9,7 @@ import {
   QuickSelectionOperator,
   RectangularSelectionOperator,
   SelectionOperator,
-} from "../../../../../../image/selection";
+} from "../../../../../../image/Operator/SelectionOperator";
 import { EllipticalSelection } from "../EllipticalSelection";
 import { Operation } from "../../../../../../types/Operation";
 import { LassoSelection } from "../LassoSelection";
@@ -20,7 +20,7 @@ import { RectangularSelection } from "../RectangularSelection";
 import { ColorSelection } from "../ColorSelection/ColorSelection";
 import { QuickSelection } from "../QuickSelection/QuickSelection";
 import { PenSelection } from "../PenSelection";
-import { PenSelectionOperator } from "../../../../../../image/selection/PenSelectionOperator";
+import { PenSelectionOperator } from "../../../../../../image/Operator/SelectionOperator/PenSelectionOperator/PenSelectionOperator";
 
 type SelectionProps = {
   operation?: Operation;

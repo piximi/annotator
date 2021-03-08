@@ -1,8 +1,8 @@
-import { RectangularSelectionOperator } from "./RectangularSelectionOperator";
+import { RectangularSelectionOperator } from "../RectangularSelectionOperator/RectangularSelectionOperator";
 import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
 import * as _ from "lodash";
-import { encode } from "../rle";
+import { encode } from "../../../rle";
 
 export class ObjectSelectionOperator extends RectangularSelectionOperator {
   graph?: tensorflow.LayersModel;

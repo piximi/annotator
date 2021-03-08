@@ -1,7 +1,7 @@
-import { SelectionOperator } from "./SelectionOperator";
+import { SelectionOperator } from "../SelectionOperator/SelectionOperator";
 import * as _ from "lodash";
 
-export class PolygonalSelectionOperator extends SelectionOperator {
+export class LassoSelectionOperator extends SelectionOperator {
   anchor?: { x: number; y: number };
   buffer: Array<number> = [];
   origin?: { x: number; y: number };
@@ -67,10 +67,7 @@ export class PolygonalSelectionOperator extends SelectionOperator {
     }
 
     if (this.origin) {
-      this.buffer.pop();
-      this.buffer.pop();
-
-      this.buffer = [this.origin.x, this.origin.y, position.x, position.y];
+      this.buffer = [...this.buffer, position.x, position.y];
     }
   }
 
@@ -95,17 +92,13 @@ export class PolygonalSelectionOperator extends SelectionOperator {
       this.selecting = false;
 
       this.points = this.buffer;
-
       this._contour = this.points;
+
       this._mask = this.computeMask();
+
       this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
       this.buffer = [];
-
-      this.anchor = undefined;
-      this.origin = undefined;
-
-      return;
     }
 
     if (this.anchor) {
@@ -119,9 +112,8 @@ export class PolygonalSelectionOperator extends SelectionOperator {
       return;
     }
 
-    if (this.origin && this.buffer.length > 0) {
+    if (this.origin && this.buffer && this.buffer.length > 0) {
       this.anchor = position;
-
       return;
     }
   }

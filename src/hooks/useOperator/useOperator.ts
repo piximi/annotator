@@ -11,8 +11,8 @@ import {
   QuickSelectionOperator,
   RectangularSelectionOperator,
   SelectionOperator,
-} from "../../image/selection";
-import { PenSelectionOperator } from "../../image/selection/PenSelectionOperator";
+} from "../../image/Operator/SelectionOperator";
+import { PenSelectionOperator } from "../../image/Operator/SelectionOperator/PenSelectionOperator/PenSelectionOperator";
 import { useSelector } from "react-redux";
 import { operationSelector } from "../../store/selectors";
 

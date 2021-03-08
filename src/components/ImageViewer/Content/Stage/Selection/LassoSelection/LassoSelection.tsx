@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { LassoSelectionOperator } from "../../../../../../image/selection";
+import { LassoSelectionOperator } from "../../../../../../image/Operator/SelectionOperator";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type LassoSelectionProps = {

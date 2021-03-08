@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { MagneticSelectionOperator } from "../../../../../../image/selection";
+import { MagneticSelectionOperator } from "../../../../../../image/Operator/SelectionOperator";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type MagneticSelectionProps = {

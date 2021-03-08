@@ -1,6 +1,6 @@
-import { SelectionOperator } from "./SelectionOperator";
-import { createPathFinder, makeGraph, PiximiGraph } from "../GraphHelper";
-import { getIdx } from "../imageHelper";
+import { SelectionOperator } from "../SelectionOperator/SelectionOperator";
+import { createPathFinder, makeGraph, PiximiGraph } from "../../../GraphHelper";
+import { getIdx } from "../../../imageHelper";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
 

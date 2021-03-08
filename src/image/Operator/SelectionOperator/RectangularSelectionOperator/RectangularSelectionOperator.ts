@@ -1,4 +1,4 @@
-import { SelectionOperator } from "./SelectionOperator";
+import { SelectionOperator } from "../SelectionOperator/SelectionOperator";
 
 export class RectangularSelectionOperator extends SelectionOperator {
   origin?: { x: number; y: number };

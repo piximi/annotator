@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { PenSelectionOperator } from "../../../../../../image/selection/PenSelectionOperator";
+import { PenSelectionOperator } from "../../../../../../image/Operator/SelectionOperator/PenSelectionOperator/PenSelectionOperator";
 
 type PenSelectionProps = {
   operator: PenSelectionOperator;

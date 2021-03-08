@@ -1,14 +1,14 @@
-import { Selection } from "../../types/Selection";
+import { Selection } from "../../../../types/Selection";
 import * as ImageJS from "image-js";
-import { Category } from "../../types/Category";
+import { Category } from "../../../../types/Category";
 import * as _ from "lodash";
-import { connectPoints } from "../imageHelper";
-import { simplify } from "../simplify/simplify";
-import { slpf } from "../polygon-fill/slpf";
+import { connectPoints } from "../../../imageHelper";
+import { simplify } from "../../../simplify/simplify";
+import { slpf } from "../../../polygon-fill/slpf";
 import * as uuid from "uuid";
-import { decode, encode } from "../rle";
+import { decode, encode } from "../../../rle";
 import { isoLines } from "marchingsquares";
-import { Operator } from "./Operator";
+import { Operator } from "../../Operator/Operator";
 
 export abstract class SelectionOperator extends Operator {
   manager: ImageJS.RoiManager;
@@ -28,8 +28,8 @@ export abstract class SelectionOperator extends Operator {
   }
 
   /*
-   * Adding to a selection adds any new areas you select to your existing
-   * selection.
+   * Adding to a Operator adds any new areas you select to your existing
+   * Operator.
    */
   add(selectedMask: Array<number>): [Array<number>, Array<number>] {
     if (!this._mask) return [[], []];
@@ -53,9 +53,9 @@ export abstract class SelectionOperator extends Operator {
   }
 
   /*
-   * When using the Intersect selection mode, any currently selected areas you
+   * When using the Intersect Operator mode, any currently selected areas you
    * select over will be kept and any currently selected areas outside your
-   * new selection will be removed from the selection.
+   * new Operator will be removed from the Operator.
    */
   intersect(selectedMask: Array<number>): [Array<number>, Array<number>] {
     if (!this._mask) return [[], []];
@@ -102,8 +102,8 @@ export abstract class SelectionOperator extends Operator {
   }
 
   /*
-   * Subtracting from a selection deselects the areas you draw over, keeping
-   * the rest of your existing selection.
+   * Subtracting from a Operator deselects the areas you draw over, keeping
+   * the rest of your existing Operator.
    */
   subtract(selectedMask: Array<number>): [Array<number>, Array<number>] {
     if (!this._mask) return [[], []];

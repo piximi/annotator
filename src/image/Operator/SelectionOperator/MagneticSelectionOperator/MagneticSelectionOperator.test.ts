@@ -17,7 +17,7 @@ import { Image } from "image-js";
 //   expect(operator.selected).toBe(false);
 //   expect(operator.selecting).toBe(false);
 //
-//   expect(operator.selection).toBe(undefined);
+//   expect(operator.Operator).toBe(undefined);
 //
 //   expect(operator.origin).toStrictEqual(undefined);
 //
@@ -119,7 +119,7 @@ test("onMouseMove", async () => {
 //   expect(operator.selected).toBe(true);
 //   expect(operator.selecting).toBe(false);
 //
-//   expect(operator.selection).toStrictEqual({
+//   expect(operator.Operator).toStrictEqual({
 //     boundingBox: [0, 0, 100, 100],
 //     categoryId: 0,
 //     mask: "mask",

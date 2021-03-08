@@ -1,4 +1,4 @@
-import { ColorSelectionOperator } from "../../../../../../image/selection";
+import { ColorSelectionOperator } from "../../../../../../image/Operator/SelectionOperator";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 

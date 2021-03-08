@@ -23,7 +23,6 @@ import { visibleCategoriesSelector } from "../../../../../store/selectors/visibl
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";
-import { KonvaEventObject } from "konva/types/Node";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 
 type StageProps = {
@@ -301,6 +300,8 @@ export const Stage = ({ category, src }: StageProps) => {
       // left click only
       if (!operator || !stageRef || !stageRef.current) return;
 
+      if (operation === Operation.Zoom) return;
+
       const position = stageRef.current.getPointerPosition();
 
       if (!position) return;
@@ -318,6 +319,8 @@ export const Stage = ({ category, src }: StageProps) => {
   const onMouseMove = useMemo(() => {
     const func = () => {
       if (!operator || !stageRef || !stageRef.current) return;
+
+      if (operation === Operation.Zoom) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -340,6 +343,8 @@ export const Stage = ({ category, src }: StageProps) => {
   const onMouseUp = useMemo(() => {
     const func = () => {
       if (!operator || !stageRef || !stageRef.current) return;
+
+      if (operation === Operation.Zoom) return;
 
       const position = stageRef.current.getPointerPosition();
 

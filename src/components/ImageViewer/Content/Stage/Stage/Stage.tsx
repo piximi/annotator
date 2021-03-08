@@ -285,6 +285,16 @@ export const Stage = ({ category, src }: StageProps) => {
     transformerRef.current?.nodes([selectionLineRef.current]);
   };
 
+  const getRelativePointerPosition = (position: { x: number; y: number }) => {
+    if (!stageRef || !stageRef.current) return;
+
+    const transform = stageRef.current.getAbsoluteTransform().copy();
+
+    transform.invert();
+
+    return transform.point(position);
+  };
+
   //FIXME not using useMemo() because could not pass event argument to it
   const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (event.evt.button === 0) {
@@ -295,7 +305,11 @@ export const Stage = ({ category, src }: StageProps) => {
 
       if (!position) return;
 
-      operator.onMouseDown({ x: position.x * scale, y: position.y * scale });
+      const relative = getRelativePointerPosition(position);
+
+      if (!relative) return;
+
+      operator.onMouseDown(relative);
 
       update();
     }
@@ -309,7 +323,11 @@ export const Stage = ({ category, src }: StageProps) => {
 
       if (!position) return;
 
-      operator.onMouseMove({ x: position.x * scale, y: position.y * scale });
+      const relative = getRelativePointerPosition(position);
+
+      if (!relative) return;
+
+      operator.onMouseMove(relative);
 
       update();
     };
@@ -327,7 +345,11 @@ export const Stage = ({ category, src }: StageProps) => {
 
       if (!position) return;
 
-      operator.onMouseUp({ x: position.x * scale, y: position.y * scale });
+      const relative = getRelativePointerPosition(position);
+
+      if (!relative) return;
+
+      operator.onMouseUp(relative);
 
       update();
     };
@@ -401,6 +423,10 @@ export const Stage = ({ category, src }: StageProps) => {
     content.style.marginLeft = "auto";
     content.style.marginRight = "auto";
   }, [stageRef.current]);
+
+  useEffect(() => {
+    console.info(`scale: ${scale}`);
+  }, [scale]);
 
   return (
     <ReactKonva.Stage

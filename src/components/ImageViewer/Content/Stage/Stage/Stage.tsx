@@ -388,6 +388,16 @@ export const Stage = ({ category, src }: StageProps) => {
     }
   }, [backspacePress, deletePress, escapePress]);
 
+  useEffect(() => {
+    if (!stageRef || !stageRef.current) return;
+    const content = document.querySelector(
+      ".konvajs-content"
+    ) as HTMLDivElement;
+    if (!content) return;
+    content.style.marginLeft = "auto";
+    content.style.marginRight = "auto";
+  }, [stageRef.current]);
+
   return (
     <ReactKonva.Stage
       className={classes.stage}
@@ -401,7 +411,13 @@ export const Stage = ({ category, src }: StageProps) => {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
       >
-        <ReactKonva.Image ref={imageRef} image={image} />
+        <ReactKonva.Image
+          ref={imageRef}
+          image={image}
+          position={{ x: 128, y: 128 }}
+          width={256}
+          height={256}
+        />
 
         {!selected && <Selection operation={operation} operator={operator} />}
 

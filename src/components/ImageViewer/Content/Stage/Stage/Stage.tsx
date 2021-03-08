@@ -414,7 +414,7 @@ export const Stage = ({ category, src }: StageProps) => {
         <ReactKonva.Image
           ref={imageRef}
           image={image}
-          position={{ x: 128, y: 128 }}
+          position={{ x: 0, y: 0 }}
           width={512}
           height={512}
         />

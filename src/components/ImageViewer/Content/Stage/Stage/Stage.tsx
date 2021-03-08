@@ -23,6 +23,7 @@ import { visibleCategoriesSelector } from "../../../../../store/selectors/visibl
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";
+import { KonvaEventObject } from "konva/types/Node";
 
 type StageProps = {
   category: Category;
@@ -398,13 +399,44 @@ export const Stage = ({ category, src }: StageProps) => {
     content.style.marginRight = "auto";
   }, [stageRef.current]);
 
+  const [scale, setScale] = useState<number>(1.0);
+
+  const [x, setX] = useState<number>(0);
+  const [y, setY] = useState<number>(0);
+
+  const onWheel = (event: KonvaEventObject<WheelEvent>) => {
+    if (operation !== Operation.Zoom) return;
+
+    setScale(event.evt.deltaY > 0 ? scale * 1.01 : scale / 1.01);
+
+    const stage = event.target.getStage();
+
+    if (!stage) return;
+
+    const position = stage.getPointerPosition();
+
+    if (!position) return;
+
+    const origin = {
+      x: position.x / scale - stage.x() / scale,
+      y: position.y / scale - stage.y() / scale,
+    };
+
+    setX(-(origin.x - position.x / scale) * scale);
+    setY(-(origin.y - position.y / scale) * scale);
+  };
+
   return (
     <ReactKonva.Stage
       className={classes.stage}
       globalCompositeOperation="destination-over"
       height={512}
       ref={stageRef}
+      onWheel={onWheel}
+      scale={{ x: scale, y: scale }}
       width={512}
+      x={x}
+      y={y}
     >
       <ReactKonva.Layer
         onMouseDown={(event) => onMouseDown(event)}

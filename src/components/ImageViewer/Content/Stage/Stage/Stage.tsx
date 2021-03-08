@@ -73,6 +73,8 @@ export const Stage = ({ category, src }: StageProps) => {
   const deletePress = useKeyPress("Delete");
   const backspacePress = useKeyPress("Backspace");
 
+  const { onWheel, scale, x, y } = useZoomOperator(operation);
+
   useEffect(() => {
     if (!selectionId || !operator) return;
 
@@ -293,7 +295,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
       if (!position) return;
 
-      operator.onMouseDown(position);
+      operator.onMouseDown({ x: position.x * scale, y: position.y * scale });
 
       update();
     }
@@ -307,7 +309,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
       if (!position) return;
 
-      operator.onMouseMove(position);
+      operator.onMouseMove({ x: position.x * scale, y: position.y * scale });
 
       update();
     };
@@ -325,7 +327,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
       if (!position) return;
 
-      operator.onMouseUp(position);
+      operator.onMouseUp({ x: position.x * scale, y: position.y * scale });
 
       update();
     };
@@ -399,8 +401,6 @@ export const Stage = ({ category, src }: StageProps) => {
     content.style.marginLeft = "auto";
     content.style.marginRight = "auto";
   }, [stageRef.current]);
-
-  const { onWheel, scale, x, y } = useZoomOperator(operation);
 
   return (
     <ReactKonva.Stage

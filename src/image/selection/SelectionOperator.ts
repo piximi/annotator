@@ -8,9 +8,9 @@ import { slpf } from "../polygon-fill/slpf";
 import * as uuid from "uuid";
 import { decode, encode } from "../rle";
 import { isoLines } from "marchingsquares";
+import { Operator } from "./Operator";
 
-export abstract class SelectionOperator {
-  image: ImageJS.Image;
+export abstract class SelectionOperator extends Operator {
   manager: ImageJS.RoiManager;
   points?: Array<number> = [];
   selected: boolean = false;
@@ -22,7 +22,7 @@ export abstract class SelectionOperator {
   protected _mask?: Array<number>;
 
   constructor(image: ImageJS.Image) {
-    this.image = image;
+    super(image);
 
     this.manager = image.getRoiManager();
   }

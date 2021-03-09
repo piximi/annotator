@@ -48,8 +48,6 @@ export class ZoomTool extends Tool {
   }
 
   onClick(position: { x: number; y: number }) {
-    console.info("In onmouse down");
-
     const index = _.findIndex(this.scales, this.scale);
 
     if (!index) return;

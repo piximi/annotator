@@ -9,9 +9,6 @@ export const useZoomOperator = (operation: Tool, operator: ZoomTool) => {
   const [x, setX] = useState<number>(0);
   const [y, setY] = useState<number>(0);
 
-  // const operator = new ZoomTool();
-
-  // use effect for when rectangle is selected
   useEffect(() => {
     if (!operator || !operator.minimum || !operator.maximum) return;
 

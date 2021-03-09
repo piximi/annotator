@@ -232,7 +232,7 @@ export const Stage = ({ category, src }: StageProps) => {
     selectingRef.current = new Konva.Line<Konva.LineConfig>({
       points: scaledContour,
     });
-  });
+  }, [operator?.contour]);
 
   useEffect(() => {
     if (!selected) return;

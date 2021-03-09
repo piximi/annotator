@@ -33,6 +33,18 @@ export class ZoomOperator extends Operator {
     });
   }
 
+  /**
+   * Zoom to fit the image to the application window.
+   */
+  fit() {}
+
+  /**
+   * Zoom the image to its actual size.
+   */
+  reset() {
+    this.scale = 1.0;
+  }
+
   onClick(position: { x: number; y: number }) {
     const index = _.findIndex(this.scales, this.scale);
 
@@ -72,17 +84,5 @@ export class ZoomOperator extends Operator {
     this.maximum = position;
 
     this.zooming = false;
-  }
-
-  /**
-   * Zoom to fit the image to the application window.
-   */
-  private fit() {}
-
-  /**
-   * Zoom the image to its actual size.
-   */
-  private reset() {
-    this.scale = 1.0;
   }
 }

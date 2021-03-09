@@ -222,10 +222,17 @@ export const Stage = ({ category, src }: StageProps) => {
 
   useEffect(() => {
     if (!operator || !operator.contour) return;
+
+    const scaledContour: Array<number> = _.flatten(
+      _.chunk(operator.contour, 2).map((el: Array<number>) => {
+        return [el[0] * scale + x, el[1] * scale + y];
+      })
+    );
+
     selectingRef.current = new Konva.Line<Konva.LineConfig>({
-      points: operator.contour,
+      points: scaledContour,
     });
-  });
+  }, [operator?.contour]);
 
   useEffect(() => {
     if (!selected) return;
@@ -307,6 +314,7 @@ export const Stage = ({ category, src }: StageProps) => {
       if (!position) return;
 
       const relative = getRelativePointerPosition(position);
+      console.info(relative);
 
       if (!relative) return;
 

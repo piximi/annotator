@@ -1,6 +1,7 @@
 import { Operator } from "../Operator";
 import { ZoomMode } from "../../../types/ZoomMode";
 import * as _ from "lodash";
+import numeral from "numeral";
 
 export class ZoomOperator extends Operator {
   /**
@@ -21,6 +22,16 @@ export class ZoomOperator extends Operator {
   zooming: boolean = false;
 
   private scales: Array<number> = [0.25, 0.75, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
+
+  get percentile(): string {
+    return numeral(this.scale).format("0%");
+  }
+
+  get percentiles(): Array<string> {
+    return _.map(this.scales, (scale: number) => {
+      return numeral(scale).format("0%");
+    });
+  }
 
   onClick(position: { x: number; y: number }) {
     const index = _.findIndex(this.scales, this.scale);

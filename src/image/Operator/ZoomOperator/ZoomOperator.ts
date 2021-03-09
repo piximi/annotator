@@ -8,6 +8,9 @@ export class ZoomOperator extends Operator {
    */
   center: boolean = false;
 
+  minimum?: { x: number; y: number };
+  maximum?: { x: number; y: number };
+
   mode: ZoomMode = ZoomMode.In;
 
   scale: number = 1.0;
@@ -40,9 +43,11 @@ export class ZoomOperator extends Operator {
     this.y = position.y;
   }
 
-  onMouseDown(position: { x: number; y: number }) {}
+  onMouseDown(position: { x: number; y: number }) {
+    this.minimum = position;
+  }
 
-  onMouseMove(position: { x: number; y: number }) {
+  onMouseMove(position: { x: number; y: number }, pressed: boolean) {
     if (!this.zooming) return;
   }
 

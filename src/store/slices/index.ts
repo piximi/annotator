@@ -12,11 +12,11 @@ export {
   setInvertMode,
   setOperation,
   setPenSelectionBrushSize,
-  setResetZoom,
   setSaturation,
   setSelectionMode,
   setSeletedCategory,
   setVibrance,
   setZoomMode,
+  setZoomReset,
   slice,
 } from "./slice";

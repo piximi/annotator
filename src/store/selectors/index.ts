@@ -14,3 +14,4 @@ export { selectionModeSelector } from "./selectionModeSelector";
 export { unknownCategroySelector } from "./unknownCategroySelector";
 export { vibranceSelector } from "./vibranceSelector";
 export { zoomModeSelector } from "./zoomModeSelector";
+export { zoomResetSelector } from "./zoomResetSelector";

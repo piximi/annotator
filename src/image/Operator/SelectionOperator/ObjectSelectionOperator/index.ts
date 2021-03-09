@@ -1,1 +1,0 @@
-export { ObjectSelectionOperator } from "./ObjectSelectionOperator";

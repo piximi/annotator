@@ -1,1 +1,0 @@
-export { ColorSelectionOperator } from "./ColorSelectionOperator";

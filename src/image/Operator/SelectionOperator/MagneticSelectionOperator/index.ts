@@ -1,1 +1,0 @@
-export { MagneticSelectionOperator } from "./MagneticSelectionOperator";

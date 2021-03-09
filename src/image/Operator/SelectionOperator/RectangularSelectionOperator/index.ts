@@ -1,1 +1,0 @@
-export { RectangularSelectionOperator } from "./RectangularSelectionOperator";

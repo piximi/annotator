@@ -1,1 +1,0 @@
-export { QuickSelectionOperator } from "./QuickSelectionOperator";

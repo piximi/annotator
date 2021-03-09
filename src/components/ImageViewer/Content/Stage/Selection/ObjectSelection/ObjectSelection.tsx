@@ -1,10 +1,10 @@
-import { ObjectSelectionOperator } from "../../../../../../image/Operator/SelectionOperator";
+import { ObjectSelectionTool } from "../../../../../../image/Tool/SelectionTool";
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type ObjectSelectionProps = {
-  operator: ObjectSelectionOperator;
+  operator: ObjectSelectionTool;
 };
 
 export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {

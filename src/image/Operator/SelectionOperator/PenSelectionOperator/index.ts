@@ -1,1 +1,0 @@
-export { PenSelectionOperator } from "./PenSelectionOperator";

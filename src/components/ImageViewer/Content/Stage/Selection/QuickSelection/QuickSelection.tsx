@@ -1,9 +1,9 @@
-import { QuickSelectionOperator } from "../../../../../../image/Operator/SelectionOperator";
+import { QuickSelectionTool } from "../../../../../../image/Tool/SelectionTool";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 
 type QuickSelectionProps = {
-  operator: QuickSelectionOperator;
+  operator: QuickSelectionTool;
 };
 
 export const QuickSelection = ({ operator }: QuickSelectionProps) => {

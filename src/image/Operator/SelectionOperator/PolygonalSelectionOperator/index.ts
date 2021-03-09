@@ -1,1 +1,0 @@
-export { PolygonalSelectionOperator } from "./PolygonalSelectionOperator";

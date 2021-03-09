@@ -69,14 +69,13 @@ export class ZoomTool extends Tool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    console.info("IN ON MOUSE DOWN");
     this.minimum = position;
 
     this.zooming = true;
   }
 
-  onMouseMove(position: { x: number; y: number }, clicked?: boolean) {
-    if (!clicked || !this.zooming) return;
+  onMouseMove(position: { x: number; y: number }) {
+    if (!this.zooming) return;
 
     this.maximum = position;
   }

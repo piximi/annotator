@@ -23,6 +23,7 @@ import { PenSelection } from "../PenSelection";
 
 import { ZoomTool } from "../../../../../../image/Tool/ZoomTool";
 import { PenAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
+import { ZoomSelection } from "../ZoomSelection";
 
 type SelectionProps = {
   operation?: Tool;
@@ -60,7 +61,7 @@ export const Selection = ({ operation, operator }: SelectionProps) => {
         />
       );
     case Tool.Zoom:
-      return <RectangularSelection operator={operator as ZoomTool} />;
+      return <ZoomSelection operator={operator as ZoomTool} />;
     case Tool.QuickAnnotation:
       return <QuickSelection operator={operator as QuickAnnotationTool} />;
     default:

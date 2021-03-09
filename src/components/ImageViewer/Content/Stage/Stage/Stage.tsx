@@ -25,6 +25,7 @@ import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 import { AnnotationTool } from "../../../../../image/Tool/AnnotationTool/AnnotationTool";
+import { RectangularAnnotationTool } from "../../../../../image/Tool/AnnotationTool/RectangularAnnotationTool";
 
 type StageProps = {
   category: Category;
@@ -77,10 +78,12 @@ export const Stage = ({ category, src }: StageProps) => {
 
   let annotationOperator = operator as AnnotationTool;
 
-  useEffect(() => {
-    if (operation === Tool.Zoom) return;
-    annotationOperator = operator as AnnotationTool;
-  }, [operator]);
+  // useEffect(() => {
+  //   if (operation === Tool.Zoom) {
+  //     annotationOperator = new RectangularAnnotationTool();
+  //   }
+  //   annotationOperator = operator as AnnotationTool;
+  // }, [operator]);
 
   useEffect(() => {
     if (!selectionId || !annotationOperator) return;

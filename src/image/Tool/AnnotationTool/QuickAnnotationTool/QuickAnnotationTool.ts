@@ -59,7 +59,7 @@ export class QuickAnnotationTool extends AnnotationTool {
   deselect() {}
 
   onMouseDown(position: { x: number; y: number }) {
-    if (this.selected) return;
+    if (this.annotated) return;
 
     if (!this.superpixels || !this.masks) return;
 
@@ -73,11 +73,11 @@ export class QuickAnnotationTool extends AnnotationTool {
     this.currentMask = mask[2] as ImageJS.Image;
     this.currentData = mask[1] as Int32Array;
 
-    this.selecting = true;
+    this.annotating = true;
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (this.selected) return;
+    if (this.annotated) return;
 
     if (!this.superpixels || !this.masks) return;
 
@@ -93,7 +93,7 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     this.currentMask = mask[2] as ImageJS.Image;
 
-    if (!this.selecting) return;
+    if (!this.annotating) return;
 
     if (!this.currentData) return;
 
@@ -108,7 +108,7 @@ export class QuickAnnotationTool extends AnnotationTool {
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.selected || !this.selecting) return;
+    if (this.annotated || !this.annotating) return;
 
     if (!this.currentMask) return;
 
@@ -131,8 +131,8 @@ export class QuickAnnotationTool extends AnnotationTool {
     this._mask = this.computeObjectSelectionMask();
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
-    this.selected = true;
-    this.selecting = false;
+    this.annotated = true;
+    this.annotating = false;
   }
 
   private static colorSuperpixelMap(mask: ImageJS.Image, color: string) {

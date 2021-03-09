@@ -39,10 +39,10 @@ export class MagneticAnnotationTool extends AnnotationTool {
   }
 
   deselect() {
-    this.selected = false;
-    this.selecting = false;
+    this.annotated = false;
+    this.annotating = false;
 
-    this.selection = undefined;
+    this.annotation = undefined;
 
     this.anchor = undefined;
     this.buffer = [];
@@ -53,15 +53,15 @@ export class MagneticAnnotationTool extends AnnotationTool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    if (this.selected) return;
+    if (this.annotated) return;
 
     if (this.connected(position)) {
       if (this.origin) {
         this.buffer = [...this.buffer, this.origin.x, this.origin.y];
       }
 
-      this.selected = true;
-      this.selecting = false;
+      this.annotated = true;
+      this.annotating = false;
 
       this.points = this.buffer;
 
@@ -71,7 +71,7 @@ export class MagneticAnnotationTool extends AnnotationTool {
     }
 
     if (this.buffer && this.buffer.length === 0) {
-      this.selecting = true;
+      this.annotating = true;
 
       if (!this.origin) {
         this.origin = position;
@@ -80,7 +80,7 @@ export class MagneticAnnotationTool extends AnnotationTool {
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (!this.image || !this.pathfinder || this.selected || !this.selecting)
+    if (!this.image || !this.pathfinder || this.annotated || !this.annotating)
       return;
 
     if (this.anchor) {
@@ -139,7 +139,7 @@ export class MagneticAnnotationTool extends AnnotationTool {
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.selected || !this.selecting) return;
+    if (this.annotated || !this.annotating) return;
 
     if (
       this.connected(position) &&
@@ -155,8 +155,8 @@ export class MagneticAnnotationTool extends AnnotationTool {
         this.origin.y,
       ];
 
-      this.selected = true;
-      this.selecting = false;
+      this.annotated = true;
+      this.annotating = false;
 
       this.points = this.buffer;
 

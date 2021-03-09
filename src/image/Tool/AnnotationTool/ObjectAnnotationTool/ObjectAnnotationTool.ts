@@ -14,8 +14,8 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
   output?: ImageJS.Image;
 
   deselect() {
-    this.selected = false;
-    this.selecting = false;
+    this.annotated = false;
+    this.annotating = false;
 
     this.prediction = undefined;
     this.points = [];

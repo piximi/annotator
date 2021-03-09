@@ -206,11 +206,11 @@ export const Stage = ({ category, src }: StageProps) => {
   useEffect(() => {
     if (!operator) return;
 
-    if (operator.selected) setSelected(operator.selected);
+    if (operator.annotated) setSelected(operator.annotated);
 
     if (selectionMode === SelectionMode.New) return;
 
-    if (operator.selecting) setSelecting(operator.selecting);
+    if (operator.annotating) setSelecting(operator.annotating);
   });
 
   useEffect(() => {
@@ -253,10 +253,10 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!operator) return;
 
-    operator.select(category);
+    operator.annotate(category);
 
-    if (!operator.selection) return;
-    selectionInstanceRef.current = operator.selection;
+    if (!operator.annotation) return;
+    selectionInstanceRef.current = operator.annotation;
   }, [selected]);
 
   const onContextMenuClick = (
@@ -267,7 +267,7 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!operator) return;
 
-    if (operator.selecting) return;
+    if (operator.annotating) return;
 
     if (!instances) return;
 
@@ -474,8 +474,8 @@ export const Stage = ({ category, src }: StageProps) => {
 
         {selectionMode !== SelectionMode.New &&
           operator &&
-          operator.selecting &&
-          !operator.selected &&
+          operator.annotating &&
+          !operator.annotated &&
           selectionInstanceRef &&
           selectionInstanceRef.current && (
             <SelectedContour points={selectionInstanceRef.current.contour} />

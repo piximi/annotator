@@ -15,8 +15,8 @@ export class ColorAnnotationTool extends AnnotationTool {
   toleranceMap?: ImageJS.Image;
 
   deselect() {
-    this.selected = false;
-    this.selecting = false;
+    this.annotated = false;
+    this.annotating = false;
 
     this.overlayData = "";
 
@@ -32,8 +32,8 @@ export class ColorAnnotationTool extends AnnotationTool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    this.selected = false;
-    this.selecting = true;
+    this.annotated = false;
+    this.annotating = true;
     this.tolerance = 1;
     this.initialPosition = position;
     this.toleranceMap = makeFloodMap({
@@ -45,7 +45,7 @@ export class ColorAnnotationTool extends AnnotationTool {
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (this.selecting) {
+    if (this.annotating) {
       const diff = Math.ceil(
         Math.hypot(
           position.x - this.initialPosition!.x,
@@ -99,8 +99,8 @@ export class ColorAnnotationTool extends AnnotationTool {
     // @ts-ignore
     this._mask = encode(this.roiMask.data as Uint8Array);
 
-    this.selected = true;
-    this.selecting = false;
+    this.annotated = true;
+    this.annotating = false;
   }
 
   private static colorOverlay(

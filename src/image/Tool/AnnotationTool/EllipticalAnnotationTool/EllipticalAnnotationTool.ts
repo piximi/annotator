@@ -18,8 +18,8 @@ export class EllipticalAnnotationTool extends AnnotationTool {
   }
 
   deselect() {
-    this.selected = false;
-    this.selecting = false;
+    this.annotated = false;
+    this.annotating = false;
 
     this.center = undefined;
     this.origin = undefined;
@@ -27,18 +27,18 @@ export class EllipticalAnnotationTool extends AnnotationTool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    if (this.selected) return;
+    if (this.annotated) return;
 
     if (!this.radius) {
       this.origin = position;
 
-      this.selecting = true;
+      this.annotating = true;
     } else {
       this.resize(position);
 
-      this.selected = true;
+      this.annotated = true;
 
-      this.selecting = false;
+      this.annotating = false;
 
       this.points = this.convertToPoints();
 
@@ -51,20 +51,20 @@ export class EllipticalAnnotationTool extends AnnotationTool {
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (this.selected) return;
+    if (this.annotated) return;
 
     this.resize(position);
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.selected || !this.selecting) return;
+    if (this.annotated || !this.annotating) return;
 
     if (this.radius) {
       this.resize(position);
 
-      this.selected = true;
+      this.annotated = true;
 
-      this.selecting = false;
+      this.annotating = false;
 
       this.points = this.convertToPoints();
 

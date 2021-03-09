@@ -18,8 +18,8 @@ export class RectangularAnnotationTool extends AnnotationTool {
   }
 
   deselect() {
-    this.selected = false;
-    this.selecting = false;
+    this.annotated = false;
+    this.annotating = false;
 
     this.origin = undefined;
 
@@ -28,12 +28,12 @@ export class RectangularAnnotationTool extends AnnotationTool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    if (this.selected) return;
+    if (this.annotated) return;
 
     if (!this.width) {
       this.origin = position;
 
-      this.selecting = true;
+      this.annotating = true;
     } else {
       this.resize(position);
 
@@ -43,19 +43,19 @@ export class RectangularAnnotationTool extends AnnotationTool {
       this._mask = this.computeMask();
       this._boundingBox = this.computeBoundingBox();
 
-      this.selected = true;
-      this.selecting = false;
+      this.annotated = true;
+      this.annotating = false;
     }
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (this.selected) return;
+    if (this.annotated) return;
 
     this.resize(position);
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.selected || !this.selecting) return;
+    if (this.annotated || !this.annotating) return;
 
     if (this.width) {
       this.resize(position);
@@ -65,8 +65,8 @@ export class RectangularAnnotationTool extends AnnotationTool {
       this._mask = this.computeMask();
       this._boundingBox = this.computeBoundingBox();
 
-      this.selected = true;
-      this.selecting = false;
+      this.annotated = true;
+      this.annotating = false;
     }
   }
 

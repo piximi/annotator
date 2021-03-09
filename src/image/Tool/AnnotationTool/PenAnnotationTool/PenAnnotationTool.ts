@@ -56,8 +56,8 @@ export class PenAnnotationTool extends AnnotationTool {
   }
 
   deselect() {
-    this.selected = false;
-    this.selecting = false;
+    this.annotated = false;
+    this.annotating = false;
 
     this.circlesData = undefined;
     this.buffer = [];
@@ -66,25 +66,25 @@ export class PenAnnotationTool extends AnnotationTool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    if (this.selected) return;
+    if (this.annotated) return;
 
-    this.selecting = true;
+    this.annotating = true;
 
     this.buffer = [...this.buffer, position.x, position.y];
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (this.selected || !this.selecting) return;
+    if (this.annotated || !this.annotating) return;
 
     this.buffer = [...this.buffer, position.x, position.y];
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.selected || !this.selecting) return;
+    if (this.annotated || !this.annotating) return;
 
-    this.selected = true;
+    this.annotated = true;
 
-    this.selecting = false;
+    this.annotating = false;
 
     this.points = this.buffer;
 

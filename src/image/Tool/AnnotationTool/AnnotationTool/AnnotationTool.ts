@@ -13,9 +13,9 @@ import { Tool } from "../../Tool";
 export abstract class AnnotationTool extends Tool {
   manager: ImageJS.RoiManager;
   points?: Array<number> = [];
-  selected: boolean = false;
-  selecting: boolean = false;
-  selection?: Selection;
+  annotated: boolean = false;
+  annotating: boolean = false;
+  annotation?: Selection;
 
   protected _boundingBox?: [number, number, number, number];
   protected _contour?: Array<number>;
@@ -198,10 +198,10 @@ export abstract class AnnotationTool extends Tool {
 
   abstract onMouseUp(position: { x: number; y: number }): void;
 
-  select(category: Category): void {
+  annotate(category: Category): void {
     if (!this.boundingBox || !this.contour || !this.mask) return;
 
-    this.selection = {
+    this.annotation = {
       boundingBox: this.boundingBox,
       categoryId: category.id,
       contour: this.contour,

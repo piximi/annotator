@@ -8,10 +8,10 @@ export class PolygonalAnnotationTool extends AnnotationTool {
   points: Array<number> = [];
 
   deselect() {
-    this.selected = false;
-    this.selecting = false;
+    this.annotated = false;
+    this.annotating = false;
 
-    this.selection = undefined;
+    this.annotation = undefined;
 
     this.anchor = undefined;
     this.buffer = [];
@@ -20,15 +20,15 @@ export class PolygonalAnnotationTool extends AnnotationTool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    if (this.selected) return;
+    if (this.annotated) return;
 
     if (this.connected(position)) {
       if (this.origin) {
         this.buffer = [...this.buffer, this.origin.x, this.origin.y];
       }
 
-      this.selected = true;
-      this.selecting = false;
+      this.annotated = true;
+      this.annotating = false;
 
       this.points = this.buffer;
 
@@ -41,7 +41,7 @@ export class PolygonalAnnotationTool extends AnnotationTool {
     }
 
     if (this.buffer && this.buffer.length === 0) {
-      this.selecting = true;
+      this.annotating = true;
 
       if (!this.origin) {
         this.origin = position;
@@ -50,7 +50,7 @@ export class PolygonalAnnotationTool extends AnnotationTool {
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (this.selected || !this.selecting) return;
+    if (this.annotated || !this.annotating) return;
 
     if (this.anchor) {
       if (
@@ -75,7 +75,7 @@ export class PolygonalAnnotationTool extends AnnotationTool {
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.selected || !this.selecting) return;
+    if (this.annotated || !this.annotating) return;
 
     if (
       this.connected(position) &&
@@ -91,8 +91,8 @@ export class PolygonalAnnotationTool extends AnnotationTool {
         this.origin.y,
       ];
 
-      this.selected = true;
-      this.selecting = false;
+      this.annotated = true;
+      this.annotating = false;
 
       this.points = this.buffer;
 

@@ -13,9 +13,15 @@ export const useZoomOperator = (operation: Tool, operator: ZoomTool) => {
 
   // use effect for when rectangle is selected
   useEffect(() => {
-    if (!operator || !operator.maximum) return;
-    console.info("Selected!");
-    setScale(2);
+    if (!operator || !operator.minimum || !operator.maximum) return;
+
+    const newScale =
+      operator.image.width / (operator.maximum.x - operator.minimum.x);
+
+    setX(-1 * operator.minimum.x * newScale);
+    setY(-1 * operator.minimum.y * newScale);
+
+    setScale(newScale);
   }, [operator?.selected]);
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {

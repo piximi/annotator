@@ -10,6 +10,7 @@ import {
   invertModeSelector,
   operationSelector,
   selectionModeSelector,
+  zoomModeSelector,
 } from "../../../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
@@ -69,6 +70,8 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const categories = useSelector(categoriesSelector);
   const visibleCategories = useSelector(visibleCategoriesSelector);
+
+  const zoomMode = useSelector(zoomModeSelector);
 
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
@@ -242,6 +245,14 @@ export const Stage = ({ category, src }: StageProps) => {
     // @ts-ignore
     operator.brushSize = penSelectionBrushSize;
   }, [penSelectionBrushSize]);
+
+  useEffect(() => {
+    if (operation !== Tool.Zoom) return;
+
+    // @ts-ignore
+    operator.mode = zoomMode;
+    console.info("Setting new zoom mode");
+  }, [zoomMode]);
 
   useEffect(() => {
     if (!annotationOperator || !annotationOperator.contour) return;

@@ -46,6 +46,8 @@ export class ZoomTool extends Tool {
   }
 
   onClick(position: { x: number; y: number }) {
+    console.info("In onmouse down");
+
     const index = _.findIndex(this.scales, this.scale);
 
     if (!index) return;
@@ -67,12 +69,13 @@ export class ZoomTool extends Tool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
+    console.info("IN ON MOUSE DOWN");
     this.minimum = position;
 
     this.zooming = true;
   }
 
-  onMouseMove(position: { x: number; y: number }, clicked: boolean) {
+  onMouseMove(position: { x: number; y: number }, clicked?: boolean) {
     if (!clicked || !this.zooming) return;
 
     this.maximum = position;

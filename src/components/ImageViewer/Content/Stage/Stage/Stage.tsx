@@ -24,6 +24,7 @@ import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/pe
 import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
+import { AnnotationTool } from "../../../../../image/Tool/AnnotationTool/AnnotationTool";
 
 type StageProps = {
   category: Category;
@@ -74,8 +75,17 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const { onWheel, scale, x, y } = useZoomOperator(operation);
 
+  let annotationOperator = operator as AnnotationTool;
+
   useEffect(() => {
-    if (!selectionId || !operator) return;
+    if (operation === Tool.Zoom) return;
+    annotationOperator = operator as AnnotationTool;
+  }, [operator]);
+
+  useEffect(() => {
+    if (!selectionId || !annotationOperator) return;
+
+    if (operation === Tool.Zoom) return;
 
     if (!instances) return;
 
@@ -92,11 +102,13 @@ export const Stage = ({ category, src }: StageProps) => {
     )
       return;
 
-    const invertedMask = operator.invert(selectedInstance.mask, true);
+    const invertedMask = annotationOperator.invert(selectedInstance.mask, true);
 
-    const invertedContour = operator.invertContour(selectedInstance.contour);
+    const invertedContour = annotationOperator.invertContour(
+      selectedInstance.contour
+    );
 
-    const invertedBoundingBox = operator.computeBoundingBoxFromContours(
+    const invertedBoundingBox = annotationOperator.computeBoundingBoxFromContours(
       invertedContour
     );
 
@@ -132,11 +144,13 @@ export const Stage = ({ category, src }: StageProps) => {
   }, [invertMode]);
 
   useEffect(() => {
+    if (operation === Tool.Zoom) return;
+
     if (selectionMode === SelectionMode.New) return; // "New" mode
 
     setSelecting(false);
 
-    if (!selected || !operator || !selectionId || !instances) return;
+    if (!selected || !annotationOperator || !selectionId || !instances) return;
 
     let combinedMask, combinedContour;
 
@@ -145,27 +159,31 @@ export const Stage = ({ category, src }: StageProps) => {
     if (!selectedInstance) return;
 
     if (selectionMode === SelectionMode.Add) {
-      [combinedMask, combinedContour] = operator.add(selectedInstance.mask);
+      [combinedMask, combinedContour] = annotationOperator.add(
+        selectedInstance.mask
+      );
     } else if (selectionMode === SelectionMode.Subtract) {
-      [combinedMask, combinedContour] = operator.subtract(
+      [combinedMask, combinedContour] = annotationOperator.subtract(
         selectedInstance.mask
       );
     } else if (selectionMode === SelectionMode.Intersect) {
-      [combinedMask, combinedContour] = operator.intersect(
+      [combinedMask, combinedContour] = annotationOperator.intersect(
         selectedInstance.mask
       );
     }
 
-    operator.mask = combinedMask;
-    operator.contour = combinedContour;
+    annotationOperator.mask = combinedMask;
+    annotationOperator.contour = combinedContour;
 
     if (!combinedContour) return;
-    operator.boundingBox = operator.computeBoundingBoxFromContours(
+    annotationOperator.boundingBox = annotationOperator.computeBoundingBoxFromContours(
       combinedContour
     );
   }, [selectionMode, selected]);
 
   useEffect(() => {
+    if (operation === Tool.Zoom) return;
+
     if (selectionMode === SelectionMode.New) return;
 
     if (!selecting) return;
@@ -183,6 +201,8 @@ export const Stage = ({ category, src }: StageProps) => {
   }, [selecting]);
 
   useEffect(() => {
+    if (operation === Tool.Zoom) return;
+
     if (!selectionId) return;
 
     const others = instances?.filter(
@@ -204,13 +224,16 @@ export const Stage = ({ category, src }: StageProps) => {
   }, [category]);
 
   useEffect(() => {
-    if (!operator) return;
+    if (!annotationOperator) return;
 
-    if (operator.annotated) setSelected(operator.annotated);
+    if (operation === Tool.Zoom) return;
+
+    if (annotationOperator.annotated) setSelected(annotationOperator.annotated);
 
     if (selectionMode === SelectionMode.New) return;
 
-    if (operator.annotating) setSelecting(operator.annotating);
+    if (annotationOperator.annotating)
+      setSelecting(annotationOperator.annotating);
   });
 
   useEffect(() => {
@@ -221,10 +244,12 @@ export const Stage = ({ category, src }: StageProps) => {
   }, [penSelectionBrushSize]);
 
   useEffect(() => {
-    if (!operator || !operator.contour) return;
+    if (!annotationOperator || !annotationOperator.contour) return;
+
+    if (operation === Tool.Zoom) return;
 
     const scaledContour: Array<number> = _.flatten(
-      _.chunk(operator.contour, 2).map((el: Array<number>) => {
+      _.chunk(annotationOperator.contour, 2).map((el: Array<number>) => {
         return [el[0] * scale + x, el[1] * scale + y];
       })
     );
@@ -232,16 +257,18 @@ export const Stage = ({ category, src }: StageProps) => {
     selectingRef.current = new Konva.Line<Konva.LineConfig>({
       points: scaledContour,
     });
-  }, [operator?.contour, selected]);
+  }, [annotationOperator?.contour, selected]);
 
   useEffect(() => {
     if (!selected) return;
+
+    if (operation === Tool.Zoom) return;
 
     if (!transformerRef || !transformerRef.current) return;
 
     if (!selectingRef || !selectingRef.current) return;
 
-    if (!operator || !operator.contour) return;
+    if (!annotationOperator || !annotationOperator.contour) return;
 
     transformerRef.current.nodes([selectingRef.current]);
 
@@ -253,10 +280,10 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!operator) return;
 
-    operator.annotate(category);
+    annotationOperator.annotate(category);
 
-    if (!operator.annotation) return;
-    selectionInstanceRef.current = operator.annotation;
+    if (!annotationOperator.annotation) return;
+    selectionInstanceRef.current = annotationOperator.annotation;
   }, [selected]);
 
   const onContextMenuClick = (
@@ -265,13 +292,15 @@ export const Stage = ({ category, src }: StageProps) => {
   ) => {
     event.evt.preventDefault();
 
-    if (!operator) return;
+    if (!annotationOperator) return;
 
-    if (operator.annotating) return;
+    if (operation === Tool.Zoom) return;
+
+    if (annotationOperator.annotating) return;
 
     if (!instances) return;
 
-    operator.deselect();
+    annotationOperator.deselect();
 
     selectionInstanceRef.current = instances.filter((v: SelectionType) => {
       // @ts-ignore
@@ -307,8 +336,6 @@ export const Stage = ({ category, src }: StageProps) => {
       // left click only
       if (!operator || !stageRef || !stageRef.current) return;
 
-      if (operation === Tool.Zoom) return;
-
       const position = stageRef.current.getPointerPosition();
 
       if (!position) return;
@@ -326,8 +353,6 @@ export const Stage = ({ category, src }: StageProps) => {
   const onMouseMove = useMemo(() => {
     const func = () => {
       if (!operator || !stageRef || !stageRef.current) return;
-
-      if (operation === Tool.Zoom) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -351,8 +376,6 @@ export const Stage = ({ category, src }: StageProps) => {
     const func = () => {
       if (!operator || !stageRef || !stageRef.current) return;
 
-      if (operation === Tool.Zoom) return;
-
       const position = stageRef.current.getPointerPosition();
 
       if (!position) return;
@@ -374,7 +397,7 @@ export const Stage = ({ category, src }: StageProps) => {
   useEffect(() => {
     if (!enterPress) return;
 
-    if (!instances || !operator) return;
+    if (!instances || !annotationOperator) return;
 
     if (!selectionInstanceRef || !selectionInstanceRef.current) return;
 
@@ -386,7 +409,7 @@ export const Stage = ({ category, src }: StageProps) => {
       );
     }
 
-    operator.deselect();
+    annotationOperator.deselect();
 
     transformerRef.current?.detach();
     transformerRef.current?.getLayer()?.batchDraw();
@@ -403,9 +426,9 @@ export const Stage = ({ category, src }: StageProps) => {
 
     if (!escapePress) return;
 
-    if (!operator) return;
+    if (!annotationOperator) return;
 
-    operator.deselect();
+    annotationOperator.deselect();
 
     transformerRef.current?.detach();
   }, [escapePress]);
@@ -461,16 +484,18 @@ export const Stage = ({ category, src }: StageProps) => {
           height={512}
         />
 
-        {!selected && <Selection operation={operation} operator={operator} />}
+        {!selected && (
+          <Selection operation={operation} operator={annotationOperator} />
+        )}
 
-        {selected && operator && operator.contour && (
-          <SelectedContour points={operator.contour} />
+        {selected && operator && annotationOperator.contour && (
+          <SelectedContour points={annotationOperator.contour} />
         )}
 
         {selectionMode !== SelectionMode.New &&
-          operator &&
-          operator.annotating &&
-          !operator.annotated &&
+          annotationOperator &&
+          annotationOperator.annotating &&
+          !annotationOperator.annotated &&
           selectionInstanceRef &&
           selectionInstanceRef.current && (
             <SelectedContour points={selectionInstanceRef.current.contour} />

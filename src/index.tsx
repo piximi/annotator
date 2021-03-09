@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import "./i18n";
 
 Sentry.init({
   dsn:

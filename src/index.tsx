@@ -9,7 +9,7 @@ import { Integrations } from "@sentry/tracing";
 
 Sentry.init({
   dsn:
-    "https://c0b47db2a1b34f12b33ca8e78067617e@o71028.ingest.sentry.io/152399",
+    "https://756e21ab7263457eab9bc2f65edddc79@o71028.ingest.sentry.io/5668724",
   integrations: [new Integrations.BrowserTracing()],
   release: "image-viewer@" + process.env.npm_package_version,
   tracesSampleRate: 1.0,

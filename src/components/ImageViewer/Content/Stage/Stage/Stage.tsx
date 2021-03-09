@@ -27,10 +27,12 @@ import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 
 type StageProps = {
   category: Category;
+  height?: number;
   src: string;
+  width?: number;
 };
 
-export const Stage = ({ category, src }: StageProps) => {
+export const Stage = ({ category, height, src, width }: StageProps) => {
   const [image] = useImage(src, "Anonymous");
 
   const imageRef = useRef<Konva.Image>(null);

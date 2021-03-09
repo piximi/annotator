@@ -1,4 +1,4 @@
-import { EllipticalSelectionTool } from "./EllipticalSelectionOperator";
+import { EllipticalAnnotationTool } from "./EllipticalAnnotationTool";
 import { test } from "@jest/globals";
 import { Category } from "../../../../types/Category";
 import { Image } from "image-js";
@@ -9,9 +9,9 @@ const src =
 test("deselect", async () => {
   const image = await Image.load(src);
 
-  const operator = new EllipticalSelectionTool(image);
+  const operator = new EllipticalAnnotationTool(image);
 
-  operator.selected = true;
+  operator.annotated = true;
 
   operator.center = { x: 50, y: 50 };
   operator.origin = { x: 0, y: 0 };
@@ -19,10 +19,10 @@ test("deselect", async () => {
 
   operator.deselect();
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(false);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(false);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.center).toStrictEqual(undefined);
   expect(operator.origin).toStrictEqual(undefined);
@@ -32,14 +32,14 @@ test("deselect", async () => {
 test("onMouseDown", async () => {
   const image = await Image.load(src);
 
-  const operator = new EllipticalSelectionTool(image);
+  const operator = new EllipticalAnnotationTool(image);
 
   operator.onMouseDown({ x: 0, y: 0 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.center).toStrictEqual(undefined);
   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
@@ -49,18 +49,18 @@ test("onMouseDown", async () => {
 test("onMouseMove", async () => {
   const image = await Image.load(src);
 
-  const operator = new EllipticalSelectionTool(image);
+  const operator = new EllipticalAnnotationTool(image);
 
-  operator.selecting = true;
+  operator.annotating = true;
 
   operator.origin = { x: 0, y: 0 };
 
   operator.onMouseMove({ x: 100, y: 100 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.center).toStrictEqual({ x: 50, y: 50 });
   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
@@ -70,18 +70,18 @@ test("onMouseMove", async () => {
 test("onMouseUp", async () => {
   const image = await Image.load(src);
 
-  const operator = new EllipticalSelectionTool(image);
+  const operator = new EllipticalAnnotationTool(image);
 
-  operator.selecting = true;
+  operator.annotating = true;
 
   operator.origin = { x: 0, y: 0 };
 
   operator.onMouseUp({ x: 100, y: 100 });
 
-  expect(operator.selected).toBe(true);
-  expect(operator.selecting).toBe(false);
+  expect(operator.annotated).toBe(true);
+  expect(operator.annotating).toBe(false);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.center).toStrictEqual({ x: 50, y: 50 });
   expect(operator.origin).toStrictEqual({ x: 0, y: 0 });
@@ -91,9 +91,9 @@ test("onMouseUp", async () => {
 test("select", async () => {
   const image = await Image.load(src);
 
-  const operator = new EllipticalSelectionTool(image);
+  const operator = new EllipticalAnnotationTool(image);
 
-  operator.selected = true;
+  operator.annotated = true;
 
   operator.center = { x: 50, y: 50 };
   operator.origin = { x: 0, y: 0 };
@@ -106,12 +106,12 @@ test("select", async () => {
     visible: true,
   };
 
-  operator.select(category);
+  operator.annotate(category);
 
-  expect(operator.selected).toBe(true);
-  expect(operator.selecting).toBe(false);
+  expect(operator.annotated).toBe(true);
+  expect(operator.annotating).toBe(false);
 
-  expect(operator.selection).toStrictEqual({
+  expect(operator.annotation).toStrictEqual({
     boundingBox: [0, 0, 100, 100],
     categoryId: "5ed3511d-1223-4bba-a0c2-2b3897232d98",
     mask: "mask",

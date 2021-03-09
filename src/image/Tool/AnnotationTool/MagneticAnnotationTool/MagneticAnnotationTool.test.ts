@@ -1,11 +1,11 @@
 import { test } from "@jest/globals";
-import { MagneticSelectionTool } from "./MagneticSelectionOperator";
+import { MagneticAnnotationTool } from "./MagneticAnnotationTool";
 import { Image } from "image-js";
 
 // test("deselect", () => {
 //   const operator = new PolygonalSelectionOperator();
 //
-//   operator.selected = true;
+//   operator.annotated = true;
 //
 //   operator.anchor = { x: 100, y: 0 };
 //   operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
@@ -14,8 +14,8 @@ import { Image } from "image-js";
 //
 //   operator.deselect();
 //
-//   expect(operator.selected).toBe(false);
-//   expect(operator.selecting).toBe(false);
+//   expect(operator.annotated).toBe(false);
+//   expect(operator.annotating).toBe(false);
 //
 //   expect(operator.Operator).toBe(undefined);
 //
@@ -33,14 +33,14 @@ test("onMouseDown (unconnected)", async () => {
 
   const image = await Image.load(src);
 
-  const operator = new MagneticSelectionTool(image);
+  const operator = new MagneticAnnotationTool(image);
 
   operator.onMouseDown({ x: 0, y: 0 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual({ x: 0, y: 0 });
   expect(operator.buffer).toStrictEqual([0, 0]);
@@ -54,7 +54,7 @@ test("onMouseDown (connected)", async () => {
 
   const image = await Image.load(src);
 
-  const operator = new MagneticSelectionTool(image);
+  const operator = new MagneticAnnotationTool(image);
 
   operator.anchor = { x: 0, y: 0 };
   operator.buffer = [0, 0];
@@ -62,10 +62,10 @@ test("onMouseDown (connected)", async () => {
 
   operator.onMouseDown({ x: 1, y: 1 });
 
-  expect(operator.selected).toBe(true);
-  expect(operator.selecting).toBe(false);
+  expect(operator.annotated).toBe(true);
+  expect(operator.annotating).toBe(false);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual({ x: 0, y: 0 });
   expect(operator.buffer).toStrictEqual([0, 0, 0, 0]);
@@ -79,9 +79,9 @@ test("onMouseMove", async () => {
 
   const image = await Image.load(src);
 
-  const operator = new MagneticSelectionTool(image);
+  const operator = new MagneticAnnotationTool(image);
 
-  operator.selecting = true;
+  operator.annotating = true;
 
   operator.anchor = { x: 0, y: 0 };
   operator.buffer = [0, 0];
@@ -89,10 +89,10 @@ test("onMouseMove", async () => {
 
   operator.onMouseMove({ x: 300, y: 300 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual({ x: 0, y: 0 });
   expect([operator.buffer[0], operator.buffer[1]]).toStrictEqual([0, 0]);
@@ -107,17 +107,17 @@ test("onMouseMove", async () => {
 // test("select", () => {
 //   const operator = new PolygonalSelectionOperator();
 //
-//   operator.selected = true;
+//   operator.annotated = true;
 //
 //   operator.anchor = { x: 100, y: 0 };
 //   operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
 //   operator.origin = { x: 0, y: 0 };
 //   operator.points = [0, 0, 100, 0, 100, 100, 0, 100, 0, 0];
 //
-//   operator.select(0);
+//   operator.annotate(0);
 //
-//   expect(operator.selected).toBe(true);
-//   expect(operator.selecting).toBe(false);
+//   expect(operator.annotated).toBe(true);
+//   expect(operator.annotating).toBe(false);
 //
 //   expect(operator.Operator).toStrictEqual({
 //     boundingBox: [0, 0, 100, 100],

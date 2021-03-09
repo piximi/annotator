@@ -1,14 +1,14 @@
 import { test } from "@jest/globals";
-import { LassoSelectionTool } from "./LassoSelectionOperator";
+import { LassoAnnotationTool } from "./LassoAnnotationTool";
 import { Category } from "../../../../types/Category";
 import * as ImageJS from "image-js";
 
 test("deselect", () => {
   const image = new ImageJS.Image();
 
-  const operator = new LassoSelectionTool(image);
+  const operator = new LassoAnnotationTool(image);
 
-  operator.selected = true;
+  operator.annotated = true;
 
   operator.anchor = { x: 3, y: 3 };
   operator.buffer = [0, 0, 1, 1, 2, 2, 3, 3, 4, 3, 5, 3];
@@ -17,10 +17,10 @@ test("deselect", () => {
 
   operator.deselect();
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(false);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(false);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.origin).toStrictEqual(undefined);
 
@@ -33,14 +33,14 @@ test("deselect", () => {
 test("onMouseDown", () => {
   const image = new ImageJS.Image();
 
-  const operator = new LassoSelectionTool(image);
+  const operator = new LassoAnnotationTool(image);
 
   operator.onMouseDown({ x: 0, y: 0 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
   expect(operator.buffer).toStrictEqual([]);
@@ -51,16 +51,16 @@ test("onMouseDown", () => {
 test("onMouseDown (subsequent, unconnected)", () => {
   const image = new ImageJS.Image();
 
-  const operator = new LassoSelectionTool(image);
+  const operator = new LassoAnnotationTool(image);
 
   operator.origin = { x: 0, y: 0 };
 
   operator.onMouseDown({ x: 100, y: 0 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
   expect(operator.buffer).toStrictEqual([]);
@@ -71,7 +71,7 @@ test("onMouseDown (subsequent, unconnected)", () => {
 test("onMouseDown (subsequent, connected)", () => {
   const image = new ImageJS.Image();
 
-  const operator = new LassoSelectionTool(image);
+  const operator = new LassoAnnotationTool(image);
 
   operator.anchor = { x: 0, y: 100 };
   operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
@@ -79,10 +79,10 @@ test("onMouseDown (subsequent, connected)", () => {
 
   operator.onMouseDown({ x: 1, y: 1 });
 
-  expect(operator.selected).toBe(true);
-  expect(operator.selecting).toBe(false);
+  expect(operator.annotated).toBe(true);
+  expect(operator.annotating).toBe(false);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
   expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 100, 100, 0, 100, 0, 0]);
@@ -93,9 +93,9 @@ test("onMouseDown (subsequent, connected)", () => {
 test("onMouseMove", () => {
   const image = new ImageJS.Image();
 
-  const operator = new LassoSelectionTool(image);
+  const operator = new LassoAnnotationTool(image);
 
-  operator.selecting = true;
+  operator.annotating = true;
 
   operator.origin = { x: 0, y: 0 };
 
@@ -103,10 +103,10 @@ test("onMouseMove", () => {
 
   operator.onMouseMove({ x: 5, y: 5 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
   expect(operator.buffer).toStrictEqual([0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5]);
@@ -117,9 +117,9 @@ test("onMouseMove", () => {
 test("onMouseMove (with anchor)", () => {
   const image = new ImageJS.Image();
 
-  const operator = new LassoSelectionTool(image);
+  const operator = new LassoAnnotationTool(image);
 
-  operator.selecting = true;
+  operator.annotating = true;
 
   operator.anchor = { x: 0, y: 3 };
   operator.buffer = [0, 0, 0, 1, 0, 2, 0, 3, 2, 2];
@@ -127,10 +127,10 @@ test("onMouseMove (with anchor)", () => {
 
   operator.onMouseMove({ x: 5, y: 5 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual({ x: 0, y: 3 });
   expect(operator.buffer).toStrictEqual([0, 0, 0, 1, 0, 2, 0, 3, 5, 5]);
@@ -141,9 +141,9 @@ test("onMouseMove (with anchor)", () => {
 test("onMouseUp (unconnected, with anchor)", () => {
   const image = new ImageJS.Image();
 
-  const operator = new LassoSelectionTool(image);
+  const operator = new LassoAnnotationTool(image);
 
-  operator.selecting = true;
+  operator.annotating = true;
 
   operator.anchor = { x: 100, y: 0 };
   operator.buffer = [0, 0, 100, 0, 100, 100];
@@ -151,10 +151,10 @@ test("onMouseUp (unconnected, with anchor)", () => {
 
   operator.onMouseUp({ x: 0, y: 100 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual({ x: 0, y: 100 });
   expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 0, 100]);
@@ -165,19 +165,19 @@ test("onMouseUp (unconnected, with anchor)", () => {
 test("onMouseUp (unconnected, without anchor)", () => {
   const image = new ImageJS.Image();
 
-  const operator = new LassoSelectionTool(image);
+  const operator = new LassoAnnotationTool(image);
 
-  operator.selecting = true;
+  operator.annotating = true;
 
   operator.buffer = [0, 0, 1, 1, 2, 2, 3, 3];
   operator.origin = { x: 0, y: 0 };
 
   operator.onMouseUp({ x: 3, y: 3 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual({ x: 3, y: 3 });
   expect(operator.buffer).toStrictEqual([0, 0, 1, 1, 2, 2, 3, 3]);
@@ -188,9 +188,9 @@ test("onMouseUp (unconnected, without anchor)", () => {
 test("select", () => {
   const image = new ImageJS.Image();
 
-  const operator = new LassoSelectionTool(image);
+  const operator = new LassoAnnotationTool(image);
 
-  operator.selected = true;
+  operator.annotated = true;
 
   operator.anchor = { x: 3, y: 3 };
   operator.buffer = [0, 0, 1, 1, 2, 2, 3, 3, 4, 3, 5, 3];
@@ -204,12 +204,12 @@ test("select", () => {
     visible: true,
   };
 
-  operator.select(category);
+  operator.annotate(category);
 
-  expect(operator.selected).toBe(true);
-  expect(operator.selecting).toBe(false);
+  expect(operator.annotated).toBe(true);
+  expect(operator.annotating).toBe(false);
 
-  expect(operator.selection).toStrictEqual({
+  expect(operator.annotation).toStrictEqual({
     boundingBox: [0, 0, 5, 3],
     categoryId: "5ed3511d-1223-4bba-a0c2-2b3897232d98",
     mask: "mask",

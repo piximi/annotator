@@ -1,11 +1,14 @@
 import { test } from "@jest/globals";
-import { PolygonalSelectionTool } from "./PolygonalSelectionOperator";
+import { PolygonalAnnotationTool } from "./PolygonalAnnotationTool";
 import { Category } from "../../../../types/Category";
+import * as ImageJS from "image-js";
 
 test("deselect", () => {
-  const operator = new PolygonalSelectionTool();
+  const image = new ImageJS.Image();
 
-  operator.selected = true;
+  const operator = new PolygonalAnnotationTool(image);
+
+  operator.annotated = true;
 
   operator.anchor = { x: 100, y: 0 };
   operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
@@ -14,10 +17,10 @@ test("deselect", () => {
 
   operator.deselect();
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(false);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(false);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.origin).toStrictEqual(undefined);
 
@@ -28,14 +31,16 @@ test("deselect", () => {
 });
 
 test("onMouseDown", () => {
-  const operator = new PolygonalSelectionTool();
+  const image = new ImageJS.Image();
+
+  const operator = new PolygonalAnnotationTool(image);
 
   operator.onMouseDown({ x: 0, y: 0 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
   expect(operator.buffer).toStrictEqual([]);
@@ -44,16 +49,18 @@ test("onMouseDown", () => {
 });
 
 test("onMouseDown (subsequent, unconnected)", () => {
-  const operator = new PolygonalSelectionTool();
+  const image = new ImageJS.Image();
+
+  const operator = new PolygonalAnnotationTool(image);
 
   operator.origin = { x: 0, y: 0 };
 
   operator.onMouseDown({ x: 100, y: 0 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
   expect(operator.buffer).toStrictEqual([]);
@@ -62,7 +69,9 @@ test("onMouseDown (subsequent, unconnected)", () => {
 });
 
 test("onMouseDown (subsequent, connected)", () => {
-  const operator = new PolygonalSelectionTool();
+  const image = new ImageJS.Image();
+
+  const operator = new PolygonalAnnotationTool(image);
 
   operator.anchor = { x: 0, y: 100 };
   operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
@@ -70,10 +79,10 @@ test("onMouseDown (subsequent, connected)", () => {
 
   operator.onMouseDown({ x: 1, y: 1 });
 
-  expect(operator.selected).toBe(true);
-  expect(operator.selecting).toBe(false);
+  expect(operator.annotated).toBe(true);
+  expect(operator.annotating).toBe(false);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
   expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 100, 100, 0, 100, 0, 0]);
@@ -82,19 +91,21 @@ test("onMouseDown (subsequent, connected)", () => {
 });
 
 test("onMouseMove", () => {
-  const operator = new PolygonalSelectionTool();
+  const image = new ImageJS.Image();
 
-  operator.selecting = true;
+  const operator = new PolygonalAnnotationTool(image);
+
+  operator.annotating = true;
 
   operator.origin = { x: 0, y: 0 };
   operator.buffer = [0, 0];
 
   operator.onMouseMove({ x: 200, y: 200 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
   expect(operator.buffer).toStrictEqual([0, 0, 200, 200]);
@@ -103,9 +114,11 @@ test("onMouseMove", () => {
 });
 
 test("onMouseMove (with anchor)", () => {
-  const operator = new PolygonalSelectionTool();
+  const image = new ImageJS.Image();
 
-  operator.selecting = true;
+  const operator = new PolygonalAnnotationTool(image);
+
+  operator.annotating = true;
 
   operator.anchor = { x: 100, y: 0 };
   operator.buffer = [0, 0, 100, 0, 100, 100];
@@ -113,10 +126,10 @@ test("onMouseMove (with anchor)", () => {
 
   operator.onMouseMove({ x: 200, y: 200 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual({ x: 100, y: 0 });
   expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 200, 200]);
@@ -125,9 +138,11 @@ test("onMouseMove (with anchor)", () => {
 });
 
 test("onMouseUp (unconnected, with anchor)", () => {
-  const operator = new PolygonalSelectionTool();
+  const image = new ImageJS.Image();
 
-  operator.selecting = true;
+  const operator = new PolygonalAnnotationTool(image);
+
+  operator.annotating = true;
 
   operator.anchor = { x: 100, y: 0 };
   operator.buffer = [0, 0, 100, 0, 100, 100];
@@ -135,10 +150,10 @@ test("onMouseUp (unconnected, with anchor)", () => {
 
   operator.onMouseUp({ x: 0, y: 100 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual({ x: 0, y: 100 });
   expect(operator.buffer).toStrictEqual([0, 0, 100, 0, 0, 100]);
@@ -147,19 +162,21 @@ test("onMouseUp (unconnected, with anchor)", () => {
 });
 
 test("onMouseUp (unconnected, without anchor)", () => {
-  const operator = new PolygonalSelectionTool();
+  const image = new ImageJS.Image();
 
-  operator.selecting = true;
+  const operator = new PolygonalAnnotationTool(image);
+
+  operator.annotating = true;
 
   operator.origin = { x: 0, y: 0 };
   operator.buffer = [0, 0, 100, 100];
 
   operator.onMouseUp({ x: 100, y: 100 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual({ x: 100, y: 100 });
   expect(operator.buffer).toStrictEqual([0, 0, 100, 100]);
@@ -168,18 +185,20 @@ test("onMouseUp (unconnected, without anchor)", () => {
 });
 
 test("onMouseUp (unconnected, on origin)", () => {
-  const operator = new PolygonalSelectionTool();
+  const image = new ImageJS.Image();
 
-  operator.selecting = true;
+  const operator = new PolygonalAnnotationTool(image);
+
+  operator.annotating = true;
 
   operator.origin = { x: 0, y: 0 };
 
   operator.onMouseUp({ x: 0, y: 0 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.anchor).toStrictEqual(undefined);
   expect(operator.buffer).toStrictEqual([]);
@@ -188,9 +207,11 @@ test("onMouseUp (unconnected, on origin)", () => {
 });
 
 test("select", () => {
-  const operator = new PolygonalSelectionTool();
+  const image = new ImageJS.Image();
 
-  operator.selected = true;
+  const operator = new PolygonalAnnotationTool(image);
+
+  operator.annotated = true;
 
   operator.anchor = { x: 100, y: 0 };
   operator.buffer = [0, 0, 100, 0, 100, 100, 0, 100];
@@ -204,12 +225,12 @@ test("select", () => {
     visible: true,
   };
 
-  operator.select(category);
+  operator.annotate(category);
 
-  expect(operator.selected).toBe(true);
-  expect(operator.selecting).toBe(false);
+  expect(operator.annotated).toBe(true);
+  expect(operator.annotating).toBe(false);
 
-  expect(operator.selection).toStrictEqual({
+  expect(operator.annotation).toStrictEqual({
     boundingBox: [0, 0, 100, 100],
     categoryId: "5ed3511d-1223-4bba-a0c2-2b3897232d98",
     mask: "mask",

@@ -1,4 +1,4 @@
-import { ColorSelectionTool } from "./ColorSelectionOperator";
+import { ColorAnnotationTool } from "./ColorAnnotationTool";
 import { test } from "@jest/globals";
 import { Image } from "image-js";
 import { makeFloodMap } from "../../../flood";
@@ -9,15 +9,15 @@ test("onMouseDown", async () => {
 
   const image = await Image.load(src);
 
-  const operator = new ColorSelectionTool(image);
+  const operator = new ColorAnnotationTool(image);
 
   operator.onMouseDown({ x: 0, y: 0 });
 
-  expect(operator.selected).toBe(false);
+  expect(operator.annotated).toBe(false);
 
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotating).toBe(true);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.tolerance).toBe(1);
 
@@ -32,9 +32,9 @@ test("onMouseMove", async () => {
 
   const image = await Image.load(src);
 
-  const operator = new ColorSelectionTool(image);
+  const operator = new ColorAnnotationTool(image);
 
-  operator.selecting = true;
+  operator.annotating = true;
 
   operator.initialPosition = { x: 0, y: 0 };
 
@@ -46,10 +46,11 @@ test("onMouseMove", async () => {
 
   operator.onMouseMove({ x: 20, y: 0 });
 
-  expect(operator.selected).toBe(false);
-  expect(operator.selecting).toBe(true);
+  expect(operator.annotated).toBe(false);
 
-  expect(operator.selection).toBe(undefined);
+  expect(operator.annotating).toBe(true);
+
+  expect(operator.annotation).toBe(undefined);
 
   expect(operator.tolerance).toBe(20);
 });
@@ -57,14 +58,14 @@ test("onMouseMove", async () => {
 // test("onMouseUp", () => {
 //     const operator = new ColorSelectionOperator();
 //
-//     operator.selecting = true;
+//     operator.annotating = true;
 //
 //     operator.origin = { x: 0, y: 0 };
 //
 //     operator.onMouseUp({ x: 100, y: 100 });
 //
-//     expect(operator.selected).toBe(true);
-//     expect(operator.selecting).toBe(false);
+//     expect(operator.annotated).toBe(true);
+//     expect(operator.annotating).toBe(false);
 //
 //     expect(operator.Operator).toBe(undefined);
 //

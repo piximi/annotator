@@ -1,4 +1,4 @@
-import { RectangularSelectionTool } from "./RectangularSelectionOperator";
+import { RectangularAnnotationTool } from "./RectangularAnnotationTool";
 import { test } from "@jest/globals";
 import { Category } from "../../../../types/Category";
 import * as ImageJS from "image-js";
@@ -6,9 +6,9 @@ import * as ImageJS from "image-js";
 test("deselect", () => {
   const image = new ImageJS.Image(224, 224);
 
-  const selectionOperator = new RectangularSelectionTool(image);
+  const selectionOperator = new RectangularAnnotationTool(image);
 
-  selectionOperator.selected = true;
+  selectionOperator.annotated = true;
 
   selectionOperator.origin = { x: 0, y: 0 };
 
@@ -17,10 +17,10 @@ test("deselect", () => {
 
   selectionOperator.deselect();
 
-  expect(selectionOperator.selected).toBe(false);
-  expect(selectionOperator.selecting).toBe(false);
+  expect(selectionOperator.annotated).toBe(false);
+  expect(selectionOperator.annotating).toBe(false);
 
-  expect(selectionOperator.selection).toBe(undefined);
+  expect(selectionOperator.annotation).toBe(undefined);
 
   expect(selectionOperator.origin).toStrictEqual(undefined);
 
@@ -31,14 +31,14 @@ test("deselect", () => {
 test("onMouseDown", () => {
   const image = new ImageJS.Image(224, 224);
 
-  const selectionOperator = new RectangularSelectionTool(image);
+  const selectionOperator = new RectangularAnnotationTool(image);
 
   selectionOperator.onMouseDown({ x: 0, y: 0 });
 
-  expect(selectionOperator.selected).toBe(false);
-  expect(selectionOperator.selecting).toBe(true);
+  expect(selectionOperator.annotated).toBe(false);
+  expect(selectionOperator.annotating).toBe(true);
 
-  expect(selectionOperator.selection).toBe(undefined);
+  expect(selectionOperator.annotation).toBe(undefined);
 
   expect(selectionOperator.origin).toStrictEqual({ x: 0, y: 0 });
 
@@ -49,18 +49,18 @@ test("onMouseDown", () => {
 test("onMouseMove", () => {
   const image = new ImageJS.Image(224, 224);
 
-  const selectionOperator = new RectangularSelectionTool(image);
+  const selectionOperator = new RectangularAnnotationTool(image);
 
-  selectionOperator.selecting = true;
+  selectionOperator.annotating = true;
 
   selectionOperator.origin = { x: 0, y: 0 };
 
   selectionOperator.onMouseMove({ x: 100, y: 100 });
 
-  expect(selectionOperator.selected).toBe(false);
-  expect(selectionOperator.selecting).toBe(true);
+  expect(selectionOperator.annotated).toBe(false);
+  expect(selectionOperator.annotating).toBe(true);
 
-  expect(selectionOperator.selection).toBe(undefined);
+  expect(selectionOperator.annotation).toBe(undefined);
 
   expect(selectionOperator.origin).toStrictEqual({ x: 0, y: 0 });
 
@@ -71,18 +71,18 @@ test("onMouseMove", () => {
 test("onMouseUp", () => {
   const image = new ImageJS.Image(224, 224);
 
-  const selectionOperator = new RectangularSelectionTool(image);
+  const selectionOperator = new RectangularAnnotationTool(image);
 
-  selectionOperator.selecting = true;
+  selectionOperator.annotating = true;
 
   selectionOperator.origin = { x: 0, y: 0 };
 
   selectionOperator.onMouseUp({ x: 100, y: 100 });
 
-  expect(selectionOperator.selected).toBe(true);
-  expect(selectionOperator.selecting).toBe(false);
+  expect(selectionOperator.annotated).toBe(true);
+  expect(selectionOperator.annotating).toBe(false);
 
-  expect(selectionOperator.selection).toBe(undefined);
+  expect(selectionOperator.annotation).toBe(undefined);
 
   expect(selectionOperator.origin).toStrictEqual({ x: 0, y: 0 });
 
@@ -93,9 +93,9 @@ test("onMouseUp", () => {
 test("select", () => {
   const image = new ImageJS.Image(224, 224);
 
-  const selectionOperator = new RectangularSelectionTool(image);
+  const selectionOperator = new RectangularAnnotationTool(image);
 
-  selectionOperator.selected = true;
+  selectionOperator.annotated = true;
 
   selectionOperator.origin = { x: 0, y: 0 };
 
@@ -108,12 +108,12 @@ test("select", () => {
     name: "foo",
     visible: true,
   };
-  selectionOperator.select(category);
+  selectionOperator.annotate(category);
 
-  expect(selectionOperator.selected).toBe(true);
-  expect(selectionOperator.selecting).toBe(false);
+  expect(selectionOperator.annotated).toBe(true);
+  expect(selectionOperator.annotating).toBe(false);
 
-  expect(selectionOperator.selection).toStrictEqual({
+  expect(selectionOperator.annotation).toStrictEqual({
     boundingBox: [0, 0, 100, 100],
     categoryId: "5ed3511d-1223-4bba-a0c2-2b3897232d98",
     mask: "mask",

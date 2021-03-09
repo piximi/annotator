@@ -1,5 +1,6 @@
 import { Operator } from "../Operator";
 import { ZoomMode } from "../../../types/ZoomMode";
+import * as _ from "lodash";
 
 export class ZoomOperator extends Operator {
   /**
@@ -16,11 +17,21 @@ export class ZoomOperator extends Operator {
 
   zooming: boolean = false;
 
+  private scales: Array<number> = [0.25, 0.75, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
+
   onClick(position: { x: number; y: number }) {
+    const index = _.findIndex(this.scales, this.scale);
+
+    if (!index) return;
+
     if (this.mode === ZoomMode.In) {
-      this.scale *= 2;
+      if (this.scale === 32.0) return;
+
+      this.scale = this.scales[index + 1];
     } else {
-      this.scale /= 2;
+      if (this.scale === 0.25) return;
+
+      this.scale = this.scales[index - 1];
     }
   }
 

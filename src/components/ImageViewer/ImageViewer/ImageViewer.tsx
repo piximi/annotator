@@ -37,17 +37,20 @@ import {
 } from "../../icons";
 import { theme } from "./theme";
 import Collapse from "@material-ui/core/Collapse";
+import { resetZoomSelector } from "../../../store/selectors/resetZoomSelector";
 
 type ImageViewerProps = {
   image?: Image;
 };
 
 export const ImageViewer = (props: ImageViewerProps) => {
-  const handleRevertZoom = () => {
-    setZoomReset(!zoomReset);
-  };
+  const dispatch = useDispatch();
 
-  const [zoomReset, setZoomReset] = useState<boolean>(false);
+  const zoomReset = useSelector(resetZoomSelector);
+
+  const handleResetZoom = () => {
+    dispatch(slice.actions.setResetZoom({ resetZoom: !zoomReset }));
+  };
 
   const operations = [
     {
@@ -132,11 +135,9 @@ export const ImageViewer = (props: ImageViewerProps) => {
       icon: <ZoomIcon />,
       method: Tool.Zoom,
       name: "Zoom",
-      options: <ZoomOptions handleRevert={handleRevertZoom} />,
+      options: <ZoomOptions handleRevert={handleResetZoom} />,
     },
   ];
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (props.image) {

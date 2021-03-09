@@ -12,6 +12,7 @@ export {
   setInvertMode,
   setOperation,
   setPenSelectionBrushSize,
+  setResetZoom,
   setSaturation,
   setSelectionMode,
   setSeletedCategory,

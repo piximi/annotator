@@ -31,6 +31,7 @@ const initialState: State = {
   },
   invertMode: false,
   operation: Tool.RectangularSelection,
+  resetZoom: false,
   penSelectionBrushSize: 1,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
@@ -118,6 +119,9 @@ export const slice = createSlice({
     ) {
       state.penSelectionBrushSize = action.payload.penSelectionBrushSize;
     },
+    setResetZoom(state: State, action: PayloadAction<{ resetZoom: boolean }>) {
+      state.resetZoom = action.payload.resetZoom;
+    },
     setSaturation(state: State, action: PayloadAction<{ saturation: number }>) {
       state.saturation = action.payload.saturation;
     },
@@ -156,6 +160,7 @@ export const {
   setInvertMode,
   setOperation,
   setPenSelectionBrushSize,
+  setResetZoom,
   setSaturation,
   setSelectionMode,
   setSeletedCategory,

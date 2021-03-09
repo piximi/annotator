@@ -14,6 +14,7 @@ export type State = {
   invertMode: boolean;
   operation: Tool;
   penSelectionBrushSize: number;
+  resetZoom: boolean;
   saturation: number;
   selectedCategory: string;
   selectionMode: SelectionMode;

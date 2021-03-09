@@ -20,10 +20,10 @@ export const Content = ({ category }: ContentProps) => {
   const classes = useStyles();
 
   return (
-    <main className={classes.content}>
+    <main className={classes.content} ref={ref}>
       <div className={classes.toolbar} />
 
-      <div className={classes.parent} ref={ref}>
+      <div className={classes.parent}>
         <Stage
           category={category}
           height={boundingClientRect?.height}

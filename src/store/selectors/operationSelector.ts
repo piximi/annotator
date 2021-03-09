@@ -1,6 +1,6 @@
 import { State } from "../../types/State";
-import { Operation } from "../../types/Operation";
+import { Tool } from "../../types/Tool";
 
-export const operationSelector = ({ state }: { state: State }): Operation => {
+export const operationSelector = ({ state }: { state: State }): Tool => {
   return state.operation;
 };

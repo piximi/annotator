@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as ImageJS from "image-js";
-import { Operation } from "../../types/Operation";
+import { Tool } from "../../types/Tool";
 import {
   ColorAnnotationTool,
   EllipticalAnnotationTool,
@@ -24,23 +24,23 @@ export const useOperator = (src: string) => {
   useEffect(() => {
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
       switch (operation) {
-        case Operation.ColorSelection:
+        case Tool.ColorAnnotation:
           setOperator(new ColorAnnotationTool(image));
 
           return;
-        case Operation.EllipticalSelection:
+        case Tool.EllipticalAnnotation:
           setOperator(new EllipticalAnnotationTool(image));
 
           return;
-        case Operation.LassoSelection:
+        case Tool.LassoAnnotation:
           setOperator(new LassoAnnotationTool(image));
 
           return;
-        case Operation.MagneticSelection:
+        case Tool.MagneticAnnotation:
           setOperator(new MagneticAnnotationTool(image));
 
           return;
-        case Operation.ObjectSelection:
+        case Tool.ObjectAnnotation:
           ObjectAnnotationTool.compile(image).then(
             (operator: ObjectAnnotationTool) => {
               setOperator(operator);
@@ -48,7 +48,7 @@ export const useOperator = (src: string) => {
           );
 
           return;
-        case Operation.PenSelection:
+        case Tool.PenAnnotation:
           PenAnnotationTool.setup(image, 8).then(
             (operator: PenAnnotationTool) => {
               setOperator(operator);
@@ -56,16 +56,16 @@ export const useOperator = (src: string) => {
           );
 
           return;
-        case Operation.PolygonalSelection:
+        case Tool.PolygonalAnnotation:
           setOperator(new PolygonalAnnotationTool(image));
 
           return;
-        case Operation.QuickSelection:
+        case Tool.QuickAnnotation:
           const quickSelectionOperator = QuickAnnotationTool.setup(image);
           setOperator(quickSelectionOperator);
 
           return;
-        case Operation.RectangularSelection:
+        case Tool.RectangularSelection:
           setOperator(new RectangularAnnotationTool(image));
 
           return;

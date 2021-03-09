@@ -11,7 +11,7 @@ import {
   AnnotationTool,
 } from "../../../../../../image/Tool/AnnotationTool";
 import { EllipticalSelection } from "../EllipticalSelection";
-import { Operation } from "../../../../../../types/Operation";
+import { Tool } from "../../../../../../types/Tool";
 import { LassoSelection } from "../LassoSelection";
 import { MagneticSelection } from "../MagneticSelection";
 import { ObjectSelection } from "../ObjectSelection";
@@ -23,7 +23,7 @@ import { PenSelection } from "../PenSelection";
 import { PenSelectionTool } from "../../../../../../image/Tool/AnnotationTool/PenAnnotationTool/PenSelectionOperator";
 
 type SelectionProps = {
-  operation?: Operation;
+  operation?: Tool;
   operator?: AnnotationTool;
 };
 
@@ -31,33 +31,33 @@ export const Selection = ({ operation, operator }: SelectionProps) => {
   if (!operation || !operator) return <React.Fragment />;
 
   switch (operation) {
-    case Operation.ColorSelection:
+    case Tool.ColorAnnotation:
       return <ColorSelection operator={operator as ColorAnnotationTool} />;
-    case Operation.EllipticalSelection:
+    case Tool.EllipticalAnnotation:
       return (
         <EllipticalSelection operator={operator as EllipticalAnnotationTool} />
       );
-    case Operation.LassoSelection:
+    case Tool.LassoAnnotation:
       return <LassoSelection operator={operator as LassoAnnotationTool} />;
-    case Operation.MagneticSelection:
+    case Tool.MagneticAnnotation:
       return (
         <MagneticSelection operator={operator as MagneticAnnotationTool} />
       );
-    case Operation.ObjectSelection:
+    case Tool.ObjectAnnotation:
       return <ObjectSelection operator={operator as ObjectAnnotationTool} />;
-    case Operation.PenSelection:
+    case Tool.PenAnnotation:
       return <PenSelection operator={operator as PenSelectionTool} />;
-    case Operation.PolygonalSelection:
+    case Tool.PolygonalAnnotation:
       return (
         <PolygonalSelection operator={operator as PolygonalAnnotationTool} />
       );
-    case Operation.RectangularSelection:
+    case Tool.RectangularSelection:
       return (
         <RectangularSelection
           operator={operator as RectangularAnnotationTool}
         />
       );
-    case Operation.QuickSelection:
+    case Tool.QuickAnnotation:
       return <QuickSelection operator={operator as QuickAnnotationTool} />;
     default:
       return <React.Fragment />;

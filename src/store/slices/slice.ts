@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Category } from "../../types/Category";
 import { Image } from "../../types/Image";
-import { Operation } from "../../types/Operation";
+import { Tool } from "../../types/Tool";
 import { Selection } from "../../types/Selection";
 import { SelectionMode } from "../../types/SelectionMode";
 import { State } from "../../types/State";
@@ -30,7 +30,7 @@ const initialState: State = {
     src: colorImage,
   },
   invertMode: false,
-  operation: Operation.RectangularSelection,
+  operation: Tool.RectangularSelection,
   penSelectionBrushSize: 1,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
@@ -109,10 +109,7 @@ export const slice = createSlice({
     ) {
       state.invertMode = action.payload.invertMode;
     },
-    setOperation(
-      state: State,
-      action: PayloadAction<{ operation: Operation }>
-    ) {
+    setOperation(state: State, action: PayloadAction<{ operation: Tool }>) {
       state.operation = action.payload.operation;
     },
     setPenSelectionBrushSize(

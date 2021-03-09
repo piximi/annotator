@@ -1,6 +1,6 @@
 import { Category } from "./Category";
 import { Image } from "./Image";
-import { Operation } from "./Operation";
+import { Tool } from "./Tool";
 import { SelectionMode } from "./SelectionMode";
 import { ZoomMode } from "./ZoomMode";
 
@@ -12,7 +12,7 @@ export type State = {
   hue: number;
   image?: Image;
   invertMode: boolean;
-  operation: Operation;
+  operation: Tool;
   penSelectionBrushSize: number;
   saturation: number;
   selectedCategory: string;

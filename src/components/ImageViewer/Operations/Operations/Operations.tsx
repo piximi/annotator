@@ -2,7 +2,7 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import React from "react";
-import { Operation as OperationType } from "../../../../types/Operation";
+import { Tool as OperationType } from "../../../../types/Tool";
 import { Operation } from "../Operation";
 import { useStyles } from "./Operations.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -82,12 +82,12 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: OperationType.EllipticalSelection,
+                operation: OperationType.EllipticalAnnotation,
               })
             );
             handleCollapse(true);
           }}
-          selected={activeOperation === OperationType.EllipticalSelection}
+          selected={activeOperation === OperationType.EllipticalAnnotation}
         >
           <EllipticalSelectionIcon />
         </Operation>
@@ -97,12 +97,12 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: OperationType.PenSelection,
+                operation: OperationType.PenAnnotation,
               })
             );
             handleCollapse(true);
           }}
-          selected={activeOperation === OperationType.PenSelection}
+          selected={activeOperation === OperationType.PenAnnotation}
         >
           <LassoSelectionIcon />
         </Operation>
@@ -112,12 +112,12 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: OperationType.LassoSelection,
+                operation: OperationType.LassoAnnotation,
               })
             );
             handleCollapse(true);
           }}
-          selected={activeOperation === OperationType.LassoSelection}
+          selected={activeOperation === OperationType.LassoAnnotation}
         >
           <LassoSelectionIcon />
         </Operation>
@@ -127,12 +127,12 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: OperationType.PolygonalSelection,
+                operation: OperationType.PolygonalAnnotation,
               })
             );
             handleCollapse(true);
           }}
-          selected={activeOperation === OperationType.PolygonalSelection}
+          selected={activeOperation === OperationType.PolygonalAnnotation}
         >
           <PolygonalSelectionIcon />
         </Operation>
@@ -142,12 +142,12 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: OperationType.MagneticSelection,
+                operation: OperationType.MagneticAnnotation,
               })
             );
             handleCollapse(true);
           }}
-          selected={activeOperation === OperationType.MagneticSelection}
+          selected={activeOperation === OperationType.MagneticAnnotation}
         >
           <MagneticSelectionIcon />
         </Operation>
@@ -157,12 +157,12 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: OperationType.ColorSelection,
+                operation: OperationType.ColorAnnotation,
               })
             );
             handleCollapse(true);
           }}
-          selected={activeOperation === OperationType.ColorSelection}
+          selected={activeOperation === OperationType.ColorAnnotation}
         >
           <ColorSelectionIcon />
         </Operation>
@@ -172,12 +172,12 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: OperationType.QuickSelection,
+                operation: OperationType.QuickAnnotation,
               })
             );
             handleCollapse(true);
           }}
-          selected={activeOperation === OperationType.QuickSelection}
+          selected={activeOperation === OperationType.QuickAnnotation}
         >
           <QuickSelectionIcon />
         </Operation>
@@ -187,12 +187,12 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
-                operation: OperationType.ObjectSelection,
+                operation: OperationType.ObjectAnnotation,
               })
             );
             handleCollapse(true);
           }}
-          selected={activeOperation === OperationType.ObjectSelection}
+          selected={activeOperation === OperationType.ObjectAnnotation}
         >
           <ObjectSelectionIcon />
         </Operation>

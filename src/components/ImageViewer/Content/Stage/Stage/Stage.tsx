@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import useImage from "use-image";
-import { Operation } from "../../../../../types/Operation";
+import { Tool } from "../../../../../types/Tool";
 import {
   categoriesSelector,
   imageInstancesSelector,
@@ -214,7 +214,7 @@ export const Stage = ({ category, src }: StageProps) => {
   });
 
   useEffect(() => {
-    if (operation !== Operation.PenSelection) return;
+    if (operation !== Tool.PenAnnotation) return;
 
     // @ts-ignore
     operator.brushSize = penSelectionBrushSize;
@@ -307,7 +307,7 @@ export const Stage = ({ category, src }: StageProps) => {
       // left click only
       if (!operator || !stageRef || !stageRef.current) return;
 
-      if (operation === Operation.Zoom) return;
+      if (operation === Tool.Zoom) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -328,7 +328,7 @@ export const Stage = ({ category, src }: StageProps) => {
     const func = () => {
       if (!operator || !stageRef || !stageRef.current) return;
 
-      if (operation === Operation.Zoom) return;
+      if (operation === Tool.Zoom) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -352,7 +352,7 @@ export const Stage = ({ category, src }: StageProps) => {
     const func = () => {
       if (!operator || !stageRef || !stageRef.current) return;
 
-      if (operation === Operation.Zoom) return;
+      if (operation === Tool.Zoom) return;
 
       const position = stageRef.current.getPointerPosition();
 

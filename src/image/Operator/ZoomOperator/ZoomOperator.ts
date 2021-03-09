@@ -33,6 +33,11 @@ export class ZoomOperator extends Operator {
 
       this.scale = this.scales[index - 1];
     }
+
+    if (this.center) return;
+
+    this.x = position.x;
+    this.y = position.y;
   }
 
   onMouseDown(position: { x: number; y: number }) {}

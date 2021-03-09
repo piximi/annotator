@@ -314,7 +314,6 @@ export const Stage = ({ category, src }: StageProps) => {
       if (!position) return;
 
       const relative = getRelativePointerPosition(position);
-      console.info(relative);
 
       if (!relative) return;
 
@@ -436,10 +435,6 @@ export const Stage = ({ category, src }: StageProps) => {
     content.style.marginLeft = "auto";
     content.style.marginRight = "auto";
   }, [stageRef.current]);
-
-  useEffect(() => {
-    console.info(`scale: ${scale}`);
-  }, [scale]);
 
   return (
     <ReactKonva.Stage

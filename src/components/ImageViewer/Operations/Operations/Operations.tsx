@@ -21,6 +21,7 @@ import {
   RectangularSelectionIcon,
   ZoomIcon,
 } from "../../../icons";
+import { useTranslation } from "react-i18next";
 
 type OperationsProps = {
   handleCollapse: (b: boolean) => void;
@@ -32,6 +33,8 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
   const dispatch = useDispatch();
 
   const activeOperation = useSelector(operationSelector);
+
+  const { t, i18n } = useTranslation();
 
   return (
     <Drawer
@@ -46,7 +49,7 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
 
       <List>
         <Operation
-          name="Color adjustment"
+          name={t("Color adjustment")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({

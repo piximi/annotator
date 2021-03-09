@@ -37,6 +37,7 @@ import {
 } from "../../icons";
 import { theme } from "./theme";
 import Collapse from "@material-ui/core/Collapse";
+import { useTranslation } from "react-i18next";
 
 type ImageViewerProps = {
   image?: Image;
@@ -49,12 +50,14 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
   const [zoomReset, setZoomReset] = useState<boolean>(false);
 
+  const { t, i18n } = useTranslation();
+
   const operations = [
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <ColorAdjustmentIcon />,
       method: Tool.ColorAdjustment,
-      name: "Color adjustment",
+      name: t("Color adjustment"),
       options: <React.Fragment />,
     },
     {

@@ -22,8 +22,10 @@ export const useZoomOperator = (operation: Tool, operator: ZoomTool) => {
   }, [operator?.selected]);
 
   useEffect(() => {
-    if (!operator || !operator.scale) return;
+    if (!operator || !operator.minimum || !operator.scale) return;
     setScale(operator.scale);
+    setX(operator.minimum.x - operator.minimum.x * operator.scale);
+    setY(operator.minimum.y - operator.minimum.y * operator.scale);
   }, [operator?.scale]);
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {

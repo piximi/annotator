@@ -57,6 +57,7 @@ export class ZoomTool extends Tool {
    */
   reset() {
     this.scale = 1.0;
+    this.minimum = { x: 0, y: 0 };
   }
 
   onMouseDown(position: { x: number; y: number }) {

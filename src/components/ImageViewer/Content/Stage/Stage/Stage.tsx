@@ -26,8 +26,8 @@ import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 import { AnnotationTool } from "../../../../../image/Tool/AnnotationTool/AnnotationTool";
-import { RectangularAnnotationTool } from "../../../../../image/Tool/AnnotationTool/RectangularAnnotationTool";
 import { ZoomTool } from "../../../../../image/Tool/ZoomTool";
+import { zoomResetSelector } from "../../../../../store/selectors/zoomResetSelector";
 
 type StageProps = {
   category: Category;
@@ -71,6 +71,7 @@ export const Stage = ({ category, src }: StageProps) => {
   const categories = useSelector(categoriesSelector);
   const visibleCategories = useSelector(visibleCategoriesSelector);
 
+  const zoomReset = useSelector(zoomResetSelector);
   const zoomMode = useSelector(zoomModeSelector);
 
   const enterPress = useKeyPress("Enter");
@@ -80,7 +81,9 @@ export const Stage = ({ category, src }: StageProps) => {
 
   const { onWheel, scale, x, y } = useZoomOperator(
     operation,
-    operator as ZoomTool
+    operator as ZoomTool,
+    zoomMode,
+    zoomReset
   );
 
   let annotationOperator = operator as AnnotationTool;
@@ -246,13 +249,13 @@ export const Stage = ({ category, src }: StageProps) => {
     operator.brushSize = penSelectionBrushSize;
   }, [penSelectionBrushSize]);
 
-  useEffect(() => {
-    if (operation !== Tool.Zoom) return;
-
-    // @ts-ignore
-    operator.mode = zoomMode;
-    console.info("Setting new zoom mode");
-  }, [zoomMode]);
+  // useEffect(() => {
+  //   if (operation !== Tool.Zoom) return;
+  //   console.info("Always here")
+  //
+  //   // @ts-ignore
+  //   operator.reset()
+  // }, [zoomReset]);
 
   useEffect(() => {
     if (!annotationOperator || !annotationOperator.contour) return;

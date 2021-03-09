@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import { Tool } from "../../types/Tool";
 import { KonvaEventObject } from "konva/types/Node";
 import { ZoomTool } from "../../image/Tool/ZoomTool";
+import { ZoomMode } from "../../types/ZoomMode";
 
-export const useZoomOperator = (operation: Tool, operator: ZoomTool) => {
+export const useZoomOperator = (
+  operation: Tool,
+  operator: ZoomTool,
+  zoomMode: ZoomMode,
+  zoomReset: boolean
+) => {
   const [scale, setScale] = useState<number>(1.0);
 
   const [x, setX] = useState<number>(0);
@@ -27,6 +33,20 @@ export const useZoomOperator = (operation: Tool, operator: ZoomTool) => {
     setX(operator.minimum.x - operator.minimum.x * operator.scale);
     setY(operator.minimum.y - operator.minimum.y * operator.scale);
   }, [operator?.scale]);
+
+  useEffect(() => {
+    if (!operator) return;
+    operator.reset();
+    setScale(operator.scale);
+    setX(0);
+    setY(0);
+  }, [zoomReset]);
+
+  useEffect(() => {
+    if (!operator) return;
+    // @ts-ignore
+    operator.mode = zoomMode;
+  }, [zoomMode]);
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     if (operation !== Tool.Zoom) return;

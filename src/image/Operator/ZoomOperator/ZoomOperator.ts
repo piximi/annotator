@@ -45,14 +45,22 @@ export class ZoomOperator extends Operator {
 
   onMouseDown(position: { x: number; y: number }) {
     this.minimum = position;
+
+    this.zooming = true;
   }
 
-  onMouseMove(position: { x: number; y: number }, pressed: boolean) {
-    if (!this.zooming) return;
+  onMouseMove(position: { x: number; y: number }, clicked: boolean) {
+    if (!clicked || !this.zooming) return;
+
+    this.maximum = position;
   }
 
   onMouseUp(position: { x: number; y: number }) {
     if (!this.zooming) return;
+
+    this.maximum = position;
+
+    this.zooming = false;
   }
 
   /**

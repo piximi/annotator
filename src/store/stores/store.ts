@@ -6,8 +6,11 @@ import {
 } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 import { reducer } from "../reducer";
+import * as Sentry from "@sentry/react";
 
-const enhancers: StoreEnhancer[] = [];
+const sentryReduxEnhancer = Sentry.createReduxEnhancer({});
+
+const enhancers: StoreEnhancer[] = [sentryReduxEnhancer];
 
 const middleware: Middleware[] = [logger];
 

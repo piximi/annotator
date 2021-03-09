@@ -16,13 +16,11 @@ export class ZoomOperator extends Operator {
 
   zooming: boolean = false;
 
-  onMouseDown(position: { x: number; y: number }) {
-    this.zooming = true;
-
+  onClick(position: { x: number; y: number }) {
     this.scale *= 2;
-
-    this.zooming = false;
   }
+
+  onMouseDown(position: { x: number; y: number }) {}
 
   onMouseMove(position: { x: number; y: number }) {
     if (!this.zooming) return;

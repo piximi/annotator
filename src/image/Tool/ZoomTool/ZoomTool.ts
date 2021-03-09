@@ -47,31 +47,29 @@ export class ZoomTool extends Tool {
     this.scale = 1.0;
   }
 
-  onClick(position: { x: number; y: number }) {
-    const index = _.findIndex(this.scales, this.scale);
-
-    if (!index) return;
-
-    if (this.mode === ZoomMode.In) {
-      if (this.scale === 32.0) return;
-
-      this.scale = this.scales[index + 1];
-    } else {
-      if (this.scale === 0.25) return;
-
-      this.scale = this.scales[index - 1];
-    }
-
-    if (this.center) return;
-
-    this.x = position.x;
-    this.y = position.y;
-  }
+  // onClick(position: { x: number; y: number }) {
+  //   const index = _.findIndex(this.scales, this.scale);
+  //
+  //   if (!index) return;
+  //
+  //   if (this.mode === ZoomMode.In) {
+  //     if (this.scale === 32.0) return;
+  //
+  //     this.scale = this.scales[index + 1];
+  //   } else {
+  //     if (this.scale === 0.25) return;
+  //
+  //     this.scale = this.scales[index - 1];
+  //   }
+  //
+  //   if (this.center) return;
+  //
+  //   this.x = position.x;
+  //   this.y = position.y;
+  // }
 
   onMouseDown(position: { x: number; y: number }) {
     this.minimum = position;
-
-    console.info(position);
 
     this.zooming = true;
   }
@@ -85,10 +83,35 @@ export class ZoomTool extends Tool {
   onMouseUp(position: { x: number; y: number }) {
     if (!this.zooming) return;
 
-    this.maximum = position;
+    // click event
+    if (!this.maximum) {
+      const index = _.indexOf(this.scales, this.scale);
 
-    this.selected = true;
+      if (!index) return;
 
-    this.zooming = false;
+      if (this.mode === ZoomMode.In) {
+        if (this.scale === 32.0) return;
+
+        this.scale = this.scales[index + 1];
+      } else {
+        if (this.scale === 0.25) return;
+
+        this.scale = this.scales[index - 1];
+      }
+
+      this.zooming = false;
+      this.selected = true;
+
+      //FIXME incoroporate below
+      // if (this.center) return;
+      // this.x = position.x;
+      // this.y = position.y;
+    } else {
+      this.maximum = position;
+
+      this.selected = true;
+
+      this.zooming = false;
+    }
   }
 }

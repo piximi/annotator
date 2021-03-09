@@ -21,6 +21,11 @@ export const useZoomOperator = (operation: Tool, operator: ZoomTool) => {
     setScale(newScale);
   }, [operator?.selected]);
 
+  useEffect(() => {
+    if (!operator || !operator.scale) return;
+    setScale(operator.scale);
+  }, [operator?.scale]);
+
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     if (operation !== Tool.Zoom) return;
 

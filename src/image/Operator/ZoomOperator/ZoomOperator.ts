@@ -17,7 +17,11 @@ export class ZoomOperator extends Operator {
   zooming: boolean = false;
 
   onClick(position: { x: number; y: number }) {
-    this.scale *= 2;
+    if (this.mode === ZoomMode.In) {
+      this.scale *= 2;
+    } else {
+      this.scale /= 2;
+    }
   }
 
   onMouseDown(position: { x: number; y: number }) {}

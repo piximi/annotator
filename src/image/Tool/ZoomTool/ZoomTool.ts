@@ -59,27 +59,6 @@ export class ZoomTool extends Tool {
     this.scale = 1.0;
   }
 
-  // onClick(position: { x: number; y: number }) {
-  //   const index = _.findIndex(this.scales, this.scale);
-  //
-  //   if (!index) return;
-  //
-  //   if (this.mode === ZoomMode.In) {
-  //     if (this.scale === 32.0) return;
-  //
-  //     this.scale = this.scales[index + 1];
-  //   } else {
-  //     if (this.scale === 0.25) return;
-  //
-  //     this.scale = this.scales[index - 1];
-  //   }
-  //
-  //   if (this.center) return;
-  //
-  //   this.x = position.x;
-  //   this.y = position.y;
-  // }
-
   onMouseDown(position: { x: number; y: number }) {
     this.minimum = position;
 

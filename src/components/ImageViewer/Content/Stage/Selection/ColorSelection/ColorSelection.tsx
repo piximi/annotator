@@ -1,9 +1,9 @@
-import { ColorSelectionTool } from "../../../../../../image/Tool/SelectionTool";
+import { ColorAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 
 type ColorSelectionProps = {
-  operator: ColorSelectionTool;
+  operator: ColorAnnotationTool;
 };
 
 export const ColorSelection = ({ operator }: ColorSelectionProps) => {

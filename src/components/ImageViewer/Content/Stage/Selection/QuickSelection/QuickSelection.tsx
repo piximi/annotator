@@ -1,9 +1,9 @@
-import { QuickSelectionTool } from "../../../../../../image/Tool/SelectionTool";
+import { QuickAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 
 type QuickSelectionProps = {
-  operator: QuickSelectionTool;
+  operator: QuickAnnotationTool;
 };
 
 export const QuickSelection = ({ operator }: QuickSelectionProps) => {

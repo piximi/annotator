@@ -1,10 +1,10 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { LassoSelectionTool } from "../../../../../../image/Tool/SelectionTool";
+import { LassoAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type LassoSelectionProps = {
-  operator: LassoSelectionTool;
+  operator: LassoAnnotationTool;
 };
 
 export const LassoSelection = ({ operator }: LassoSelectionProps) => {

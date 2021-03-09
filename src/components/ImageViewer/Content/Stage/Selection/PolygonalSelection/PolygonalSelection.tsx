@@ -1,10 +1,10 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { PolygonalSelectionTool } from "../../../../../../image/Tool/SelectionTool";
+import { PolygonalAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type PolygonalSelectionProps = {
-  operator: PolygonalSelectionTool;
+  operator: PolygonalAnnotationTool;
 };
 
 export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {

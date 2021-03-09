@@ -1,10 +1,10 @@
-import { RectangularSelectionTool } from "../../../../../../image/Tool/SelectionTool";
+import { RectangularAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type RectangularSelectionProps = {
-  operator: RectangularSelectionTool;
+  operator: RectangularAnnotationTool;
 };
 
 export const RectangularSelection = ({

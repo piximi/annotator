@@ -1,1 +1,0 @@
-export { PolygonalSelectionTool } from "./PolygonalSelectionTool";

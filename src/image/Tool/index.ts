@@ -1,14 +1,14 @@
 export { Tool } from "./Tool";
 
 export {
-  ColorSelectionTool,
-  EllipticalSelectionTool,
-  LassoSelectionTool,
-  MagneticSelectionTool,
-  ObjectSelectionTool,
-  PenSelectionTool,
-  PolygonalSelectionTool,
-  QuickSelectionTool,
-  RectangularSelectionTool,
-  SelectionTool,
-} from "./SelectionTool";
+  ColorAnnotationTool,
+  EllipticalAnnotationTool,
+  LassoAnnotationTool,
+  MagneticAnnotationTool,
+  ObjectAnnotationTool,
+  PenAnnotationTool,
+  PolygonalAnnotationTool,
+  QuickAnnotationTool,
+  RectangularAnnotationTool,
+  AnnotationTool,
+} from "./AnnotationTool";

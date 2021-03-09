@@ -1,10 +1,10 @@
-import { ObjectSelectionTool } from "../../../../../../image/Tool/SelectionTool";
+import { ObjectAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type ObjectSelectionProps = {
-  operator: ObjectSelectionTool;
+  operator: ObjectAnnotationTool;
 };
 
 export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {

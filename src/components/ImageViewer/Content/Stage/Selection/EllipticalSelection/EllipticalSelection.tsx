@@ -1,10 +1,10 @@
-import { EllipticalSelectionTool } from "../../../../../../image/Tool/SelectionTool";
+import { EllipticalAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type EllipticalSelectionProps = {
-  operator: EllipticalSelectionTool;
+  operator: EllipticalAnnotationTool;
 };
 
 export const EllipticalSelection = ({ operator }: EllipticalSelectionProps) => {

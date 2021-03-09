@@ -1,1 +1,0 @@
-export { RectangularSelectionTool } from "./RectangularSelectionTool";

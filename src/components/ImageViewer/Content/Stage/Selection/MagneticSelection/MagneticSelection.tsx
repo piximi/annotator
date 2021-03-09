@@ -1,10 +1,10 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { MagneticSelectionTool } from "../../../../../../image/Tool/SelectionTool";
+import { MagneticAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type MagneticSelectionProps = {
-  operator: MagneticSelectionTool;
+  operator: MagneticAnnotationTool;
 };
 
 export const MagneticSelection = ({ operator }: MagneticSelectionProps) => {

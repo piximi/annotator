@@ -249,14 +249,6 @@ export const Stage = ({ category, src }: StageProps) => {
     operator.brushSize = penSelectionBrushSize;
   }, [penSelectionBrushSize]);
 
-  // useEffect(() => {
-  //   if (operation !== Tool.Zoom) return;
-  //   console.info("Always here")
-  //
-  //   // @ts-ignore
-  //   operator.reset()
-  // }, [zoomReset]);
-
   useEffect(() => {
     if (!annotationOperator || !annotationOperator.contour) return;
 

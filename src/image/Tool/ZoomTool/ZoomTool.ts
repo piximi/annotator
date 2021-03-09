@@ -57,7 +57,10 @@ export class ZoomTool extends Tool {
    */
   reset() {
     this.scale = 1.0;
-    this.minimum = { x: 0, y: 0 };
+
+    this.zooming = false;
+
+    this.selected = false;
   }
 
   onMouseDown(position: { x: number; y: number }) {
@@ -75,7 +78,6 @@ export class ZoomTool extends Tool {
   onMouseUp(position: { x: number; y: number }) {
     if (!this.zooming) return;
 
-    // click event
     if (!this.maximum) {
       const index = _.indexOf(this.scales, this.scale);
 
@@ -92,18 +94,21 @@ export class ZoomTool extends Tool {
       }
 
       this.zooming = false;
-      this.selected = true;
+      this.selected = false;
 
-      //FIXME incoroporate below
+      //FIXME: uncomment below when we have a "automatically center" option
       // if (this.center) return;
-      // this.x = position.x;
-      // this.y = position.y;
     } else {
       this.maximum = position;
 
       this.selected = true;
 
       this.zooming = false;
+
+      // //deselect
+      // this.selected = false;
+      // this.minimum = undefined;
+      // this.maximum = undefined;
     }
   }
 }

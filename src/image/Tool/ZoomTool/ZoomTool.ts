@@ -89,8 +89,8 @@ export class ZoomTool extends Tool {
 
     this.maximum = position;
 
-    this.zooming = false;
-
     this.selected = true;
+
+    this.zooming = false;
   }
 }

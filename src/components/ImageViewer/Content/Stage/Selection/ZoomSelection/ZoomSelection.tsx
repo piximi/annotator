@@ -10,7 +10,7 @@ type ZoomSelectionProps = {
 export const ZoomSelection = ({ operator }: ZoomSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
-  if (!operator.minimum || !operator.maximum) return null;
+  if (!operator.minimum || !operator.maximum || !operator.zooming) return null;
 
   return (
     <ReactKonva.Group>

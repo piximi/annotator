@@ -21,6 +21,8 @@ export class ZoomTool extends Tool {
 
   zooming: boolean = false;
 
+  selected = false;
+
   private scales: Array<number> = [0.25, 0.75, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
 
   get percentile(): string {
@@ -86,5 +88,7 @@ export class ZoomTool extends Tool {
     this.maximum = position;
 
     this.zooming = false;
+
+    this.selected = true;
   }
 }

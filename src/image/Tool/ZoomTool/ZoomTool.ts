@@ -47,6 +47,14 @@ export class ZoomTool extends Tool {
     });
   }
 
+  deselect() {
+    this.maximum = undefined;
+    this.minimum = undefined;
+
+    this.selected = false;
+    this.zooming = false;
+  }
+
   /**
    * Zoom to fit the image to the application window.
    */
@@ -58,25 +66,31 @@ export class ZoomTool extends Tool {
   reset() {
     this.scale = 1.0;
 
-    this.zooming = false;
+    // this.zooming = false;
 
     this.selected = false;
   }
 
   onMouseDown(position: { x: number; y: number }) {
+    if (this.selected) return;
     this.minimum = position;
 
+    // this.zooming = true;
     this.zooming = true;
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (!this.zooming) return;
+    if (this.selected || !this.zooming) return;
 
-    this.maximum = position;
+    if (!this.minimum) return;
+
+    if (position.x !== this.minimum.x) {
+      this.maximum = position;
+    }
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (!this.zooming) return;
+    if (this.selected || !this.zooming) return;
 
     if (!this.maximum) {
       const index = _.indexOf(this.scales, this.scale);
@@ -93,22 +107,22 @@ export class ZoomTool extends Tool {
         this.scale = this.scales[index - 1];
       }
 
-      this.zooming = false;
-      this.selected = false;
+      // this.zooming = false;
+      // this.selected = false;
 
       //FIXME: uncomment below when we have a "automatically center" option
       // if (this.center) return;
     } else {
       this.maximum = position;
 
-      this.selected = true;
-
-      this.zooming = false;
+      // this.zooming = false;
 
       // //deselect
       // this.selected = false;
       // this.minimum = undefined;
       // this.maximum = undefined;
     }
+    this.selected = true;
+    this.zooming = false;
   }
 }

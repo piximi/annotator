@@ -25,21 +25,28 @@ export const useZoomOperator = (
     setY(-1 * operator.minimum.y * newScale);
 
     setScale(newScale);
+
+    operator.deselect();
   }, [operator?.selected]);
 
   useEffect(() => {
     if (!operator || !operator.minimum || !operator.scale) return;
+
     setScale(operator.scale);
     setX(operator.minimum.x - operator.minimum.x * operator.scale);
     setY(operator.minimum.y - operator.minimum.y * operator.scale);
+
+    operator.deselect();
   }, [operator?.scale]);
 
   useEffect(() => {
     if (!operator) return;
     operator.reset();
-    setScale(operator.scale);
+    setScale(1.0);
     setX(0);
     setY(0);
+
+    operator.deselect();
   }, [zoomReset]);
 
   useEffect(() => {

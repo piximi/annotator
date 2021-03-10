@@ -131,10 +131,17 @@ export class ZoomTool extends Tool {
       if (this.mode === ZoomMode.In) {
         this.maximum = position;
 
-        this.scale = this.image.width / (this.maximum.x - this.minimum.x);
+        this.scale = Math.abs(
+          this.image.width / (this.maximum.x - this.minimum.x)
+        );
 
-        this.x = -1 * this.minimum.x * this.scale;
-        this.y = -1 * this.minimum.y * this.scale;
+        const x =
+          this.minimum.x > this.maximum.x ? this.maximum.x : this.minimum.x;
+        const y =
+          this.minimum.y > this.maximum.y ? this.maximum.y : this.minimum.y;
+
+        this.x = -1 * x * this.scale;
+        this.y = -1 * y * this.scale;
       }
 
       // //deselect

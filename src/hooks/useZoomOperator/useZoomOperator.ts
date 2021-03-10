@@ -15,8 +15,6 @@ export const useZoomOperator = (
   const [x, setX] = useState<number>(0);
   const [y, setY] = useState<number>(0);
 
-  const [zoomed, setZoomed] = useState<boolean>(false);
-
   useEffect(() => {
     if (!operator || !operator.scale || !operator.selected) return;
 
@@ -25,15 +23,8 @@ export const useZoomOperator = (
 
     setScale(operator.scale);
 
-    setZoomed(true);
-  }, [operator?.selected]);
-
-  useEffect(() => {
-    if (!zoomed) return;
-
     operator.deselect();
-    setZoomed(false);
-  }, [zoomed]);
+  }, [operator?.selected]);
 
   useEffect(() => {
     if (!operator) return;

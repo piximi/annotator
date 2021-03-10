@@ -27,6 +27,8 @@ export const useZoomOperator = (
   }, [operator?.selected]);
 
   useEffect(() => {
+    if (operation !== Tool.Zoom) return;
+
     if (!operator) return;
     operator.reset();
     setScale(1.0);

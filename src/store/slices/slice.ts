@@ -36,8 +36,11 @@ const initialState: State = {
   selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: SelectionMode.New,
   vibrance: 0,
-  zoomMode: ZoomMode.In,
-  zoomReset: false,
+  zoomSettings: {
+    center: true,
+    zoomMode: ZoomMode.In,
+    zoomReset: false,
+  },
 };
 
 export const slice = createSlice({
@@ -119,9 +122,6 @@ export const slice = createSlice({
     ) {
       state.penSelectionBrushSize = action.payload.penSelectionBrushSize;
     },
-    setZoomReset(state: State, action: PayloadAction<{ zoomReset: boolean }>) {
-      state.zoomReset = action.payload.zoomReset;
-    },
     setSaturation(state: State, action: PayloadAction<{ saturation: number }>) {
       state.saturation = action.payload.saturation;
     },
@@ -141,7 +141,10 @@ export const slice = createSlice({
       state.vibrance = action.payload.vibrance;
     },
     setZoomMode(state: State, action: PayloadAction<{ zoomMode: ZoomMode }>) {
-      state.zoomMode = action.payload.zoomMode;
+      state.zoomSettings.zoomMode = action.payload.zoomMode;
+    },
+    setZoomReset(state: State, action: PayloadAction<{ zoomReset: boolean }>) {
+      state.zoomSettings.zoomReset = action.payload.zoomReset;
     },
   },
 });

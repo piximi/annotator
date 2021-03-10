@@ -10,7 +10,7 @@ import {
   invertModeSelector,
   operationSelector,
   selectionModeSelector,
-  zoomModeSelector,
+  zoomSettingsSelector,
 } from "../../../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
@@ -27,7 +27,6 @@ import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 import { AnnotationTool } from "../../../../../image/Tool/AnnotationTool/AnnotationTool";
 import { ZoomTool } from "../../../../../image/Tool/ZoomTool";
-import { zoomResetSelector } from "../../../../../store/selectors/zoomResetSelector";
 
 type StageProps = {
   category: Category;
@@ -71,8 +70,7 @@ export const Stage = ({ category, src }: StageProps) => {
   const categories = useSelector(categoriesSelector);
   const visibleCategories = useSelector(visibleCategoriesSelector);
 
-  const zoomReset = useSelector(zoomResetSelector);
-  const zoomMode = useSelector(zoomModeSelector);
+  const zoomSettings = useSelector(zoomSettingsSelector);
 
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
@@ -82,8 +80,8 @@ export const Stage = ({ category, src }: StageProps) => {
   const { onWheel, scale, x, y } = useZoomOperator(
     operation,
     tool as ZoomTool,
-    zoomMode,
-    zoomReset
+    zoomSettings.zoomMode,
+    zoomSettings.zoomReset
   );
 
   let operator = tool as AnnotationTool;

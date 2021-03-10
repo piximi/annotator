@@ -3,6 +3,7 @@ import { Image } from "./Image";
 import { Tool } from "./Tool";
 import { SelectionMode } from "./SelectionMode";
 import { ZoomMode } from "./ZoomMode";
+import { ZoomSettings } from "./ZoomSettings";
 
 export type State = {
   brightness: number;
@@ -18,6 +19,5 @@ export type State = {
   selectedCategory: string;
   selectionMode: SelectionMode;
   vibrance: number;
-  zoomMode: ZoomMode;
-  zoomReset: boolean;
+  zoomSettings: ZoomSettings;
 };

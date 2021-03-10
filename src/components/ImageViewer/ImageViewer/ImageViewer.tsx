@@ -8,6 +8,7 @@ import {
   operationSelector,
   selectedCategroySelector,
   unknownCategroySelector,
+  zoomSettingsSelector,
 } from "../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
@@ -37,7 +38,6 @@ import {
 } from "../../icons";
 import { theme } from "./theme";
 import Collapse from "@material-ui/core/Collapse";
-import { zoomResetSelector } from "../../../store/selectors/zoomResetSelector";
 
 type ImageViewerProps = {
   image?: Image;
@@ -46,10 +46,12 @@ type ImageViewerProps = {
 export const ImageViewer = (props: ImageViewerProps) => {
   const dispatch = useDispatch();
 
-  const zoomReset = useSelector(zoomResetSelector);
+  const zoomSettings = useSelector(zoomSettingsSelector);
 
   const handleZoomReset = () => {
-    dispatch(slice.actions.setZoomReset({ zoomReset: !zoomReset }));
+    dispatch(
+      slice.actions.setZoomReset({ zoomReset: !zoomSettings.zoomReset })
+    );
   };
 
   const operations = [

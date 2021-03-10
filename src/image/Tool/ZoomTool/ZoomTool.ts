@@ -66,7 +66,11 @@ export class ZoomTool extends Tool {
   reset() {
     this.scale = 1.0;
 
+    this.x = 0;
+    this.y = 0;
+
     this.selected = false;
+    this.zooming = false;
   }
 
   onMouseDown(position: { x: number; y: number }) {
@@ -119,12 +123,14 @@ export class ZoomTool extends Tool {
       //FIXME: uncomment below when we have a "automatically center" option
       // if (this.center) return;
     } else {
-      this.maximum = position;
+      if (this.mode === ZoomMode.In) {
+        this.maximum = position;
 
-      this.scale = this.image.width / (this.maximum.x - this.minimum.x);
+        this.scale = this.image.width / (this.maximum.x - this.minimum.x);
 
-      this.x = -1 * this.minimum.x * this.scale;
-      this.y = -1 * this.minimum.y * this.scale;
+        this.x = -1 * this.minimum.x * this.scale;
+        this.y = -1 * this.minimum.y * this.scale;
+      }
 
       // //deselect
       // this.selected = false;

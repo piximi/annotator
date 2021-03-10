@@ -38,7 +38,6 @@ export const useZoomOperator = (
 
   useEffect(() => {
     if (!operator) return;
-    console.info(zoomMode);
     // @ts-ignore
     operator.mode = zoomMode;
   }, [zoomMode]);

@@ -128,8 +128,6 @@ export class ZoomTool extends Tool {
         this.y = this.minimum.y - this.minimum.y * this.scale;
       }
 
-      // if (this.center) return; //FIXME implement this
-
       this.selected = true;
     } else {
       if (this.mode === ZoomMode.In) {
@@ -148,10 +146,6 @@ export class ZoomTool extends Tool {
         this.y = -1 * y * this.scale;
       }
 
-      // //deselect
-      // this.selected = false;
-      // this.minimum = undefined;
-      // this.maximum = undefined;
       this.selected = true;
     }
   }

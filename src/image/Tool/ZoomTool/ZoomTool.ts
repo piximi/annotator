@@ -70,18 +70,15 @@ export class ZoomTool extends Tool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    if (this.selected) return;
     this.minimum = position;
 
     this.zooming = true;
+
+    this.selected = false;
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (this.selected) return;
-
-    if (!this.zooming) return;
-
-    if (!this.minimum) return;
+    if (this.selected || !this.zooming || !this.minimum) return;
 
     if (position.x !== this.minimum.x) {
       this.maximum = position;
@@ -89,31 +86,35 @@ export class ZoomTool extends Tool {
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.selected) return;
-
-    if (!this.zooming) return;
-
-    if (!this.minimum) return;
+    if (this.selected || !this.zooming || !this.minimum) return;
 
     if (!this.maximum) {
       const index = _.indexOf(this.scales, this.scale);
 
       if (!index) return;
 
-      if (this.mode === ZoomMode.In) {
-        if (this.scale === 32.0) return;
-
-        this.scale = this.scales[index + 1];
+      if (index === -1) {
+        if (this.mode === ZoomMode.In) {
+          this.scale += 0.25;
+        } else {
+          this.scale -= 0.25;
+        }
       } else {
-        if (this.scale === 0.25) return;
+        if (this.mode === ZoomMode.In) {
+          if (this.scale === 32.0) return;
 
-        this.scale = this.scales[index - 1];
+          this.scale = this.scales[index + 1];
+        } else {
+          if (this.scale === 0.25) return;
+
+          this.scale = this.scales[index - 1];
+        }
       }
 
       this.x = this.minimum.x - this.minimum.x * this.scale;
       this.y = this.minimum.y - this.minimum.y * this.scale;
 
-      // this.selected = false;
+      this.selected = true;
 
       //FIXME: uncomment below when we have a "automatically center" option
       // if (this.center) return;
@@ -129,7 +130,7 @@ export class ZoomTool extends Tool {
       // this.selected = false;
       // this.minimum = undefined;
       // this.maximum = undefined;
+      this.selected = true;
     }
-    this.selected = true;
   }
 }

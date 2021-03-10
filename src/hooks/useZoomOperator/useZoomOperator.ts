@@ -18,7 +18,7 @@ export const useZoomOperator = (
   const [zoomed, setZoomed] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!operator || !operator.x || !operator.y || !operator.scale) return;
+    if (!operator || !operator.scale || !operator.selected) return;
 
     setX(operator.x);
     setY(operator.y);
@@ -27,6 +27,13 @@ export const useZoomOperator = (
 
     setZoomed(true);
   }, [operator?.selected]);
+
+  useEffect(() => {
+    if (!zoomed) return;
+
+    operator.deselect();
+    setZoomed(false);
+  }, [zoomed]);
 
   useEffect(() => {
     if (!operator) return;
@@ -40,16 +47,10 @@ export const useZoomOperator = (
 
   useEffect(() => {
     if (!operator) return;
+    console.info(zoomMode);
     // @ts-ignore
     operator.mode = zoomMode;
   }, [zoomMode]);
-
-  useEffect(() => {
-    if (!zoomed) return;
-
-    operator.deselect();
-    setZoomed(false);
-  }, [zoomed]);
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     if (operation !== Tool.Zoom) return;

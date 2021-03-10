@@ -64,6 +64,10 @@ export const useZoomOperator = (
     setY(-(origin.y - position.y / newScale) * newScale);
 
     setScale(newScale);
+
+    operator.x = -(origin.x - position.x / newScale) * newScale;
+    operator.y = -(origin.x - position.x / newScale) * newScale;
+    operator.scale = newScale;
   };
 
   return {

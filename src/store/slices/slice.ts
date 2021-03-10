@@ -37,7 +37,7 @@ const initialState: State = {
   selectionMode: SelectionMode.New,
   vibrance: 0,
   zoomSettings: {
-    center: true,
+    zoomAutomaticCentering: true,
     zoomMode: ZoomMode.In,
     zoomReset: false,
   },
@@ -139,6 +139,13 @@ export const slice = createSlice({
     },
     setVibrance(state: State, action: PayloadAction<{ vibrance: number }>) {
       state.vibrance = action.payload.vibrance;
+    },
+    setZoomAutomaticCentering(
+      state: State,
+      action: PayloadAction<{ zoomAutomaticCentering: boolean }>
+    ) {
+      state.zoomSettings.zoomAutomaticCentering =
+        action.payload.zoomAutomaticCentering;
     },
     setZoomMode(state: State, action: PayloadAction<{ zoomMode: ZoomMode }>) {
       state.zoomSettings.zoomMode = action.payload.zoomMode;

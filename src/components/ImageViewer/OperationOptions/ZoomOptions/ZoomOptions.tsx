@@ -21,12 +21,20 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
 
   const zoomSettings = useSelector(zoomSettingsSelector);
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onZoomModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt((event.target as HTMLInputElement).value);
 
     dispatch(
       slice.actions.setZoomMode({
         zoomMode: value as ZoomMode,
+      })
+    );
+  };
+
+  const onCenterChange = () => {
+    dispatch(
+      slice.actions.setZoomAutomaticCentering({
+        zoomAutomaticCentering: !zoomSettings.zoomAutomaticCentering,
       })
     );
   };
@@ -39,7 +47,7 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
         <RadioGroup
           defaultValue={ZoomMode.In}
           name="zoom-mode"
-          onChange={onChange}
+          onChange={onZoomModeChange}
           value={zoomSettings.zoomMode}
         >
           <FormControlLabel
@@ -59,7 +67,11 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
       <ListItem>
         <FormControlLabel
           control={
-            <Checkbox checked={false} onChange={() => {}} name="center" />
+            <Checkbox
+              checked={zoomSettings.zoomAutomaticCentering}
+              onChange={onCenterChange}
+              name="center"
+            />
           }
           label="Center image automatically"
         />

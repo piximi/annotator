@@ -1,7 +1,7 @@
 import { ZoomMode } from "./ZoomMode";
 
 export type ZoomSettings = {
-  center: boolean;
+  zoomAutomaticCentering: boolean;
   zoomMode: ZoomMode;
   zoomReset: boolean;
 };

@@ -21,7 +21,26 @@ export class ZoomTool extends Tool {
 
   zooming: boolean = false;
 
-  private scales: Array<number> = [0.25, 0.75, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
+  selected = false;
+
+  MIN_DELTA_X = 5;
+  MIN_SCALE = 0.25;
+  MAX_SCALE = 32;
+  DELTA_SCALE = 0.25;
+
+  private scales: Array<number> = [
+    this.MIN_SCALE,
+    0.75,
+    1.0,
+    1.25,
+    1.5,
+    1.75,
+    2.0,
+    4.0,
+    8.0,
+    16.0,
+    this.MAX_SCALE,
+  ];
 
   get percentile(): string {
     return numeral(this.scale).format("0%");
@@ -31,6 +50,14 @@ export class ZoomTool extends Tool {
     return _.map(this.scales, (scale: number) => {
       return numeral(scale).format("0%");
     });
+  }
+
+  deselect() {
+    this.maximum = undefined;
+    this.minimum = undefined;
+
+    this.selected = false;
+    this.zooming = false;
   }
 
   /**
@@ -43,46 +70,83 @@ export class ZoomTool extends Tool {
    */
   reset() {
     this.scale = 1.0;
-  }
 
-  onClick(position: { x: number; y: number }) {
-    const index = _.findIndex(this.scales, this.scale);
+    this.x = 0;
+    this.y = 0;
 
-    if (!index) return;
-
-    if (this.mode === ZoomMode.In) {
-      if (this.scale === 32.0) return;
-
-      this.scale = this.scales[index + 1];
-    } else {
-      if (this.scale === 0.25) return;
-
-      this.scale = this.scales[index - 1];
-    }
-
-    if (this.center) return;
-
-    this.x = position.x;
-    this.y = position.y;
+    this.selected = false;
+    this.zooming = false;
   }
 
   onMouseDown(position: { x: number; y: number }) {
     this.minimum = position;
 
     this.zooming = true;
+
+    this.selected = false;
   }
 
-  onMouseMove(position: { x: number; y: number }, clicked: boolean) {
-    if (!clicked || !this.zooming) return;
+  onMouseMove(position: { x: number; y: number }) {
+    if (this.selected || !this.zooming || !this.minimum) return;
 
-    this.maximum = position;
+    if (Math.abs(position.x - this.minimum.x) > this.MIN_DELTA_X) {
+      this.maximum = position;
+    }
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (!this.zooming) return;
+    if (this.selected || !this.zooming || !this.minimum) return;
 
-    this.maximum = position;
+    if (!this.maximum) {
+      const index = _.indexOf(this.scales, this.scale);
 
-    this.zooming = false;
+      if (!index) return;
+
+      if (index === -1) {
+        if (this.mode === ZoomMode.In) {
+          this.scale += this.DELTA_SCALE;
+        } else {
+          this.scale -= this.DELTA_SCALE;
+        }
+      } else {
+        if (this.mode === ZoomMode.In) {
+          if (this.scale === this.MAX_SCALE) return;
+
+          this.scale = this.scales[index + 1];
+        } else {
+          if (this.scale === this.MIN_SCALE) return;
+
+          this.scale = this.scales[index - 1];
+        }
+      }
+
+      if (this.center) {
+        this.x = this.image.width / 2 - (this.image.width / 2) * this.scale;
+        this.y = this.image.height / 2 - (this.image.height / 2) * this.scale;
+      } else {
+        this.x = this.minimum.x - this.minimum.x * this.scale;
+        this.y = this.minimum.y - this.minimum.y * this.scale;
+      }
+
+      this.selected = true;
+    } else {
+      if (this.mode === ZoomMode.In) {
+        this.maximum = position;
+
+        this.scale = Math.abs(
+          this.image.width / (this.maximum.x - this.minimum.x)
+        );
+
+        const x =
+          this.minimum.x > this.maximum.x ? this.maximum.x : this.minimum.x;
+        const y =
+          this.minimum.y > this.maximum.y ? this.maximum.y : this.minimum.y;
+
+        this.x = -1 * x * this.scale;
+        this.y = -1 * y * this.scale;
+      }
+
+      this.selected = true;
+    }
   }
 }

@@ -17,5 +17,6 @@ export {
   setSeletedCategory,
   setVibrance,
   setZoomMode,
+  setZoomReset,
   slice,
 } from "./slice";

@@ -8,6 +8,7 @@ import {
   operationSelector,
   selectedCategroySelector,
   unknownCategroySelector,
+  zoomSettingsSelector,
 } from "../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
@@ -44,11 +45,15 @@ type ImageViewerProps = {
 };
 
 export const ImageViewer = (props: ImageViewerProps) => {
-  const handleRevertZoom = () => {
-    setZoomReset(!zoomReset);
-  };
+  const dispatch = useDispatch();
 
-  const [zoomReset, setZoomReset] = useState<boolean>(false);
+  const zoomSettings = useSelector(zoomSettingsSelector);
+
+  const handleZoomReset = () => {
+    dispatch(
+      slice.actions.setZoomReset({ zoomReset: !zoomSettings.zoomReset })
+    );
+  };
 
   const { t, i18n } = useTranslation();
 
@@ -135,11 +140,9 @@ export const ImageViewer = (props: ImageViewerProps) => {
       icon: <ZoomIcon />,
       method: Tool.Zoom,
       name: "Zoom",
-      options: <ZoomOptions handleRevert={handleRevertZoom} />,
+      options: <ZoomOptions handleRevert={handleZoomReset} />,
     },
   ];
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (props.image) {

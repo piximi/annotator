@@ -7,9 +7,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { zoomModeSelector } from "../../../../store/selectors";
 import { ZoomMode } from "../../../../types/ZoomMode";
 import { slice } from "../../../../store/slices";
+import Checkbox from "@material-ui/core/Checkbox";
+import { zoomSettingsSelector } from "../../../../store/selectors";
 
 type ZoomOptionsProps = {
   handleRevert: () => void;
@@ -18,14 +19,22 @@ type ZoomOptionsProps = {
 export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
   const dispatch = useDispatch();
 
-  const zoomMode = useSelector(zoomModeSelector);
+  const zoomSettings = useSelector(zoomSettingsSelector);
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onZoomModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt((event.target as HTMLInputElement).value);
 
     dispatch(
       slice.actions.setZoomMode({
         zoomMode: value as ZoomMode,
+      })
+    );
+  };
+
+  const onCenterChange = () => {
+    dispatch(
+      slice.actions.setZoomAutomaticCentering({
+        zoomAutomaticCentering: !zoomSettings.zoomAutomaticCentering,
       })
     );
   };
@@ -38,8 +47,8 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
         <RadioGroup
           defaultValue={ZoomMode.In}
           name="zoom-mode"
-          onChange={onChange}
-          value={zoomMode}
+          onChange={onZoomModeChange}
+          value={zoomSettings.zoomMode}
         >
           <FormControlLabel
             control={<Radio tabIndex={-1} />}
@@ -53,6 +62,19 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
             value={ZoomMode.Out}
           />
         </RadioGroup>
+      </ListItem>
+
+      <ListItem>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={zoomSettings.zoomAutomaticCentering}
+              onChange={onCenterChange}
+              name="center"
+            />
+          }
+          label="Center image automatically"
+        />
       </ListItem>
 
       <ListItem>

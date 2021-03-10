@@ -13,4 +13,4 @@ export { selectedCategroySelector } from "./selectedCategroySelector";
 export { selectionModeSelector } from "./selectionModeSelector";
 export { unknownCategroySelector } from "./unknownCategroySelector";
 export { vibranceSelector } from "./vibranceSelector";
-export { zoomModeSelector } from "./zoomModeSelector";
+export { zoomSettingsSelector } from "./zoomSettingsSelector";

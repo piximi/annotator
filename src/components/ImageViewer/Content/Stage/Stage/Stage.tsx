@@ -10,6 +10,7 @@ import {
   invertModeSelector,
   operationSelector,
   selectionModeSelector,
+  zoomSettingsSelector,
 } from "../../../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
@@ -24,6 +25,8 @@ import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/pe
 import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
+import { AnnotationTool } from "../../../../../image/Tool/AnnotationTool/AnnotationTool";
+import { ZoomTool } from "../../../../../image/Tool/ZoomTool";
 
 type StageProps = {
   category: Category;
@@ -54,7 +57,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const invertMode = useSelector(invertModeSelector);
 
-  const [operator] = useOperator(src);
+  const [tool] = useOperator(src);
 
   const [selectionId, setSelectionId] = useState<string>();
   const [selected, setSelected] = useState<boolean>(false);
@@ -69,12 +72,20 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const categories = useSelector(categoriesSelector);
   const visibleCategories = useSelector(visibleCategoriesSelector);
 
+  const zoomSettings = useSelector(zoomSettingsSelector);
+
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
   const deletePress = useKeyPress("Delete");
   const backspacePress = useKeyPress("Backspace");
 
-  const { onWheel, scale, x, y } = useZoomOperator(operation);
+  const { onWheel, scale, x, y } = useZoomOperator(
+    operation,
+    tool as ZoomTool,
+    zoomSettings
+  );
+
+  let operator = tool as AnnotationTool;
 
   useEffect(() => {
     if (!selectionId || !operator) return;
@@ -309,14 +320,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       // left click only
       if (!operator || !stageRef || !stageRef.current) return;
 
-      if (operation === Tool.Zoom) return;
-
       const position = stageRef.current.getPointerPosition();
 
       if (!position) return;
 
       const relative = getRelativePointerPosition(position);
-      console.info(relative);
 
       if (!relative) return;
 
@@ -329,8 +337,6 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const onMouseMove = useMemo(() => {
     const func = () => {
       if (!operator || !stageRef || !stageRef.current) return;
-
-      if (operation === Tool.Zoom) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -353,8 +359,6 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const onMouseUp = useMemo(() => {
     const func = () => {
       if (!operator || !stageRef || !stageRef.current) return;
-
-      if (operation === Tool.Zoom) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -438,10 +442,6 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     content.style.marginLeft = "auto";
     content.style.marginRight = "auto";
   }, [stageRef.current]);
-
-  useEffect(() => {
-    console.info(`scale: ${scale}`);
-  }, [scale]);
 
   return (
     <ReactKonva.Stage

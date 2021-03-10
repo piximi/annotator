@@ -15,29 +15,18 @@ export const useZoomOperator = (
   const [x, setX] = useState<number>(0);
   const [y, setY] = useState<number>(0);
 
-  useEffect(() => {
-    if (!operator || !operator.minimum || !operator.maximum) return;
-
-    const newScale =
-      operator.image.width / (operator.maximum.x - operator.minimum.x);
-
-    setX(-1 * operator.minimum.x * newScale);
-    setY(-1 * operator.minimum.y * newScale);
-
-    setScale(newScale);
-
-    operator.deselect();
-  }, [operator?.selected]);
+  const [zoomed, setZoomed] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!operator || !operator.minimum || !operator.scale) return;
+    if (!operator || !operator.x || !operator.y || !operator.scale) return;
+
+    setX(operator.x);
+    setY(operator.y);
 
     setScale(operator.scale);
-    setX(operator.minimum.x - operator.minimum.x * operator.scale);
-    setY(operator.minimum.y - operator.minimum.y * operator.scale);
 
-    operator.deselect();
-  }, [operator?.scale]);
+    setZoomed(true);
+  }, [operator?.selected]);
 
   useEffect(() => {
     if (!operator) return;
@@ -54,6 +43,13 @@ export const useZoomOperator = (
     // @ts-ignore
     operator.mode = zoomMode;
   }, [zoomMode]);
+
+  useEffect(() => {
+    if (!zoomed) return;
+
+    operator.deselect();
+    setZoomed(false);
+  }, [zoomed]);
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     if (operation !== Tool.Zoom) return;

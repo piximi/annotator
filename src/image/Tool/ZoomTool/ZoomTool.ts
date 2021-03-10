@@ -66,8 +66,6 @@ export class ZoomTool extends Tool {
   reset() {
     this.scale = 1.0;
 
-    // this.zooming = false;
-
     this.selected = false;
   }
 
@@ -75,12 +73,13 @@ export class ZoomTool extends Tool {
     if (this.selected) return;
     this.minimum = position;
 
-    // this.zooming = true;
     this.zooming = true;
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (this.selected || !this.zooming) return;
+    if (this.selected) return;
+
+    if (!this.zooming) return;
 
     if (!this.minimum) return;
 
@@ -90,7 +89,11 @@ export class ZoomTool extends Tool {
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.selected || !this.zooming) return;
+    if (this.selected) return;
+
+    if (!this.zooming) return;
+
+    if (!this.minimum) return;
 
     if (!this.maximum) {
       const index = _.indexOf(this.scales, this.scale);
@@ -107,7 +110,9 @@ export class ZoomTool extends Tool {
         this.scale = this.scales[index - 1];
       }
 
-      // this.zooming = false;
+      this.x = this.minimum.x - this.minimum.x * this.scale;
+      this.y = this.minimum.y - this.minimum.y * this.scale;
+
       // this.selected = false;
 
       //FIXME: uncomment below when we have a "automatically center" option
@@ -115,7 +120,10 @@ export class ZoomTool extends Tool {
     } else {
       this.maximum = position;
 
-      // this.zooming = false;
+      this.scale = this.image.width / (this.maximum.x - this.minimum.x);
+
+      this.x = -1 * this.minimum.x * this.scale;
+      this.y = -1 * this.minimum.y * this.scale;
 
       // //deselect
       // this.selected = false;
@@ -123,6 +131,5 @@ export class ZoomTool extends Tool {
       // this.maximum = undefined;
     }
     this.selected = true;
-    this.zooming = false;
   }
 }

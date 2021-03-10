@@ -23,8 +23,13 @@ export class ZoomTool extends Tool {
 
   selected = false;
 
+  MIN_DELTA_X = 5;
+  MIN_SCALE = 0.25;
+  MAX_SCALE = 32;
+  DELTA_SCALE = 0.25;
+
   private scales: Array<number> = [
-    0.25,
+    this.MIN_SCALE,
     0.75,
     1.0,
     1.25,
@@ -34,7 +39,7 @@ export class ZoomTool extends Tool {
     4.0,
     8.0,
     16.0,
-    32.0,
+    this.MAX_SCALE,
   ];
 
   get percentile(): string {
@@ -84,7 +89,7 @@ export class ZoomTool extends Tool {
   onMouseMove(position: { x: number; y: number }) {
     if (this.selected || !this.zooming || !this.minimum) return;
 
-    if (position.x !== this.minimum.x) {
+    if (Math.abs(position.x - this.minimum.x) > this.MIN_DELTA_X) {
       this.maximum = position;
     }
   }
@@ -99,17 +104,17 @@ export class ZoomTool extends Tool {
 
       if (index === -1) {
         if (this.mode === ZoomMode.In) {
-          this.scale += 0.25;
+          this.scale += this.DELTA_SCALE;
         } else {
-          this.scale -= 0.25;
+          this.scale -= this.DELTA_SCALE;
         }
       } else {
         if (this.mode === ZoomMode.In) {
-          if (this.scale === 32.0) return;
+          if (this.scale === this.MAX_SCALE) return;
 
           this.scale = this.scales[index + 1];
         } else {
-          if (this.scale === 0.25) return;
+          if (this.scale === this.MIN_SCALE) return;
 
           this.scale = this.scales[index - 1];
         }

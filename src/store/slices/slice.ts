@@ -37,7 +37,7 @@ const initialState: State = {
   selectionMode: SelectionMode.New,
   vibrance: 0,
   zoomSettings: {
-    zoomAutomaticCentering: true,
+    zoomAutomaticCentering: false,
     zoomMode: ZoomMode.In,
     zoomReset: false,
   },

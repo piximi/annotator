@@ -80,8 +80,7 @@ export const Stage = ({ category, src }: StageProps) => {
   const { onWheel, scale, x, y } = useZoomOperator(
     operation,
     tool as ZoomTool,
-    zoomSettings.zoomMode,
-    zoomSettings.zoomReset
+    zoomSettings
   );
 
   let operator = tool as AnnotationTool;

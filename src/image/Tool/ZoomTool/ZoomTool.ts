@@ -7,7 +7,7 @@ export class ZoomTool extends Tool {
   /**
    * Automatically center the image.
    */
-  center: boolean = false;
+  center: boolean = true;
 
   minimum?: { x: number; y: number };
   maximum?: { x: number; y: number };
@@ -123,10 +123,9 @@ export class ZoomTool extends Tool {
       this.x = this.minimum.x - this.minimum.x * this.scale;
       this.y = this.minimum.y - this.minimum.y * this.scale;
 
-      this.selected = true;
+      // if (this.center) return; //FIXME implement this
 
-      //FIXME: uncomment below when we have a "automatically center" option
-      // if (this.center) return;
+      this.selected = true;
     } else {
       if (this.mode === ZoomMode.In) {
         this.maximum = position;

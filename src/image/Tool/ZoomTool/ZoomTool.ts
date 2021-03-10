@@ -7,7 +7,7 @@ export class ZoomTool extends Tool {
   /**
    * Automatically center the image.
    */
-  center: boolean = true;
+  center: boolean = false;
 
   minimum?: { x: number; y: number };
   maximum?: { x: number; y: number };
@@ -120,8 +120,13 @@ export class ZoomTool extends Tool {
         }
       }
 
-      this.x = this.minimum.x - this.minimum.x * this.scale;
-      this.y = this.minimum.y - this.minimum.y * this.scale;
+      if (this.center) {
+        this.x = this.image.width / 2 - (this.image.width / 2) * this.scale;
+        this.y = this.image.height / 2 - (this.image.height / 2) * this.scale;
+      } else {
+        this.x = this.minimum.x - this.minimum.x * this.scale;
+        this.y = this.minimum.y - this.minimum.y * this.scale;
+      }
 
       // if (this.center) return; //FIXME implement this
 

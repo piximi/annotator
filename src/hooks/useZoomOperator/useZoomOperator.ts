@@ -67,8 +67,13 @@ export const useZoomOperator = (
       y: position.y / scale - stage.y() / scale,
     };
 
-    setX(-(origin.x - position.x / newScale) * newScale);
-    setY(-(origin.y - position.y / newScale) * newScale);
+    if (zoomSettings.zoomAutomaticCentering) {
+      setX(operator.image.width / 2 - (operator.image.width / 2) * newScale);
+      setY(operator.image.height / 2 - (operator.image.height / 2) * newScale);
+    } else {
+      setX(-(origin.x - position.x / newScale) * newScale);
+      setY(-(origin.y - position.y / newScale) * newScale);
+    }
 
     setScale(newScale);
 

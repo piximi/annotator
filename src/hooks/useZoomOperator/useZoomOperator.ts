@@ -45,7 +45,7 @@ export const useZoomOperator = (
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     if (operation !== Tool.Zoom) return;
 
-    const newScale = event.evt.deltaY > 0 ? scale * 1.01 : scale / 1.01;
+    const newScale = event.evt.deltaY > 0 ? scale * 1.1 : scale / 1.1;
 
     const stage = event.target.getStage();
 

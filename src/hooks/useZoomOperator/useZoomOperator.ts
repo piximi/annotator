@@ -24,20 +24,11 @@ export const useZoomOperator = (
   //   if (!operator || !operator.scale || !operator.selected) return;
   //
   //   setX(operator.x);
-  //   setY(operator.y);
+  //   //   setY(operator.y);
+  //   //
+  //   //   setScale(operator.scale);
+  //   // }, [operator?.selected]);
   //
-  //   setScale(operator.scale);
-  // }, [operator?.selected]);
-  //
-  // useEffect(() => {
-  //   if (operation !== Tool.Zoom) return;
-  //
-  //   if (!operator) return;
-  //   operator.reset();
-  //   setScale(1.0);
-  //   setX(0);
-  //   setY(0);
-  // }, [zoomSettings.zoomReset]);
 
   useEffect(() => {
     if (operation !== Tool.Zoom) return;
@@ -49,6 +40,13 @@ export const useZoomOperator = (
 
   useEffect(() => {
     if (operation !== Tool.Zoom) return;
+    console.info("Resetting");
+    if (!operator) return;
+    operator.reset();
+  }, [zoomSettings.zoomReset]);
+
+  useEffect(() => {
+    if (operation !== Tool.Zoom) return;
 
     if (!operator) return;
     // @ts-ignore
@@ -56,7 +54,6 @@ export const useZoomOperator = (
   }, [zoomSettings.zoomAutomaticCentering]);
 
   return operator;
-
   // return {
   //   onWheel: operator ? operator.onWheel: () => {},
   //   onZoomMouseDown: operator ? operator.onMouseDown : () => {},

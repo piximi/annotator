@@ -2,6 +2,7 @@ import { Tool } from "../Tool";
 import { ZoomMode } from "../../../types/ZoomMode";
 import * as _ from "lodash";
 import numeral from "numeral";
+import { KonvaEventObject } from "konva/types/Node";
 
 export class ZoomTool extends Tool {
   /**
@@ -128,8 +129,35 @@ export class ZoomTool extends Tool {
       }
     }
 
+    console.info(this.scale);
+    console.info(this.x);
+    console.info(this.y);
+
     this.selected = true;
     this.maximum = undefined;
     this.zooming = false;
   }
+
+  onWheel = (event: KonvaEventObject<WheelEvent>) => {
+    console.info("IN ON WHEEL");
+    const newScale = event.evt.deltaY > 0 ? this.scale * 1.1 : this.scale / 1.1;
+
+    const stage = event.target.getStage();
+
+    if (!stage) return;
+
+    const position = stage.getPointerPosition();
+
+    if (!position) return;
+
+    const origin = {
+      x: position.x / this.scale - stage.x() / this.scale,
+      y: position.y / this.scale - stage.y() / this.scale,
+    };
+
+    this.x = -(origin.x - position.x / newScale) * newScale;
+    this.y = -(origin.y - position.y / newScale) * newScale;
+
+    this.scale = newScale;
+  };
 }

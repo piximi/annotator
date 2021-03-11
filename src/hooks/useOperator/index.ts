@@ -1,1 +1,1 @@
-export { useOperator } from "./useOperator";
+export { useAnnotationOperator } from "./useAnnotationOperator";

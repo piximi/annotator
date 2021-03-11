@@ -15,12 +15,11 @@ import {
 } from "../../image/Tool";
 import { useSelector } from "react-redux";
 import { operationSelector } from "../../store/selectors";
-import { ZoomTool } from "../../image/Tool/ZoomTool";
 
-export const useOperator = (src: string) => {
+export const useAnnotationOperator = (src: string) => {
   const operation = useSelector(operationSelector);
 
-  const [operator, setOperator] = useState<AnnotationTool | ZoomTool>();
+  const [operator, setOperator] = useState<AnnotationTool>();
 
   useEffect(() => {
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
@@ -69,9 +68,6 @@ export const useOperator = (src: string) => {
         case Tool.RectangularSelection:
           setOperator(new RectangularAnnotationTool(image));
 
-          return;
-        case Tool.Zoom:
-          setOperator(new ZoomTool(image));
           return;
       }
     });

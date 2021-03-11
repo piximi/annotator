@@ -1,87 +1,67 @@
 import { useEffect, useState } from "react";
 import { Tool } from "../../types/Tool";
-import { KonvaEventObject } from "konva/types/Node";
 import { ZoomTool } from "../../image/Tool/ZoomTool";
 import { ZoomSettings } from "../../types/ZoomSettings";
+import * as ImageJS from "image-js";
 
 export const useZoomOperator = (
   operation: Tool,
-  operator: ZoomTool,
+  src: string,
   zoomSettings: ZoomSettings
 ) => {
-  const [scale, setScale] = useState<number>(1.0);
-
-  const [x, setX] = useState<number>(0);
-  const [y, setY] = useState<number>(0);
-
-  useEffect(() => {
-    if (!operator || !operator.scale || !operator.selected) return;
-
-    setX(operator.x);
-    setY(operator.y);
-
-    setScale(operator.scale);
-  }, [operator?.selected]);
+  const [operator, setOperator] = useState<ZoomTool>();
 
   useEffect(() => {
     if (operation !== Tool.Zoom) return;
 
-    if (!operator) return;
-    operator.reset();
-    setScale(1.0);
-    setX(0);
-    setY(0);
-  }, [zoomSettings.zoomReset]);
+    ImageJS.Image.load(src).then((image: ImageJS.Image) => {
+      setOperator(new ZoomTool(image));
+    });
+  }, [operation, src]);
+
+  //FIXME: What do I do with code below?
+  // useEffect(() => {
+  //   if (!operator || !operator.scale || !operator.selected) return;
+  //
+  //   setX(operator.x);
+  //   setY(operator.y);
+  //
+  //   setScale(operator.scale);
+  // }, [operator?.selected]);
+  //
+  // useEffect(() => {
+  //   if (operation !== Tool.Zoom) return;
+  //
+  //   if (!operator) return;
+  //   operator.reset();
+  //   setScale(1.0);
+  //   setX(0);
+  //   setY(0);
+  // }, [zoomSettings.zoomReset]);
 
   useEffect(() => {
+    if (operation !== Tool.Zoom) return;
+
     if (!operator) return;
     // @ts-ignore
     operator.mode = zoomSettings.zoomMode;
   }, [zoomSettings.zoomMode]);
 
   useEffect(() => {
+    if (operation !== Tool.Zoom) return;
+
     if (!operator) return;
     // @ts-ignore
     operator.center = zoomSettings.zoomAutomaticCentering;
   }, [zoomSettings.zoomAutomaticCentering]);
 
-  const onWheel = (event: KonvaEventObject<WheelEvent>) => {
-    if (operation !== Tool.Zoom) return;
+  return operator;
 
-    const newScale = event.evt.deltaY > 0 ? scale * 1.1 : scale / 1.1;
-
-    const stage = event.target.getStage();
-
-    if (!stage) return;
-
-    const position = stage.getPointerPosition();
-
-    if (!position) return;
-
-    const origin = {
-      x: position.x / scale - stage.x() / scale,
-      y: position.y / scale - stage.y() / scale,
-    };
-
-    if (zoomSettings.zoomAutomaticCentering) {
-      setX(operator.image.width / 2 - (operator.image.width / 2) * newScale);
-      setY(operator.image.height / 2 - (operator.image.height / 2) * newScale);
-    } else {
-      setX(-(origin.x - position.x / newScale) * newScale);
-      setY(-(origin.y - position.y / newScale) * newScale);
-    }
-
-    setScale(newScale);
-
-    operator.x = -(origin.x - position.x / newScale) * newScale;
-    operator.y = -(origin.x - position.x / newScale) * newScale;
-    operator.scale = newScale;
-  };
-
-  return {
-    onWheel,
-    scale,
-    x,
-    y,
-  };
+  // return {
+  //   onWheel: operator ? operator.onWheel: () => {},
+  //   onZoomMouseDown: operator ? operator.onMouseDown : () => {},
+  //   scale: operator ? operator.scale: 1,
+  //   x: operator ? operator.x : 0,
+  //   y: operator ? operator.y: 0
+  // }
 };

@@ -495,6 +495,10 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
           <Selection operation={operation} operator={annotationOperator} />
         )}
 
+        {!selected && operation === Tool.Zoom && (
+          <Selection operation={operation} operator={zoomOperator} />
+        )}
+
         {selected && annotationOperator && annotationOperator.contour && (
           <SelectedContour points={annotationOperator.contour} />
         )}

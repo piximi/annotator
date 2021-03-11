@@ -21,8 +21,6 @@ export const useZoomOperator = (
     setY(operator.y);
 
     setScale(operator.scale);
-
-    operator.deselect();
   }, [operator?.selected]);
 
   useEffect(() => {
@@ -33,8 +31,6 @@ export const useZoomOperator = (
     setScale(1.0);
     setX(0);
     setY(0);
-
-    operator.deselect();
   }, [zoomSettings.zoomReset]);
 
   useEffect(() => {

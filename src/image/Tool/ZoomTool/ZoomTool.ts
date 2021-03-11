@@ -52,14 +52,6 @@ export class ZoomTool extends Tool {
     });
   }
 
-  deselect() {
-    this.maximum = undefined;
-    this.minimum = undefined;
-
-    this.selected = false;
-    this.zooming = false;
-  }
-
   /**
    * Zoom to fit the image to the application window.
    */
@@ -148,5 +140,8 @@ export class ZoomTool extends Tool {
 
       this.selected = true;
     }
+
+    this.maximum = undefined;
+    this.zooming = false;
   }
 }

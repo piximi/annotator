@@ -19,17 +19,6 @@ export const useZoomOperator = (
     });
   }, [operation, src]);
 
-  //FIXME: What do I do with code below?
-  // useEffect(() => {
-  //   if (!operator || !operator.scale || !operator.selected) return;
-  //
-  //   setX(operator.x);
-  //   //   setY(operator.y);
-  //   //
-  //   //   setScale(operator.scale);
-  //   // }, [operator?.selected]);
-  //
-
   useEffect(() => {
     if (operation !== Tool.Zoom) return;
 
@@ -54,11 +43,4 @@ export const useZoomOperator = (
   }, [zoomSettings.zoomAutomaticCentering]);
 
   return operator;
-  // return {
-  //   onWheel: operator ? operator.onWheel: () => {},
-  //   onZoomMouseDown: operator ? operator.onMouseDown : () => {},
-  //   scale: operator ? operator.scale: 1,
-  //   x: operator ? operator.x : 0,
-  //   y: operator ? operator.y: 0
-  // }
 };

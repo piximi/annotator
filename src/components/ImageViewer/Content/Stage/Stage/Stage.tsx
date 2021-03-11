@@ -77,7 +77,6 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const deletePress = useKeyPress("Delete");
   const backspacePress = useKeyPress("Backspace");
 
-  // const {onWheel, onZoomMouseDown, scale, x, y} = useZoomOperator(operation, src, zoomSettings);
   const zoomOperator = useZoomOperator(operation, src, zoomSettings);
 
   useEffect(() => {

@@ -57,7 +57,6 @@ export class ZoomTool extends Tool {
    * Zoom the image to its actual size.
    */
   reset() {
-    console.info("Setting scale to zero");
     this.scale = 1.0;
 
     this.x = 0;

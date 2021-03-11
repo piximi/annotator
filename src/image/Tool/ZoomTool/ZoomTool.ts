@@ -23,13 +23,13 @@ export class ZoomTool extends Tool {
 
   selected = false;
 
+  private min_scale = 0.05;
+  private max_scale = 125;
+
   MIN_DELTA_X = 5;
-  MIN_SCALE = 0.25;
-  MAX_SCALE = 32;
-  DELTA_SCALE = 0.25;
 
   private scales: Array<number> = [
-    this.MIN_SCALE,
+    0.25,
     0.75,
     1.0,
     1.25,
@@ -39,7 +39,7 @@ export class ZoomTool extends Tool {
     4.0,
     8.0,
     16.0,
-    this.MAX_SCALE,
+    32.0,
   ];
 
   get percentile(): string {
@@ -90,26 +90,26 @@ export class ZoomTool extends Tool {
     if (this.selected || !this.zooming || !this.minimum) return;
 
     if (!this.maximum) {
-      const index = _.indexOf(this.scales, this.scale);
+      if (this.mode === ZoomMode.In) {
+        if (this.scale === 32.0) return;
 
-      if (!index) return;
+        const index = _.findIndex(this.scales, (scale) => {
+          return this.scale < scale;
+        });
 
-      if (index === -1) {
-        if (this.mode === ZoomMode.In) {
-          this.scale += this.DELTA_SCALE;
-        } else {
-          this.scale -= this.DELTA_SCALE;
-        }
+        if (!index) return;
+
+        this.scale = this.scales[index];
       } else {
-        if (this.mode === ZoomMode.In) {
-          if (this.scale === this.MAX_SCALE) return;
+        if (this.scale === 0.25) return;
 
-          this.scale = this.scales[index + 1];
-        } else {
-          if (this.scale === this.MIN_SCALE) return;
+        const index = _.findIndex(this.scales, (scale) => {
+          return this.scale <= scale;
+        });
 
-          this.scale = this.scales[index - 1];
-        }
+        if (!index) return;
+
+        this.scale = this.scales[index - 1];
       }
 
       if (this.center) {

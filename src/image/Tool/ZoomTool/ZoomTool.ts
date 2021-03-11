@@ -112,15 +112,8 @@ export class ZoomTool extends Tool {
         this.scale = this.scales[index - 1];
       }
 
-      if (this.center) {
-        this.x = this.image.width / 2 - (this.image.width / 2) * this.scale;
-        this.y = this.image.height / 2 - (this.image.height / 2) * this.scale;
-      } else {
-        this.x = this.minimum.x - this.minimum.x * this.scale;
-        this.y = this.minimum.y - this.minimum.y * this.scale;
-      }
-
-      this.selected = true;
+      this.x = this.minimum.x - this.minimum.x * this.scale;
+      this.y = this.minimum.y - this.minimum.y * this.scale;
     } else {
       if (this.mode === ZoomMode.In) {
         this.maximum = position;
@@ -137,10 +130,9 @@ export class ZoomTool extends Tool {
         this.x = -1 * x * this.scale;
         this.y = -1 * y * this.scale;
       }
-
-      this.selected = true;
     }
 
+    this.selected = true;
     this.maximum = undefined;
     this.zooming = false;
   }

@@ -23,11 +23,6 @@ export class ZoomTool extends Tool {
 
   selected = false;
 
-  private min_scale = 0.05;
-  private max_scale = 125;
-
-  MIN_DELTA_X = 5;
-
   private scales: Array<number> = [
     0.25,
     0.75,
@@ -81,7 +76,8 @@ export class ZoomTool extends Tool {
   onMouseMove(position: { x: number; y: number }) {
     if (this.selected || !this.zooming || !this.minimum) return;
 
-    if (Math.abs(position.x - this.minimum.x) > this.MIN_DELTA_X) {
+    if (Math.abs(position.x - this.minimum.x) > 5) {
+      //FIXME: this code won't be necessary once we implement the onClick event
       this.maximum = position;
     }
   }

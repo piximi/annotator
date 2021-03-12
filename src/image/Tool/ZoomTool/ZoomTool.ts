@@ -24,19 +24,7 @@ export class ZoomTool extends Tool {
 
   selected = false;
 
-  private scales: Array<number> = [
-    0.25,
-    0.75,
-    1.0,
-    1.25,
-    1.5,
-    1.75,
-    2.0,
-    4.0,
-    8.0,
-    16.0,
-    32.0,
-  ];
+  private scales: Array<number> = [0.25, 0.75, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
 
   get percentile(): string {
     return numeral(this.scale).format("0%");

@@ -3,6 +3,7 @@ import { Tool } from "../../types/Tool";
 import { ZoomTool } from "../../image/Tool/ZoomTool";
 import { ZoomSettings } from "../../types/ZoomSettings";
 import * as ImageJS from "image-js";
+import { KonvaEventObject } from "konva/types/Node";
 
 export const useZoomOperator = (
   operation: Tool,
@@ -11,6 +12,14 @@ export const useZoomOperator = (
 ) => {
   const [operator, setOperator] = useState<ZoomTool>();
   const [, update] = useReducer((x) => x + 1, 0);
+
+  const onZoomWheel = (event: KonvaEventObject<WheelEvent>) => {
+    if (!operator) return;
+
+    operator.onWheel(event);
+
+    update();
+  };
 
   useEffect(() => {
     if (operation !== Tool.Zoom) return;
@@ -47,5 +56,5 @@ export const useZoomOperator = (
     operator.center = zoomSettings.zoomAutomaticCentering;
   }, [zoomSettings.zoomAutomaticCentering]);
 
-  return operator;
+  return { zoomOperator: operator, onZoomWheel: onZoomWheel };
 };

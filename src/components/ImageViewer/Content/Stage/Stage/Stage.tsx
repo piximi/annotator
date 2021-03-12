@@ -77,7 +77,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const deletePress = useKeyPress("Delete");
   const backspacePress = useKeyPress("Backspace");
 
-  const zoomOperator = useZoomOperator(operation, src, zoomSettings);
+  const { zoomOperator, onZoomWheel } = useZoomOperator(
+    operation,
+    src,
+    zoomSettings
+  );
 
   useEffect(() => {
     if (operation === Tool.Zoom) return;
@@ -468,7 +472,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       globalCompositeOperation="destination-over"
       height={512}
       ref={stageRef}
-      // onWheel={zoomOperator?.onWheel}
+      onWheel={onZoomWheel}
       scale={{
         x: zoomOperator ? zoomOperator.scale : 1,
         y: zoomOperator ? zoomOperator.scale : 1,

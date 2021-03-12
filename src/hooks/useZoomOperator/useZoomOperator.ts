@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { Tool } from "../../types/Tool";
 import { ZoomTool } from "../../image/Tool/ZoomTool";
 import { ZoomSettings } from "../../types/ZoomSettings";
@@ -10,6 +10,7 @@ export const useZoomOperator = (
   zoomSettings: ZoomSettings
 ) => {
   const [operator, setOperator] = useState<ZoomTool>();
+  const [, update] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
     if (operation !== Tool.Zoom) return;
@@ -23,15 +24,19 @@ export const useZoomOperator = (
     if (operation !== Tool.Zoom) return;
 
     if (!operator) return;
+
     // @ts-ignore
     operator.mode = zoomSettings.zoomMode;
   }, [zoomSettings.zoomMode]);
 
   useEffect(() => {
     if (operation !== Tool.Zoom) return;
-    console.info("Resetting");
+
     if (!operator) return;
+
     operator.reset();
+
+    update();
   }, [zoomSettings.zoomReset]);
 
   useEffect(() => {

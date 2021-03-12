@@ -135,8 +135,9 @@ export class ZoomTool extends Tool {
   }
 
   onWheel = (event: KonvaEventObject<WheelEvent>) => {
-    console.info("IN ON WHEEL");
     const newScale = event.evt.deltaY > 0 ? this.scale * 1.1 : this.scale / 1.1;
+
+    if (newScale > 125 || newScale < 0.05) return;
 
     const stage = event.target.getStage();
 

@@ -479,7 +479,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
         x: zoomOperator ? zoomOperator.scale : 1,
         y: zoomOperator ? zoomOperator.scale : 1,
       }}
-      width={width}
+      width={512}
       x={zoomOperator ? zoomOperator.x : 0}
       y={zoomOperator ? zoomOperator.y : 0}
     >

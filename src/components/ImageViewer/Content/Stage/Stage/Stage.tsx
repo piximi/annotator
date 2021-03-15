@@ -243,13 +243,14 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (!annotationOperator || !annotationOperator.contour) return;
 
-    const scale = zoomOperator ? zoomOperator.scale : 1;
-    const x = zoomOperator ? zoomOperator.x : 1;
-    const y = zoomOperator ? zoomOperator.y : 1;
+    if (!zoomOperator) return;
 
     const scaledContour: Array<number> = _.flatten(
       _.chunk(annotationOperator.contour, 2).map((el: Array<number>) => {
-        return [el[0] * scale + x, el[1] * scale + y];
+        return [
+          el[0] * zoomOperator.scale + zoomOperator.x,
+          el[1] * zoomOperator.scale + zoomOperator.y,
+        ];
       })
     );
 
@@ -480,7 +481,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       }}
       width={512}
       x={zoomOperator ? zoomOperator.x : 0}
-      y={zoomOperator ? zoomOperator.x : 0}
+      y={zoomOperator ? zoomOperator.y : 0}
     >
       <ReactKonva.Layer
         onMouseDown={(event) => onMouseDown(event)}

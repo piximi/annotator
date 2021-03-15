@@ -243,14 +243,14 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (!annotationOperator || !annotationOperator.contour) return;
 
-    if (!zoomOperator) return;
+    if (!stageRef || !stageRef.current) return;
+
+    const transform = stageRef.current.getAbsoluteTransform().copy();
 
     const scaledContour: Array<number> = _.flatten(
       _.chunk(annotationOperator.contour, 2).map((el: Array<number>) => {
-        return [
-          el[0] * zoomOperator.scale + zoomOperator.x,
-          el[1] * zoomOperator.scale + zoomOperator.y,
-        ];
+        const transformed = transform.point({ x: el[0], y: el[1] });
+        return [transformed.x, transformed.y];
       })
     );
 

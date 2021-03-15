@@ -34,10 +34,12 @@ export const useZoomOperator = (
   };
 
   useEffect(() => {
+    if (operation !== Tool.Zoom) return;
+
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
       setOperator(new ZoomTool(image));
     });
-  }, [src]);
+  }, [operation, src]);
 
   useEffect(() => {
     if (operation !== Tool.Zoom) return;

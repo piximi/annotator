@@ -96,8 +96,6 @@ export class ZoomTool extends Tool {
   onClick = (event: KonvaEventObject<MouseEvent>) => {
     if (event.evt.button !== 0) return;
 
-    event.evt.preventDefault();
-
     const stage = event.target.getStage();
 
     if (!stage) return;

@@ -1,18 +1,19 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { PenSelectionTool } from "../../../../../../image/Tool/AnnotationTool/PenAnnotationTool/PenSelectionOperator";
+import { PenAnnotationTool } from "../../../../../../image/Tool/AnnotationTool/PenAnnotationTool";
 
 type PenSelectionProps = {
-  operator: PenSelectionTool;
+  operator: PenAnnotationTool;
+  scale: number;
 };
 
-export const PenSelection = ({ operator }: PenSelectionProps) => {
+export const PenSelection = ({ operator, scale }: PenSelectionProps) => {
   return (
     <ReactKonva.Group>
       <ReactKonva.Line
         points={operator.buffer}
         stroke="red"
-        strokeWidth={operator.brushSize}
+        strokeWidth={operator.brushSize / scale}
       />
     </ReactKonva.Group>
   );

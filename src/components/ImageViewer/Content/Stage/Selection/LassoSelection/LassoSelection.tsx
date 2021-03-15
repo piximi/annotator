@@ -5,9 +5,10 @@ import { useMarchingAnts } from "../../../../../../hooks";
 
 type LassoSelectionProps = {
   operator: LassoAnnotationTool;
+  scale: number;
 };
 
-export const LassoSelection = ({ operator }: LassoSelectionProps) => {
+export const LassoSelection = ({ operator, scale }: LassoSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
   return (
@@ -15,9 +16,9 @@ export const LassoSelection = ({ operator }: LassoSelectionProps) => {
       {operator.origin && (
         <ReactKonva.Circle
           fill="white"
-          radius={3}
+          radius={3 / scale}
           stroke="black"
-          strokeWidth={1}
+          strokeWidth={1 / scale}
           x={operator.origin.x}
           y={operator.origin.y}
         />
@@ -26,9 +27,9 @@ export const LassoSelection = ({ operator }: LassoSelectionProps) => {
       {operator.anchor && (
         <ReactKonva.Circle
           fill="black"
-          radius={3}
+          radius={3 / scale}
           stroke="white"
-          strokeWidth={1}
+          strokeWidth={1 / scale}
           x={operator.anchor.x}
           y={operator.anchor.y}
         />
@@ -37,15 +38,15 @@ export const LassoSelection = ({ operator }: LassoSelectionProps) => {
       <ReactKonva.Line
         points={operator.buffer}
         stroke="black"
-        strokeWidth={1}
+        strokeWidth={1 / scale}
       />
 
       <ReactKonva.Line
-        dash={[4, 2]}
+        dash={[4 / scale, 2 / scale]}
         dashOffset={-dashOffset}
         stroke="white"
         points={operator.buffer}
-        strokeWidth={1}
+        strokeWidth={1 / scale}
       />
     </ReactKonva.Group>
   );

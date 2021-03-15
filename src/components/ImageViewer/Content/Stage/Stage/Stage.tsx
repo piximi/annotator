@@ -497,15 +497,26 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
         />
 
         {!selected && (
-          <Selection operation={operation} operator={annotationOperator} />
+          <Selection
+            operation={operation}
+            operator={annotationOperator}
+            scale={zoomOperator ? zoomOperator.scale : 1}
+          />
         )}
 
         {!selected && operation === Tool.Zoom && (
-          <Selection operation={operation} operator={zoomOperator} />
+          <Selection
+            operation={operation}
+            operator={zoomOperator}
+            scale={zoomOperator ? zoomOperator.scale : 1}
+          />
         )}
 
         {selected && annotationOperator && annotationOperator.contour && (
-          <SelectedContour points={annotationOperator.contour} />
+          <SelectedContour
+            points={annotationOperator.contour}
+            scale={zoomOperator ? zoomOperator.scale : 1}
+          />
         )}
 
         {selectionMode !== SelectionMode.New &&
@@ -514,7 +525,10 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
           !annotationOperator.annotated &&
           selectionInstanceRef &&
           selectionInstanceRef.current && (
-            <SelectedContour points={selectionInstanceRef.current.contour} />
+            <SelectedContour
+              points={selectionInstanceRef.current.contour}
+              scale={zoomOperator ? zoomOperator.scale : 1}
+            />
           )}
 
         {instances &&

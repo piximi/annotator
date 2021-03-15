@@ -28,9 +28,10 @@ import { ZoomSelection } from "../ZoomSelection";
 type SelectionProps = {
   operation?: Tool;
   operator?: AnnotationTool | ZoomTool;
+  scale: number;
 };
 
-export const Selection = ({ operation, operator }: SelectionProps) => {
+export const Selection = ({ operation, operator, scale }: SelectionProps) => {
   if (!operation || !operator) return <React.Fragment />;
 
   switch (operation) {
@@ -38,18 +39,36 @@ export const Selection = ({ operation, operator }: SelectionProps) => {
       return <ColorSelection operator={operator as ColorAnnotationTool} />;
     case Tool.EllipticalAnnotation:
       return (
-        <EllipticalSelection operator={operator as EllipticalAnnotationTool} />
+        <EllipticalSelection
+          operator={operator as EllipticalAnnotationTool}
+          scale={scale}
+        />
       );
     case Tool.LassoAnnotation:
-      return <LassoSelection operator={operator as LassoAnnotationTool} />;
+      return (
+        <LassoSelection
+          operator={operator as LassoAnnotationTool}
+          scale={scale}
+        />
+      );
     case Tool.MagneticAnnotation:
       return (
-        <MagneticSelection operator={operator as MagneticAnnotationTool} />
+        <MagneticSelection
+          operator={operator as MagneticAnnotationTool}
+          scale={scale}
+        />
       );
     case Tool.ObjectAnnotation:
-      return <ObjectSelection operator={operator as ObjectAnnotationTool} />;
+      return (
+        <ObjectSelection
+          operator={operator as ObjectAnnotationTool}
+          scale={scale}
+        />
+      );
     case Tool.PenAnnotation:
-      return <PenSelection operator={operator as PenAnnotationTool} />;
+      return (
+        <PenSelection operator={operator as PenAnnotationTool} scale={scale} />
+      );
     case Tool.PolygonalAnnotation:
       return (
         <PolygonalSelection operator={operator as PolygonalAnnotationTool} />
@@ -58,6 +77,7 @@ export const Selection = ({ operation, operator }: SelectionProps) => {
       return (
         <RectangularSelection
           operator={operator as RectangularAnnotationTool}
+          scale={scale}
         />
       );
     case Tool.Zoom:

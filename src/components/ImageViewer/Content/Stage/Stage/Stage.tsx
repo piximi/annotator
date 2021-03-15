@@ -77,7 +77,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const deletePress = useKeyPress("Delete");
   const backspacePress = useKeyPress("Backspace");
 
-  const { zoomOperator, onZoomWheel } = useZoomOperator(
+  const { zoomOperator, onZoomClick, onZoomWheel } = useZoomOperator(
     operation,
     src,
     zoomSettings
@@ -471,8 +471,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       className={classes.stage}
       globalCompositeOperation="destination-over"
       height={512}
-      ref={stageRef}
+      onClick={onZoomClick}
       onWheel={onZoomWheel}
+      ref={stageRef}
       scale={{
         x: zoomOperator ? zoomOperator.scale : 1,
         y: zoomOperator ? zoomOperator.scale : 1,

@@ -13,7 +13,19 @@ export const useZoomOperator = (
   const [operator, setOperator] = useState<ZoomTool>();
   const [, update] = useReducer((x) => x + 1, 0);
 
+  const onZoomClick = (event: KonvaEventObject<MouseEvent>) => {
+    if (operation !== Tool.Zoom) return;
+
+    if (!operator) return;
+
+    operator.onClick(event);
+
+    update();
+  };
+
   const onZoomWheel = (event: KonvaEventObject<WheelEvent>) => {
+    if (operation !== Tool.Zoom) return;
+
     if (!operator) return;
 
     operator.onWheel(event);
@@ -56,5 +68,9 @@ export const useZoomOperator = (
     operator.center = zoomSettings.zoomAutomaticCentering;
   }, [zoomSettings.zoomAutomaticCentering]);
 
-  return { zoomOperator: operator, onZoomWheel: onZoomWheel };
+  return {
+    zoomOperator: operator,
+    onZoomClick: onZoomClick,
+    onZoomWheel: onZoomWheel,
+  };
 };

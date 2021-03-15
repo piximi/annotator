@@ -65,62 +65,70 @@ export class ZoomTool extends Tool {
   onMouseMove(position: { x: number; y: number }) {
     if (this.selected || !this.zooming || !this.minimum) return;
 
-    if (Math.abs(position.x - this.minimum.x) > 5) {
-      //FIXME: this code won't be necessary once we implement the onClick event
-      this.maximum = position;
-    }
+    this.maximum = position;
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.selected || !this.zooming || !this.minimum) return;
+    if (this.selected || !this.zooming || !this.minimum || !this.maximum)
+      return;
 
-    if (!this.maximum) {
-      if (this.mode === ZoomMode.In) {
-        if (this.scale === 32.0) return;
+    if (this.mode === ZoomMode.In) {
+      this.maximum = position;
 
-        const index = _.findIndex(this.scales, (scale) => {
-          return this.scale < scale;
-        });
+      this.scale = Math.abs(
+        this.image.width / (this.maximum.x - this.minimum.x)
+      );
 
-        if (!index) return;
+      const x =
+        this.minimum.x > this.maximum.x ? this.maximum.x : this.minimum.x;
+      const y =
+        this.minimum.y > this.maximum.y ? this.maximum.y : this.minimum.y;
 
-        this.scale = this.scales[index];
-      } else {
-        if (this.scale === 0.25) return;
-
-        const index = _.findIndex(this.scales, (scale) => {
-          return this.scale <= scale;
-        });
-
-        if (!index) return;
-
-        this.scale = this.scales[index - 1];
-      }
-
-      this.x = this.minimum.x - this.minimum.x * this.scale;
-      this.y = this.minimum.y - this.minimum.y * this.scale;
-    } else {
-      if (this.mode === ZoomMode.In) {
-        this.maximum = position;
-
-        this.scale = Math.abs(
-          this.image.width / (this.maximum.x - this.minimum.x)
-        );
-
-        const x =
-          this.minimum.x > this.maximum.x ? this.maximum.x : this.minimum.x;
-        const y =
-          this.minimum.y > this.maximum.y ? this.maximum.y : this.minimum.y;
-
-        this.x = -1 * x * this.scale;
-        this.y = -1 * y * this.scale;
-      }
+      this.x = -1 * x * this.scale;
+      this.y = -1 * y * this.scale;
     }
 
     this.selected = true;
     this.maximum = undefined;
     this.zooming = false;
   }
+
+  onClick = (event: KonvaEventObject<MouseEvent>) => {
+    const stage = event.target.getStage();
+
+    if (!stage) return;
+
+    const position = stage.getPointerPosition();
+
+    if (!position) return;
+
+    if (this.mode === ZoomMode.In) {
+      if (this.scale === 32.0) return;
+
+      const index = _.findIndex(this.scales, (scale) => {
+        return this.scale < scale;
+      });
+
+      if (!index) return;
+
+      this.scale = this.scales[index];
+    } else {
+      if (this.scale === 0.25) return;
+
+      const index = _.findIndex(this.scales, (scale) => {
+        return this.scale <= scale;
+      });
+
+      if (!index) return;
+
+      this.scale = this.scales[index - 1];
+    }
+
+    this.x = position.x - position.x * this.scale;
+    this.y = position.y - position.y * this.scale;
+
+    this.selected = true;
+  };
 
   onWheel = (event: KonvaEventObject<WheelEvent>) => {
     const newScale = event.evt.deltaY > 0 ? this.scale * 1.1 : this.scale / 1.1;

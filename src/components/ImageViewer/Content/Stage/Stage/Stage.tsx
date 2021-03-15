@@ -374,7 +374,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     const throttled = _.throttle(func, 5);
 
     return () => throttled();
-  }, [annotationOperator, zoomOperator]);
+  }, [annotationOperator, operation, zoomOperator]);
 
   const onMouseUp = useMemo(() => {
     const func = () => {
@@ -400,7 +400,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     const throttled = _.throttle(func, 10);
 
     return () => throttled();
-  }, [annotationOperator, zoomOperator]);
+  }, [annotationOperator, operation, zoomOperator]);
 
   useEffect(() => {
     if (!enterPress) return;

@@ -496,7 +496,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
           height={512}
         />
 
-        {!selected && (
+        {!selected && operation !== Tool.Zoom && (
           <Selection
             operation={operation}
             operator={annotationOperator}

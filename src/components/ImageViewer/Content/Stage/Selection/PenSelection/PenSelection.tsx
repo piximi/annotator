@@ -13,7 +13,7 @@ export const PenSelection = ({ operator, scale }: PenSelectionProps) => {
       <ReactKonva.Line
         points={operator.buffer}
         stroke="red"
-        strokeWidth={operator.brushSize / scale}
+        strokeWidth={operator.brushSize}
       />
     </ReactKonva.Group>
   );

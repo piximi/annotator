@@ -5,9 +5,10 @@ import { ZoomTool } from "../../../../../../image/Tool/ZoomTool";
 
 type ZoomSelectionProps = {
   operator: ZoomTool;
+  scale: number;
 };
 
-export const ZoomSelection = ({ operator }: ZoomSelectionProps) => {
+export const ZoomSelection = ({ operator, scale }: ZoomSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
   if (!operator.minimum || !operator.maximum || !operator.zooming) return null;

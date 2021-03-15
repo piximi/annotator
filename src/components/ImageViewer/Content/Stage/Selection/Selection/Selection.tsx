@@ -71,7 +71,10 @@ export const Selection = ({ operation, operator, scale }: SelectionProps) => {
       );
     case Tool.PolygonalAnnotation:
       return (
-        <PolygonalSelection operator={operator as PolygonalAnnotationTool} />
+        <PolygonalSelection
+          operator={operator as PolygonalAnnotationTool}
+          scale={scale}
+        />
       );
     case Tool.RectangularSelection:
       return (
@@ -81,7 +84,7 @@ export const Selection = ({ operation, operator, scale }: SelectionProps) => {
         />
       );
     case Tool.Zoom:
-      return <ZoomSelection operator={operator as ZoomTool} />;
+      return <ZoomSelection operator={operator as ZoomTool} scale={scale} />;
     case Tool.QuickAnnotation:
       return <QuickSelection operator={operator as QuickAnnotationTool} />;
     default:

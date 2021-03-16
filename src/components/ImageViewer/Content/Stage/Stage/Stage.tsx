@@ -66,7 +66,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const dispatch = useDispatch();
 
-  const instances = useSelector(imageInstancesSelector);
+  const annotations = useSelector(imageInstancesSelector);
 
   const zoomSettings = useSelector(zoomSettingsSelector);
 
@@ -100,9 +100,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!selectedAnnotation || !annotationTool) return;
 
-    if (!instances) return;
+    if (!annotations) return;
 
-    const selectedInstance: SelectionType = instances.filter(
+    const selectedInstance: SelectionType = annotations.filter(
       (instance: SelectionType) => {
         return instance.id === selectedAnnotation;
       }
@@ -125,7 +125,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       invertedContour
     );
 
-    const instance = instances.filter((instance: SelectionType) => {
+    const instance = annotations.filter((instance: SelectionType) => {
       return instance.id === selectedAnnotation;
     })[0];
 
@@ -152,7 +152,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     setSelecting(false);
 
-    if (!selected || !annotationTool || !selectedAnnotation || !instances)
+    if (!selected || !annotationTool || !selectedAnnotation || !annotations)
       return;
 
     let combinedMask, combinedContour;
@@ -208,12 +208,12 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!selectionInstanceRef || !selectionInstanceRef.current) return;
 
-    const others = instances?.filter(
+    const others = annotations?.filter(
       (instance: SelectionType) => instance.id !== selectedAnnotation
     );
 
     const updated: SelectionType = {
-      ...instances?.filter(
+      ...annotations?.filter(
         (instance: SelectionType) => instance.id === selectedAnnotation
       )[0],
       categoryId: category.id,
@@ -305,9 +305,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     transformerRef.current.nodes([node]);
 
-    if (!instances) return;
+    if (!annotations) return;
 
-    selectionInstanceRef.current = instances.filter((v: SelectionType) => {
+    selectionInstanceRef.current = annotations.filter((v: SelectionType) => {
       // @ts-ignore
       return v.id === selectedAnnotation;
     })[0];
@@ -402,7 +402,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (!enterPress) return;
 
-    if (!instances || !annotationTool) return;
+    if (!annotations || !annotationTool) return;
 
     if (!selectionInstanceRef || !selectionInstanceRef.current) return;
 
@@ -416,7 +416,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     } else {
       dispatch(
         slice.actions.setImageInstances({
-          instances: [...instances, selectionInstanceRef.current],
+          instances: [...annotations, selectionInstanceRef.current],
         })
       );
     }

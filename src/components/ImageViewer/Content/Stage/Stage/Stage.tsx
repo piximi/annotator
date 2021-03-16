@@ -32,6 +32,7 @@ import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 import { KonvaEventObject } from "konva/types/Node";
 import { Image } from "../Image";
 import { AnnotationShapes } from "../AnnotationShapes";
+import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 
 type StageProps = {
   category: Category;
@@ -293,37 +294,20 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     selectionInstanceRef.current = annotationOperator.annotation;
   }, [selected]);
 
-  const onContextMenuClick = (
-    event: Konva.KonvaEventObject<MouseEvent>,
-    instance: SelectionType
-  ) => {
-    event.evt.preventDefault();
+  const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
-    if (!annotationOperator) return;
+  /*
+   * Connect Konva.Transformer to selected annotation Konva.Node
+   */
+  useEffect(() => {
+    if (!stageRef || !stageRef.current) return;
 
-    if (annotationOperator.annotating) return;
+    if (!selectedAnnotation) return;
 
-    if (!instances) return;
+    const node = stageRef.current.findOne(`#${selectedAnnotation}`);
 
-    annotationOperator.deselect();
-
-    selectionInstanceRef.current = instances.filter((v: SelectionType) => {
-      // @ts-ignore
-      return v.id === instance.id;
-    })[0];
-
-    setSelectionId(instance.id);
-
-    dispatch(
-      slice.actions.setSeletedCategory({
-        selectedCategory: instance.categoryId,
-      })
-    );
-
-    selectionLineRef.current = event.target as Konva.Line;
-
-    transformerRef.current?.nodes([selectionLineRef.current]);
-  };
+    transformerRef.current?.nodes([node]);
+  }, [selectedAnnotation]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!stageRef || !stageRef.current) return;

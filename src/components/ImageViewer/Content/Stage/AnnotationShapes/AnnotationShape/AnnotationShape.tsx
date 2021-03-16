@@ -71,6 +71,7 @@ export const AnnotationShape = ({
     <ReactKonva.Line
       closed
       fill={fill}
+      id={annotation.id}
       onContextMenu={onContextMenu}
       opacity={0.5}
       points={annotation.contour}

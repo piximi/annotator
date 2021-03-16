@@ -1,1 +1,0 @@
-export { AnnotationShape } from "./AnnotationShape";

@@ -12,15 +12,12 @@ import {
   setSeletedCategory,
 } from "../../../../../../store";
 
-type AnnotationShapeProps = {
+type AnnotationProps = {
   annotation: Selection;
   annotationTool?: AnnotationTool;
 };
 
-export const AnnotationShape = ({
-  annotation,
-  annotationTool,
-}: AnnotationShapeProps) => {
+export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   const ref = useRef<Konva.Line | null>(null);
 
   useEffect(() => {

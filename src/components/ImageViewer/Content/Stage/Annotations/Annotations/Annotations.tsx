@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Selection } from "../../../../../../types/Selection";
 import { useSelector } from "react-redux";
 import { visibleCategoriesSelector } from "../../../../../../store/selectors/visibleCategoriesSelector";
-import { AnnotationShape } from "../AnnotationShape";
+import { Annotation } from "../Annotation";
 import { imageInstancesSelector } from "../../../../../../store/selectors";
 import { AnnotationTool } from "../../../../../../image/Tool";
 
@@ -32,7 +32,7 @@ export const Annotations = ({ annotationTool }: AnnotationsProps) => {
   return (
     <React.Fragment>
       {visibleAnnotations.map((annotation: Selection) => (
-        <AnnotationShape
+        <Annotation
           annotation={annotation}
           key={annotation.id}
           annotationTool={annotationTool}

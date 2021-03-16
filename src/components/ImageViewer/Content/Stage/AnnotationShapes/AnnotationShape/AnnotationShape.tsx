@@ -11,10 +11,7 @@ type AnnotationShapeProps = {
   annotation: Selection;
 };
 
-export const AnnotationShape = React.forwardRef<
-  Konva.Line,
-  AnnotationShapeProps
->(({ annotation }, ref) => {
+export const AnnotationShape = ({ annotation }: AnnotationShapeProps) => {
   const categories = useSelector(categoriesSelector);
 
   const fill = _.find(
@@ -31,8 +28,7 @@ export const AnnotationShape = React.forwardRef<
       onContextMenu={onContextMenu}
       opacity={0.5}
       points={annotation.contour}
-      ref={ref}
       strokeWidth={1}
     />
   );
-});
+};

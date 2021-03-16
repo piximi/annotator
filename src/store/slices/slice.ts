@@ -148,6 +148,12 @@ export const slice = createSlice({
     ) {
       state.selectedAnnotation = action.payload.selectedAnnotation;
     },
+    setSelectedAnnotationNode(
+      state: State,
+      action: PayloadAction<{ selectedAnnotationNode: number }>
+    ) {
+      state.selectedAnnotationNode = action.payload.selectedAnnotationNode;
+    },
     setSelectionMode(
       state: State,
       action: PayloadAction<{ selectionMode: SelectionMode }>
@@ -190,6 +196,7 @@ export const {
   setPenSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,
+  setSelectedAnnotationNode,
   setSelectionMode,
   setSeletedCategory,
   setVibrance,

@@ -15,6 +15,7 @@ export {
   setPenSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,
+  setSelectedAnnotationNode,
   setSelectionMode,
   setSeletedCategory,
   setVibrance,

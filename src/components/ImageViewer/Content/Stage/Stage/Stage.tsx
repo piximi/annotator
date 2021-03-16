@@ -4,7 +4,6 @@ import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
-  categoriesSelector,
   imageInstancesSelector,
   invertModeSelector,
   toolTypeSelector,
@@ -20,11 +19,10 @@ import {
 import { useStyles } from "../../Content/Content.css";
 import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
-import { slice } from "../../../../../store/slices";
+import { slice } from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator } from "../../../../../hooks";
 import { Selection as SelectionType } from "../../../../../types/Selection";
-import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";

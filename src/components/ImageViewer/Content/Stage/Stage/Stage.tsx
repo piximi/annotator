@@ -72,9 +72,6 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const instances = useSelector(imageInstancesSelector);
 
-  const categories = useSelector(categoriesSelector);
-  const visibleCategories = useSelector(visibleCategoriesSelector);
-
   const zoomSettings = useSelector(zoomSettingsSelector);
 
   const enterPress = useKeyPress("Enter");

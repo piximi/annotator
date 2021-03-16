@@ -29,7 +29,7 @@ import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 import { KonvaEventObject } from "konva/types/Node";
 import { Image } from "../Image";
-import { Annotations } from "../AnnotationShapes";
+import { Annotations } from "../Annotations";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 
 type StageProps = {

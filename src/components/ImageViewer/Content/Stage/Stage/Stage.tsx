@@ -31,6 +31,7 @@ import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 import { KonvaEventObject } from "konva/types/Node";
 import { Image } from "../Image";
+import { AnnotationShapes } from "../AnnotationShapes";
 
 type StageProps = {
   category: Category;
@@ -546,34 +547,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                   />
                 )}
 
-              {instances &&
-                instances.map((instance: SelectionType) => {
-                  if (visibleCategories.includes(instance.categoryId)) {
-                    return (
-                      <ReactKonva.Line
-                        closed={true}
-                        key={instance.id}
-                        points={instance.contour}
-                        fill={
-                          _.find(
-                            categories,
-                            (category: Category) =>
-                              category.id === instance.categoryId
-                          )?.color
-                        }
-                        onContextMenu={(event) =>
-                          onContextMenuClick(event, instance)
-                        }
-                        opacity={0.5}
-                        ref={selectionLineRef}
-                        // stroke={shadeHex(category.color, 50)}
-                        strokeWidth={1}
-                      />
-                    );
-                  } else {
-                    return <React.Fragment />;
-                  }
-                })}
+              {instances && <AnnotationShapes annotations={instances} />}
 
               <ReactKonva.Transformer ref={transformerRef} />
             </ReactKonva.Layer>

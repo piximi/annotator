@@ -19,7 +19,7 @@ import {
 import { useStyles } from "../../Content/Content.css";
 import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
-import { slice } from "../../../../../store";
+import { setSelectedAnnotation, slice } from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator } from "../../../../../hooks";
 import { Selection as SelectionType } from "../../../../../types/Selection";
@@ -422,6 +422,12 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     }
 
     annotationTool.deselect();
+
+    dispatch(
+      setSelectedAnnotation({
+        selectedAnnotation: "",
+      })
+    );
 
     transformerRef.current?.detach();
     transformerRef.current?.getLayer()?.batchDraw();

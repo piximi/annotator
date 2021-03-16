@@ -11,7 +11,12 @@ import {
   selectionModeSelector,
   zoomSettingsSelector,
 } from "../../../../../store/selectors";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  Provider,
+  ReactReduxContext,
+  useDispatch,
+  useSelector,
+} from "react-redux";
 import { useStyles } from "../../Content/Content.css";
 import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
@@ -481,92 +486,100 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [stageRef.current]);
 
   return (
-    <ReactKonva.Stage
-      className={classes.stage}
-      globalCompositeOperation="destination-over"
-      height={512}
-      onClick={onClick}
-      onWheel={onWheel}
-      ref={stageRef}
-      scale={{
-        x: zoomOperator ? zoomOperator.scale : 1,
-        y: zoomOperator ? zoomOperator.scale : 1,
-      }}
-      width={512}
-      x={zoomOperator ? zoomOperator.x : 0}
-      y={zoomOperator ? zoomOperator.y : 0}
-    >
-      <ReactKonva.Layer
-        onMouseDown={(event) => onMouseDown(event)}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-      >
-        <Image ref={imageRef} src={src} />
+    <ReactReduxContext.Consumer>
+      {({ store }) => (
+        <ReactKonva.Stage
+          className={classes.stage}
+          globalCompositeOperation="destination-over"
+          height={512}
+          onClick={onClick}
+          onWheel={onWheel}
+          ref={stageRef}
+          scale={{
+            x: zoomOperator ? zoomOperator.scale : 1,
+            y: zoomOperator ? zoomOperator.scale : 1,
+          }}
+          width={512}
+          x={zoomOperator ? zoomOperator.x : 0}
+          y={zoomOperator ? zoomOperator.y : 0}
+        >
+          <Provider store={store}>
+            <ReactKonva.Layer
+              onMouseDown={(event) => onMouseDown(event)}
+              onMouseMove={onMouseMove}
+              onMouseUp={onMouseUp}
+            >
+              <Image ref={imageRef} src={src} />
 
-        {!selected && tool !== Tool.Zoom && (
-          <Selection
-            operation={tool}
-            operator={annotationOperator}
-            scale={zoomOperator ? zoomOperator.scale : 1}
-          />
-        )}
-
-        {!selected && tool === Tool.Zoom && (
-          <Selection
-            operation={tool}
-            operator={zoomOperator}
-            scale={zoomOperator ? zoomOperator.scale : 1}
-          />
-        )}
-
-        {selected && annotationOperator && annotationOperator.contour && (
-          <SelectedContour
-            points={annotationOperator.contour}
-            scale={zoomOperator ? zoomOperator.scale : 1}
-          />
-        )}
-
-        {selectionMode !== SelectionMode.New &&
-          annotationOperator &&
-          annotationOperator.annotating &&
-          !annotationOperator.annotated &&
-          selectionInstanceRef &&
-          selectionInstanceRef.current && (
-            <SelectedContour
-              points={selectionInstanceRef.current.contour}
-              scale={zoomOperator ? zoomOperator.scale : 1}
-            />
-          )}
-
-        {instances &&
-          instances.map((instance: SelectionType) => {
-            if (visibleCategories.includes(instance.categoryId)) {
-              return (
-                <ReactKonva.Line
-                  closed={true}
-                  key={instance.id}
-                  points={instance.contour}
-                  fill={
-                    _.find(
-                      categories,
-                      (category: Category) =>
-                        category.id === instance.categoryId
-                    )?.color
-                  }
-                  onContextMenu={(event) => onContextMenuClick(event, instance)}
-                  opacity={0.5}
-                  ref={selectionLineRef}
-                  // stroke={shadeHex(category.color, 50)}
-                  strokeWidth={1}
+              {!selected && tool !== Tool.Zoom && (
+                <Selection
+                  operation={tool}
+                  operator={annotationOperator}
+                  scale={zoomOperator ? zoomOperator.scale : 1}
                 />
-              );
-            } else {
-              return <React.Fragment />;
-            }
-          })}
+              )}
 
-        <ReactKonva.Transformer ref={transformerRef} />
-      </ReactKonva.Layer>
-    </ReactKonva.Stage>
+              {!selected && tool === Tool.Zoom && (
+                <Selection
+                  operation={tool}
+                  operator={zoomOperator}
+                  scale={zoomOperator ? zoomOperator.scale : 1}
+                />
+              )}
+
+              {selected && annotationOperator && annotationOperator.contour && (
+                <SelectedContour
+                  points={annotationOperator.contour}
+                  scale={zoomOperator ? zoomOperator.scale : 1}
+                />
+              )}
+
+              {selectionMode !== SelectionMode.New &&
+                annotationOperator &&
+                annotationOperator.annotating &&
+                !annotationOperator.annotated &&
+                selectionInstanceRef &&
+                selectionInstanceRef.current && (
+                  <SelectedContour
+                    points={selectionInstanceRef.current.contour}
+                    scale={zoomOperator ? zoomOperator.scale : 1}
+                  />
+                )}
+
+              {instances &&
+                instances.map((instance: SelectionType) => {
+                  if (visibleCategories.includes(instance.categoryId)) {
+                    return (
+                      <ReactKonva.Line
+                        closed={true}
+                        key={instance.id}
+                        points={instance.contour}
+                        fill={
+                          _.find(
+                            categories,
+                            (category: Category) =>
+                              category.id === instance.categoryId
+                          )?.color
+                        }
+                        onContextMenu={(event) =>
+                          onContextMenuClick(event, instance)
+                        }
+                        opacity={0.5}
+                        ref={selectionLineRef}
+                        // stroke={shadeHex(category.color, 50)}
+                        strokeWidth={1}
+                      />
+                    );
+                  } else {
+                    return <React.Fragment />;
+                  }
+                })}
+
+              <ReactKonva.Transformer ref={transformerRef} />
+            </ReactKonva.Layer>
+          </Provider>
+        </ReactKonva.Stage>
+      )}
+    </ReactReduxContext.Consumer>
   );
 };

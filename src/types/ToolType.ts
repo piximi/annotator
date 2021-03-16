@@ -1,4 +1,4 @@
-export enum Tool {
+export enum ToolType {
   ColorAdjustment,
   ColorAnnotation,
   EllipticalAnnotation,

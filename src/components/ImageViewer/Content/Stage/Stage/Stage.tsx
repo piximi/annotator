@@ -2,12 +2,12 @@ import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
 import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
-import { Tool } from "../../../../../types/Tool";
+import { ToolType } from "../../../../../types/ToolType";
 import {
   categoriesSelector,
   imageInstancesSelector,
   invertModeSelector,
-  toolSelector,
+  toolTypeSelector,
   selectionModeSelector,
   zoomSettingsSelector,
 } from "../../../../../store/selectors";
@@ -52,7 +52,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const classes = useStyles();
 
-  const tool = useSelector(toolSelector);
+  const tool = useSelector(toolTypeSelector);
 
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
 
@@ -87,20 +87,20 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {
     switch (tool) {
-      case Tool.Zoom:
+      case ToolType.Zoom:
         onZoomClick(event);
     }
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     switch (tool) {
-      case Tool.Zoom:
+      case ToolType.Zoom:
         onZoomWheel(event);
     }
   };
 
   useEffect(() => {
-    if (tool === Tool.Zoom) return;
+    if (tool === ToolType.Zoom) return;
 
     if (!selectionId || !annotationOperator) return;
 
@@ -150,7 +150,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [invertMode]);
 
   useEffect(() => {
-    if (tool === Tool.Zoom) return;
+    if (tool === ToolType.Zoom) return;
 
     if (selectionMode === SelectionMode.New) return; // "New" mode
 
@@ -188,7 +188,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [selectionMode, selected]);
 
   useEffect(() => {
-    if (tool === Tool.Zoom) return;
+    if (tool === ToolType.Zoom) return;
 
     if (selectionMode === SelectionMode.New) return;
 
@@ -243,7 +243,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   });
 
   useEffect(() => {
-    if (tool !== Tool.PenAnnotation) return;
+    if (tool !== ToolType.PenAnnotation) return;
 
     // @ts-ignore
     annotationOperator.brushSize = penSelectionBrushSize;
@@ -349,7 +349,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!relative) return;
 
-      if (tool === Tool.Zoom) {
+      if (tool === ToolType.Zoom) {
         zoomOperator?.onMouseDown(relative);
       } else {
         annotationOperator.onMouseDown(relative);
@@ -371,7 +371,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!relative) return;
 
-      if (tool === Tool.Zoom) {
+      if (tool === ToolType.Zoom) {
         zoomOperator?.onMouseMove(relative);
       } else {
         annotationOperator.onMouseMove(relative);
@@ -397,7 +397,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!relative) return;
 
-      if (tool === Tool.Zoom) {
+      if (tool === ToolType.Zoom) {
         zoomOperator?.onMouseUp(relative);
       } else {
         annotationOperator.onMouseUp(relative);
@@ -509,7 +509,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
             >
               <Image ref={imageRef} src={src} />
 
-              {!selected && tool !== Tool.Zoom && (
+              {!selected && tool !== ToolType.Zoom && (
                 <Selection
                   operation={tool}
                   operator={annotationOperator}
@@ -517,7 +517,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                 />
               )}
 
-              {!selected && tool === Tool.Zoom && (
+              {!selected && tool === ToolType.Zoom && (
                 <Selection
                   operation={tool}
                   operator={zoomOperator}
@@ -544,7 +544,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                   />
                 )}
 
-              {instances && <AnnotationShapes annotations={instances} />}
+              <AnnotationShapes tool={annotationOperator} />
 
               <ReactKonva.Transformer ref={transformerRef} />
             </ReactKonva.Layer>

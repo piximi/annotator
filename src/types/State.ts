@@ -1,8 +1,9 @@
 import { Category } from "./Category";
 import { Image } from "./Image";
-import { Tool } from "./Tool";
+import { ToolType } from "./ToolType";
 import { SelectionMode } from "./SelectionMode";
 import { ZoomSettings } from "./ZoomSettings";
+import { Tool } from "../image/Tool/Tool";
 
 export type State = {
   brightness: number;
@@ -12,9 +13,10 @@ export type State = {
   hue: number;
   image?: Image;
   invertMode: boolean;
-  tool: Tool;
+  toolType: ToolType;
   penSelectionBrushSize: number;
   saturation: number;
+  selectedAnnotation?: string;
   selectedCategory: string;
   selectionMode: SelectionMode;
   vibrance: number;

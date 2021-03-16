@@ -1,15 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Category } from "../../types/Category";
 import { Image } from "../../types/Image";
-import { Tool } from "../../types/Tool";
+import { ToolType } from "../../types/ToolType";
 import { Selection } from "../../types/Selection";
 import { SelectionMode } from "../../types/SelectionMode";
 import { State } from "../../types/State";
 import { ZoomMode } from "../../types/ZoomMode";
 import * as _ from "lodash";
 import colorImage from "../../images/colorImage.png";
-import { decode } from "../../image/rle";
-import * as ImageJS from "image-js";
 
 const initialState: State = {
   brightness: 0,
@@ -32,7 +30,7 @@ const initialState: State = {
     src: colorImage,
   },
   invertMode: false,
-  tool: Tool.RectangularSelection,
+  toolType: ToolType.RectangularSelection,
   penSelectionBrushSize: 1,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
@@ -126,8 +124,8 @@ export const slice = createSlice({
     ) {
       state.invertMode = action.payload.invertMode;
     },
-    setOperation(state: State, action: PayloadAction<{ operation: Tool }>) {
-      state.tool = action.payload.operation;
+    setOperation(state: State, action: PayloadAction<{ operation: ToolType }>) {
+      state.toolType = action.payload.operation;
     },
     setPenSelectionBrushSize(
       state: State,
@@ -143,6 +141,12 @@ export const slice = createSlice({
       action: PayloadAction<{ selectedCategory: string }>
     ) {
       state.selectedCategory = action.payload.selectedCategory;
+    },
+    setSelectedAnnotation(
+      state: State,
+      action: PayloadAction<{ selectedAnnotation: string }>
+    ) {
+      state.selectedAnnotation = action.payload.selectedAnnotation;
     },
     setSelectionMode(
       state: State,
@@ -185,6 +189,7 @@ export const {
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,
+  setSelectedAnnotation,
   setSelectionMode,
   setSeletedCategory,
   setVibrance,

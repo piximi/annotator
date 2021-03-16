@@ -2,11 +2,11 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import React from "react";
-import { Tool as OperationType } from "../../../../types/Tool";
+import { ToolType as OperationType } from "../../../../types/ToolType";
 import { Operation } from "../Operation";
 import { useStyles } from "./Operations.css";
 import { useDispatch, useSelector } from "react-redux";
-import { toolSelector } from "../../../../store/selectors";
+import { toolTypeSelector } from "../../../../store/selectors";
 import { slice } from "../../../../store/slices";
 import {
   ColorAdjustmentIcon,
@@ -32,7 +32,7 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
 
   const dispatch = useDispatch();
 
-  const activeOperation = useSelector(toolSelector);
+  const activeOperation = useSelector(toolTypeSelector);
 
   const { t, i18n } = useTranslation();
 

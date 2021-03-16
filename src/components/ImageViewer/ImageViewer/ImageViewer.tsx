@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Category } from "../../../types/Category";
 import { CssBaseline } from "@material-ui/core";
 import { Image } from "../../../types/Image";
-import { Tool } from "../../../types/Tool";
+import { ToolType } from "../../../types/ToolType";
 import {
   imageSelector,
-  toolSelector,
+  toolTypeSelector,
   selectedCategroySelector,
   unknownCategroySelector,
   zoomSettingsSelector,
@@ -61,84 +61,84 @@ export const ImageViewer = (props: ImageViewerProps) => {
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <ColorAdjustmentIcon />,
-      method: Tool.ColorAdjustment,
+      method: ToolType.ColorAdjustment,
       name: t("Color adjustment"),
       options: <React.Fragment />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <RectangularSelectionIcon />,
-      method: Tool.RectangularSelection,
+      method: ToolType.RectangularSelection,
       name: "Rectangular selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <EllipticalSelectionIcon />,
-      method: Tool.EllipticalAnnotation,
+      method: ToolType.EllipticalAnnotation,
       name: "Elliptical selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <PenSelectionIcon />,
-      method: Tool.PenAnnotation,
+      method: ToolType.PenAnnotation,
       name: "Pen selection",
       options: <PenSelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <LassoSelectionIcon />,
-      method: Tool.LassoAnnotation,
+      method: ToolType.LassoAnnotation,
       name: "Lasso selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <PolygonalSelectionIcon />,
-      method: Tool.PolygonalAnnotation,
+      method: ToolType.PolygonalAnnotation,
       name: "Polygonal selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <MagneticSelectionIcon />,
-      method: Tool.MagneticAnnotation,
+      method: ToolType.MagneticAnnotation,
       name: "Magnetic selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <ColorSelectionIcon />,
-      method: Tool.ColorAnnotation,
+      method: ToolType.ColorAnnotation,
       name: "Color selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <QuickSelectionIcon />,
-      method: Tool.QuickAnnotation,
+      method: ToolType.QuickAnnotation,
       name: "Quick selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <ObjectSelectionIcon />,
-      method: Tool.ObjectAnnotation,
+      method: ToolType.ObjectAnnotation,
       name: "Object selection",
       options: <SelectionOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <HandIcon />,
-      method: Tool.Hand,
+      method: ToolType.Hand,
       name: "Hand",
       options: <React.Fragment />,
     },
     {
       description: "Description of zoom here.",
       icon: <ZoomIcon />,
-      method: Tool.Zoom,
+      method: ToolType.Zoom,
       name: "Zoom",
       options: <ZoomOptions handleRevert={handleZoomReset} />,
     },
@@ -152,7 +152,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
   const image = useSelector(imageSelector);
 
-  const activeOperation = useSelector(toolSelector);
+  const activeOperation = useSelector(toolTypeSelector);
 
   const classes = useStyles();
 

@@ -1,12 +1,12 @@
 import { useEffect, useReducer, useRef, useState } from "react";
-import { Tool } from "../../types/Tool";
+import { ToolType } from "../../types/ToolType";
 import { ZoomTool } from "../../image/Tool/ZoomTool";
 import { ZoomSettings } from "../../types/ZoomSettings";
 import * as ImageJS from "image-js";
 import { KonvaEventObject } from "konva/types/Node";
 
 export const useZoomOperator = (
-  operation: Tool,
+  operation: ToolType,
   src: string,
   zoomSettings: ZoomSettings
 ) => {
@@ -14,7 +14,7 @@ export const useZoomOperator = (
   const [, update] = useReducer((x) => x + 1, 0);
 
   const onZoomClick = (event: KonvaEventObject<MouseEvent>) => {
-    if (operation !== Tool.Zoom) return;
+    if (operation !== ToolType.Zoom) return;
 
     if (!operator) return;
 
@@ -24,7 +24,7 @@ export const useZoomOperator = (
   };
 
   const onZoomWheel = (event: KonvaEventObject<WheelEvent>) => {
-    if (operation !== Tool.Zoom) return;
+    if (operation !== ToolType.Zoom) return;
 
     if (!operator) return;
 
@@ -34,7 +34,7 @@ export const useZoomOperator = (
   };
 
   useEffect(() => {
-    if (operation !== Tool.Zoom) return;
+    if (operation !== ToolType.Zoom) return;
 
     if (operator) return;
 
@@ -44,7 +44,7 @@ export const useZoomOperator = (
   }, [operation, src]);
 
   useEffect(() => {
-    if (operation !== Tool.Zoom) return;
+    if (operation !== ToolType.Zoom) return;
 
     if (!operator) return;
 
@@ -53,7 +53,7 @@ export const useZoomOperator = (
   }, [zoomSettings.zoomMode]);
 
   useEffect(() => {
-    if (operation !== Tool.Zoom) return;
+    if (operation !== ToolType.Zoom) return;
 
     if (!operator) return;
 
@@ -63,7 +63,7 @@ export const useZoomOperator = (
   }, [zoomSettings.zoomReset]);
 
   useEffect(() => {
-    if (operation !== Tool.Zoom) return;
+    if (operation !== ToolType.Zoom) return;
 
     if (!operator) return;
     // @ts-ignore

@@ -11,7 +11,7 @@ import {
   AnnotationTool,
 } from "../../../../../../image/Tool/AnnotationTool";
 import { EllipticalSelection } from "../EllipticalSelection";
-import { Tool } from "../../../../../../types/Tool";
+import { ToolType } from "../../../../../../types/ToolType";
 import { LassoSelection } from "../LassoSelection";
 import { MagneticSelection } from "../MagneticSelection";
 import { ObjectSelection } from "../ObjectSelection";
@@ -26,7 +26,7 @@ import { PenAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import { ZoomSelection } from "../ZoomSelection";
 
 type SelectionProps = {
-  operation?: Tool;
+  operation?: ToolType;
   operator?: AnnotationTool | ZoomTool;
   scale: number;
 };
@@ -35,57 +35,57 @@ export const Selection = ({ operation, operator, scale }: SelectionProps) => {
   if (!operation || !operator) return <React.Fragment />;
 
   switch (operation) {
-    case Tool.ColorAnnotation:
+    case ToolType.ColorAnnotation:
       return <ColorSelection operator={operator as ColorAnnotationTool} />;
-    case Tool.EllipticalAnnotation:
+    case ToolType.EllipticalAnnotation:
       return (
         <EllipticalSelection
           operator={operator as EllipticalAnnotationTool}
           scale={scale}
         />
       );
-    case Tool.LassoAnnotation:
+    case ToolType.LassoAnnotation:
       return (
         <LassoSelection
           operator={operator as LassoAnnotationTool}
           scale={scale}
         />
       );
-    case Tool.MagneticAnnotation:
+    case ToolType.MagneticAnnotation:
       return (
         <MagneticSelection
           operator={operator as MagneticAnnotationTool}
           scale={scale}
         />
       );
-    case Tool.ObjectAnnotation:
+    case ToolType.ObjectAnnotation:
       return (
         <ObjectSelection
           operator={operator as ObjectAnnotationTool}
           scale={scale}
         />
       );
-    case Tool.PenAnnotation:
+    case ToolType.PenAnnotation:
       return (
         <PenSelection operator={operator as PenAnnotationTool} scale={scale} />
       );
-    case Tool.PolygonalAnnotation:
+    case ToolType.PolygonalAnnotation:
       return (
         <PolygonalSelection
           operator={operator as PolygonalAnnotationTool}
           scale={scale}
         />
       );
-    case Tool.RectangularSelection:
+    case ToolType.RectangularSelection:
       return (
         <RectangularSelection
           operator={operator as RectangularAnnotationTool}
           scale={scale}
         />
       );
-    case Tool.Zoom:
+    case ToolType.Zoom:
       return <ZoomSelection operator={operator as ZoomTool} scale={scale} />;
-    case Tool.QuickAnnotation:
+    case ToolType.QuickAnnotation:
       return <QuickSelection operator={operator as QuickAnnotationTool} />;
     default:
       return <React.Fragment />;

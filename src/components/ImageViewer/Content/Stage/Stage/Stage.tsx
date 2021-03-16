@@ -193,6 +193,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (!selectionId) return;
 
+    if (!selectionInstanceRef || !selectionInstanceRef.current) return;
+
     const others = instances?.filter(
       (instance: SelectionType) => instance.id !== selectionId
     );
@@ -209,6 +211,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
         instances: [...(others as Array<SelectionType>), updated],
       })
     );
+
+    selectionInstanceRef.current = updated;
   }, [category]);
 
   useEffect(() => {

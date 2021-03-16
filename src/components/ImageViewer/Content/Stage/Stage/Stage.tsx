@@ -54,7 +54,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
-  const selectedAnnotation = useSelector(selectedAnnotationSelector);
+  const selectedAnnotationId = useSelector(selectedAnnotationSelector);
   const selectionMode = useSelector(selectionModeSelector);
 
   const [annotationTool] = useAnnotationOperator(src);
@@ -98,13 +98,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (tool === ToolType.Zoom) return;
 
-    if (!selectedAnnotation || !annotationTool) return;
+    if (!selectedAnnotationId || !annotationTool) return;
 
     if (!annotations) return;
 
     const selectedInstance: SelectionType = annotations.filter(
       (instance: SelectionType) => {
-        return instance.id === selectedAnnotation;
+        return instance.id === selectedAnnotationId;
       }
     )[0];
 
@@ -126,7 +126,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     );
 
     const instance = annotations.filter((instance: SelectionType) => {
-      return instance.id === selectedAnnotation;
+      return instance.id === selectedAnnotationId;
     })[0];
 
     if (!selectedAnnotationRef || !selectedAnnotationRef.current) return;
@@ -152,7 +152,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     setSelecting(false);
 
-    if (!selected || !annotationTool || !selectedAnnotation || !annotations)
+    if (!selected || !annotationTool || !selectedAnnotationId || !annotations)
       return;
 
     let combinedMask, combinedContour;
@@ -191,30 +191,30 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!selecting) return;
 
-    if (!selectedAnnotation) return;
+    if (!selectedAnnotationId) return;
 
     transformerRef.current?.detach();
 
     //remove the existing Operator since it's essentially been replaced
     dispatch(
       slice.actions.deleteImageInstance({
-        id: selectedAnnotation,
+        id: selectedAnnotationId,
       })
     );
   }, [selecting]);
 
   useEffect(() => {
-    if (!selectedAnnotation) return;
+    if (!selectedAnnotationId) return;
 
     if (!selectedAnnotationRef || !selectedAnnotationRef.current) return;
 
     const others = annotations?.filter(
-      (instance: SelectionType) => instance.id !== selectedAnnotation
+      (instance: SelectionType) => instance.id !== selectedAnnotationId
     );
 
     const updated: SelectionType = {
       ...annotations?.filter(
-        (instance: SelectionType) => instance.id === selectedAnnotation
+        (instance: SelectionType) => instance.id === selectedAnnotationId
       )[0],
       categoryId: category.id,
     } as SelectionType;
@@ -295,9 +295,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (!stageRef || !stageRef.current) return;
 
-    if (!selectedAnnotation) return;
+    if (!selectedAnnotationId) return;
 
-    const node = stageRef.current.findOne(`#${selectedAnnotation}`);
+    const node = stageRef.current.findOne(`#${selectedAnnotationId}`);
 
     if (!node) return;
 
@@ -309,9 +309,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     selectedAnnotationRef.current = annotations.filter((v: SelectionType) => {
       // @ts-ignore
-      return v.id === selectedAnnotation;
+      return v.id === selectedAnnotationId;
     })[0];
-  }, [selectedAnnotation]);
+  }, [selectedAnnotationId]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!stageRef || !stageRef.current) return;
@@ -406,7 +406,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!selectedAnnotationRef || !selectedAnnotationRef.current) return;
 
-    if (selectedAnnotation === selectedAnnotationRef.current.id) {
+    if (selectedAnnotationId === selectedAnnotationRef.current.id) {
       dispatch(
         slice.actions.replaceImageInstance({
           id: selectedAnnotationRef.current.id,
@@ -446,11 +446,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [escapePress]);
 
   useEffect(() => {
-    if (selectedAnnotation) {
+    if (selectedAnnotationId) {
       if (backspacePress || escapePress || deletePress) {
         dispatch(
           slice.actions.deleteImageInstance({
-            id: selectedAnnotation,
+            id: selectedAnnotationId,
           })
         );
 

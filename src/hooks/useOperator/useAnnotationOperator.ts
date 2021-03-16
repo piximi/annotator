@@ -14,10 +14,10 @@ import {
   AnnotationTool,
 } from "../../image/Tool";
 import { useSelector } from "react-redux";
-import { operationSelector } from "../../store/selectors";
+import { toolSelector } from "../../store/selectors";
 
 export const useAnnotationOperator = (src: string) => {
-  const operation = useSelector(operationSelector);
+  const operation = useSelector(toolSelector);
 
   const [operator, setOperator] = useState<AnnotationTool>();
 

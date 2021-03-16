@@ -7,7 +7,7 @@ export { hueSelector } from "./hueSelector";
 export { imageInstancesSelector } from "./imageInstancesSelector";
 export { imageSelector } from "./imageSelector";
 export { invertModeSelector } from "./invertModeSelector";
-export { operationSelector } from "./operationSelector";
+export { toolSelector } from "./toolSelector";
 export { saturationSelector } from "./saturationSelector";
 export { selectedCategroySelector } from "./selectedCategroySelector";
 export { selectionModeSelector } from "./selectionModeSelector";

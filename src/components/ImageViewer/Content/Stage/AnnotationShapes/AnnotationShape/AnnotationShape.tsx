@@ -6,7 +6,6 @@ import { Selection } from "../../../../../../types/Selection";
 import { useSelector } from "react-redux";
 import { categoriesSelector } from "../../../../../../store/selectors";
 import Konva from "konva";
-import KonvaEventObject = Konva.KonvaEventObject;
 
 type AnnotationShapeProps = {
   annotation: Selection;
@@ -20,7 +19,7 @@ export const AnnotationShape = ({ annotation }: AnnotationShapeProps) => {
     (category: Category) => category.id === annotation.categoryId
   )?.color;
 
-  const onContextMenu = (event: KonvaEventObject<PointerEvent>) => {};
+  const onContextMenu = (event: Konva.KonvaEventObject<PointerEvent>) => {};
 
   return (
     <ReactKonva.Line

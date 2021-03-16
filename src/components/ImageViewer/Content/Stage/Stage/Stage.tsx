@@ -2,13 +2,12 @@ import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
 import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
-import useImage from "use-image";
 import { Tool } from "../../../../../types/Tool";
 import {
   categoriesSelector,
   imageInstancesSelector,
   invertModeSelector,
-  operationSelector,
+  toolSelector,
   selectionModeSelector,
   zoomSettingsSelector,
 } from "../../../../../store/selectors";
@@ -25,6 +24,8 @@ import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/pe
 import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
+import { KonvaEventObject } from "konva/types/Node";
+import { Image } from "../Image";
 
 type StageProps = {
   category: Category;
@@ -34,8 +35,6 @@ type StageProps = {
 };
 
 export const Stage = ({ category, height, src, width }: StageProps) => {
-  const [image] = useImage(src, "Anonymous");
-
   const imageRef = useRef<Konva.Image>(null);
   const stageRef = useRef<Konva.Stage>(null);
 
@@ -47,7 +46,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const classes = useStyles();
 
-  const operation = useSelector(operationSelector);
+  const tool = useSelector(toolSelector);
 
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
 
@@ -78,13 +77,27 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const backspacePress = useKeyPress("Backspace");
 
   const { zoomOperator, onZoomClick, onZoomWheel } = useZoomOperator(
-    operation,
+    tool,
     src,
     zoomSettings
   );
 
+  const onClick = (event: KonvaEventObject<MouseEvent>) => {
+    switch (tool) {
+      case Tool.Zoom:
+        onZoomClick(event);
+    }
+  };
+
+  const onWheel = (event: KonvaEventObject<WheelEvent>) => {
+    switch (tool) {
+      case Tool.Zoom:
+        onZoomWheel(event);
+    }
+  };
+
   useEffect(() => {
-    if (operation === Tool.Zoom) return;
+    if (tool === Tool.Zoom) return;
 
     if (!selectionId || !annotationOperator) return;
 
@@ -134,7 +147,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [invertMode]);
 
   useEffect(() => {
-    if (operation === Tool.Zoom) return;
+    if (tool === Tool.Zoom) return;
 
     if (selectionMode === SelectionMode.New) return; // "New" mode
 
@@ -172,7 +185,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [selectionMode, selected]);
 
   useEffect(() => {
-    if (operation === Tool.Zoom) return;
+    if (tool === Tool.Zoom) return;
 
     if (selectionMode === SelectionMode.New) return;
 
@@ -227,7 +240,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   });
 
   useEffect(() => {
-    if (operation !== Tool.PenAnnotation) return;
+    if (tool !== Tool.PenAnnotation) return;
 
     // @ts-ignore
     annotationOperator.brushSize = penSelectionBrushSize;
@@ -333,7 +346,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!relative) return;
 
-      if (operation === Tool.Zoom) {
+      if (tool === Tool.Zoom) {
         zoomOperator?.onMouseDown(relative);
       } else {
         annotationOperator.onMouseDown(relative);
@@ -355,7 +368,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!relative) return;
 
-      if (operation === Tool.Zoom) {
+      if (tool === Tool.Zoom) {
         zoomOperator?.onMouseMove(relative);
       } else {
         annotationOperator.onMouseMove(relative);
@@ -367,7 +380,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     const throttled = _.throttle(func, 5);
 
     return () => throttled();
-  }, [annotationOperator, operation, zoomOperator]);
+  }, [annotationOperator, tool, zoomOperator]);
 
   const onMouseUp = useMemo(() => {
     const func = () => {
@@ -381,7 +394,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!relative) return;
 
-      if (operation === Tool.Zoom) {
+      if (tool === Tool.Zoom) {
         zoomOperator?.onMouseUp(relative);
       } else {
         annotationOperator.onMouseUp(relative);
@@ -393,7 +406,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     const throttled = _.throttle(func, 10);
 
     return () => throttled();
-  }, [annotationOperator, operation, zoomOperator]);
+  }, [annotationOperator, tool, zoomOperator]);
 
   useEffect(() => {
     if (!enterPress) return;
@@ -472,8 +485,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       className={classes.stage}
       globalCompositeOperation="destination-over"
       height={512}
-      onClick={onZoomClick}
-      onWheel={onZoomWheel}
+      onClick={onClick}
+      onWheel={onWheel}
       ref={stageRef}
       scale={{
         x: zoomOperator ? zoomOperator.scale : 1,
@@ -488,25 +501,19 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
       >
-        <ReactKonva.Image
-          ref={imageRef}
-          image={image}
-          position={{ x: 0, y: 0 }}
-          width={512}
-          height={512}
-        />
+        <Image ref={imageRef} src={src} />
 
-        {!selected && operation !== Tool.Zoom && (
+        {!selected && tool !== Tool.Zoom && (
           <Selection
-            operation={operation}
+            operation={tool}
             operator={annotationOperator}
             scale={zoomOperator ? zoomOperator.scale : 1}
           />
         )}
 
-        {!selected && operation === Tool.Zoom && (
+        {!selected && tool === Tool.Zoom && (
           <Selection
-            operation={operation}
+            operation={tool}
             operator={zoomOperator}
             scale={zoomOperator ? zoomOperator.scale : 1}
           />

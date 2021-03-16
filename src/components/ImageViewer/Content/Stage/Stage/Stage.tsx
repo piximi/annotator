@@ -544,7 +544,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                   />
                 )}
 
-              <AnnotationShapes tool={annotationOperator} />
+              <AnnotationShapes annotationTool={annotationOperator} />
 
               <ReactKonva.Transformer ref={transformerRef} />
             </ReactKonva.Layer>

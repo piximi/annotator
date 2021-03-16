@@ -6,18 +6,18 @@ import { Selection } from "../../../../../../types/Selection";
 import { useDispatch, useSelector } from "react-redux";
 import { categoriesSelector } from "../../../../../../store/selectors";
 import Konva from "konva";
-import { AnnotationTool } from "../../../../../../image/Tool/AnnotationTool/AnnotationTool";
+import { AnnotationTool } from "../../../../../../image/Tool";
 import { slice } from "../../../../../../store/slices";
 
 type AnnotationShapeProps = {
   annotation: Selection;
-  tool?: AnnotationTool;
+  annotationTool?: AnnotationTool;
 };
 
 export const AnnotationShape = React.forwardRef<
-  React.Ref<Konva.Line>,
+  Konva.Line,
   AnnotationShapeProps
->(({ annotation, tool }, ref) => {
+>(({ annotation, annotationTool }, ref) => {
   const dispatch = useDispatch();
 
   const categories = useSelector(categoriesSelector);
@@ -30,11 +30,11 @@ export const AnnotationShape = React.forwardRef<
   const onContextMenu = (event: Konva.KonvaEventObject<MouseEvent>) => {
     event.evt.preventDefault();
 
-    if (!tool) return;
+    if (!annotationTool) return;
 
-    if (tool.annotating) return;
+    if (annotationTool.annotating) return;
 
-    tool.deselect();
+    annotationTool.deselect();
 
     dispatch(
       slice.actions.setSelectedAnnotation({ selectedAnnotation: annotation.id })
@@ -45,12 +45,6 @@ export const AnnotationShape = React.forwardRef<
         selectedCategory: annotation.categoryId,
       })
     );
-
-    if (!ref || !ref.current) return;
-
-    // ref.current = event.target as Konva.Line;
-
-    // transformerRef.current?.nodes([selectionLineRef.current]);
   };
 
   return (

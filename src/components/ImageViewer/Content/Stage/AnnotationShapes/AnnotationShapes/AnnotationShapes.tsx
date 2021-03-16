@@ -4,13 +4,13 @@ import { useSelector } from "react-redux";
 import { visibleCategoriesSelector } from "../../../../../../store/selectors/visibleCategoriesSelector";
 import { AnnotationShape } from "../AnnotationShape";
 import { imageInstancesSelector } from "../../../../../../store/selectors";
-import { AnnotationTool } from "../../../../../../image/Tool/AnnotationTool/AnnotationTool";
+import { AnnotationTool } from "../../../../../../image/Tool";
 
 type AnnotationShapesProps = {
-  tool?: AnnotationTool;
+  annotationTool?: AnnotationTool;
 };
 
-export const AnnotationShapes = ({ tool }: AnnotationShapesProps) => {
+export const AnnotationShapes = ({ annotationTool }: AnnotationShapesProps) => {
   const annotations = useSelector(imageInstancesSelector);
 
   const visibleCategories = useSelector(visibleCategoriesSelector);
@@ -35,7 +35,7 @@ export const AnnotationShapes = ({ tool }: AnnotationShapesProps) => {
         <AnnotationShape
           annotation={annotation}
           key={annotation.id}
-          tool={tool}
+          annotationTool={annotationTool}
         />
       ))}
     </React.Fragment>

@@ -46,7 +46,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const selectingRef = useRef<Konva.Line | null>(null);
 
-  const selectionInstanceRef = useRef<SelectionType | null>(null);
+  const selectedAnnotationRef = useRef<SelectionType | null>(null);
 
   const classes = useStyles();
 
@@ -129,9 +129,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       return instance.id === selectedAnnotation;
     })[0];
 
-    if (!selectionInstanceRef || !selectionInstanceRef.current) return;
+    if (!selectedAnnotationRef || !selectedAnnotationRef.current) return;
 
-    selectionInstanceRef.current = {
+    selectedAnnotationRef.current = {
       ...instance,
       boundingBox: invertedBoundingBox,
       contour: invertedContour,
@@ -157,7 +157,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     let combinedMask, combinedContour;
 
-    const selectedInstance = selectionInstanceRef.current;
+    const selectedInstance = selectedAnnotationRef.current;
 
     if (!selectedInstance) return;
 
@@ -206,7 +206,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (!selectedAnnotation) return;
 
-    if (!selectionInstanceRef || !selectionInstanceRef.current) return;
+    if (!selectedAnnotationRef || !selectedAnnotationRef.current) return;
 
     const others = annotations?.filter(
       (instance: SelectionType) => instance.id !== selectedAnnotation
@@ -225,7 +225,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       })
     );
 
-    selectionInstanceRef.current = updated;
+    selectedAnnotationRef.current = updated;
   }, [category]);
 
   useEffect(() => {
@@ -286,7 +286,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     annotationTool.annotate(category);
 
     if (!annotationTool.annotation) return;
-    selectionInstanceRef.current = annotationTool.annotation;
+    selectedAnnotationRef.current = annotationTool.annotation;
   }, [selected]);
 
   /*
@@ -307,7 +307,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!annotations) return;
 
-    selectionInstanceRef.current = annotations.filter((v: SelectionType) => {
+    selectedAnnotationRef.current = annotations.filter((v: SelectionType) => {
       // @ts-ignore
       return v.id === selectedAnnotation;
     })[0];
@@ -404,19 +404,19 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!annotations || !annotationTool) return;
 
-    if (!selectionInstanceRef || !selectionInstanceRef.current) return;
+    if (!selectedAnnotationRef || !selectedAnnotationRef.current) return;
 
-    if (selectedAnnotation === selectionInstanceRef.current.id) {
+    if (selectedAnnotation === selectedAnnotationRef.current.id) {
       dispatch(
         slice.actions.replaceImageInstance({
-          id: selectionInstanceRef.current.id,
-          instance: selectionInstanceRef.current,
+          id: selectedAnnotationRef.current.id,
+          instance: selectedAnnotationRef.current,
         })
       );
     } else {
       dispatch(
         slice.actions.setImageInstances({
-          instances: [...annotations, selectionInstanceRef.current],
+          instances: [...annotations, selectedAnnotationRef.current],
         })
       );
     }
@@ -430,7 +430,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     selectingRef.current = null;
 
-    selectionInstanceRef.current = null;
+    selectedAnnotationRef.current = null;
   }, [enterPress]);
 
   useEffect(() => {
@@ -456,7 +456,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
         transformerRef.current?.detach();
 
-        selectionInstanceRef.current = null;
+        selectedAnnotationRef.current = null;
       }
     }
   }, [backspacePress, deletePress, escapePress]);
@@ -524,10 +524,10 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                 annotationTool &&
                 annotationTool.annotating &&
                 !annotationTool.annotated &&
-                selectionInstanceRef &&
-                selectionInstanceRef.current && (
+                selectedAnnotationRef &&
+                selectedAnnotationRef.current && (
                   <SelectedContour
-                    points={selectionInstanceRef.current.contour}
+                    points={selectedAnnotationRef.current.contour}
                     scale={zoomOperator ? zoomOperator.scale : 1}
                   />
                 )}

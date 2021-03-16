@@ -144,22 +144,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       mask: invertedMask,
     };
 
-    dispatch(
-      slice.actions.deleteImageInstance({
-        id: selectionId,
-      })
-    );
+    annotationOperator.mask = invertedMask;
+    annotationOperator.boundingBox = invertedBoundingBox;
+    annotationOperator.contour = invertedContour;
 
-    //dispatch call is async so let's make sure we don't add the same instance twice
-    const otherInstances = instances.filter((v) => {
-      return v.id !== selectionId;
-    });
-
-    dispatch(
-      slice.actions.setImageInstances({
-        instances: [...otherInstances, selectionInstanceRef.current],
-      })
-    );
+    setSelected(true);
   }, [invertMode]);
 
   useEffect(() => {
@@ -222,6 +211,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (!selectionId) return;
 
+    if (!selectionInstanceRef || !selectionInstanceRef.current) return;
+
     const others = instances?.filter(
       (instance: SelectionType) => instance.id !== selectionId
     );
@@ -238,6 +229,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
         instances: [...(others as Array<SelectionType>), updated],
       })
     );
+
+    selectionInstanceRef.current = updated;
   }, [category]);
 
   useEffect(() => {
@@ -427,7 +420,14 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!selectionInstanceRef || !selectionInstanceRef.current) return;
 
-    if (selectionId !== selectionInstanceRef.current.id) {
+    if (selectionId === selectionInstanceRef.current.id) {
+      dispatch(
+        slice.actions.replaceImageInstance({
+          id: selectionInstanceRef.current.id,
+          instance: selectionInstanceRef.current,
+        })
+      );
+    } else {
       dispatch(
         slice.actions.setImageInstances({
           instances: [...instances, selectionInstanceRef.current],

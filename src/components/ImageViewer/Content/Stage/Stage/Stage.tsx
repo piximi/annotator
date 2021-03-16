@@ -25,6 +25,7 @@ import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/pe
 import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
+import { KonvaEventObject } from "konva/types/Node";
 
 type StageProps = {
   category: Category;
@@ -82,6 +83,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     src,
     zoomSettings
   );
+
+  const onClick = (event: KonvaEventObject<MouseEvent>) => {
+    switch (operation) {
+      case Tool.Zoom:
+        onZoomClick(event);
+    }
+  };
 
   useEffect(() => {
     if (operation === Tool.Zoom) return;
@@ -472,7 +480,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       className={classes.stage}
       globalCompositeOperation="destination-over"
       height={512}
-      onClick={onZoomClick}
+      onClick={onClick}
       onWheel={onZoomWheel}
       ref={stageRef}
       scale={{

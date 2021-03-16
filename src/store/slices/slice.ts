@@ -8,6 +8,8 @@ import { State } from "../../types/State";
 import { ZoomMode } from "../../types/ZoomMode";
 import * as _ from "lodash";
 import colorImage from "../../images/colorImage.png";
+import { decode } from "../../image/rle";
+import * as ImageJS from "image-js";
 
 const initialState: State = {
   brightness: 0,
@@ -62,6 +64,18 @@ export const slice = createSlice({
         (instance: Selection) => instance.id !== action.payload.id
       );
     },
+    replaceImageInstance(
+      state: State,
+      action: PayloadAction<{ id: string; instance: Selection }>
+    ) {
+      if (!state.image) return;
+
+      const instances = state.image.instances.filter(
+        (instance: Selection) => instance.id !== action.payload.id
+      );
+
+      state.image.instances = [...instances, action.payload.instance];
+    },
     setBrightness(state: State, action: PayloadAction<{ brightness: number }>) {
       state.brightness = action.payload.brightness;
     },
@@ -104,7 +118,6 @@ export const slice = createSlice({
       action: PayloadAction<{ instances: Array<Selection> }>
     ) {
       if (!state.image) return;
-
       state.image.instances = action.payload.instances;
     },
     setInvertMode(
@@ -159,6 +172,7 @@ export const slice = createSlice({
 export const {
   deleteCategory,
   deleteImageInstance,
+  replaceImageInstance,
   setBrightness,
   setCategories,
   setCategoryVisibility,

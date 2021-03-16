@@ -1,6 +1,7 @@
 export {
   deleteCategory,
   deleteImageInstance,
+  replaceImageInstance,
   setBrightness,
   setCategories,
   setCategoryVisibility,

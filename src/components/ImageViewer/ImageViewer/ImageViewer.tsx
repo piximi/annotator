@@ -191,25 +191,15 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
         {image && <Content category={activeCategory} />}
 
-        <Collapse in={collapsed} timeout="auto" unmountOnExit>
-          <OperationOptions
-            handleCollapse={handleCollapse}
-            name={
-              operations[
-                operations.findIndex(
-                  (operation) => operation.method === activeOperation
-                )
-              ].name
-            }
-            settings={
-              operations[
-                operations.findIndex(
-                  (operation) => operation.method === activeOperation
-                )
-              ].options
-            }
-          />
-        </Collapse>
+        <OperationOptions
+          settings={
+            operations[
+              operations.findIndex(
+                (operation) => operation.method === activeOperation
+              )
+            ].options
+          }
+        />
 
         <Operations handleCollapse={handleCollapse} />
       </div>

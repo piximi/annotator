@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { selectionModeSelector } from "../../../../../store/selectors";
 
 type AnnotatedProps = {
-  annotationTool: AnnotationTool;
+  annotationTool?: AnnotationTool;
   scale: number;
   selected: boolean;
 };
@@ -21,8 +21,10 @@ export const Annotated = React.forwardRef<
   const [points, setPoints] = useState<Array<number>>([]);
 
   useEffect(() => {
+    if (!annotationTool) return;
+
     if (selectionMode === SelectionMode.New) {
-      if (!annotationTool || !annotationTool.contour) return;
+      if (!annotationTool.contour) return;
 
       setPoints(annotationTool.contour);
     } else {

@@ -304,6 +304,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     if (!transformerRef || !transformerRef.current) return;
 
     transformerRef.current.nodes([node]);
+
+    if (!instances) return;
+
+    selectionInstanceRef.current = instances.filter((v: SelectionType) => {
+      // @ts-ignore
+      return v.id === selectedAnnotation;
+    })[0];
   }, [selectedAnnotation]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {

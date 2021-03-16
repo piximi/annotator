@@ -6,15 +6,15 @@ import { AnnotationTool } from "../../../../../image/Tool";
 import { useSelector } from "react-redux";
 import { selectionModeSelector } from "../../../../../store/selectors";
 
-type AnnotatedProps = {
+type ConfirmationProps = {
   annotationTool?: AnnotationTool;
   scale: number;
   selected: boolean;
 };
 
-export const Annotated = React.forwardRef<
+export const Confirmation = React.forwardRef<
   React.RefObject<Selection>,
-  AnnotatedProps
+  ConfirmationProps
 >(({ annotationTool, scale, selected }, ref) => {
   const selectionMode = useSelector(selectionModeSelector);
 

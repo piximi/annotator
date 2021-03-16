@@ -31,8 +31,8 @@ export const AnnotationShape = React.forwardRef<
       onContextMenu={onContextMenu}
       opacity={0.5}
       points={annotation.contour}
-      strokeWidth={1}
       ref={ref}
+      strokeWidth={1}
     />
   );
 });

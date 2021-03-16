@@ -8,7 +8,6 @@ import { categoriesSelector } from "../../../../../../store/selectors";
 import Konva from "konva";
 import { AnnotationTool } from "../../../../../../image/Tool";
 import {
-  setSelectedAnnotationNode,
   setSelectedAnnotation,
   setSeletedCategory,
 } from "../../../../../../store";
@@ -57,12 +56,6 @@ export const AnnotationShape = ({
     dispatch(
       setSelectedAnnotation({
         selectedAnnotation: annotation.id,
-      })
-    );
-
-    dispatch(
-      setSelectedAnnotationNode({
-        selectedAnnotationNode: ref.current._id,
       })
     );
   };

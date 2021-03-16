@@ -46,7 +46,6 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const stageRef = useRef<Konva.Stage>(null);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
-  const selectionLineRef = useRef<Konva.Line | null>(null);
   const selectingRef = useRef<Konva.Line | null>(null);
 
   const selectionInstanceRef = useRef<SelectionType | null>(null);
@@ -55,15 +54,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const tool = useSelector(toolTypeSelector);
 
+  const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
-
+  const selectedAnnotation = useSelector(selectedAnnotationSelector);
   const selectionMode = useSelector(selectionModeSelector);
 
-  const invertMode = useSelector(invertModeSelector);
+  const [annotationTool] = useAnnotationOperator(src);
 
-  const [annotationOperator] = useAnnotationOperator(src);
-
-  const [selectionId, setSelectionId] = useState<string>();
   const [selected, setSelected] = useState<boolean>(false);
   const [selecting, setSelecting] = useState<boolean>(false);
 
@@ -103,13 +100,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (tool === ToolType.Zoom) return;
 
-    if (!selectionId || !annotationOperator) return;
+    if (!selectedAnnotation || !annotationTool) return;
 
     if (!instances) return;
 
     const selectedInstance: SelectionType = instances.filter(
       (instance: SelectionType) => {
-        return instance.id === selectionId;
+        return instance.id === selectedAnnotation;
       }
     )[0];
 
@@ -120,18 +117,18 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     )
       return;
 
-    const invertedMask = annotationOperator.invert(selectedInstance.mask, true);
+    const invertedMask = annotationTool.invert(selectedInstance.mask, true);
 
-    const invertedContour = annotationOperator.invertContour(
+    const invertedContour = annotationTool.invertContour(
       selectedInstance.contour
     );
 
-    const invertedBoundingBox = annotationOperator.computeBoundingBoxFromContours(
+    const invertedBoundingBox = annotationTool.computeBoundingBoxFromContours(
       invertedContour
     );
 
     const instance = instances.filter((instance: SelectionType) => {
-      return instance.id === selectionId;
+      return instance.id === selectedAnnotation;
     })[0];
 
     if (!selectionInstanceRef || !selectionInstanceRef.current) return;
@@ -143,9 +140,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       mask: invertedMask,
     };
 
-    annotationOperator.mask = invertedMask;
-    annotationOperator.boundingBox = invertedBoundingBox;
-    annotationOperator.contour = invertedContour;
+    annotationTool.mask = invertedMask;
+    annotationTool.boundingBox = invertedBoundingBox;
+    annotationTool.contour = invertedContour;
 
     setSelected(true);
   }, [invertMode]);
@@ -157,7 +154,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     setSelecting(false);
 
-    if (!selected || !annotationOperator || !selectionId || !instances) return;
+    if (!selected || !annotationTool || !selectedAnnotation || !instances)
+      return;
 
     let combinedMask, combinedContour;
 
@@ -166,24 +164,24 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     if (!selectedInstance) return;
 
     if (selectionMode === SelectionMode.Add) {
-      [combinedMask, combinedContour] = annotationOperator.add(
+      [combinedMask, combinedContour] = annotationTool.add(
         selectedInstance.mask
       );
     } else if (selectionMode === SelectionMode.Subtract) {
-      [combinedMask, combinedContour] = annotationOperator.subtract(
+      [combinedMask, combinedContour] = annotationTool.subtract(
         selectedInstance.mask
       );
     } else if (selectionMode === SelectionMode.Intersect) {
-      [combinedMask, combinedContour] = annotationOperator.intersect(
+      [combinedMask, combinedContour] = annotationTool.intersect(
         selectedInstance.mask
       );
     }
 
-    annotationOperator.mask = combinedMask;
-    annotationOperator.contour = combinedContour;
+    annotationTool.mask = combinedMask;
+    annotationTool.contour = combinedContour;
 
     if (!combinedContour) return;
-    annotationOperator.boundingBox = annotationOperator.computeBoundingBoxFromContours(
+    annotationTool.boundingBox = annotationTool.computeBoundingBoxFromContours(
       combinedContour
     );
   }, [selectionMode, selected]);
@@ -195,30 +193,30 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!selecting) return;
 
-    if (!selectionId) return;
+    if (!selectedAnnotation) return;
 
     transformerRef.current?.detach();
 
     //remove the existing Operator since it's essentially been replaced
     dispatch(
       slice.actions.deleteImageInstance({
-        id: selectionId,
+        id: selectedAnnotation,
       })
     );
   }, [selecting]);
 
   useEffect(() => {
-    if (!selectionId) return;
+    if (!selectedAnnotation) return;
 
     if (!selectionInstanceRef || !selectionInstanceRef.current) return;
 
     const others = instances?.filter(
-      (instance: SelectionType) => instance.id !== selectionId
+      (instance: SelectionType) => instance.id !== selectedAnnotation
     );
 
     const updated: SelectionType = {
       ...instances?.filter(
-        (instance: SelectionType) => instance.id === selectionId
+        (instance: SelectionType) => instance.id === selectedAnnotation
       )[0],
       categoryId: category.id,
     } as SelectionType;
@@ -233,32 +231,31 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [category]);
 
   useEffect(() => {
-    if (!annotationOperator) return;
+    if (!annotationTool) return;
 
-    if (annotationOperator.annotated) setSelected(annotationOperator.annotated);
+    if (annotationTool.annotated) setSelected(annotationTool.annotated);
 
     if (selectionMode === SelectionMode.New) return;
 
-    if (annotationOperator.annotating)
-      setSelecting(annotationOperator.annotating);
+    if (annotationTool.annotating) setSelecting(annotationTool.annotating);
   });
 
   useEffect(() => {
     if (tool !== ToolType.PenAnnotation) return;
 
     // @ts-ignore
-    annotationOperator.brushSize = penSelectionBrushSize;
+    annotationTool.brushSize = penSelectionBrushSize;
   }, [penSelectionBrushSize]);
 
   useEffect(() => {
-    if (!annotationOperator || !annotationOperator.contour) return;
+    if (!annotationTool || !annotationTool.contour) return;
 
     if (!stageRef || !stageRef.current) return;
 
     const transform = stageRef.current.getAbsoluteTransform().copy();
 
     const scaledContour: Array<number> = _.flatten(
-      _.chunk(annotationOperator.contour, 2).map((el: Array<number>) => {
+      _.chunk(annotationTool.contour, 2).map((el: Array<number>) => {
         const transformed = transform.point({ x: el[0], y: el[1] });
         return [transformed.x, transformed.y];
       })
@@ -267,7 +264,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     selectingRef.current = new Konva.Line<Konva.LineConfig>({
       points: scaledContour,
     });
-  }, [annotationOperator?.contour, selected]);
+  }, [annotationTool?.contour, selected]);
 
   useEffect(() => {
     if (!selected) return;
@@ -276,7 +273,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!selectingRef || !selectingRef.current) return;
 
-    if (!annotationOperator || !annotationOperator.contour) return;
+    if (!annotationTool || !annotationTool.contour) return;
 
     transformerRef.current.nodes([selectingRef.current]);
 
@@ -286,15 +283,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     layer.batchDraw();
 
-    if (!annotationOperator) return;
+    if (!annotationTool) return;
 
-    annotationOperator.annotate(category);
+    annotationTool.annotate(category);
 
-    if (!annotationOperator.annotation) return;
-    selectionInstanceRef.current = annotationOperator.annotation;
+    if (!annotationTool.annotation) return;
+    selectionInstanceRef.current = annotationTool.annotation;
   }, [selected]);
-
-  const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
   /*
    * Connect Konva.Transformer to selected annotation Konva.Node
@@ -325,7 +320,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (event.evt.button === 0) {
       // left click only
-      if (!annotationOperator || !stageRef || !stageRef.current) return;
+      if (!annotationTool || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -338,7 +333,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       if (tool === ToolType.Zoom) {
         zoomOperator?.onMouseDown(relative);
       } else {
-        annotationOperator.onMouseDown(relative);
+        annotationTool.onMouseDown(relative);
       }
 
       update();
@@ -347,7 +342,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const onMouseMove = useMemo(() => {
     const func = () => {
-      if (!annotationOperator || !stageRef || !stageRef.current) return;
+      if (!annotationTool || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -360,7 +355,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       if (tool === ToolType.Zoom) {
         zoomOperator?.onMouseMove(relative);
       } else {
-        annotationOperator.onMouseMove(relative);
+        annotationTool.onMouseMove(relative);
       }
 
       update();
@@ -369,11 +364,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     const throttled = _.throttle(func, 5);
 
     return () => throttled();
-  }, [annotationOperator, tool, zoomOperator]);
+  }, [annotationTool, tool, zoomOperator]);
 
   const onMouseUp = useMemo(() => {
     const func = () => {
-      if (!annotationOperator || !stageRef || !stageRef.current) return;
+      if (!annotationTool || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -386,7 +381,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       if (tool === ToolType.Zoom) {
         zoomOperator?.onMouseUp(relative);
       } else {
-        annotationOperator.onMouseUp(relative);
+        annotationTool.onMouseUp(relative);
       }
 
       update();
@@ -395,16 +390,16 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     const throttled = _.throttle(func, 10);
 
     return () => throttled();
-  }, [annotationOperator, tool, zoomOperator]);
+  }, [annotationTool, tool, zoomOperator]);
 
   useEffect(() => {
     if (!enterPress) return;
 
-    if (!instances || !annotationOperator) return;
+    if (!instances || !annotationTool) return;
 
     if (!selectionInstanceRef || !selectionInstanceRef.current) return;
 
-    if (selectionId === selectionInstanceRef.current.id) {
+    if (selectedAnnotation === selectionInstanceRef.current.id) {
       dispatch(
         slice.actions.replaceImageInstance({
           id: selectionInstanceRef.current.id,
@@ -419,7 +414,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       );
     }
 
-    annotationOperator.deselect();
+    annotationTool.deselect();
 
     transformerRef.current?.detach();
     transformerRef.current?.getLayer()?.batchDraw();
@@ -436,19 +431,19 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!escapePress) return;
 
-    if (!annotationOperator) return;
+    if (!annotationTool) return;
 
-    annotationOperator.deselect();
+    annotationTool.deselect();
 
     transformerRef.current?.detach();
   }, [escapePress]);
 
   useEffect(() => {
-    if (selectionId) {
+    if (selectedAnnotation) {
       if (backspacePress || escapePress || deletePress) {
         dispatch(
           slice.actions.deleteImageInstance({
-            id: selectionId,
+            id: selectedAnnotation,
           })
         );
 
@@ -498,7 +493,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
               {!selected && tool !== ToolType.Zoom && (
                 <Selection
                   operation={tool}
-                  operator={annotationOperator}
+                  operator={annotationTool}
                   scale={zoomOperator ? zoomOperator.scale : 1}
                 />
               )}
@@ -511,17 +506,17 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                 />
               )}
 
-              {selected && annotationOperator && annotationOperator.contour && (
+              {selected && annotationTool && annotationTool.contour && (
                 <SelectedContour
-                  points={annotationOperator.contour}
+                  points={annotationTool.contour}
                   scale={zoomOperator ? zoomOperator.scale : 1}
                 />
               )}
 
               {selectionMode !== SelectionMode.New &&
-                annotationOperator &&
-                annotationOperator.annotating &&
-                !annotationOperator.annotated &&
+                annotationTool &&
+                annotationTool.annotating &&
+                !annotationTool.annotated &&
                 selectionInstanceRef &&
                 selectionInstanceRef.current && (
                   <SelectedContour
@@ -530,7 +525,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                   />
                 )}
 
-              <AnnotationShapes annotationTool={annotationOperator} />
+              <AnnotationShapes annotationTool={annotationTool} />
 
               <ReactKonva.Transformer ref={transformerRef} />
             </ReactKonva.Layer>

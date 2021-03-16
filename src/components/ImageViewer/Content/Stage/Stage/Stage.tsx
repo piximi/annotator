@@ -91,6 +91,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     }
   };
 
+  const onWheel = (event: KonvaEventObject<WheelEvent>) => {
+    switch (operation) {
+      case Tool.Zoom:
+        onZoomWheel(event);
+    }
+  };
+
   useEffect(() => {
     if (operation === Tool.Zoom) return;
 
@@ -481,7 +488,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       globalCompositeOperation="destination-over"
       height={512}
       onClick={onClick}
-      onWheel={onZoomWheel}
+      onWheel={onWheel}
       ref={stageRef}
       scale={{
         x: zoomOperator ? zoomOperator.scale : 1,

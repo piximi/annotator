@@ -29,7 +29,7 @@ import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 import { KonvaEventObject } from "konva/types/Node";
 import { Image } from "../Image";
-import { AnnotationShapes } from "../AnnotationShapes";
+import { Annotations } from "../AnnotationShapes";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 
 type StageProps = {
@@ -523,7 +523,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                   />
                 )}
 
-              <AnnotationShapes annotationTool={annotationTool} />
+              <Annotations annotationTool={annotationTool} />
 
               <ReactKonva.Transformer ref={transformerRef} />
             </ReactKonva.Layer>

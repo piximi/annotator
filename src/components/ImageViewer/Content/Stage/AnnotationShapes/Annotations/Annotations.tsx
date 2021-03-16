@@ -6,11 +6,11 @@ import { AnnotationShape } from "../AnnotationShape";
 import { imageInstancesSelector } from "../../../../../../store/selectors";
 import { AnnotationTool } from "../../../../../../image/Tool";
 
-type AnnotationShapesProps = {
+type AnnotationsProps = {
   annotationTool?: AnnotationTool;
 };
 
-export const AnnotationShapes = ({ annotationTool }: AnnotationShapesProps) => {
+export const Annotations = ({ annotationTool }: AnnotationsProps) => {
   const annotations = useSelector(imageInstancesSelector);
 
   const visibleCategories = useSelector(visibleCategoriesSelector);

@@ -2,7 +2,6 @@ import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
 import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
-import useImage from "use-image";
 import { Tool } from "../../../../../types/Tool";
 import {
   categoriesSelector,
@@ -36,8 +35,6 @@ type StageProps = {
 };
 
 export const Stage = ({ category, height, src, width }: StageProps) => {
-  const [image] = useImage(src, "Anonymous");
-
   const imageRef = useRef<Konva.Image>(null);
   const stageRef = useRef<Konva.Stage>(null);
 

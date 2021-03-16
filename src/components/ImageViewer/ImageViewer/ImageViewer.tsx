@@ -5,7 +5,7 @@ import { Image } from "../../../types/Image";
 import { Tool } from "../../../types/Tool";
 import {
   imageSelector,
-  operationSelector,
+  toolSelector,
   selectedCategroySelector,
   unknownCategroySelector,
   zoomSettingsSelector,
@@ -152,7 +152,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
   const image = useSelector(imageSelector);
 
-  const activeOperation = useSelector(operationSelector);
+  const activeOperation = useSelector(toolSelector);
 
   const classes = useStyles();
 

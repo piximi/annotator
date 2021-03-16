@@ -8,7 +8,7 @@ import {
   categoriesSelector,
   imageInstancesSelector,
   invertModeSelector,
-  operationSelector,
+  toolSelector,
   selectionModeSelector,
   zoomSettingsSelector,
 } from "../../../../../store/selectors";
@@ -48,7 +48,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const classes = useStyles();
 
-  const operation = useSelector(operationSelector);
+  const tool = useSelector(toolSelector);
 
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
 
@@ -79,27 +79,27 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const backspacePress = useKeyPress("Backspace");
 
   const { zoomOperator, onZoomClick, onZoomWheel } = useZoomOperator(
-    operation,
+    tool,
     src,
     zoomSettings
   );
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {
-    switch (operation) {
+    switch (tool) {
       case Tool.Zoom:
         onZoomClick(event);
     }
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
-    switch (operation) {
+    switch (tool) {
       case Tool.Zoom:
         onZoomWheel(event);
     }
   };
 
   useEffect(() => {
-    if (operation === Tool.Zoom) return;
+    if (tool === Tool.Zoom) return;
 
     if (!selectionId || !annotationOperator) return;
 
@@ -160,7 +160,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [invertMode]);
 
   useEffect(() => {
-    if (operation === Tool.Zoom) return;
+    if (tool === Tool.Zoom) return;
 
     if (selectionMode === SelectionMode.New) return; // "New" mode
 
@@ -198,7 +198,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [selectionMode, selected]);
 
   useEffect(() => {
-    if (operation === Tool.Zoom) return;
+    if (tool === Tool.Zoom) return;
 
     if (selectionMode === SelectionMode.New) return;
 
@@ -249,7 +249,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   });
 
   useEffect(() => {
-    if (operation !== Tool.PenAnnotation) return;
+    if (tool !== Tool.PenAnnotation) return;
 
     // @ts-ignore
     annotationOperator.brushSize = penSelectionBrushSize;
@@ -355,7 +355,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!relative) return;
 
-      if (operation === Tool.Zoom) {
+      if (tool === Tool.Zoom) {
         zoomOperator?.onMouseDown(relative);
       } else {
         annotationOperator.onMouseDown(relative);
@@ -377,7 +377,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!relative) return;
 
-      if (operation === Tool.Zoom) {
+      if (tool === Tool.Zoom) {
         zoomOperator?.onMouseMove(relative);
       } else {
         annotationOperator.onMouseMove(relative);
@@ -389,7 +389,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     const throttled = _.throttle(func, 5);
 
     return () => throttled();
-  }, [annotationOperator, operation, zoomOperator]);
+  }, [annotationOperator, tool, zoomOperator]);
 
   const onMouseUp = useMemo(() => {
     const func = () => {
@@ -403,7 +403,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!relative) return;
 
-      if (operation === Tool.Zoom) {
+      if (tool === Tool.Zoom) {
         zoomOperator?.onMouseUp(relative);
       } else {
         annotationOperator.onMouseUp(relative);
@@ -415,7 +415,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     const throttled = _.throttle(func, 10);
 
     return () => throttled();
-  }, [annotationOperator, operation, zoomOperator]);
+  }, [annotationOperator, tool, zoomOperator]);
 
   useEffect(() => {
     if (!enterPress) return;
@@ -511,17 +511,17 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
           height={512}
         />
 
-        {!selected && operation !== Tool.Zoom && (
+        {!selected && tool !== Tool.Zoom && (
           <Selection
-            operation={operation}
+            operation={tool}
             operator={annotationOperator}
             scale={zoomOperator ? zoomOperator.scale : 1}
           />
         )}
 
-        {!selected && operation === Tool.Zoom && (
+        {!selected && tool === Tool.Zoom && (
           <Selection
-            operation={operation}
+            operation={tool}
             operator={zoomOperator}
             scale={zoomOperator ? zoomOperator.scale : 1}
           />

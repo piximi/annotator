@@ -6,7 +6,7 @@ import { Tool as OperationType } from "../../../../types/Tool";
 import { Operation } from "../Operation";
 import { useStyles } from "./Operations.css";
 import { useDispatch, useSelector } from "react-redux";
-import { operationSelector } from "../../../../store/selectors";
+import { toolSelector } from "../../../../store/selectors";
 import { slice } from "../../../../store/slices";
 import {
   ColorAdjustmentIcon,
@@ -32,7 +32,7 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
 
   const dispatch = useDispatch();
 
-  const activeOperation = useSelector(operationSelector);
+  const activeOperation = useSelector(toolSelector);
 
   const { t, i18n } = useTranslation();
 

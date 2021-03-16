@@ -306,7 +306,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     const node = stageRef.current.findOne(`#${selectedAnnotation}`);
 
-    transformerRef.current?.nodes([node]);
+    if (!transformerRef || !transformerRef.current) return;
+
+    transformerRef.current.nodes([node]);
   }, [selectedAnnotation]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {

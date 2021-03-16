@@ -299,6 +299,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     const node = stageRef.current.findOne(`#${selectedAnnotation}`);
 
+    if (!node) return;
+
     if (!transformerRef || !transformerRef.current) return;
 
     transformerRef.current.nodes([node]);

@@ -26,6 +26,7 @@ import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 import { KonvaEventObject } from "konva/types/Node";
+import { Image } from "../Image";
 
 type StageProps = {
   category: Category;
@@ -503,13 +504,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
       >
-        <ReactKonva.Image
-          ref={imageRef}
-          image={image}
-          position={{ x: 0, y: 0 }}
-          width={512}
-          height={512}
-        />
+        <Image ref={imageRef} src={src} />
 
         {!selected && tool !== Tool.Zoom && (
           <Selection

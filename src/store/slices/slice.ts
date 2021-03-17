@@ -144,7 +144,7 @@ export const slice = createSlice({
     },
     setSelectedAnnotation(
       state: State,
-      action: PayloadAction<{ selectedAnnotation: string }>
+      action: PayloadAction<{ selectedAnnotation: string | undefined }>
     ) {
       state.selectedAnnotation = action.payload.selectedAnnotation;
     },

@@ -24,10 +24,11 @@ import { PenSelection } from "../PenSelection";
 import { ZoomTool } from "../../../../../../image/Tool/ZoomTool";
 import { PenAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import { ZoomSelection } from "../ZoomSelection";
+import { Tool } from "../../../../../../image/Tool/Tool";
 
 type SelectionProps = {
   scale: number;
-  tool?: AnnotationTool | ZoomTool;
+  tool?: Tool;
   toolType?: ToolType;
 };
 

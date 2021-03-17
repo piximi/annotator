@@ -1,23 +1,16 @@
 import React from "react";
 import { Selection } from "../Stage/Selection";
-import { ToolType } from "../../../../types/ToolType";
-import { AnnotationTool } from "../../../../image/Tool/AnnotationTool/AnnotationTool";
-import { ZoomTool } from "../../../../image/Tool/ZoomTool";
 import { useSelector } from "react-redux";
 import { annotatedSelector } from "../../../../store/selectors/annotatedSelector";
 import { toolTypeSelector } from "../../../../store/selectors";
+import { Tool } from "../../../../image/Tool/Tool";
 
 type SelectingProps = {
-  annotationTool?: AnnotationTool;
+  tool: Tool;
   scale: number;
-  zoomTool?: ZoomTool;
 };
 
-export const Selecting = ({
-  annotationTool,
-  scale,
-  zoomTool,
-}: SelectingProps) => {
+export const Selecting = ({ scale, tool }: SelectingProps) => {
   const annotated = useSelector(annotatedSelector);
 
   const toolType = useSelector(toolTypeSelector);
@@ -26,13 +19,7 @@ export const Selecting = ({
 
   return (
     <React.Fragment>
-      {toolType !== ToolType.Zoom && (
-        <Selection scale={scale} tool={annotationTool} toolType={toolType} />
-      )}
-
-      {toolType === ToolType.Zoom && (
-        <Selection scale={scale} tool={zoomTool} toolType={toolType} />
-      )}
+      <Selection scale={scale} tool={tool} toolType={toolType} />
     </React.Fragment>
   );
 };

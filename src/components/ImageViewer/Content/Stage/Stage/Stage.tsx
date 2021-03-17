@@ -9,6 +9,7 @@ import {
   toolTypeSelector,
   selectionModeSelector,
   zoomSettingsSelector,
+  imageSelector,
 } from "../../../../../store/selectors";
 import {
   Provider,
@@ -496,13 +497,27 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     }
   }, [annotationTool, toolType, zoomTool]);
 
+  const image = useSelector(imageSelector);
+
+  const [imageWidth, setImageWidth] = useState<number>(512);
+  const [imageHeight, setImageHeight] = useState<number>(512);
+
+  useEffect(() => {
+    if (!image) return;
+
+    if (!image.shape) return;
+
+    setImageWidth(image.shape.c);
+    setImageHeight(image.shape.r);
+  });
+
   return (
     <ReactReduxContext.Consumer>
       {({ store }) => (
         <ReactKonva.Stage
           className={classes.stage}
           globalCompositeOperation="destination-over"
-          height={512}
+          height={imageHeight}
           onClick={onClick}
           onWheel={onWheel}
           ref={stageRef}
@@ -510,7 +525,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
             x: zoomTool ? zoomTool.scale : 1,
             y: zoomTool ? zoomTool.scale : 1,
           }}
-          width={512}
+          width={imageWidth}
           x={zoomTool ? zoomTool.x : 0}
           y={zoomTool ? zoomTool.y : 0}
         >

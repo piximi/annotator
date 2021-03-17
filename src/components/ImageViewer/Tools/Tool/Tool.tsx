@@ -11,7 +11,7 @@ type ImageViewerProps = {
   selected: boolean;
 };
 
-export const Operation = ({
+export const Tool = ({
   children,
   name,
   onClick,

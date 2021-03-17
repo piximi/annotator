@@ -3,8 +3,8 @@ import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import React from "react";
 import { ToolType as OperationType } from "../../../../types/ToolType";
-import { Operation } from "../Operation";
-import { useStyles } from "./Operations.css";
+import { Tool } from "../Tool";
+import { useStyles } from "./Tools.css";
 import { useDispatch, useSelector } from "react-redux";
 import { toolTypeSelector } from "../../../../store/selectors";
 import { slice } from "../../../../store/slices";
@@ -27,7 +27,7 @@ type OperationsProps = {
   handleCollapse: (b: boolean) => void;
 };
 
-export const Operations = ({ handleCollapse }: OperationsProps) => {
+export const Tools = ({ handleCollapse }: OperationsProps) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
       <Divider />
 
       <List>
-        <Operation
+        <Tool
           name={t("Color adjustment")}
           onClick={() => {
             dispatch(
@@ -61,11 +61,11 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.ColorAdjustment}
         >
           <ColorAdjustmentIcon />
-        </Operation>
+        </Tool>
 
         <Divider />
 
-        <Operation
+        <Tool
           name="Rectangular selection"
           onClick={() => {
             dispatch(
@@ -78,9 +78,9 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.RectangularSelection}
         >
           <RectangularSelectionIcon />
-        </Operation>
+        </Tool>
 
-        <Operation
+        <Tool
           name="Elliptical selection"
           onClick={() => {
             dispatch(
@@ -93,9 +93,9 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.EllipticalAnnotation}
         >
           <EllipticalSelectionIcon />
-        </Operation>
+        </Tool>
 
-        <Operation
+        <Tool
           name="Pen selection"
           onClick={() => {
             dispatch(
@@ -108,9 +108,9 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.PenAnnotation}
         >
           <LassoSelectionIcon />
-        </Operation>
+        </Tool>
 
-        <Operation
+        <Tool
           name="Lasso selection"
           onClick={() => {
             dispatch(
@@ -123,9 +123,9 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.LassoAnnotation}
         >
           <LassoSelectionIcon />
-        </Operation>
+        </Tool>
 
-        <Operation
+        <Tool
           name="Polygonal selection"
           onClick={() => {
             dispatch(
@@ -138,9 +138,9 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.PolygonalAnnotation}
         >
           <PolygonalSelectionIcon />
-        </Operation>
+        </Tool>
 
-        <Operation
+        <Tool
           name="Magnetic selection"
           onClick={() => {
             dispatch(
@@ -153,9 +153,9 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.MagneticAnnotation}
         >
           <MagneticSelectionIcon />
-        </Operation>
+        </Tool>
 
-        <Operation
+        <Tool
           name="Color selection"
           onClick={() => {
             dispatch(
@@ -168,9 +168,9 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.ColorAnnotation}
         >
           <ColorSelectionIcon />
-        </Operation>
+        </Tool>
 
-        <Operation
+        <Tool
           name="Quick selection"
           onClick={() => {
             dispatch(
@@ -183,9 +183,9 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.QuickAnnotation}
         >
           <QuickSelectionIcon />
-        </Operation>
+        </Tool>
 
-        <Operation
+        <Tool
           name="Object selection"
           onClick={() => {
             dispatch(
@@ -198,11 +198,11 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.ObjectAnnotation}
         >
           <ObjectSelectionIcon />
-        </Operation>
+        </Tool>
 
         <Divider />
 
-        <Operation
+        <Tool
           name="Zoom"
           onClick={() => {
             dispatch(
@@ -215,7 +215,7 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.Zoom}
         >
           <ZoomIcon />
-        </Operation>
+        </Tool>
       </List>
     </Drawer>
   );

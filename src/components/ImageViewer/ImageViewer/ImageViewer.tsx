@@ -13,15 +13,15 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
 import { Categories } from "../Categories";
-import { OperationOptions } from "../OperationOptions";
-import { SelectionOptions } from "../OperationOptions/SelectionOptions";
-import { Operations } from "../Operations";
-import { ZoomOptions } from "../OperationOptions/ZoomOptions";
+import { ToolOptions } from "../ToolOptions";
+import { SelectionOptions } from "../ToolOptions/SelectionOptions";
+import { Tools } from "../Tools";
+import { ZoomOptions } from "../ToolOptions/ZoomOptions";
 import { slice } from "../../../store/slices";
 import { Content } from "../Content";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
-import { PenSelectionOptions } from "../OperationOptions/PenSelectionOptions";
+import { PenSelectionOptions } from "../ToolOptions/PenSelectionOptions";
 import {
   ColorAdjustmentIcon,
   ColorSelectionIcon,
@@ -191,7 +191,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
         {image && <Content category={activeCategory} />}
 
-        <OperationOptions
+        <ToolOptions
           settings={
             operations[
               operations.findIndex(
@@ -201,7 +201,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
           }
         />
 
-        <Operations handleCollapse={handleCollapse} />
+        <Tools handleCollapse={handleCollapse} />
       </div>
     </ThemeProvider>
   );

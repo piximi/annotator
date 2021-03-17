@@ -1,13 +1,13 @@
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import React from "react";
-import { useStyles } from "./OperationOptions.css";
+import { useStyles } from "./ToolOptions.css";
 
 type OperationOptionsProps = {
   settings: React.ReactNode;
 };
 
-export const OperationOptions = ({ settings }: OperationOptionsProps) => {
+export const ToolOptions = ({ settings }: OperationOptionsProps) => {
   const classes = useStyles();
 
   return (

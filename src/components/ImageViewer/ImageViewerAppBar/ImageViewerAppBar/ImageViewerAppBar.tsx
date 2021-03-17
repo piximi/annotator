@@ -6,6 +6,7 @@ import { Chip } from "@material-ui/core";
 import { useStyles } from "./ImageViewerAppBar.css";
 import { OpenImageButton } from "../OpenImageButton";
 import { ExportButton } from "../ExportButton";
+import { SettingsButton } from "../SettingsButton/SettingsButton";
 
 export const ImageViewerAppBar = () => {
   const classes = useStyles();
@@ -22,6 +23,8 @@ export const ImageViewerAppBar = () => {
         <OpenImageButton />
 
         <ExportButton />
+
+        <SettingsButton />
       </Toolbar>
     </AppBar>
   );

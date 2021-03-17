@@ -66,7 +66,7 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
     <MenuItem component="label" dense>
       Computer
       <input
-        accept="image/tiff, image/png"
+        accept="image/*"
         hidden
         id="open-image"
         onChange={onChange}

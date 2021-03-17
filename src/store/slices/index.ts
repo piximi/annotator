@@ -2,6 +2,7 @@ export {
   deleteCategory,
   deleteImageInstance,
   replaceImageInstance,
+  setAnnotated,
   setBrightness,
   setCategories,
   setCategoryVisibility,

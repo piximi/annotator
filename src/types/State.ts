@@ -5,6 +5,7 @@ import { SelectionMode } from "./SelectionMode";
 import { ZoomSettings } from "./ZoomSettings";
 
 export type State = {
+  annotated: boolean;
   brightness: number;
   categories: Array<Category>;
   contrast: number;

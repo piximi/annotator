@@ -31,6 +31,8 @@ import { KonvaEventObject } from "konva/types/Node";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
+import { Selecting } from "../../Selecting";
+import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 
 type StageProps = {
   category: Category;
@@ -59,7 +61,6 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const [annotationTool] = useAnnotationOperator(src);
 
-  const [selected, setSelected] = useState<boolean>(false);
   const [selecting, setSelecting] = useState<boolean>(false);
 
   const [, update] = useReducer((x) => x + 1, 0);
@@ -69,6 +70,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const annotations = useSelector(imageInstancesSelector);
 
   const zoomSettings = useSelector(zoomSettingsSelector);
+
+  const annotated = useSelector(annotatedSelector);
 
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
@@ -144,7 +147,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     annotationTool.boundingBox = invertedBoundingBox;
     annotationTool.contour = invertedContour;
 
-    setSelected(true);
+    dispatch(slice.actions.setAnnotated({ annotated: true }));
   }, [invertMode]);
 
   useEffect(() => {
@@ -154,7 +157,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     setSelecting(false);
 
-    if (!selected || !annotationTool || !selectedAnnotationId || !annotations)
+    if (!annotated || !annotationTool || !selectedAnnotationId || !annotations)
       return;
 
     let combinedMask, combinedContour;
@@ -184,7 +187,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     annotationTool.boundingBox = annotationTool.computeBoundingBoxFromContours(
       combinedContour
     );
-  }, [selectionMode, selected]);
+  }, [selectionMode, annotated]);
 
   useEffect(() => {
     if (tool === ToolType.Zoom) return;
@@ -233,7 +236,10 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (!annotationTool) return;
 
-    if (annotationTool.annotated) setSelected(annotationTool.annotated);
+    if (annotationTool.annotated)
+      dispatch(
+        slice.actions.setAnnotated({ annotated: annotationTool.annotated })
+      );
 
     if (selectionMode === SelectionMode.New) return;
 
@@ -264,10 +270,10 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     selectingRef.current = new Konva.Line<Konva.LineConfig>({
       points: scaledContour,
     });
-  }, [annotationTool?.contour, selected]);
+  }, [annotationTool?.contour, annotated]);
 
   useEffect(() => {
-    if (!selected) return;
+    if (!annotated) return;
 
     if (!transformerRef || !transformerRef.current) return;
 
@@ -289,7 +295,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!annotationTool.annotation) return;
     selectedAnnotationRef.current = annotationTool.annotation;
-  }, [selected]);
+  }, [annotated]);
 
   /*
    * Connect Konva.Transformer to selected annotation Konva.Node
@@ -434,7 +440,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     transformerRef.current?.detach();
     transformerRef.current?.getLayer()?.batchDraw();
 
-    setSelected(false);
+    dispatch(slice.actions.setAnnotated({ annotated: false }));
 
     selectingRef.current = null;
 
@@ -442,7 +448,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [enterPress]);
 
   useEffect(() => {
-    if (!selected) return;
+    if (!annotated) return;
 
     if (!escapePress) return;
 
@@ -505,23 +511,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
             >
               <Image ref={imageRef} src={src} />
 
-              {!selected && tool !== ToolType.Zoom && (
-                <Selection
-                  operation={tool}
-                  operator={annotationTool}
-                  scale={zoomOperator ? zoomOperator.scale : 1}
-                />
-              )}
+              <Selecting
+                annotationTool={annotationTool}
+                scale={zoomOperator ? zoomOperator.scale : 1}
+                zoomTool={zoomOperator}
+              />
 
-              {!selected && tool === ToolType.Zoom && (
-                <Selection
-                  operation={tool}
-                  operator={zoomOperator}
-                  scale={zoomOperator ? zoomOperator.scale : 1}
-                />
-              )}
-
-              {selected && annotationTool && annotationTool.contour && (
+              {annotated && annotationTool && annotationTool.contour && (
                 <SelectedContour
                   points={annotationTool.contour}
                   scale={zoomOperator ? zoomOperator.scale : 1}

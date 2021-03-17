@@ -10,6 +10,7 @@ import * as _ from "lodash";
 import colorImage from "../../images/colorImage.png";
 
 const initialState: State = {
+  annotated: false,
   brightness: 0,
   categories: [
     {
@@ -74,6 +75,9 @@ export const slice = createSlice({
       );
 
       state.image.instances = [...instances, action.payload.instance];
+    },
+    setAnnotated(state: State, action: PayloadAction<{ annotated: boolean }>) {
+      state.annotated = action.payload.annotated;
     },
     setBrightness(state: State, action: PayloadAction<{ brightness: number }>) {
       state.brightness = action.payload.brightness;
@@ -184,6 +188,7 @@ export const {
   deleteCategory,
   deleteImageInstance,
   replaceImageInstance,
+  setAnnotated,
   setBrightness,
   setCategories,
   setCategoryVisibility,

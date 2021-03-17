@@ -63,6 +63,8 @@
     "use-constant": "^1.1.0",
     "use-dropbox-chooser": "^0.0.5",
     "use-image": "^1.0.7",
+    "use-sound": "^2.0.1",
+    "utif": "^3.1.0",
     "uuid": "^8.3.2",
     "victory": "^35.4.6",
     "web-vitals": "^0.2.4"

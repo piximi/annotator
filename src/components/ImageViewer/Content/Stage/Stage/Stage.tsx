@@ -96,7 +96,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   };
 
   useEffect(() => {
-    if (tool === ToolType.Zoom) return;
+    if (tool === ToolType.Zoom) {
+      debugger;
+    }
 
     if (!selectedAnnotationId || !annotationTool) return;
 
@@ -425,7 +427,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     dispatch(
       setSelectedAnnotation({
-        selectedAnnotation: "",
+        selectedAnnotation: undefined,
       })
     );
 

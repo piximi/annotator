@@ -3,6 +3,7 @@ import React from "react";
 import { Shape } from "../../../../../types/Shape";
 import { setImage } from "../../../../../store/slices";
 import { useDispatch } from "react-redux";
+import * as ImageJS from "image-js";
 
 type ComputerMenuItemProps = {
   onClose: () => void;
@@ -17,7 +18,7 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
     event.persist();
 
     if (event.currentTarget.files) {
-      const blob = event.currentTarget.files[0];
+      const file = event.currentTarget.files[0];
 
       const reader = new FileReader();
 
@@ -27,33 +28,37 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
 
           const image = new Image();
 
-          image.onload = () => {
-            const name = blob.name;
-
-            const shape: Shape = {
-              r: image.naturalHeight,
-              c: image.naturalWidth,
-              channels: 4,
-            };
-
-            dispatch(
-              setImage({
-                image: {
-                  id: "",
-                  instances: [],
-                  name: name,
-                  shape: shape,
-                  src: src as string,
-                },
-              })
-            );
-          };
+          image.onload = () => {};
 
           image.src = src as string;
         }
       };
 
-      reader.readAsDataURL(blob);
+      file.arrayBuffer().then((buffer) => {
+        ImageJS.Image.load(buffer).then((image) => {
+          const name = file.name;
+
+          const shape: Shape = {
+            r: image.height,
+            c: image.width,
+            channels: 4,
+          };
+
+          dispatch(
+            setImage({
+              image: {
+                id: "",
+                instances: [],
+                name: name,
+                shape: shape,
+                src: image.toDataURL(),
+              },
+            })
+          );
+        });
+      });
+
+      reader.readAsDataURL(file);
     }
   };
 
@@ -61,7 +66,7 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
     <MenuItem component="label" dense>
       Computer
       <input
-        accept="image/*"
+        accept="image/tiff, image/png"
         hidden
         id="open-image"
         onChange={onChange}

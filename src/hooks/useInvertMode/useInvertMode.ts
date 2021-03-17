@@ -1,11 +1,7 @@
 import { useEffect } from "react";
-import { ToolType } from "../../types/ToolType";
 import { Selection as SelectionType } from "../../types/Selection";
 import { useSelector } from "react-redux";
-import {
-  imageInstancesSelector,
-  toolTypeSelector,
-} from "../../store/selectors";
+import { imageInstancesSelector } from "../../store/selectors";
 import { AnnotationTool } from "../../image/Tool/AnnotationTool/AnnotationTool";
 import { selectedAnnotationSelector } from "../../store/selectors/selectedAnnotationSelector";
 

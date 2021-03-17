@@ -216,21 +216,6 @@ export const Operations = ({ handleCollapse }: OperationsProps) => {
         >
           <ZoomIcon />
         </Operation>
-
-        <Operation
-          name="Hand"
-          onClick={() => {
-            dispatch(
-              slice.actions.setOperation({
-                operation: OperationType.Hand,
-              })
-            );
-            handleCollapse(true);
-          }}
-          selected={activeOperation === OperationType.Hand}
-        >
-          <HandIcon />
-        </Operation>
       </List>
     </Drawer>
   );

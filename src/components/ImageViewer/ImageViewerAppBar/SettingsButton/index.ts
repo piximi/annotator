@@ -1,1 +1,1 @@
-import { SettingsButton } from "./SettingButton";
+import { SettingsButton } from "./SettingsButton";

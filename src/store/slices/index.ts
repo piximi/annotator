@@ -11,6 +11,7 @@ export {
   setImage,
   setImageInstances,
   setInvertMode,
+  setIsSelected,
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,

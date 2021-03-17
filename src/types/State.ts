@@ -12,6 +12,7 @@ export type State = {
   hue: number;
   image?: Image;
   invertMode: boolean;
+  isSelected: boolean;
   penSelectionBrushSize: number;
   saturation: number;
   selectedAnnotation?: string;

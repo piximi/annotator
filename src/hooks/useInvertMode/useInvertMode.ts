@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Selection as SelectionType } from "../../types/Selection";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   imageInstancesSelector,
   invertModeSelector,
 } from "../../store/selectors";
 import { AnnotationTool } from "../../image/Tool/AnnotationTool/AnnotationTool";
 import { selectedAnnotationSelector } from "../../store/selectors/selectedAnnotationSelector";
+import { slice } from "../../store/slices";
 
 export const useInvertMode = (annotationTool: AnnotationTool) => {
   const annotations = useSelector(imageInstancesSelector);
   const invertMode = useSelector(invertModeSelector);
   const selectedAnnotationId = useSelector(selectedAnnotationSelector);
+
+  const dispatch = useDispatch();
 
   const [
     invertedAnnotation,
@@ -58,6 +61,8 @@ export const useInvertMode = (annotationTool: AnnotationTool) => {
     };
 
     setInvertedAnnotation(invertedInstance);
+
+    dispatch(slice.actions.setIsSelected({ isSelected: true }));
   }, [invertMode]);
 
   return invertedAnnotation;

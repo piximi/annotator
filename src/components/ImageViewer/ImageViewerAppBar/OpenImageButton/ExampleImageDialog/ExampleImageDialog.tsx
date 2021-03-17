@@ -26,12 +26,6 @@ export const ExampleImageDialog = ({
         "Fusce lectus lorem, lacinia eu libero eu, pellentesque semper dui. Nunc bibendum est eget lacus fermentum ullamcorper.",
       data: malaria,
     },
-    {
-      name: "Microscopy (3D)",
-      description:
-        "Cras lobortis sapien eu tellus malesuada sodales. Vivamus placerat est eu mi ullamcorper, ut ultrices elit rhoncus. Aliquam vitae viverra nisi. Sed odio metus, finibus quis nisi a, vulputate varius justo.",
-      data: malaria,
-    },
   ];
 
   const onClick = ({

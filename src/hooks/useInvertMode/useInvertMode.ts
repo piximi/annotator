@@ -9,7 +9,7 @@ import { AnnotationTool } from "../../image/Tool/AnnotationTool/AnnotationTool";
 import { selectedAnnotationSelector } from "../../store/selectors/selectedAnnotationSelector";
 import { slice } from "../../store/slices";
 
-export const useInvertMode = (annotationTool: AnnotationTool) => {
+export const useInvertMode = (annotationTool: AnnotationTool | undefined) => {
   const annotations = useSelector(imageInstancesSelector);
   const invertMode = useSelector(invertModeSelector);
   const selectedAnnotationId = useSelector(selectedAnnotationSelector);
@@ -22,6 +22,8 @@ export const useInvertMode = (annotationTool: AnnotationTool) => {
   ] = useState<SelectionType | null>(null);
 
   useEffect(() => {
+    if (!annotationTool) return;
+
     if (!annotations || !selectedAnnotationId) return;
 
     const selectedInstance: SelectionType = annotations.filter(
@@ -53,6 +55,7 @@ export const useInvertMode = (annotationTool: AnnotationTool) => {
     annotationTool.boundingBox = invertedBoundingBox;
     annotationTool.contour = invertedContour;
 
+    //FIXME: This logic should not be part of stage, it should be something that our annotationTool does
     const invertedInstance = {
       ...selectedInstance,
       boundingBox: invertedBoundingBox,

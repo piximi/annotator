@@ -1,9 +1,9 @@
 import React from "react";
-import { Selection } from "../Stage/Selection";
+import { Selection } from "../Selection";
 import { useSelector } from "react-redux";
-import { annotatedSelector } from "../../../../store/selectors/annotatedSelector";
-import { toolTypeSelector } from "../../../../store/selectors";
-import { Tool } from "../../../../image/Tool/Tool";
+import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
+import { toolTypeSelector } from "../../../../../store/selectors";
+import { Tool } from "../../../../../image/Tool/Tool";
 
 type SelectingProps = {
   tool: Tool;

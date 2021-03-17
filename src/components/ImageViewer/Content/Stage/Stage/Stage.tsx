@@ -31,7 +31,7 @@ import { KonvaEventObject } from "konva/types/Node";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
-import { Selecting } from "../../Selecting";
+import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import { Tool } from "../../../../../image/Tool/Tool";
 

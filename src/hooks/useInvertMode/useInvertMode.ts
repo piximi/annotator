@@ -65,7 +65,7 @@ export const useInvertMode = (annotationTool: AnnotationTool | undefined) => {
 
     setInvertedAnnotation(invertedInstance);
 
-    dispatch(slice.actions.setIsSelected({ isSelected: true }));
+    dispatch(slice.actions.setAnnotated({ annotated: true }));
   }, [invertMode]);
 
   return invertedAnnotation;

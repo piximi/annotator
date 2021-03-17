@@ -31,7 +31,6 @@ const initialState: State = {
     src: colorImage,
   },
   invertMode: false,
-  isSelected: false,
   toolType: ToolType.RectangularSelection,
   penSelectionBrushSize: 1,
   saturation: 0,
@@ -129,12 +128,6 @@ export const slice = createSlice({
     ) {
       state.invertMode = action.payload.invertMode;
     },
-    setIsSelected(
-      state: State,
-      action: PayloadAction<{ isSelected: boolean }>
-    ) {
-      state.isSelected = action.payload.isSelected;
-    },
     setOperation(state: State, action: PayloadAction<{ operation: ToolType }>) {
       state.toolType = action.payload.operation;
     },
@@ -198,7 +191,6 @@ export const {
   setImage,
   setImageInstances,
   setInvertMode,
-  setIsSelected,
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,

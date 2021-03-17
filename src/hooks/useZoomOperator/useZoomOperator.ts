@@ -71,7 +71,7 @@ export const useZoomOperator = (
   }, [zoomSettings.zoomAutomaticCentering]);
 
   return {
-    zoomOperator: operator,
+    zoomTool: operator,
     onZoomClick: onZoomClick,
     onZoomWheel: onZoomWheel,
   };

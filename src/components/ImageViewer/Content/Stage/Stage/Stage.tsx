@@ -79,7 +79,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const deletePress = useKeyPress("Delete");
   const backspacePress = useKeyPress("Backspace");
 
-  const { zoomOperator, onZoomClick, onZoomWheel } = useZoomOperator(
+  const { zoomTool, onZoomClick, onZoomWheel } = useZoomOperator(
     toolType,
     src,
     zoomSettings
@@ -347,7 +347,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       if (!relative) return;
 
       if (toolType === ToolType.Zoom) {
-        zoomOperator?.onMouseDown(relative);
+        zoomTool?.onMouseDown(relative);
       } else {
         annotationTool.onMouseDown(relative);
       }
@@ -369,7 +369,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       if (!relative) return;
 
       if (toolType === ToolType.Zoom) {
-        zoomOperator?.onMouseMove(relative);
+        zoomTool?.onMouseMove(relative);
       } else {
         annotationTool.onMouseMove(relative);
       }
@@ -380,7 +380,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     const throttled = _.throttle(func, 5);
 
     return () => throttled();
-  }, [annotationTool, toolType, zoomOperator]);
+  }, [annotationTool, toolType, zoomTool]);
 
   const onMouseUp = useMemo(() => {
     const func = () => {
@@ -395,7 +395,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       if (!relative) return;
 
       if (toolType === ToolType.Zoom) {
-        zoomOperator?.onMouseUp(relative);
+        zoomTool?.onMouseUp(relative);
       } else {
         annotationTool.onMouseUp(relative);
       }
@@ -406,7 +406,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     const throttled = _.throttle(func, 10);
 
     return () => throttled();
-  }, [annotationTool, toolType, zoomOperator]);
+  }, [annotationTool, toolType, zoomTool]);
 
   useEffect(() => {
     if (!enterPress) return;
@@ -490,11 +490,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   useEffect(() => {
     if (toolType === ToolType.Zoom) {
-      setTool(zoomOperator);
+      setTool(zoomTool);
     } else {
       setTool(annotationTool);
     }
-  }, [annotationTool, toolType, zoomOperator]);
+  }, [annotationTool, toolType, zoomTool]);
 
   return (
     <ReactReduxContext.Consumer>
@@ -507,12 +507,12 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
           onWheel={onWheel}
           ref={stageRef}
           scale={{
-            x: zoomOperator ? zoomOperator.scale : 1,
-            y: zoomOperator ? zoomOperator.scale : 1,
+            x: zoomTool ? zoomTool.scale : 1,
+            y: zoomTool ? zoomTool.scale : 1,
           }}
           width={512}
-          x={zoomOperator ? zoomOperator.x : 0}
-          y={zoomOperator ? zoomOperator.y : 0}
+          x={zoomTool ? zoomTool.x : 0}
+          y={zoomTool ? zoomTool.y : 0}
         >
           <Provider store={store}>
             <ReactKonva.Layer
@@ -522,15 +522,12 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
             >
               <Image ref={imageRef} src={src} />
 
-              <Selecting
-                scale={zoomOperator ? zoomOperator.scale : 1}
-                tool={tool!}
-              />
+              <Selecting scale={zoomTool ? zoomTool.scale : 1} tool={tool!} />
 
               {annotated && annotationTool && annotationTool.contour && (
                 <SelectedContour
                   points={annotationTool.contour}
-                  scale={zoomOperator ? zoomOperator.scale : 1}
+                  scale={zoomTool ? zoomTool.scale : 1}
                 />
               )}
 
@@ -542,7 +539,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                 selectedAnnotationRef.current && (
                   <SelectedContour
                     points={selectedAnnotationRef.current.contour}
-                    scale={zoomOperator ? zoomOperator.scale : 1}
+                    scale={zoomTool ? zoomTool.scale : 1}
                   />
                 )}
 

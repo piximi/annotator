@@ -19,6 +19,7 @@ export const Selecting = ({
   zoomTool,
 }: SelectingProps) => {
   const annotated = useSelector(annotatedSelector);
+
   const toolType = useSelector(toolTypeSelector);
 
   if (annotated) return <React.Fragment />;
@@ -26,15 +27,11 @@ export const Selecting = ({
   return (
     <React.Fragment>
       {toolType !== ToolType.Zoom && (
-        <Selection
-          operation={toolType}
-          operator={annotationTool}
-          scale={scale}
-        />
+        <Selection scale={scale} tool={annotationTool} toolType={toolType} />
       )}
 
       {toolType === ToolType.Zoom && (
-        <Selection operation={toolType} operator={zoomTool} scale={scale} />
+        <Selection scale={scale} tool={zoomTool} toolType={toolType} />
       )}
     </React.Fragment>
   );

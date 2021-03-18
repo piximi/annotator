@@ -16,7 +16,7 @@ import {
 import { slice } from "../../../../store";
 import { SelectionMode } from "../../../../types/SelectionMode";
 import { Typography } from "@material-ui/core";
-import { SamplingOptions } from "../SamplingOptions";
+import { SampleList } from "../SampleList";
 
 export const SelectionOptions = () => {
   const dispatch = useDispatch();
@@ -152,7 +152,7 @@ export const SelectionOptions = () => {
 
       <Divider />
 
-      <SamplingOptions />
+      <SampleList />
     </React.Fragment>
   );
 };

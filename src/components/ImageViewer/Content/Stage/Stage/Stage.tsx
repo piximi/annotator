@@ -452,17 +452,15 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     selectedAnnotationRef.current = null;
   }, [enterPress]);
 
-  useEffect(() => {
-    if (!annotated) return;
-
-    if (!escapePress) return;
-
-    if (!annotationTool) return;
-
-    annotationTool.deselect();
-
-    transformerRef.current?.detach();
-  }, [escapePress]);
+  // useEffect(() => {
+  //   if (!annotated) return;
+  //
+  //   if (!escapePress) return;
+  //
+  //   if (!annotationTool) return;
+  //
+  //   deselectAnnotation();
+  // }, [escapePress]);
 
   useEffect(() => {
     if (selectedAnnotationId) {
@@ -473,11 +471,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
           })
         );
 
-        transformerRef.current?.detach();
-
         selectedAnnotationRef.current = null;
       }
     }
+
+    deselectAnnotation();
   }, [backspacePress, deletePress, escapePress]);
 
   useEffect(() => {

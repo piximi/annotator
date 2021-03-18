@@ -5,11 +5,11 @@ import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
   imageInstancesSelector,
-  invertModeSelector,
-  toolTypeSelector,
-  selectionModeSelector,
-  zoomSettingsSelector,
   imageSelector,
+  invertModeSelector,
+  selectionModeSelector,
+  toolTypeSelector,
+  zoomSettingsSelector,
 } from "../../../../../store/selectors";
 import {
   Provider,
@@ -18,7 +18,6 @@ import {
   useSelector,
 } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
-import { Selection } from "../Selection";
 import { Category } from "../../../../../types/Category";
 import { setSelectedAnnotation, slice } from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
@@ -35,6 +34,7 @@ import { selectedAnnotationSelector } from "../../../../../store/selectors/selec
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import { Tool } from "../../../../../image/Tool/Tool";
+import { PolygonalAnnotationTool } from "../../../../../image/Tool/AnnotationTool/PolygonalAnnotationTool";
 
 type StageProps = {
   category: Category;
@@ -452,15 +452,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     selectedAnnotationRef.current = null;
   }, [enterPress]);
 
-  // useEffect(() => {
-  //   if (!annotated) return;
-  //
-  //   if (!escapePress) return;
-  //
-  //   if (!annotationTool) return;
-  //
-  //   deselectAnnotation();
-  // }, [escapePress]);
+  useEffect(() => {
+    if (toolType !== ToolType.PolygonalAnnotation) return;
+
+    if (!annotationTool) return;
+
+    (annotationTool as PolygonalAnnotationTool).connect();
+  }, [enterPress]);
 
   useEffect(() => {
     if (selectedAnnotationId) {

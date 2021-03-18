@@ -119,10 +119,6 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   };
 
   useEffect(() => {
-    if (toolType === ToolType.Zoom) {
-      debugger;
-    }
-
     if (!selectedAnnotationId || !annotationTool) return;
 
     if (!annotations) return;
@@ -177,8 +173,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     setSelecting(false);
 
-    if (!annotated || !annotationTool || !selectedAnnotationId || !annotations)
-      return;
+    if (!annotated || !annotationTool) return;
 
     let combinedMask, combinedContour;
 
@@ -355,8 +350,15 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (event.evt.button === 0) {
       // left click only
-
-      if (annotated) deselectAnnotation();
+      if (selectionMode === SelectionMode.New && annotated)
+        deselectAnnotation();
+      else if (
+        selectionMode !== SelectionMode.New &&
+        annotated &&
+        annotationTool
+      ) {
+        annotationTool.deselect();
+      }
 
       if (!annotationTool || !stageRef || !stageRef.current) return;
 

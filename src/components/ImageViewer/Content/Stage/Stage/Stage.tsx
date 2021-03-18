@@ -430,7 +430,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (!enterPress) return;
 
-    if (!annotations || !annotationTool) return;
+    if (!annotations || !annotationTool || annotationTool.annotating) return;
 
     if (!selectedAnnotationRef || !selectedAnnotationRef.current) return;
 
@@ -452,6 +452,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     deselectAnnotation();
 
     selectedAnnotationRef.current = null;
+
+    if (selectionMode !== SelectionMode.New)
+      dispatch(
+        slice.actions.setSelectionMode({ selectionMode: SelectionMode.New })
+      );
   }, [enterPress]);
 
   useEffect(() => {

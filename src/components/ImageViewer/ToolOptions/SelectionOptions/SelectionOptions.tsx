@@ -17,6 +17,7 @@ import { slice } from "../../../../store";
 import { SelectionMode } from "../../../../types/SelectionMode";
 import { Typography } from "@material-ui/core";
 import { SampleList } from "../SampleList";
+import ListSubheader from "@material-ui/core/ListSubheader";
 
 export const SelectionOptions = () => {
   const dispatch = useDispatch();
@@ -72,7 +73,10 @@ export const SelectionOptions = () => {
 
         <Divider />
 
-        <List>
+        <List
+          component="nav"
+          subheader={<ListSubheader component="div">Mode</ListSubheader>}
+        >
           <ListItem dense>
             <ListItemIcon>
               <Radio
@@ -146,7 +150,7 @@ export const SelectionOptions = () => {
             </SvgIcon>
           </ListItemIcon>
 
-          <ListItemText primary="Invert selection" />
+          <ListItemText primary="Invert annotation" />
         </ListItem>
       </List>
 

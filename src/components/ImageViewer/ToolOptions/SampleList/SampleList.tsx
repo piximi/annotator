@@ -7,7 +7,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 
 export const SampleList = () => {
-  const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = React.useState([0, 1, 2]);
 
   const onChange = (index: number) => () => {
     const current = checked.indexOf(index);

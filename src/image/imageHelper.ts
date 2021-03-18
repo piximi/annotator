@@ -28,13 +28,13 @@ export const connectPoints = (
     }
   );
   foo.forEach(([current, next]) => {
-    const points = drawLine(image, current!, next!);
+    const points = drawLine(current!, next!);
     connectedPoints = _.concat(connectedPoints, points);
   });
   return connectedPoints;
 };
 
-const drawLine = (image: ImageJS.Image, p: Array<number>, q: Array<number>) => {
+export const drawLine = (p: Array<number>, q: Array<number>) => {
   const coords: Array<Array<number>> = [];
 
   let x: number,
@@ -69,7 +69,6 @@ const drawLine = (image: ImageJS.Image, p: Array<number>, q: Array<number>) => {
   i = 1;
 
   while (i <= step) {
-    image.setPixelXY(Math.round(x), Math.round(y), [255, 255, 255, 255]);
     coords.push([Math.round(x), Math.round(y)]);
     x = x + dx;
     y = y + dy;

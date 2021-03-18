@@ -80,6 +80,24 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const deletePress = useKeyPress("Delete");
   const backspacePress = useKeyPress("Backspace");
 
+  const deselectAnnotation = () => {
+    if (!annotationTool) return;
+
+    annotationTool.deselect();
+
+    dispatch(
+      setSelectedAnnotation({
+        selectedAnnotation: undefined,
+      })
+    );
+    dispatch(slice.actions.setAnnotated({ annotated: false }));
+
+    transformerRef.current?.detach();
+    transformerRef.current?.getLayer()?.batchDraw();
+
+    selectingRef.current = null;
+  };
+
   const { zoomTool, onZoomClick, onZoomWheel } = useZoomOperator(
     toolType,
     src,
@@ -337,6 +355,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (event.evt.button === 0) {
       // left click only
+
+      if (annotated) deselectAnnotation();
+
       if (!annotationTool || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
@@ -431,20 +452,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       );
     }
 
-    annotationTool.deselect();
-
-    dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
-
-    transformerRef.current?.detach();
-    transformerRef.current?.getLayer()?.batchDraw();
-
-    dispatch(slice.actions.setAnnotated({ annotated: false }));
-
-    selectingRef.current = null;
+    deselectAnnotation();
 
     selectedAnnotationRef.current = null;
   }, [enterPress]);

@@ -350,15 +350,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (event.evt.button === 0) {
       // left click only
-      if (selectionMode === SelectionMode.New && annotated)
-        deselectAnnotation();
-      else if (
-        selectionMode !== SelectionMode.New &&
-        annotated &&
-        annotationTool
-      ) {
-        annotationTool.deselect();
-      }
+
+      if (annotated) deselectAnnotation();
 
       if (!annotationTool || !stageRef || !stageRef.current) return;
 

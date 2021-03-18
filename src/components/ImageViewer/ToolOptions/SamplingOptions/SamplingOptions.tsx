@@ -1,9 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import { Channels } from "../Channels";
 
 type SampleLayersCheckboxProps = {
   checked: boolean;
@@ -16,23 +14,17 @@ const SampleLayersCheckbox = ({ checked }: SampleLayersCheckboxProps) => {
 };
 
 export const SamplingOptions = () => {
+  const [checked, setChecked] = useState<boolean>(true);
+
+  const onChange = () => {
+    setChecked(!checked);
+  };
+
   return (
     <React.Fragment>
-      <SampleLayersCheckbox checked />
+      <SampleLayersCheckbox checked={checked} />
 
-      <List component="nav">
-        <ListItem button>
-          <ListItemText primary="Red" />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemText primary="Green" />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemText primary="Blue" />
-        </ListItem>
-      </List>
+      <Channels />
     </React.Fragment>
   );
 };

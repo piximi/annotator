@@ -2,15 +2,11 @@ import React, { useState } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Channels } from "../Channels";
+import List from "@material-ui/core/List";
+import { ListItem } from "@material-ui/core";
 
 type SampleLayersCheckboxProps = {
   checked: boolean;
-};
-
-const SampleLayersCheckbox = ({ checked }: SampleLayersCheckboxProps) => {
-  const control = <Checkbox checked={checked} name="sample-layers" />;
-
-  return <FormControlLabel control={control} label="Sample all channels?" />;
 };
 
 export const SamplingOptions = () => {
@@ -21,10 +17,21 @@ export const SamplingOptions = () => {
   };
 
   return (
-    <React.Fragment>
-      <SampleLayersCheckbox checked={checked} />
+    <List component="nav">
+      <ListItem>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={checked}
+              name="sample-layers"
+              onChange={onChange}
+            />
+          }
+          label="Sample all channels?"
+        />
+      </ListItem>
 
       <Channels />
-    </React.Fragment>
+    </List>
   );
 };

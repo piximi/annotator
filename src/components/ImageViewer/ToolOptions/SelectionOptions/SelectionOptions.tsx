@@ -13,9 +13,10 @@ import {
   invertModeSelector,
   selectionModeSelector,
 } from "../../../../store/selectors";
-import { slice } from "../../../../store/slices";
+import { slice } from "../../../../store";
 import { SelectionMode } from "../../../../types/SelectionMode";
 import { Typography } from "@material-ui/core";
+import { SamplingOptions } from "../SamplingOptions";
 
 export const SelectionOptions = () => {
   const dispatch = useDispatch();
@@ -148,6 +149,10 @@ export const SelectionOptions = () => {
           <ListItemText primary="Invert selection" />
         </ListItem>
       </List>
+
+      <Divider />
+
+      <SamplingOptions />
     </React.Fragment>
   );
 };

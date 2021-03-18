@@ -55,7 +55,7 @@ export const SelectionOptions = () => {
           <ListItem>
             <ListItemText>
               <Typography variant="inherit">
-                Press the Backspace or Escape keys to remove a selected
+                Press the Backspace or Escape key to remove a selected
                 annotation.
               </Typography>
             </ListItemText>
@@ -75,7 +75,7 @@ export const SelectionOptions = () => {
               />
             </ListItemIcon>
 
-            <ListItemText primary="New" secondary="Create a new selection." />
+            <ListItemText primary="New" secondary="Create a new annotation." />
           </ListItem>
 
           <ListItem dense>
@@ -90,7 +90,7 @@ export const SelectionOptions = () => {
 
             <ListItemText
               primary="Add"
-              secondary="Add area to the selected selection."
+              secondary="Add area to the selected annotation."
             />
           </ListItem>
 
@@ -106,7 +106,7 @@ export const SelectionOptions = () => {
 
             <ListItemText
               primary="Subtract"
-              secondary="Subtract area from the selected selection."
+              secondary="Subtract area from the selected annotation."
             />
           </ListItem>
 
@@ -122,7 +122,7 @@ export const SelectionOptions = () => {
 
             <ListItemText
               primary="Intersect"
-              secondary="Constrain the boundary of the new selection to the selectedselection."
+              secondary="Constrain the boundary of the new annotion to the selected annotation."
             />
           </ListItem>
         </List>

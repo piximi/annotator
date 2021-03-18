@@ -437,7 +437,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     if (selectedAnnotationId === selectedAnnotationRef.current.id) {
       dispatch(
         slice.actions.replaceImageInstance({
-          id: selectedAnnotationRef.currentselectedAnnotationRef.current.id,
+          id: selectedAnnotationRef.current.id,
           instance: selectedAnnotationRef.current,
         })
       );

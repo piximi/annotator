@@ -16,6 +16,7 @@ import {
   LassoSelectionIcon,
   MagneticSelectionIcon,
   ObjectSelectionIcon,
+  PenSelectionIcon,
   PolygonalSelectionIcon,
   QuickSelectionIcon,
   RectangularSelectionIcon,
@@ -107,7 +108,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
           }}
           selected={activeOperation === OperationType.PenAnnotation}
         >
-          <LassoSelectionIcon />
+          <PenSelectionIcon />
         </Tool>
 
         <Tool

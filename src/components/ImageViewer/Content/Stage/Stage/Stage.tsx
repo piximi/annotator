@@ -34,8 +34,6 @@ import { selectedAnnotationSelector } from "../../../../../store/selectors/selec
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import { Tool } from "../../../../../image/Tool/Tool";
-import { PolygonalAnnotationTool } from "../../../../../image/Tool/AnnotationTool/PolygonalAnnotationTool";
-import { LassoAnnotationTool } from "../../../../../image/Tool/AnnotationTool/LassoAnnotationTool";
 
 type StageProps = {
   category: Category;
@@ -354,6 +352,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (annotated) deselectAnnotation();
 
+      if (selectionMode === SelectionMode.New)
+        selectedAnnotationRef.current = null;
+
       if (!annotationTool || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
@@ -436,7 +437,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     if (selectedAnnotationId === selectedAnnotationRef.current.id) {
       dispatch(
         slice.actions.replaceImageInstance({
-          id: selectedAnnotationRef.current.id,
+          id: selectedAnnotationRef.currentselectedAnnotationRef.current.id,
           instance: selectedAnnotationRef.current,
         })
       );

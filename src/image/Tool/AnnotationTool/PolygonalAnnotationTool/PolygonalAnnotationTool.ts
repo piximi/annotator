@@ -8,36 +8,6 @@ export class PolygonalAnnotationTool extends AnnotationTool {
   origin?: { x: number; y: number };
   points: Array<number> = [];
 
-  connect() {
-    if (this.annotated) return;
-
-    if (!this.anchor || !this.origin) return;
-
-    const anchorIndex = _.findLastIndex(this.buffer, (point) => {
-      return point === this.anchor!.x;
-    });
-
-    const segment = _.flatten(
-      drawLine([this.anchor.x, this.anchor.y], [this.origin.x, this.origin.y])
-    );
-
-    this.buffer.splice(anchorIndex, segment.length, ...segment);
-
-    this.annotated = true;
-    this.annotating = false;
-
-    this.points = this.buffer;
-
-    this._contour = this.points;
-    this._mask = this.computeMask();
-    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
-
-    this.buffer = [];
-
-    this.anchor = undefined;
-    this.origin = undefined;
-  }
-
   deselect() {
     this.annotated = false;
     this.annotating = false;

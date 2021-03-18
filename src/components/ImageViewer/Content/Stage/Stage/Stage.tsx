@@ -35,6 +35,7 @@ import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import { Tool } from "../../../../../image/Tool/Tool";
 import { PolygonalAnnotationTool } from "../../../../../image/Tool/AnnotationTool/PolygonalAnnotationTool";
+import { LassoAnnotationTool } from "../../../../../image/Tool/AnnotationTool/LassoAnnotationTool";
 
 type StageProps = {
   category: Category;
@@ -453,11 +454,15 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [enterPress]);
 
   useEffect(() => {
-    if (toolType !== ToolType.PolygonalAnnotation) return;
+    if (
+      toolType !== ToolType.PolygonalAnnotation &&
+      toolType !== ToolType.LassoAnnotation
+    )
+      return;
 
     if (!annotationTool) return;
 
-    (annotationTool as PolygonalAnnotationTool).connect();
+    annotationTool.connect();
   }, [enterPress]);
 
   useEffect(() => {

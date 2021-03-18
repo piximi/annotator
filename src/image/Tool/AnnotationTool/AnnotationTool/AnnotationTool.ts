@@ -2,7 +2,7 @@ import { Selection } from "../../../../types/Selection";
 import * as ImageJS from "image-js";
 import { Category } from "../../../../types/Category";
 import * as _ from "lodash";
-import { connectPoints } from "../../../imageHelper";
+import { connectPoints, drawLine } from "../../../imageHelper";
 import { simplify } from "../../../simplify/simplify";
 import { slpf } from "../../../polygon-fill/slpf";
 import * as uuid from "uuid";
@@ -16,6 +16,10 @@ export abstract class AnnotationTool extends Tool {
   annotated: boolean = false;
   annotating: boolean = false;
   annotation?: Selection;
+
+  anchor?: { x: number; y: number } = undefined;
+  origin?: { x: number; y: number } = undefined;
+  buffer?: Array<number> = [];
 
   protected _boundingBox?: [number, number, number, number];
   protected _contour?: Array<number>;
@@ -50,6 +54,36 @@ export abstract class AnnotationTool extends Tool {
     const contours = this.computeContours(mat);
 
     return [encode(data), _.flatten(contours)];
+  }
+
+  connect() {
+    if (this.annotated) return;
+
+    if (!this.anchor || !this.origin) return;
+
+    if (!this.buffer) return;
+
+    const anchorIndex = _.findLastIndex(this.buffer, (point) => {
+      return point === this.anchor!.x;
+    });
+
+    const segment = _.flatten(
+      drawLine([this.anchor.x, this.anchor.y], [this.origin.x, this.origin.y])
+    );
+
+    this.buffer.splice(anchorIndex, segment.length, ...segment);
+
+    this.points = this.buffer;
+    this._contour = this.points;
+    this._mask = this.computeMask();
+    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
+
+    this.anchor = undefined;
+    this.origin = undefined;
+    this.buffer = [];
+
+    this.annotated = true;
+    this.annotating = false;
   }
 
   /*

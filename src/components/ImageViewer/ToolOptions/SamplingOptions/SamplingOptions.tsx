@@ -5,8 +5,12 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
-const SampleLayersCheckbox = () => {
-  const control = <Checkbox name="sample-layers" />;
+type SampleLayersCheckboxProps = {
+  checked: boolean;
+};
+
+const SampleLayersCheckbox = ({ checked }: SampleLayersCheckboxProps) => {
+  const control = <Checkbox checked={checked} name="sample-layers" />;
 
   return <FormControlLabel control={control} label="Sample all channels?" />;
 };
@@ -14,7 +18,7 @@ const SampleLayersCheckbox = () => {
 export const SamplingOptions = () => {
   return (
     <React.Fragment>
-      <SampleLayersCheckbox />
+      <SampleLayersCheckbox checked />
 
       <List component="nav">
         <ListItem button>

@@ -15,6 +15,7 @@ import {
 } from "../../../../store/selectors";
 import { slice } from "../../../../store/slices";
 import { SelectionMode } from "../../../../types/SelectionMode";
+import { Typography } from "@material-ui/core";
 
 export const SelectionOptions = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,25 @@ export const SelectionOptions = () => {
         onChange={onChange}
         value={selectionMode}
       >
+        <List dense>
+          <ListItem>
+            <ListItemText>
+              <Typography variant="inherit">
+                Right-click on an existing annotation to select it.
+              </Typography>
+            </ListItemText>
+          </ListItem>
+          <ListItem>
+            <ListItemText>
+              <Typography variant="inherit">
+                Press Backspace or Escape keys to remove a selected annotation.
+              </Typography>
+            </ListItemText>
+          </ListItem>
+        </List>
+
+        <Divider />
+
         <List>
           <ListItem dense>
             <ListItemIcon>

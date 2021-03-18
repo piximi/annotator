@@ -48,7 +48,7 @@ export const SelectionOptions = () => {
           <ListItem>
             <ListItemText>
               <Typography variant="inherit">
-                Right-click on an existing annotation to select it.
+                Right-click to select an existing annotation.
               </Typography>
             </ListItemText>
           </ListItem>

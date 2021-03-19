@@ -11,7 +11,7 @@ import { invertModeSelector } from "../../../../store/selectors";
 import { slice } from "../../../../store";
 import { Typography } from "@material-ui/core";
 import { SampleList } from "../SampleList";
-import { AnnotationMode } from "../AnnotationMode";
+import { AnnotationMode } from "../AnnotationMode/AnnotationMode";
 
 export const SelectionOptions = () => {
   const dispatch = useDispatch();

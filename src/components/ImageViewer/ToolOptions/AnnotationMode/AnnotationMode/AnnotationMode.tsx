@@ -6,9 +6,9 @@ import Radio from "@material-ui/core/Radio";
 import React from "react";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { useDispatch, useSelector } from "react-redux";
-import { selectionModeSelector } from "../../../../store/selectors";
-import { slice } from "../../../../store";
-import { SelectionMode } from "../../../../types/SelectionMode";
+import { selectionModeSelector } from "../../../../../store/selectors";
+import { slice } from "../../../../../store";
+import { SelectionMode } from "../../../../../types/SelectionMode";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import Tooltip from "@material-ui/core/Tooltip";
 

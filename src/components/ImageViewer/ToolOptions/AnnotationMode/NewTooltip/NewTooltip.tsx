@@ -1,5 +1,5 @@
 import React from "react";
-import Tooltip from "@material-ui/core/Tooltip";
+import { AnnotationModeTooltip } from "../AnnotationModeTooltip";
 
 type NewTooltipProps = {
   children: React.ReactElement;
@@ -7,15 +7,8 @@ type NewTooltipProps = {
 
 export const NewTooltip = ({ children }: NewTooltipProps) => {
   return (
-    <Tooltip
-      title={
-        <React.Fragment>
-          <p>Create a new annotation.</p>
-        </React.Fragment>
-      }
-      placement="bottom"
-    >
+    <AnnotationModeTooltip content={<p>Create a new annotation.</p>}>
       {children}
-    </Tooltip>
+    </AnnotationModeTooltip>
   );
 };

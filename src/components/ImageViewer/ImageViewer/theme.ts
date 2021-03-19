@@ -10,16 +10,16 @@ export const theme = createMuiTheme({
         borderLeft: "1px solid rgba(16, 16, 16)",
       },
     },
-    MuiListItemIcon: {
-      root: {
-        minWidth: 36,
-      },
-    },
     MuiListItem: {
       root: {
         "&$selected": {
           backgroundColor: "rgba(60, 61, 62)",
         },
+      },
+    },
+    MuiListItemIcon: {
+      root: {
+        minWidth: 36,
       },
     },
     MuiSlider: {

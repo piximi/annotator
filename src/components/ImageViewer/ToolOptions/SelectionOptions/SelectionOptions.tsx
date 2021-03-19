@@ -18,11 +18,9 @@ import { SelectionMode } from "../../../../types/SelectionMode";
 import { Typography } from "@material-ui/core";
 import { SampleList } from "../SampleList";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import { useStyles } from "./SelectionOptions.css";
+import Tooltip from "@material-ui/core/Tooltip";
 
 export const SelectionOptions = () => {
-  const classes = useStyles();
-
   const dispatch = useDispatch();
 
   const selectionMode = useSelector(selectionModeSelector);
@@ -78,68 +76,78 @@ export const SelectionOptions = () => {
 
         <List
           component="nav"
-          subheader={<ListSubheader component="div">Mode</ListSubheader>}
+          subheader={
+            <ListSubheader component="div">Annotation mode</ListSubheader>
+          }
         >
-          <ListItem dense>
-            <ListItemIcon>
-              <Radio
-                disableRipple
-                edge="start"
-                tabIndex={-1}
-                value={SelectionMode.New}
-              />
-            </ListItemIcon>
+          <Tooltip title="Create a new annotation." placement="bottom">
+            <ListItem button dense>
+              <ListItemIcon>
+                <Radio
+                  disableRipple
+                  edge="start"
+                  tabIndex={-1}
+                  value={SelectionMode.New}
+                />
+              </ListItemIcon>
 
-            <ListItemText primary="New" secondary="Create a new annotation." />
-          </ListItem>
+              <ListItemText primary="New" />
+            </ListItem>
+          </Tooltip>
 
-          <ListItem dense>
-            <ListItemIcon>
-              <Radio
-                disableRipple
-                edge="start"
-                tabIndex={-1}
-                value={SelectionMode.Add}
-              />
-            </ListItemIcon>
+          <Tooltip
+            title="Add area to the selected annotation."
+            placement="bottom"
+          >
+            <ListItem button dense>
+              <ListItemIcon>
+                <Radio
+                  disableRipple
+                  edge="start"
+                  tabIndex={-1}
+                  value={SelectionMode.Add}
+                />
+              </ListItemIcon>
 
-            <ListItemText
-              primary="Add"
-              secondary="Add area to the selected annotation."
-            />
-          </ListItem>
+              <ListItemText primary="Add" />
+            </ListItem>
+          </Tooltip>
 
-          <ListItem dense>
-            <ListItemIcon>
-              <Radio
-                disableRipple
-                edge="start"
-                tabIndex={-1}
-                value={SelectionMode.Subtract}
-              />
-            </ListItemIcon>
+          <Tooltip
+            title="Subtract area from the selected annotation."
+            placement="bottom"
+          >
+            <ListItem button dense>
+              <ListItemIcon>
+                <Radio
+                  disableRipple
+                  edge="start"
+                  tabIndex={-1}
+                  value={SelectionMode.Subtract}
+                />
+              </ListItemIcon>
 
-            <ListItemText
-              primary="Subtract"
-              secondary="Subtract area from the selected annotation."
-            />
-          </ListItem>
+              <ListItemText primary="Subtract" />
+            </ListItem>
+          </Tooltip>
 
-          <ListItem dense>
-            <ListItemIcon>
-              <Radio
-                disableRipple
-                edge="start"
-                tabIndex={-1}
-                value={SelectionMode.Intersect}
-              />
-            </ListItemIcon>
+          <Tooltip
+            title="Constrain the boundary of the new annotion to the selected annotation."
+            placement="bottom"
+          >
+            <ListItem button dense>
+              <ListItemIcon>
+                <Radio
+                  disableRipple
+                  edge="start"
+                  tabIndex={-1}
+                  value={SelectionMode.Intersect}
+                />
+              </ListItemIcon>
 
-            <ListItemText
-              primary="Intersect"
-              secondary="Constrain the boundary of the new annotion to the selected annotation."
-            />
-          </ListItem>
+              <ListItemText primary="Intersect" />
+            </ListItem>
+          </Tooltip>
         </List>
       </RadioGroup>
 

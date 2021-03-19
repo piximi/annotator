@@ -27,10 +27,10 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
     this.width = undefined;
   }
 
-  onMouseUp(position: { x: number; y: number }) {
+  async onMouseUp(position: { x: number; y: number }) {
     if (!this.annotating || this.annotated) return;
 
-    this.predict();
+    await this.predict();
   }
 
   static async compile(image: ImageJS.Image) {
@@ -100,38 +100,36 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
     });
 
     if (prediction) {
-      tensorflow.browser
-        .toPixels(prediction as tensorflow.Tensor3D)
-        .then(async (clamped) => {
-          this.output = new ImageJS.Image({
-            width: this.image.width,
-            height: this.image.height,
-            data: clamped,
-          });
+      const clamped: Uint8ClampedArray = await tensorflow.browser.toPixels(
+        prediction as tensorflow.Tensor3D
+      );
+      // .then(async (clamped) => {
+      this.output = new ImageJS.Image({
+        width: this.image.width,
+        height: this.image.height,
+        data: clamped,
+      });
 
-          // @ts-ignore
-          const data = this.output.grey().getMatrix().data;
-          const bar = data.map((el: Array<number>) => {
-            return Array.from(el);
-          });
+      // @ts-ignore
+      const data = this.output.grey().getMatrix().data;
+      const bar = data.map((el: Array<number>) => {
+        return Array.from(el);
+      });
 
-          const largest = this.computeContours(bar);
+      const largest = this.computeContours(bar);
 
-          const foo: Array<number> = _.flatten(largest);
-          this.points = foo.map((el: number) => {
-            return Math.round(el);
-          });
+      const foo: Array<number> = _.flatten(largest);
+      this.points = foo.map((el: number) => {
+        return Math.round(el);
+      });
 
-          // @ts-ignore
-          this._mask = encode(this.output.getChannel(0).data);
-          this._contour = this.points;
-          this._boundingBox = this.computeBoundingBoxFromContours(
-            this._contour
-          );
+      // @ts-ignore
+      this._mask = encode(this.output.getChannel(0).data);
+      this._contour = this.points;
+      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
-          this.annotated = true;
-          this.width = undefined;
-        });
+      this.annotated = true;
+      this.width = undefined;
     }
   }
 }

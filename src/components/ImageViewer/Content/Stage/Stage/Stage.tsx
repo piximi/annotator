@@ -296,6 +296,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     if (!annotationTool || !annotationTool.contour) return;
 
     transformerRef.current.nodes([selectingRef.current]);
+    console.info("attaching here");
 
     const layer = transformerRef.current.getLayer();
 
@@ -345,8 +346,16 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     return transform.point(position);
   };
 
+  const onTransformerMouseDown = () => {
+    console.info("Clicked on transformer!");
+  };
+
   //FIXME not using useMemo() because could not pass event argument to it
   const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
+    if (event.target.getParent().className === "Transformer") {
+      onTransformerMouseDown();
+    }
+
     if (event.evt.button === 0) {
       // left click only
 

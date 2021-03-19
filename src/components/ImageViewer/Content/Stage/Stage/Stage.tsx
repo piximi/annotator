@@ -258,7 +258,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     if (selectionMode === SelectionMode.New) return;
 
     if (annotationTool.annotating) setSelecting(annotationTool.annotating);
-  });
+  }, [annotationTool?.annotated]);
 
   useEffect(() => {
     if (toolType !== ToolType.PenAnnotation) return;
@@ -302,6 +302,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     annotationTool.annotate(category);
 
     if (!annotationTool.annotation) return;
+
     selectedAnnotationRef.current = annotationTool.annotation;
   }, [annotated]);
 

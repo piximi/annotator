@@ -1,5 +1,5 @@
 import React from "react";
-import Tooltip from "@material-ui/core/Tooltip";
+import { AnnotationModeTooltip } from "../AnnotationModeTooltip";
 
 type SubtractTooltipProps = {
   children: React.ReactElement;
@@ -7,15 +7,10 @@ type SubtractTooltipProps = {
 
 export const SubtractTooltip = ({ children }: SubtractTooltipProps) => {
   return (
-    <Tooltip
-      title={
-        <React.Fragment>
-          <p>Subtract area from the selected annotation.</p>
-        </React.Fragment>
-      }
-      placement="bottom"
+    <AnnotationModeTooltip
+      content={<p>Subtract area from the selected annotation.</p>}
     >
       {children}
-    </Tooltip>
+    </AnnotationModeTooltip>
   );
 };

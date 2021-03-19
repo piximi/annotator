@@ -1,5 +1,5 @@
 import React from "react";
-import Tooltip from "@material-ui/core/Tooltip";
+import { AnnotationModeTooltip } from "../AnnotationModeTooltip";
 
 type IntersectionTooltipProps = {
   children: React.ReactElement;
@@ -7,18 +7,15 @@ type IntersectionTooltipProps = {
 
 export const IntersectionTooltip = ({ children }: IntersectionTooltipProps) => {
   return (
-    <Tooltip
-      title={
-        <React.Fragment>
-          <p>
-            Constrain the boundary of the new annotation to the selected
-            annotation.
-          </p>
-        </React.Fragment>
+    <AnnotationModeTooltip
+      content={
+        <p>
+          Constrain the boundary of the new annotation to the selected
+          annotation.
+        </p>
       }
-      placement="bottom"
     >
       {children}
-    </Tooltip>
+    </AnnotationModeTooltip>
   );
 };

@@ -90,7 +90,7 @@ export const AnnotationMode = () => {
         </Tooltip>
 
         <Tooltip
-          title="Constrain the boundary of the new annotion to the selected annotation."
+          title="Constrain the boundary of the new annotation to the selected annotation."
           placement="bottom"
         >
           <ListItem button dense>

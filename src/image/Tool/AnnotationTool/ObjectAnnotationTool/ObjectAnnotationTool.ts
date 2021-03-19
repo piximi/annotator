@@ -28,7 +28,7 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    super.onMouseUp(position);
+    if (!this.annotating || this.annotated) return;
 
     this.predict();
   }
@@ -54,6 +54,8 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
 
   private async predict() {
     if (!this.image || !this.origin || !this.width || !this.height) return;
+
+    this.annotating = false;
 
     const width = Math.floor(this.width);
     const height = Math.floor(this.height);
@@ -126,6 +128,8 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
           this._boundingBox = this.computeBoundingBoxFromContours(
             this._contour
           );
+
+          this.annotated = true;
         });
     }
   }

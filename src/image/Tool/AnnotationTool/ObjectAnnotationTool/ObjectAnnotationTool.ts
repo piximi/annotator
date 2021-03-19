@@ -130,6 +130,7 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
           );
 
           this.annotated = true;
+          this.width = undefined;
         });
     }
   }

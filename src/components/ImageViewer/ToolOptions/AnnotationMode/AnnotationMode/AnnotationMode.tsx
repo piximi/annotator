@@ -10,7 +10,10 @@ import { selectionModeSelector } from "../../../../../store/selectors";
 import { slice } from "../../../../../store";
 import { SelectionMode } from "../../../../../types/SelectionMode";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import Tooltip from "@material-ui/core/Tooltip";
+import { NewTooltip } from "../NewTooltip";
+import { AddTooltip } from "../AddTooltip";
+import { SubtractTooltip } from "../SubtractTooltip";
+import { IntersectionTooltip } from "../IntersectionTooltip";
 
 export const AnnotationMode = () => {
   const dispatch = useDispatch();
@@ -38,7 +41,7 @@ export const AnnotationMode = () => {
           <ListSubheader component="div">Annotation mode</ListSubheader>
         }
       >
-        <Tooltip title="Create a new annotation." placement="bottom">
+        <NewTooltip>
           <ListItem button dense>
             <ListItemIcon>
               <Radio
@@ -51,12 +54,9 @@ export const AnnotationMode = () => {
 
             <ListItemText primary="New annotation" />
           </ListItem>
-        </Tooltip>
+        </NewTooltip>
 
-        <Tooltip
-          title="Add area to the selected annotation."
-          placement="bottom"
-        >
+        <AddTooltip>
           <ListItem button dense>
             <ListItemIcon>
               <Radio
@@ -69,12 +69,9 @@ export const AnnotationMode = () => {
 
             <ListItemText primary="Add area" />
           </ListItem>
-        </Tooltip>
+        </AddTooltip>
 
-        <Tooltip
-          title="Subtract area from the selected annotation."
-          placement="bottom"
-        >
+        <SubtractTooltip>
           <ListItem button dense>
             <ListItemIcon>
               <Radio
@@ -87,12 +84,9 @@ export const AnnotationMode = () => {
 
             <ListItemText primary="Subtract area" />
           </ListItem>
-        </Tooltip>
+        </SubtractTooltip>
 
-        <Tooltip
-          title="Constrain the boundary of the new annotation to the selected annotation."
-          placement="bottom"
-        >
+        <IntersectionTooltip>
           <ListItem button dense>
             <ListItemIcon>
               <Radio
@@ -105,7 +99,7 @@ export const AnnotationMode = () => {
 
             <ListItemText primary="Intersection" />
           </ListItem>
-        </Tooltip>
+        </IntersectionTooltip>
       </List>
     </RadioGroup>
   );

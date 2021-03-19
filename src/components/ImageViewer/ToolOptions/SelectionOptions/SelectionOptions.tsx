@@ -18,8 +18,11 @@ import { SelectionMode } from "../../../../types/SelectionMode";
 import { Typography } from "@material-ui/core";
 import { SampleList } from "../SampleList";
 import ListSubheader from "@material-ui/core/ListSubheader";
+import { useStyles } from "./SelectionOptions.css";
 
 export const SelectionOptions = () => {
+  const classes = useStyles();
+
   const dispatch = useDispatch();
 
   const selectionMode = useSelector(selectionModeSelector);

@@ -34,6 +34,7 @@ import { selectedAnnotationSelector } from "../../../../../store/selectors/selec
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import { Tool } from "../../../../../image/Tool/Tool";
+import { ObjectAnnotationTool } from "../../../../../image/Tool/AnnotationTool/ObjectAnnotationTool";
 
 type StageProps = {
   category: Category;
@@ -258,7 +259,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     if (selectionMode === SelectionMode.New) return;
 
     if (annotationTool.annotating) setSelecting(annotationTool.annotating);
-  }, [annotationTool?.annotated]);
+  });
 
   useEffect(() => {
     if (toolType !== ToolType.PenAnnotation) return;
@@ -406,7 +407,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [annotationTool, toolType, zoomTool]);
 
   const onMouseUp = useMemo(() => {
-    const func = () => {
+    const func = async () => {
       if (!annotationTool || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
@@ -420,7 +421,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       if (toolType === ToolType.Zoom) {
         zoomTool?.onMouseUp(relative);
       } else {
-        annotationTool.onMouseUp(relative);
+        if (toolType === ToolType.ObjectAnnotation)
+          await (annotationTool as ObjectAnnotationTool).onMouseUp(relative);
+        else {
+          annotationTool.onMouseUp(relative);
+        }
       }
 
       update();

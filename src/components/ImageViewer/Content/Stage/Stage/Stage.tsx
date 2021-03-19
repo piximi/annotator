@@ -268,6 +268,10 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   }, [penSelectionBrushSize]);
 
   useEffect(() => {
+    if (!annotated) return;
+
+    if (!transformerRef || !transformerRef.current) return;
+
     if (!annotationTool || !annotationTool.contour) return;
 
     if (!stageRef || !stageRef.current) return;
@@ -284,19 +288,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     selectingRef.current = new Konva.Line<Konva.LineConfig>({
       points: scaledContour,
     });
-  }, [annotationTool?.contour, annotated]);
-
-  useEffect(() => {
-    if (!annotated) return;
-
-    if (!transformerRef || !transformerRef.current) return;
-
-    if (!selectingRef || !selectingRef.current) return;
-
-    if (!annotationTool || !annotationTool.contour) return;
 
     transformerRef.current.nodes([selectingRef.current]);
-    console.info("attaching here");
 
     const layer = transformerRef.current.getLayer();
 
@@ -354,6 +347,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (event.target.getParent().className === "Transformer") {
       onTransformerMouseDown();
+      return;
     }
 
     if (event.evt.button === 0) {

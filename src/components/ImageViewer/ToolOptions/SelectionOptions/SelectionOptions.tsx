@@ -91,7 +91,7 @@ export const SelectionOptions = () => {
                 />
               </ListItemIcon>
 
-              <ListItemText primary="New" />
+              <ListItemText primary="New annotation" />
             </ListItem>
           </Tooltip>
 
@@ -109,7 +109,7 @@ export const SelectionOptions = () => {
                 />
               </ListItemIcon>
 
-              <ListItemText primary="Add" />
+              <ListItemText primary="Add area" />
             </ListItem>
           </Tooltip>
 
@@ -127,7 +127,7 @@ export const SelectionOptions = () => {
                 />
               </ListItemIcon>
 
-              <ListItemText primary="Subtract" />
+              <ListItemText primary="Subtract area" />
             </ListItem>
           </Tooltip>
 
@@ -145,7 +145,7 @@ export const SelectionOptions = () => {
                 />
               </ListItemIcon>
 
-              <ListItemText primary="Intersect" />
+              <ListItemText primary="Intersection" />
             </ListItem>
           </Tooltip>
         </List>

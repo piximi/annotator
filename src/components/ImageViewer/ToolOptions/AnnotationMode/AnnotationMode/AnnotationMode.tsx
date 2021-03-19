@@ -15,7 +15,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 export const AnnotationMode = () => {
   const dispatch = useDispatch();
 
-  const selectionMode = useSelector(selectionModeSelector);
+  const annotationMode = useSelector(selectionModeSelector);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const payload = {
@@ -27,10 +27,10 @@ export const AnnotationMode = () => {
 
   return (
     <RadioGroup
-      aria-label="selection mode"
-      name="selection-mode"
+      aria-label="annotation mode"
+      name="annotation-mode"
       onChange={onChange}
-      value={selectionMode}
+      value={annotationMode}
     >
       <List
         component="nav"

@@ -5,7 +5,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
 import SvgIcon from "@material-ui/core/SvgIcon";
-import { ReactComponent as InvertSelectionIcon } from "../../../icons/InvertSelection.svg";
+import { ReactComponent as InvertSelectionIcon } from "../../../icons/InvertAnnotation.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { invertModeSelector } from "../../../../store/selectors";
 import { slice } from "../../../../store";

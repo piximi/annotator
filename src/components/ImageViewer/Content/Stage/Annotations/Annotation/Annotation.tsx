@@ -4,13 +4,17 @@ import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
 import { Selection } from "../../../../../../types/Selection";
 import { useDispatch, useSelector } from "react-redux";
-import { categoriesSelector } from "../../../../../../store/selectors";
+import {
+  categoriesSelector,
+  toolTypeSelector,
+} from "../../../../../../store/selectors";
 import Konva from "konva";
 import { AnnotationTool } from "../../../../../../image/Tool";
 import {
   setSelectedAnnotation,
   setSeletedCategory,
 } from "../../../../../../store";
+import { ToolType } from "../../../../../../types/ToolType";
 
 type AnnotationProps = {
   annotation: Selection;
@@ -27,6 +31,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   const dispatch = useDispatch();
 
   const categories = useSelector(categoriesSelector);
+  const toolType = useSelector(toolTypeSelector);
 
   const fill = _.find(
     categories,
@@ -34,6 +39,8 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   )?.color;
 
   const onPointerClick = (event: Konva.KonvaEventObject<MouseEvent>) => {
+    if (toolType !== ToolType.Pointer) return;
+
     event.evt.preventDefault();
 
     if (!ref || !ref.current) return;

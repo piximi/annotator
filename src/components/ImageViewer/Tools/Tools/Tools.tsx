@@ -69,7 +69,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
 
       <List>
         <Tool
-          name="Rectangular selection"
+          name="Rectangular annotation"
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -84,7 +84,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Elliptical selection"
+          name="Elliptical annotation"
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -99,7 +99,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Pen selection"
+          name="Pen annotation"
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -114,7 +114,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Lasso selection"
+          name="Lasso annotation"
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -129,7 +129,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Polygonal selection"
+          name="Polygonal annotation"
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -144,7 +144,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Magnetic selection"
+          name="Magnetic annotation"
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -159,7 +159,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Color selection"
+          name="Color annotation"
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -174,7 +174,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Quick selection"
+          name="Quick annotation"
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -189,7 +189,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Object selection"
+          name="Object annotation"
           onClick={() => {
             dispatch(
               slice.actions.setOperation({

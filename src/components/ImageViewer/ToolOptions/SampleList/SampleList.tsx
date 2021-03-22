@@ -5,6 +5,13 @@ import { ListItem } from "@material-ui/core";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
+import {
+  CheckboxCheckedIcon,
+  CheckboxUncheckedIcon,
+  RadioCheckedIcon,
+  RadioUncheckedIcon,
+} from "../../../icons";
+import Radio from "@material-ui/core/Radio";
 
 export const SampleList = () => {
   const [checked, setChecked] = React.useState([0, 1, 2]);
@@ -34,6 +41,8 @@ export const SampleList = () => {
             checked={checked.indexOf(0) !== -1}
             disableRipple
             edge="start"
+            icon={<CheckboxUncheckedIcon />}
+            checkedIcon={<CheckboxCheckedIcon />}
             tabIndex={-1}
           />
         </ListItemIcon>
@@ -47,6 +56,8 @@ export const SampleList = () => {
             checked={checked.indexOf(1) !== -1}
             disableRipple
             edge="start"
+            icon={<CheckboxUncheckedIcon />}
+            checkedIcon={<CheckboxCheckedIcon />}
             tabIndex={-1}
           />
         </ListItemIcon>
@@ -60,6 +71,8 @@ export const SampleList = () => {
             checked={checked.indexOf(2) !== -1}
             disableRipple
             edge="start"
+            icon={<CheckboxUncheckedIcon />}
+            checkedIcon={<CheckboxCheckedIcon />}
             tabIndex={-1}
           />
         </ListItemIcon>

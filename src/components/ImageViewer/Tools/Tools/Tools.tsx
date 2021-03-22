@@ -12,6 +12,7 @@ import {
   ColorAdjustmentIcon,
   ColorSelectionIcon,
   EllipticalSelectionIcon,
+  SelectionIcon,
   HandIcon,
   LassoSelectionIcon,
   MagneticSelectionIcon,
@@ -49,24 +50,24 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
 
       <Divider />
 
+      <Tool
+        name="Pointer"
+        onClick={() => {
+          dispatch(
+            slice.actions.setOperation({
+              operation: OperationType.Pointer,
+            })
+          );
+          handleCollapse(true);
+        }}
+        selected={activeOperation === OperationType.Pointer}
+      >
+        <SelectionIcon />
+      </Tool>
+
+      <Divider />
+
       <List>
-        <Tool
-          name={t("Color adjustment")}
-          onClick={() => {
-            dispatch(
-              slice.actions.setOperation({
-                operation: OperationType.ColorAdjustment,
-              })
-            );
-            handleCollapse(true);
-          }}
-          selected={activeOperation === OperationType.ColorAdjustment}
-        >
-          <ColorAdjustmentIcon />
-        </Tool>
-
-        <Divider />
-
         <Tool
           name="Rectangular selection"
           onClick={() => {
@@ -217,20 +218,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.Zoom}
         >
           <ZoomIcon />
-        </Tool>
-        <Tool
-          name="Pointer"
-          onClick={() => {
-            dispatch(
-              slice.actions.setOperation({
-                operation: OperationType.Pointer,
-              })
-            );
-            handleCollapse(true);
-          }}
-          selected={activeOperation === OperationType.Pointer}
-        >
-          <ObjectSelectionIcon />
         </Tool>
       </List>
     </Drawer>

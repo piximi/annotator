@@ -13,6 +13,7 @@ export class ColorAnnotationTool extends AnnotationTool {
   initialPosition: { x: number; y: number } = { x: 0, y: 0 };
   tolerance: number = 1;
   toleranceMap?: ImageJS.Image;
+  toolTipPosition?: { x: number; y: number };
 
   deselect() {
     this.annotated = false;
@@ -36,6 +37,7 @@ export class ColorAnnotationTool extends AnnotationTool {
     this.annotating = true;
     this.tolerance = 1;
     this.initialPosition = position;
+    this.toolTipPosition = position;
     this.toleranceMap = makeFloodMap({
       x: Math.floor(position.x),
       y: Math.floor(position.y),
@@ -56,6 +58,7 @@ export class ColorAnnotationTool extends AnnotationTool {
         this.tolerance = diff;
         this.updateOverlay(this.initialPosition);
       }
+      this.toolTipPosition = position;
     }
   }
 

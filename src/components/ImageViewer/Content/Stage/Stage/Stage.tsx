@@ -35,6 +35,8 @@ import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import { Tool } from "../../../../../image/Tool/Tool";
 import { ObjectAnnotationTool } from "../../../../../image/Tool/AnnotationTool/ObjectAnnotationTool";
+import { ColorAnnotationTool } from "../../../../../image/Tool/AnnotationTool/ColorAnnotationTool";
+import { ColorAnnotationToolTip } from "../ColorAnnotationToolTip";
 
 type StageProps = {
   category: Category;
@@ -51,6 +53,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const selectingRef = useRef<Konva.Line | null>(null);
 
   const selectedAnnotationRef = useRef<SelectionType | null>(null);
+
+  const colorAnnotationToolTip = useRef<Konva.Layer | null>(null);
 
   const classes = useStyles();
 
@@ -111,6 +115,18 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
         onZoomClick(event);
     }
   };
+
+  useEffect(() => {
+    if (toolType !== ToolType.ColorAnnotation) return;
+
+    if (!annotationTool) return;
+
+    if (!colorAnnotationToolTip || !colorAnnotationToolTip.current) return;
+
+    colorAnnotationToolTip.current.batchDraw();
+
+    // console.info((annotationTool as ColorAnnotationTool).tolerance);
+  }, [toolType, (annotationTool as ColorAnnotationTool)?.tolerance]);
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     switch (toolType) {
@@ -590,6 +606,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
               <Annotations annotationTool={annotationTool} />
 
               <ReactKonva.Transformer ref={transformerRef} />
+            </ReactKonva.Layer>
+            <ReactKonva.Layer ref={colorAnnotationToolTip}>
+              <ColorAnnotationToolTip
+                colorAnnotationTool={annotationTool as ColorAnnotationTool}
+              />
             </ReactKonva.Layer>
           </Provider>
         </ReactKonva.Stage>

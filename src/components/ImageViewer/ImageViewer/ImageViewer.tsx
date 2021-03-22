@@ -39,6 +39,15 @@ import {
 import { theme } from "./theme";
 import Collapse from "@material-ui/core/Collapse";
 import { useTranslation } from "react-i18next";
+import { RectangularAnnotationOptions } from "../ToolOptions/RectangularAnnotationOptions";
+import { EllipticalAnnotationOptions } from "../ToolOptions/EllipticalAnnotationOptions";
+import { FreehandAnnotationOptions } from "../ToolOptions/FreehandAnnotationOptions";
+import { LassoAnnotationOptions } from "../ToolOptions/LassoAnnotationOptions";
+import { PolygonalAnnotationOptions } from "../ToolOptions/PolygonalAnnotationOptions";
+import { MagneticAnnotationOptions } from "../ToolOptions/MagneticAnnotationOptions";
+import { ColorAnnotationOptions } from "../ToolOptions/ColorAnnotationOptions";
+import { QuickAnnotationOptions } from "../ToolOptions/QuickAnnotationOptions";
+import { ObjectAnnotationOptions } from "../ToolOptions/ObjectAnnotationOptions";
 
 type ImageViewerProps = {
   image?: Image;
@@ -70,63 +79,63 @@ export const ImageViewer = (props: ImageViewerProps) => {
       icon: <RectangularSelectionIcon />,
       method: ToolType.RectangularSelection,
       name: "Rectangular selection",
-      options: <SelectionOptions />,
+      options: <RectangularAnnotationOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <EllipticalSelectionIcon />,
       method: ToolType.EllipticalAnnotation,
       name: "Elliptical selection",
-      options: <SelectionOptions />,
+      options: <EllipticalAnnotationOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <PenSelectionIcon />,
       method: ToolType.PenAnnotation,
       name: "Pen selection",
-      options: <PenSelectionOptions />,
+      options: <FreehandAnnotationOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <LassoSelectionIcon />,
       method: ToolType.LassoAnnotation,
       name: "Lasso selection",
-      options: <SelectionOptions />,
+      options: <LassoAnnotationOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <PolygonalSelectionIcon />,
       method: ToolType.PolygonalAnnotation,
       name: "Polygonal selection",
-      options: <SelectionOptions />,
+      options: <PolygonalAnnotationOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <MagneticSelectionIcon />,
       method: ToolType.MagneticAnnotation,
       name: "Magnetic selection",
-      options: <SelectionOptions />,
+      options: <MagneticAnnotationOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <ColorSelectionIcon />,
       method: ToolType.ColorAnnotation,
       name: "Color selection",
-      options: <SelectionOptions />,
+      options: <ColorAnnotationOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <QuickSelectionIcon />,
       method: ToolType.QuickAnnotation,
       name: "Quick selection",
-      options: <SelectionOptions />,
+      options: <QuickAnnotationOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <ObjectSelectionIcon />,
       method: ToolType.ObjectAnnotation,
       name: "Object selection",
-      options: <SelectionOptions />,
+      options: <ObjectAnnotationOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",

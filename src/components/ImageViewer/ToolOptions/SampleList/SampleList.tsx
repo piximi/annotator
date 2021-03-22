@@ -35,7 +35,7 @@ export const SampleList = () => {
       component="nav"
       subheader={<ListSubheader component="div">Sample</ListSubheader>}
     >
-      <ListItem button onClick={onChange(0)}>
+      <ListItem button dense onClick={onChange(0)}>
         <ListItemIcon>
           <Checkbox
             checked={checked.indexOf(0) !== -1}
@@ -50,7 +50,7 @@ export const SampleList = () => {
         <ListItemText primary="Red" />
       </ListItem>
 
-      <ListItem button onClick={onChange(1)}>
+      <ListItem button dense onClick={onChange(1)}>
         <ListItemIcon>
           <Checkbox
             checked={checked.indexOf(1) !== -1}
@@ -65,7 +65,7 @@ export const SampleList = () => {
         <ListItemText primary="Green" />
       </ListItem>
 
-      <ListItem button onClick={onChange(2)}>
+      <ListItem button dense onClick={onChange(2)}>
         <ListItemIcon>
           <Checkbox
             checked={checked.indexOf(2) !== -1}

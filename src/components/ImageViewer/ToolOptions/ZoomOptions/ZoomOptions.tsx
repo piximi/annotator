@@ -12,6 +12,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import { zoomSettingsSelector } from "../../../../store/selectors";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../icons";
 
 type ZoomOptionsProps = {
   handleRevert: () => void;
@@ -59,6 +60,8 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
                 <Radio
                   disableRipple
                   edge="start"
+                  icon={<RadioUncheckedIcon />}
+                  checkedIcon={<RadioCheckedIcon />}
                   tabIndex={-1}
                   value={ZoomMode.In}
                 />
@@ -72,6 +75,8 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
                 <Radio
                   disableRipple
                   edge="start"
+                  icon={<RadioUncheckedIcon />}
+                  checkedIcon={<RadioCheckedIcon />}
                   tabIndex={-1}
                   value={ZoomMode.Out}
                 />

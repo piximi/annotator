@@ -79,6 +79,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const deletePress = useKeyPress("Delete");
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
+  const shiftPress = useKeyPress("Shift");
 
   const deselectAnnotation = () => {
     if (!annotationTool) return;
@@ -360,6 +361,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       if (annotated) deselectAnnotation();
 
       if (selectionMode === SelectionMode.New)
+        selectedAnnotationRef.current = null;
+
+      if (selectionMode === SelectionMode.Add && !shiftPress)
         selectedAnnotationRef.current = null;
 
       if (!annotationTool || !stageRef || !stageRef.current) return;

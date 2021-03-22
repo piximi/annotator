@@ -9,8 +9,6 @@ import { ReactComponent as InvertSelectionIcon } from "../../../icons/InvertAnno
 import { useDispatch, useSelector } from "react-redux";
 import { invertModeSelector } from "../../../../store/selectors";
 import { slice } from "../../../../store";
-import { Typography } from "@material-ui/core";
-import { SampleList } from "../SampleList";
 import { AnnotationMode } from "../AnnotationMode";
 import { InformationBox } from "../InformationBox";
 
@@ -44,10 +42,6 @@ export const LassoAnnotationOptions = () => {
           <ListItemText primary="Invert annotation" />
         </ListItem>
       </List>
-
-      <Divider />
-
-      <SampleList />
     </React.Fragment>
   );
 };

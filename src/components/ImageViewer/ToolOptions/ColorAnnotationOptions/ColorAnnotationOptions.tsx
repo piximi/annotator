@@ -11,7 +11,6 @@ import { invertModeSelector } from "../../../../store/selectors";
 import { slice } from "../../../../store";
 import { SampleList } from "../SampleList";
 import { AnnotationMode } from "../AnnotationMode";
-import Typography from "@material-ui/core/Typography";
 import { InformationBox } from "../InformationBox";
 
 export const ColorAnnotationOptions = () => {

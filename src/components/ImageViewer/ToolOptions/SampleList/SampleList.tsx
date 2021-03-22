@@ -1,17 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import List from "@material-ui/core/List";
 import { ListItem } from "@material-ui/core";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import {
-  CheckboxCheckedIcon,
-  CheckboxUncheckedIcon,
-  RadioCheckedIcon,
-  RadioUncheckedIcon,
-} from "../../../icons";
-import Radio from "@material-ui/core/Radio";
+import { CheckboxCheckedIcon, CheckboxUncheckedIcon } from "../../../icons";
 
 export const SampleList = () => {
   const [checked, setChecked] = React.useState([0, 1, 2]);

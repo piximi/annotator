@@ -1,7 +1,6 @@
 import Radio from "@material-ui/core/Radio";
 import React from "react";
 import { RadioGroup } from "@material-ui/core";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";

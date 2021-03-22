@@ -40,8 +40,6 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
     if (annotationTool.annotating) return;
 
-    annotationTool.deselect();
-
     if (!ref || !ref.current) return;
 
     dispatch(

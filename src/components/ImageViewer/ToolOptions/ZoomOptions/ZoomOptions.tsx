@@ -5,7 +5,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { ZoomMode } from "../../../../types/ZoomMode";
 import { slice } from "../../../../store";
@@ -84,18 +83,18 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
         </RadioGroup>
       </List>
 
-      <List dense>
-        <ListItem>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={zoomSettings.zoomAutomaticCentering}
-                onChange={onCenterChange}
-                name="center"
-              />
-            }
-            label="Center image automatically"
-          />
+      <List component="nav">
+        <ListItem button onClick={onCenterChange}>
+          <ListItemIcon>
+            <Checkbox
+              checked={zoomSettings.zoomAutomaticCentering}
+              disableRipple
+              edge="start"
+              tabIndex={-1}
+            />
+          </ListItemIcon>
+
+          <ListItemText primary="Center image automatically" />
         </ListItem>
       </List>
 

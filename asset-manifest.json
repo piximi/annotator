@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/image-viewer/static/js/main.f7df9047.chunk.js",
-    "main.js.map": "/image-viewer/static/js/main.f7df9047.chunk.js.map",
+    "main.js": "/image-viewer/static/js/main.04575d51.chunk.js",
+    "main.js.map": "/image-viewer/static/js/main.04575d51.chunk.js.map",
     "runtime-main.js": "/image-viewer/static/js/runtime-main.89477dea.js",
     "runtime-main.js.map": "/image-viewer/static/js/runtime-main.89477dea.js.map",
     "static/js/2.0d23f086.chunk.js": "/image-viewer/static/js/2.0d23f086.chunk.js",
@@ -21,6 +21,8 @@
     "static/media/ObjectAnnotation.64bf20e5.svg": "/image-viewer/static/media/ObjectAnnotation.64bf20e5.svg",
     "static/media/PolygonalAnnotation.a42ec225.svg": "/image-viewer/static/media/PolygonalAnnotation.a42ec225.svg",
     "static/media/QuickAnnotation.92a60ac4.svg": "/image-viewer/static/media/QuickAnnotation.92a60ac4.svg",
+    "static/media/RadioChecked.247674a9.svg": "/image-viewer/static/media/RadioChecked.247674a9.svg",
+    "static/media/RadioUnchecked.d9a75d6a.svg": "/image-viewer/static/media/RadioUnchecked.d9a75d6a.svg",
     "static/media/RectangularAnnotation.3cca93c1.svg": "/image-viewer/static/media/RectangularAnnotation.3cca93c1.svg",
     "static/media/Zoom.58f47de7.svg": "/image-viewer/static/media/Zoom.58f47de7.svg",
     "static/media/colorImage.f118ef08.png": "/image-viewer/static/media/colorImage.f118ef08.png",
@@ -29,6 +31,6 @@
   "entrypoints": [
     "static/js/runtime-main.89477dea.js",
     "static/js/2.0d23f086.chunk.js",
-    "static/js/main.f7df9047.chunk.js"
+    "static/js/main.04575d51.chunk.js"
   ]
 }

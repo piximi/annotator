@@ -36,10 +36,6 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   const onPointerClick = (event: Konva.KonvaEventObject<MouseEvent>) => {
     event.evt.preventDefault();
 
-    if (!annotationTool) return;
-
-    // if (annotationTool.annotating) return;
-
     if (!ref || !ref.current) return;
 
     dispatch(

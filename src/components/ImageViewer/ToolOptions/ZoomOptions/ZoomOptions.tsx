@@ -8,7 +8,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { ZoomMode } from "../../../../types/ZoomMode";
-import { slice } from "../../../../store/slices";
+import { slice } from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
 import { zoomSettingsSelector } from "../../../../store/selectors";
 

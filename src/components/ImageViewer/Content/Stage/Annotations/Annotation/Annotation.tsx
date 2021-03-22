@@ -33,12 +33,12 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
     (category: Category) => category.id === annotation.categoryId
   )?.color;
 
-  const onContextMenu = (event: Konva.KonvaEventObject<MouseEvent>) => {
+  const onPointerClick = (event: Konva.KonvaEventObject<MouseEvent>) => {
     event.evt.preventDefault();
 
     if (!annotationTool) return;
 
-    if (annotationTool.annotating) return;
+    // if (annotationTool.annotating) return;
 
     if (!ref || !ref.current) return;
 
@@ -60,7 +60,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       closed
       fill={fill}
       id={annotation.id}
-      onContextMenu={onContextMenu}
+      onClick={onPointerClick}
       opacity={0.5}
       points={annotation.contour}
       ref={ref}

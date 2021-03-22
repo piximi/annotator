@@ -347,6 +347,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   //FIXME not using useMemo() because could not pass event argument to it
   const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
+    if (toolType === ToolType.Pointer) return;
+
     if (event.target.getParent().className === "Transformer") {
       onTransformerMouseDown();
       return;

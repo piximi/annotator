@@ -15,7 +15,7 @@ export const AnnotationModeTooltip = ({
   const classes = useStyles();
 
   return (
-    <Tooltip classes={classes} title={<Box>{content}</Box>} placement="bottom">
+    <Tooltip title={<Box>{content}</Box>} placement="bottom">
       {children}
     </Tooltip>
   );

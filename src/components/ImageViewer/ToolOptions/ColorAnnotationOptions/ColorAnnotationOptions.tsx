@@ -9,9 +9,9 @@ import { ReactComponent as InvertSelectionIcon } from "../../../icons/InvertAnno
 import { useDispatch, useSelector } from "react-redux";
 import { invertModeSelector } from "../../../../store/selectors";
 import { slice } from "../../../../store";
-import { Typography } from "@material-ui/core";
 import { SampleList } from "../SampleList";
 import { AnnotationMode } from "../AnnotationMode";
+import Typography from "@material-ui/core/Typography";
 
 export const ColorAnnotationOptions = () => {
   const dispatch = useDispatch();

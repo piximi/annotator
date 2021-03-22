@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Category } from "../../../types/Category";
 import { CssBaseline } from "@material-ui/core";
 import { Image } from "../../../types/Image";
 import { ToolType } from "../../../types/ToolType";
 import {
   imageSelector,
-  toolTypeSelector,
   selectedCategroySelector,
+  toolTypeSelector,
   unknownCategroySelector,
   zoomSettingsSelector,
 } from "../../../store/selectors";
@@ -14,14 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
 import { Categories } from "../Categories";
 import { ToolOptions } from "../ToolOptions";
-import { SelectionOptions } from "../ToolOptions/SelectionOptions";
 import { Tools } from "../Tools";
 import { ZoomOptions } from "../ToolOptions/ZoomOptions";
-import { slice } from "../../../store/slices";
+import { slice } from "../../../store";
 import { Content } from "../Content";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
-import { PenSelectionOptions } from "../ToolOptions/PenSelectionOptions";
 import {
   ColorAdjustmentIcon,
   ColorSelectionIcon,
@@ -37,7 +35,6 @@ import {
   ZoomIcon,
 } from "../../icons";
 import { theme } from "./theme";
-import Collapse from "@material-ui/core/Collapse";
 import { useTranslation } from "react-i18next";
 import { RectangularAnnotationOptions } from "../ToolOptions/RectangularAnnotationOptions";
 import { EllipticalAnnotationOptions } from "../ToolOptions/EllipticalAnnotationOptions";

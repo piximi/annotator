@@ -20,20 +20,28 @@ export const ColorAnnotationToolTip = ({
   const toolType = useSelector(toolTypeSelector);
 
   useEffect(() => {
-    if (toolType !== ToolType.ColorAnnotation) return;
-
-    if (!colorAnnotationTool || !colorAnnotationTool.toolTipPosition) return;
+    if (
+      !colorAnnotationTool ||
+      !colorAnnotationTool.annotating ||
+      !colorAnnotationTool.toolTipPosition
+    )
+      return;
 
     setPosition(colorAnnotationTool.toolTipPosition);
   }, [colorAnnotationTool?.toolTipPosition]);
 
+  if (toolType !== ToolType.ColorAnnotation) return <React.Fragment />;
+
+  if (
+    !colorAnnotationTool ||
+    !colorAnnotationTool.annotating ||
+    colorAnnotationTool.annotated
+  )
+    return <React.Fragment />;
+
   if (!position) return <React.Fragment />;
 
   return (
-    <ReactKonva.Text
-      position={colorAnnotationTool.toolTipPosition}
-      stroke={"white"}
-      text={"Tolerance"}
-    />
+    <ReactKonva.Text position={position} stroke={"white"} text={"Tolerance"} />
   );
 };

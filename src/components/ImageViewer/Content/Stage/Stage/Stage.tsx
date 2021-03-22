@@ -540,6 +540,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
           className={classes.stage}
           globalCompositeOperation="destination-over"
           height={imageHeight}
+          onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
+            event.evt.preventDefault();
+          }}
           onClick={onClick}
           onWheel={onWheel}
           ref={stageRef}

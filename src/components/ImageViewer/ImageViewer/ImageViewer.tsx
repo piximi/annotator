@@ -142,6 +142,13 @@ export const ImageViewer = (props: ImageViewerProps) => {
       name: "Zoom",
       options: <ZoomOptions handleRevert={handleZoomReset} />,
     },
+    {
+      description: "Description of pointer here.",
+      icon: <ObjectSelectionIcon />,
+      method: ToolType.Pointer,
+      name: "Pointer",
+      options: <React.Fragment />,
+    },
   ];
 
   useEffect(() => {

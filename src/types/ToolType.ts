@@ -8,6 +8,7 @@ export enum ToolType {
   ObjectAnnotation,
   PenAnnotation,
   PolygonalAnnotation,
+  Pointer,
   QuickAnnotation,
   RectangularSelection,
   Zoom,

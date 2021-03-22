@@ -23,6 +23,7 @@ import {
   ZoomIcon,
 } from "../../../icons";
 import { useTranslation } from "react-i18next";
+import { ObjectSelection } from "../../Content/Stage/Selection/ObjectSelection";
 
 type OperationsProps = {
   handleCollapse: (b: boolean) => void;
@@ -216,6 +217,20 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
           selected={activeOperation === OperationType.Zoom}
         >
           <ZoomIcon />
+        </Tool>
+        <Tool
+          name="Pointer"
+          onClick={() => {
+            dispatch(
+              slice.actions.setOperation({
+                operation: OperationType.Pointer,
+              })
+            );
+            handleCollapse(true);
+          }}
+          selected={activeOperation === OperationType.Pointer}
+        >
+          <ObjectSelectionIcon />
         </Tool>
       </List>
     </Drawer>

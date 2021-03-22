@@ -56,7 +56,15 @@ export class QuickAnnotationTool extends AnnotationTool {
     return { count, map, superpixels };
   }
 
-  deselect() {}
+  deselect() {
+    this.annotated = false;
+    this.annotating = false;
+
+    this.currentData = undefined;
+    this.colorMasks = undefined;
+    this.currentSuperpixel = undefined;
+    this.currentMask = undefined;
+  }
 
   onMouseDown(position: { x: number; y: number }) {
     if (this.annotated) return;

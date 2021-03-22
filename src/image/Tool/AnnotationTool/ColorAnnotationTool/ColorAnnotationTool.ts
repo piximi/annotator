@@ -27,6 +27,7 @@ export class ColorAnnotationTool extends AnnotationTool {
     this.points = [];
 
     this.initialPosition = { x: 0, y: 0 };
+    this.toolTipPosition = undefined;
 
     this.tolerance = 1;
     this.toleranceMap = undefined;

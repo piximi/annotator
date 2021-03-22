@@ -114,18 +114,6 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (toolType !== ToolType.ColorAnnotation) return;
-  //
-  //   if (!annotationTool) return;
-  //
-  //   if (!colorAnnotationToolTip || !colorAnnotationToolTip.current) return;
-  //
-  //   colorAnnotationToolTip.current.batchDraw();
-  //
-  //   // console.info((annotationTool as ColorAnnotationTool).tolerance);
-  // }, [toolType, (annotationTool as ColorAnnotationTool)?.tolerance]);
-
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     switch (toolType) {
       case ToolType.Zoom:
@@ -434,9 +422,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!position) return;
 
+      console.info("After position");
+
       const relative = getRelativePointerPosition(position);
 
       if (!relative) return;
+
+      console.info("After relative");
 
       if (toolType === ToolType.Zoom) {
         zoomTool?.onMouseUp(relative);
@@ -604,10 +596,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
               <Annotations annotationTool={annotationTool} />
 
               <ReactKonva.Transformer ref={transformerRef} />
+
+              <ColorAnnotationToolTip
+                colorAnnotationTool={annotationTool as ColorAnnotationTool}
+              />
             </ReactKonva.Layer>
-            <ColorAnnotationToolTip
-              colorAnnotationTool={annotationTool as ColorAnnotationTool}
-            />
           </Provider>
         </ReactKonva.Stage>
       )}

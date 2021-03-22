@@ -1,3 +1,5 @@
+export { ReactComponent as CheckboxCheckedIcon } from "./CheckboxChecked.svg";
+export { ReactComponent as CheckboxUncheckedIcon } from "./CheckboxUnchecked.svg";
 export { ReactComponent as ColorAdjustmentIcon } from "./ColorAdjustment.svg";
 export { ReactComponent as ColorSelectionIcon } from "./ColorAnnotation.svg";
 export { ReactComponent as EllipticalSelectionIcon } from "./EllipticalAnnotation.svg";

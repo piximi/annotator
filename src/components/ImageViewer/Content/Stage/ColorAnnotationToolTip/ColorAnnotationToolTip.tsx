@@ -1,10 +1,9 @@
 import * as ReactKonva from "react-konva";
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toolTypeSelector } from "../../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { ToolType } from "../../../../../types/ToolType";
 import { ColorAnnotationTool } from "../../../../../image/Tool/AnnotationTool/ColorAnnotationTool";
-import Konva from "konva";
 
 type ColorAnnotationToolTipProps = {
   colorAnnotationTool: ColorAnnotationTool;
@@ -17,6 +16,7 @@ export const ColorAnnotationToolTip = ({
     x: number;
     y: number | undefined;
   }>();
+  const [text, setText] = useState<string>("Tolerance: 0%");
   const toolType = useSelector(toolTypeSelector);
 
   useEffect(() => {
@@ -28,6 +28,7 @@ export const ColorAnnotationToolTip = ({
       return;
 
     setPosition(colorAnnotationTool.toolTipPosition);
+    setText(`Tolerance: ${colorAnnotationTool.tolerance}%`);
   }, [colorAnnotationTool?.toolTipPosition]);
 
   if (toolType !== ToolType.ColorAnnotation) return <React.Fragment />;
@@ -42,6 +43,9 @@ export const ColorAnnotationToolTip = ({
   if (!position) return <React.Fragment />;
 
   return (
-    <ReactKonva.Text position={position} stroke={"white"} text={"Tolerance"} />
+    <ReactKonva.Label position={position} opacity={0.75}>
+      <ReactKonva.Tag fill={"black"} />
+      <ReactKonva.Text fill={"white"} padding={5} text={text} />
+    </ReactKonva.Label>
   );
 };

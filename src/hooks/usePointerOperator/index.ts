@@ -1,1 +1,1 @@
-export { useZoomOperator } from "./useZoomOperator";
+export { usePointerOperator } from "./usePointerOperator";

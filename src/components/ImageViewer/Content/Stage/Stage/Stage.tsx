@@ -75,10 +75,10 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const annotated = useSelector(annotatedSelector);
 
+  const backspacePress = useKeyPress("Backspace");
+  const deletePress = useKeyPress("Delete");
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
-  const deletePress = useKeyPress("Delete");
-  const backspacePress = useKeyPress("Backspace");
 
   const deselectAnnotation = () => {
     if (!annotationTool) return;

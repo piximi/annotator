@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/image-viewer/static/js/main.e8371a54.chunk.js",
-    "main.js.map": "/image-viewer/static/js/main.e8371a54.chunk.js.map",
+    "main.js": "/image-viewer/static/js/main.894cc9d4.chunk.js",
+    "main.js.map": "/image-viewer/static/js/main.894cc9d4.chunk.js.map",
     "runtime-main.js": "/image-viewer/static/js/runtime-main.a490be8f.js",
     "runtime-main.js.map": "/image-viewer/static/js/runtime-main.a490be8f.js.map",
     "static/js/2.b9b2331b.chunk.js": "/image-viewer/static/js/2.b9b2331b.chunk.js",
@@ -17,7 +17,7 @@
     "static/media/EllipticalAnnotation.18552cf6.svg": "/image-viewer/static/media/EllipticalAnnotation.18552cf6.svg",
     "static/media/FreehandAnnotation.ce15dd27.svg": "/image-viewer/static/media/FreehandAnnotation.ce15dd27.svg",
     "static/media/Hand.57521d91.svg": "/image-viewer/static/media/Hand.57521d91.svg",
-    "static/media/InvertAnnotation.7649974a.svg": "/image-viewer/static/media/InvertAnnotation.7649974a.svg",
+    "static/media/InvertAnnotation.ec8719eb.svg": "/image-viewer/static/media/InvertAnnotation.ec8719eb.svg",
     "static/media/LassoAnnotation.c53651de.svg": "/image-viewer/static/media/LassoAnnotation.c53651de.svg",
     "static/media/MagneticAnnotation.eaf31360.svg": "/image-viewer/static/media/MagneticAnnotation.eaf31360.svg",
     "static/media/ObjectAnnotation.64bf20e5.svg": "/image-viewer/static/media/ObjectAnnotation.64bf20e5.svg",
@@ -34,6 +34,6 @@
   "entrypoints": [
     "static/js/runtime-main.a490be8f.js",
     "static/js/2.b9b2331b.chunk.js",
-    "static/js/main.e8371a54.chunk.js"
+    "static/js/main.894cc9d4.chunk.js"
   ]
 }

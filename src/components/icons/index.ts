@@ -13,4 +13,5 @@ export { ReactComponent as QuickSelectionIcon } from "./QuickAnnotation.svg";
 export { ReactComponent as RadioCheckedIcon } from "./RadioChecked.svg";
 export { ReactComponent as RadioUncheckedIcon } from "./RadioUnchecked.svg";
 export { ReactComponent as RectangularSelectionIcon } from "./RectangularAnnotation.svg";
+export { ReactComponent as SelectionIcon } from "./Selection.svg";
 export { ReactComponent as ZoomIcon } from "./Zoom.svg";

@@ -12,12 +12,7 @@ import { slice } from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
 import { zoomSettingsSelector } from "../../../../store/selectors";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import { NewTooltip } from "../AnnotationMode/NewTooltip";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { SelectionMode } from "../../../../types/SelectionMode";
-import { AddTooltip } from "../AnnotationMode/AddTooltip";
-import { SubtractTooltip } from "../AnnotationMode/SubtractTooltip";
-import { IntersectionTooltip } from "../AnnotationMode/IntersectionTooltip";
 
 type ZoomOptionsProps = {
   handleRevert: () => void;
@@ -102,11 +97,11 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
             label="Center image automatically"
           />
         </ListItem>
+      </List>
 
-        <ListItem>
-          <Button onClick={handleRevert} variant="contained">
-            Actual Size
-          </Button>
+      <List>
+        <ListItem button onClick={handleRevert}>
+          <ListItemText>Actual size</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

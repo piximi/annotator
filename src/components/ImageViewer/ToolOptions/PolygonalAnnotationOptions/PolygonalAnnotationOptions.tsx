@@ -12,6 +12,7 @@ import { slice } from "../../../../store";
 import { Typography } from "@material-ui/core";
 import { SampleList } from "../SampleList";
 import { AnnotationMode } from "../AnnotationMode";
+import { InformationBox } from "../InformationBox";
 
 export const PolygonalAnnotationOptions = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,10 @@ export const PolygonalAnnotationOptions = () => {
 
   return (
     <React.Fragment>
+      <InformationBox description="" name="Polygonal annotation" />
+
+      <Divider />
+
       <AnnotationMode />
 
       <Divider />

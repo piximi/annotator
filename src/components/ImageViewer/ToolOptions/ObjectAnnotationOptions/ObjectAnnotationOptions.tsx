@@ -12,6 +12,7 @@ import { slice } from "../../../../store";
 import { Typography } from "@material-ui/core";
 import { SampleList } from "../SampleList";
 import { AnnotationMode } from "../AnnotationMode";
+import { InformationBox } from "../InformationBox";
 
 export const ObjectAnnotationOptions = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,10 @@ export const ObjectAnnotationOptions = () => {
 
   return (
     <React.Fragment>
+      <InformationBox description="" name="Object annotation" />
+
+      <Divider />
+
       <AnnotationMode />
 
       <Divider />

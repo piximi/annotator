@@ -12,6 +12,7 @@ import { slice } from "../../../../store";
 import { Typography } from "@material-ui/core";
 import { SampleList } from "../SampleList";
 import { AnnotationMode } from "../AnnotationMode";
+import { InformationBox } from "../InformationBox";
 
 export const FreehandAnnotationOptions = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,10 @@ export const FreehandAnnotationOptions = () => {
 
   return (
     <React.Fragment>
+      <InformationBox description="" name="Freehand annotation" />
+
+      <Divider />
+
       <AnnotationMode />
 
       <Divider />

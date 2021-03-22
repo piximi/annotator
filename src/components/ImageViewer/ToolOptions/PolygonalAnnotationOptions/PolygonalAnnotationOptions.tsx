@@ -25,7 +25,7 @@ export const PolygonalAnnotationOptions = () => {
 
   return (
     <React.Fragment>
-      <InformationBox description="" name="Polygonal annotation" />
+      <InformationBox description="…" name="Polygonal annotation" />
 
       <Divider />
 

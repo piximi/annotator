@@ -25,7 +25,7 @@ export const ColorAnnotationOptions = () => {
 
   return (
     <React.Fragment>
-      <InformationBox description="" name="Color annotation" />
+      <InformationBox description="…" name="Color annotation" />
 
       <Divider />
 

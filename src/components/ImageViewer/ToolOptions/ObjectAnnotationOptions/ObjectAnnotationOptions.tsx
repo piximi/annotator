@@ -25,7 +25,7 @@ export const ObjectAnnotationOptions = () => {
 
   return (
     <React.Fragment>
-      <InformationBox description="" name="Object annotation" />
+      <InformationBox description="…" name="Object annotation" />
 
       <Divider />
 

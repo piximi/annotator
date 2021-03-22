@@ -11,6 +11,10 @@ export const InformationBox = ({ description, name }: InformationBoxProps) => {
   return (
     <Box p={2}>
       <Typography variant="subtitle1">{name}</Typography>
+
+      <Typography variant="body2">
+        <em>{description}</em>
+      </Typography>
     </Box>
   );
 };

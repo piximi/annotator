@@ -25,7 +25,7 @@ export const MagneticAnnotationOptions = () => {
 
   return (
     <React.Fragment>
-      <InformationBox description="" name="Magnetic annotation" />
+      <InformationBox description="…" name="Magnetic annotation" />
 
       <Divider />
 

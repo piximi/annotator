@@ -25,7 +25,7 @@ export const LassoAnnotationOptions = () => {
 
   return (
     <React.Fragment>
-      <InformationBox description="" name="Lasso annotation" />
+      <InformationBox description="…" name="Lasso annotation" />
 
       <Divider />
 

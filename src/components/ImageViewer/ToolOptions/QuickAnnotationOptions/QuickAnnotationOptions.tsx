@@ -25,7 +25,7 @@ export const QuickAnnotationOptions = () => {
 
   return (
     <React.Fragment>
-      <InformationBox description="" name="Quick annotation" />
+      <InformationBox description="…" name="Quick annotation" />
 
       <Divider />
 

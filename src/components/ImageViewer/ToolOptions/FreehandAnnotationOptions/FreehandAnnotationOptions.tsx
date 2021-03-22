@@ -25,7 +25,7 @@ export const FreehandAnnotationOptions = () => {
 
   return (
     <React.Fragment>
-      <InformationBox description="" name="Freehand annotation" />
+      <InformationBox description="…" name="Freehand annotation" />
 
       <Divider />
 

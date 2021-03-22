@@ -599,6 +599,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
               <ColorAnnotationToolTip
                 colorAnnotationTool={annotationTool as ColorAnnotationTool}
+                scale={zoomTool ? zoomTool.scale : 1}
               />
             </ReactKonva.Layer>
           </Provider>

@@ -14,6 +14,7 @@ import { NewTooltip } from "../NewTooltip";
 import { AddTooltip } from "../AddTooltip";
 import { SubtractTooltip } from "../SubtractTooltip";
 import { IntersectionTooltip } from "../IntersectionTooltip";
+import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../../icons";
 
 export const AnnotationMode = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,8 @@ export const AnnotationMode = () => {
               <Radio
                 disableRipple
                 edge="start"
+                icon={<RadioUncheckedIcon />}
+                checkedIcon={<RadioCheckedIcon />}
                 tabIndex={-1}
                 value={SelectionMode.New}
               />
@@ -62,6 +65,8 @@ export const AnnotationMode = () => {
               <Radio
                 disableRipple
                 edge="start"
+                icon={<RadioUncheckedIcon />}
+                checkedIcon={<RadioCheckedIcon />}
                 tabIndex={-1}
                 value={SelectionMode.Add}
               />
@@ -77,6 +82,8 @@ export const AnnotationMode = () => {
               <Radio
                 disableRipple
                 edge="start"
+                icon={<RadioUncheckedIcon />}
+                checkedIcon={<RadioCheckedIcon />}
                 tabIndex={-1}
                 value={SelectionMode.Subtract}
               />
@@ -92,6 +99,8 @@ export const AnnotationMode = () => {
               <Radio
                 disableRipple
                 edge="start"
+                icon={<RadioUncheckedIcon />}
+                checkedIcon={<RadioCheckedIcon />}
                 tabIndex={-1}
                 value={SelectionMode.Intersect}
               />

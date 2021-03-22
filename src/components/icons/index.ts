@@ -8,5 +8,7 @@ export { ReactComponent as ObjectSelectionIcon } from "./ObjectAnnotation.svg";
 export { ReactComponent as PenSelectionIcon } from "./FreehandAnnotation.svg";
 export { ReactComponent as PolygonalSelectionIcon } from "./PolygonalAnnotation.svg";
 export { ReactComponent as QuickSelectionIcon } from "./QuickAnnotation.svg";
+export { ReactComponent as RadioCheckedIcon } from "./RadioChecked.svg";
+export { ReactComponent as RadioUncheckedIcon } from "./RadioUnchecked.svg";
 export { ReactComponent as RectangularSelectionIcon } from "./RectangularAnnotation.svg";
 export { ReactComponent as ZoomIcon } from "./Zoom.svg";

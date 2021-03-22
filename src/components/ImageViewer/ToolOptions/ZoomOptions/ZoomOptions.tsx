@@ -5,12 +5,14 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { ZoomMode } from "../../../../types/ZoomMode";
-import { slice } from "../../../../store/slices";
+import { slice } from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
 import { zoomSettingsSelector } from "../../../../store/selectors";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../icons";
 
 type ZoomOptionsProps = {
   handleRevert: () => void;
@@ -40,48 +42,72 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
   };
 
   return (
-    <List>
-      <ListItem dense>
-        <ListItemText primary={"Mode"} secondary={"Select the zoom mode."} />
-
+    <React.Fragment>
+      <List dense>
         <RadioGroup
           defaultValue={ZoomMode.In}
-          name="zoom-mode"
+          aria-label="annotation mode"
+          name="annotation-mode"
           onChange={onZoomModeChange}
           value={zoomSettings.zoomMode}
         >
-          <FormControlLabel
-            control={<Radio tabIndex={-1} />}
-            label="Zoom In"
-            value={ZoomMode.In}
-          />
+          <List
+            component="nav"
+            subheader={<ListSubheader component="div">Zoom mode</ListSubheader>}
+          >
+            <ListItem button dense>
+              <ListItemIcon>
+                <Radio
+                  disableRipple
+                  edge="start"
+                  icon={<RadioUncheckedIcon />}
+                  checkedIcon={<RadioCheckedIcon />}
+                  tabIndex={-1}
+                  value={ZoomMode.In}
+                />
+              </ListItemIcon>
 
-          <FormControlLabel
-            control={<Radio tabIndex={-1} />}
-            label="Zoom out"
-            value={ZoomMode.Out}
-          />
+              <ListItemText primary="Zoom in" />
+            </ListItem>
+
+            <ListItem button dense>
+              <ListItemIcon>
+                <Radio
+                  disableRipple
+                  edge="start"
+                  icon={<RadioUncheckedIcon />}
+                  checkedIcon={<RadioCheckedIcon />}
+                  tabIndex={-1}
+                  value={ZoomMode.Out}
+                />
+              </ListItemIcon>
+
+              <ListItemText primary="Zoom out" />
+            </ListItem>
+          </List>
         </RadioGroup>
-      </ListItem>
+      </List>
 
-      <ListItem>
-        <FormControlLabel
-          control={
+      <List component="nav">
+        <ListItem button onClick={onCenterChange}>
+          <ListItemIcon>
             <Checkbox
               checked={zoomSettings.zoomAutomaticCentering}
-              onChange={onCenterChange}
-              name="center"
+              disableRipple
+              edge="start"
+              tabIndex={-1}
             />
-          }
-          label="Center image automatically"
-        />
-      </ListItem>
+          </ListItemIcon>
 
-      <ListItem>
-        <Button onClick={handleRevert} variant="contained">
-          Actual Size
-        </Button>
-      </ListItem>
-    </List>
+          <ListItemText primary="Center image automatically" />
+        </ListItem>
+      </List>
+
+      <List>
+        <ListItem button onClick={handleRevert}>
+          <ListItemText>Actual size</ListItemText>
+        </ListItem>
+      </List>
+    </React.Fragment>
   );
 };

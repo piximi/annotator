@@ -33,9 +33,9 @@ import { Annotations } from "../Annotations";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
-import { Tool } from "../../../../../image/Tool/Tool";
-import { ObjectAnnotationTool } from "../../../../../image/Tool/AnnotationTool/ObjectAnnotationTool";
-import { ColorAnnotationTool } from "../../../../../image/Tool/AnnotationTool/ColorAnnotationTool";
+import { Tool } from "../../../../../image/Tool";
+import { ObjectAnnotationTool } from "../../../../../image/Tool";
+import { ColorAnnotationTool } from "../../../../../image/Tool";
 import { ColorAnnotationToolTip } from "../ColorAnnotationToolTip";
 
 type StageProps = {

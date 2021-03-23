@@ -1,1 +1,0 @@
-export { PenSelectionOptions } from "./PenSelectionOptions";

@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { PolygonalAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
+import { PolygonalAnnotationTool } from "../../../../../../image/Tool";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type PolygonalSelectionProps = {

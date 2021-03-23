@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { MagneticAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
+import { MagneticAnnotationTool } from "../../../../../../image/Tool";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type MagneticSelectionProps = {

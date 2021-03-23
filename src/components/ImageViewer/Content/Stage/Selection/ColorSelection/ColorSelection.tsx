@@ -1,4 +1,4 @@
-import { ColorAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
+import { ColorAnnotationTool } from "../../../../../../image/Tool";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 

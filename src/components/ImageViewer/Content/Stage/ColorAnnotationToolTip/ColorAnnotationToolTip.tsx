@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { toolTypeSelector } from "../../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { ToolType } from "../../../../../types/ToolType";
-import { ColorAnnotationTool } from "../../../../../image/Tool/AnnotationTool/ColorAnnotationTool";
+import { ColorAnnotationTool } from "../../../../../image/Tool";
 
 type ColorAnnotationToolTipProps = {
   colorAnnotationTool: ColorAnnotationTool;

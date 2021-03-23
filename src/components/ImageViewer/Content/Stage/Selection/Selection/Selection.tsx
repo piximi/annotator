@@ -5,11 +5,11 @@ import {
   LassoAnnotationTool,
   MagneticAnnotationTool,
   ObjectAnnotationTool,
+  PenAnnotationTool,
   PolygonalAnnotationTool,
   QuickAnnotationTool,
   RectangularAnnotationTool,
-  AnnotationTool,
-} from "../../../../../../image/Tool/AnnotationTool";
+} from "../../../../../../image/Tool";
 import { EllipticalSelection } from "../EllipticalSelection";
 import { ToolType } from "../../../../../../types/ToolType";
 import { LassoSelection } from "../LassoSelection";
@@ -22,9 +22,8 @@ import { QuickSelection } from "../QuickSelection/QuickSelection";
 import { PenSelection } from "../PenSelection";
 
 import { ZoomTool } from "../../../../../../image/Tool/ZoomTool";
-import { PenAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import { ZoomSelection } from "../ZoomSelection";
-import { Tool } from "../../../../../../image/Tool/Tool";
+import { Tool } from "../../../../../../image/Tool";
 
 type SelectionProps = {
   scale: number;

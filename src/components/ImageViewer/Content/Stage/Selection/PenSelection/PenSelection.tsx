@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { PenAnnotationTool } from "../../../../../../image/Tool/AnnotationTool/PenAnnotationTool";
+import { PenAnnotationTool } from "../../../../../../image/Tool";
 
 type PenSelectionProps = {
   operator: PenAnnotationTool;

@@ -11,7 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import { useStyles } from "./CreateCategoryDialog.css";
 import { ColorResult } from "react-color";
 import { sample } from "underscore";
-import { slice } from "../../../../../store/slices";
+import { slice } from "../../../../../store";
 import { v4 } from "uuid";
 import { Category } from "../../../../../types/Category";
 import { categoriesSelector } from "../../../../../store/selectors";

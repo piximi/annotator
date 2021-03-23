@@ -12,6 +12,9 @@ import Switch from "@material-ui/core/Switch";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import { Language } from "../../../../../types/Language";
+import { setAddon } from "@storybook/react";
+import { useDispatch } from "react-redux";
+import { slice } from "../../../../../store/slices";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -40,6 +43,15 @@ type SettingsDialogProps = {
 };
 export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const handleLanguageChange = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    dispatch(
+      slice.actions.setLanguage({ language: event.target.value as Language })
+    );
+  };
 
   return (
     <Dialog fullWidth={true} maxWidth={"md"} onClose={onClose} open={open}>
@@ -56,21 +68,21 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
             <FormControl className={classes.form}>
               <Select
                 autoFocus
-                value={"English"}
-                onChange={() => {}}
+                value={Language.English}
+                onChange={handleLanguageChange}
                 inputProps={{
                   name: "language",
                   id: "language",
                 }}
               >
-                <MenuItem value="English">English</MenuItem>
-                <MenuItem value="Arabic">Arabic</MenuItem>
-                <MenuItem value="Finnish">Finnish</MenuItem>
-                <MenuItem value="French">French</MenuItem>
-                <MenuItem value="German">German</MenuItem>
-                <MenuItem value="Hindi">Hindi</MenuItem>
-                <MenuItem value="Hungarian">Hungarian</MenuItem>
-                <MenuItem value="Spanish">Spanish</MenuItem>
+                <MenuItem value={Language.English}>English</MenuItem>
+                <MenuItem value={Language.Arabic}>Arabic</MenuItem>
+                <MenuItem value={Language.Finnish}>Finnish</MenuItem>
+                <MenuItem value={Language.French}>French</MenuItem>
+                <MenuItem value={Language.German}>German</MenuItem>
+                <MenuItem value={Language.Hindi}>Hindi</MenuItem>
+                <MenuItem value={Language.Hungarian}>Hungarian</MenuItem>
+                <MenuItem value={Language.Spanish}>Spanish</MenuItem>
               </Select>
             </FormControl>
           </form>

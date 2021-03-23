@@ -11,16 +11,10 @@ import { invertModeSelector } from "../../../../store/selectors";
 import { slice } from "../../../../store";
 import { AnnotationMode } from "../AnnotationMode";
 import { InformationBox } from "../InformationBox";
+import { useTranslation } from "../../../../hooks/useTranslation";
+import { InvertAnnotation } from "../InvertAnnotation";
 
 export const EllipticalAnnotationOptions = () => {
-  const dispatch = useDispatch();
-
-  const invertMode = useSelector(invertModeSelector);
-
-  const onInvertClick = () => {
-    dispatch(slice.actions.setInvertMode({ invertMode: !invertMode }));
-  };
-
   return (
     <React.Fragment>
       <InformationBox
@@ -34,17 +28,7 @@ export const EllipticalAnnotationOptions = () => {
 
       <Divider />
 
-      <List>
-        <ListItem button onClick={onInvertClick} dense>
-          <ListItemIcon>
-            <SvgIcon>
-              <InvertSelectionIcon />
-            </SvgIcon>
-          </ListItemIcon>
-
-          <ListItemText primary="Invert annotation" />
-        </ListItem>
-      </List>
+      <InvertAnnotation />
     </React.Fragment>
   );
 };

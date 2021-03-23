@@ -15,6 +15,7 @@ import { AddTooltip } from "../AddTooltip";
 import { SubtractTooltip } from "../SubtractTooltip";
 import { IntersectionTooltip } from "../IntersectionTooltip";
 import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../../icons";
+import { useTranslation } from "../../../../../hooks/useTranslation";
 
 export const AnnotationMode = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,8 @@ export const AnnotationMode = () => {
     dispatch(slice.actions.setSelectionMode(payload));
   };
 
+  const t = useTranslation();
+
   return (
     <RadioGroup
       aria-label="annotation mode"
@@ -39,7 +42,7 @@ export const AnnotationMode = () => {
       <List
         component="nav"
         subheader={
-          <ListSubheader component="div">Annotation mode</ListSubheader>
+          <ListSubheader component="div">{t("Annotation mode")}</ListSubheader>
         }
       >
         <NewTooltip>
@@ -55,7 +58,7 @@ export const AnnotationMode = () => {
               />
             </ListItemIcon>
 
-            <ListItemText primary="New annotation" />
+            <ListItemText primary={t("New annotation")} />
           </ListItem>
         </NewTooltip>
 
@@ -72,7 +75,7 @@ export const AnnotationMode = () => {
               />
             </ListItemIcon>
 
-            <ListItemText primary="Add area" />
+            <ListItemText primary={t("Add area")} />
           </ListItem>
         </AddTooltip>
 
@@ -89,7 +92,7 @@ export const AnnotationMode = () => {
               />
             </ListItemIcon>
 
-            <ListItemText primary="Subtract area" />
+            <ListItemText primary={t("Subtract area")} />
           </ListItem>
         </SubtractTooltip>
 
@@ -106,7 +109,7 @@ export const AnnotationMode = () => {
               />
             </ListItemIcon>
 
-            <ListItemText primary="Intersection" />
+            <ListItemText primary={t("Intersection")} />
           </ListItem>
         </IntersectionTooltip>
       </List>

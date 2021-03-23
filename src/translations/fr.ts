@@ -2,6 +2,8 @@ import { language } from "./language";
 
 const fr: language = {
   translation: {
+    "Add area": "Ajouter région",
+    "Annotation mode": "Mode d'annotation",
     Cancel: "Annuler",
     Categories: "Catégories",
     "Color annotation": "Annotation couleur",
@@ -19,6 +21,8 @@ const fr: language = {
     "Hide other categories": "Cacher autres catégories",
     "Hide sidebar": "Cacher sidebar",
     "Import images": "Importer images",
+    Intersection: "Intersection",
+    "Invert annotation": "Inverser annotation",
     "Lasso annotation": "Annotation lasso",
     Logo: "Logo",
     "Magnetic annotation": "Annotation magnétique",
@@ -32,6 +36,7 @@ const fr: language = {
     "Pen annotation": "Annotation pinceau",
     Pointer: "Pointeur",
     "Polygonal annotation": "Annotation polygonale",
+    "New annotation": "Nouvelle annotation",
     "Quick annotation": "Annotation rapide",
     "Rectangular annotation": "Annotation rectangulaire",
     "Run classifier": "Initier classifieur",
@@ -43,6 +48,7 @@ const fr: language = {
     "Send feedback": "Envoyer feedback",
     Settings: "Préférences",
     "Show sidebar": "Montrer sidebar",
+    "Subtract area": "Soustraire région",
     Unknown: "Inconnu",
     Zoom: "Zoom",
   },

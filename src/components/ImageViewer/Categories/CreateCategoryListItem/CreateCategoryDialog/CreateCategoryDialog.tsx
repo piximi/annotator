@@ -15,6 +15,7 @@ import { slice } from "../../../../../store";
 import { v4 } from "uuid";
 import { Category } from "../../../../../types/Category";
 import { categoriesSelector } from "../../../../../store/selectors";
+import { useTranslation } from "../../../../../hooks/useTranslation";
 
 const COLORS = [
   "#f44336",
@@ -89,9 +90,11 @@ export const CreateCategoryDialog = ({
     setName(event.target.value);
   };
 
+  const t = useTranslation();
+
   return (
     <Dialog fullWidth maxWidth="xs" onClose={onClose} open={open}>
-      <DialogTitle>Create category</DialogTitle>
+      <DialogTitle>{t("Create category")}</DialogTitle>
 
       <DialogContent className={classes.createCategoryDialogContent}>
         <div className={classes.createCategoryDialogGrid}>
@@ -104,7 +107,7 @@ export const CreateCategoryDialog = ({
                 autoFocus
                 fullWidth
                 id="name"
-                label="Name"
+                label={t("Name")}
                 margin="dense"
                 onChange={onNameChange}
               />
@@ -115,11 +118,11 @@ export const CreateCategoryDialog = ({
 
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          {t("Cancel")}
         </Button>
 
         <Button onClick={onCreate} color="primary">
-          Create
+          {t("Create")}
         </Button>
       </DialogActions>
     </Dialog>

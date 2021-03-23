@@ -8,4 +8,5 @@ export enum Language {
   Greek,
   Hindi,
   Hungarian,
+  Spannish,
 }

@@ -11,6 +11,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import Switch from "@material-ui/core/Switch";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
+import { Language } from "../../../../../types/Language";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -62,9 +63,14 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
                   id: "language",
                 }}
               >
-                <MenuItem value="english">english</MenuItem>
-                <MenuItem value="deutsch">deutsch</MenuItem>
-                <MenuItem value="francais">francais</MenuItem>
+                <MenuItem value="English">English</MenuItem>
+                <MenuItem value="Arabic">Arabic</MenuItem>
+                <MenuItem value="Finnish">Finnish</MenuItem>
+                <MenuItem value="French">French</MenuItem>
+                <MenuItem value="German">German</MenuItem>
+                <MenuItem value="Hindi">Hindi</MenuItem>
+                <MenuItem value="Hungarian">Hungarian</MenuItem>
+                <MenuItem value="Spanish">Spanish</MenuItem>
               </Select>
             </FormControl>
           </form>

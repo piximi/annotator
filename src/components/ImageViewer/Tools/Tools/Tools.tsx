@@ -21,7 +21,7 @@ import {
   SelectionIcon,
   ZoomIcon,
 } from "../../../icons";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "../../../../hooks/useTranslation";
 
 type OperationsProps = {
   handleCollapse: (b: boolean) => void;
@@ -34,7 +34,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
 
   const activeOperation = useSelector(toolTypeSelector);
 
-  const { t, i18n } = useTranslation();
+  const t = useTranslation();
 
   return (
     <Drawer
@@ -48,7 +48,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
       <Divider />
 
       <Tool
-        name="Pointer"
+        name={t("Pointer")}
         onClick={() => {
           dispatch(
             slice.actions.setOperation({
@@ -66,7 +66,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
 
       <List>
         <Tool
-          name="Rectangular annotation"
+          name={t("Rectangular annotation")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -81,7 +81,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Elliptical annotation"
+          name={t("Elliptical annotation")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -96,7 +96,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Pen annotation"
+          name={t("Pen annotation")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -111,7 +111,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Lasso annotation"
+          name={t("Lasso annotation")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -126,7 +126,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Polygonal annotation"
+          name={t("Polygonal annotation")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -141,7 +141,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Magnetic annotation"
+          name={t("Magnetic annotation")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -156,7 +156,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Color annotation"
+          name={t("Color annotation")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -171,7 +171,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Quick annotation"
+          name={t("Quick annotation")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -186,7 +186,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         </Tool>
 
         <Tool
-          name="Object annotation"
+          name={t("Object annotation")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({
@@ -203,7 +203,7 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
         <Divider />
 
         <Tool
-          name="Zoom"
+          name={t("Zoom")}
           onClick={() => {
             dispatch(
               slice.actions.setOperation({

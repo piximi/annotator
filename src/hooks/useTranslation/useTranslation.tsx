@@ -19,7 +19,7 @@ export const useTranslation = () => {
         if (!fr.translation[word]) return word;
         return fr.translation[word];
       case Language.German:
-        if (!de.translation) return word;
+        if (!de.translation[word]) return word;
         return de.translation[word];
       case Language.Greek:
         if (!gr.translation[word]) return word;

@@ -19,6 +19,7 @@ import { CategoryMenu } from "../CategoryMenu";
 import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
+import { useTranslation } from "../../../../hooks/useTranslation";
 
 type CategoriesProps = {
   activeCategory: Category;
@@ -60,6 +61,8 @@ export const Categories = ({
     setAnchorEl(null);
   };
 
+  const t = useTranslation();
+
   return (
     <Drawer
       anchor="left"
@@ -70,7 +73,7 @@ export const Categories = ({
     >
       <div className={classes.applicationDrawerHeader} />
 
-      <CollapsibleList primary="Categories">
+      <CollapsibleList primary={t("Categories")}>
         {categories.map((category: Category) => {
           return (
             <div key={category.id}>
@@ -132,7 +135,7 @@ export const Categories = ({
 
           <ListItemText
             id={unknownCategory.id}
-            primary={unknownCategory.name}
+            primary={t(unknownCategory.name)}
             primaryTypographyProps={{ noWrap: true }}
           />
         </ListItem>

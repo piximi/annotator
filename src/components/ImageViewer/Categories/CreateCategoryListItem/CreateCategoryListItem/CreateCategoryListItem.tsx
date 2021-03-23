@@ -5,9 +5,12 @@ import AddIcon from "@material-ui/icons/Add";
 import React from "react";
 import { CreateCategoryDialog } from "../CreateCategoryDialog";
 import { useDialog } from "../../../../../hooks";
+import { useTranslation } from "../../../../../hooks/useTranslation";
 
 export const CreateCategoryListItem = () => {
   const { onClose, onOpen, open } = useDialog();
+
+  const t = useTranslation();
 
   return (
     <React.Fragment>
@@ -16,7 +19,7 @@ export const CreateCategoryListItem = () => {
           <AddIcon />
         </ListItemIcon>
 
-        <ListItemText primary="Create category" />
+        <ListItemText primary={t("Create category")} />
       </ListItem>
 
       <CreateCategoryDialog onClose={onClose} open={open} />

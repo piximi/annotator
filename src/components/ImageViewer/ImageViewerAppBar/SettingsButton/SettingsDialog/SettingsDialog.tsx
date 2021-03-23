@@ -13,8 +13,9 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import { Language } from "../../../../../types/Language";
 import { setAddon } from "@storybook/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { slice } from "../../../../../store/slices";
+import { languageSelector } from "../../../../../store/selectors/languageSelector";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -45,6 +46,8 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const language = useSelector(languageSelector);
+
   const handleLanguageChange = (
     event: React.ChangeEvent<{ value: unknown }>
   ) => {
@@ -68,7 +71,7 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
             <FormControl className={classes.form}>
               <Select
                 autoFocus
-                value={Language.English}
+                value={language}
                 onChange={handleLanguageChange}
                 inputProps={{
                   name: "language",

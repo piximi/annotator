@@ -7,6 +7,7 @@ import { HideOrShowCategoryMenuItem } from "../HideOrShowCategoryMenuItem";
 import { HideOtherCategoriesMenuItem } from "../HideOtherCategoriesMenuItem";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
+import { useTranslation } from "../../../../../hooks/useTranslation";
 
 type CategoryMenuProps = {
   anchorElCategoryMenu: any;
@@ -42,6 +43,8 @@ export const CategoryMenu = ({
     onCloseCategoryMenu(event);
   };
 
+  const t = useTranslation();
+
   return (
     <Menu
       anchorEl={anchorElCategoryMenu}
@@ -67,11 +70,11 @@ export const CategoryMenu = ({
             <Divider />
 
             <MenuItem onClick={onOpenEditCategoryDialogClick}>
-              <Typography variant="inherit">Edit category</Typography>
+              <Typography variant="inherit">{t("Edit category")}</Typography>
             </MenuItem>
 
             <MenuItem onClick={onOpenDeleteCategoryDialogClick}>
-              <Typography variant="inherit">Delete category</Typography>
+              <Typography variant="inherit">{t("Delete category")}</Typography>
             </MenuItem>
           </div>
         )}

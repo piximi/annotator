@@ -2,6 +2,7 @@ import React from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import { Category } from "../../../../../types/Category";
+import { useTranslation } from "../../../../../hooks/useTranslation";
 
 type HideOrShowCategoryMenuItemProps = {
   category: Category;
@@ -22,10 +23,15 @@ export const HideOrShowCategoryMenuItem = ({
     // TODO: dispatch hide or show category action
   };
 
+  const t = useTranslation();
+
+  const translatedHide = t("Hide category");
+  const translatedShow = t("Show category");
+
   return (
     <MenuItem onClick={onClick}>
       <Typography variant="inherit">
-        {category.visible ? "Hide" : "Show"} category
+        {category.visible ? translatedHide : translatedShow}
       </Typography>
     </MenuItem>
   );

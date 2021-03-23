@@ -56,7 +56,7 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
             <FormControl className={classes.form}>
               <Select
                 autoFocus
-                value={"english"}
+                value={"English"}
                 onChange={() => {}}
                 inputProps={{
                   name: "language",

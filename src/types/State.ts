@@ -3,6 +3,7 @@ import { Image } from "./Image";
 import { ToolType } from "./ToolType";
 import { SelectionMode } from "./SelectionMode";
 import { ZoomSettings } from "./ZoomSettings";
+import { Language } from "./Language";
 
 export type State = {
   annotated: boolean;
@@ -13,11 +14,13 @@ export type State = {
   hue: number;
   image?: Image;
   invertMode: boolean;
+  language: Language.English;
   penSelectionBrushSize: number;
   saturation: number;
   selectedAnnotation?: string;
   selectedCategory: string;
   selectionMode: SelectionMode;
+  soundEnabled: boolean;
   toolType: ToolType;
   vibrance: number;
   zoomSettings: ZoomSettings;

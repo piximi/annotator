@@ -1,6 +1,5 @@
 import React from "react";
 import { AnnotationModeTooltip } from "../AnnotationModeTooltip";
-import Typography from "@material-ui/core/Typography";
 
 type AddTooltipProps = {
   children: React.ReactElement;

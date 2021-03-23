@@ -5,10 +5,10 @@ import {
   LassoAnnotationTool,
   MagneticAnnotationTool,
   ObjectAnnotationTool,
+  PenAnnotationTool,
   PolygonalAnnotationTool,
   QuickAnnotationTool,
   RectangularAnnotationTool,
-  AnnotationTool,
 } from "../../../../../../image/Tool/AnnotationTool";
 import { EllipticalSelection } from "../EllipticalSelection";
 import { ToolType } from "../../../../../../types/ToolType";
@@ -22,7 +22,6 @@ import { QuickSelection } from "../QuickSelection/QuickSelection";
 import { PenSelection } from "../PenSelection";
 
 import { ZoomTool } from "../../../../../../image/Tool/ZoomTool";
-import { PenAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
 import { ZoomSelection } from "../ZoomSelection";
 import { Tool } from "../../../../../../image/Tool/Tool";
 

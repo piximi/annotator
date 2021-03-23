@@ -9,11 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toolTypeSelector } from "../../../../store/selectors";
 import { slice } from "../../../../store/slices";
 import {
-  ColorAdjustmentIcon,
   ColorSelectionIcon,
   EllipticalSelectionIcon,
-  SelectionIcon,
-  HandIcon,
   LassoSelectionIcon,
   MagneticSelectionIcon,
   ObjectSelectionIcon,
@@ -21,10 +18,10 @@ import {
   PolygonalSelectionIcon,
   QuickSelectionIcon,
   RectangularSelectionIcon,
+  SelectionIcon,
   ZoomIcon,
 } from "../../../icons";
 import { useTranslation } from "react-i18next";
-import { ObjectSelection } from "../../Content/Stage/Selection/ObjectSelection";
 
 type OperationsProps = {
   handleCollapse: (b: boolean) => void;

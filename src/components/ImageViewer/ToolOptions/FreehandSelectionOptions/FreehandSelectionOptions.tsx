@@ -3,13 +3,13 @@ import { SelectionOptions } from "../SelectionOptions";
 import Divider from "@material-ui/core/Divider";
 import Slider from "@material-ui/core/Slider";
 import { useDispatch, useSelector } from "react-redux";
-import { slice } from "../../../../store/slices";
+import { slice } from "../../../../store";
 import { penSelectionBrushSizeSelector } from "../../../../store/selectors/penSelectionBrushSizeSelector";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
-export const PenSelectionOptions = () => {
+export const FreehandSelectionOptions = () => {
   const dispatch = useDispatch();
 
   const penSelectionBrushSizeBrushSize = useSelector(

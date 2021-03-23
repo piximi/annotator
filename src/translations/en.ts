@@ -1,4 +1,6 @@
-const en = {
+import { language } from "./language";
+
+const en: language = {
   translation: {
     Cancel: "Cancel",
     Categories: "Categories",

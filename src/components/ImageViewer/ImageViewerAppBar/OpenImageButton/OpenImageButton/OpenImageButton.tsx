@@ -6,6 +6,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { useStyles } from "./OpenImageButton.css";
 import { ComputerMenuItem } from "../ComputerMenuItem";
 import { ExampleMenuItem } from "../ExampleMenuItem";
+import { useTranslation } from "../../../../../hooks/useTranslation";
 
 type OpenImageMenuProps = {
   anchorEl: null | HTMLElement;
@@ -56,15 +57,17 @@ export const OpenImageButton = () => {
     setAnchorEl(null);
   };
 
+  const t = useTranslation();
+
   return (
     <React.Fragment>
-      <Tooltip title="Open image">
+      <Tooltip title={t("Open image")}>
         <Button
           className={classes.button}
           startIcon={<CloudUploadIcon />}
           onClick={onClick}
         >
-          Open image
+          {t("Open image")}
         </Button>
       </Tooltip>
 

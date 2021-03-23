@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { useStyles } from "../../ExportButton/ExportButton.css";
 import { SettingsDialog } from "../SettingsDialog/SettingsDialog";
+import { useTranslation } from "../../../../../hooks/useTranslation";
 
 export const SettingsButton = () => {
   const classes = useStyles();
@@ -18,15 +19,17 @@ export const SettingsButton = () => {
     setOpenSettingsDialog(false);
   };
 
+  const t = useTranslation();
+
   return (
     <React.Fragment>
-      <Tooltip title="Settings">
+      <Tooltip title={t("Settings")}>
         <Button
           className={classes.button}
           startIcon={<SettingsIcon />}
           onClick={onSettingsClick}
         >
-          Settings
+          {t("Settings")}
         </Button>
       </Tooltip>
       <SettingsDialog

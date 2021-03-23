@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { languageSelector } from "../../store/selectors/languageSelector";
 import { de, en, fi, gr, hi, hu } from "../../translations/";
 import { Language } from "../../types/Language";
+import fr from "../../translations/fr";
 
 export const useTranslation = () => {
   const language = useSelector(languageSelector);
@@ -14,6 +15,9 @@ export const useTranslation = () => {
       case Language.Finnish:
         if (!fi.translation[word]) return word;
         return fi.translation[word];
+      case Language.French:
+        if (!fr.translation[word]) return word;
+        return fr.translation[word];
       case Language.German:
         if (!de.translation) return word;
         return de.translation[word];

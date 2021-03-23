@@ -7,6 +7,7 @@ import { saveAs } from "file-saver";
 import { useSelector } from "react-redux";
 import { categoriesSelector, imageSelector } from "../../../../store/selectors";
 import * as _ from "lodash";
+import { useTranslation } from "../../../../hooks/useTranslation";
 
 export const ExportButton = () => {
   const classes = useStyles();
@@ -41,15 +42,17 @@ export const ExportButton = () => {
     saveAs(blob, "foo.json");
   };
 
+  const t = useTranslation();
+
   return (
     <React.Fragment>
-      <Tooltip title="Export annotations">
+      <Tooltip title={t("Export annotations")}>
         <Button
           className={classes.button}
           startIcon={<CloudDownloadIcon />}
           onClick={onClick}
         >
-          Export
+          {t("Export")}
         </Button>
       </Tooltip>
     </React.Fragment>

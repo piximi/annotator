@@ -36,6 +36,14 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
     );
   };
 
+  const handleSoundEnabledChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatch(
+      slice.actions.setSoundEnabled({ soundEnabled: event.target.checked })
+    );
+  };
+
   return (
     <Dialog fullWidth={true} maxWidth={"md"} onClose={onClose} open={open}>
       <DialogTitle>Settings</DialogTitle>
@@ -85,8 +93,8 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
                 <Grid item>
                   <Switch
                     checked={soundEnabled}
-                    onChange={() => {}}
-                    name="checkedC"
+                    onChange={handleSoundEnabledChange}
+                    name="soundEnabled"
                   />
                 </Grid>
                 <Grid item>On</Grid>

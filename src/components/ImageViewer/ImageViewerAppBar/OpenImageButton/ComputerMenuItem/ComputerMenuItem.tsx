@@ -1,7 +1,7 @@
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 import { Shape } from "../../../../../types/Shape";
-import { setImage } from "../../../../../store/slices";
+import { setImage } from "../../../../../store";
 import { useDispatch } from "react-redux";
 import * as ImageJS from "image-js";
 

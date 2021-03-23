@@ -1,6 +1,6 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
-import { LassoAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
+import { LassoAnnotationTool } from "../../../../../../image/Tool";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type LassoSelectionProps = {

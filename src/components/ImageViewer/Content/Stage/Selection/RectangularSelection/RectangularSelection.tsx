@@ -1,4 +1,4 @@
-import { RectangularAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
+import { RectangularAnnotationTool } from "../../../../../../image/Tool";
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";

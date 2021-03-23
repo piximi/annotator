@@ -12,7 +12,7 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import { Language } from "../../../../../types/Language";
 import { useDispatch, useSelector } from "react-redux";
-import { slice } from "../../../../../store/slices";
+import { slice } from "../../../../../store";
 import { languageSelector } from "../../../../../store/selectors/languageSelector";
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
 import { useStyles } from "./SettingsDialog.css";

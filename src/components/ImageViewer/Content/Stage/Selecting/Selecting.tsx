@@ -3,7 +3,7 @@ import { Selection } from "../Selection";
 import { useSelector } from "react-redux";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import { toolTypeSelector } from "../../../../../store/selectors";
-import { Tool } from "../../../../../image/Tool/Tool";
+import { Tool } from "../../../../../image/Tool";
 
 type SelectingProps = {
   tool: Tool;

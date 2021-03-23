@@ -10,7 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import { ColorIcon } from "../ColorIcon";
 import { useStyles } from "./EditCategoryDialog.css";
 import { Category } from "../../../../types/Category";
-import { slice } from "../../../../store/slices";
+import { slice } from "../../../../store";
 import { categoriesSelector } from "../../../../store/selectors";
 
 type EditCategoryDialogProps = {

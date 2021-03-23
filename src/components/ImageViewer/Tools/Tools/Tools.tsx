@@ -7,7 +7,7 @@ import { Tool } from "../Tool";
 import { useStyles } from "./Tools.css";
 import { useDispatch, useSelector } from "react-redux";
 import { toolTypeSelector } from "../../../../store/selectors";
-import { slice } from "../../../../store/slices";
+import { slice } from "../../../../store";
 import {
   ColorSelectionIcon,
   EllipticalSelectionIcon,

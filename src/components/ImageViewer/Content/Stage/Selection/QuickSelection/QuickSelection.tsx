@@ -1,4 +1,4 @@
-import { QuickAnnotationTool } from "../../../../../../image/Tool/AnnotationTool";
+import { QuickAnnotationTool } from "../../../../../../image/Tool";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 

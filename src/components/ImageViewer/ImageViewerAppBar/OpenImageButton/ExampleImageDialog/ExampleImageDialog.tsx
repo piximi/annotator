@@ -1,7 +1,7 @@
 import Dialog from "@material-ui/core/Dialog";
 import React from "react";
 import { Shape } from "../../../../../types/Shape";
-import { setImage } from "../../../../../store/slices";
+import { setImage } from "../../../../../store";
 import { useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";

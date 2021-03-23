@@ -28,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
   boldTypography: {
     fontWeight: "inherit",
     marginRight: "15px",
+    width: "100px",
+    textAlign: "right",
   },
 }));
 

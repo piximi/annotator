@@ -6,37 +6,16 @@ import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import FormGroup from "@material-ui/core/FormGroup";
 import Switch from "@material-ui/core/Switch";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import { Language } from "../../../../../types/Language";
-import { setAddon } from "@storybook/react";
 import { useDispatch, useSelector } from "react-redux";
 import { slice } from "../../../../../store/slices";
 import { languageSelector } from "../../../../../store/selectors/languageSelector";
-
-const useStyles = makeStyles((theme) => ({
-  form: {
-    maginLeft: "15px",
-  },
-  root: {
-    flexGrow: 1,
-  },
-  rowLayout: {
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    margin: "20px",
-  },
-  boldTypography: {
-    fontWeight: "inherit",
-    marginRight: "15px",
-    width: "100px",
-    textAlign: "right",
-  },
-}));
+import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
+import { useStyles } from "./SettingsDialog.css";
 
 type SettingsDialogProps = {
   onClose: () => void;
@@ -47,6 +26,7 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
   const dispatch = useDispatch();
 
   const language = useSelector(languageSelector);
+  const soundEnabled = useSelector(soundEnabledSelector);
 
   const handleLanguageChange = (
     event: React.ChangeEvent<{ value: unknown }>
@@ -59,11 +39,11 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
   return (
     <Dialog fullWidth={true} maxWidth={"md"} onClose={onClose} open={open}>
       <DialogTitle>Settings</DialogTitle>
-      <DialogContent className={classes.root}>
-        <Box className={classes.rowLayout}>
+      <DialogContent className={classes.content}>
+        <Box className={classes.boxLayout}>
           <Box fontWeight={700}>
             {" "}
-            <Typography className={classes.boldTypography}>
+            <Typography className={classes.typography}>
               Language:{" "}
             </Typography>{" "}
           </Box>
@@ -93,19 +73,21 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
 
         <Divider />
 
-        <Box className={classes.rowLayout}>
+        <Box className={classes.boxLayout}>
           <Box fontWeight={700}>
             {" "}
-            <Typography className={classes.boldTypography}>
-              Sound:{" "}
-            </Typography>{" "}
+            <Typography className={classes.typography}>Sound: </Typography>{" "}
           </Box>
           <FormGroup>
             <Typography component="div">
               <Grid component="label" container alignItems="center" spacing={1}>
                 <Grid item>Off</Grid>
                 <Grid item>
-                  <Switch checked={false} onChange={() => {}} name="checkedC" />
+                  <Switch
+                    checked={soundEnabled}
+                    onChange={() => {}}
+                    name="checkedC"
+                  />
                 </Grid>
                 <Grid item>On</Grid>
               </Grid>

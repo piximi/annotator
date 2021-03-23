@@ -8,6 +8,7 @@ import { State } from "../../types/State";
 import { ZoomMode } from "../../types/ZoomMode";
 import * as _ from "lodash";
 import colorImage from "../../images/colorImage.png";
+import { Language } from "../../types/Language";
 
 const initialState: State = {
   annotated: false,
@@ -31,11 +32,13 @@ const initialState: State = {
     src: colorImage,
   },
   invertMode: false,
+  language: Language.English,
   toolType: ToolType.RectangularSelection,
   penSelectionBrushSize: 1,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: SelectionMode.New,
+  soundEnabled: true,
   vibrance: 0,
   zoomSettings: {
     zoomAutomaticCentering: false,
@@ -128,6 +131,9 @@ export const slice = createSlice({
     ) {
       state.invertMode = action.payload.invertMode;
     },
+    setLanguage(state: State, action: PayloadAction<{ language: Language }>) {
+      state.language = action.payload.language;
+    },
     setOperation(state: State, action: PayloadAction<{ operation: ToolType }>) {
       state.toolType = action.payload.operation;
     },
@@ -157,6 +163,12 @@ export const slice = createSlice({
       action: PayloadAction<{ selectionMode: SelectionMode }>
     ) {
       state.selectionMode = action.payload.selectionMode;
+    },
+    setSoundEnabled(
+      state: State,
+      action: PayloadAction<{ soundEnabled: boolean }>
+    ) {
+      state.soundEnabled = action.payload.soundEnabled;
     },
     setVibrance(state: State, action: PayloadAction<{ vibrance: number }>) {
       state.vibrance = action.payload.vibrance;
@@ -191,12 +203,14 @@ export const {
   setImage,
   setImageInstances,
   setInvertMode,
+  setLanguage,
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,
   setSelectionMode,
   setSeletedCategory,
+  setSoundEnabled,
   setVibrance,
   setZoomMode,
   setZoomReset,

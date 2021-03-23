@@ -14,7 +14,7 @@ export type State = {
   hue: number;
   image?: Image;
   invertMode: boolean;
-  language: Language.English;
+  language: Language;
   penSelectionBrushSize: number;
   saturation: number;
   selectedAnnotation?: string;

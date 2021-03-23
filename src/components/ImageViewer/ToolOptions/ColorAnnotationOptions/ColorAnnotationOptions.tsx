@@ -4,11 +4,14 @@ import { SampleList } from "../SampleList";
 import { AnnotationMode } from "../AnnotationMode";
 import { InformationBox } from "../InformationBox";
 import { InvertAnnotation } from "../InvertAnnotation";
+import { useTranslation } from "../../../../hooks/useTranslation";
 
 export const ColorAnnotationOptions = () => {
+  const t = useTranslation();
+
   return (
     <React.Fragment>
-      <InformationBox description="…" name="Color annotation" />
+      <InformationBox description="…" name={t("Color annotation")} />
 
       <Divider />
 

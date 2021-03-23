@@ -17,6 +17,7 @@ const fr: language = {
     "Elliptical annotation": "Annotation elliptique",
     Export: "Exporter",
     "Export annotations": "Exporter annotations",
+    "Freehand annotation": "Annotation main-libres",
     Help: "Aide",
     "Hide other categories": "Cacher autres catégories",
     "Hide sidebar": "Cacher sidebar",

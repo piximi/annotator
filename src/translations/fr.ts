@@ -2,10 +2,12 @@ import { language } from "./language";
 
 const fr: language = {
   translation: {
+    "Actual size": "Taille réelle",
     "Add area": "Ajouter région",
     "Annotation mode": "Mode d'annotation",
     Cancel: "Annuler",
     Categories: "Catégories",
+    "Center image automatically": "Centrer image automatiquement",
     "Color annotation": "Annotation couleur",
     "Create category": "Nouvelle catégorie",
     "Create new classifier": "Nouveau classifieur",
@@ -52,6 +54,9 @@ const fr: language = {
     "Subtract area": "Soustraire région",
     Unknown: "Inconnu",
     Zoom: "Zoom",
+    "Zoom in": "Zoom intérieur",
+    "Zoom mode": "Mode zoom",
+    "Zoom out": "Zoom extérieur",
   },
 };
 

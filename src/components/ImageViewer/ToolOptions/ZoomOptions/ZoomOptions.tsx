@@ -12,6 +12,7 @@ import { zoomSettingsSelector } from "../../../../store/selectors";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../icons";
+import { useTranslation } from "../../../../hooks/useTranslation";
 
 type ZoomOptionsProps = {
   handleRevert: () => void;
@@ -40,6 +41,8 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
     );
   };
 
+  const t = useTranslation();
+
   return (
     <React.Fragment>
       <List dense>
@@ -52,7 +55,9 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
         >
           <List
             component="nav"
-            subheader={<ListSubheader component="div">Zoom mode</ListSubheader>}
+            subheader={
+              <ListSubheader component="div">{t("Zoom mode")}</ListSubheader>
+            }
           >
             <ListItem button dense>
               <ListItemIcon>
@@ -66,7 +71,7 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
                 />
               </ListItemIcon>
 
-              <ListItemText primary="Zoom in" />
+              <ListItemText primary={t("Zoom in")} />
             </ListItem>
 
             <ListItem button dense>
@@ -81,7 +86,7 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
                 />
               </ListItemIcon>
 
-              <ListItemText primary="Zoom out" />
+              <ListItemText primary={t("Zoom out")} />
             </ListItem>
           </List>
         </RadioGroup>
@@ -98,13 +103,13 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
             />
           </ListItemIcon>
 
-          <ListItemText primary="Center image automatically" />
+          <ListItemText primary={t("Center image automatically")} />
         </ListItem>
       </List>
 
       <List>
         <ListItem button onClick={handleRevert}>
-          <ListItemText>Actual size</ListItemText>
+          <ListItemText>{t("Actual size")}</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

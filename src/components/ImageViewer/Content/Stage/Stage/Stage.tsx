@@ -422,13 +422,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!position) return;
 
-      console.info("After position");
-
       const relative = getRelativePointerPosition(position);
 
       if (!relative) return;
-
-      console.info("After relative");
 
       if (toolType === ToolType.Zoom) {
         zoomTool?.onMouseUp(relative);

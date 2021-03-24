@@ -40,15 +40,17 @@ export const Content = ({ category, onDrop }: ContentProps) => {
 
   return (
     <main className={classes.content} ref={ref}>
-      <div className={classes.toolbar} />
+      <div ref={drop}>
+        <div className={classes.toolbar} />
 
-      <div className={classes.parent}>
-        <Stage
-          category={category}
-          height={boundingClientRect?.height}
-          src={image!.src}
-          width={boundingClientRect?.width}
-        />
+        <div className={classes.parent}>
+          <Stage
+            category={category}
+            height={boundingClientRect?.height}
+            src={image!.src}
+            width={boundingClientRect?.width}
+          />
+        </div>
       </div>
     </main>
   );

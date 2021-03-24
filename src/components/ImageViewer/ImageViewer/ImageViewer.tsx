@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Category } from "../../../types/Category";
 import { CssBaseline } from "@material-ui/core";
 import { Image } from "../../../types/Image";
@@ -190,6 +190,19 @@ export const ImageViewer = (props: ImageViewerProps) => {
     setCollapsed(isCollapsed);
   };
 
+  const [dropped, setDropped] = useState<File[]>([]);
+
+  const onDrop = useCallback(
+    (item) => {
+      if (item) {
+        const files = item.files;
+
+        setDropped(files);
+      }
+    },
+    [setDropped]
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
@@ -202,7 +215,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
           onCategoryClick={onCategoryClick}
         />
 
-        {image && <Content category={activeCategory} />}
+        <Content category={activeCategory} onDrop={onDrop} />
 
         <ToolOptions
           settings={

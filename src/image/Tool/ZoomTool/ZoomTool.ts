@@ -76,7 +76,7 @@ export class ZoomTool extends Tool {
       this.maximum = position;
 
       this.scale = Math.abs(
-        this.image.width / (this.maximum.x - this.minimum.x)
+        512 / (this.maximum.x - this.minimum.x) //FIXME let's try to not hardcode to 512 and instead read that value from somewhere
       );
 
       const x =

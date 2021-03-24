@@ -86,6 +86,7 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
                     >
                       <MenuItem value={Language.English}>English</MenuItem>
                       <MenuItem value={Language.Arabic}>Arabic</MenuItem>
+                      <MenuItem value={Language.Farsi}>Farsi</MenuItem>
                       <MenuItem value={Language.Finnish}>Finnish</MenuItem>
                       <MenuItem value={Language.French}>French</MenuItem>
                       <MenuItem value={Language.German}>German</MenuItem>

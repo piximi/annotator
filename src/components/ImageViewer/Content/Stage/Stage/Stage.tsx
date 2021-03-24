@@ -549,7 +549,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
         <ReactKonva.Stage
           className={classes.stage}
           globalCompositeOperation="destination-over"
-          height={imageHeight}
+          height={512}
           onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
             event.evt.preventDefault();
           }}
@@ -560,7 +560,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
             x: zoomTool ? zoomTool.scale : 1,
             y: zoomTool ? zoomTool.scale : 1,
           }}
-          width={imageWidth}
+          width={512}
           x={zoomTool ? zoomTool.x : 0}
           y={zoomTool ? zoomTool.y : 0}
         >

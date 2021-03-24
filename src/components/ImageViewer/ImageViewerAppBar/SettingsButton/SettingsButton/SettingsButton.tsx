@@ -3,7 +3,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { useStyles } from "../../ExportButton/ExportButton.css";
-import { SettingsDialog } from "../SettingsDialog/SettingsDialog";
+import { SettingsDialog } from "../SettingsDialog";
 import { useTranslation } from "../../../../../hooks/useTranslation";
 
 export const SettingsButton = () => {

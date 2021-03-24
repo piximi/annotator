@@ -73,7 +73,7 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
             <Grid container>
               <Grid item xs={12}>
                 <Grid container xs={4}>
-                  <FormControl fullWidth>
+                  <FormControl color="primary" fullWidth>
                     <InputLabel shrink id="settings-language">
                       Language
                     </InputLabel>
@@ -107,6 +107,7 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
                     <FormControlLabel
                       control={
                         <Switch
+                          color="default"
                           checked={soundEnabled}
                           onChange={onSoundEffectsChange}
                           name="soundEnabled"

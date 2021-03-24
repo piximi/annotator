@@ -27,7 +27,7 @@ const initialState: State = {
   image: {
     id: "",
     instances: [],
-    name: "foo.png",
+    name: "example.png",
     shape: { c: 512, channels: 3, r: 512 },
     src: colorImage,
   },
@@ -125,6 +125,11 @@ export const slice = createSlice({
       if (!state.image) return;
       state.image.instances = action.payload.instances;
     },
+    setImageName(state: State, action: PayloadAction<{ name: string }>) {
+      if (!state.image) return;
+
+      state.image.name = action.payload.name;
+    },
     setInvertMode(
       state: State,
       action: PayloadAction<{ invertMode: boolean }>
@@ -202,6 +207,7 @@ export const {
   setHue,
   setImage,
   setImageInstances,
+  setImageName,
   setInvertMode,
   setLanguage,
   setOperation,

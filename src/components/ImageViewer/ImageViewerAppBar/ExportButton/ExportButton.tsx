@@ -39,7 +39,10 @@ export const ExportButton = () => {
 
     const blob = new Blob(blobParts, options);
 
-    saveAs(blob, "foo.json");
+    const name =
+      image.name.substr(0, image.name.lastIndexOf(".")) || image.name;
+
+    saveAs(blob, `${name}.json`);
   };
 
   const t = useTranslation();

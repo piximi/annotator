@@ -21,7 +21,7 @@ export const ExampleImageDialog = ({
 
   const examples = [
     {
-      name: "Microscopy",
+      name: "example.png",
       description:
         "Fusce lectus lorem, lacinia eu libero eu, pellentesque semper dui. Nunc bibendum est eget lacus fermentum ullamcorper.",
       data: malaria,

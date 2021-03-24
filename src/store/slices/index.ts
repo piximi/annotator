@@ -11,6 +11,7 @@ export {
   setHue,
   setImage,
   setImageInstances,
+  setImageName,
   setInvertMode,
   setLanguage,
   setOperation,

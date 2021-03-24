@@ -16,7 +16,7 @@ import { Categories } from "../Categories";
 import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
 import { ZoomOptions } from "../ToolOptions/ZoomOptions";
-import { slice } from "../../../store";
+import { setImage, slice } from "../../../store";
 import { Content } from "../Content";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
@@ -45,6 +45,8 @@ import { MagneticAnnotationOptions } from "../ToolOptions/MagneticAnnotationOpti
 import { ColorAnnotationOptions } from "../ToolOptions/ColorAnnotationOptions";
 import { QuickAnnotationOptions } from "../ToolOptions/QuickAnnotationOptions";
 import { ObjectAnnotationOptions } from "../ToolOptions/ObjectAnnotationOptions";
+import * as ImageJS from "image-js";
+import { Shape } from "../../../types/Shape";
 
 type ImageViewerProps = {
   image?: Image;
@@ -195,9 +197,37 @@ export const ImageViewer = (props: ImageViewerProps) => {
   const onDrop = useCallback(
     (item) => {
       if (item) {
-        const files = item.files;
+        const file = item.files[0];
 
-        setDropped(files);
+        const reader = new FileReader();
+
+        reader.onload = async (event: ProgressEvent<FileReader>) => {};
+
+        file.arrayBuffer().then((buffer: any) => {
+          ImageJS.Image.load(buffer).then((image) => {
+            const name = file.name;
+
+            const shape: Shape = {
+              r: image.height,
+              c: image.width,
+              channels: 4,
+            };
+
+            dispatch(
+              setImage({
+                image: {
+                  id: "",
+                  instances: [],
+                  name: name,
+                  shape: shape,
+                  src: image.toDataURL(),
+                },
+              })
+            );
+          });
+        });
+
+        reader.readAsDataURL(file);
       }
     },
     [setDropped]

@@ -7,6 +7,8 @@ import { store } from "./store";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import "./i18n";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 Sentry.init({
   dsn:
@@ -19,7 +21,9 @@ Sentry.init({
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ImageViewer />
+      <DndProvider backend={HTML5Backend}>
+        <ImageViewer />
+      </DndProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

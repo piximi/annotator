@@ -21,9 +21,9 @@ export const ExampleImageDialog = ({
 
   const examples = [
     {
-      name: "example.png",
+      name: "malaria.png",
       description:
-        "Fusce lectus lorem, lacinia eu libero eu, pellentesque semper dui. Nunc bibendum est eget lacus fermentum ullamcorper.",
+        "Blood cells infected by malaria and stained with Giemsa reagent. Image from the Broad Bioimage Benchmark Collection, image set BBBC041v1.",
       data: malaria,
     },
   ];

@@ -20,6 +20,18 @@ const initialState: State = {
       name: "Unknown",
       visible: true,
     },
+    {
+      color: "#a08cd2",
+      id: "00000000-0000-0000-0000-000000000001",
+      name: "Cell membrane",
+      visible: true,
+    },
+    {
+      color: "#b8ddf3",
+      id: "00000000-0000-0000-0000-000000000002",
+      name: "Cell nucleus",
+      visible: true,
+    },
   ],
   contrast: 0,
   exposure: 0,

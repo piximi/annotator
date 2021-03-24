@@ -83,6 +83,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const escapePress = useKeyPress("Escape");
   const shiftPress = useKeyPress("Shift");
 
+  const [zooming, setZooming] = useState<boolean>(false);
+
   const deselectAnnotation = () => {
     if (!annotationTool) return;
 
@@ -110,6 +112,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const onClick = (event: KonvaEventObject<MouseEvent>) => {
     switch (toolType) {
       case ToolType.Zoom:
+        if (zooming) return;
         onZoomClick(event);
     }
   };
@@ -380,6 +383,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (toolType === ToolType.Zoom) {
         zoomTool?.onMouseDown(relative);
+        setZooming(false);
       } else {
         annotationTool.onMouseDown(relative);
       }
@@ -402,6 +406,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (toolType === ToolType.Zoom) {
         zoomTool?.onMouseMove(relative);
+        setZooming(true);
       } else {
         annotationTool.onMouseMove(relative);
       }

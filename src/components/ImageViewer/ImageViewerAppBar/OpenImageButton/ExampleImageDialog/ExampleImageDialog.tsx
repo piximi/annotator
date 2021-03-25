@@ -42,7 +42,7 @@ export const ExampleImageDialog = ({
     const shape: Shape = {
       r: 1200,
       c: 1600,
-      channels: 4,
+      channels: 3,
     };
 
     dispatch(

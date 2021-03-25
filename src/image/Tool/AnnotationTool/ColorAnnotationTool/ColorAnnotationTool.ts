@@ -41,9 +41,12 @@ export class ColorAnnotationTool extends AnnotationTool {
     this.tolerance = 1;
     this.initialPosition = position;
     this.toolTipPosition = position;
+
+    const { x, y } = this.toImageSpace(position);
+
     this.toleranceMap = makeFloodMap({
-      x: Math.floor(position.x),
-      y: Math.floor(position.y),
+      x,
+      y,
       image: this.image!,
       width: this.stageWidth,
     });
@@ -162,6 +165,8 @@ export class ColorAnnotationTool extends AnnotationTool {
     );
     let roi = overlay.getRoiManager();
 
+    if (!this.stageWidth) return;
+
     // Use the watershed function with a single seed to determine the selected region.
     // @ts-ignore
     roi.fromWaterShed({
@@ -173,9 +178,11 @@ export class ColorAnnotationTool extends AnnotationTool {
   };
 
   private updateOverlay(position: { x: number; y: number }) {
+    const { x, y } = this.toImageSpace(position);
+
     const roi = this.fromFlood({
-      x: Math.floor(position.x),
-      y: Math.floor(position.y),
+      x: x,
+      y: y,
       image: this.toleranceMap!,
       tolerance: this.tolerance,
     });
@@ -188,12 +195,41 @@ export class ColorAnnotationTool extends AnnotationTool {
     if (!this.roiMask) return;
 
     // @ts-ignore
-    this.offset = { x: this.roiMask.position[0], y: this.roiMask.position[1] };
+    this.offset = this.toStageSpace({
+      x: this.roiMask.position[0],
+      y: this.roiMask.position[1],
+    });
+    console.info(this.offset);
 
     this.overlayData = ColorAnnotationTool.colorOverlay(
       this.roiMask,
-      position,
+      { x, y },
       "red"
     );
+  }
+
+  /**
+   * From coordinates in stage to coordinates in image space
+   */
+  private toImageSpace(position: { x: number; y: number }) {
+    if (!this.stageWidth) return position;
+
+    const x_im = Math.floor((position.x * this.image.width) / this.stageWidth);
+    const y_im = Math.floor((position.y * this.image.height) / this.stageWidth);
+
+    return { x: x_im, y: y_im };
+  }
+
+  private toStageSpace(position: { x: number; y: number }) {
+    if (!this.stageWidth) return position;
+
+    const x_stage = Math.floor(
+      (position.x * this.stageWidth) / this.image.width
+    );
+    const y_stage = Math.floor(
+      (position.y * this.stageWidth) / this.image.height
+    );
+
+    return { x: x_stage, y: y_stage };
   }
 }

@@ -27,16 +27,27 @@ import { Tool } from "../../../../../../image/Tool";
 
 type SelectionProps = {
   scale: number;
+  stageScale: { x: number; y: number };
   tool?: Tool;
   toolType?: ToolType;
 };
 
-export const Selection = ({ scale, tool, toolType }: SelectionProps) => {
+export const Selection = ({
+  scale,
+  stageScale,
+  tool,
+  toolType,
+}: SelectionProps) => {
   if (!toolType || !tool) return <React.Fragment />;
 
   switch (toolType) {
     case ToolType.ColorAnnotation:
-      return <ColorSelection operator={tool as ColorAnnotationTool} />;
+      return (
+        <ColorSelection
+          operator={tool as ColorAnnotationTool}
+          stageScale={stageScale}
+        />
+      );
     case ToolType.EllipticalAnnotation:
       return (
         <EllipticalSelection

@@ -8,9 +8,10 @@ import { Tool } from "../../../../../image/Tool";
 type SelectingProps = {
   tool: Tool;
   scale: number;
+  stageScale: { x: number; y: number };
 };
 
-export const Selecting = ({ scale, tool }: SelectingProps) => {
+export const Selecting = ({ scale, stageScale, tool }: SelectingProps) => {
   const annotated = useSelector(annotatedSelector);
 
   const toolType = useSelector(toolTypeSelector);
@@ -19,7 +20,12 @@ export const Selecting = ({ scale, tool }: SelectingProps) => {
 
   return (
     <React.Fragment>
-      <Selection scale={scale} tool={tool} toolType={toolType} />
+      <Selection
+        scale={scale}
+        stageScale={stageScale}
+        tool={tool}
+        toolType={toolType}
+      />
     </React.Fragment>
   );
 };

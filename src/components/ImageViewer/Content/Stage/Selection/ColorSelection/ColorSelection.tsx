@@ -4,15 +4,21 @@ import React, { useEffect, useState } from "react";
 
 type ColorSelectionProps = {
   operator: ColorAnnotationTool;
+  stageScale: { x: number; y: number };
 };
 
-export const ColorSelection = ({ operator }: ColorSelectionProps) => {
+export const ColorSelection = ({
+  operator,
+  stageScale,
+}: ColorSelectionProps) => {
   const [image, setImage] = useState<HTMLImageElement>();
 
   useEffect(() => {
     const image = new Image();
     image.src = operator.overlayData;
     setImage(image);
+    console.info(image.width);
+    console.info(image.height);
   }, [operator.overlayData]);
 
   if (!operator.overlayData || !operator.offset) return null;
@@ -23,6 +29,8 @@ export const ColorSelection = ({ operator }: ColorSelectionProps) => {
         image={image}
         x={operator.offset.x}
         y={operator.offset.y}
+        scaleX={stageScale.x}
+        scaleY={stageScale.y}
       />
     </ReactKonva.Group>
   );

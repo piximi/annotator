@@ -581,7 +581,14 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                 stageHeight={stageWidth}
               />
 
-              <Selecting scale={zoomTool ? zoomTool.scale : 1} tool={tool!} />
+              <Selecting
+                scale={zoomTool ? zoomTool.scale : 1}
+                stageScale={{
+                  x: stageWidth / imageWidth,
+                  y: stageWidth / imageHeight,
+                }}
+                tool={tool!}
+              />
 
               {annotated && annotationTool && annotationTool.contour && (
                 <SelectedContour

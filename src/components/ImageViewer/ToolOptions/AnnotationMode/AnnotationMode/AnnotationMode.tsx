@@ -26,7 +26,13 @@ export const AnnotationMode = () => {
     const payload = {
       selectionMode: parseInt((event.target as HTMLInputElement).value),
     };
+    dispatch(slice.actions.setSelectionMode(payload));
+  };
 
+  const onClickLabel = (event: any, mode: SelectionMode) => {
+    const payload = {
+      selectionMode: mode,
+    };
     dispatch(slice.actions.setSelectionMode(payload));
   };
 
@@ -46,7 +52,11 @@ export const AnnotationMode = () => {
         }
       >
         <NewTooltip>
-          <ListItem button dense>
+          <ListItem
+            button
+            dense
+            onClick={(event) => onClickLabel(event, SelectionMode.New)}
+          >
             <ListItemIcon>
               <Radio
                 disableRipple
@@ -63,7 +73,11 @@ export const AnnotationMode = () => {
         </NewTooltip>
 
         <AddTooltip>
-          <ListItem button dense>
+          <ListItem
+            button
+            dense
+            onClick={(event) => onClickLabel(event, SelectionMode.Add)}
+          >
             <ListItemIcon>
               <Radio
                 disableRipple
@@ -80,7 +94,11 @@ export const AnnotationMode = () => {
         </AddTooltip>
 
         <SubtractTooltip>
-          <ListItem button dense>
+          <ListItem
+            button
+            dense
+            onClick={(event) => onClickLabel(event, SelectionMode.Subtract)}
+          >
             <ListItemIcon>
               <Radio
                 disableRipple
@@ -97,7 +115,11 @@ export const AnnotationMode = () => {
         </SubtractTooltip>
 
         <IntersectionTooltip>
-          <ListItem button dense>
+          <ListItem
+            button
+            dense
+            onClick={(event) => onClickLabel(event, SelectionMode.Intersect)}
+          >
             <ListItemIcon>
               <Radio
                 disableRipple

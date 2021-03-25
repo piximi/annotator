@@ -5,19 +5,21 @@ import Konva from "konva";
 
 type ImageProps = {
   src: string;
+  stageHeight: number;
+  stageWidth: number;
 };
 
 export const Image = React.forwardRef<Konva.Image, ImageProps>(
-  ({ src }, ref) => {
+  ({ src, stageHeight, stageWidth }, ref) => {
     const [image] = useImage(src, "Anonymous");
 
-    const [height, setHeight] = useState<number>(512);
-    const [width, setWidth] = useState<number>(512);
+    const [height, setHeight] = useState<number>(stageHeight);
+    const [width, setWidth] = useState<number>(stageWidth);
 
     useEffect(() => {
       if (!image) return;
 
-      setHeight(512 * (image.height / image.width));
+      setHeight(stageHeight * (image.height / image.width));
     });
 
     return (

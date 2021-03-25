@@ -549,6 +549,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       {({ store }) => (
         <ReactKonva.Stage
           className={classes.stage}
+          draggable
           globalCompositeOperation="destination-over"
           height={512}
           onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
@@ -571,7 +572,12 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
               onMouseMove={onMouseMove}
               onMouseUp={onMouseUp}
             >
-              <Image ref={imageRef} src={src} />
+              <Image
+                ref={imageRef}
+                src={src}
+                stageWidth={512}
+                stageHeight={512}
+              />
 
               <Selecting scale={zoomTool ? zoomTool.scale : 1} tool={tool!} />
 

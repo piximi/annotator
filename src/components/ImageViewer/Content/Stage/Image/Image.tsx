@@ -1,5 +1,5 @@
 import * as ReactKonva from "react-konva";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useImage from "use-image";
 import Konva from "konva";
 
@@ -11,13 +11,22 @@ export const Image = React.forwardRef<Konva.Image, ImageProps>(
   ({ src }, ref) => {
     const [image] = useImage(src, "Anonymous");
 
+    const [height, setHeight] = useState<number>(512);
+    const [width, setWidth] = useState<number>(512);
+
+    useEffect(() => {
+      if (!image) return;
+
+      setHeight(512 * (image.height / image.width));
+    });
+
     return (
       <ReactKonva.Image
-        ref={ref}
+        height={height}
         image={image}
         position={{ x: 0, y: 0 }}
-        width={512}
-        height={512}
+        ref={ref}
+        width={width}
       />
     );
   }

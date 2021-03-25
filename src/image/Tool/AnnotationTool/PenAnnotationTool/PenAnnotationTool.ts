@@ -112,8 +112,12 @@ export class PenAnnotationTool extends AnnotationTool {
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
   }
 
-  static async setup(image: ImageJS.Image, brushSize: number) {
-    const operator = new PenAnnotationTool(image);
+  static async setup(
+    image: ImageJS.Image,
+    brushSize: number,
+    stageWidth: number
+  ) {
+    const operator = new PenAnnotationTool(image, stageWidth);
 
     operator.brushSize = brushSize;
 

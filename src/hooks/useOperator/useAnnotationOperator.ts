@@ -41,7 +41,7 @@ export const useAnnotationOperator = (src: string, stageWidth: number) => {
 
           return;
         case ToolType.ObjectAnnotation:
-          ObjectAnnotationTool.compile(image).then(
+          ObjectAnnotationTool.compile(image, stageWidth).then(
             (operator: ObjectAnnotationTool) => {
               setOperator(operator);
             }
@@ -49,7 +49,7 @@ export const useAnnotationOperator = (src: string, stageWidth: number) => {
 
           return;
         case ToolType.PenAnnotation:
-          PenAnnotationTool.setup(image, 8).then(
+          PenAnnotationTool.setup(image, 8, stageWidth).then(
             (operator: PenAnnotationTool) => {
               setOperator(operator);
             }

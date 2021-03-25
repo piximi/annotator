@@ -377,9 +377,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!position) return;
 
+      console.info(`position: ${position.x}, ${positiongit.y}`);
+
       const relative = getRelativePointerPosition(position);
 
       if (!relative) return;
+
+      console.info(`relative: ${relative.x}, ${relative.y}`);
 
       if (toolType === ToolType.Zoom) {
         zoomTool?.onMouseDown(relative);
@@ -551,7 +555,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
           className={classes.stage}
           draggable
           globalCompositeOperation="destination-over"
-          height={512}
+          height={1000}
           onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
             event.evt.preventDefault();
           }}
@@ -562,7 +566,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
             x: zoomTool ? zoomTool.scale : 1,
             y: zoomTool ? zoomTool.scale : 1,
           }}
-          width={512}
+          width={1000}
           x={zoomTool ? zoomTool.x : 0}
           y={zoomTool ? zoomTool.y : 0}
         >
@@ -575,8 +579,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
               <Image
                 ref={imageRef}
                 src={src}
-                stageWidth={512}
-                stageHeight={512}
+                stageWidth={1000}
+                stageHeight={1000}
               />
 
               <Selecting scale={zoomTool ? zoomTool.scale : 1} tool={tool!} />

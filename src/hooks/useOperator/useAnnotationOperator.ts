@@ -37,7 +37,7 @@ export const useAnnotationOperator = (src: string, stageWidth: number) => {
 
           return;
         case ToolType.MagneticAnnotation:
-          setOperator(new MagneticAnnotationTool(image, stageWidth));
+          setOperator(new MagneticAnnotationTool(image, 0.5, stageWidth));
 
           return;
         case ToolType.ObjectAnnotation:
@@ -61,7 +61,10 @@ export const useAnnotationOperator = (src: string, stageWidth: number) => {
 
           return;
         case ToolType.QuickAnnotation:
-          const quickSelectionOperator = QuickAnnotationTool.setup(image);
+          const quickSelectionOperator = QuickAnnotationTool.setup(
+            image,
+            stageWidth
+          );
           setOperator(quickSelectionOperator);
 
           return;

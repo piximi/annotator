@@ -188,8 +188,8 @@ export class QuickAnnotationTool extends AnnotationTool {
     });
   }
 
-  static setup(image: ImageJS.Image) {
-    const instance = new QuickAnnotationTool(image);
+  static setup(image: ImageJS.Image, stageWidth: number) {
+    const instance = new QuickAnnotationTool(image, stageWidth);
 
     const { count, map, superpixels } = instance.filter();
 

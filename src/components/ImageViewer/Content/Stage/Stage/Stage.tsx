@@ -377,13 +377,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       if (!position) return;
 
-      console.info(`position: ${position.x}, ${positiongit.y}`);
-
       const relative = getRelativePointerPosition(position);
 
       if (!relative) return;
-
-      console.info(`relative: ${relative.x}, ${relative.y}`);
 
       if (toolType === ToolType.Zoom) {
         zoomTool?.onMouseDown(relative);

@@ -3,6 +3,7 @@ import { ZoomMode } from "../../../types/ZoomMode";
 import * as _ from "lodash";
 import numeral from "numeral";
 import { KonvaEventObject } from "konva/types/Node";
+import * as ImageJS from "image-js";
 
 export class ZoomTool extends Tool {
   /**
@@ -24,7 +25,15 @@ export class ZoomTool extends Tool {
 
   selected = false;
 
+  stageWidth?: number = 1;
+
   private scales: Array<number> = [0.25, 0.75, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
+
+  constructor(image: ImageJS.Image, stageWidth: number) {
+    super(image);
+
+    this.stageWidth = stageWidth;
+  }
 
   get percentile(): string {
     return numeral(this.scale).format("0%");
@@ -72,11 +81,13 @@ export class ZoomTool extends Tool {
     if (this.selected || !this.zooming || !this.minimum || !this.maximum)
       return;
 
+    if (!this.stageWidth) return;
+
     if (this.mode === ZoomMode.In) {
       this.maximum = position;
 
       this.scale = Math.abs(
-        512 / (this.maximum.x - this.minimum.x) //FIXME let's try to not hardcode to 512 and instead read that value from somewhere
+        this.stageWidth / (this.maximum.x - this.minimum.x)
       );
 
       const x =

@@ -8,6 +8,7 @@ import { KonvaEventObject } from "konva/types/Node";
 export const useZoomOperator = (
   operation: ToolType,
   src: string,
+  stageWidth: number,
   zoomSettings: ZoomSettings
 ) => {
   const [operator, setOperator] = useState<ZoomTool>();
@@ -39,7 +40,7 @@ export const useZoomOperator = (
     if (operator) return;
 
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
-      setOperator(new ZoomTool(image));
+      setOperator(new ZoomTool(image, stageWidth));
     });
   }, [operation, src]);
 

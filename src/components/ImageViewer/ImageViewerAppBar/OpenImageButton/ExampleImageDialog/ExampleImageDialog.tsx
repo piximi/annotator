@@ -59,7 +59,7 @@ export const ExampleImageDialog = ({
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onClose={onClose}>
       <List component="div" role="list">
         {examples.map((example, index) => {
           return (

@@ -603,6 +603,10 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                 <SelectedContour
                   points={annotationTool.contour}
                   scale={zoomTool ? zoomTool.scale : 1}
+                  stageScale={{
+                    x: stagedImageShape.width / imageWidth,
+                    y: stagedImageShape.height / imageHeight,
+                  }}
                 />
               )}
 
@@ -615,6 +619,10 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                   <SelectedContour
                     points={selectedAnnotationRef.current.contour}
                     scale={zoomTool ? zoomTool.scale : 1}
+                    stageScale={{
+                      x: stagedImageShape.width / imageWidth,
+                      y: stagedImageShape.height / imageHeight,
+                    }}
                   />
                 )}
 

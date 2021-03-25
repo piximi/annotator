@@ -5,10 +5,17 @@ import { useMarchingAnts } from "../../../../../hooks";
 type SelectedContourProps = {
   points: Array<number>;
   scale: number;
+  stageScale: { x: number; y: number };
 };
 
-export const SelectedContour = ({ points, scale }: SelectedContourProps) => {
+export const SelectedContour = ({
+  points,
+  scale,
+  stageScale,
+}: SelectedContourProps) => {
   const dashOffset = useMarchingAnts();
+
+  if (!stageScale) return <React.Fragment />;
 
   return (
     <React.Fragment>
@@ -18,6 +25,8 @@ export const SelectedContour = ({ points, scale }: SelectedContourProps) => {
         points={points}
         stroke="black"
         strokeWidth={1 / scale}
+        scaleX={stageScale.x}
+        scaleY={stageScale.y}
       />
 
       <ReactKonva.Line
@@ -26,6 +35,8 @@ export const SelectedContour = ({ points, scale }: SelectedContourProps) => {
         points={points}
         stroke="white"
         strokeWidth={1 / scale}
+        scaleX={stageScale.x}
+        scaleY={stageScale.y}
       />
     </React.Fragment>
   );

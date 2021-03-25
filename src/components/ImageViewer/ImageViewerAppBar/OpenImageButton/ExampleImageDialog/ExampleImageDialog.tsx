@@ -40,8 +40,8 @@ export const ExampleImageDialog = ({
     onClose();
 
     const shape: Shape = {
-      r: 512,
-      c: 512,
+      r: 1200,
+      c: 1600,
       channels: 4,
     };
 

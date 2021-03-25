@@ -21,60 +21,88 @@ export const useAnnotationOperator = (src: string, stageWidth: number) => {
 
   const [operator, setOperator] = useState<AnnotationTool>();
 
+  const [image, setImage] = useState<ImageJS.Image>();
+
   useEffect(() => {
-    ImageJS.Image.load(src).then((image: ImageJS.Image) => {
-      switch (operation) {
-        case ToolType.ColorAnnotation:
-          setOperator(new ColorAnnotationTool(image, stageWidth));
+    // // PUT HERE
+    // const image = new Image();
+    //
+    // image.onload = () => {
+    //     const width = image.naturalWidth;
+    //     const height = image.naturalHeight;
+    //
+    //     const request = new Request(src);
+    //
+    //     fetch(request).then((response) => response.blob()).then((buffer) => {
+    //         const foo = new ImageJS.Image(width, height, buffer)
+    //         console.info(foo.toDataURL());
+    //     })
+    // };
+    //
+    // image.src = src;
 
-          return;
-        case ToolType.EllipticalAnnotation:
-          setOperator(new EllipticalAnnotationTool(image, stageWidth));
+    const loadImage = async () => {
+      const image = await ImageJS.Image.load(src);
+      setImage(image);
+    };
 
-          return;
-        case ToolType.LassoAnnotation:
-          setOperator(new LassoAnnotationTool(image, stageWidth));
+    loadImage();
+  }, [src]);
 
-          return;
-        case ToolType.MagneticAnnotation:
-          setOperator(new MagneticAnnotationTool(image, 0.5, stageWidth));
+  useEffect(() => {
+    if (!image) return;
 
-          return;
-        case ToolType.ObjectAnnotation:
-          ObjectAnnotationTool.compile(image, stageWidth).then(
-            (operator: ObjectAnnotationTool) => {
-              setOperator(operator);
-            }
-          );
+    switch (operation) {
+      case ToolType.ColorAnnotation:
+        setOperator(new ColorAnnotationTool(image, stageWidth));
 
-          return;
-        case ToolType.PenAnnotation:
-          PenAnnotationTool.setup(image, 8, stageWidth).then(
-            (operator: PenAnnotationTool) => {
-              setOperator(operator);
-            }
-          );
+        return;
+      case ToolType.EllipticalAnnotation:
+        setOperator(new EllipticalAnnotationTool(image, stageWidth));
 
-          return;
-        case ToolType.PolygonalAnnotation:
-          setOperator(new PolygonalAnnotationTool(image, stageWidth));
+        return;
+      case ToolType.LassoAnnotation:
+        setOperator(new LassoAnnotationTool(image, stageWidth));
 
-          return;
-        case ToolType.QuickAnnotation:
-          const quickSelectionOperator = QuickAnnotationTool.setup(
-            image,
-            stageWidth
-          );
-          setOperator(quickSelectionOperator);
+        return;
+      case ToolType.MagneticAnnotation:
+        setOperator(new MagneticAnnotationTool(image, 0.5, stageWidth));
 
-          return;
-        case ToolType.RectangularSelection:
-          setOperator(new RectangularAnnotationTool(image, stageWidth));
+        return;
+      case ToolType.ObjectAnnotation:
+        ObjectAnnotationTool.compile(image, stageWidth).then(
+          (operator: ObjectAnnotationTool) => {
+            setOperator(operator);
+          }
+        );
 
-          return;
-      }
-    });
-  }, [operation, src]);
+        return;
+      case ToolType.PenAnnotation:
+        PenAnnotationTool.setup(image, 8, stageWidth).then(
+          (operator: PenAnnotationTool) => {
+            setOperator(operator);
+          }
+        );
+
+        return;
+      case ToolType.PolygonalAnnotation:
+        setOperator(new PolygonalAnnotationTool(image, stageWidth));
+
+        return;
+      case ToolType.QuickAnnotation:
+        const quickSelectionOperator = QuickAnnotationTool.setup(
+          image,
+          stageWidth
+        );
+        setOperator(quickSelectionOperator);
+
+        return;
+      case ToolType.RectangularSelection:
+        setOperator(new RectangularAnnotationTool(image, stageWidth));
+
+        return;
+    }
+  }, [operation, image]);
 
   return [operator];
 };

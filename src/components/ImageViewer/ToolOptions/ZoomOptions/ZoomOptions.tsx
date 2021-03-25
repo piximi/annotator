@@ -33,6 +33,14 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
     );
   };
 
+  const onZoomModeClick = (event: any, mode: ZoomMode) => {
+    dispatch(
+      slice.actions.setZoomMode({
+        zoomMode: mode,
+      })
+    );
+  };
+
   const onCenterChange = () => {
     dispatch(
       slice.actions.setZoomAutomaticCentering({
@@ -59,7 +67,11 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
               <ListSubheader component="div">{t("Zoom mode")}</ListSubheader>
             }
           >
-            <ListItem button dense>
+            <ListItem
+              button
+              dense
+              onClick={(event) => onZoomModeClick(event, ZoomMode.In)}
+            >
               <ListItemIcon>
                 <Radio
                   disableRipple
@@ -74,7 +86,11 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
               <ListItemText primary={t("Zoom in")} />
             </ListItem>
 
-            <ListItem button dense>
+            <ListItem
+              button
+              dense
+              onClick={(event) => onZoomModeClick(event, ZoomMode.Out)}
+            >
               <ListItemIcon>
                 <Radio
                   disableRipple

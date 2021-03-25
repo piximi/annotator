@@ -48,7 +48,6 @@ export class ColorAnnotationTool extends AnnotationTool {
       x,
       y,
       image: this.image!,
-      width: this.stageWidth,
     });
 
     this.updateOverlay(position);

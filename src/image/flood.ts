@@ -51,12 +51,10 @@ export const makeFloodMap = ({
   x,
   y,
   image,
-  width,
 }: {
   x: number;
   y: number;
   image: ImageJS.Image;
-  width: number;
 }) => {
   // if (!image) {
   //   console.log("Error - No image");

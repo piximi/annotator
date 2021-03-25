@@ -34,7 +34,7 @@ export class ColorAnnotationTool extends AnnotationTool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    if (!this.stageWidth) return;
+    if (!this.stagedImageShape) return;
 
     this.annotated = false;
     this.annotating = true;
@@ -164,7 +164,7 @@ export class ColorAnnotationTool extends AnnotationTool {
     );
     let roi = overlay.getRoiManager();
 
-    if (!this.stageWidth) return;
+    if (!this.stagedImageShape) return;
 
     // Use the watershed function with a single seed to determine the selected region.
     // @ts-ignore
@@ -212,22 +212,26 @@ export class ColorAnnotationTool extends AnnotationTool {
    * From coordinates in stage to coordinates in image space
    */
   private toImageSpace(position: { x: number; y: number }) {
-    if (!this.stageWidth) return position;
+    if (!this.stagedImageShape) return position;
 
-    const x_im = Math.floor((position.x * this.image.width) / this.stageWidth);
-    const y_im = Math.floor((position.y * this.image.height) / this.stageWidth);
+    const x_im = Math.floor(
+      (position.x * this.image.width) / this.stagedImageShape.width
+    );
+    const y_im = Math.floor(
+      (position.y * this.image.height) / this.stagedImageShape.height
+    );
 
     return { x: x_im, y: y_im };
   }
 
   private toStageSpace(position: { x: number; y: number }) {
-    if (!this.stageWidth) return position;
+    if (!this.stagedImageShape) return position;
 
     const x_stage = Math.floor(
-      (position.x * this.stageWidth) / this.image.width
+      (position.x * this.stagedImageShape.width) / this.image.width
     );
     const y_stage = Math.floor(
-      (position.y * this.stageWidth) / this.image.height
+      (position.y * this.stagedImageShape.height) / this.image.height
     );
 
     return { x: x_stage, y: y_stage };

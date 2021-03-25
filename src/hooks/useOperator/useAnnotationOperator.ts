@@ -16,7 +16,10 @@ import {
 import { useSelector } from "react-redux";
 import { toolTypeSelector } from "../../store/selectors";
 
-export const useAnnotationOperator = (src: string, stageWidth: number) => {
+export const useAnnotationOperator = (
+  src: string,
+  stagedImageShape: { width: number; height: number }
+) => {
   const operation = useSelector(toolTypeSelector);
 
   const [operator, setOperator] = useState<AnnotationTool>();
@@ -54,23 +57,23 @@ export const useAnnotationOperator = (src: string, stageWidth: number) => {
 
     switch (operation) {
       case ToolType.ColorAnnotation:
-        setOperator(new ColorAnnotationTool(image, stageWidth));
+        setOperator(new ColorAnnotationTool(image, stagedImageShape));
 
         return;
       case ToolType.EllipticalAnnotation:
-        setOperator(new EllipticalAnnotationTool(image, stageWidth));
+        setOperator(new EllipticalAnnotationTool(image, stagedImageShape));
 
         return;
       case ToolType.LassoAnnotation:
-        setOperator(new LassoAnnotationTool(image, stageWidth));
+        setOperator(new LassoAnnotationTool(image, stagedImageShape));
 
         return;
       case ToolType.MagneticAnnotation:
-        setOperator(new MagneticAnnotationTool(image, 0.5, stageWidth));
+        setOperator(new MagneticAnnotationTool(image, 0.5, stagedImageShape));
 
         return;
       case ToolType.ObjectAnnotation:
-        ObjectAnnotationTool.compile(image, stageWidth).then(
+        ObjectAnnotationTool.compile(image, stagedImageShape).then(
           (operator: ObjectAnnotationTool) => {
             setOperator(operator);
           }
@@ -78,7 +81,7 @@ export const useAnnotationOperator = (src: string, stageWidth: number) => {
 
         return;
       case ToolType.PenAnnotation:
-        PenAnnotationTool.setup(image, 8, stageWidth).then(
+        PenAnnotationTool.setup(image, 8, stagedImageShape).then(
           (operator: PenAnnotationTool) => {
             setOperator(operator);
           }
@@ -86,19 +89,19 @@ export const useAnnotationOperator = (src: string, stageWidth: number) => {
 
         return;
       case ToolType.PolygonalAnnotation:
-        setOperator(new PolygonalAnnotationTool(image, stageWidth));
+        setOperator(new PolygonalAnnotationTool(image, stagedImageShape));
 
         return;
       case ToolType.QuickAnnotation:
         const quickSelectionOperator = QuickAnnotationTool.setup(
           image,
-          stageWidth
+          stagedImageShape
         );
         setOperator(quickSelectionOperator);
 
         return;
       case ToolType.RectangularSelection:
-        setOperator(new RectangularAnnotationTool(image, stageWidth));
+        setOperator(new RectangularAnnotationTool(image, stagedImageShape));
 
         return;
     }

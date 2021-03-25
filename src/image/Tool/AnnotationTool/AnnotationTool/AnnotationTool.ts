@@ -21,17 +21,20 @@ export abstract class AnnotationTool extends Tool {
   origin?: { x: number; y: number } = undefined;
   buffer?: Array<number> = [];
 
-  stageWidth?: number = undefined;
+  stagedImageShape?: { width: number; height: number } = undefined;
 
   protected _boundingBox?: [number, number, number, number];
   protected _contour?: Array<number>;
   protected _mask?: Array<number>;
 
-  constructor(image: ImageJS.Image, stageWidth: number) {
+  constructor(
+    image: ImageJS.Image,
+    stagedImageShape: { width: number; height: number }
+  ) {
     super(image);
 
     this.manager = image.getRoiManager();
-    this.stageWidth = stageWidth;
+    this.stagedImageShape = stagedImageShape;
   }
 
   /*

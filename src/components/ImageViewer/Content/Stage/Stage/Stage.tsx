@@ -64,8 +64,12 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const selectionMode = useSelector(selectionModeSelector);
 
   const stageWidth = 1000;
+  const [stagedImageShape, setStagedImageShape] = useState<{
+    width: number;
+    height: number;
+  }>({ width: 512, height: 512 });
 
-  const [annotationTool] = useAnnotationOperator(src, stageWidth);
+  const [annotationTool] = useAnnotationOperator(src, stagedImageShape);
 
   const [selecting, setSelecting] = useState<boolean>(false);
 
@@ -545,7 +549,12 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     setImageWidth(image.shape.c);
     setImageHeight(image.shape.r);
-  });
+
+    setStagedImageShape({
+      width: stageWidth,
+      height: Math.floor(stageWidth * (image.shape.r / image.shape.c)),
+    });
+  }, [image?.shape]);
 
   return (
     <ReactReduxContext.Consumer>
@@ -584,8 +593,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
               <Selecting
                 scale={zoomTool ? zoomTool.scale : 1}
                 stageScale={{
-                  x: stageWidth / imageWidth,
-                  y: stageWidth / imageHeight,
+                  x: stagedImageShape.width / imageWidth,
+                  y: stagedImageShape.height / imageHeight,
                 }}
                 tool={tool!}
               />

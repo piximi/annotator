@@ -63,7 +63,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const selectedAnnotationId = useSelector(selectedAnnotationSelector);
   const selectionMode = useSelector(selectionModeSelector);
 
-  const [annotationTool] = useAnnotationOperator(src);
+  const stageWidth = 1000;
+
+  const [annotationTool] = useAnnotationOperator(src, stageWidth);
 
   const [selecting, setSelecting] = useState<boolean>(false);
 
@@ -106,7 +108,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const { zoomTool, onZoomClick, onZoomWheel } = useZoomOperator(
     toolType,
     src,
-    1000,
+    stageWidth,
     zoomSettings
   );
 
@@ -551,7 +553,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
         <ReactKonva.Stage
           className={classes.stage}
           globalCompositeOperation="destination-over"
-          height={1000}
+          height={stageWidth}
           onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
             event.evt.preventDefault();
           }}
@@ -562,7 +564,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
             x: zoomTool ? zoomTool.scale : 1,
             y: zoomTool ? zoomTool.scale : 1,
           }}
-          width={1000}
+          width={stageWidth}
           x={zoomTool ? zoomTool.x : 0}
           y={zoomTool ? zoomTool.y : 0}
         >
@@ -575,8 +577,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
               <Image
                 ref={imageRef}
                 src={src}
-                stageWidth={1000}
-                stageHeight={1000}
+                stageWidth={stageWidth}
+                stageHeight={stageWidth}
               />
 
               <Selecting scale={zoomTool ? zoomTool.scale : 1} tool={tool!} />

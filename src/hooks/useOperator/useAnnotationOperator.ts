@@ -16,7 +16,7 @@ import {
 import { useSelector } from "react-redux";
 import { toolTypeSelector } from "../../store/selectors";
 
-export const useAnnotationOperator = (src: string) => {
+export const useAnnotationOperator = (src: string, stageWidth: number) => {
   const operation = useSelector(toolTypeSelector);
 
   const [operator, setOperator] = useState<AnnotationTool>();
@@ -25,19 +25,19 @@ export const useAnnotationOperator = (src: string) => {
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
       switch (operation) {
         case ToolType.ColorAnnotation:
-          setOperator(new ColorAnnotationTool(image));
+          setOperator(new ColorAnnotationTool(image, stageWidth));
 
           return;
         case ToolType.EllipticalAnnotation:
-          setOperator(new EllipticalAnnotationTool(image));
+          setOperator(new EllipticalAnnotationTool(image, stageWidth));
 
           return;
         case ToolType.LassoAnnotation:
-          setOperator(new LassoAnnotationTool(image));
+          setOperator(new LassoAnnotationTool(image, stageWidth));
 
           return;
         case ToolType.MagneticAnnotation:
-          setOperator(new MagneticAnnotationTool(image));
+          setOperator(new MagneticAnnotationTool(image, stageWidth));
 
           return;
         case ToolType.ObjectAnnotation:
@@ -57,7 +57,7 @@ export const useAnnotationOperator = (src: string) => {
 
           return;
         case ToolType.PolygonalAnnotation:
-          setOperator(new PolygonalAnnotationTool(image));
+          setOperator(new PolygonalAnnotationTool(image, stageWidth));
 
           return;
         case ToolType.QuickAnnotation:
@@ -66,7 +66,7 @@ export const useAnnotationOperator = (src: string) => {
 
           return;
         case ToolType.RectangularSelection:
-          setOperator(new RectangularAnnotationTool(image));
+          setOperator(new RectangularAnnotationTool(image, stageWidth));
 
           return;
       }

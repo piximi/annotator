@@ -34,6 +34,8 @@ export class ColorAnnotationTool extends AnnotationTool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
+    if (!this.stageWidth) return;
+
     this.annotated = false;
     this.annotating = true;
     this.tolerance = 1;
@@ -43,7 +45,9 @@ export class ColorAnnotationTool extends AnnotationTool {
       x: Math.floor(position.x),
       y: Math.floor(position.y),
       image: this.image!,
+      width: this.stageWidth,
     });
+
     this.updateOverlay(position);
   }
 

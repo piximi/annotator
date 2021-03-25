@@ -51,10 +51,12 @@ export const makeFloodMap = ({
   x,
   y,
   image,
+  width,
 }: {
   x: number;
   y: number;
   image: ImageJS.Image;
+  width: number;
 }) => {
   // if (!image) {
   //   console.log("Error - No image");
@@ -71,7 +73,10 @@ export const makeFloodMap = ({
 
   const tol: Array<number> = [];
 
-  const color = image.getPixelXY(x, y);
+  const color = image.getPixelXY(
+    Math.floor((x * image.width) / width),
+    Math.floor((y * image.height) / width)
+  );
 
   for (let i = 0; i < image.data.length; i += image.channels) {
     const red = Math.abs(image.data[i] - color[0]);

@@ -26,6 +26,7 @@ export const Image = React.forwardRef<Konva.Image, ImageProps>(
       <ReactKonva.Image
         height={height}
         image={image}
+        perfectDrawEnabled={false}
         position={{ x: 0, y: 0 }}
         ref={ref}
         width={width}

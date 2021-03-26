@@ -101,23 +101,12 @@ export class RectangularAnnotationTool extends AnnotationTool {
       origin.y = this.origin.y - height;
     }
 
-    // four edges of the rectangle
-    for (let x = 0; x < width; x++) {
-      points.push(Math.round(x + origin.x));
-      points.push(Math.round(origin.y));
-    }
-    for (let y = 0; y < height; y++) {
-      points.push(Math.round(origin.x + width - 1));
-      points.push(Math.round(y + origin.y));
-    }
-    for (let x = width - 1; x >= 0; x--) {
-      points.push(Math.round(x + origin.x));
-      points.push(Math.round(origin.y + height - 1));
-    }
-    for (let y = height - 1; y >= 0; y--) {
-      points.push(Math.round(origin.x));
-      points.push(Math.round(y + origin.y));
-    }
+    // add corners of the rectangle
+    const x1 = Math.round(origin.x);
+    const y1 = Math.round(origin.y);
+    const x2 = Math.round(origin.x + width);
+    const y2 = Math.round(origin.y + height);
+    points.push(...[x1, y1, x2, y1, x2, y2, x1, y2, x1, y1]);
 
     return points;
   }

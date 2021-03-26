@@ -21,7 +21,6 @@ import { languageSelector } from "../../../../../store/selectors/languageSelecto
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
 import { useStyles } from "./SettingsDialog.css";
 import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -72,7 +71,7 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
           <Grid item xs={6}>
             <Grid container>
               <Grid item xs={12}>
-                <Grid container xs={4}>
+                <Grid container item xs={4}>
                   <FormControl color="primary" fullWidth>
                     <InputLabel shrink id="settings-language">
                       Language

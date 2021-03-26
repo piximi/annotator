@@ -22,6 +22,7 @@ export const SelectedContour = ({
       <ReactKonva.Line
         dash={[4 / scale, 2 / scale]}
         dashOffset={-dashOffset}
+        id="selected"
         points={points}
         stroke="black"
         strokeWidth={1 / scale}

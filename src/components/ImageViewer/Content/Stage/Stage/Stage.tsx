@@ -303,7 +303,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       points: scaledContour,
     });
 
-    transformerRef.current.nodes([selectingRef.current]);
+    const node = stageRef.current.findOne("#selected");
+
+    if (!node) return;
+
+    transformerRef.current.nodes([node]);
 
     const layer = transformerRef.current.getLayer();
 

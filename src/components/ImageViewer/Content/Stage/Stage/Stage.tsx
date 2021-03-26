@@ -37,6 +37,10 @@ import { Tool } from "../../../../../image/Tool";
 import { ObjectAnnotationTool } from "../../../../../image/Tool";
 import { ColorAnnotationTool } from "../../../../../image/Tool";
 import { ColorAnnotationToolTip } from "../ColorAnnotationToolTip";
+import useSound from "use-sound";
+import createAnnotationSoundEffect from "../../../../../sounds/pop-up-on.mp3";
+import deleteAnnotationSoundEffect from "../../../../../sounds/pop-up-off.mp3";
+import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
 
 type StageProps = {
   category: Category;
@@ -95,6 +99,15 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const shiftPress = useKeyPress("Shift");
 
   const [zooming, setZooming] = useState<boolean>(false);
+
+  const [playCreateAnnotationSoundEffect] = useSound(
+    createAnnotationSoundEffect
+  );
+  const [playDeleteAnnotationSoundEffect] = useSound(
+    deleteAnnotationSoundEffect
+  );
+
+  const soundEnabled = useSelector(soundEnabledSelector);
 
   const deselectAnnotation = () => {
     if (!annotationTool) return;
@@ -488,6 +501,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       );
     }
 
+    if (soundEnabled) playCreateAnnotationSoundEffect();
+
     deselectAnnotation();
 
     selectedAnnotationRef.current = null;
@@ -518,6 +533,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
             id: selectedAnnotationId,
           })
         );
+
+        if (soundEnabled) playDeleteAnnotationSoundEffect();
 
         selectedAnnotationRef.current = null;
       }

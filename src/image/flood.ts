@@ -80,10 +80,7 @@ export const makeFloodMap = ({
     //gresycale
     for (let i = 0; i < image.data.length; i++) {
       const grey = Math.abs(image.data[i] - color[0]);
-      if (image.bitDepth === 16) tol.push(Math.floor(grey / 255));
-      else {
-        tol.push(grey);
-      }
+      tol.push(Math.floor((grey / image.maxValue) * 255));
     }
   }
 

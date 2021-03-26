@@ -3,7 +3,6 @@ import * as ImageJS from "image-js";
 import * as _ from "lodash";
 import { connectPoints } from "../../../imageHelper";
 import { encode } from "../../../rle";
-import { isoLines } from "marchingsquares";
 
 export class PenAnnotationTool extends AnnotationTool {
   brushSize: number = 8;
@@ -11,19 +10,6 @@ export class PenAnnotationTool extends AnnotationTool {
   buffer: Array<number> = [];
   outline: Array<number> = [];
   points: Array<number> = [];
-
-  computeBoundingBox(): [number, number, number, number] | undefined {
-    if (!this.outline) return undefined;
-
-    const pairs = _.chunk(this.outline, 2);
-
-    return [
-      Math.round(_.min(_.map(pairs, _.first))!),
-      Math.round(_.min(_.map(pairs, _.last))!),
-      Math.round(_.max(_.map(pairs, _.first))!),
-      Math.round(_.max(_.map(pairs, _.last))!),
-    ];
-  }
 
   computeCircleData(): Uint8Array | Uint8ClampedArray | undefined {
     const canvas = document.createElement("canvas");
@@ -86,15 +72,13 @@ export class PenAnnotationTool extends AnnotationTool {
 
     this.annotating = false;
 
-    this.points = this.buffer;
+    this.points = this.translateStagedPointsToImagePoints(this.buffer);
 
     this.computeCircleData();
 
     if (!this.circlesData) return [];
 
     this._mask = encode(this.circlesData);
-
-    if (!this.circlesData) return;
 
     const bar = _.map(
       _.chunk(this.circlesData, this.image.width),

@@ -51,7 +51,6 @@ export class ColorAnnotationTool extends AnnotationTool {
     });
 
     this.updateOverlay(position);
-    debugger;
   }
 
   onMouseMove(position: { x: number; y: number }) {

@@ -82,7 +82,7 @@ export const makeFloodMap = ({
       const grey = Math.abs(image.data[i] - color[0]);
       if (image.bitDepth === 16) tol.push(Math.floor(grey / 255));
       else {
-        tol.push(Math.floor(grey));
+        tol.push(grey);
       }
     }
   }

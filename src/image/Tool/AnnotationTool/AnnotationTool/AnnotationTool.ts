@@ -238,6 +238,38 @@ export abstract class AnnotationTool extends Tool {
 
   abstract onMouseUp(position: { x: number; y: number }): void;
 
+  /**
+   * From coordinates in the staged image to coordinates in image space
+   */
+  protected toImageSpace(position: { x: number; y: number }) {
+    if (!this.stagedImageShape) return position;
+
+    const x_im = Math.floor(
+      (position.x * this.image.width) / this.stagedImageShape.width
+    );
+    const y_im = Math.floor(
+      (position.y * this.image.height) / this.stagedImageShape.height
+    );
+
+    return { x: x_im, y: y_im };
+  }
+
+  /**
+   * From coordinates of the original image to the coordinates in the staged image
+   */
+  protected toStageSpace(position: { x: number; y: number }) {
+    if (!this.stagedImageShape) return position;
+
+    const x_stage = Math.floor(
+      (position.x * this.stagedImageShape.width) / this.image.width
+    );
+    const y_stage = Math.floor(
+      (position.y * this.stagedImageShape.height) / this.image.height
+    );
+
+    return { x: x_stage, y: y_stage };
+  }
+
   annotate(category: Category): void {
     if (!this.boundingBox || !this.contour || !this.mask) return;
 

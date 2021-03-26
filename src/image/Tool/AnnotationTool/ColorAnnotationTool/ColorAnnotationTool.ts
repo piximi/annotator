@@ -207,33 +207,4 @@ export class ColorAnnotationTool extends AnnotationTool {
       "red"
     );
   }
-
-  /**
-   * From coordinates in stage to coordinates in image space
-   */
-  private toImageSpace(position: { x: number; y: number }) {
-    if (!this.stagedImageShape) return position;
-
-    const x_im = Math.floor(
-      (position.x * this.image.width) / this.stagedImageShape.width
-    );
-    const y_im = Math.floor(
-      (position.y * this.image.height) / this.stagedImageShape.height
-    );
-
-    return { x: x_im, y: y_im };
-  }
-
-  private toStageSpace(position: { x: number; y: number }) {
-    if (!this.stagedImageShape) return position;
-
-    const x_stage = Math.floor(
-      (position.x * this.stagedImageShape.width) / this.image.width
-    );
-    const y_stage = Math.floor(
-      (position.y * this.stagedImageShape.height) / this.image.height
-    );
-
-    return { x: x_stage, y: y_stage };
-  }
 }

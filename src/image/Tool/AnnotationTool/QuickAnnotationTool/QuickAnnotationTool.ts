@@ -89,8 +89,12 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     if (!this.superpixels || !this.masks) return;
 
+    // get position in original image space coordinates
+    const translatedPosition = this.toImageSpace(position);
+
     const pixel =
-      Math.round(position.x) + Math.round(position.y) * this.image.width;
+      Math.round(translatedPosition.x) +
+      Math.round(translatedPosition.y) * this.image.width;
     const superpixel = this.superpixels[pixel];
 
     if (superpixel === this.currentSuperpixel) return; // don't draw superpixel mask if already on that superpixel

@@ -4,9 +4,13 @@ import React, { useEffect, useState } from "react";
 
 type QuickSelectionProps = {
   operator: QuickAnnotationTool;
+  stageScale: { x: number; y: number };
 };
 
-export const QuickSelection = ({ operator }: QuickSelectionProps) => {
+export const QuickSelection = ({
+  operator,
+  stageScale,
+}: QuickSelectionProps) => {
   const [image, setImage] = useState<HTMLImageElement>();
 
   useEffect(() => {
@@ -21,7 +25,11 @@ export const QuickSelection = ({ operator }: QuickSelectionProps) => {
 
   return (
     <ReactKonva.Group>
-      <ReactKonva.Image image={image} />
+      <ReactKonva.Image
+        image={image}
+        scaleX={stageScale.x}
+        scaleY={stageScale.y}
+      />
     </ReactKonva.Group>
   );
 };

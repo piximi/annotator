@@ -94,7 +94,12 @@ export const Selection = ({
     case ToolType.Zoom:
       return <ZoomSelection operator={tool as ZoomTool} scale={scale} />;
     case ToolType.QuickAnnotation:
-      return <QuickSelection operator={tool as QuickAnnotationTool} />;
+      return (
+        <QuickSelection
+          operator={tool as QuickAnnotationTool}
+          stageScale={stageScale}
+        />
+      );
     default:
       return <React.Fragment />;
   }

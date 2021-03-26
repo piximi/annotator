@@ -10,12 +10,13 @@ type ConfirmationProps = {
   annotationTool?: AnnotationTool;
   scale: number;
   selected: boolean;
+  stageScale: { x: number; y: number };
 };
 
 export const Confirmation = React.forwardRef<
   React.RefObject<Selection>,
   ConfirmationProps
->(({ annotationTool, scale, selected }, ref) => {
+>(({ annotationTool, scale, selected, stageScale }, ref) => {
   const selectionMode = useSelector(selectionModeSelector);
 
   const [points, setPoints] = useState<Array<number>>([]);
@@ -42,9 +43,21 @@ export const Confirmation = React.forwardRef<
 
   return (
     <React.Fragment>
-      {selected && <SelectedContour points={points} scale={scale} />}
+      {selected && (
+        <SelectedContour
+          points={points}
+          scale={scale}
+          stageScale={stageScale}
+        />
+      )}
 
-      {ref && <SelectedContour points={points} scale={scale} />}
+      {ref && (
+        <SelectedContour
+          points={points}
+          scale={scale}
+          stageScale={stageScale}
+        />
+      )}
     </React.Fragment>
   );
 });

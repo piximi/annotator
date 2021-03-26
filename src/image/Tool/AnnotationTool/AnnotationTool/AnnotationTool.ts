@@ -239,6 +239,19 @@ export abstract class AnnotationTool extends Tool {
   abstract onMouseUp(position: { x: number; y: number }): void;
 
   /**
+   * Convert the points in the staged image coordinates to actual image coordinates.
+   */
+  protected translateStagedPointsToImagePoints(points: Array<number>) {
+    const stagedPoints = _.chunk(points, 2);
+    return _.flatten(
+      _.map(stagedPoints, (el: Array<number>) => {
+        const imagePoints = this.toImageSpace({ x: el[0], y: el[1] });
+        return [imagePoints.x, imagePoints.y];
+      })
+    );
+  }
+
+  /**
    * From coordinates in the staged image to coordinates in image space
    */
   protected toImageSpace(position: { x: number; y: number }) {

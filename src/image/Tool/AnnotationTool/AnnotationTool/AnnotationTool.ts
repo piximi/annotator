@@ -166,9 +166,6 @@ export abstract class AnnotationTool extends Tool {
 
   get boundingBox(): [number, number, number, number] | undefined {
     return this._boundingBox;
-    // if (!this._contour) return undefined;
-    //
-    // return this.computeBoundingBoxFromContours(this._contour);
   }
 
   set boundingBox(

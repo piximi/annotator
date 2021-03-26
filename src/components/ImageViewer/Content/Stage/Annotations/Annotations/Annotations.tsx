@@ -8,9 +8,13 @@ import { AnnotationTool } from "../../../../../../image/Tool";
 
 type AnnotationsProps = {
   annotationTool?: AnnotationTool;
+  stageScale: { x: number; y: number };
 };
 
-export const Annotations = ({ annotationTool }: AnnotationsProps) => {
+export const Annotations = ({
+  annotationTool,
+  stageScale,
+}: AnnotationsProps) => {
   const annotations = useSelector(imageInstancesSelector);
 
   const visibleCategories = useSelector(visibleCategoriesSelector);
@@ -36,6 +40,7 @@ export const Annotations = ({ annotationTool }: AnnotationsProps) => {
           annotation={annotation}
           key={annotation.id}
           annotationTool={annotationTool}
+          stageScale={stageScale}
         />
       ))}
     </React.Fragment>

@@ -19,9 +19,14 @@ import { ToolType } from "../../../../../../types/ToolType";
 type AnnotationProps = {
   annotation: Selection;
   annotationTool?: AnnotationTool;
+  stageScale: { x: number; y: number };
 };
 
-export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
+export const Annotation = ({
+  annotation,
+  annotationTool,
+  stageScale,
+}: AnnotationProps) => {
   const ref = useRef<Konva.Line | null>(null);
 
   useEffect(() => {
@@ -68,6 +73,8 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       points={annotation.contour}
       ref={ref}
       strokeWidth={1}
+      scaleX={stageScale.x}
+      scaleY={stageScale.y}
     />
   );
 };

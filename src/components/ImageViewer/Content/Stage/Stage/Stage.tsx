@@ -626,7 +626,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                   />
                 )}
 
-              <Annotations annotationTool={annotationTool} />
+              <Annotations
+                annotationTool={annotationTool}
+                stageScale={{
+                  x: stagedImageShape.width / imageWidth,
+                  y: stagedImageShape.height / imageHeight,
+                }}
+              />
 
               <ReactKonva.Transformer ref={transformerRef} />
 

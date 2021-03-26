@@ -69,7 +69,7 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
     );
 
     const height = Math.floor(
-      (this.width * this.image.height) / this.stagedImageShape.height
+      (this.height * this.image.height) / this.stagedImageShape.height
     );
 
     const crop = this.image.crop({

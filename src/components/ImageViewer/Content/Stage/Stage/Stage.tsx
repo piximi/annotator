@@ -495,8 +495,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   useEffect(() => {
     if (
       toolType !== ToolType.PolygonalAnnotation &&
-      toolType !== ToolType.LassoAnnotation &&
-      toolType !== ToolType.MagneticAnnotation
+      toolType !== ToolType.LassoAnnotation
     )
       return;
 

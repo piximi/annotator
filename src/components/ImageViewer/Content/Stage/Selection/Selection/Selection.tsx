@@ -64,6 +64,7 @@ export const Selection = ({
         <MagneticSelection
           operator={tool as MagneticAnnotationTool}
           scale={scale}
+          stageScale={stageScale}
         />
       );
     case ToolType.ObjectAnnotation:

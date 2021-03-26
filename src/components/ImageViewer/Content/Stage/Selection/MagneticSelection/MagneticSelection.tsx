@@ -6,11 +6,13 @@ import { useMarchingAnts } from "../../../../../../hooks";
 type MagneticSelectionProps = {
   operator: MagneticAnnotationTool;
   scale: number;
+  stageScale: { x: number; y: number };
 };
 
 export const MagneticSelection = ({
   operator,
   scale,
+  stageScale,
 }: MagneticSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
@@ -42,6 +44,7 @@ export const MagneticSelection = ({
         points={operator.buffer}
         stroke="black"
         strokeWidth={1 / scale}
+        scale={stageScale}
       />
 
       <ReactKonva.Line
@@ -50,6 +53,7 @@ export const MagneticSelection = ({
         stroke="white"
         points={operator.buffer}
         strokeWidth={1 / scale}
+        scale={stageScale}
       />
     </ReactKonva.Group>
   );

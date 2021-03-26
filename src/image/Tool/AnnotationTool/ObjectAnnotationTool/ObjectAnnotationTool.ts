@@ -58,14 +58,23 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
   private async predict() {
     if (!this.image || !this.origin || !this.width || !this.height) return;
 
+    if (!this.stagedImageShape) return;
+
     this.annotating = false;
 
-    const width = Math.floor(this.width);
-    const height = Math.floor(this.height);
+    const origin = this.toImageSpace(this.origin);
+
+    const width = Math.floor(
+      (this.width * this.image.width) / this.stagedImageShape.width
+    );
+
+    const height = Math.floor(
+      (this.width * this.image.height) / this.stagedImageShape.height
+    );
 
     const crop = this.image.crop({
-      x: this.origin.x,
-      y: this.origin.y,
+      x: origin.x,
+      y: origin.y,
       width: width,
       height: height,
     });
@@ -94,8 +103,8 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
             .relu()
             .resizeBilinear([height, width])
             .pad([
-              [this.origin!.y, this.image.height - (this.origin!.y + height)],
-              [this.origin!.x, this.image.width - (this.origin!.x + width)],
+              [origin.y, this.image.height - (origin.y + height)],
+              [origin.x, this.image.width - (origin.x + width)],
               [0, 0],
             ]);
         }

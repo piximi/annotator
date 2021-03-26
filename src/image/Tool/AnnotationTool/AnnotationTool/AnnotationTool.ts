@@ -79,8 +79,7 @@ export abstract class AnnotationTool extends Tool {
 
     this.buffer.splice(anchorIndex, segment.length, ...segment);
 
-    this.points = this.buffer;
-    this._contour = this.points;
+    this._contour = this.translateStagedPointsToImagePoints(this.buffer);
     this._mask = this.computeMask();
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 

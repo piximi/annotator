@@ -30,7 +30,7 @@ export class LassoAnnotationTool extends AnnotationTool {
       this.annotated = true;
       this.annotating = false;
 
-      this.points = this.buffer;
+      this.points = this.translateStagedPointsToImagePoints(this.buffer);
 
       this._contour = this.points;
       this._mask = this.computeMask();
@@ -91,7 +91,7 @@ export class LassoAnnotationTool extends AnnotationTool {
       this.annotated = true;
       this.annotating = false;
 
-      this.points = this.buffer;
+      this.points = this.translateStagedPointsToImagePoints(this.buffer);
       this._contour = this.points;
 
       this._mask = this.computeMask();

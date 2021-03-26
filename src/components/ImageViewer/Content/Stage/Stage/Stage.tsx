@@ -73,6 +73,11 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
   const [selecting, setSelecting] = useState<boolean>(false);
 
+  const [currentPosition, setCurrentPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>();
+
   const [, update] = useReducer((x) => x + 1, 0);
 
   const dispatch = useDispatch();
@@ -413,8 +418,9 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
       const relative = getRelativePointerPosition(position);
 
-      if (!relative) return;
+      setCurrentPosition(relative);
 
+      if (!relative) return;
       if (toolType === ToolType.Zoom) {
         zoomTool?.onMouseMove(relative);
         setZooming(true);
@@ -602,6 +608,19 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                 }}
                 tool={tool!}
               />
+
+              {currentPosition &&
+                !annotationTool?.annotating &&
+                toolType === ToolType.PenAnnotation && (
+                  <ReactKonva.Circle
+                    radius={penSelectionBrushSize}
+                    x={currentPosition.x}
+                    y={currentPosition.y}
+                    stroke="grey"
+                    strokewidth={1}
+                    dash={[2, 2]}
+                  />
+                )}
 
               {annotated && annotationTool && annotationTool.contour && (
                 <SelectedContour

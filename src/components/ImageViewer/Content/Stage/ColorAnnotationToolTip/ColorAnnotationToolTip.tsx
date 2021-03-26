@@ -30,7 +30,7 @@ export const ColorAnnotationToolTip = ({
       return;
 
     setPosition(colorAnnotationTool.toolTipPosition);
-    setText(`Tolerance: ${colorAnnotationTool.tolerance}%`);
+    setText(`Tolerance: ${colorAnnotationTool.tolerance}`);
   }, [colorAnnotationTool?.toolTipPosition]);
 
   if (toolType !== ToolType.ColorAnnotation) return <React.Fragment />;
@@ -45,14 +45,26 @@ export const ColorAnnotationToolTip = ({
   if (!position) return <React.Fragment />;
 
   return (
-    <ReactKonva.Label position={position} opacity={0.75}>
-      <ReactKonva.Tag fill={"black"} />
-      <ReactKonva.Text
-        fill={"white"}
-        fontSize={12 / scale}
-        padding={5 / scale}
-        text={text}
+    <ReactKonva.Group>
+      <ReactKonva.Line
+        points={[
+          position.x,
+          position.y!,
+          colorAnnotationTool.initialPosition.x,
+          colorAnnotationTool.initialPosition.y,
+        ]}
+        strokeWidth={1}
+        stroke="white"
       />
-    </ReactKonva.Label>
+      <ReactKonva.Label position={position} opacity={0.75}>
+        <ReactKonva.Tag fill={"black"} />
+        <ReactKonva.Text
+          fill={"white"}
+          fontSize={12 / scale}
+          padding={5 / scale}
+          text={text}
+        />
+      </ReactKonva.Label>
+    </ReactKonva.Group>
   );
 };

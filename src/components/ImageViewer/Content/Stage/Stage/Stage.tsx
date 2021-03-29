@@ -667,8 +667,11 @@ export const Stage = ({ src }: StageProps) => {
                 {currentPosition &&
                   !annotationTool?.annotating &&
                   toolType === ToolType.PenAnnotation && (
-                    <ReactKonva.Circle
-                      radius={penSelectionBrushSize / zoomScale}
+                    <ReactKonva.Ellipse
+                      radiusX={
+                        (aspectRatio * penSelectionBrushSize) / zoomScale
+                      }
+                      radiusY={penSelectionBrushSize / zoomScale}
                       x={currentPosition.x}
                       y={currentPosition.y}
                       stroke="grey"

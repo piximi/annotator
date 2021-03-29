@@ -69,12 +69,8 @@ export const Stage = ({ src }: StageProps) => {
   const [stageWidth, setStageWidth] = useState<number>(1000);
   const [stageHeight, setStageHeight] = useState<number>(1000);
 
-  const [stagedImageShape, setStagedImageShape] = useState<{
-    width: number;
-    height: number;
-  }>({ width: 512, height: 512 });
-
-  const stagedImagePosition = { x: 100, y: 100 };
+  // const stagedImagePosition = { x: 100, y: 100 };
+  const stagedImagePosition = { x: 0, y: 0 };
 
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
@@ -83,7 +79,7 @@ export const Stage = ({ src }: StageProps) => {
   const [annotationTool] = useAnnotationOperator(
     src,
     stagedImagePosition,
-    stagedImageShape,
+    { width: stageWidth, height: stageHeight },
     zoomScale
   );
 
@@ -321,9 +317,12 @@ export const Stage = ({ src }: StageProps) => {
 
   useEffect(() => {
     if (!annotationTool) return;
-    annotationTool.stagedImageShape = stagedImageShape;
+    annotationTool.stagedImageShape = {
+      width: stageWidth,
+      height: stageHeight,
+    };
     annotationTool.stagedImagePosition = stagedImagePosition;
-  }, [stagedImageShape, annotationTool]);
+  }, [stageWidth, stageHeight, annotationTool]);
 
   useEffect(() => {
     if (!annotated) return;
@@ -429,6 +428,8 @@ export const Stage = ({ src }: StageProps) => {
       if (!annotationTool || !stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
+
+      console.info(position);
 
       if (!position) return;
 
@@ -611,10 +612,6 @@ export const Stage = ({ src }: StageProps) => {
     if (!parentDivRef || !parentDivRef.current) return;
     const parentDivWidth = parentDivRef.current.getBoundingClientRect().width;
     setZoomScale(parentDivWidth / 1000);
-    setStagedImageShape({
-      width: parentDivWidth,
-      height: Math.floor(parentDivWidth * aspectRatio),
-    });
     setStageWidth(parentDivWidth);
     setStageHeight(Math.floor(parentDivWidth * aspectRatio));
   };
@@ -663,8 +660,8 @@ export const Stage = ({ src }: StageProps) => {
                 <Selecting
                   scale={zoomScale}
                   stageScale={{
-                    x: stagedImageShape.width / imageWidth,
-                    y: stagedImageShape.height / imageHeight,
+                    x: stageWidth / imageWidth,
+                    y: stageHeight / imageHeight,
                   }}
                   tool={tool!}
                 />
@@ -691,8 +688,8 @@ export const Stage = ({ src }: StageProps) => {
                     points={annotationTool.contour}
                     scale={zoomScale}
                     stageScale={{
-                      x: stagedImageShape.width / imageWidth,
-                      y: stagedImageShape.height / imageHeight,
+                      x: stageWidth / imageWidth,
+                      y: stageHeight / imageHeight,
                     }}
                   />
                 )}
@@ -708,8 +705,8 @@ export const Stage = ({ src }: StageProps) => {
                       points={selectedAnnotationRef.current.contour}
                       scale={zoomScale}
                       stageScale={{
-                        x: stagedImageShape.width / imageWidth,
-                        y: stagedImageShape.height / imageHeight,
+                        x: stageWidth / imageWidth,
+                        y: stageHeight / imageHeight,
                       }}
                     />
                   )}
@@ -718,8 +715,8 @@ export const Stage = ({ src }: StageProps) => {
                   annotationTool={annotationTool}
                   imagePosition={stagedImagePosition}
                   stageScale={{
-                    x: stagedImageShape.width / imageWidth,
-                    y: stagedImageShape.height / imageHeight,
+                    x: stageWidth / imageWidth,
+                    y: stageHeight / imageHeight,
                   }}
                 />
 

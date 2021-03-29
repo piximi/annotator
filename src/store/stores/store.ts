@@ -7,12 +7,13 @@ import {
 import logger from "redux-logger";
 import { reducer } from "../reducer";
 import * as Sentry from "@sentry/react";
+import thunk from "redux-thunk";
 
 const sentryReduxEnhancer = Sentry.createReduxEnhancer({});
 
 const enhancers: StoreEnhancer[] = [sentryReduxEnhancer];
 
-const middleware: Middleware[] = [logger];
+const middleware: Middleware[] = [logger, thunk];
 
 const preloadedState = {};
 

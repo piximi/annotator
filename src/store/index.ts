@@ -24,3 +24,4 @@ export {
   slice,
 } from "./slices";
 export { store } from "./stores";
+export { echoThunk } from "./thunks";

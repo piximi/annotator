@@ -6,7 +6,7 @@ import { ImageViewerAppBar } from "../ImageViewerAppBar";
 import { CategoriesList } from "../CategoriesList";
 import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
-import { setImage, slice } from "../../../store";
+import { echoThunk, setImage, slice } from "../../../store";
 import { Content } from "../Content";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
@@ -20,6 +20,10 @@ type ImageViewerProps = {
 
 export const ImageViewer = (props: ImageViewerProps) => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(echoThunk("oops!"));
+  });
 
   useEffect(() => {
     if (props.image) {

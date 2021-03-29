@@ -73,6 +73,8 @@ export const Stage = ({ src }: StageProps) => {
     height: number;
   }>({ width: 512, height: 512 });
 
+  const [aspectRatio, setAspectRatio] = useState<number>(1);
+
   const [zoomScale, setZoomScale] = useState<number>(1);
 
   const [annotationTool] = useAnnotationOperator(
@@ -594,12 +596,20 @@ export const Stage = ({ src }: StageProps) => {
       width: stageWidth,
       height: Math.floor(stageWidth * (image.shape.r / image.shape.c)),
     });
+    setAspectRatio(image.shape.r / image.shape.c);
   }, [image?.shape]);
 
   useEffect(() => {
     const resize = () => {
       if (!parentDivRef || !parentDivRef.current) return;
-      console.info(parentDivRef.current.getBoundingClientRect().width);
+      const prevWidth = stageWidth;
+      const parentDivWidth = parentDivRef.current.getBoundingClientRect().width;
+      setStageWidth(parentDivWidth);
+      setZoomScale(parentDivWidth / prevWidth);
+      setStagedImageShape({
+        width: parentDivWidth,
+        height: Math.floor(parentDivWidth * aspectRatio),
+      });
     };
     window.addEventListener("resize", resize);
   }, []);

@@ -610,8 +610,8 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
           onWheel={onWheel}
           ref={stageRef}
           scale={{
-            x: zoomTool ? zoomTool.scale : 1,
-            y: zoomTool ? zoomTool.scale : 1,
+            x: zoomScale,
+            y: zoomScale,
           }}
           width={stageWidth}
           x={zoomTool ? zoomTool.x : 0}
@@ -631,7 +631,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
               />
 
               <Selecting
-                scale={zoomTool ? zoomTool.scale : 1}
+                scale={zoomScale}
                 stageScale={{
                   x: stagedImageShape.width / imageWidth,
                   y: stagedImageShape.height / imageHeight,
@@ -655,7 +655,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
               {annotated && annotationTool && annotationTool.contour && (
                 <SelectedContour
                   points={annotationTool.contour}
-                  scale={zoomTool ? zoomTool.scale : 1}
+                  scale={zoomScale}
                   stageScale={{
                     x: stagedImageShape.width / imageWidth,
                     y: stagedImageShape.height / imageHeight,
@@ -671,7 +671,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                 selectedAnnotationRef.current && (
                   <SelectedContour
                     points={selectedAnnotationRef.current.contour}
-                    scale={zoomTool ? zoomTool.scale : 1}
+                    scale={zoomScale}
                     stageScale={{
                       x: stagedImageShape.width / imageWidth,
                       y: stagedImageShape.height / imageHeight,
@@ -691,7 +691,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
               <ColorAnnotationToolTip
                 colorAnnotationTool={annotationTool as ColorAnnotationTool}
-                scale={zoomTool ? zoomTool.scale : 1}
+                scale={zoomScale}
               />
             </ReactKonva.Layer>
           </Provider>

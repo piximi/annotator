@@ -599,21 +599,24 @@ export const Stage = ({ src }: StageProps) => {
     setImageHeight(image.shape.r);
 
     setAspectRatio(image.shape.r / image.shape.c);
-  }, [image, image?.shape]);
+
+    resize();
+  }, [image?.shape]);
+
+  const resize = () => {
+    if (!parentDivRef || !parentDivRef.current) return;
+    const parentDivWidth = parentDivRef.current.getBoundingClientRect().width;
+    setZoomScale(parentDivWidth / 1000);
+    setStagedImageShape({
+      width: parentDivWidth,
+      height: Math.floor(parentDivWidth * aspectRatio),
+    });
+    setStageWidth(parentDivWidth);
+    setStageHeight(Math.floor(parentDivWidth * aspectRatio));
+  };
 
   useEffect(() => {
-    const resize = () => {
-      if (!parentDivRef || !parentDivRef.current) return;
-      const prevWidth = stageWidth;
-      const parentDivWidth = parentDivRef.current.getBoundingClientRect().width;
-      setZoomScale(parentDivWidth / prevWidth);
-      setStagedImageShape({
-        width: parentDivWidth,
-        height: Math.floor(parentDivWidth * aspectRatio),
-      });
-      setStageWidth(parentDivWidth);
-      setStageHeight(Math.floor(parentDivWidth * aspectRatio));
-    };
+    resize();
     window.addEventListener("resize", resize);
   }, []);
 

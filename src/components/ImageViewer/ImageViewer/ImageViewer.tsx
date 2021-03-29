@@ -1,13 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Category } from "../../../types/Category";
 import { CssBaseline } from "@material-ui/core";
 import { Image } from "../../../types/Image";
 import { ToolType } from "../../../types/ToolType";
 import {
-  imageSelector,
   selectedCategroySelector,
   toolTypeSelector,
-  unknownCategroySelector,
   zoomSettingsSelector,
 } from "../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";

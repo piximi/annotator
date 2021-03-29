@@ -1,26 +1,28 @@
 import React, { useRef } from "react";
 import { Stage } from "../Stage";
-import { imageSelector } from "../../../../store/selectors";
+import {
+  imageSelector,
+  selectedCategroySelector,
+} from "../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
-import { Category } from "../../../../types/Category";
 import { useBoundingClientRect } from "../../../../hooks/useBoundingClientRect";
 import { NativeTypes } from "react-dnd-html5-backend";
-import { useDrop, DropTargetMonitor } from "react-dnd";
+import { DropTargetMonitor, useDrop } from "react-dnd";
 
 type ContentProps = {
-  category: Category;
   onDrop: (item: { files: any[] }) => void;
 };
 
-export const Content = ({ category, onDrop }: ContentProps) => {
+export const Content = ({ onDrop }: ContentProps) => {
   const ref = useRef<HTMLDivElement>(null);
-
   const boundingClientRect = useBoundingClientRect(ref);
+
+  const classes = useStyles();
 
   const image = useSelector(imageSelector);
 
-  const classes = useStyles();
+  const selectedCategory = useSelector(selectedCategroySelector);
 
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
@@ -45,7 +47,7 @@ export const Content = ({ category, onDrop }: ContentProps) => {
 
         <div className={classes.parent}>
           <Stage
-            category={category}
+            category={selectedCategory}
             height={boundingClientRect?.height}
             src={image!.src}
             width={boundingClientRect?.width}

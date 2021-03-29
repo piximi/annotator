@@ -233,7 +233,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
           }
         />
 
-        <Tools handleCollapse={handleCollapse} />
+        <Tools />
       </div>
     </ThemeProvider>
   );

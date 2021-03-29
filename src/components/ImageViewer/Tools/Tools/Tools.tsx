@@ -23,11 +23,7 @@ import {
 } from "../../../icons";
 import { useTranslation } from "../../../../hooks/useTranslation";
 
-type OperationsProps = {
-  handleCollapse: (b: boolean) => void;
-};
-
-export const Tools = ({ handleCollapse }: OperationsProps) => {
+export const Tools = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -55,7 +51,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
               operation: OperationType.Pointer,
             })
           );
-          handleCollapse(true);
         }}
         selected={activeOperation === OperationType.Pointer}
       >
@@ -73,7 +68,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
                 operation: OperationType.RectangularSelection,
               })
             );
-            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.RectangularSelection}
         >
@@ -88,7 +82,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
                 operation: OperationType.EllipticalAnnotation,
               })
             );
-            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.EllipticalAnnotation}
         >
@@ -103,7 +96,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
                 operation: OperationType.PenAnnotation,
               })
             );
-            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.PenAnnotation}
         >
@@ -118,7 +110,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
                 operation: OperationType.LassoAnnotation,
               })
             );
-            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.LassoAnnotation}
         >
@@ -133,7 +124,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
                 operation: OperationType.PolygonalAnnotation,
               })
             );
-            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.PolygonalAnnotation}
         >
@@ -148,7 +138,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
                 operation: OperationType.MagneticAnnotation,
               })
             );
-            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.MagneticAnnotation}
         >
@@ -163,7 +152,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
                 operation: OperationType.ColorAnnotation,
               })
             );
-            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.ColorAnnotation}
         >
@@ -178,7 +166,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
                 operation: OperationType.QuickAnnotation,
               })
             );
-            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.QuickAnnotation}
         >
@@ -193,7 +180,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
                 operation: OperationType.ObjectAnnotation,
               })
             );
-            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.ObjectAnnotation}
         >
@@ -210,7 +196,6 @@ export const Tools = ({ handleCollapse }: OperationsProps) => {
                 operation: OperationType.Zoom,
               })
             );
-            handleCollapse(true);
           }}
           selected={activeOperation === OperationType.Zoom}
         >

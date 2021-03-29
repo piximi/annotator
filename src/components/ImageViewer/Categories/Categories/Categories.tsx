@@ -6,7 +6,7 @@ import { Category } from "../../../../types/Category";
 import {
   createdCategoriesSelector,
   selectedCategroySelector,
-  unknownCategroySelector,
+  unknownCategorySelector,
 } from "../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Categories.css";
@@ -27,11 +27,9 @@ import { useDispatch } from "react-redux";
 export const Categories = () => {
   const classes = useStyles();
 
+  const createdCategories = useSelector(createdCategoriesSelector);
   const selectedCategory = useSelector(selectedCategroySelector);
-
-  const categories: Array<Category> = useSelector(createdCategoriesSelector);
-
-  const unknownCategory: Category = useSelector(unknownCategroySelector);
+  const unknownCategory = useSelector(unknownCategorySelector);
 
   const dispatch = useDispatch();
 
@@ -81,7 +79,7 @@ export const Categories = () => {
       <div className={classes.applicationDrawerHeader} />
 
       <CollapsibleList primary={t("Categories")}>
-        {categories.map((category: Category) => {
+        {createdCategories.map((category: Category) => {
           return (
             <div key={category.id}>
               <ListItem

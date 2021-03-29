@@ -12,6 +12,6 @@ export { saturationSelector } from "./saturationSelector";
 export { selectedCategroySelector } from "./selectedCategroySelector";
 export { selectionModeSelector } from "./selectionModeSelector";
 export { toolTypeSelector } from "./toolTypeSelector";
-export { unknownCategroySelector } from "./unknownCategroySelector";
+export { unknownCategorySelector } from "./unknownCategroySelector";
 export { vibranceSelector } from "./vibranceSelector";
 export { zoomSettingsSelector } from "./zoomSettingsSelector";

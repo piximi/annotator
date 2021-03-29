@@ -20,14 +20,14 @@ export const SelectedContour = ({
 
   if (!stageScale) return <React.Fragment />;
 
-  const stagedPoints: Array<number> = _.flatten(
-    _.map(_.chunk(points, 2), (coords: Array<number>) => {
-      return [
-        coords[0] + imagePosition.x / stageScale.x,
-        coords[1] + imagePosition.y / stageScale.y,
-      ];
-    })
-  );
+  // const stagedPoints: Array<number> = _.flatten(
+  //   _.map(_.chunk(points, 2), (coords: Array<number>) => {
+  //     return [
+  //       coords[0] * stageScale.x + imagePosition.x,
+  //       coords[1] * stageScale.y + imagePosition.y
+  //     ];
+  //   })
+  // );
 
   return (
     <React.Fragment>
@@ -35,7 +35,8 @@ export const SelectedContour = ({
         dash={[4 / scale, 2 / scale]}
         dashOffset={-dashOffset}
         id="selected"
-        points={stagedPoints}
+        offset={imagePosition}
+        points={points}
         stroke="black"
         strokeWidth={1 / scale}
         scaleX={stageScale.x}
@@ -45,7 +46,8 @@ export const SelectedContour = ({
       <ReactKonva.Line
         dash={[4 / scale, 2 / scale]}
         dashOffset={-dashOffset}
-        points={stagedPoints}
+        offset={imagePosition}
+        points={points}
         stroke="white"
         strokeWidth={1 / scale}
         scaleX={stageScale.x}

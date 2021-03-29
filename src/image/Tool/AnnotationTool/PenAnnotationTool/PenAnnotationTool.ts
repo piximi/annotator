@@ -60,9 +60,6 @@ export class PenAnnotationTool extends AnnotationTool {
     this.annotating = true;
 
     this.buffer = [...this.buffer, position.x, position.y];
-
-    console.info(position);
-    console.info(this.stagedImageShape);
   }
 
   onMouseMove(position: { x: number; y: number }) {

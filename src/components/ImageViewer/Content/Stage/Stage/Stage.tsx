@@ -79,7 +79,10 @@ export const Stage = ({ src }: StageProps) => {
   const [annotationTool] = useAnnotationOperator(
     src,
     stagedImagePosition,
-    { width: stageWidth, height: stageHeight },
+    {
+      width: stageWidth - stagedImagePosition.x,
+      height: stageHeight - stagedImagePosition.y,
+    },
     zoomScale
   );
 
@@ -318,8 +321,8 @@ export const Stage = ({ src }: StageProps) => {
   useEffect(() => {
     if (!annotationTool) return;
     annotationTool.stagedImageShape = {
-      width: stageWidth,
-      height: stageHeight,
+      width: stageWidth - stagedImagePosition.x,
+      height: stageHeight - stagedImagePosition.y,
     };
     annotationTool.stagedImagePosition = stagedImagePosition;
   }, [stageWidth, stageHeight, annotationTool]);
@@ -432,9 +435,6 @@ export const Stage = ({ src }: StageProps) => {
       if (!position) return;
 
       const relative = getRelativePointerPosition(position);
-
-      console.info(relative);
-      console.info(stageWidth);
 
       if (!relative) return;
 
@@ -689,8 +689,8 @@ export const Stage = ({ src }: StageProps) => {
                     points={annotationTool.contour}
                     scale={zoomScale}
                     stageScale={{
-                      x: stageWidth / imageWidth,
-                      y: stageHeight / imageHeight,
+                      x: (stageWidth - stagedImagePosition.x) / imageWidth,
+                      y: (stageHeight - stagedImagePosition.y) / imageHeight,
                     }}
                   />
                 )}
@@ -706,8 +706,8 @@ export const Stage = ({ src }: StageProps) => {
                       points={selectedAnnotationRef.current.contour}
                       scale={zoomScale}
                       stageScale={{
-                        x: stageWidth / imageWidth,
-                        y: stageHeight / imageHeight,
+                        x: (stageWidth - stagedImagePosition.x) / imageWidth,
+                        y: (stageHeight - stagedImagePosition.y) / imageHeight,
                       }}
                     />
                   )}

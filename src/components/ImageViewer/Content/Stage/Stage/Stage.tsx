@@ -597,12 +597,8 @@ export const Stage = ({ src }: StageProps) => {
     setImageWidth(image.shape.c);
     setImageHeight(image.shape.r);
 
-    // setStagedImageShape({
-    //   width: stageWidth,
-    //   height: Math.floor(stageWidth * (image.shape.r / image.shape.c)),
-    // });
     setAspectRatio(image.shape.r / image.shape.c);
-  }, [image?.shape]);
+  }, [image, image?.shape]);
 
   useEffect(() => {
     const resize = () => {

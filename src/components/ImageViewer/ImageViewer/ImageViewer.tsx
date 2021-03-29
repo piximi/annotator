@@ -13,6 +13,7 @@ import { useStyles } from "./ImageViewer.css";
 import { theme } from "./theme";
 import * as ImageJS from "image-js";
 import { Shape } from "../../../types/Shape";
+import { loadLayersModelThunk } from "../../../store/thunks";
 
 type ImageViewerProps = {
   image?: Image;
@@ -22,7 +23,10 @@ export const ImageViewer = (props: ImageViewerProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(echoThunk("oops!"));
+    const path =
+      "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
+
+    dispatch(loadLayersModelThunk({ name: "foo", path: path }));
   });
 
   useEffect(() => {

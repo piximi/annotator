@@ -73,7 +73,13 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     height: number;
   }>({ width: 512, height: 512 });
 
-  const [annotationTool] = useAnnotationOperator(src, stagedImageShape);
+  const [zoomScale, setZoomScale] = useState<number>(1);
+
+  const [annotationTool] = useAnnotationOperator(
+    src,
+    stagedImageShape,
+    zoomScale
+  );
 
   const [selecting, setSelecting] = useState<boolean>(false);
 
@@ -148,6 +154,14 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
         onZoomWheel(event);
     }
   };
+
+  useEffect(() => {
+    if (toolType !== ToolType.Zoom) return;
+
+    if (!zoomTool || !zoomTool.scale) return;
+
+    setZoomScale(zoomTool.scale);
+  }, [zoomTool?.scale]);
 
   useEffect(() => {
     if (!selectedAnnotationId || !annotationTool) return;
@@ -293,10 +307,10 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   });
 
   useEffect(() => {
-    if (toolType !== ToolType.PenAnnotation) return;
-
-    // @ts-ignore
-    annotationTool.brushSize = penSelectionBrushSize;
+    if (toolType === ToolType.PenAnnotation) {
+      // @ts-ignore
+      annotationTool.brushSize = penSelectionBrushSize / zoomScale;
+    }
   }, [penSelectionBrushSize]);
 
   useEffect(() => {
@@ -629,7 +643,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
                 !annotationTool?.annotating &&
                 toolType === ToolType.PenAnnotation && (
                   <ReactKonva.Circle
-                    radius={penSelectionBrushSize}
+                    radius={penSelectionBrushSize / zoomScale}
                     x={currentPosition.x}
                     y={currentPosition.y}
                     stroke="grey"

@@ -15,16 +15,20 @@ import {
 } from "../../image/Tool";
 import { useSelector } from "react-redux";
 import { toolTypeSelector } from "../../store/selectors";
+import { penSelectionBrushSizeSelector } from "../../store/selectors/penSelectionBrushSizeSelector";
 
 export const useAnnotationOperator = (
   src: string,
-  stagedImageShape: { width: number; height: number }
+  stagedImageShape: { width: number; height: number },
+  zoomScale?: number
 ) => {
   const operation = useSelector(toolTypeSelector);
 
   const [operator, setOperator] = useState<AnnotationTool>();
 
   const [image, setImage] = useState<ImageJS.Image>();
+
+  const brushSize = useSelector(penSelectionBrushSizeSelector);
 
   useEffect(() => {
     // // PUT HERE
@@ -81,11 +85,14 @@ export const useAnnotationOperator = (
 
         return;
       case ToolType.PenAnnotation:
-        PenAnnotationTool.setup(image, 8, stagedImageShape).then(
-          (operator: PenAnnotationTool) => {
-            setOperator(operator);
-          }
-        );
+        const scale = zoomScale ? zoomScale : 1;
+        PenAnnotationTool.setup(
+          image,
+          brushSize / scale,
+          stagedImageShape
+        ).then((operator: PenAnnotationTool) => {
+          setOperator(operator);
+        });
 
         return;
       case ToolType.PolygonalAnnotation:

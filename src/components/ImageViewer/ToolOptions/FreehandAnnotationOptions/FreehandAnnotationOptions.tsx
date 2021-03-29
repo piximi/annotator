@@ -42,6 +42,7 @@ export const FreehandAnnotationOptions = () => {
             secondary={
               <Slider
                 aria-labelledby="pen-selection-brush-size"
+                min={2}
                 onChange={onChange}
                 value={penSelectionBrushSizeBrushSize}
               />

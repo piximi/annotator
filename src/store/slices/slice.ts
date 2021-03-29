@@ -46,7 +46,7 @@ const initialState: State = {
   invertMode: false,
   language: Language.English,
   toolType: ToolType.RectangularSelection,
-  penSelectionBrushSize: 1,
+  penSelectionBrushSize: 2,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: SelectionMode.New,

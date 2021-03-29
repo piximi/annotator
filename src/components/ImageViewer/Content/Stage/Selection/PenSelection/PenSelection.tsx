@@ -15,7 +15,7 @@ export const PenSelection = ({ operator, scale }: PenSelectionProps) => {
         lineJoin="round"
         lineCap="round"
         stroke="red"
-        strokeWidth={operator.brushSize / scale}
+        strokeWidth={operator.brushSize}
       />
     </ReactKonva.Group>
   );

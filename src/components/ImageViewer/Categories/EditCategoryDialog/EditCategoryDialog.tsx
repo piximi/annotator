@@ -37,6 +37,8 @@ export const EditCategoryDialog = ({
   const [name, setName] = useState<string>(category.name);
 
   const onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    debugger;
+
     setName(event.target.value);
   };
 

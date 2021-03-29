@@ -67,11 +67,14 @@ export const Stage = ({ src }: StageProps) => {
   const selectionMode = useSelector(selectionModeSelector);
 
   const [stageWidth, setStageWidth] = useState<number>(1000);
+  const [stageHeight, setStageHeight] = useState<number>(1000);
 
   const [stagedImageShape, setStagedImageShape] = useState<{
     width: number;
     height: number;
   }>({ width: 512, height: 512 });
+
+  const [aspectRatio, setAspectRatio] = useState<number>(1);
 
   const [zoomScale, setZoomScale] = useState<number>(1);
 
@@ -312,6 +315,11 @@ export const Stage = ({ src }: StageProps) => {
       annotationTool.brushSize = penSelectionBrushSize / zoomScale;
     }
   }, [penSelectionBrushSize]);
+
+  useEffect(() => {
+    if (!annotationTool) return;
+    annotationTool.stagedImageShape = stagedImageShape;
+  }, [stagedImageShape, annotationTool]);
 
   useEffect(() => {
     if (!annotated) return;
@@ -590,17 +598,25 @@ export const Stage = ({ src }: StageProps) => {
     setImageWidth(image.shape.c);
     setImageHeight(image.shape.r);
 
-    setStagedImageShape({
-      width: stageWidth,
-      height: Math.floor(stageWidth * (image.shape.r / image.shape.c)),
-    });
+    setAspectRatio(image.shape.r / image.shape.c);
+
+    resize();
   }, [image?.shape]);
 
+  const resize = () => {
+    if (!parentDivRef || !parentDivRef.current) return;
+    const parentDivWidth = parentDivRef.current.getBoundingClientRect().width;
+    setZoomScale(parentDivWidth / 1000);
+    setStagedImageShape({
+      width: parentDivWidth,
+      height: Math.floor(parentDivWidth * aspectRatio),
+    });
+    setStageWidth(parentDivWidth);
+    setStageHeight(Math.floor(parentDivWidth * aspectRatio));
+  };
+
   useEffect(() => {
-    const resize = () => {
-      if (!parentDivRef || !parentDivRef.current) return;
-      console.info(parentDivRef.current.getBoundingClientRect().width);
-    };
+    resize();
     window.addEventListener("resize", resize);
   }, []);
 
@@ -611,7 +627,7 @@ export const Stage = ({ src }: StageProps) => {
           <ReactKonva.Stage
             className={classes.stage}
             globalCompositeOperation="destination-over"
-            height={stageWidth}
+            height={stageHeight}
             onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
               event.evt.preventDefault();
             }}
@@ -620,7 +636,7 @@ export const Stage = ({ src }: StageProps) => {
             ref={stageRef}
             scale={{
               x: zoomScale,
-              y: zoomScale,
+              y: zoomScale * aspectRatio,
             }}
             width={stageWidth}
             x={zoomTool ? zoomTool.x : 0}
@@ -636,7 +652,7 @@ export const Stage = ({ src }: StageProps) => {
                   ref={imageRef}
                   src={src}
                   stageWidth={stageWidth}
-                  stageHeight={stageWidth}
+                  stageHeight={stageHeight}
                 />
 
                 <Selecting

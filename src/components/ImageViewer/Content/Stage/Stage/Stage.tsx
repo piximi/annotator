@@ -316,6 +316,11 @@ export const Stage = ({ src }: StageProps) => {
   }, [penSelectionBrushSize]);
 
   useEffect(() => {
+    if (!annotationTool) return;
+    annotationTool.stagedImageShape = stagedImageShape;
+  }, [stagedImageShape, annotationTool]);
+
+  useEffect(() => {
     if (!annotated) return;
 
     if (!transformerRef || !transformerRef.current) return;
@@ -592,10 +597,10 @@ export const Stage = ({ src }: StageProps) => {
     setImageWidth(image.shape.c);
     setImageHeight(image.shape.r);
 
-    setStagedImageShape({
-      width: stageWidth,
-      height: Math.floor(stageWidth * (image.shape.r / image.shape.c)),
-    });
+    // setStagedImageShape({
+    //   width: stageWidth,
+    //   height: Math.floor(stageWidth * (image.shape.r / image.shape.c)),
+    // });
     setAspectRatio(image.shape.r / image.shape.c);
   }, [image?.shape]);
 

@@ -73,6 +73,8 @@ export class RectangularAnnotationTool extends AnnotationTool {
         this.convertToPoints()
       );
 
+      console.info(this.points);
+
       this._contour = this.points;
       this._mask = this.computeMask();
       this._boundingBox = this.computeBoundingBox();

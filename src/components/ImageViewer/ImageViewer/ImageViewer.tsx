@@ -3,7 +3,6 @@ import { CssBaseline } from "@material-ui/core";
 import { Image } from "../../../types/Image";
 import { ToolType } from "../../../types/ToolType";
 import {
-  selectedCategroySelector,
   toolTypeSelector,
   zoomSettingsSelector,
 } from "../../../store/selectors";
@@ -166,8 +165,6 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
   const classes = useStyles();
 
-  const selectedCategory = useSelector(selectedCategroySelector);
-
   const [collapsed, setCollapsed] = React.useState(false);
 
   const handleCollapse = (isCollapsed: boolean) => {
@@ -224,7 +221,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
         <Categories />
 
-        <Content category={selectedCategory} onDrop={onDrop} />
+        <Content onDrop={onDrop} />
 
         <ToolOptions
           settings={

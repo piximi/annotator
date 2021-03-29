@@ -6,7 +6,6 @@ import {
 } from "../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
-import { useBoundingClientRect } from "../../../../hooks/useBoundingClientRect";
 import { NativeTypes } from "react-dnd-html5-backend";
 import { DropTargetMonitor, useDrop } from "react-dnd";
 
@@ -16,7 +15,6 @@ type ContentProps = {
 
 export const Content = ({ onDrop }: ContentProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const boundingClientRect = useBoundingClientRect(ref);
 
   const classes = useStyles();
 
@@ -46,12 +44,7 @@ export const Content = ({ onDrop }: ContentProps) => {
         <div className={classes.toolbar} />
 
         <div className={classes.parent}>
-          <Stage
-            category={selectedCategory}
-            height={boundingClientRect?.height}
-            src={image!.src}
-            width={boundingClientRect?.width}
-          />
+          <Stage category={selectedCategory} src={image!.src} />
         </div>
       </div>
     </main>

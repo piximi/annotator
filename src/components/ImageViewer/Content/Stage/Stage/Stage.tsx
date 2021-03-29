@@ -7,6 +7,7 @@ import {
   imageInstancesSelector,
   imageSelector,
   invertModeSelector,
+  selectedCategroySelector,
   selectionModeSelector,
   toolTypeSelector,
   zoomSettingsSelector,
@@ -18,7 +19,6 @@ import {
   useSelector,
 } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
-import { Category } from "../../../../../types/Category";
 import { setSelectedAnnotation, slice } from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator } from "../../../../../hooks";
@@ -43,13 +43,10 @@ import deleteAnnotationSoundEffect from "../../../../../sounds/pop-up-off.mp3";
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
 
 type StageProps = {
-  category: Category;
-  height?: number;
   src: string;
-  width?: number;
 };
 
-export const Stage = ({ category, height, src, width }: StageProps) => {
+export const Stage = ({ src }: StageProps) => {
   const imageRef = useRef<Konva.Image>(null);
   const stageRef = useRef<Konva.Stage>(null);
 
@@ -65,6 +62,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
   const selectedAnnotationId = useSelector(selectedAnnotationSelector);
+  const selectedCategory = useSelector(selectedCategroySelector);
   const selectionMode = useSelector(selectionModeSelector);
 
   const stageWidth = 1000;
@@ -281,7 +279,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
       ...annotations?.filter(
         (instance: SelectionType) => instance.id === selectedAnnotationId
       )[0],
-      categoryId: category.id,
+      categoryId: selectedCategory.id,
     } as SelectionType;
 
     dispatch(
@@ -291,7 +289,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
     );
 
     selectedAnnotationRef.current = updated;
-  }, [category]);
+  }, [selectedCategory]);
 
   useEffect(() => {
     if (!annotationTool) return;
@@ -349,7 +347,7 @@ export const Stage = ({ category, height, src, width }: StageProps) => {
 
     if (!annotationTool) return;
 
-    annotationTool.annotate(category);
+    annotationTool.annotate(selectedCategory);
 
     if (!annotationTool.annotation) return;
 

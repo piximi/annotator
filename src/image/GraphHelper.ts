@@ -68,13 +68,13 @@ export const makeGraph = (
   let graph: any = createGraph();
   graph.fromId = -1;
   graph.openSet = new NodeHeap();
-
+  let cap = 255;
+  if (edges.BYTES_PER_ELEMENT === 2) {
+    cap = 65535;
+  }
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const startIdx = getIdx(width, 1)(x, y, 0);
-      // TODO : Go back to inferring max from actual image data
-      // const cap = Math.max.apply(Math, edges.data);
-      const cap = 255;
       const dist = cap - edges[startIdx];
 
       graph.addNode(startIdx, dist);

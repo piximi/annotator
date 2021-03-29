@@ -633,7 +633,7 @@ export const Stage = ({ src }: StageProps) => {
             ref={stageRef}
             scale={{
               x: zoomScale,
-              y: zoomScale,
+              y: zoomScale * aspectRatio,
             }}
             width={stageWidth}
             x={zoomTool ? zoomTool.x : 0}

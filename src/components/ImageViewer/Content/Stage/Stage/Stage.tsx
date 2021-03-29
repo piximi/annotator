@@ -67,6 +67,7 @@ export const Stage = ({ src }: StageProps) => {
   const selectionMode = useSelector(selectionModeSelector);
 
   const [stageWidth, setStageWidth] = useState<number>(1000);
+  const [stageHeight, setStageHeight] = useState<number>(1000);
 
   const [stagedImageShape, setStagedImageShape] = useState<{
     width: number;
@@ -611,6 +612,7 @@ export const Stage = ({ src }: StageProps) => {
         height: Math.floor(parentDivWidth * aspectRatio),
       });
       setStageWidth(parentDivWidth);
+      setStageHeight(Math.floor(parentDivWidth * aspectRatio));
     };
     window.addEventListener("resize", resize);
   }, []);
@@ -622,7 +624,7 @@ export const Stage = ({ src }: StageProps) => {
           <ReactKonva.Stage
             className={classes.stage}
             globalCompositeOperation="destination-over"
-            height={stageWidth}
+            height={stageHeight}
             onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
               event.evt.preventDefault();
             }}
@@ -647,7 +649,7 @@ export const Stage = ({ src }: StageProps) => {
                   ref={imageRef}
                   src={src}
                   stageWidth={stageWidth}
-                  stageHeight={stageWidth}
+                  stageHeight={stageHeight}
                 />
 
                 <Selecting

@@ -44,7 +44,7 @@ export const Content = ({ onDrop }: ContentProps) => {
         <div className={classes.toolbar} />
 
         <div className={classes.parent}>
-          <Stage category={selectedCategory} src={image!.src} />
+          <Stage src={image!.src} />
         </div>
       </div>
     </main>

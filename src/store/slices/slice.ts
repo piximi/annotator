@@ -9,6 +9,8 @@ import { ZoomMode } from "../../types/ZoomMode";
 import * as _ from "lodash";
 import colorImage from "../../images/cell-painting.png";
 import { Language } from "../../types/Language";
+import { loadLayersModelThunk } from "../thunks";
+import * as tensorflow from "@tensorflow/tfjs";
 
 const initialState: State = {
   annotated: false,
@@ -202,6 +204,14 @@ export const slice = createSlice({
     },
     setZoomReset(state: State, action: PayloadAction<{ zoomReset: boolean }>) {
       state.zoomSettings.zoomReset = action.payload.zoomReset;
+    },
+  },
+  extraReducers: {
+    ["thunks/loadLayersModel/fulfilled"]: (
+      state: State,
+      action: PayloadAction<tensorflow.LayersModel>
+    ) => {
+      console.info(action.payload);
     },
   },
 });

@@ -5,6 +5,7 @@ import React from "react";
 import { Category } from "../../../../types/Category";
 import {
   createdCategoriesSelector,
+  selectedCategroySelector,
   unknownCategroySelector,
 } from "../../../../store/selectors";
 import { useSelector } from "react-redux";
@@ -22,18 +23,16 @@ import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
 
 type CategoriesProps = {
-  activeCategory: Category;
   onCategoryClick: (
     event: React.MouseEvent<HTMLDivElement>,
     category: Category
   ) => void;
 };
 
-export const Categories = ({
-  activeCategory,
-  onCategoryClick,
-}: CategoriesProps) => {
+export const Categories = ({ onCategoryClick }: CategoriesProps) => {
   const classes = useStyles();
+
+  const selectedCategory = useSelector(selectedCategroySelector);
 
   const categories: Array<Category> = useSelector(createdCategoriesSelector);
 
@@ -82,7 +81,7 @@ export const Categories = ({
                 dense
                 id={category.id}
                 onClick={(event) => onCategoryClick(event, category)}
-                selected={category.id === activeCategory.id}
+                selected={category.id === selectedCategory.id}
               >
                 <CategoryListItemCheckbox category={category} />
 
@@ -129,7 +128,7 @@ export const Categories = ({
           dense
           id={unknownCategory.id}
           onClick={(event) => onCategoryClick(event, unknownCategory)}
-          selected={unknownCategory.id === activeCategory.id}
+          selected={unknownCategory.id === selectedCategory.id}
         >
           <CategoryListItemCheckbox category={unknownCategory} />
 

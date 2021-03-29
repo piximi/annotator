@@ -240,10 +240,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
         <ImageViewerAppBar />
 
-        <Categories
-          activeCategory={activeCategory}
-          onCategoryClick={onCategoryClick}
-        />
+        <Categories onCategoryClick={onCategoryClick} />
 
         <Content category={activeCategory} onDrop={onDrop} />
 

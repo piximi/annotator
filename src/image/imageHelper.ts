@@ -186,6 +186,6 @@ export const mooreNeighborhood = (
 export const getIdx = (width: number, nchannels: number) => {
   return (x: number, y: number, index: number) => {
     index = index || 0;
-    return (width * y + x) * nchannels + index;
+    return Math.floor((width * y + x) * nchannels + index);
   };
 };

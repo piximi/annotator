@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/image-viewer/static/js/main.ec47500e.chunk.js",
-    "main.js.map": "/image-viewer/static/js/main.ec47500e.chunk.js.map",
+    "main.js": "/image-viewer/static/js/main.c58e89a2.chunk.js",
+    "main.js.map": "/image-viewer/static/js/main.c58e89a2.chunk.js.map",
     "runtime-main.js": "/image-viewer/static/js/runtime-main.3b295491.js",
     "runtime-main.js.map": "/image-viewer/static/js/runtime-main.3b295491.js.map",
     "static/js/2.3b59dde4.chunk.js": "/image-viewer/static/js/2.3b59dde4.chunk.js",
@@ -31,7 +31,7 @@
     "static/media/RectangularAnnotation.3cca93c1.svg": "/image-viewer/static/media/RectangularAnnotation.3cca93c1.svg",
     "static/media/Selection.4e4701f2.svg": "/image-viewer/static/media/Selection.4e4701f2.svg",
     "static/media/Zoom.58f47de7.svg": "/image-viewer/static/media/Zoom.58f47de7.svg",
-    "static/media/colorImage.f118ef08.png": "/image-viewer/static/media/colorImage.f118ef08.png",
+    "static/media/cell-painting.f118ef08.png": "/image-viewer/static/media/cell-painting.f118ef08.png",
     "static/media/malaria.5b73ad75.png": "/image-viewer/static/media/malaria.5b73ad75.png",
     "static/media/pop-up-off.83c6ba5b.mp3": "/image-viewer/static/media/pop-up-off.83c6ba5b.mp3",
     "static/media/pop-up-on.b776a1ef.mp3": "/image-viewer/static/media/pop-up-on.b776a1ef.mp3"
@@ -39,6 +39,6 @@
   "entrypoints": [
     "static/js/runtime-main.3b295491.js",
     "static/js/2.3b59dde4.chunk.js",
-    "static/js/main.ec47500e.chunk.js"
+    "static/js/main.c58e89a2.chunk.js"
   ]
 }

@@ -3,7 +3,7 @@ import { CssBaseline } from "@material-ui/core";
 import { Image } from "../../../types/Image";
 import { useDispatch } from "react-redux";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
-import { CategoriesList } from "../Categories";
+import { CategoriesList } from "../CategoriesList";
 import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
 import { setImage, slice } from "../../../store";

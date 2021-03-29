@@ -1,12 +1,12 @@
 import React, { ComponentProps } from "react";
 import { Meta, Story } from "@storybook/react/types-6-0";
-import { Image } from "../../../types/Image";
-import { ImageViewer } from "./ImageViewer";
-import src from "../../../images/cell-painting.png";
+import { Image } from "../../../../types/Image";
+import { ImageViewer } from "../../ImageViewer";
+import src from "../../../../images/cell-painting.png";
 
 export default {
   component: ImageViewer,
-  title: "Components/ImageViewer/ImageViewer",
+  title: "Components/ImageViewer/CategoriesList",
 } as Meta;
 
 const Template: Story<ComponentProps<typeof ImageViewer>> = (args) => (

@@ -16,6 +16,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   parent: {
     cursor: "crosshair",
+    width: "100%",
     // width: `calc(100% - ${toolOptionsDrawerWidth}px)`
   },
 }));

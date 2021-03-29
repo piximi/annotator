@@ -49,6 +49,7 @@ type StageProps = {
 export const Stage = ({ src }: StageProps) => {
   const imageRef = useRef<Konva.Image>(null);
   const stageRef = useRef<Konva.Stage>(null);
+  const parentDivRef = useRef<HTMLDivElement>(null);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const selectingRef = useRef<Konva.Line | null>(null);
@@ -595,80 +596,65 @@ export const Stage = ({ src }: StageProps) => {
   }, [image?.shape]);
 
   return (
-    <ReactReduxContext.Consumer>
-      {({ store }) => (
-        <ReactKonva.Stage
-          className={classes.stage}
-          globalCompositeOperation="destination-over"
-          height={stageWidth}
-          onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
-            event.evt.preventDefault();
-          }}
-          onClick={onClick}
-          onWheel={onWheel}
-          ref={stageRef}
-          scale={{
-            x: zoomScale,
-            y: zoomScale,
-          }}
-          width={stageWidth}
-          x={zoomTool ? zoomTool.x : 0}
-          y={zoomTool ? zoomTool.y : 0}
-        >
-          <Provider store={store}>
-            <ReactKonva.Layer
-              onMouseDown={(event) => onMouseDown(event)}
-              onMouseMove={onMouseMove}
-              onMouseUp={onMouseUp}
-            >
-              <Image
-                ref={imageRef}
-                src={src}
-                stageWidth={stageWidth}
-                stageHeight={stageWidth}
-              />
+    <div id={"parent-div"} ref={parentDivRef} className={classes.parent}>
+      <ReactReduxContext.Consumer>
+        {({ store }) => (
+          <ReactKonva.Stage
+            className={classes.stage}
+            globalCompositeOperation="destination-over"
+            height={stageWidth}
+            onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
+              event.evt.preventDefault();
+            }}
+            onClick={onClick}
+            onWheel={onWheel}
+            ref={stageRef}
+            scale={{
+              x: zoomScale,
+              y: zoomScale,
+            }}
+            width={stageWidth}
+            x={zoomTool ? zoomTool.x : 0}
+            y={zoomTool ? zoomTool.y : 0}
+          >
+            <Provider store={store}>
+              <ReactKonva.Layer
+                onMouseDown={(event) => onMouseDown(event)}
+                onMouseMove={onMouseMove}
+                onMouseUp={onMouseUp}
+              >
+                <Image
+                  ref={imageRef}
+                  src={src}
+                  stageWidth={stageWidth}
+                  stageHeight={stageWidth}
+                />
 
-              <Selecting
-                scale={zoomScale}
-                stageScale={{
-                  x: stagedImageShape.width / imageWidth,
-                  y: stagedImageShape.height / imageHeight,
-                }}
-                tool={tool!}
-              />
-
-              {currentPosition &&
-                !annotationTool?.annotating &&
-                toolType === ToolType.PenAnnotation && (
-                  <ReactKonva.Circle
-                    radius={penSelectionBrushSize / zoomScale}
-                    x={currentPosition.x}
-                    y={currentPosition.y}
-                    stroke="grey"
-                    strokewidth={1}
-                    dash={[2, 2]}
-                  />
-                )}
-
-              {annotated && annotationTool && annotationTool.contour && (
-                <SelectedContour
-                  points={annotationTool.contour}
+                <Selecting
                   scale={zoomScale}
                   stageScale={{
                     x: stagedImageShape.width / imageWidth,
                     y: stagedImageShape.height / imageHeight,
                   }}
+                  tool={tool!}
                 />
-              )}
 
-              {selectionMode !== SelectionMode.New &&
-                annotationTool &&
-                annotationTool.annotating &&
-                !annotationTool.annotated &&
-                selectedAnnotationRef &&
-                selectedAnnotationRef.current && (
+                {currentPosition &&
+                  !annotationTool?.annotating &&
+                  toolType === ToolType.PenAnnotation && (
+                    <ReactKonva.Circle
+                      radius={penSelectionBrushSize / zoomScale}
+                      x={currentPosition.x}
+                      y={currentPosition.y}
+                      stroke="grey"
+                      strokewidth={1}
+                      dash={[2, 2]}
+                    />
+                  )}
+
+                {annotated && annotationTool && annotationTool.contour && (
                   <SelectedContour
-                    points={selectedAnnotationRef.current.contour}
+                    points={annotationTool.contour}
                     scale={zoomScale}
                     stageScale={{
                       x: stagedImageShape.width / imageWidth,
@@ -677,24 +663,41 @@ export const Stage = ({ src }: StageProps) => {
                   />
                 )}
 
-              <Annotations
-                annotationTool={annotationTool}
-                stageScale={{
-                  x: stagedImageShape.width / imageWidth,
-                  y: stagedImageShape.height / imageHeight,
-                }}
-              />
+                {selectionMode !== SelectionMode.New &&
+                  annotationTool &&
+                  annotationTool.annotating &&
+                  !annotationTool.annotated &&
+                  selectedAnnotationRef &&
+                  selectedAnnotationRef.current && (
+                    <SelectedContour
+                      points={selectedAnnotationRef.current.contour}
+                      scale={zoomScale}
+                      stageScale={{
+                        x: stagedImageShape.width / imageWidth,
+                        y: stagedImageShape.height / imageHeight,
+                      }}
+                    />
+                  )}
 
-              <ReactKonva.Transformer ref={transformerRef} />
+                <Annotations
+                  annotationTool={annotationTool}
+                  stageScale={{
+                    x: stagedImageShape.width / imageWidth,
+                    y: stagedImageShape.height / imageHeight,
+                  }}
+                />
 
-              <ColorAnnotationToolTip
-                colorAnnotationTool={annotationTool as ColorAnnotationTool}
-                scale={zoomScale}
-              />
-            </ReactKonva.Layer>
-          </Provider>
-        </ReactKonva.Stage>
-      )}
-    </ReactReduxContext.Consumer>
+                <ReactKonva.Transformer ref={transformerRef} />
+
+                <ColorAnnotationToolTip
+                  colorAnnotationTool={annotationTool as ColorAnnotationTool}
+                  scale={zoomScale}
+                />
+              </ReactKonva.Layer>
+            </Provider>
+          </ReactKonva.Stage>
+        )}
+      </ReactReduxContext.Consumer>
+    </div>
   );
 };

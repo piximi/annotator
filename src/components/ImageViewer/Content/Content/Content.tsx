@@ -24,7 +24,7 @@ export const Content = ({ onDrop }: ContentProps) => {
 
   const selectedCategory = useSelector(selectedCategroySelector);
 
-  const [{ canDrop, isOver }, drop] = useDrop(
+  const [, drop] = useDrop(
     () => ({
       accept: [NativeTypes.FILE],
       drop(item: { files: any[] }) {

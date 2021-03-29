@@ -604,12 +604,12 @@ export const Stage = ({ src }: StageProps) => {
       if (!parentDivRef || !parentDivRef.current) return;
       const prevWidth = stageWidth;
       const parentDivWidth = parentDivRef.current.getBoundingClientRect().width;
-      setStageWidth(parentDivWidth);
       setZoomScale(parentDivWidth / prevWidth);
       setStagedImageShape({
         width: parentDivWidth,
         height: Math.floor(parentDivWidth * aspectRatio),
       });
+      setStageWidth(parentDivWidth);
     };
     window.addEventListener("resize", resize);
   }, []);

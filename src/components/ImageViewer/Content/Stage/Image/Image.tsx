@@ -19,6 +19,7 @@ export const Image = React.forwardRef<Konva.Image, ImageProps>(
     useEffect(() => {
       if (!image) return;
 
+      setWidth(stageWidth);
       setHeight(stageHeight * (image.height / image.width));
     });
 

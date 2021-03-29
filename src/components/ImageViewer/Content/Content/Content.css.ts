@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
-const toolOptionsDrawerWidth = 240;
+const toolOptionsDrawerWidth = 50;
 
 export const useStyles = makeStyles((theme) => ({
   content: {
@@ -16,7 +16,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   parent: {
     cursor: "crosshair",
-    width: "100%",
-    // width: `calc(100% - ${toolOptionsDrawerWidth}px)`
+    // width: "100%",
+    width: `calc(100% - ${toolOptionsDrawerWidth}px)`,
   },
 }));

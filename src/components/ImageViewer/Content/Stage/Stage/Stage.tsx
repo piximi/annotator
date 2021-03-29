@@ -595,6 +595,13 @@ export const Stage = ({ src }: StageProps) => {
     });
   }, [image?.shape]);
 
+  useEffect(() => {
+    const resize = () => {
+      console.info("Resizing");
+    };
+    window.addEventListener("resize", resize);
+  }, []);
+
   return (
     <div id={"parent-div"} ref={parentDivRef} className={classes.parent}>
       <ReactReduxContext.Consumer>

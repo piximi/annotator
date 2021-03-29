@@ -1,9 +1,6 @@
 import React, { useRef } from "react";
 import { Stage } from "../Stage";
-import {
-  imageSelector,
-  selectedCategroySelector,
-} from "../../../../store/selectors";
+import { imageSelector } from "../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
 import { NativeTypes } from "react-dnd-html5-backend";
@@ -19,8 +16,6 @@ export const Content = ({ onDrop }: ContentProps) => {
   const classes = useStyles();
 
   const image = useSelector(imageSelector);
-
-  const selectedCategory = useSelector(selectedCategroySelector);
 
   const [, drop] = useDrop(
     () => ({

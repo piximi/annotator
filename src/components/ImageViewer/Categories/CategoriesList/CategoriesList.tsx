@@ -9,7 +9,7 @@ import {
   unknownCategorySelector,
 } from "../../../../store/selectors";
 import { useSelector } from "react-redux";
-import { useStyles } from "./Categories.css";
+import { useStyles } from "./CategoriesList.css";
 import { CollapsibleList } from "../CollapsibleList";
 import { CreateCategoryListItem } from "../CreateCategoryListItem";
 import { CategoryListItemCheckbox } from "../CategoryListItemCheckbox";
@@ -24,7 +24,7 @@ import { useTranslation } from "../../../../hooks/useTranslation";
 import { slice } from "../../../../store";
 import { useDispatch } from "react-redux";
 
-export const Categories = () => {
+export const CategoriesList = () => {
   const classes = useStyles();
 
   const createdCategories = useSelector(createdCategoriesSelector);
@@ -78,7 +78,7 @@ export const Categories = () => {
     >
       <div className={classes.applicationDrawerHeader} />
 
-      <CollapsibleList primary={t("Categories")}>
+      <CollapsibleList primary={t("CategoriesList")}>
         {createdCategories.map((category: Category) => {
           return (
             <div key={category.id}>

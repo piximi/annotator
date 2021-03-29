@@ -3,7 +3,7 @@ import { CssBaseline } from "@material-ui/core";
 import { Image } from "../../../types/Image";
 import { useDispatch } from "react-redux";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
-import { Categories } from "../Categories";
+import { CategoriesList } from "../Categories";
 import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
 import { setImage, slice } from "../../../store";
@@ -77,7 +77,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
         <ImageViewerAppBar />
 
-        <Categories />
+        <CategoriesList />
 
         <Content onDrop={onDrop} />
 

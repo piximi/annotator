@@ -19,6 +19,7 @@ import { penSelectionBrushSizeSelector } from "../../store/selectors/penSelectio
 
 export const useAnnotationOperator = (
   src: string,
+  stagedImagePosition: { x: number; y: number },
   stagedImageShape: { width: number; height: number },
   zoomScale?: number
 ) => {
@@ -61,27 +62,46 @@ export const useAnnotationOperator = (
 
     switch (operation) {
       case ToolType.ColorAnnotation:
-        setOperator(new ColorAnnotationTool(image, stagedImageShape));
+        setOperator(
+          new ColorAnnotationTool(image, stagedImagePosition, stagedImageShape)
+        );
 
         return;
       case ToolType.EllipticalAnnotation:
-        setOperator(new EllipticalAnnotationTool(image, stagedImageShape));
+        setOperator(
+          new EllipticalAnnotationTool(
+            image,
+            stagedImagePosition,
+            stagedImageShape
+          )
+        );
 
         return;
       case ToolType.LassoAnnotation:
-        setOperator(new LassoAnnotationTool(image, stagedImageShape));
+        setOperator(
+          new LassoAnnotationTool(image, stagedImagePosition, stagedImageShape)
+        );
 
         return;
       case ToolType.MagneticAnnotation:
-        setOperator(new MagneticAnnotationTool(image, 0.5, stagedImageShape));
+        setOperator(
+          new MagneticAnnotationTool(
+            image,
+            0.5,
+            stagedImagePosition,
+            stagedImageShape
+          )
+        );
 
         return;
       case ToolType.ObjectAnnotation:
-        ObjectAnnotationTool.compile(image, stagedImageShape).then(
-          (operator: ObjectAnnotationTool) => {
-            setOperator(operator);
-          }
-        );
+        ObjectAnnotationTool.compile(
+          image,
+          stagedImagePosition,
+          stagedImageShape
+        ).then((operator: ObjectAnnotationTool) => {
+          setOperator(operator);
+        });
 
         return;
       case ToolType.PenAnnotation:
@@ -89,6 +109,7 @@ export const useAnnotationOperator = (
         PenAnnotationTool.setup(
           image,
           brushSize / scale,
+          stagedImagePosition,
           stagedImageShape
         ).then((operator: PenAnnotationTool) => {
           setOperator(operator);
@@ -96,19 +117,32 @@ export const useAnnotationOperator = (
 
         return;
       case ToolType.PolygonalAnnotation:
-        setOperator(new PolygonalAnnotationTool(image, stagedImageShape));
+        setOperator(
+          new PolygonalAnnotationTool(
+            image,
+            stagedImagePosition,
+            stagedImageShape
+          )
+        );
 
         return;
       case ToolType.QuickAnnotation:
         const quickSelectionOperator = QuickAnnotationTool.setup(
           image,
+          stagedImagePosition,
           stagedImageShape
         );
         setOperator(quickSelectionOperator);
 
         return;
       case ToolType.RectangularSelection:
-        setOperator(new RectangularAnnotationTool(image, stagedImageShape));
+        setOperator(
+          new RectangularAnnotationTool(
+            image,
+            stagedImagePosition,
+            stagedImageShape
+          )
+        );
 
         return;
     }

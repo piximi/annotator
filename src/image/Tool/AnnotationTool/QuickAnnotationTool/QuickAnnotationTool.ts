@@ -198,6 +198,7 @@ export class QuickAnnotationTool extends AnnotationTool {
 
   static setup(
     image: ImageJS.Image,
+    stagedImagePosition: { x: number; y: number },
     stagedImageShape: { width: number; height: number }
   ) {
     const instance = new QuickAnnotationTool(image, stagedImageShape);

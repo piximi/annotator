@@ -8,11 +8,13 @@ import { AnnotationTool } from "../../../../../../image/Tool";
 
 type AnnotationsProps = {
   annotationTool?: AnnotationTool;
+  imagePosition: { x: number; y: number };
   stageScale: { x: number; y: number };
 };
 
 export const Annotations = ({
   annotationTool,
+  imagePosition,
   stageScale,
 }: AnnotationsProps) => {
   const annotations = useSelector(imageInstancesSelector);
@@ -40,6 +42,7 @@ export const Annotations = ({
           annotation={annotation}
           key={annotation.id}
           annotationTool={annotationTool}
+          imagePosition={imagePosition}
           stageScale={stageScale}
         />
       ))}

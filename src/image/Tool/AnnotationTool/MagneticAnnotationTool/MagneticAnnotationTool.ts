@@ -19,9 +19,10 @@ export class MagneticAnnotationTool extends AnnotationTool {
   constructor(
     image: ImageJS.Image,
     factor: number = 0.5,
+    stagedImagePosition: { x: number; y: number },
     stagedImageShape: { width: number; height: number }
   ) {
-    super(image, stagedImageShape);
+    super(image, stagedImagePosition, stagedImageShape);
 
     this.factor = factor;
 

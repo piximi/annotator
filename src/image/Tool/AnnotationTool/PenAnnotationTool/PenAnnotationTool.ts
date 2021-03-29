@@ -102,6 +102,7 @@ export class PenAnnotationTool extends AnnotationTool {
   static async setup(
     image: ImageJS.Image,
     brushSize: number,
+    stagedImagePosition: { x: number; y: number },
     stagedImageShape: { width: number; height: number }
   ) {
     const operator = new PenAnnotationTool(image, stagedImageShape);

@@ -19,12 +19,14 @@ import { ToolType } from "../../../../../../types/ToolType";
 type AnnotationProps = {
   annotation: Selection;
   annotationTool?: AnnotationTool;
+  imagePosition: { x: number; y: number };
   stageScale: { x: number; y: number };
 };
 
 export const Annotation = ({
   annotation,
   annotationTool,
+  imagePosition,
   stageScale,
 }: AnnotationProps) => {
   const ref = useRef<Konva.Line | null>(null);
@@ -63,6 +65,15 @@ export const Annotation = ({
     );
   };
 
+  const stagedPoints: Array<number> = _.flatten(
+    _.map(_.chunk(annotation.contour, 2), (coords: Array<number>) => {
+      return [
+        coords[0] + imagePosition.x / stageScale.x,
+        coords[1] + imagePosition.y / stageScale.y,
+      ];
+    })
+  );
+
   return (
     <ReactKonva.Line
       closed
@@ -70,7 +81,7 @@ export const Annotation = ({
       id={annotation.id}
       onClick={onPointerClick}
       opacity={0.5}
-      points={annotation.contour}
+      points={stagedPoints}
       ref={ref}
       strokeWidth={1}
       scaleX={stageScale.x}

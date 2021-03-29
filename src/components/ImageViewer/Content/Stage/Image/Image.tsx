@@ -4,13 +4,14 @@ import useImage from "use-image";
 import Konva from "konva";
 
 type ImageProps = {
+  position: { x: number; y: number };
   src: string;
   stageHeight: number;
   stageWidth: number;
 };
 
 export const Image = React.forwardRef<Konva.Image, ImageProps>(
-  ({ src, stageHeight, stageWidth }, ref) => {
+  ({ position, src, stageHeight, stageWidth }, ref) => {
     const [image] = useImage(src, "Anonymous");
 
     return (
@@ -18,7 +19,7 @@ export const Image = React.forwardRef<Konva.Image, ImageProps>(
         height={stageHeight}
         image={image}
         perfectDrawEnabled={false}
-        position={{ x: 0, y: 0 }}
+        position={position}
         ref={ref}
         width={stageWidth}
       />

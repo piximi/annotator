@@ -74,12 +74,15 @@ export const Stage = ({ src }: StageProps) => {
     height: number;
   }>({ width: 512, height: 512 });
 
+  const stagedImagePosition = { x: 100, y: 100 };
+
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
   const [zoomScale, setZoomScale] = useState<number>(1);
 
   const [annotationTool] = useAnnotationOperator(
     src,
+    stagedImagePosition,
     stagedImageShape,
     zoomScale
   );
@@ -319,6 +322,7 @@ export const Stage = ({ src }: StageProps) => {
   useEffect(() => {
     if (!annotationTool) return;
     annotationTool.stagedImageShape = stagedImageShape;
+    annotationTool.stagedImagePosition = stagedImagePosition;
   }, [stagedImageShape, annotationTool]);
 
   useEffect(() => {
@@ -653,6 +657,7 @@ export const Stage = ({ src }: StageProps) => {
                   src={src}
                   stageWidth={stageWidth}
                   stageHeight={stageHeight}
+                  position={stagedImagePosition}
                 />
 
                 <Selecting
@@ -682,6 +687,7 @@ export const Stage = ({ src }: StageProps) => {
 
                 {annotated && annotationTool && annotationTool.contour && (
                   <SelectedContour
+                    imagePosition={stagedImagePosition}
                     points={annotationTool.contour}
                     scale={zoomScale}
                     stageScale={{
@@ -698,6 +704,7 @@ export const Stage = ({ src }: StageProps) => {
                   selectedAnnotationRef &&
                   selectedAnnotationRef.current && (
                     <SelectedContour
+                      imagePosition={stagedImagePosition}
                       points={selectedAnnotationRef.current.contour}
                       scale={zoomScale}
                       stageScale={{
@@ -709,6 +716,7 @@ export const Stage = ({ src }: StageProps) => {
 
                 <Annotations
                   annotationTool={annotationTool}
+                  imagePosition={stagedImagePosition}
                   stageScale={{
                     x: stagedImageShape.width / imageWidth,
                     y: stagedImageShape.height / imageHeight,

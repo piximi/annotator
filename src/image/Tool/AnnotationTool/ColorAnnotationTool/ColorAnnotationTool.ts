@@ -36,6 +36,7 @@ export class ColorAnnotationTool extends AnnotationTool {
   onMouseDown(position: { x: number; y: number }) {
     if (!this.stagedImageShape) return;
 
+    console.info(position);
     this.annotated = false;
     this.annotating = true;
     this.tolerance = 1;

@@ -22,6 +22,7 @@ export abstract class AnnotationTool extends Tool {
   buffer?: Array<number> = [];
 
   stagedImageShape?: { width: number; height: number } = undefined;
+  stagedImagePosition: { x: number; y: number } = { x: 0, y: 0 };
 
   protected _boundingBox?: [number, number, number, number];
   protected _contour?: Array<number>;
@@ -29,6 +30,7 @@ export abstract class AnnotationTool extends Tool {
 
   constructor(
     image: ImageJS.Image,
+    stagedImagePosition: { x: number; y: number },
     stagedImageShape: { width: number; height: number }
   ) {
     super(image);
@@ -254,10 +256,12 @@ export abstract class AnnotationTool extends Tool {
     if (!this.stagedImageShape) return position;
 
     const x_im = Math.floor(
-      (position.x * this.image.width) / this.stagedImageShape.width
+      ((position.x - this.stagedImagePosition.x) * this.image.width) /
+        this.stagedImageShape.width
     );
     const y_im = Math.floor(
-      (position.y * this.image.height) / this.stagedImageShape.height
+      ((position.y - this.stagedImagePosition.y) * this.image.height) /
+        this.stagedImageShape.height
     );
 
     return { x: x_im, y: y_im };
@@ -269,12 +273,14 @@ export abstract class AnnotationTool extends Tool {
   protected toStageSpace(position: { x: number; y: number }) {
     if (!this.stagedImageShape) return position;
 
-    const x_stage = Math.floor(
-      (position.x * this.stagedImageShape.width) / this.image.width
-    );
-    const y_stage = Math.floor(
-      (position.y * this.stagedImageShape.height) / this.image.height
-    );
+    const x_stage =
+      Math.floor(
+        (position.x * this.stagedImageShape.width) / this.image.width
+      ) + this.stagedImagePosition.x;
+    const y_stage =
+      Math.floor(
+        (position.y * this.stagedImageShape.height) / this.image.height
+      ) + this.stagedImagePosition.y;
 
     return { x: x_stage, y: y_stage };
   }

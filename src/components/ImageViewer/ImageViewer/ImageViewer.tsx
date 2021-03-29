@@ -165,26 +165,11 @@ export const ImageViewer = (props: ImageViewerProps) => {
     }
   }, [dispatch, props.image]);
 
-  const image = useSelector(imageSelector);
-
   const activeOperation = useSelector(toolTypeSelector);
 
   const classes = useStyles();
 
-  const unknownCategory = useSelector(unknownCategroySelector);
-
-  const activeCategory = useSelector(selectedCategroySelector);
-
-  const onCategoryClick = (
-    event: React.MouseEvent<HTMLDivElement>,
-    category: Category
-  ) => {
-    dispatch(
-      slice.actions.setSeletedCategory({
-        selectedCategory: category.id,
-      })
-    );
-  };
+  const selectedCategory = useSelector(selectedCategroySelector);
 
   const [collapsed, setCollapsed] = React.useState(false);
 
@@ -240,9 +225,9 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
         <ImageViewerAppBar />
 
-        <Categories onCategoryClick={onCategoryClick} />
+        <Categories />
 
-        <Content category={activeCategory} onDrop={onDrop} />
+        <Content category={selectedCategory} onDrop={onDrop} />
 
         <ToolOptions
           settings={

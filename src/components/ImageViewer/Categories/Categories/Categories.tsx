@@ -21,15 +21,10 @@ import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
+import { slice } from "../../../../store";
+import { useDispatch } from "react-redux";
 
-type CategoriesProps = {
-  onCategoryClick: (
-    event: React.MouseEvent<HTMLDivElement>,
-    category: Category
-  ) => void;
-};
-
-export const Categories = ({ onCategoryClick }: CategoriesProps) => {
+export const Categories = () => {
   const classes = useStyles();
 
   const selectedCategory = useSelector(selectedCategroySelector);
@@ -37,6 +32,8 @@ export const Categories = ({ onCategoryClick }: CategoriesProps) => {
   const categories: Array<Category> = useSelector(createdCategoriesSelector);
 
   const unknownCategory: Category = useSelector(unknownCategroySelector);
+
+  const dispatch = useDispatch();
 
   const {
     onClose: onCloseDeleteCategoryDialog,
@@ -51,6 +48,17 @@ export const Categories = ({ onCategoryClick }: CategoriesProps) => {
   } = useDialog();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const onCategoryClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    category: Category
+  ) => {
+    dispatch(
+      slice.actions.setSeletedCategory({
+        selectedCategory: category.id,
+      })
+    );
+  };
 
   const onCategoryMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);

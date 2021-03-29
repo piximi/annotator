@@ -66,7 +66,8 @@ export const Stage = ({ src }: StageProps) => {
   const selectedCategory = useSelector(selectedCategroySelector);
   const selectionMode = useSelector(selectionModeSelector);
 
-  const stageWidth = 1000;
+  const [stageWidth, setStageWidth] = useState<number>(1000);
+
   const [stagedImageShape, setStagedImageShape] = useState<{
     width: number;
     height: number;
@@ -597,7 +598,8 @@ export const Stage = ({ src }: StageProps) => {
 
   useEffect(() => {
     const resize = () => {
-      console.info("Resizing");
+      if (!parentDivRef || !parentDivRef.current) return;
+      console.info(parentDivRef.current.getBoundingClientRect().width);
     };
     window.addEventListener("resize", resize);
   }, []);

@@ -1,5 +1,4 @@
 import { AnnotationTool } from "../AnnotationTool";
-import * as _ from "lodash";
 
 export class RectangularAnnotationTool extends AnnotationTool {
   origin?: { x: number; y: number };

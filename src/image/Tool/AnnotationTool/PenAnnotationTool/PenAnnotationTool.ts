@@ -60,6 +60,9 @@ export class PenAnnotationTool extends AnnotationTool {
     this.annotating = true;
 
     this.buffer = [...this.buffer, position.x, position.y];
+
+    console.info(position);
+    console.info(this.stagedImageShape);
   }
 
   onMouseMove(position: { x: number; y: number }) {
@@ -70,6 +73,8 @@ export class PenAnnotationTool extends AnnotationTool {
 
   onMouseUp(position: { x: number; y: number }) {
     if (this.annotated || !this.annotating) return;
+
+    console.info(this.buffer);
 
     this.annotated = true;
 
@@ -105,7 +110,11 @@ export class PenAnnotationTool extends AnnotationTool {
     stagedImagePosition: { x: number; y: number },
     stagedImageShape: { width: number; height: number }
   ) {
-    const operator = new PenAnnotationTool(image, stagedImageShape);
+    const operator = new PenAnnotationTool(
+      image,
+      stagedImagePosition,
+      stagedImageShape
+    );
 
     operator.brushSize = brushSize;
 

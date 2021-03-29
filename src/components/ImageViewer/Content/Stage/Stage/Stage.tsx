@@ -69,8 +69,8 @@ export const Stage = ({ src }: StageProps) => {
   const [stageWidth, setStageWidth] = useState<number>(1000);
   const [stageHeight, setStageHeight] = useState<number>(1000);
 
-  // const stagedImagePosition = { x: 100, y: 100 };
-  const stagedImagePosition = { x: 0, y: 0 };
+  const stagedImagePosition = { x: 100, y: 100 };
+  // const stagedImagePosition = { x: 0, y: 0 };
 
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
@@ -429,11 +429,12 @@ export const Stage = ({ src }: StageProps) => {
 
       const position = stageRef.current.getPointerPosition();
 
-      console.info(position);
-
       if (!position) return;
 
       const relative = getRelativePointerPosition(position);
+
+      console.info(relative);
+      console.info(stageWidth);
 
       if (!relative) return;
 

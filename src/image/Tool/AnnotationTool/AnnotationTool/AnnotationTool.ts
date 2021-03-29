@@ -261,7 +261,7 @@ export abstract class AnnotationTool extends Tool {
     );
     const y_im = Math.floor(
       ((position.y - this.stagedImagePosition.y) * this.image.height) /
-        this.stagedImageShape.height
+        (this.stagedImageShape.height - this.stagedImagePosition.y)
     );
 
     return { x: x_im, y: y_im };

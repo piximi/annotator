@@ -26,7 +26,7 @@ import { AnnotationType as SelectionType } from "../../../../../types/Annotation
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
-import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
+import { useZoomTool } from "../../../../../hooks/useZoomTool";
 import { KonvaEventObject } from "konva/types/Node";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
@@ -103,8 +103,6 @@ export const Stage = ({ src }: StageProps) => {
 
   const annotations = useSelector(imageInstancesSelector);
 
-  const zoomToolOptions = useSelector(zoomToolOptionsSelector);
-
   const annotated = useSelector(annotatedSelector);
 
   const backspacePress = useKeyPress("Backspace");
@@ -142,12 +140,11 @@ export const Stage = ({ src }: StageProps) => {
     selectingRef.current = null;
   };
 
-  const { zoomTool, onZoomClick, onZoomWheel } = useZoomOperator(
+  const { zoomTool, onZoomClick, onZoomWheel } = useZoomTool(
     aspectRatio,
     toolType,
     src,
-    stageWidth,
-    zoomToolOptions
+    stageWidth
   );
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {

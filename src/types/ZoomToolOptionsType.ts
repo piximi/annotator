@@ -1,7 +1,7 @@
-import { ZoomMode } from "./ZoomMode";
+import { ZoomModeType } from "./ZoomModeType";
 
 export type ZoomToolOptionsType = {
   zoomAutomaticCentering: boolean;
-  zoomMode: ZoomMode;
+  zoomMode: ZoomModeType;
   zoomReset: boolean;
 };

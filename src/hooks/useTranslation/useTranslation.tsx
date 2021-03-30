@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { languageSelector } from "../../store/selectors/languageSelector";
 import { de, en, fas, fi, gr, hi, hu } from "../../translations/";
-import { Language } from "../../types/Language";
+import { LanguageType } from "../../types/LanguageType";
 import fr from "../../translations/fr";
 
 export const useTranslation = () => {
@@ -9,28 +9,28 @@ export const useTranslation = () => {
 
   const t = (word: string) => {
     switch (language) {
-      case Language.English:
+      case LanguageType.English:
         if (!en.translation[word]) return word;
         return en.translation[word];
-      case Language.Farsi:
+      case LanguageType.Farsi:
         if (!fas.translation[word]) return word;
         return fas.translation[word];
-      case Language.Finnish:
+      case LanguageType.Finnish:
         if (!fi.translation[word]) return word;
         return fi.translation[word];
-      case Language.French:
+      case LanguageType.French:
         if (!fr.translation[word]) return word;
         return fr.translation[word];
-      case Language.German:
+      case LanguageType.German:
         if (!de.translation[word]) return word;
         return de.translation[word];
-      case Language.Greek:
+      case LanguageType.Greek:
         if (!gr.translation[word]) return word;
         return gr.translation[word];
-      case Language.Hindi:
+      case LanguageType.Hindi:
         if (!hi.translation[word]) return word;
         return hi.translation[word];
-      case Language.Hungarian:
+      case LanguageType.Hungarian:
         if (!hu.translation[word]) return word;
         return hu.translation[word];
       default:

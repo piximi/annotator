@@ -3,12 +3,12 @@ import { CategoryType } from "../../types/CategoryType";
 import { ImageType } from "../../types/ImageType";
 import { ToolType } from "../../types/ToolType";
 import { AnnotationType } from "../../types/AnnotationType";
-import { SelectionMode } from "../../types/SelectionMode";
+import { AnnotationModeType } from "../../types/AnnotationModeType";
 import { StateType } from "../../types/StateType";
-import { ZoomMode } from "../../types/ZoomMode";
+import { ZoomModeType } from "../../types/ZoomModeType";
 import * as _ from "lodash";
 import colorImage from "../../images/cell-painting.png";
-import { Language } from "../../types/Language";
+import { LanguageType } from "../../types/LanguageType";
 import * as tensorflow from "@tensorflow/tfjs";
 
 const initialState: StateType = {
@@ -51,17 +51,17 @@ const initialState: StateType = {
     src: colorImage,
   },
   invertMode: false,
-  language: Language.English,
+  language: LanguageType.English,
   toolType: ToolType.RectangularSelection,
   penSelectionBrushSize: 2,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
-  selectionMode: SelectionMode.New,
+  selectionMode: AnnotationModeType.New,
   soundEnabled: true,
   vibrance: 0,
   zoomSettings: {
     zoomAutomaticCentering: false,
-    zoomMode: ZoomMode.In,
+    zoomMode: ZoomModeType.In,
     zoomReset: false,
   },
 };
@@ -166,7 +166,7 @@ export const applicationSlice = createSlice({
     },
     setLanguage(
       state: StateType,
-      action: PayloadAction<{ language: Language }>
+      action: PayloadAction<{ language: LanguageType }>
     ) {
       state.language = action.payload.language;
     },
@@ -202,7 +202,7 @@ export const applicationSlice = createSlice({
     },
     setSelectionMode(
       state: StateType,
-      action: PayloadAction<{ selectionMode: SelectionMode }>
+      action: PayloadAction<{ selectionMode: AnnotationModeType }>
     ) {
       state.selectionMode = action.payload.selectionMode;
     },
@@ -224,7 +224,7 @@ export const applicationSlice = createSlice({
     },
     setZoomMode(
       state: StateType,
-      action: PayloadAction<{ zoomMode: ZoomMode }>
+      action: PayloadAction<{ zoomMode: ZoomModeType }>
     ) {
       state.zoomSettings.zoomMode = action.payload.zoomMode;
     },

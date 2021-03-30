@@ -1,5 +1,5 @@
 import { Tool } from "../Tool";
-import { ZoomMode } from "../../../types/ZoomMode";
+import { ZoomModeType } from "../../../types/ZoomModeType";
 import * as _ from "lodash";
 import numeral from "numeral";
 import { KonvaEventObject } from "konva/types/Node";
@@ -16,7 +16,7 @@ export class ZoomTool extends Tool {
   minimum?: { x: number; y: number };
   maximum?: { x: number; y: number };
 
-  mode: ZoomMode = ZoomMode.In;
+  mode: ZoomModeType = ZoomModeType.In;
 
   scale: number = 1.0;
 
@@ -86,7 +86,7 @@ export class ZoomTool extends Tool {
 
     if (!this.stageWidth) return;
 
-    if (this.mode === ZoomMode.In) {
+    if (this.mode === ZoomModeType.In) {
       this.maximum = position;
 
       this.scale = Math.abs(
@@ -118,7 +118,7 @@ export class ZoomTool extends Tool {
 
     if (!position) return;
 
-    if (this.mode === ZoomMode.In) {
+    if (this.mode === ZoomModeType.In) {
       if (this.scale === 32.0) return;
 
       const index = _.findIndex(this.scales, (scale) => {

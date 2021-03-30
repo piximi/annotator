@@ -1,4 +1,4 @@
-export enum SelectionMode {
+export enum AnnotationModeType {
   Add,
   Intersect,
   New,

@@ -1,4 +1,4 @@
-export enum Language {
+export enum LanguageType {
   Arabic,
   English,
   Farsi,

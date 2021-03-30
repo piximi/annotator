@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SelectionMode } from "../../../../../types/SelectionMode";
+import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { AnnotationType } from "../../../../../types/AnnotationType";
 import { SelectedContour } from "../SelectedContour";
 import { AnnotationTool } from "../../../../../image/Tool";
@@ -26,7 +26,7 @@ export const Confirmation = React.forwardRef<
   useEffect(() => {
     if (!annotationTool) return;
 
-    if (selectionMode === SelectionMode.New) {
+    if (selectionMode === AnnotationModeType.New) {
       if (!annotationTool.contour) return;
 
       const stagedPoints: Array<number> = _.flatten(

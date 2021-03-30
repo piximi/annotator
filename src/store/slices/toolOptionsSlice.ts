@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ToolOptionsStateType } from "../../types/ToolOptionsStateType";
-import { ZoomMode } from "../../types/ZoomMode";
+import { ZoomModeType } from "../../types/ZoomModeType";
 import { ZoomToolOptionsType } from "../../types/ZoomToolOptionsType";
 
 const initialState: ToolOptionsStateType = {
   zoom: {
     zoomAutomaticCentering: false,
-    zoomMode: ZoomMode.In,
+    zoomMode: ZoomModeType.In,
     zoomReset: false,
   },
 };

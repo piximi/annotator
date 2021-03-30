@@ -5,7 +5,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useDispatch, useSelector } from "react-redux";
-import { ZoomMode } from "../../../../types/ZoomMode";
+import { ZoomModeType } from "../../../../types/ZoomModeType";
 import { applicationSlice } from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
 import { zoomSettingsSelector } from "../../../../store/selectors";
@@ -27,12 +27,12 @@ export const ZoomOptions = () => {
 
     dispatch(
       applicationSlice.actions.setZoomMode({
-        zoomMode: value as ZoomMode,
+        zoomMode: value as ZoomModeType,
       })
     );
   };
 
-  const onZoomModeClick = (event: any, mode: ZoomMode) => {
+  const onZoomModeClick = (event: any, mode: ZoomModeType) => {
     dispatch(
       applicationSlice.actions.setZoomMode({
         zoomMode: mode,
@@ -68,7 +68,7 @@ export const ZoomOptions = () => {
 
       <List dense>
         <RadioGroup
-          defaultValue={ZoomMode.In}
+          defaultValue={ZoomModeType.In}
           aria-label="annotation mode"
           name="annotation-mode"
           onChange={onZoomModeChange}
@@ -83,7 +83,7 @@ export const ZoomOptions = () => {
             <ListItem
               button
               dense
-              onClick={(event) => onZoomModeClick(event, ZoomMode.In)}
+              onClick={(event) => onZoomModeClick(event, ZoomModeType.In)}
             >
               <ListItemIcon>
                 <Radio
@@ -92,7 +92,7 @@ export const ZoomOptions = () => {
                   icon={<RadioUncheckedIcon />}
                   checkedIcon={<RadioCheckedIcon />}
                   tabIndex={-1}
-                  value={ZoomMode.In}
+                  value={ZoomModeType.In}
                 />
               </ListItemIcon>
 
@@ -102,7 +102,7 @@ export const ZoomOptions = () => {
             <ListItem
               button
               dense
-              onClick={(event) => onZoomModeClick(event, ZoomMode.Out)}
+              onClick={(event) => onZoomModeClick(event, ZoomModeType.Out)}
             >
               <ListItemIcon>
                 <Radio
@@ -111,7 +111,7 @@ export const ZoomOptions = () => {
                   icon={<RadioUncheckedIcon />}
                   checkedIcon={<RadioCheckedIcon />}
                   tabIndex={-1}
-                  value={ZoomMode.Out}
+                  value={ZoomModeType.Out}
                 />
               </ListItemIcon>
 

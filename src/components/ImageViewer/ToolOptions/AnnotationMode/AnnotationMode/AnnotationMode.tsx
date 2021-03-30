@@ -8,7 +8,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import { useDispatch, useSelector } from "react-redux";
 import { selectionModeSelector } from "../../../../../store/selectors";
 import { applicationSlice } from "../../../../../store";
-import { SelectionMode } from "../../../../../types/SelectionMode";
+import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { NewTooltip } from "../NewTooltip";
 import { AddTooltip } from "../AddTooltip";
@@ -29,7 +29,7 @@ export const AnnotationMode = () => {
     dispatch(applicationSlice.actions.setSelectionMode(payload));
   };
 
-  const onClickLabel = (event: any, mode: SelectionMode) => {
+  const onClickLabel = (event: any, mode: AnnotationModeType) => {
     const payload = {
       selectionMode: mode,
     };
@@ -55,7 +55,7 @@ export const AnnotationMode = () => {
           <ListItem
             button
             dense
-            onClick={(event) => onClickLabel(event, SelectionMode.New)}
+            onClick={(event) => onClickLabel(event, AnnotationModeType.New)}
           >
             <ListItemIcon>
               <Radio
@@ -64,7 +64,7 @@ export const AnnotationMode = () => {
                 icon={<RadioUncheckedIcon />}
                 checkedIcon={<RadioCheckedIcon />}
                 tabIndex={-1}
-                value={SelectionMode.New}
+                value={AnnotationModeType.New}
               />
             </ListItemIcon>
 
@@ -76,7 +76,7 @@ export const AnnotationMode = () => {
           <ListItem
             button
             dense
-            onClick={(event) => onClickLabel(event, SelectionMode.Add)}
+            onClick={(event) => onClickLabel(event, AnnotationModeType.Add)}
           >
             <ListItemIcon>
               <Radio
@@ -85,7 +85,7 @@ export const AnnotationMode = () => {
                 icon={<RadioUncheckedIcon />}
                 checkedIcon={<RadioCheckedIcon />}
                 tabIndex={-1}
-                value={SelectionMode.Add}
+                value={AnnotationModeType.Add}
               />
             </ListItemIcon>
 
@@ -97,7 +97,9 @@ export const AnnotationMode = () => {
           <ListItem
             button
             dense
-            onClick={(event) => onClickLabel(event, SelectionMode.Subtract)}
+            onClick={(event) =>
+              onClickLabel(event, AnnotationModeType.Subtract)
+            }
           >
             <ListItemIcon>
               <Radio
@@ -106,7 +108,7 @@ export const AnnotationMode = () => {
                 icon={<RadioUncheckedIcon />}
                 checkedIcon={<RadioCheckedIcon />}
                 tabIndex={-1}
-                value={SelectionMode.Subtract}
+                value={AnnotationModeType.Subtract}
               />
             </ListItemIcon>
 
@@ -118,7 +120,9 @@ export const AnnotationMode = () => {
           <ListItem
             button
             dense
-            onClick={(event) => onClickLabel(event, SelectionMode.Intersect)}
+            onClick={(event) =>
+              onClickLabel(event, AnnotationModeType.Intersect)
+            }
           >
             <ListItemIcon>
               <Radio
@@ -127,7 +131,7 @@ export const AnnotationMode = () => {
                 icon={<RadioUncheckedIcon />}
                 checkedIcon={<RadioCheckedIcon />}
                 tabIndex={-1}
-                value={SelectionMode.Intersect}
+                value={AnnotationModeType.Intersect}
               />
             </ListItemIcon>
 

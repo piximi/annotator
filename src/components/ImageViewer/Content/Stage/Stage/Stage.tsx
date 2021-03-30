@@ -24,7 +24,7 @@ import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
-import { SelectionMode } from "../../../../../types/SelectionMode";
+import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
 import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
 import { KonvaEventObject } from "konva/types/Node";
@@ -224,7 +224,7 @@ export const Stage = ({ src }: StageProps) => {
   useEffect(() => {
     if (toolType === ToolType.Zoom) return;
 
-    if (selectionMode === SelectionMode.New) return; // "New" mode
+    if (selectionMode === AnnotationModeType.New) return; // "New" mode
 
     setSelecting(false);
 
@@ -236,15 +236,15 @@ export const Stage = ({ src }: StageProps) => {
 
     if (!selectedInstance) return;
 
-    if (selectionMode === SelectionMode.Add) {
+    if (selectionMode === AnnotationModeType.Add) {
       [combinedMask, combinedContour] = annotationTool.add(
         selectedInstance.mask
       );
-    } else if (selectionMode === SelectionMode.Subtract) {
+    } else if (selectionMode === AnnotationModeType.Subtract) {
       [combinedMask, combinedContour] = annotationTool.subtract(
         selectedInstance.mask
       );
-    } else if (selectionMode === SelectionMode.Intersect) {
+    } else if (selectionMode === AnnotationModeType.Intersect) {
       [combinedMask, combinedContour] = annotationTool.intersect(
         selectedInstance.mask
       );
@@ -262,7 +262,7 @@ export const Stage = ({ src }: StageProps) => {
   useEffect(() => {
     if (toolType === ToolType.Zoom) return;
 
-    if (selectionMode === SelectionMode.New) return;
+    if (selectionMode === AnnotationModeType.New) return;
 
     if (!selecting) return;
 
@@ -313,7 +313,7 @@ export const Stage = ({ src }: StageProps) => {
         })
       );
 
-    if (selectionMode === SelectionMode.New) return;
+    if (selectionMode === AnnotationModeType.New) return;
 
     if (annotationTool.annotating) setSelecting(annotationTool.annotating);
   });
@@ -429,10 +429,10 @@ export const Stage = ({ src }: StageProps) => {
 
       if (annotated) deselectAnnotation();
 
-      if (selectionMode === SelectionMode.New)
+      if (selectionMode === AnnotationModeType.New)
         selectedAnnotationRef.current = null;
 
-      if (selectionMode === SelectionMode.Add && !shiftPress)
+      if (selectionMode === AnnotationModeType.Add && !shiftPress)
         selectedAnnotationRef.current = null;
 
       if (!annotationTool || !stageRef || !stageRef.current) return;
@@ -542,10 +542,10 @@ export const Stage = ({ src }: StageProps) => {
 
     selectedAnnotationRef.current = null;
 
-    if (selectionMode !== SelectionMode.New)
+    if (selectionMode !== AnnotationModeType.New)
       dispatch(
         applicationSlice.actions.setSelectionMode({
-          selectionMode: SelectionMode.New,
+          selectionMode: AnnotationModeType.New,
         })
       );
   }, [enterPress]);
@@ -709,7 +709,7 @@ export const Stage = ({ src }: StageProps) => {
                   />
                 )}
 
-                {selectionMode !== SelectionMode.New &&
+                {selectionMode !== AnnotationModeType.New &&
                   annotationTool &&
                   annotationTool.annotating &&
                   !annotationTool.annotated &&

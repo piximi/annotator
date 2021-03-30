@@ -69,7 +69,7 @@ export const Stage = ({ src }: StageProps) => {
   const [stageWidth, setStageWidth] = useState<number>(1000);
   const [stageHeight, setStageHeight] = useState<number>(1000);
 
-  const stagedImagePosition = { x: 100, y: 100 };
+  const stagedImagePosition = { x: 200, y: 200 };
   // const stagedImagePosition = { x: 0, y: 0 };
 
   const [aspectRatio, setAspectRatio] = useState<number>(1);
@@ -80,8 +80,8 @@ export const Stage = ({ src }: StageProps) => {
     src,
     stagedImagePosition,
     {
-      width: stageWidth - stagedImagePosition.x,
-      height: stageHeight - stagedImagePosition.y,
+      width: stageWidth,
+      height: stageHeight,
     },
     zoomScale
   );
@@ -321,8 +321,8 @@ export const Stage = ({ src }: StageProps) => {
   useEffect(() => {
     if (!annotationTool) return;
     annotationTool.stagedImageShape = {
-      width: stageWidth - stagedImagePosition.x,
-      height: stageHeight - stagedImagePosition.y,
+      width: stageWidth,
+      height: stageHeight,
     };
     annotationTool.stagedImagePosition = stagedImagePosition;
   }, [stageWidth, stageHeight, annotationTool]);
@@ -689,8 +689,8 @@ export const Stage = ({ src }: StageProps) => {
                     points={annotationTool.contour}
                     scale={zoomScale}
                     stageScale={{
-                      x: (stageWidth - stagedImagePosition.x) / imageWidth,
-                      y: (stageHeight - stagedImagePosition.y) / imageHeight,
+                      x: stageWidth / imageWidth,
+                      y: stageHeight / imageHeight,
                     }}
                   />
                 )}
@@ -706,8 +706,8 @@ export const Stage = ({ src }: StageProps) => {
                       points={selectedAnnotationRef.current.contour}
                       scale={zoomScale}
                       stageScale={{
-                        x: (stageWidth - stagedImagePosition.x) / imageWidth,
-                        y: (stageHeight - stagedImagePosition.y) / imageHeight,
+                        x: stageWidth / imageWidth,
+                        y: stageHeight / imageHeight,
                       }}
                     />
                   )}

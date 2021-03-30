@@ -40,7 +40,12 @@ export function cachedAStarPathSearch(
   };
 
   const distance = (fromNode: Node, toNode: Node) => {
-    return toNode.data;
+    const [x1, y1] = fromIdxToCoord(fromNode.id as number, width);
+    const [x2, y2] = fromIdxToCoord(toNode.id as number, width);
+    if (x1 === x2 || y1 === y2) {
+      return 1 * toNode.data;
+    }
+    return 1.41 * toNode.data;
   };
 
   return {

@@ -13,6 +13,8 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../icons";
 import { useTranslation } from "../../../../hooks/useTranslation";
+import Divider from "@material-ui/core/Divider";
+import { InformationBox } from "../InformationBox";
 
 type ZoomOptionsProps = {
   handleRevert: () => void;
@@ -53,6 +55,10 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
 
   return (
     <React.Fragment>
+      <InformationBox description="…" name={t("Zoom")} />
+
+      <Divider />
+
       <List dense>
         <RadioGroup
           defaultValue={ZoomMode.In}
@@ -108,7 +114,9 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
         </RadioGroup>
       </List>
 
-      <List component="nav">
+      <Divider />
+
+      <List component="nav" dense>
         <ListItem button onClick={onCenterChange}>
           <ListItemIcon>
             <Checkbox
@@ -119,13 +127,22 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
             />
           </ListItemIcon>
 
-          <ListItemText primary={t("Center image automatically")} />
+          <ListItemText
+            primary={t("Auto-center")}
+            secondary={t("Keep the image centered")}
+          />
         </ListItem>
       </List>
 
-      <List>
+      <Divider />
+
+      <List dense>
         <ListItem button onClick={handleRevert}>
           <ListItemText>{t("Actual size")}</ListItemText>
+        </ListItem>
+
+        <ListItem button onClick={handleRevert}>
+          <ListItemText>{t("Fit to window")}</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

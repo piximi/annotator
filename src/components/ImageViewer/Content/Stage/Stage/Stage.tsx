@@ -10,7 +10,6 @@ import {
   selectedCategroySelector,
   selectionModeSelector,
   toolTypeSelector,
-  zoomToolOptionsSelector,
 } from "../../../../../store/selectors";
 import {
   Provider,
@@ -19,7 +18,7 @@ import {
   useSelector,
 } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
-import { setSelectedAnnotation, applicationSlice } from "../../../../../store";
+import { applicationSlice, setSelectedAnnotation } from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
@@ -33,9 +32,11 @@ import { Annotations } from "../Annotations";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
-import { Tool } from "../../../../../image/Tool";
-import { ObjectAnnotationTool } from "../../../../../image/Tool";
-import { ColorAnnotationTool } from "../../../../../image/Tool";
+import {
+  ColorAnnotationTool,
+  ObjectAnnotationTool,
+  Tool,
+} from "../../../../../image/Tool";
 import { ColorAnnotationToolTip } from "../ColorAnnotationToolTip";
 import useSound from "use-sound";
 import createAnnotationSoundEffect from "../../../../../sounds/pop-up-on.mp3";

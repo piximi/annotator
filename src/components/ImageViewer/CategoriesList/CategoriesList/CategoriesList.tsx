@@ -78,7 +78,7 @@ export const CategoriesList = () => {
     >
       <div className={classes.applicationDrawerHeader} />
 
-      <CollapsibleList primary={t("CategoriesList")}>
+      <CollapsibleList primary={t("Categories")}>
         {createdCategories.map((category: Category) => {
           return (
             <div key={category.id}>

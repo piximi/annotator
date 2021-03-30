@@ -9,8 +9,11 @@ import {
   invertModeSelector,
   selectedCategroySelector,
   selectionModeSelector,
+  stageHeightSelector,
+  stageWidthSelector,
   toolTypeSelector,
 } from "../../../../../store/selectors";
+import { setStageHeight, setStageWidth } from "../../../../../store";
 import {
   Provider,
   ReactReduxContext,
@@ -69,8 +72,8 @@ export const Stage = ({ src }: StageProps) => {
 
   const virtualWidth = 750;
 
-  const [stageWidth, setStageWidth] = useState<number>(virtualWidth);
-  const [stageHeight, setStageHeight] = useState<number>(virtualWidth);
+  const stageHeight = useSelector(stageHeightSelector);
+  const stageWidth = useSelector(stageWidthSelector);
 
   const [stagedImagePosition, setStagedImagePosition] = useState<{
     x: number;
@@ -618,13 +621,14 @@ export const Stage = ({ src }: StageProps) => {
 
   const resize = () => {
     if (!parentDivRef || !parentDivRef.current) return;
-    const parentDivWidth = parentDivRef.current.getBoundingClientRect().width;
-    setZoomScale(parentDivWidth / virtualWidth);
-    setStageWidth(parentDivWidth);
-    setStageHeight(parentDivWidth);
+    const size = parentDivRef.current.getBoundingClientRect().width;
+    setZoomScale(size / virtualWidth);
+
+    dispatch(setStageHeight({ stageHeight: size }));
+    dispatch(setStageWidth({ stageWidth: size }));
 
     setStagedImagePosition({
-      x: ((1 - parentDivWidth / virtualWidth) / 2) * virtualWidth,
+      x: ((1 - size / virtualWidth) / 2) * virtualWidth,
       y: 50,
     });
   };

@@ -19,6 +19,8 @@ export {
   setSelectedAnnotation,
   setSelectionMode,
   setSeletedCategory,
+  setStageHeight,
+  setStageWidth,
   setVibrance,
   setZoomToolOptions,
 } from "./slices";

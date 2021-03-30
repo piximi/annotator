@@ -10,7 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import { ColorIcon } from "../ColorIcon";
 import { useStyles } from "./EditCategoryDialog.css";
 import { CategoryType } from "../../../../types/CategoryType";
-import { slice } from "../../../../store";
+import { applicationSlice } from "../../../../store";
 import { categoriesSelector } from "../../../../store/selectors";
 
 type EditCategoryDialogProps = {
@@ -56,7 +56,9 @@ export const EditCategoryDialog = ({
         return v;
       }
     });
-    dispatch(slice.actions.setCategories({ categories: updatedCategories }));
+    dispatch(
+      applicationSlice.actions.setCategories({ categories: updatedCategories })
+    );
 
     onCloseDialog();
   };

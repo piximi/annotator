@@ -21,7 +21,7 @@ import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
-import { slice } from "../../../../store";
+import { applicationSlice } from "../../../../store";
 import { useDispatch } from "react-redux";
 
 export const CategoriesList = () => {
@@ -52,7 +52,7 @@ export const CategoriesList = () => {
     category: CategoryType
   ) => {
     dispatch(
-      slice.actions.setSeletedCategory({
+      applicationSlice.actions.setSeletedCategory({
         selectedCategory: category.id,
       })
     );

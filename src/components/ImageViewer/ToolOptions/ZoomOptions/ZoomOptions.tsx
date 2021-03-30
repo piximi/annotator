@@ -6,7 +6,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useDispatch, useSelector } from "react-redux";
 import { ZoomMode } from "../../../../types/ZoomMode";
-import { slice } from "../../../../store";
+import { applicationSlice } from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
 import { zoomSettingsSelector } from "../../../../store/selectors";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -26,7 +26,7 @@ export const ZoomOptions = () => {
     const value = parseInt((event.target as HTMLInputElement).value);
 
     dispatch(
-      slice.actions.setZoomMode({
+      applicationSlice.actions.setZoomMode({
         zoomMode: value as ZoomMode,
       })
     );
@@ -34,7 +34,7 @@ export const ZoomOptions = () => {
 
   const onZoomModeClick = (event: any, mode: ZoomMode) => {
     dispatch(
-      slice.actions.setZoomMode({
+      applicationSlice.actions.setZoomMode({
         zoomMode: mode,
       })
     );
@@ -42,7 +42,7 @@ export const ZoomOptions = () => {
 
   const onCenterChange = () => {
     dispatch(
-      slice.actions.setZoomAutomaticCentering({
+      applicationSlice.actions.setZoomAutomaticCentering({
         zoomAutomaticCentering: !zoomSettings.zoomAutomaticCentering,
       })
     );
@@ -50,7 +50,9 @@ export const ZoomOptions = () => {
 
   const onActualSizeClick = () => {
     dispatch(
-      slice.actions.setZoomReset({ zoomReset: !zoomSettings.zoomReset })
+      applicationSlice.actions.setZoomReset({
+        zoomReset: !zoomSettings.zoomReset,
+      })
     );
   };
 

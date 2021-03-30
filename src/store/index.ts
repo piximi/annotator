@@ -21,7 +21,7 @@ export {
   setVibrance,
   setZoomMode,
   setZoomReset,
-  slice,
+  applicationSlice,
 } from "./slices";
 export { store } from "./stores";
 export { echoThunk } from "./thunks";

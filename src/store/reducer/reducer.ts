@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import { slice } from "../slices";
+import { applicationSlice } from "../slices";
 
 const reducers = {
-  state: slice.reducer,
+  state: applicationSlice.reducer,
 };
 
 export const reducer = combineReducers(reducers);

@@ -1,10 +1,10 @@
 import { StateType } from "../../types/StateType";
-import { ZoomSettings } from "../../types/ZoomSettings";
+import { ZoomToolOptionsType } from "../../types/ZoomToolOptionsType";
 
 export const zoomSettingsSelector = ({
   state,
 }: {
   state: StateType;
-}): ZoomSettings => {
+}): ZoomToolOptionsType => {
   return state.zoomSettings;
 };

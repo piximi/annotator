@@ -7,7 +7,7 @@ import React from "react";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import { useDispatch, useSelector } from "react-redux";
 import { selectionModeSelector } from "../../../../../store/selectors";
-import { slice } from "../../../../../store";
+import { applicationSlice } from "../../../../../store";
 import { SelectionMode } from "../../../../../types/SelectionMode";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { NewTooltip } from "../NewTooltip";
@@ -26,14 +26,14 @@ export const AnnotationMode = () => {
     const payload = {
       selectionMode: parseInt((event.target as HTMLInputElement).value),
     };
-    dispatch(slice.actions.setSelectionMode(payload));
+    dispatch(applicationSlice.actions.setSelectionMode(payload));
   };
 
   const onClickLabel = (event: any, mode: SelectionMode) => {
     const payload = {
       selectionMode: mode,
     };
-    dispatch(slice.actions.setSelectionMode(payload));
+    dispatch(applicationSlice.actions.setSelectionMode(payload));
   };
 
   const t = useTranslation();

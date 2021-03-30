@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { invertModeSelector } from "../../../../store/selectors";
-import { slice } from "../../../../store/slices";
+import { applicationSlice } from "../../../../store/slices";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -16,7 +16,9 @@ export const InvertAnnotation = () => {
   const invertMode = useSelector(invertModeSelector);
 
   const onInvertClick = () => {
-    dispatch(slice.actions.setInvertMode({ invertMode: !invertMode }));
+    dispatch(
+      applicationSlice.actions.setInvertMode({ invertMode: !invertMode })
+    );
   };
 
   const t = useTranslation();

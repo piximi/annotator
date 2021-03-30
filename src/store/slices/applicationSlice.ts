@@ -9,7 +9,6 @@ import { ZoomMode } from "../../types/ZoomMode";
 import * as _ from "lodash";
 import colorImage from "../../images/cell-painting.png";
 import { Language } from "../../types/Language";
-import { loadLayersModelThunk } from "../thunks";
 import * as tensorflow from "@tensorflow/tfjs";
 
 const initialState: StateType = {
@@ -67,7 +66,7 @@ const initialState: StateType = {
   },
 };
 
-export const slice = createSlice({
+export const applicationSlice = createSlice({
   initialState: initialState,
   name: "image-viewer",
   reducers: {
@@ -272,4 +271,4 @@ export const {
   setVibrance,
   setZoomMode,
   setZoomReset,
-} = slice.actions;
+} = applicationSlice.actions;

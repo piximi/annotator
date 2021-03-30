@@ -7,7 +7,7 @@ import { Tool } from "../Tool";
 import { useStyles } from "./Tools.css";
 import { useDispatch, useSelector } from "react-redux";
 import { toolTypeSelector } from "../../../../store/selectors";
-import { slice } from "../../../../store";
+import { applicationSlice } from "../../../../store";
 import {
   ColorSelectionIcon,
   EllipticalSelectionIcon,
@@ -47,7 +47,7 @@ export const Tools = () => {
         name={t("Pointer")}
         onClick={() => {
           dispatch(
-            slice.actions.setOperation({
+            applicationSlice.actions.setOperation({
               operation: OperationType.Pointer,
             })
           );
@@ -64,7 +64,7 @@ export const Tools = () => {
           name={t("Rectangular annotation")}
           onClick={() => {
             dispatch(
-              slice.actions.setOperation({
+              applicationSlice.actions.setOperation({
                 operation: OperationType.RectangularSelection,
               })
             );
@@ -78,7 +78,7 @@ export const Tools = () => {
           name={t("Elliptical annotation")}
           onClick={() => {
             dispatch(
-              slice.actions.setOperation({
+              applicationSlice.actions.setOperation({
                 operation: OperationType.EllipticalAnnotation,
               })
             );
@@ -92,7 +92,7 @@ export const Tools = () => {
           name={t("Pen annotation")}
           onClick={() => {
             dispatch(
-              slice.actions.setOperation({
+              applicationSlice.actions.setOperation({
                 operation: OperationType.PenAnnotation,
               })
             );
@@ -106,7 +106,7 @@ export const Tools = () => {
           name={t("Lasso annotation")}
           onClick={() => {
             dispatch(
-              slice.actions.setOperation({
+              applicationSlice.actions.setOperation({
                 operation: OperationType.LassoAnnotation,
               })
             );
@@ -120,7 +120,7 @@ export const Tools = () => {
           name={t("Polygonal annotation")}
           onClick={() => {
             dispatch(
-              slice.actions.setOperation({
+              applicationSlice.actions.setOperation({
                 operation: OperationType.PolygonalAnnotation,
               })
             );
@@ -134,7 +134,7 @@ export const Tools = () => {
           name={t("Magnetic annotation")}
           onClick={() => {
             dispatch(
-              slice.actions.setOperation({
+              applicationSlice.actions.setOperation({
                 operation: OperationType.MagneticAnnotation,
               })
             );
@@ -148,7 +148,7 @@ export const Tools = () => {
           name={t("Color annotation")}
           onClick={() => {
             dispatch(
-              slice.actions.setOperation({
+              applicationSlice.actions.setOperation({
                 operation: OperationType.ColorAnnotation,
               })
             );
@@ -162,7 +162,7 @@ export const Tools = () => {
           name={t("Quick annotation")}
           onClick={() => {
             dispatch(
-              slice.actions.setOperation({
+              applicationSlice.actions.setOperation({
                 operation: OperationType.QuickAnnotation,
               })
             );
@@ -176,7 +176,7 @@ export const Tools = () => {
           name={t("Object annotation")}
           onClick={() => {
             dispatch(
-              slice.actions.setOperation({
+              applicationSlice.actions.setOperation({
                 operation: OperationType.ObjectAnnotation,
               })
             );
@@ -192,7 +192,7 @@ export const Tools = () => {
           name={t("Zoom")}
           onClick={() => {
             dispatch(
-              slice.actions.setOperation({
+              applicationSlice.actions.setOperation({
                 operation: OperationType.Zoom,
               })
             );

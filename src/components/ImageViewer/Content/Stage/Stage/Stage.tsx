@@ -19,7 +19,7 @@ import {
   useSelector,
 } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
-import { setSelectedAnnotation, slice } from "../../../../../store";
+import { setSelectedAnnotation, applicationSlice } from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
@@ -134,7 +134,7 @@ export const Stage = ({ src }: StageProps) => {
         selectedAnnotation: undefined,
       })
     );
-    dispatch(slice.actions.setAnnotated({ annotated: false }));
+    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
 
     transformerRef.current?.detach();
     transformerRef.current?.getLayer()?.batchDraw();
@@ -218,7 +218,7 @@ export const Stage = ({ src }: StageProps) => {
     annotationTool.boundingBox = invertedBoundingBox;
     annotationTool.contour = invertedContour;
 
-    dispatch(slice.actions.setAnnotated({ annotated: true }));
+    dispatch(applicationSlice.actions.setAnnotated({ annotated: true }));
   }, [invertMode]);
 
   useEffect(() => {
@@ -272,7 +272,7 @@ export const Stage = ({ src }: StageProps) => {
 
     //remove the existing Operator since it's essentially been replaced
     dispatch(
-      slice.actions.deleteImageInstance({
+      applicationSlice.actions.deleteImageInstance({
         id: selectedAnnotationId,
       })
     );
@@ -295,7 +295,7 @@ export const Stage = ({ src }: StageProps) => {
     } as SelectionType;
 
     dispatch(
-      slice.actions.setImageInstances({
+      applicationSlice.actions.setImageInstances({
         instances: [...(others as Array<SelectionType>), updated],
       })
     );
@@ -308,7 +308,9 @@ export const Stage = ({ src }: StageProps) => {
 
     if (annotationTool.annotated)
       dispatch(
-        slice.actions.setAnnotated({ annotated: annotationTool.annotated })
+        applicationSlice.actions.setAnnotated({
+          annotated: annotationTool.annotated,
+        })
       );
 
     if (selectionMode === SelectionMode.New) return;
@@ -521,14 +523,14 @@ export const Stage = ({ src }: StageProps) => {
 
     if (selectedAnnotationId === selectedAnnotationRef.current.id) {
       dispatch(
-        slice.actions.replaceImageInstance({
+        applicationSlice.actions.replaceImageInstance({
           id: selectedAnnotationRef.current.id,
           instance: selectedAnnotationRef.current,
         })
       );
     } else {
       dispatch(
-        slice.actions.setImageInstances({
+        applicationSlice.actions.setImageInstances({
           instances: [...annotations, selectedAnnotationRef.current],
         })
       );
@@ -542,7 +544,9 @@ export const Stage = ({ src }: StageProps) => {
 
     if (selectionMode !== SelectionMode.New)
       dispatch(
-        slice.actions.setSelectionMode({ selectionMode: SelectionMode.New })
+        applicationSlice.actions.setSelectionMode({
+          selectionMode: SelectionMode.New,
+        })
       );
   }, [enterPress]);
 
@@ -562,7 +566,7 @@ export const Stage = ({ src }: StageProps) => {
     if (selectedAnnotationId) {
       if (backspacePress || escapePress || deletePress) {
         dispatch(
-          slice.actions.deleteImageInstance({
+          applicationSlice.actions.deleteImageInstance({
             id: selectedAnnotationId,
           })
         );

@@ -32,7 +32,7 @@ import {
   toolTypeSelector,
   zoomSettingsSelector,
 } from "../../../../store/selectors";
-import { slice } from "../../../../store";
+import { applicationSlice } from "../../../../store";
 import { useTranslation } from "react-i18next";
 
 export const ToolOptions = () => {
@@ -47,7 +47,9 @@ export const ToolOptions = () => {
 
   const handleZoomReset = () => {
     dispatch(
-      slice.actions.setZoomReset({ zoomReset: !zoomSettings.zoomReset })
+      applicationSlice.actions.setZoomReset({
+        zoomReset: !zoomSettings.zoomReset,
+      })
     );
   };
 

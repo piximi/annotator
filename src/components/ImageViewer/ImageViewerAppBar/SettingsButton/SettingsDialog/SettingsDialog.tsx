@@ -16,7 +16,7 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import { Language } from "../../../../../types/Language";
 import { useDispatch, useSelector } from "react-redux";
-import { slice } from "../../../../../store";
+import { applicationSlice } from "../../../../../store";
 import { languageSelector } from "../../../../../store/selectors/languageSelector";
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
 import { useStyles } from "./SettingsDialog.css";
@@ -38,13 +38,17 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
 
   const onLanguageChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     dispatch(
-      slice.actions.setLanguage({ language: event.target.value as Language })
+      applicationSlice.actions.setLanguage({
+        language: event.target.value as Language,
+      })
     );
   };
 
   const onSoundEffectsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(
-      slice.actions.setSoundEnabled({ soundEnabled: event.target.checked })
+      applicationSlice.actions.setSoundEnabled({
+        soundEnabled: event.target.checked,
+      })
     );
   };
 

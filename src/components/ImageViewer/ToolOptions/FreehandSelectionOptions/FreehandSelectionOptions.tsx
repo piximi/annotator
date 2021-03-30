@@ -3,7 +3,7 @@ import { SelectionOptions } from "../SelectionOptions";
 import Divider from "@material-ui/core/Divider";
 import Slider from "@material-ui/core/Slider";
 import { useDispatch, useSelector } from "react-redux";
-import { slice } from "../../../../store";
+import { applicationSlice } from "../../../../store";
 import { penSelectionBrushSizeSelector } from "../../../../store/selectors/penSelectionBrushSizeSelector";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -19,7 +19,7 @@ export const FreehandSelectionOptions = () => {
   const onChange = (event: any, changed: number | number[]) => {
     const payload = { penSelectionBrushSize: changed as number };
 
-    dispatch(slice.actions.setPenSelectionBrushSize(payload));
+    dispatch(applicationSlice.actions.setPenSelectionBrushSize(payload));
   };
 
   return (

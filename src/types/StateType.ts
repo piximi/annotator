@@ -2,7 +2,7 @@ import { CategoryType } from "./CategoryType";
 import { ImageType } from "./ImageType";
 import { ToolType } from "./ToolType";
 import { SelectionMode } from "./SelectionMode";
-import { ZoomSettings } from "./ZoomSettings";
+import { ZoomToolOptionsType } from "./ZoomToolOptionsType";
 import { Language } from "./Language";
 
 export type StateType = {
@@ -23,5 +23,5 @@ export type StateType = {
   soundEnabled: boolean;
   toolType: ToolType;
   vibrance: number;
-  zoomSettings: ZoomSettings;
+  zoomSettings: ZoomToolOptionsType;
 };

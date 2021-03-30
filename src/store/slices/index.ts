@@ -24,5 +24,5 @@ export {
   setVibrance,
   setZoomMode,
   setZoomReset,
-  slice,
-} from "./slice";
+  applicationSlice,
+} from "./applicationSlice";

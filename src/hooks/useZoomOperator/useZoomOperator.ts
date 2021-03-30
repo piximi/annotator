@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../types/ToolType";
 import { ZoomTool } from "../../image/Tool/ZoomTool";
-import { ZoomSettings } from "../../types/ZoomSettings";
+import { ZoomToolOptionsType } from "../../types/ZoomToolOptionsType";
 import * as ImageJS from "image-js";
 import { KonvaEventObject } from "konva/types/Node";
 
@@ -10,7 +10,7 @@ export const useZoomOperator = (
   operation: ToolType,
   src: string,
   stageWidth: number,
-  zoomSettings: ZoomSettings
+  zoomSettings: ZoomToolOptionsType
 ) => {
   const [operator, setOperator] = useState<ZoomTool>();
   const [, update] = useReducer((x) => x + 1, 0);

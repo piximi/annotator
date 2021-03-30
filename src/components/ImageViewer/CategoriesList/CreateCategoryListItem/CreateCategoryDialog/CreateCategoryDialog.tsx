@@ -11,7 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import { useStyles } from "./CreateCategoryDialog.css";
 import { ColorResult } from "react-color";
 import { sample } from "underscore";
-import { slice } from "../../../../../store";
+import { applicationSlice } from "../../../../../store";
 import { v4 } from "uuid";
 import { CategoryType } from "../../../../../types/CategoryType";
 import { categoriesSelector } from "../../../../../store/selectors";
@@ -66,13 +66,13 @@ export const CreateCategoryDialog = ({
     };
 
     dispatch(
-      slice.actions.setCategories({
+      applicationSlice.actions.setCategories({
         categories: [...categories, category],
       })
     );
 
     dispatch(
-      slice.actions.setSeletedCategory({
+      applicationSlice.actions.setSeletedCategory({
         selectedCategory: category.id,
       })
     );

@@ -10,7 +10,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Slider from "@material-ui/core/Slider";
 import { useDispatch, useSelector } from "react-redux";
 import { penSelectionBrushSizeSelector } from "../../../../store/selectors/penSelectionBrushSizeSelector";
-import { slice } from "../../../../store";
+import { applicationSlice } from "../../../../store";
 
 export const FreehandAnnotationOptions = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export const FreehandAnnotationOptions = () => {
   const onChange = (event: any, changed: number | number[]) => {
     const payload = { penSelectionBrushSize: changed as number };
 
-    dispatch(slice.actions.setPenSelectionBrushSize(payload));
+    dispatch(applicationSlice.actions.setPenSelectionBrushSize(payload));
   };
   const t = useTranslation();
   return (

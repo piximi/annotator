@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { CategoryType } from "../../../../types/CategoryType";
 import { AnnotationType } from "../../../../types/AnnotationType";
-import { slice } from "../../../../store";
+import { applicationSlice } from "../../../../store";
 import {
   imageInstancesSelector,
   selectedCategroySelector,
@@ -34,13 +34,13 @@ export const DeleteCategoryDialog = ({
     //change activeCategory if we are about to delete it
     if (activeCategory.id === category.id) {
       dispatch(
-        slice.actions.setSeletedCategory({
+        applicationSlice.actions.setSeletedCategory({
           selectedCategory: "00000000-0000-0000-0000-000000000000",
         })
       );
     }
 
-    dispatch(slice.actions.deleteCategory({ category: category }));
+    dispatch(applicationSlice.actions.deleteCategory({ category: category }));
 
     const instances = selections?.map((instance: AnnotationType) => {
       if (instance.categoryId === category.id) {
@@ -54,7 +54,7 @@ export const DeleteCategoryDialog = ({
     });
 
     dispatch(
-      slice.actions.setImageInstances({
+      applicationSlice.actions.setImageInstances({
         instances: instances as Array<AnnotationType>,
       })
     );

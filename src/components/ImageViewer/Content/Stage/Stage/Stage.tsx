@@ -659,6 +659,7 @@ export const Stage = ({ src }: StageProps) => {
                 />
 
                 <Selecting
+                  imagePosition={stagedImagePosition}
                   scale={zoomScale}
                   stageScale={{
                     x: stageWidth / imageWidth,

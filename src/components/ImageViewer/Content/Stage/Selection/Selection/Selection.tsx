@@ -26,6 +26,7 @@ import { ZoomSelection } from "../ZoomSelection";
 import { Tool } from "../../../../../../image/Tool";
 
 type SelectionProps = {
+  imagePosition: { x: number; y: number };
   scale: number;
   stageScale: { x: number; y: number };
   tool?: Tool;
@@ -33,6 +34,7 @@ type SelectionProps = {
 };
 
 export const Selection = ({
+  imagePosition,
   scale,
   stageScale,
   tool,
@@ -62,6 +64,7 @@ export const Selection = ({
     case ToolType.MagneticAnnotation:
       return (
         <MagneticSelection
+          imagePosition={imagePosition}
           operator={tool as MagneticAnnotationTool}
           scale={scale}
           stageScale={stageScale}

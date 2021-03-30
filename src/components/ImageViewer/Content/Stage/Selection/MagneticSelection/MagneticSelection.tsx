@@ -4,12 +4,14 @@ import { MagneticAnnotationTool } from "../../../../../../image/Tool";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type MagneticSelectionProps = {
+  imagePosition: { x: number; y: number };
   operator: MagneticAnnotationTool;
   scale: number;
   stageScale: { x: number; y: number };
 };
 
 export const MagneticSelection = ({
+  imagePosition,
   operator,
   scale,
   stageScale,
@@ -45,6 +47,8 @@ export const MagneticSelection = ({
         stroke="black"
         strokeWidth={1 / scale}
         scale={stageScale}
+        x={imagePosition.x}
+        y={imagePosition.y}
       />
 
       <ReactKonva.Line
@@ -54,6 +58,8 @@ export const MagneticSelection = ({
         points={operator.buffer}
         strokeWidth={1 / scale}
         scale={stageScale}
+        x={imagePosition.x}
+        y={imagePosition.y}
       />
     </ReactKonva.Group>
   );

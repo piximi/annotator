@@ -26,3 +26,5 @@ export {
   setZoomReset,
   applicationSlice,
 } from "./applicationSlice";
+
+export { setZoomOptions } from "./toolOptionsSlice";

@@ -36,7 +36,6 @@ export class ColorAnnotationTool extends AnnotationTool {
   onMouseDown(position: { x: number; y: number }) {
     if (!this.stagedImageShape) return;
 
-    console.info(position);
     this.annotated = false;
     this.annotating = true;
     this.tolerance = 1;
@@ -107,8 +106,24 @@ export class ColorAnnotationTool extends AnnotationTool {
 
     this._contour = this.points;
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
+
+    //mask should be the whole image, not just the ROI
+    const imgMask = new ImageJS.Image(this.image.width, this.image.height, {
+      components: 1,
+      alpha: 0,
+    });
+
+    for (let x = 0; x < this.roiMask.width; x++) {
+      for (let y = 0; y < this.roiMask.height; y++) {
+        //@ts-ignore
+        if (this.roiMask.getBitXY(x, y)) {
+          imgMask.setPixelXY(x + offsetX, y + offsetY, [255]);
+        }
+      }
+    }
+
     // @ts-ignore
-    this._mask = encode(this.roiMask.data as Uint8Array);
+    this._mask = encode(imgMask.data as Uint8Array);
 
     this.annotated = true;
     this.annotating = false;

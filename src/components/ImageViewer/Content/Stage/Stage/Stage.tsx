@@ -71,12 +71,10 @@ export const Stage = ({ src }: StageProps) => {
   const [stageWidth, setStageWidth] = useState<number>(virtualWidth);
   const [stageHeight, setStageHeight] = useState<number>(virtualWidth);
 
-  // const stagedImagePosition = { x: 100, y: 100 };
   const [stagedImagePosition, setStagedImagePosition] = useState<{
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
-  // const stagedImagePosition = { x: 0, y: 0 };
 
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
@@ -442,9 +440,6 @@ export const Stage = ({ src }: StageProps) => {
 
       const relative = getRelativePointerPosition(position);
 
-      console.info(position);
-      console.info(relative);
-
       if (!relative) return;
 
       if (toolType === ToolType.Zoom) {
@@ -625,8 +620,10 @@ export const Stage = ({ src }: StageProps) => {
     setStageWidth(parentDivWidth);
     setStageHeight(Math.floor(parentDivWidth * aspectRatio));
 
-    // if (!image || !image.shape) return;
-    // const stagedImageWidth = image.shape.c *
+    setStagedImagePosition({
+      x: ((1 - parentDivWidth / virtualWidth) / 2) * virtualWidth,
+      y: 50,
+    });
   };
 
   useEffect(() => {

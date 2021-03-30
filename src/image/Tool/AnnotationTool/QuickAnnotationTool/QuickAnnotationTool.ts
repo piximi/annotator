@@ -36,6 +36,8 @@ export class QuickAnnotationTool extends AnnotationTool {
       }
     }
 
+    debugger;
+
     return encode(binaryMask.data as Uint8Array);
   }
 
@@ -201,7 +203,11 @@ export class QuickAnnotationTool extends AnnotationTool {
     stagedImagePosition: { x: number; y: number },
     stagedImageShape: { width: number; height: number }
   ) {
-    const instance = new QuickAnnotationTool(image, stagedImageShape);
+    const instance = new QuickAnnotationTool(
+      image,
+      stagedImagePosition,
+      stagedImageShape
+    );
 
     const { count, map, superpixels } = instance.filter();
 

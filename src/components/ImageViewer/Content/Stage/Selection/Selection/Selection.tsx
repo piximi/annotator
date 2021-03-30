@@ -101,6 +101,7 @@ export const Selection = ({
       return (
         <QuickSelection
           operator={tool as QuickAnnotationTool}
+          imagePosition={imagePosition}
           stageScale={stageScale}
         />
       );

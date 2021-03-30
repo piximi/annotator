@@ -3,11 +3,13 @@ import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 
 type QuickSelectionProps = {
+  imagePosition: { x: number; y: number };
   operator: QuickAnnotationTool;
   stageScale: { x: number; y: number };
 };
 
 export const QuickSelection = ({
+  imagePosition,
   operator,
   stageScale,
 }: QuickSelectionProps) => {
@@ -29,6 +31,8 @@ export const QuickSelection = ({
         image={image}
         scaleX={stageScale.x}
         scaleY={stageScale.y}
+        x={imagePosition.x}
+        y={imagePosition.y}
       />
     </ReactKonva.Group>
   );

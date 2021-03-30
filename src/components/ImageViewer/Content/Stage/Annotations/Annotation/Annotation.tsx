@@ -65,15 +65,6 @@ export const Annotation = ({
     );
   };
 
-  const stagedPoints: Array<number> = _.flatten(
-    _.map(_.chunk(annotation.contour, 2), (coords: Array<number>) => {
-      return [
-        coords[0] + imagePosition.x / stageScale.x,
-        coords[1] + imagePosition.y / stageScale.y,
-      ];
-    })
-  );
-
   return (
     <ReactKonva.Line
       closed
@@ -81,11 +72,13 @@ export const Annotation = ({
       id={annotation.id}
       onClick={onPointerClick}
       opacity={0.5}
-      points={stagedPoints}
+      points={annotation.contour}
       ref={ref}
       strokeWidth={1}
       scaleX={stageScale.x}
       scaleY={stageScale.y}
+      x={imagePosition.x}
+      y={imagePosition.y}
     />
   );
 };

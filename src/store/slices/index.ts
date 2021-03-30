@@ -1,4 +1,5 @@
 export {
+  applicationSlice,
   deleteCategory,
   deleteImageInstance,
   replaceImageInstance,
@@ -21,10 +22,9 @@ export {
   setSelectionMode,
   setSeletedCategory,
   setSoundEnabled,
+  setStageHeight,
+  setStageWidth,
   setVibrance,
-  setZoomMode,
-  setZoomReset,
-  applicationSlice,
 } from "./applicationSlice";
 
 export { setZoomToolOptions } from "./toolOptionsSlice";

@@ -9,9 +9,11 @@ import {
   invertModeSelector,
   selectedCategroySelector,
   selectionModeSelector,
+  stageHeightSelector,
+  stageWidthSelector,
   toolTypeSelector,
-  zoomSettingsSelector,
 } from "../../../../../store/selectors";
+import { setStageHeight, setStageWidth } from "../../../../../store";
 import {
   Provider,
   ReactReduxContext,
@@ -19,23 +21,25 @@ import {
   useSelector,
 } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
-import { setSelectedAnnotation, applicationSlice } from "../../../../../store";
+import { applicationSlice, setSelectedAnnotation } from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
-import { useZoomOperator } from "../../../../../hooks/useZoomOperator";
+import { useZoomTool } from "../../../../../hooks/useZoomTool";
 import { KonvaEventObject } from "konva/types/Node";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
-import { Tool } from "../../../../../image/Tool";
-import { ObjectAnnotationTool } from "../../../../../image/Tool";
-import { ColorAnnotationTool } from "../../../../../image/Tool";
+import {
+  ColorAnnotationTool,
+  ObjectAnnotationTool,
+  Tool,
+} from "../../../../../image/Tool";
 import { ColorAnnotationToolTip } from "../ColorAnnotationToolTip";
 import useSound from "use-sound";
 import createAnnotationSoundEffect from "../../../../../sounds/pop-up-on.mp3";
@@ -68,8 +72,8 @@ export const Stage = ({ src }: StageProps) => {
 
   const virtualWidth = 750;
 
-  const [stageWidth, setStageWidth] = useState<number>(virtualWidth);
-  const [stageHeight, setStageHeight] = useState<number>(virtualWidth);
+  const stageHeight = useSelector(stageHeightSelector);
+  const stageWidth = useSelector(stageWidthSelector);
 
   const [stagedImagePosition, setStagedImagePosition] = useState<{
     x: number;
@@ -102,8 +106,6 @@ export const Stage = ({ src }: StageProps) => {
   const dispatch = useDispatch();
 
   const annotations = useSelector(imageInstancesSelector);
-
-  const zoomSettings = useSelector(zoomSettingsSelector);
 
   const annotated = useSelector(annotatedSelector);
 
@@ -142,12 +144,11 @@ export const Stage = ({ src }: StageProps) => {
     selectingRef.current = null;
   };
 
-  const { zoomTool, onZoomClick, onZoomWheel } = useZoomOperator(
+  const { zoomTool, onZoomClick, onZoomWheel } = useZoomTool(
     aspectRatio,
     toolType,
     src,
-    stageWidth,
-    zoomSettings
+    stageWidth
   );
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {
@@ -620,13 +621,14 @@ export const Stage = ({ src }: StageProps) => {
 
   const resize = () => {
     if (!parentDivRef || !parentDivRef.current) return;
-    const parentDivWidth = parentDivRef.current.getBoundingClientRect().width;
-    setZoomScale(parentDivWidth / virtualWidth);
-    setStageWidth(parentDivWidth);
-    setStageHeight(parentDivWidth);
+    const size = parentDivRef.current.getBoundingClientRect().width;
+    setZoomScale(size / virtualWidth);
+
+    dispatch(setStageHeight({ stageHeight: size }));
+    dispatch(setStageWidth({ stageWidth: size }));
 
     setStagedImagePosition({
-      x: ((1 - parentDivWidth / virtualWidth) / 2) * virtualWidth,
+      x: ((1 - size / virtualWidth) / 2) * virtualWidth,
       y: 50,
     });
   };

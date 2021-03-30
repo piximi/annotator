@@ -1,17 +1,19 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { ToolType } from "../../types/ToolType";
 import { ZoomTool } from "../../image/Tool/ZoomTool";
-import { ZoomToolOptionsType } from "../../types/ZoomToolOptionsType";
 import * as ImageJS from "image-js";
 import { KonvaEventObject } from "konva/types/Node";
+import { useSelector } from "react-redux";
+import { zoomToolOptionsSelector } from "../../store/selectors";
 
-export const useZoomOperator = (
+export const useZoomTool = (
   aspectRatio: number,
   operation: ToolType,
   src: string,
-  stageWidth: number,
-  zoomSettings: ZoomToolOptionsType
+  stageWidth: number
 ) => {
+  const options = useSelector(zoomToolOptionsSelector);
+
   const [operator, setOperator] = useState<ZoomTool>();
   const [, update] = useReducer((x) => x + 1, 0);
 
@@ -51,8 +53,8 @@ export const useZoomOperator = (
     if (!operator) return;
 
     // @ts-ignore
-    operator.mode = zoomSettings.mode;
-  }, [zoomSettings.mode]);
+    operator.mode = options.mode;
+  }, [options.mode]);
 
   useEffect(() => {
     if (operation !== ToolType.Zoom) return;
@@ -62,15 +64,15 @@ export const useZoomOperator = (
     operator.reset();
 
     update();
-  }, [zoomSettings.toActualSize]);
+  }, [options.toActualSize]);
 
   useEffect(() => {
     if (operation !== ToolType.Zoom) return;
 
     if (!operator) return;
     // @ts-ignore
-    operator.center = zoomSettings.automaticCentering;
-  }, [zoomSettings.automaticCentering]);
+    operator.center = options.automaticCentering;
+  }, [options.automaticCentering]);
 
   return {
     zoomTool: operator,

@@ -27,31 +27,16 @@ import { ColorAnnotationOptions } from "../ColorAnnotationOptions";
 import { QuickAnnotationOptions } from "../QuickAnnotationOptions";
 import { ObjectAnnotationOptions } from "../ObjectAnnotationOptions";
 import { ZoomOptions } from "../ZoomOptions";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  toolTypeSelector,
-  zoomSettingsSelector,
-} from "../../../../store/selectors";
-import { applicationSlice } from "../../../../store";
+import { useSelector } from "react-redux";
+import { toolTypeSelector } from "../../../../store/selectors";
 import { useTranslation } from "react-i18next";
 
 export const ToolOptions = () => {
-  const dispatch = useDispatch();
-
   const classes = useStyles();
 
   const { t } = useTranslation();
 
   const activeOperation = useSelector(toolTypeSelector);
-  const zoomSettings = useSelector(zoomSettingsSelector);
-
-  const handleZoomReset = () => {
-    dispatch(
-      applicationSlice.actions.setZoomReset({
-        zoomReset: !zoomSettings.toActualSize,
-      })
-    );
-  };
 
   const operations = [
     {

@@ -1,5 +1,6 @@
 export { reducer } from "./reducer";
 export {
+  applicationSlice,
   deleteCategory,
   deleteImageInstance,
   replaceImageInstance,
@@ -18,10 +19,10 @@ export {
   setSelectedAnnotation,
   setSelectionMode,
   setSeletedCategory,
+  setStageHeight,
+  setStageWidth,
   setVibrance,
-  setZoomMode,
-  setZoomReset,
-  applicationSlice,
+  setZoomToolOptions,
 } from "./slices";
 export { store } from "./stores";
 export { echoThunk } from "./thunks";

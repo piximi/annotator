@@ -5,7 +5,6 @@ import { ToolType } from "../../types/ToolType";
 import { AnnotationType } from "../../types/AnnotationType";
 import { AnnotationModeType } from "../../types/AnnotationModeType";
 import { StateType } from "../../types/StateType";
-import { ZoomModeType } from "../../types/ZoomModeType";
 import * as _ from "lodash";
 import colorImage from "../../images/cell-painting.png";
 import { LanguageType } from "../../types/LanguageType";
@@ -52,19 +51,15 @@ const initialState: StateType = {
   },
   invertMode: false,
   language: LanguageType.English,
-  toolType: ToolType.RectangularAnnotation,
   penSelectionBrushSize: 2,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: AnnotationModeType.New,
   soundEnabled: true,
+  stageHeight: 0,
+  stageWidth: 0,
+  toolType: ToolType.RectangularAnnotation,
   vibrance: 0,
-  zoomSettings: {
-    automaticCentering: false,
-    mode: ZoomModeType.In,
-    toActualSize: false,
-    toFit: false,
-  },
 };
 
 export const applicationSlice = createSlice({
@@ -207,6 +202,18 @@ export const applicationSlice = createSlice({
     ) {
       state.selectionMode = action.payload.selectionMode;
     },
+    setStageHeight(
+      state: StateType,
+      action: PayloadAction<{ stageHeight: number }>
+    ) {
+      state.stageHeight = action.payload.stageHeight;
+    },
+    setStageWidth(
+      state: StateType,
+      action: PayloadAction<{ stageWidth: number }>
+    ) {
+      state.stageWidth = action.payload.stageWidth;
+    },
     setSoundEnabled(
       state: StateType,
       action: PayloadAction<{ soundEnabled: boolean }>
@@ -215,25 +222,6 @@ export const applicationSlice = createSlice({
     },
     setVibrance(state: StateType, action: PayloadAction<{ vibrance: number }>) {
       state.vibrance = action.payload.vibrance;
-    },
-    setZoomAutomaticCentering(
-      state: StateType,
-      action: PayloadAction<{ zoomAutomaticCentering: boolean }>
-    ) {
-      state.zoomSettings.automaticCentering =
-        action.payload.zoomAutomaticCentering;
-    },
-    setZoomMode(
-      state: StateType,
-      action: PayloadAction<{ zoomMode: ZoomModeType }>
-    ) {
-      state.zoomSettings.mode = action.payload.zoomMode;
-    },
-    setZoomReset(
-      state: StateType,
-      action: PayloadAction<{ zoomReset: boolean }>
-    ) {
-      state.zoomSettings.toActualSize = action.payload.zoomReset;
     },
   },
   extraReducers: {
@@ -269,7 +257,7 @@ export const {
   setSelectionMode,
   setSeletedCategory,
   setSoundEnabled,
+  setStageHeight,
+  setStageWidth,
   setVibrance,
-  setZoomMode,
-  setZoomReset,
 } = applicationSlice.actions;

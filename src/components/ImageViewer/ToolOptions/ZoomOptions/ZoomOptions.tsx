@@ -6,59 +6,79 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useDispatch, useSelector } from "react-redux";
 import { ZoomModeType } from "../../../../types/ZoomModeType";
-import { applicationSlice } from "../../../../store";
+import { setZoomToolOptions } from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
-import { zoomSettingsSelector } from "../../../../store/selectors";
+import { zoomToolOptionsSelector } from "../../../../store/selectors";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../icons";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import Divider from "@material-ui/core/Divider";
 import { InformationBox } from "../InformationBox";
-import { useZoomOperator } from "../../../../hooks/useZoomOperator";
 
 export const ZoomOptions = () => {
   const dispatch = useDispatch();
 
-  const zoomSettings = useSelector(zoomSettingsSelector);
-
-  const onZoomModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt((event.target as HTMLInputElement).value);
-
-    dispatch(
-      applicationSlice.actions.setZoomMode({
-        zoomMode: value as ZoomModeType,
-      })
-    );
-  };
-
-  const onZoomModeClick = (event: any, mode: ZoomModeType) => {
-    dispatch(
-      applicationSlice.actions.setZoomMode({
-        zoomMode: mode,
-      })
-    );
-  };
-
-  const onCenterChange = () => {
-    dispatch(
-      applicationSlice.actions.setZoomAutomaticCentering({
-        zoomAutomaticCentering: !zoomSettings.automaticCentering,
-      })
-    );
-  };
-
-  const onActualSizeClick = () => {
-    dispatch(
-      applicationSlice.actions.setZoomReset({
-        zoomReset: !zoomSettings.toActualSize,
-      })
-    );
-  };
-
-  const onFitToScreenClick = () => {};
+  const options = useSelector(zoomToolOptionsSelector);
 
   const t = useTranslation();
+
+  const onAutomaticCenteringChange = () => {
+    const payload = {
+      options: {
+        ...options,
+        automaticCentering: !options.automaticCentering,
+      },
+    };
+
+    dispatch(setZoomToolOptions(payload));
+  };
+
+  const onToActualSizeClick = () => {
+    const payload = {
+      options: {
+        ...options,
+        toActualSize: !options.toActualSize,
+      },
+    };
+
+    dispatch(setZoomToolOptions(payload));
+  };
+
+  const onToFitClick = () => {
+    const payload = {
+      options: {
+        ...options,
+        toFit: !options.toFit,
+      },
+    };
+
+    dispatch(setZoomToolOptions(payload));
+  };
+
+  const onModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt((event.target as HTMLInputElement).value);
+
+    const payload = {
+      options: {
+        ...options,
+        mode: value as ZoomModeType,
+      },
+    };
+
+    dispatch(setZoomToolOptions(payload));
+  };
+
+  const onModeClick = (event: any, mode: ZoomModeType) => {
+    const payload = {
+      options: {
+        ...options,
+        mode: mode,
+      },
+    };
+
+    dispatch(setZoomToolOptions(payload));
+  };
 
   return (
     <React.Fragment>
@@ -71,8 +91,8 @@ export const ZoomOptions = () => {
           defaultValue={ZoomModeType.In}
           aria-label="annotation mode"
           name="annotation-mode"
-          onChange={onZoomModeChange}
-          value={zoomSettings.mode}
+          onChange={onModeChange}
+          value={options.mode}
         >
           <List
             component="nav"
@@ -83,7 +103,7 @@ export const ZoomOptions = () => {
             <ListItem
               button
               dense
-              onClick={(event) => onZoomModeClick(event, ZoomModeType.In)}
+              onClick={(event) => onModeClick(event, ZoomModeType.In)}
             >
               <ListItemIcon>
                 <Radio
@@ -102,7 +122,7 @@ export const ZoomOptions = () => {
             <ListItem
               button
               dense
-              onClick={(event) => onZoomModeClick(event, ZoomModeType.Out)}
+              onClick={(event) => onModeClick(event, ZoomModeType.Out)}
             >
               <ListItemIcon>
                 <Radio
@@ -124,10 +144,10 @@ export const ZoomOptions = () => {
       <Divider />
 
       <List component="nav" dense>
-        <ListItem button onClick={onCenterChange}>
+        <ListItem button onClick={onAutomaticCenteringChange}>
           <ListItemIcon>
             <Checkbox
-              checked={zoomSettings.automaticCentering}
+              checked={options.automaticCentering}
               disableRipple
               edge="start"
               tabIndex={-1}
@@ -144,11 +164,11 @@ export const ZoomOptions = () => {
       <Divider />
 
       <List dense>
-        <ListItem button onClick={onActualSizeClick}>
+        <ListItem button onClick={onToActualSizeClick}>
           <ListItemText>{t("Actual size")}</ListItemText>
         </ListItem>
 
-        <ListItem button onClick={onFitToScreenClick}>
+        <ListItem button onClick={onToFitClick}>
           <ListItemText>{t("Fit to screen")}</ListItemText>
         </ListItem>
       </List>

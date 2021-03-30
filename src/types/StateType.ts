@@ -20,6 +20,8 @@ export type StateType = {
   selectedCategory: string;
   selectionMode: AnnotationModeType;
   soundEnabled: boolean;
+  stageHeight: number;
+  stageWidth: number;
   toolType: ToolType;
   vibrance: number;
 };

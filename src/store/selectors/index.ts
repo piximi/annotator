@@ -11,6 +11,8 @@ export { invertModeSelector } from "./invertModeSelector";
 export { saturationSelector } from "./saturationSelector";
 export { selectedCategroySelector } from "./selectedCategroySelector";
 export { selectionModeSelector } from "./selectionModeSelector";
+export { stageHeightSelector } from "./stageHeightSelector";
+export { stageWidthSelector } from "./stageWidthSelector";
 export { toolTypeSelector } from "./toolTypeSelector";
 export { unknownCategorySelector } from "./unknownCategorySelector";
 export { vibranceSelector } from "./vibranceSelector";

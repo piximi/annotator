@@ -5,7 +5,6 @@ import { ToolType } from "../../types/ToolType";
 import { AnnotationType } from "../../types/AnnotationType";
 import { AnnotationModeType } from "../../types/AnnotationModeType";
 import { StateType } from "../../types/StateType";
-import { ZoomModeType } from "../../types/ZoomModeType";
 import * as _ from "lodash";
 import colorImage from "../../images/cell-painting.png";
 import { LanguageType } from "../../types/LanguageType";
@@ -52,12 +51,14 @@ const initialState: StateType = {
   },
   invertMode: false,
   language: LanguageType.English,
-  toolType: ToolType.RectangularAnnotation,
   penSelectionBrushSize: 2,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: AnnotationModeType.New,
   soundEnabled: true,
+  stageHeight: 0,
+  stageWidth: 0,
+  toolType: ToolType.RectangularAnnotation,
   vibrance: 0,
 };
 
@@ -201,6 +202,18 @@ export const applicationSlice = createSlice({
     ) {
       state.selectionMode = action.payload.selectionMode;
     },
+    setStageHeight(
+      state: StateType,
+      action: PayloadAction<{ stageHeight: number }>
+    ) {
+      state.stageHeight = action.payload.stageHeight;
+    },
+    setStageWidth(
+      state: StateType,
+      action: PayloadAction<{ stageWidth: number }>
+    ) {
+      state.stageWidth = action.payload.stageWidth;
+    },
     setSoundEnabled(
       state: StateType,
       action: PayloadAction<{ soundEnabled: boolean }>
@@ -244,5 +257,7 @@ export const {
   setSelectionMode,
   setSeletedCategory,
   setSoundEnabled,
+  setStageHeight,
+  setStageWidth,
   setVibrance,
 } = applicationSlice.actions;

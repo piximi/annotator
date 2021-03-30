@@ -59,12 +59,6 @@ const initialState: StateType = {
   selectionMode: AnnotationModeType.New,
   soundEnabled: true,
   vibrance: 0,
-  zoomSettings: {
-    automaticCentering: false,
-    mode: ZoomModeType.In,
-    toActualSize: false,
-    toFit: false,
-  },
 };
 
 export const applicationSlice = createSlice({

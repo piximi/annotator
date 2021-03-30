@@ -15,7 +15,7 @@ export const toolOptionsSlice = createSlice({
   initialState: initialState,
   name: "image-viewer-tool-options",
   reducers: {
-    setZoomOptions(
+    setZoomToolOptions(
       state: ToolOptionsStateType,
       action: PayloadAction<{ options: ZoomToolOptionsType }>
     ) {
@@ -24,4 +24,4 @@ export const toolOptionsSlice = createSlice({
   },
 });
 
-export const { setZoomOptions } = toolOptionsSlice.actions;
+export const { setZoomToolOptions } = toolOptionsSlice.actions;

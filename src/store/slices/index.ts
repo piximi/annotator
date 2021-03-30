@@ -27,4 +27,4 @@ export {
   applicationSlice,
 } from "./applicationSlice";
 
-export { setZoomOptions } from "./toolOptionsSlice";
+export { setZoomToolOptions } from "./toolOptionsSlice";

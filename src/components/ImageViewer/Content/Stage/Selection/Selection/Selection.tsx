@@ -88,7 +88,7 @@ export const Selection = ({
           scale={scale}
         />
       );
-    case ToolType.RectangularSelection:
+    case ToolType.RectangularAnnotation:
       return (
         <RectangularSelection
           operator={tool as RectangularAnnotationTool}

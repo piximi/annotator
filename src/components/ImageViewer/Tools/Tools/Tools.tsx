@@ -65,11 +65,11 @@ export const Tools = () => {
           onClick={() => {
             dispatch(
               applicationSlice.actions.setOperation({
-                operation: OperationType.RectangularSelection,
+                operation: OperationType.RectangularAnnotation,
               })
             );
           }}
-          selected={activeOperation === OperationType.RectangularSelection}
+          selected={activeOperation === OperationType.RectangularAnnotation}
         >
           <RectangularSelectionIcon />
         </Tool>

@@ -52,7 +52,7 @@ const initialState: StateType = {
   },
   invertMode: false,
   language: LanguageType.English,
-  toolType: ToolType.RectangularSelection,
+  toolType: ToolType.RectangularAnnotation,
   penSelectionBrushSize: 2,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",

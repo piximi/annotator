@@ -135,7 +135,7 @@ export const useAnnotationOperator = (
         setOperator(quickSelectionOperator);
 
         return;
-      case ToolType.RectangularSelection:
+      case ToolType.RectangularAnnotation:
         setOperator(
           new RectangularAnnotationTool(
             image,

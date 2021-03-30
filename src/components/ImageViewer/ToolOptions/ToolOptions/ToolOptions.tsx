@@ -64,7 +64,7 @@ export const ToolOptions = () => {
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",
       icon: <RectangularSelectionIcon />,
-      method: ToolType.RectangularSelection,
+      method: ToolType.RectangularAnnotation,
       name: "Rectangular selection",
       options: <RectangularAnnotationOptions />,
     },

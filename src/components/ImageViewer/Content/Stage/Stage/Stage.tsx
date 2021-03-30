@@ -636,7 +636,6 @@ export const Stage = ({ src }: StageProps) => {
       <ReactReduxContext.Consumer>
         {({ store }) => (
           <ReactKonva.Stage
-            className={classes.stage}
             globalCompositeOperation="destination-over"
             height={stageHeight}
             onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {

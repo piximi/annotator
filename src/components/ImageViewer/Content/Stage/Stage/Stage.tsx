@@ -628,8 +628,8 @@ export const Stage = ({ src }: StageProps) => {
     dispatch(setStageWidth({ stageWidth: size }));
 
     setStagedImagePosition({
-      x: ((1 - size / virtualWidth) / 2) * virtualWidth,
-      y: 50,
+      x: 0,
+      y: 0,
     });
   };
 

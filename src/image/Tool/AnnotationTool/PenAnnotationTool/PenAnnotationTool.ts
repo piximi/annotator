@@ -71,8 +71,6 @@ export class PenAnnotationTool extends AnnotationTool {
   onMouseUp(position: { x: number; y: number }) {
     if (this.annotated || !this.annotating) return;
 
-    console.info(this.buffer);
-
     this.annotated = true;
 
     this.annotating = false;

@@ -9,6 +9,8 @@ export class ZoomTool extends Tool {
   /**
    * Automatically center the image.
    */
+  aspectRatio: number = 1;
+
   center: boolean = false;
 
   minimum?: { x: number; y: number };
@@ -29,10 +31,11 @@ export class ZoomTool extends Tool {
 
   private scales: Array<number> = [0.25, 0.75, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
 
-  constructor(image: ImageJS.Image, stageWidth: number) {
+  constructor(aspectRatio: number, image: ImageJS.Image, stageWidth: number) {
     super(image);
 
     this.stageWidth = stageWidth;
+    this.aspectRatio = aspectRatio;
   }
 
   get percentile(): string {
@@ -96,7 +99,7 @@ export class ZoomTool extends Tool {
         this.minimum.y > this.maximum.y ? this.maximum.y : this.minimum.y;
 
       this.x = -1 * x * this.scale;
-      this.y = -1 * y * this.scale;
+      this.y = -1 * y * this.scale * this.aspectRatio;
     }
 
     this.selected = true;
@@ -138,7 +141,7 @@ export class ZoomTool extends Tool {
     }
 
     this.x = position.x - position.x * this.scale;
-    this.y = position.y - position.y * this.scale;
+    this.y = (position.y - position.y * this.scale) * this.aspectRatio;
 
     this.selected = true;
   };
@@ -162,7 +165,7 @@ export class ZoomTool extends Tool {
     };
 
     this.x = -(origin.x - position.x / newScale) * newScale;
-    this.y = -(origin.y - position.y / newScale) * newScale;
+    this.y = -(origin.y - position.y / newScale) * newScale * this.aspectRatio;
 
     this.scale = newScale;
   };

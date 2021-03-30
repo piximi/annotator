@@ -51,8 +51,8 @@ export const useZoomOperator = (
     if (!operator) return;
 
     // @ts-ignore
-    operator.mode = zoomSettings.zoomMode;
-  }, [zoomSettings.zoomMode]);
+    operator.mode = zoomSettings.mode;
+  }, [zoomSettings.mode]);
 
   useEffect(() => {
     if (operation !== ToolType.Zoom) return;
@@ -62,15 +62,15 @@ export const useZoomOperator = (
     operator.reset();
 
     update();
-  }, [zoomSettings.zoomReset]);
+  }, [zoomSettings.toActualSize]);
 
   useEffect(() => {
     if (operation !== ToolType.Zoom) return;
 
     if (!operator) return;
     // @ts-ignore
-    operator.center = zoomSettings.zoomAutomaticCentering;
-  }, [zoomSettings.zoomAutomaticCentering]);
+    operator.center = zoomSettings.automaticCentering;
+  }, [zoomSettings.automaticCentering]);
 
   return {
     zoomTool: operator,

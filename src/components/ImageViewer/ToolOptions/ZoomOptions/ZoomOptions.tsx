@@ -43,7 +43,7 @@ export const ZoomOptions = () => {
   const onCenterChange = () => {
     dispatch(
       applicationSlice.actions.setZoomAutomaticCentering({
-        zoomAutomaticCentering: !zoomSettings.zoomAutomaticCentering,
+        zoomAutomaticCentering: !zoomSettings.automaticCentering,
       })
     );
   };
@@ -51,7 +51,7 @@ export const ZoomOptions = () => {
   const onActualSizeClick = () => {
     dispatch(
       applicationSlice.actions.setZoomReset({
-        zoomReset: !zoomSettings.zoomReset,
+        zoomReset: !zoomSettings.toActualSize,
       })
     );
   };
@@ -72,7 +72,7 @@ export const ZoomOptions = () => {
           aria-label="annotation mode"
           name="annotation-mode"
           onChange={onZoomModeChange}
-          value={zoomSettings.zoomMode}
+          value={zoomSettings.mode}
         >
           <List
             component="nav"
@@ -127,7 +127,7 @@ export const ZoomOptions = () => {
         <ListItem button onClick={onCenterChange}>
           <ListItemIcon>
             <Checkbox
-              checked={zoomSettings.zoomAutomaticCentering}
+              checked={zoomSettings.automaticCentering}
               disableRipple
               edge="start"
               tabIndex={-1}

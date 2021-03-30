@@ -60,15 +60,16 @@ const initialState: StateType = {
   soundEnabled: true,
   vibrance: 0,
   zoomSettings: {
-    zoomAutomaticCentering: false,
-    zoomMode: ZoomModeType.In,
-    zoomReset: false,
+    automaticCentering: false,
+    mode: ZoomModeType.In,
+    toActualSize: false,
+    toFit: false,
   },
 };
 
 export const applicationSlice = createSlice({
   initialState: initialState,
-  name: "image-viewer",
+  name: "image-viewer-application",
   reducers: {
     deleteCategory(
       state: StateType,
@@ -219,20 +220,20 @@ export const applicationSlice = createSlice({
       state: StateType,
       action: PayloadAction<{ zoomAutomaticCentering: boolean }>
     ) {
-      state.zoomSettings.zoomAutomaticCentering =
+      state.zoomSettings.automaticCentering =
         action.payload.zoomAutomaticCentering;
     },
     setZoomMode(
       state: StateType,
       action: PayloadAction<{ zoomMode: ZoomModeType }>
     ) {
-      state.zoomSettings.zoomMode = action.payload.zoomMode;
+      state.zoomSettings.mode = action.payload.zoomMode;
     },
     setZoomReset(
       state: StateType,
       action: PayloadAction<{ zoomReset: boolean }>
     ) {
-      state.zoomSettings.zoomReset = action.payload.zoomReset;
+      state.zoomSettings.toActualSize = action.payload.zoomReset;
     },
   },
   extraReducers: {

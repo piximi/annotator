@@ -48,7 +48,7 @@ export const ToolOptions = () => {
   const handleZoomReset = () => {
     dispatch(
       applicationSlice.actions.setZoomReset({
-        zoomReset: !zoomSettings.zoomReset,
+        zoomReset: !zoomSettings.toActualSize,
       })
     );
   };

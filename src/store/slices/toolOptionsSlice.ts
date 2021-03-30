@@ -5,9 +5,10 @@ import { ZoomToolOptionsType } from "../../types/ZoomToolOptionsType";
 
 const initialState: ToolOptionsStateType = {
   zoom: {
-    zoomAutomaticCentering: false,
-    zoomMode: ZoomModeType.In,
-    zoomReset: false,
+    automaticCentering: false,
+    mode: ZoomModeType.In,
+    toActualSize: false,
+    toFit: false,
   },
 };
 

@@ -618,7 +618,7 @@ export const Stage = ({ src }: StageProps) => {
     const parentDivWidth = parentDivRef.current.getBoundingClientRect().width;
     setZoomScale(parentDivWidth / virtualWidth);
     setStageWidth(parentDivWidth);
-    setStageHeight(Math.floor(parentDivWidth * aspectRatio));
+    setStageHeight(parentDivWidth);
 
     setStagedImagePosition({
       x: ((1 - parentDivWidth / virtualWidth) / 2) * virtualWidth,

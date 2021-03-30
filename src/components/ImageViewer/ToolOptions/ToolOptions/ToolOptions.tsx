@@ -134,7 +134,7 @@ export const ToolOptions = () => {
       icon: <ZoomIcon />,
       method: ToolType.Zoom,
       name: "Zoom",
-      options: <ZoomOptions handleRevert={handleZoomReset} />,
+      options: <ZoomOptions />,
     },
     {
       description: "Description of pointer here.",

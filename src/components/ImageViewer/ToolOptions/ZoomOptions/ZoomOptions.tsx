@@ -16,11 +16,7 @@ import { useTranslation } from "../../../../hooks/useTranslation";
 import Divider from "@material-ui/core/Divider";
 import { InformationBox } from "../InformationBox";
 
-type ZoomOptionsProps = {
-  handleRevert: () => void;
-};
-
-export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
+export const ZoomOptions = () => {
   const dispatch = useDispatch();
 
   const zoomSettings = useSelector(zoomSettingsSelector);
@@ -52,7 +48,9 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
   };
 
   const onActualSizeClick = () => {
-    handleRevert();
+    dispatch(
+      slice.actions.setZoomReset({ zoomReset: !zoomSettings.zoomReset })
+    );
   };
 
   const onFitToScreenClick = () => {};

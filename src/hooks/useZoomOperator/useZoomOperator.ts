@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { ToolType } from "../../types/ToolType";
 import { ZoomTool } from "../../image/Tool/ZoomTool";
 import { ZoomToolOptionsType } from "../../types/ZoomToolOptionsType";

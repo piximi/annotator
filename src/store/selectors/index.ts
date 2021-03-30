@@ -15,3 +15,4 @@ export { toolTypeSelector } from "./toolTypeSelector";
 export { unknownCategorySelector } from "./unknownCategorySelector";
 export { vibranceSelector } from "./vibranceSelector";
 export { zoomSettingsSelector } from "./zoomSettingsSelector";
+export { zoomToolOptionsSelector } from "./zoomToolOptionsSelector";

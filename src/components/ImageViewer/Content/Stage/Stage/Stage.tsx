@@ -11,6 +11,7 @@ import {
   selectionModeSelector,
   toolTypeSelector,
   zoomSettingsSelector,
+  zoomToolOptionsSelector,
 } from "../../../../../store/selectors";
 import {
   Provider,
@@ -103,7 +104,7 @@ export const Stage = ({ src }: StageProps) => {
 
   const annotations = useSelector(imageInstancesSelector);
 
-  const zoomSettings = useSelector(zoomSettingsSelector);
+  const zoomToolOptions = useSelector(zoomToolOptionsSelector);
 
   const annotated = useSelector(annotatedSelector);
 
@@ -147,7 +148,7 @@ export const Stage = ({ src }: StageProps) => {
     toolType,
     src,
     stageWidth,
-    zoomSettings
+    zoomToolOptions
   );
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {

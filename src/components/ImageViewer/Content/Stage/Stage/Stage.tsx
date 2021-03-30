@@ -143,6 +143,7 @@ export const Stage = ({ src }: StageProps) => {
   };
 
   const { zoomTool, onZoomClick, onZoomWheel } = useZoomOperator(
+    aspectRatio,
     toolType,
     src,
     stageWidth,

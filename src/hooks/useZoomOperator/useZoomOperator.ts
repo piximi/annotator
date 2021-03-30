@@ -6,6 +6,7 @@ import * as ImageJS from "image-js";
 import { KonvaEventObject } from "konva/types/Node";
 
 export const useZoomOperator = (
+  aspectRatio: number,
   operation: ToolType,
   src: string,
   stageWidth: number,
@@ -40,7 +41,7 @@ export const useZoomOperator = (
     if (operator) return;
 
     ImageJS.Image.load(src).then((image: ImageJS.Image) => {
-      setOperator(new ZoomTool(image, stageWidth));
+      setOperator(new ZoomTool(aspectRatio, image, stageWidth));
     });
   }, [operation, src]);
 

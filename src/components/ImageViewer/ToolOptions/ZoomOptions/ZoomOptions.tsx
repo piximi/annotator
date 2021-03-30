@@ -51,6 +51,12 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
     );
   };
 
+  const onActualSizeClick = () => {
+    handleRevert();
+  };
+
+  const onFitToScreenClick = () => {};
+
   const t = useTranslation();
 
   return (
@@ -137,12 +143,12 @@ export const ZoomOptions = ({ handleRevert }: ZoomOptionsProps) => {
       <Divider />
 
       <List dense>
-        <ListItem button onClick={handleRevert}>
+        <ListItem button onClick={onActualSizeClick}>
           <ListItemText>{t("Actual size")}</ListItemText>
         </ListItem>
 
-        <ListItem button onClick={handleRevert}>
-          <ListItemText>{t("Fit to window")}</ListItemText>
+        <ListItem button onClick={onFitToScreenClick}>
+          <ListItemText>{t("Fit to screen")}</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

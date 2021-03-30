@@ -1,5 +1,5 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 
-export const soundEnabledSelector = ({ state }: { state: State }) => {
+export const soundEnabledSelector = ({ state }: { state: StateType }) => {
   return state.soundEnabled;
 };

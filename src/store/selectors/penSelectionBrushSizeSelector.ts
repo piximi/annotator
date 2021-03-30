@@ -1,5 +1,9 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 
-export const penSelectionBrushSizeSelector = ({ state }: { state: State }) => {
+export const penSelectionBrushSizeSelector = ({
+  state,
+}: {
+  state: StateType;
+}) => {
   return state.penSelectionBrushSize;
 };

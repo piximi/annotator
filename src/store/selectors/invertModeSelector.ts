@@ -1,5 +1,9 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 
-export const invertModeSelector = ({ state }: { state: State }): boolean => {
+export const invertModeSelector = ({
+  state,
+}: {
+  state: StateType;
+}): boolean => {
   return state.invertMode;
 };

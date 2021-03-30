@@ -1,6 +1,6 @@
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
-import { Shape } from "../../../../../types/Shape";
+import { ShapeType } from "../../../../../types/ShapeType";
 import { setImage } from "../../../../../store";
 import { useDispatch } from "react-redux";
 import * as ImageJS from "image-js";
@@ -38,17 +38,19 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
         ImageJS.Image.load(buffer).then((image) => {
           const name = file.name;
 
-          const shape: Shape = {
-            r: image.height,
-            c: image.width,
+          const shape: ShapeType = {
             channels: 4,
+            frames: 1,
+            height: image.height,
+            planes: 1,
+            width: image.width,
           };
 
           dispatch(
             setImage({
               image: {
                 id: "",
-                instances: [],
+                annotations: [],
                 name: name,
                 shape: shape,
                 src: image.toDataURL(),

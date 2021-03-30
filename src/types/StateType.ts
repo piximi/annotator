@@ -1,18 +1,18 @@
-import { Category } from "./Category";
-import { Image } from "./Image";
+import { CategoryType } from "./CategoryType";
+import { ImageType } from "./ImageType";
 import { ToolType } from "./ToolType";
 import { SelectionMode } from "./SelectionMode";
 import { ZoomSettings } from "./ZoomSettings";
 import { Language } from "./Language";
 
-export type State = {
+export type StateType = {
   annotated: boolean;
   brightness: number;
-  categories: Array<Category>;
+  categories: Array<CategoryType>;
   contrast: number;
   exposure: number;
   hue: number;
-  image?: Image;
+  image?: ImageType;
   invertMode: boolean;
   language: Language;
   penSelectionBrushSize: number;

@@ -1,6 +1,6 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 
-export const visibleCategoriesSelector = ({ state }: { state: State }) => {
+export const visibleCategoriesSelector = ({ state }: { state: StateType }) => {
   return state.categories
     .filter((category) => category.visible)
     .map((category) => {

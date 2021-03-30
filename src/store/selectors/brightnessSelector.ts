@@ -1,5 +1,5 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 
-export const brightnessSelector = ({ state }: { state: State }) => {
+export const brightnessSelector = ({ state }: { state: StateType }) => {
   return state.brightness;
 };

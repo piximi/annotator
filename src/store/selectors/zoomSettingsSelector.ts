@@ -1,10 +1,10 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 import { ZoomSettings } from "../../types/ZoomSettings";
 
 export const zoomSettingsSelector = ({
   state,
 }: {
-  state: State;
+  state: StateType;
 }): ZoomSettings => {
   return state.zoomSettings;
 };

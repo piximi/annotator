@@ -15,6 +15,7 @@ import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../icons";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import Divider from "@material-ui/core/Divider";
 import { InformationBox } from "../InformationBox";
+import { useZoomOperator } from "../../../../hooks/useZoomOperator";
 
 export const ZoomOptions = () => {
   const dispatch = useDispatch();

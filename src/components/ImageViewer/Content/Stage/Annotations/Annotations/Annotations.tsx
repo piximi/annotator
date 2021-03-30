@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Selection } from "../../../../../../types/Selection";
+import { AnnotationType } from "../../../../../../types/AnnotationType";
 import { useSelector } from "react-redux";
 import { visibleCategoriesSelector } from "../../../../../../store/selectors/visibleCategoriesSelector";
 import { Annotation } from "../Annotation";
@@ -22,14 +22,14 @@ export const Annotations = ({
   const visibleCategories = useSelector(visibleCategoriesSelector);
 
   const [visibleAnnotations, setVisibleAnnotations] = useState<
-    Array<Selection>
+    Array<AnnotationType>
   >([]);
 
   useEffect(() => {
     if (!annotations) return;
 
     setVisibleAnnotations(
-      annotations.filter((annotation: Selection) =>
+      annotations.filter((annotation: AnnotationType) =>
         visibleCategories.includes(annotation.categoryId)
       )
     );
@@ -37,7 +37,7 @@ export const Annotations = ({
 
   return (
     <React.Fragment>
-      {visibleAnnotations.map((annotation: Selection) => (
+      {visibleAnnotations.map((annotation: AnnotationType) => (
         <Annotation
           annotation={annotation}
           key={annotation.id}

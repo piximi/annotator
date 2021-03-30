@@ -22,7 +22,7 @@ import { useStyles } from "../../Content/Content.css";
 import { setSelectedAnnotation, slice } from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator } from "../../../../../hooks";
-import { Selection as SelectionType } from "../../../../../types/Selection";
+import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { SelectionMode } from "../../../../../types/SelectionMode";
 import { SelectedContour } from "../SelectedContour";
@@ -606,10 +606,10 @@ export const Stage = ({ src }: StageProps) => {
 
     if (!image.shape) return;
 
-    setImageWidth(image.shape.c);
-    setImageHeight(image.shape.r);
+    setImageWidth(image.shape.width);
+    setImageHeight(image.shape.height);
 
-    setAspectRatio(image.shape.r / image.shape.c);
+    setAspectRatio(image.shape.height / image.shape.width);
 
     resize();
   }, [image?.shape]);

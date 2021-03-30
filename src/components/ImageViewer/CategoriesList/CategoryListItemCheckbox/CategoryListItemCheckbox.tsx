@@ -3,12 +3,12 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
 import LabelIcon from "@material-ui/icons/Label";
 import LabelOutlinedIcon from "@material-ui/icons/LabelOutlined";
-import { Category } from "../../../../types/Category";
+import { CategoryType } from "../../../../types/CategoryType";
 import { useDispatch } from "react-redux";
 import { slice } from "../../../../store";
 
 type CategoryListItemCheckboxProps = {
-  category: Category;
+  category: CategoryType;
 };
 
 export const CategoryListItemCheckbox = ({

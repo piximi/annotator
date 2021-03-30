@@ -13,7 +13,7 @@ import { ColorResult } from "react-color";
 import { sample } from "underscore";
 import { slice } from "../../../../../store";
 import { v4 } from "uuid";
-import { Category } from "../../../../../types/Category";
+import { CategoryType } from "../../../../../types/CategoryType";
 import { categoriesSelector } from "../../../../../store/selectors";
 import { useTranslation } from "../../../../../hooks/useTranslation";
 
@@ -58,7 +58,7 @@ export const CreateCategoryDialog = ({
   const classes = useStyles();
 
   const onCreate = () => {
-    const category: Category = {
+    const category: CategoryType = {
       color: color,
       id: v4().toString(),
       name: name ? name : "Unnamed",

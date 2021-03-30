@@ -1,8 +1,8 @@
-import { State } from "../../types/State";
-import { Category } from "../../types/Category";
+import { StateType } from "../../types/StateType";
+import { CategoryType } from "../../types/CategoryType";
 
-export const unknownCategorySelector = ({ state }: { state: State }) => {
-  return state.categories.find((category: Category) => {
+export const unknownCategorySelector = ({ state }: { state: StateType }) => {
+  return state.categories.find((category: CategoryType) => {
     return category.id === "00000000-0000-0000-0000-000000000000";
   })!;
 };

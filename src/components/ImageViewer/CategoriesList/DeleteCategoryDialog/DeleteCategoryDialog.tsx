@@ -5,8 +5,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { Category } from "../../../../types/Category";
-import { Selection } from "../../../../types/Selection";
+import { CategoryType } from "../../../../types/CategoryType";
+import { AnnotationType } from "../../../../types/AnnotationType";
 import { slice } from "../../../../store";
 import {
   imageInstancesSelector,
@@ -14,7 +14,7 @@ import {
 } from "../../../../store/selectors";
 
 type DeleteCategoryDialogProps = {
-  category: Category;
+  category: CategoryType;
   onClose: () => void;
   open: boolean;
 };
@@ -42,7 +42,7 @@ export const DeleteCategoryDialog = ({
 
     dispatch(slice.actions.deleteCategory({ category: category }));
 
-    const instances = selections?.map((instance: Selection) => {
+    const instances = selections?.map((instance: AnnotationType) => {
       if (instance.categoryId === category.id) {
         return {
           ...instance,
@@ -55,7 +55,7 @@ export const DeleteCategoryDialog = ({
 
     dispatch(
       slice.actions.setImageInstances({
-        instances: instances as Array<Selection>,
+        instances: instances as Array<AnnotationType>,
       })
     );
 

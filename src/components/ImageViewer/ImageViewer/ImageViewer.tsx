@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { CssBaseline } from "@material-ui/core";
-import { Image } from "../../../types/Image";
+import { ImageType } from "../../../types/ImageType";
 import { useDispatch } from "react-redux";
 import { ImageViewerAppBar } from "../ImageViewerAppBar";
 import { CategoriesList } from "../CategoriesList";
@@ -12,11 +12,11 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
 import { theme } from "./theme";
 import * as ImageJS from "image-js";
-import { Shape } from "../../../types/Shape";
+import { ShapeType } from "../../../types/ShapeType";
 import { loadLayersModelThunk } from "../../../store/thunks";
 
 type ImageViewerProps = {
-  image?: Image;
+  image?: ImageType;
 };
 
 export const ImageViewer = (props: ImageViewerProps) => {
@@ -52,17 +52,19 @@ export const ImageViewer = (props: ImageViewerProps) => {
           ImageJS.Image.load(buffer).then((image) => {
             const name = file.name;
 
-            const shape: Shape = {
-              r: image.height,
-              c: image.width,
+            const shape: ShapeType = {
               channels: 4,
+              frames: 1,
+              height: image.height,
+              planes: 1,
+              width: image.width,
             };
 
             dispatch(
               setImage({
                 image: {
                   id: "",
-                  instances: [],
+                  annotations: [],
                   name: name,
                   shape: shape,
                   src: image.toDataURL(),

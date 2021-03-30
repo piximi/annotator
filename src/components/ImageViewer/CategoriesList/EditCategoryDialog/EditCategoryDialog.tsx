@@ -9,12 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import { ColorIcon } from "../ColorIcon";
 import { useStyles } from "./EditCategoryDialog.css";
-import { Category } from "../../../../types/Category";
+import { CategoryType } from "../../../../types/CategoryType";
 import { slice } from "../../../../store";
 import { categoriesSelector } from "../../../../store/selectors";
 
 type EditCategoryDialogProps = {
-  category: Category;
+  category: CategoryType;
   onCloseDialog: () => void;
   openDialog: boolean;
 };
@@ -45,7 +45,7 @@ export const EditCategoryDialog = ({
   const categories = useSelector(categoriesSelector);
 
   const onEdit = () => {
-    const updatedCategories = categories?.map((v: Category) => {
+    const updatedCategories = categories?.map((v: CategoryType) => {
       if (v.id === category.id) {
         return {
           ...category,

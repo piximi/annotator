@@ -1,13 +1,13 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 import * as _ from "lodash";
-import { Category } from "../../types/Category";
+import { CategoryType } from "../../types/CategoryType";
 
 export const selectedCategroySelector = ({
   state,
 }: {
-  state: State;
-}): Category => {
-  const category = _.find(state.categories, (category: Category) => {
+  state: StateType;
+}): CategoryType => {
+  const category = _.find(state.categories, (category: CategoryType) => {
     return category.id === state.selectedCategory;
   });
 

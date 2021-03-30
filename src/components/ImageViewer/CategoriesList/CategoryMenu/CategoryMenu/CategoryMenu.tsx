@@ -2,7 +2,7 @@ import React from "react";
 import Menu from "@material-ui/core/Menu";
 import MenuList from "@material-ui/core/MenuList";
 import Divider from "@material-ui/core/Divider";
-import { Category } from "../../../../../types/Category";
+import { CategoryType } from "../../../../../types/CategoryType";
 import { HideOrShowCategoryMenuItem } from "../HideOrShowCategoryMenuItem";
 import { HideOtherCategoriesMenuItem } from "../HideOtherCategoriesMenuItem";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -11,7 +11,7 @@ import { useTranslation } from "../../../../../hooks/useTranslation";
 
 type CategoryMenuProps = {
   anchorElCategoryMenu: any;
-  category: Category;
+  category: CategoryType;
   onCloseCategoryMenu: (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => void;

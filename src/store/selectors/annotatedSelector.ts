@@ -1,5 +1,5 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 
-export const annotatedSelector = ({ state }: { state: State }): boolean => {
+export const annotatedSelector = ({ state }: { state: StateType }): boolean => {
   return state.annotated;
 };

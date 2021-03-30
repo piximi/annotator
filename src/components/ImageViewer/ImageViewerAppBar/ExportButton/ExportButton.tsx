@@ -20,7 +20,7 @@ export const ExportButton = () => {
 
     const content = {
       src: image.src,
-      instances: image.instances.map((instance) => {
+      instances: image.annotations.map((instance) => {
         return {
           boundingBox: instance.boundingBox,
           category: _.find(projectCategories, (category) => {

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { Category } from "../../../../../../types/Category";
+import { CategoryType } from "../../../../../../types/CategoryType";
 import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
-import { Selection } from "../../../../../../types/Selection";
+import { AnnotationType } from "../../../../../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
 import {
   categoriesSelector,
@@ -17,7 +17,7 @@ import {
 import { ToolType } from "../../../../../../types/ToolType";
 
 type AnnotationProps = {
-  annotation: Selection;
+  annotation: AnnotationType;
   annotationTool?: AnnotationTool;
   imagePosition: { x: number; y: number };
   stageScale: { x: number; y: number };
@@ -42,7 +42,7 @@ export const Annotation = ({
 
   const fill = _.find(
     categories,
-    (category: Category) => category.id === annotation.categoryId
+    (category: CategoryType) => category.id === annotation.categoryId
   )?.color;
 
   const onPointerClick = (event: Konva.KonvaEventObject<MouseEvent>) => {

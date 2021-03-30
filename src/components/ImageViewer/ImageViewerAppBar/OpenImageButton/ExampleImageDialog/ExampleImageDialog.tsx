@@ -1,6 +1,6 @@
 import Dialog from "@material-ui/core/Dialog";
 import React from "react";
-import { Shape } from "../../../../../types/Shape";
+import { ShapeType } from "../../../../../types/ShapeType";
 import { setImage } from "../../../../../store";
 import { useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
@@ -39,17 +39,19 @@ export const ExampleImageDialog = ({
   }) => {
     onClose();
 
-    const shape: Shape = {
-      r: 1200,
-      c: 1600,
+    const shape: ShapeType = {
       channels: 3,
+      frames: 1,
+      height: 1200,
+      planes: 1,
+      width: 1600,
     };
 
     dispatch(
       setImage({
         image: {
           id: "",
-          instances: [],
+          annotations: [],
           name: name,
           shape: shape,
           src: data as string,

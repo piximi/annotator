@@ -1,6 +1,6 @@
-import { Selection } from "../../../../types/Selection";
+import { AnnotationType } from "../../../../types/AnnotationType";
 import * as ImageJS from "image-js";
-import { Category } from "../../../../types/Category";
+import { CategoryType } from "../../../../types/CategoryType";
 import * as _ from "lodash";
 import { connectPoints, drawLine } from "../../../imageHelper";
 import { simplify } from "../../../simplify/simplify";
@@ -15,7 +15,7 @@ export abstract class AnnotationTool extends Tool {
   points?: Array<number> = [];
   annotated: boolean = false;
   annotating: boolean = false;
-  annotation?: Selection;
+  annotation?: AnnotationType;
 
   anchor?: { x: number; y: number } = undefined;
   origin?: { x: number; y: number } = undefined;
@@ -287,7 +287,7 @@ export abstract class AnnotationTool extends Tool {
     return { x: x_stage, y: y_stage };
   }
 
-  annotate(category: Category): void {
+  annotate(category: CategoryType): void {
     if (!this.boundingBox || !this.contour || !this.mask) return;
 
     this.annotation = {

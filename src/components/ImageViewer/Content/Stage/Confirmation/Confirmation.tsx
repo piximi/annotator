@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SelectionMode } from "../../../../../types/SelectionMode";
-import { Selection } from "../../../../../types/Selection";
+import { AnnotationType } from "../../../../../types/AnnotationType";
 import { SelectedContour } from "../SelectedContour";
 import { AnnotationTool } from "../../../../../image/Tool";
 import { useSelector } from "react-redux";
@@ -16,7 +16,7 @@ type ConfirmationProps = {
 };
 
 export const Confirmation = React.forwardRef<
-  React.RefObject<Selection>,
+  React.RefObject<AnnotationType>,
   ConfirmationProps
 >(({ annotationTool, imagePosition, scale, selected, stageScale }, ref) => {
   const selectionMode = useSelector(selectionModeSelector);
@@ -42,7 +42,7 @@ export const Confirmation = React.forwardRef<
     } else {
       if (!annotationTool.annotating || annotationTool.annotated) return;
 
-      const annotated: React.RefObject<Selection> = ref as React.RefObject<Selection>;
+      const annotated: React.RefObject<AnnotationType> = ref as React.RefObject<AnnotationType>;
 
       if (!annotated || !annotated.current) return;
 

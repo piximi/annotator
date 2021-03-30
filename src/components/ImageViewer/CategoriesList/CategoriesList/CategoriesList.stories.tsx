@@ -1,6 +1,6 @@
 import React, { ComponentProps } from "react";
 import { Meta, Story } from "@storybook/react/types-6-0";
-import { Image } from "../../../../types/Image";
+import { ImageType } from "../../../../types/ImageType";
 import { ImageViewer } from "../../ImageViewer";
 import src from "../../../../images/cell-painting.png";
 
@@ -15,11 +15,17 @@ const Template: Story<ComponentProps<typeof ImageViewer>> = (args) => (
 
 export const Default = Template.bind({});
 
-const image: Image = {
+const image: ImageType = {
   id: "",
-  instances: [],
+  annotations: [],
   name: "foo.png",
-  shape: { c: 512, channels: 3, r: 512 },
+  shape: {
+    channels: 3,
+    frames: 1,
+    height: 512,
+    planes: 1,
+    width: 512,
+  },
   src: src,
 };
 

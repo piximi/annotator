@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Selection as SelectionType } from "../../types/Selection";
+import { AnnotationType as SelectionType } from "../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
 import {
   imageInstancesSelector,

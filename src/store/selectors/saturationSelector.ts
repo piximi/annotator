@@ -1,5 +1,5 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 
-export const saturationSelector = ({ state }: { state: State }) => {
+export const saturationSelector = ({ state }: { state: StateType }) => {
   return state.saturation;
 };

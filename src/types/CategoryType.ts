@@ -1,4 +1,4 @@
-export type Category = {
+export type CategoryType = {
   color: string;
   id: string;
   name: string;

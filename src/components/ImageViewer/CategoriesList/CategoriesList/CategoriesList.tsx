@@ -2,7 +2,7 @@ import Drawer from "@material-ui/core/Drawer";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
-import { Category } from "../../../../types/Category";
+import { CategoryType } from "../../../../types/CategoryType";
 import {
   createdCategoriesSelector,
   selectedCategroySelector,
@@ -49,7 +49,7 @@ export const CategoriesList = () => {
 
   const onCategoryClick = (
     event: React.MouseEvent<HTMLDivElement>,
-    category: Category
+    category: CategoryType
   ) => {
     dispatch(
       slice.actions.setSeletedCategory({
@@ -79,7 +79,7 @@ export const CategoriesList = () => {
       <div className={classes.applicationDrawerHeader} />
 
       <CollapsibleList primary={t("Categories")}>
-        {createdCategories.map((category: Category) => {
+        {createdCategories.map((category: CategoryType) => {
           return (
             <div key={category.id}>
               <ListItem

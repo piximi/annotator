@@ -1,9 +1,9 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 
 export const selectedAnnotationSelector = ({
   state,
 }: {
-  state: State;
+  state: StateType;
 }): string | undefined => {
   return state.selectedAnnotation;
 };

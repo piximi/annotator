@@ -1,6 +1,6 @@
 import { EllipticalAnnotationTool } from "./EllipticalAnnotationTool";
 import { test } from "@jest/globals";
-import { Category } from "../../../../types/Category";
+import { CategoryType } from "../../../../types/CategoryType";
 import { Image } from "image-js";
 
 test("deselect", () => {

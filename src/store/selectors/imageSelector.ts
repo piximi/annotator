@@ -1,5 +1,5 @@
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 
-export const imageSelector = ({ state }: { state: State }) => {
+export const imageSelector = ({ state }: { state: StateType }) => {
   return state.image;
 };

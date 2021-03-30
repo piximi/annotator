@@ -1,6 +1,6 @@
 import { test } from "@jest/globals";
 import { LassoAnnotationTool } from "./LassoAnnotationTool";
-import { Category } from "../../../../types/Category";
+import { CategoryType } from "../../../../types/CategoryType";
 import * as ImageJS from "image-js";
 
 test("deselect", () => {

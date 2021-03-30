@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Category } from "../../types/Category";
-import { Image } from "../../types/Image";
+import { CategoryType } from "../../types/CategoryType";
+import { ImageType } from "../../types/ImageType";
 import { ToolType } from "../../types/ToolType";
-import { Selection } from "../../types/Selection";
+import { AnnotationType } from "../../types/AnnotationType";
 import { SelectionMode } from "../../types/SelectionMode";
-import { State } from "../../types/State";
+import { StateType } from "../../types/StateType";
 import { ZoomMode } from "../../types/ZoomMode";
 import * as _ from "lodash";
 import colorImage from "../../images/cell-painting.png";
@@ -12,7 +12,7 @@ import { Language } from "../../types/Language";
 import { loadLayersModelThunk } from "../thunks";
 import * as tensorflow from "@tensorflow/tfjs";
 
-const initialState: State = {
+const initialState: StateType = {
   annotated: false,
   brightness: 0,
   categories: [
@@ -40,9 +40,15 @@ const initialState: State = {
   hue: 0,
   image: {
     id: "",
-    instances: [],
+    annotations: [],
     name: "example.png",
-    shape: { c: 512, channels: 3, r: 512 },
+    shape: {
+      channels: 3,
+      frames: 1,
+      height: 512,
+      planes: 1,
+      width: 512,
+    },
     src: colorImage,
   },
   invertMode: false,
@@ -66,47 +72,56 @@ export const slice = createSlice({
   name: "image-viewer",
   reducers: {
     deleteCategory(
-      state: State,
-      action: PayloadAction<{ category: Category }>
+      state: StateType,
+      action: PayloadAction<{ category: CategoryType }>
     ) {
       state.categories = state.categories.filter(
-        (category: Category) => category.id !== action.payload.category.id
+        (category: CategoryType) => category.id !== action.payload.category.id
       );
     },
-    deleteImageInstance(state: State, action: PayloadAction<{ id: string }>) {
+    deleteImageInstance(
+      state: StateType,
+      action: PayloadAction<{ id: string }>
+    ) {
       if (!state.image) return;
 
-      state.image.instances = state.image.instances.filter(
-        (instance: Selection) => instance.id !== action.payload.id
+      state.image.annotations = state.image.annotations.filter(
+        (instance: AnnotationType) => instance.id !== action.payload.id
       );
     },
     replaceImageInstance(
-      state: State,
-      action: PayloadAction<{ id: string; instance: Selection }>
+      state: StateType,
+      action: PayloadAction<{ id: string; instance: AnnotationType }>
     ) {
       if (!state.image) return;
 
-      const instances = state.image.instances.filter(
-        (instance: Selection) => instance.id !== action.payload.id
+      const instances = state.image.annotations.filter(
+        (instance: AnnotationType) => instance.id !== action.payload.id
       );
 
-      state.image.instances = [...instances, action.payload.instance];
+      state.image.annotations = [...instances, action.payload.instance];
     },
-    setAnnotated(state: State, action: PayloadAction<{ annotated: boolean }>) {
+    setAnnotated(
+      state: StateType,
+      action: PayloadAction<{ annotated: boolean }>
+    ) {
       state.annotated = action.payload.annotated;
     },
-    setBrightness(state: State, action: PayloadAction<{ brightness: number }>) {
+    setBrightness(
+      state: StateType,
+      action: PayloadAction<{ brightness: number }>
+    ) {
       state.brightness = action.payload.brightness;
     },
     setCategories(
-      state: State,
-      action: PayloadAction<{ categories: Array<Category> }>
+      state: StateType,
+      action: PayloadAction<{ categories: Array<CategoryType> }>
     ) {
       state.categories = action.payload.categories;
     },
     setCategoryVisibility(
-      state: State,
-      action: PayloadAction<{ category: Category; visible: boolean }>
+      state: StateType,
+      action: PayloadAction<{ category: CategoryType; visible: boolean }>
     ) {
       const category = _.find(state.categories, (category) => {
         return category.id === action.payload.category.id;
@@ -120,95 +135,110 @@ export const slice = createSlice({
         category,
       ];
     },
-    setContrast(state: State, action: PayloadAction<{ contrast: number }>) {
+    setContrast(state: StateType, action: PayloadAction<{ contrast: number }>) {
       state.contrast = action.payload.contrast;
     },
-    setExposure(state: State, action: PayloadAction<{ exposure: number }>) {
+    setExposure(state: StateType, action: PayloadAction<{ exposure: number }>) {
       state.exposure = action.payload.exposure;
     },
-    setHue(state: State, action: PayloadAction<{ hue: number }>) {
+    setHue(state: StateType, action: PayloadAction<{ hue: number }>) {
       state.hue = action.payload.hue;
     },
-    setImage(state: State, action: PayloadAction<{ image: Image }>) {
+    setImage(state: StateType, action: PayloadAction<{ image: ImageType }>) {
       state.image = action.payload.image;
     },
     setImageInstances(
-      state: State,
-      action: PayloadAction<{ instances: Array<Selection> }>
+      state: StateType,
+      action: PayloadAction<{ instances: Array<AnnotationType> }>
     ) {
       if (!state.image) return;
-      state.image.instances = action.payload.instances;
+      state.image.annotations = action.payload.instances;
     },
-    setImageName(state: State, action: PayloadAction<{ name: string }>) {
+    setImageName(state: StateType, action: PayloadAction<{ name: string }>) {
       if (!state.image) return;
 
       state.image.name = action.payload.name;
     },
     setInvertMode(
-      state: State,
+      state: StateType,
       action: PayloadAction<{ invertMode: boolean }>
     ) {
       state.invertMode = action.payload.invertMode;
     },
-    setLanguage(state: State, action: PayloadAction<{ language: Language }>) {
+    setLanguage(
+      state: StateType,
+      action: PayloadAction<{ language: Language }>
+    ) {
       state.language = action.payload.language;
     },
-    setOperation(state: State, action: PayloadAction<{ operation: ToolType }>) {
+    setOperation(
+      state: StateType,
+      action: PayloadAction<{ operation: ToolType }>
+    ) {
       state.toolType = action.payload.operation;
     },
     setPenSelectionBrushSize(
-      state: State,
+      state: StateType,
       action: PayloadAction<{ penSelectionBrushSize: number }>
     ) {
       state.penSelectionBrushSize = action.payload.penSelectionBrushSize;
     },
-    setSaturation(state: State, action: PayloadAction<{ saturation: number }>) {
+    setSaturation(
+      state: StateType,
+      action: PayloadAction<{ saturation: number }>
+    ) {
       state.saturation = action.payload.saturation;
     },
     setSeletedCategory(
-      state: State,
+      state: StateType,
       action: PayloadAction<{ selectedCategory: string }>
     ) {
       state.selectedCategory = action.payload.selectedCategory;
     },
     setSelectedAnnotation(
-      state: State,
+      state: StateType,
       action: PayloadAction<{ selectedAnnotation: string | undefined }>
     ) {
       state.selectedAnnotation = action.payload.selectedAnnotation;
     },
     setSelectionMode(
-      state: State,
+      state: StateType,
       action: PayloadAction<{ selectionMode: SelectionMode }>
     ) {
       state.selectionMode = action.payload.selectionMode;
     },
     setSoundEnabled(
-      state: State,
+      state: StateType,
       action: PayloadAction<{ soundEnabled: boolean }>
     ) {
       state.soundEnabled = action.payload.soundEnabled;
     },
-    setVibrance(state: State, action: PayloadAction<{ vibrance: number }>) {
+    setVibrance(state: StateType, action: PayloadAction<{ vibrance: number }>) {
       state.vibrance = action.payload.vibrance;
     },
     setZoomAutomaticCentering(
-      state: State,
+      state: StateType,
       action: PayloadAction<{ zoomAutomaticCentering: boolean }>
     ) {
       state.zoomSettings.zoomAutomaticCentering =
         action.payload.zoomAutomaticCentering;
     },
-    setZoomMode(state: State, action: PayloadAction<{ zoomMode: ZoomMode }>) {
+    setZoomMode(
+      state: StateType,
+      action: PayloadAction<{ zoomMode: ZoomMode }>
+    ) {
       state.zoomSettings.zoomMode = action.payload.zoomMode;
     },
-    setZoomReset(state: State, action: PayloadAction<{ zoomReset: boolean }>) {
+    setZoomReset(
+      state: StateType,
+      action: PayloadAction<{ zoomReset: boolean }>
+    ) {
       state.zoomSettings.zoomReset = action.payload.zoomReset;
     },
   },
   extraReducers: {
     ["thunks/loadLayersModel/fulfilled"]: (
-      state: State,
+      state: StateType,
       action: PayloadAction<tensorflow.LayersModel>
     ) => {
       console.info(action.payload);

@@ -9,7 +9,7 @@ export const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   stage: {
-    margin: "8px",
+    // margin: "8px",
   },
   toolbar: {
     ...theme.mixins.toolbar,

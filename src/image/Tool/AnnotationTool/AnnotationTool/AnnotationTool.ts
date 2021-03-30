@@ -255,14 +255,14 @@ export abstract class AnnotationTool extends Tool {
   protected toImageSpace(position: { x: number; y: number }) {
     if (!this.stagedImageShape) return position;
 
-    const x_im = Math.floor(
-      ((position.x - this.stagedImagePosition.x) * this.image.width) /
-        this.stagedImageShape.width
-    );
-    const y_im = Math.floor(
-      ((position.y - this.stagedImagePosition.y) * this.image.height) /
-        (this.stagedImageShape.height - this.stagedImagePosition.y)
-    );
+    const x_im =
+      Math.floor(
+        (position.x - this.stagedImagePosition.x) / this.stagedImageShape.width
+      ) * this.image.width;
+    const y_im =
+      Math.floor(
+        (position.y - this.stagedImagePosition.y) / this.stagedImageShape.height
+      ) * this.image.height;
 
     return { x: x_im, y: y_im };
   }
@@ -273,14 +273,14 @@ export abstract class AnnotationTool extends Tool {
   protected toStageSpace(position: { x: number; y: number }) {
     if (!this.stagedImageShape) return position;
 
-    const x_stage =
-      Math.floor(
-        (position.x * this.stagedImageShape.width) / this.image.width
-      ) + this.stagedImagePosition.x;
-    const y_stage =
-      Math.floor(
-        (position.y * this.stagedImageShape.height) / this.image.height
-      ) + this.stagedImagePosition.y;
+    const x_stage = Math.floor(
+      (position.x * this.stagedImageShape.width) / this.image.width +
+        this.stagedImagePosition.x
+    );
+    const y_stage = Math.floor(
+      (position.y * this.stagedImageShape.height) / this.image.height +
+        this.stagedImagePosition.y
+    );
 
     return { x: x_stage, y: y_stage };
   }

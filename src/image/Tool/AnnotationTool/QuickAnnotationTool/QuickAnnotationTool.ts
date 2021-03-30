@@ -36,8 +36,6 @@ export class QuickAnnotationTool extends AnnotationTool {
       }
     }
 
-    debugger;
-
     return encode(binaryMask.data as Uint8Array);
   }
 

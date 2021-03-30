@@ -38,7 +38,7 @@ export const Content = ({ onDrop }: ContentProps) => {
       <div ref={drop}>
         <div className={classes.toolbar} />
 
-        <div className={classes.parent}>
+        <div>
           <Stage src={image!.src} />
         </div>
       </div>

@@ -22,8 +22,6 @@ export {
   setSeletedCategory,
   setSoundEnabled,
   setVibrance,
-  setZoomMode,
-  setZoomReset,
   applicationSlice,
 } from "./applicationSlice";
 

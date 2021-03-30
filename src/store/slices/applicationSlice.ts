@@ -216,25 +216,6 @@ export const applicationSlice = createSlice({
     setVibrance(state: StateType, action: PayloadAction<{ vibrance: number }>) {
       state.vibrance = action.payload.vibrance;
     },
-    setZoomAutomaticCentering(
-      state: StateType,
-      action: PayloadAction<{ zoomAutomaticCentering: boolean }>
-    ) {
-      state.zoomSettings.automaticCentering =
-        action.payload.zoomAutomaticCentering;
-    },
-    setZoomMode(
-      state: StateType,
-      action: PayloadAction<{ zoomMode: ZoomModeType }>
-    ) {
-      state.zoomSettings.mode = action.payload.zoomMode;
-    },
-    setZoomReset(
-      state: StateType,
-      action: PayloadAction<{ zoomReset: boolean }>
-    ) {
-      state.zoomSettings.toActualSize = action.payload.zoomReset;
-    },
   },
   extraReducers: {
     ["thunks/loadLayersModel/fulfilled"]: (
@@ -270,6 +251,4 @@ export const {
   setSeletedCategory,
   setSoundEnabled,
   setVibrance,
-  setZoomMode,
-  setZoomReset,
 } = applicationSlice.actions;

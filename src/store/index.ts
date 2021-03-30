@@ -20,8 +20,6 @@ export {
   setSelectionMode,
   setSeletedCategory,
   setVibrance,
-  setZoomMode,
-  setZoomReset,
   setZoomToolOptions,
 } from "./slices";
 export { store } from "./stores";

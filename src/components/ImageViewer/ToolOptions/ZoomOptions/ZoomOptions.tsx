@@ -8,10 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ZoomModeType } from "../../../../types/ZoomModeType";
 import { setZoomToolOptions } from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
-import {
-  zoomSettingsSelector,
-  zoomToolOptionsSelector,
-} from "../../../../store/selectors";
+import { zoomToolOptionsSelector } from "../../../../store/selectors";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../icons";
@@ -21,8 +18,6 @@ import { InformationBox } from "../InformationBox";
 
 export const ZoomOptions = () => {
   const dispatch = useDispatch();
-
-  const zoomSettings = useSelector(zoomSettingsSelector);
 
   const options = useSelector(zoomToolOptionsSelector);
 
@@ -152,7 +147,7 @@ export const ZoomOptions = () => {
         <ListItem button onClick={onAutomaticCenteringChange}>
           <ListItemIcon>
             <Checkbox
-              checked={zoomSettings.automaticCentering}
+              checked={options.automaticCentering}
               disableRipple
               edge="start"
               tabIndex={-1}

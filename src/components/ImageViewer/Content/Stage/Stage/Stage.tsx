@@ -10,7 +10,6 @@ import {
   selectedCategroySelector,
   selectionModeSelector,
   toolTypeSelector,
-  zoomSettingsSelector,
   zoomToolOptionsSelector,
 } from "../../../../../store/selectors";
 import {

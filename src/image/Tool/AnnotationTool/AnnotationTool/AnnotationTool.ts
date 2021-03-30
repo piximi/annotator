@@ -255,14 +255,16 @@ export abstract class AnnotationTool extends Tool {
   protected toImageSpace(position: { x: number; y: number }) {
     if (!this.stagedImageShape) return position;
 
-    const x_im =
-      Math.floor(
-        (position.x - this.stagedImagePosition.x) / this.stagedImageShape.width
-      ) * this.image.width;
-    const y_im =
-      Math.floor(
-        (position.y - this.stagedImagePosition.y) / this.stagedImageShape.height
-      ) * this.image.height;
+    const x_im = Math.floor(
+      ((position.x - this.stagedImagePosition.x) /
+        this.stagedImageShape.width) *
+        this.image.width
+    );
+    const y_im = Math.floor(
+      ((position.y - this.stagedImagePosition.y) /
+        this.stagedImageShape.height) *
+        this.image.height
+    );
 
     return { x: x_im, y: y_im };
   }

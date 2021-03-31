@@ -3,6 +3,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import { CategoryType } from "../../../../../types/CategoryType";
 import { useTranslation } from "../../../../../hooks/useTranslation";
+import { applicationSlice } from "../../../../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { categoriesSelector } from "../../../../../store/selectors";
 
 type HideOtherCategoriesMenuItemProps = {
   category: CategoryType;
@@ -15,10 +18,22 @@ export const HideOtherCategoriesMenuItem = ({
   category,
   onCloseCategoryMenu,
 }: HideOtherCategoriesMenuItemProps) => {
-  const onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    onCloseCategoryMenu(event);
+  const categories = useSelector(categoriesSelector);
 
-    // TODO: dispatch hide category action
+  const dispatch = useDispatch();
+
+  const onClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    for (let cat of categories) {
+      if (category.id != cat.id) {
+        dispatch(
+          applicationSlice.actions.setCategoryVisibility({
+            category: cat,
+            visible: false,
+          })
+        );
+      }
+    }
+    onCloseCategoryMenu(event);
   };
 
   const t = useTranslation();

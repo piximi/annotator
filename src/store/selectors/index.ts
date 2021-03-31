@@ -1,3 +1,4 @@
+export { boundingClientRectWidthSelector } from "./boundingClientRectWidthSelector";
 export { brightnessSelector } from "./brightnessSelector";
 export { categoriesSelector } from "./categoriesSelector";
 export { contrastSelector } from "./contrastSelector";
@@ -12,6 +13,7 @@ export { saturationSelector } from "./saturationSelector";
 export { selectedCategroySelector } from "./selectedCategroySelector";
 export { selectionModeSelector } from "./selectionModeSelector";
 export { stageHeightSelector } from "./stageHeightSelector";
+export { stageScaleSelector } from "./stageScaleSelector";
 export { stageWidthSelector } from "./stageWidthSelector";
 export { toolTypeSelector } from "./toolTypeSelector";
 export { unknownCategorySelector } from "./unknownCategorySelector";

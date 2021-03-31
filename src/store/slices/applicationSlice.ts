@@ -12,6 +12,7 @@ import * as tensorflow from "@tensorflow/tfjs";
 
 const initialState: StateType = {
   annotated: false,
+  boundingClientRectWidth: 0,
   brightness: 0,
   categories: [
     {
@@ -57,6 +58,7 @@ const initialState: StateType = {
   selectionMode: AnnotationModeType.New,
   soundEnabled: true,
   stageHeight: 0,
+  stageScale: 0,
   stageWidth: 0,
   toolType: ToolType.RectangularAnnotation,
   vibrance: 0,
@@ -101,6 +103,12 @@ export const applicationSlice = createSlice({
       action: PayloadAction<{ annotated: boolean }>
     ) {
       state.annotated = action.payload.annotated;
+    },
+    setBoundingClientRectWidth(
+      state: StateType,
+      action: PayloadAction<{ boundingClientRectWidth: number }>
+    ) {
+      state.boundingClientRectWidth = action.payload.boundingClientRectWidth;
     },
     setBrightness(
       state: StateType,
@@ -208,6 +216,12 @@ export const applicationSlice = createSlice({
     ) {
       state.stageHeight = action.payload.stageHeight;
     },
+    setStageScale(
+      state: StateType,
+      action: PayloadAction<{ stageScale: number }>
+    ) {
+      state.stageScale = action.payload.stageScale;
+    },
     setStageWidth(
       state: StateType,
       action: PayloadAction<{ stageWidth: number }>
@@ -239,6 +253,7 @@ export const {
   deleteImageInstance,
   replaceImageInstance,
   setAnnotated,
+  setBoundingClientRectWidth,
   setBrightness,
   setCategories,
   setCategoryVisibility,
@@ -258,6 +273,7 @@ export const {
   setSeletedCategory,
   setSoundEnabled,
   setStageHeight,
+  setStageScale,
   setStageWidth,
   setVibrance,
 } = applicationSlice.actions;

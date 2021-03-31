@@ -6,6 +6,7 @@ import { LanguageType } from "./LanguageType";
 
 export type StateType = {
   annotated: boolean;
+  boundingClientRectWidth: number;
   brightness: number;
   categories: Array<CategoryType>;
   contrast: number;
@@ -21,6 +22,7 @@ export type StateType = {
   selectionMode: AnnotationModeType;
   soundEnabled: boolean;
   stageHeight: number;
+  stageScale: number;
   stageWidth: number;
   toolType: ToolType;
   vibrance: number;

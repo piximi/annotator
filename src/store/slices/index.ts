@@ -4,6 +4,7 @@ export {
   deleteImageInstance,
   replaceImageInstance,
   setAnnotated,
+  setBoundingClientRectWidth,
   setBrightness,
   setCategories,
   setCategoryVisibility,
@@ -23,6 +24,7 @@ export {
   setSeletedCategory,
   setSoundEnabled,
   setStageHeight,
+  setStageScale,
   setStageWidth,
   setVibrance,
 } from "./applicationSlice";

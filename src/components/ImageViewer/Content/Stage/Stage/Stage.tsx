@@ -621,7 +621,9 @@ export const Stage = ({ src }: StageProps) => {
 
   const resize = () => {
     if (!parentDivRef || !parentDivRef.current) return;
+
     const size = parentDivRef.current.getBoundingClientRect().width;
+
     setZoomScale(size / virtualWidth);
 
     dispatch(setStageHeight({ stageHeight: size }));

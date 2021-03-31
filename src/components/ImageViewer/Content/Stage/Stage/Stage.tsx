@@ -633,6 +633,8 @@ export const Stage = ({ src }: StageProps) => {
   const resize = () => {
     if (!parentDivRef || !parentDivRef.current) return;
 
+    const width = parentDivRef.current.getBoundingClientRect().width;
+
     dispatch(
       setBoundingClientRectWidth({
         boundingClientRectWidth: parentDivRef.current.getBoundingClientRect()
@@ -640,12 +642,10 @@ export const Stage = ({ src }: StageProps) => {
       })
     );
 
-    dispatch(
-      setStageScale({ stageScale: boundingClientRectWidth / virtualWidth })
-    );
+    dispatch(setStageScale({ stageScale: width / virtualWidth }));
 
-    dispatch(setStageHeight({ stageHeight: boundingClientRectWidth }));
-    dispatch(setStageWidth({ stageWidth: boundingClientRectWidth }));
+    dispatch(setStageHeight({ stageHeight: width }));
+    dispatch(setStageWidth({ stageWidth: width }));
 
     setStagedImagePosition({
       x: 0,

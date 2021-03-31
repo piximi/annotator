@@ -23,6 +23,10 @@ import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { applicationSlice } from "../../../../store";
 import { useDispatch } from "react-redux";
+import { Divider } from "@material-ui/core";
+import List from "@material-ui/core/List";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -146,6 +150,22 @@ export const CategoriesList = () => {
         </ListItem>
 
         <CreateCategoryListItem />
+
+        <Divider />
+
+        <List component="nav" dense>
+          <ListItem
+            button
+            onClick={() => {
+              console.info("Clean annotations");
+            }}
+          >
+            <ListItemIcon>
+              <DeleteIcon color="disabled" />
+            </ListItemIcon>
+            <ListItemText primary={t("Clear all annotations")} />
+          </ListItem>
+        </List>
       </CollapsibleList>
     </Drawer>
   );

@@ -12,7 +12,7 @@ import * as tensorflow from "@tensorflow/tfjs";
 
 const initialState: StateType = {
   annotated: false,
-  boundingClientRectWidth: 0,
+  boundingClientRectWidth: 1,
   brightness: 0,
   categories: [
     {

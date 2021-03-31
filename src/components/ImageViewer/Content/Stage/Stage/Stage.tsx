@@ -4,6 +4,7 @@ import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
+  boundingClientRectWidthSelector,
   imageInstancesSelector,
   imageSelector,
   invertModeSelector,
@@ -14,7 +15,11 @@ import {
   stageWidthSelector,
   toolTypeSelector,
 } from "../../../../../store/selectors";
-import { setStageHeight, setStageWidth } from "../../../../../store";
+import {
+  setStageHeight,
+  setStageWidth,
+  setBoundingClientRectWidth,
+} from "../../../../../store";
 import {
   Provider,
   ReactReduxContext,
@@ -88,6 +93,7 @@ export const Stage = ({ src }: StageProps) => {
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
   const stageScale = useSelector(stageScaleSelector);
+  const boundingClientRectWidth = useSelector(boundingClientRectWidthSelector);
 
   const [annotationTool] = useAnnotationOperator(
     src,
@@ -627,12 +633,19 @@ export const Stage = ({ src }: StageProps) => {
   const resize = () => {
     if (!parentDivRef || !parentDivRef.current) return;
 
-    const size = parentDivRef.current.getBoundingClientRect().width;
+    dispatch(
+      setBoundingClientRectWidth({
+        boundingClientRectWidth: parentDivRef.current.getBoundingClientRect()
+          .width,
+      })
+    );
 
-    dispatch(setStageScale({ stageScale: size / virtualWidth }));
+    dispatch(
+      setStageScale({ stageScale: boundingClientRectWidth / virtualWidth })
+    );
 
-    dispatch(setStageHeight({ stageHeight: size }));
-    dispatch(setStageWidth({ stageWidth: size }));
+    dispatch(setStageHeight({ stageHeight: boundingClientRectWidth }));
+    dispatch(setStageWidth({ stageWidth: boundingClientRectWidth }));
 
     setStagedImagePosition({
       x: 0,

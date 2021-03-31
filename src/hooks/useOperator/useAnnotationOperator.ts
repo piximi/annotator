@@ -32,23 +32,6 @@ export const useAnnotationOperator = (
   const brushSize = useSelector(penSelectionBrushSizeSelector);
 
   useEffect(() => {
-    // // PUT HERE
-    // const image = new Image();
-    //
-    // image.onload = () => {
-    //     const width = image.naturalWidth;
-    //     const height = image.naturalHeight;
-    //
-    //     const request = new Request(src);
-    //
-    //     fetch(request).then((response) => response.blob()).then((buffer) => {
-    //         const foo = new ImageJS.Image(width, height, buffer)
-    //         console.info(foo.toDataURL());
-    //     })
-    // };
-    //
-    // image.src = src;
-
     const loadImage = async () => {
       const image = await ImageJS.Image.load(src);
       setImage(image);

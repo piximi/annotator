@@ -5,6 +5,7 @@ import React from "react";
 import { CategoryType } from "../../../../types/CategoryType";
 import {
   createdCategoriesSelector,
+  imageInstancesSelector,
   selectedCategroySelector,
   unknownCategorySelector,
 } from "../../../../store/selectors";
@@ -27,6 +28,7 @@ import { Divider } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { AnnotationType } from "../../../../types/AnnotationType";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -34,6 +36,8 @@ export const CategoriesList = () => {
   const createdCategories = useSelector(createdCategoriesSelector);
   const selectedCategory = useSelector(selectedCategroySelector);
   const unknownCategory = useSelector(unknownCategorySelector);
+
+  const annotations = useSelector(imageInstancesSelector);
 
   const dispatch = useDispatch();
 
@@ -68,6 +72,20 @@ export const CategoriesList = () => {
 
   const onCategoryMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const onClearAllAnnotations = () => {
+    if (!annotations) return;
+    annotations.forEach((annotation: AnnotationType) => {
+      dispatch(
+        applicationSlice.actions.deleteImageInstance({ id: annotation.id })
+      );
+    });
+    dispatch(
+      applicationSlice.actions.setSeletedCategory({
+        selectedCategory: "00000000-0000-0000-0000-000000000000",
+      })
+    );
   };
 
   const t = useTranslation();
@@ -154,12 +172,7 @@ export const CategoriesList = () => {
         <Divider />
 
         <List component="nav" dense>
-          <ListItem
-            button
-            onClick={() => {
-              console.info("Clean annotations");
-            }}
-          >
+          <ListItem button onClick={onClearAllAnnotations}>
             <ListItemIcon>
               <DeleteIcon color="disabled" />
             </ListItemIcon>

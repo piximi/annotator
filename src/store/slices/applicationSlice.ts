@@ -58,7 +58,7 @@ const initialState: StateType = {
   selectionMode: AnnotationModeType.New,
   soundEnabled: true,
   stageHeight: 0,
-  stageScale: 0,
+  stageScale: 1,
   stageWidth: 0,
   toolType: ToolType.RectangularAnnotation,
   vibrance: 0,

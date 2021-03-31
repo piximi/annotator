@@ -10,6 +10,7 @@ import {
   selectedCategroySelector,
   selectionModeSelector,
   stageHeightSelector,
+  stageScaleSelector,
   stageWidthSelector,
   toolTypeSelector,
 } from "../../../../../store/selectors";
@@ -21,7 +22,11 @@ import {
   useSelector,
 } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
-import { applicationSlice, setSelectedAnnotation } from "../../../../../store";
+import {
+  applicationSlice,
+  setSelectedAnnotation,
+  setStageScale,
+} from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
@@ -82,7 +87,7 @@ export const Stage = ({ src }: StageProps) => {
 
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
-  const [zoomScale, setZoomScale] = useState<number>(1);
+  const stageScale = useSelector(stageScaleSelector);
 
   const [annotationTool] = useAnnotationOperator(
     src,
@@ -91,7 +96,7 @@ export const Stage = ({ src }: StageProps) => {
       width: stageWidth,
       height: stageHeight,
     },
-    zoomScale
+    stageScale
   );
 
   const [selecting, setSelecting] = useState<boolean>(false);
@@ -171,7 +176,7 @@ export const Stage = ({ src }: StageProps) => {
 
     if (!zoomTool || !zoomTool.scale) return;
 
-    setZoomScale(zoomTool.scale);
+    dispatch(setStageScale({ stageScale: zoomTool.scale }));
   }, [zoomTool?.scale]);
 
   useEffect(() => {
@@ -322,7 +327,7 @@ export const Stage = ({ src }: StageProps) => {
   useEffect(() => {
     if (toolType === ToolType.PenAnnotation) {
       // @ts-ignore
-      annotationTool.brushSize = penSelectionBrushSize / zoomScale;
+      annotationTool.brushSize = penSelectionBrushSize / stageScale;
     }
   }, [penSelectionBrushSize]);
 
@@ -624,7 +629,7 @@ export const Stage = ({ src }: StageProps) => {
 
     const size = parentDivRef.current.getBoundingClientRect().width;
 
-    setZoomScale(size / virtualWidth);
+    dispatch(setStageScale({ stageScale: size / virtualWidth }));
 
     dispatch(setStageHeight({ stageHeight: size }));
     dispatch(setStageWidth({ stageWidth: size }));
@@ -654,8 +659,8 @@ export const Stage = ({ src }: StageProps) => {
             onWheel={onWheel}
             ref={stageRef}
             scale={{
-              x: zoomScale,
-              y: zoomScale * aspectRatio,
+              x: stageScale,
+              y: stageScale * aspectRatio,
             }}
             width={stageWidth}
             x={zoomTool ? zoomTool.x : 0}
@@ -671,7 +676,7 @@ export const Stage = ({ src }: StageProps) => {
 
                 <Selecting
                   imagePosition={stagedImagePosition}
-                  scale={zoomScale}
+                  scale={stageScale}
                   stageScale={{
                     x: stageWidth / imageWidth,
                     y: stageHeight / imageHeight,
@@ -684,9 +689,9 @@ export const Stage = ({ src }: StageProps) => {
                   toolType === ToolType.PenAnnotation && (
                     <ReactKonva.Ellipse
                       radiusX={
-                        (aspectRatio * penSelectionBrushSize) / zoomScale
+                        (aspectRatio * penSelectionBrushSize) / stageScale
                       }
-                      radiusY={penSelectionBrushSize / zoomScale}
+                      radiusY={penSelectionBrushSize / stageScale}
                       x={currentPosition.x}
                       y={currentPosition.y}
                       stroke="grey"
@@ -699,7 +704,7 @@ export const Stage = ({ src }: StageProps) => {
                   <SelectedContour
                     imagePosition={stagedImagePosition}
                     points={annotationTool.contour}
-                    scale={zoomScale}
+                    scale={stageScale}
                     stageScale={{
                       x: stageWidth / imageWidth,
                       y: stageHeight / imageHeight,
@@ -716,7 +721,7 @@ export const Stage = ({ src }: StageProps) => {
                     <SelectedContour
                       imagePosition={stagedImagePosition}
                       points={selectedAnnotationRef.current.contour}
-                      scale={zoomScale}
+                      scale={stageScale}
                       stageScale={{
                         x: stageWidth / imageWidth,
                         y: stageHeight / imageHeight,
@@ -737,7 +742,7 @@ export const Stage = ({ src }: StageProps) => {
 
                 <ColorAnnotationToolTip
                   colorAnnotationTool={annotationTool as ColorAnnotationTool}
-                  scale={zoomScale}
+                  scale={stageScale}
                 />
               </ReactKonva.Layer>
             </Provider>

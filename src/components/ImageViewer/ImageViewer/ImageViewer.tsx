@@ -14,6 +14,7 @@ import { theme } from "./theme";
 import * as ImageJS from "image-js";
 import { ShapeType } from "../../../types/ShapeType";
 import { loadLayersModelThunk } from "../../../store/thunks";
+import { ExampleContent } from "../ExampleContent/ExampleContent";
 
 type ImageViewerProps = {
   image?: ImageType;
@@ -89,7 +90,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
         <CategoriesList />
 
-        <Content onDrop={onDrop} />
+        <ExampleContent />
 
         <ToolOptions />
 

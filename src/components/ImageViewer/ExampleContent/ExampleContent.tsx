@@ -14,16 +14,13 @@ export const ExampleContent = () => {
 
   const stageRef = useRef<Konva.Stage>(null);
 
-  const [scale, setScale] = useState<number>(6);
+  const [scale, setScale] = useState(6);
 
-  const [stageW, setStageW] = useState<number>(1000);
+  const [stageW, setStageW] = useState(1000);
 
   const stageH = 1000;
 
-  const [position, setPosition] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const imageW = 160 * scale;
   const imageH = 120 * scale;

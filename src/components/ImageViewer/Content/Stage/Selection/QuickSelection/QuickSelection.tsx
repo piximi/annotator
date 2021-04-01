@@ -3,14 +3,10 @@ import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 
 type QuickSelectionProps = {
-  imagePosition: { x: number; y: number };
   operator: QuickAnnotationTool;
 };
 
-export const QuickSelection = ({
-  imagePosition,
-  operator,
-}: QuickSelectionProps) => {
+export const QuickSelection = ({ operator }: QuickSelectionProps) => {
   const [image, setImage] = useState<HTMLImageElement>();
 
   useEffect(() => {
@@ -25,7 +21,7 @@ export const QuickSelection = ({
 
   return (
     <ReactKonva.Group>
-      <ReactKonva.Image image={image} x={imagePosition.x} y={imagePosition.y} />
+      <ReactKonva.Image image={image} />
     </ReactKonva.Group>
   );
 };

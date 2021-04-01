@@ -59,11 +59,9 @@ export const Confirmation = React.forwardRef<
 
   return (
     <React.Fragment>
-      {selected && (
-        <SelectedContour imagePosition={imagePosition} points={points} />
-      )}
+      {selected && <SelectedContour points={points} />}
 
-      {ref && <SelectedContour imagePosition={imagePosition} points={points} />}
+      {ref && <SelectedContour points={points} />}
     </React.Fragment>
   );
 });

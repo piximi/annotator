@@ -19,14 +19,9 @@ import { ToolType } from "../../../../../../types/ToolType";
 type AnnotationProps = {
   annotation: AnnotationType;
   annotationTool?: AnnotationTool;
-  imagePosition: { x: number; y: number };
 };
 
-export const Annotation = ({
-  annotation,
-  annotationTool,
-  imagePosition,
-}: AnnotationProps) => {
+export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   const ref = useRef<Konva.Line | null>(null);
 
   useEffect(() => {
@@ -73,8 +68,6 @@ export const Annotation = ({
       points={annotation.contour}
       ref={ref}
       strokeWidth={1}
-      x={imagePosition.x}
-      y={imagePosition.y}
     />
   );
 };

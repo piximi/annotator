@@ -4,14 +4,10 @@ import { MagneticAnnotationTool } from "../../../../../../image/Tool";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type MagneticSelectionProps = {
-  imagePosition: { x: number; y: number };
   operator: MagneticAnnotationTool;
 };
 
-export const MagneticSelection = ({
-  imagePosition,
-  operator,
-}: MagneticSelectionProps) => {
+export const MagneticSelection = ({ operator }: MagneticSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
   if (!operator.origin) return null;
@@ -42,8 +38,6 @@ export const MagneticSelection = ({
         points={operator.buffer}
         stroke="black"
         strokeWidth={1}
-        x={imagePosition.x}
-        y={imagePosition.y}
       />
 
       <ReactKonva.Line
@@ -52,8 +46,6 @@ export const MagneticSelection = ({
         stroke="white"
         points={operator.buffer}
         strokeWidth={1}
-        x={imagePosition.x}
-        y={imagePosition.y}
       />
     </ReactKonva.Group>
   );

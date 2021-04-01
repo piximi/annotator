@@ -26,16 +26,11 @@ import { ZoomSelection } from "../ZoomSelection";
 import { Tool } from "../../../../../../image/Tool";
 
 type SelectionProps = {
-  imagePosition: { x: number; y: number };
   tool?: Tool;
   toolType?: ToolType;
 };
 
-export const Selection = ({
-  imagePosition,
-  tool,
-  toolType,
-}: SelectionProps) => {
+export const Selection = ({ tool, toolType }: SelectionProps) => {
   if (!toolType || !tool) return <React.Fragment />;
 
   switch (toolType) {
@@ -48,12 +43,7 @@ export const Selection = ({
     case ToolType.LassoAnnotation:
       return <LassoSelection operator={tool as LassoAnnotationTool} />;
     case ToolType.MagneticAnnotation:
-      return (
-        <MagneticSelection
-          imagePosition={imagePosition}
-          operator={tool as MagneticAnnotationTool}
-        />
-      );
+      return <MagneticSelection operator={tool as MagneticAnnotationTool} />;
     case ToolType.ObjectAnnotation:
       return <ObjectSelection operator={tool as ObjectAnnotationTool} />;
     case ToolType.PenAnnotation:
@@ -67,12 +57,7 @@ export const Selection = ({
     case ToolType.Zoom:
       return <ZoomSelection operator={tool as ZoomTool} />;
     case ToolType.QuickAnnotation:
-      return (
-        <QuickSelection
-          operator={tool as QuickAnnotationTool}
-          imagePosition={imagePosition}
-        />
-      );
+      return <QuickSelection operator={tool as QuickAnnotationTool} />;
     default:
       return <React.Fragment />;
   }

@@ -11,9 +11,7 @@ import React, {
 } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
-  boundingClientRectWidthSelector,
   imageInstancesSelector,
-  imageSelector,
   invertModeSelector,
   selectedCategroySelector,
   selectionModeSelector,
@@ -98,11 +96,43 @@ export const Stage = ({ src }: StageProps) => {
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
   const stageScale = useSelector(stageScaleSelector);
-  const boundingClientRectWidth = useSelector(boundingClientRectWidthSelector);
+
+  const [imageWidth, setImageWidth] = useState<number>(512);
+  const [imageHeight, setImageHeight] = useState<number>(512);
+
+  const boundingClientRect = useBoundingClientRect(parentDivRef);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!boundingClientRect) return;
+
+    dispatch(
+      setBoundingClientRectWidth({
+        boundingClientRectWidth: boundingClientRect.width,
+      })
+    );
+
+    dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
+  }, [boundingClientRect, dispatch]);
+
+  useEffect(() => {
+    if (!imageRef || !imageRef.current) return;
+
+    setImageWidth(imageRef.current.getWidth() * stageScale);
+    setImageHeight(imageRef.current.getHeight() * stageScale);
+  }, [stageScale]);
+
+  const layerPosition = useCallback(() => {
+    return {
+      x: (stageWidth - imageWidth) / 2,
+      y: (stageHeight - imageHeight) / 2,
+    };
+  }, [imageWidth, imageHeight, stageWidth, stageHeight]);
 
   const [annotationTool] = useAnnotationOperator(
     src,
-    stagedImagePosition,
+    layerPosition(),
     {
       width: stageWidth,
       height: stageHeight,
@@ -118,8 +148,6 @@ export const Stage = ({ src }: StageProps) => {
   } | null>();
 
   const [, update] = useReducer((x) => x + 1, 0);
-
-  const dispatch = useDispatch();
 
   const annotations = useSelector(imageInstancesSelector);
 
@@ -597,16 +625,6 @@ export const Stage = ({ src }: StageProps) => {
     deselectAnnotation();
   }, [backspacePress, deletePress, escapePress]);
 
-  useEffect(() => {
-    if (!stageRef || !stageRef.current) return;
-    const content = document.querySelector(
-      ".konvajs-content"
-    ) as HTMLDivElement;
-    if (!content) return;
-    content.style.marginLeft = "auto";
-    content.style.marginRight = "auto";
-  }, [stageRef.current]);
-
   const [tool, setTool] = useState<Tool>();
 
   useEffect(() => {
@@ -617,39 +635,6 @@ export const Stage = ({ src }: StageProps) => {
     }
   }, [annotationTool, toolType, zoomTool]);
 
-  const image = useSelector(imageSelector);
-
-  const [imageWidth, setImageWidth] = useState<number>(512);
-  const [imageHeight, setImageHeight] = useState<number>(512);
-
-  const boundingClientRect = useBoundingClientRect(parentDivRef);
-
-  useEffect(() => {
-    if (!boundingClientRect) return;
-
-    dispatch(
-      setBoundingClientRectWidth({
-        boundingClientRectWidth: boundingClientRect.width,
-      })
-    );
-
-    dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
-  }, [boundingClientRect, dispatch]);
-
-  useEffect(() => {
-    if (!imageRef || !imageRef.current) return;
-
-    setImageWidth(imageRef.current.getWidth() * stageScale);
-    setImageHeight(imageRef.current.getHeight() * stageScale);
-  }, [stageScale]);
-
-  const layerPosition = useCallback(() => {
-    return {
-      x: (stageWidth - imageWidth) / 2,
-      y: (stageHeight - imageHeight) / 2,
-    };
-  }, [imageWidth, imageHeight, stageWidth, stageHeight]);
-
   return (
     <div ref={parentDivRef} className={classes.parent}>
       <ReactReduxContext.Consumer>
@@ -657,9 +642,6 @@ export const Stage = ({ src }: StageProps) => {
           <ReactKonva.Stage
             globalCompositeOperation="destination-over"
             height={stageHeight}
-            onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
-              event.evt.preventDefault();
-            }}
             onClick={onClick}
             onWheel={onWheel}
             ref={stageRef}
@@ -679,7 +661,7 @@ export const Stage = ({ src }: StageProps) => {
                   width={imageWidth}
                 />
 
-                <Selecting imagePosition={stagedImagePosition} tool={tool!} />
+                <Selecting tool={tool!} />
 
                 {currentPosition &&
                   !annotationTool?.annotating &&
@@ -698,10 +680,7 @@ export const Stage = ({ src }: StageProps) => {
                   )}
 
                 {annotated && annotationTool && annotationTool.contour && (
-                  <SelectedContour
-                    imagePosition={stagedImagePosition}
-                    points={annotationTool.contour}
-                  />
+                  <SelectedContour points={annotationTool.contour} />
                 )}
 
                 {selectionMode !== AnnotationModeType.New &&
@@ -711,15 +690,11 @@ export const Stage = ({ src }: StageProps) => {
                   selectedAnnotationRef &&
                   selectedAnnotationRef.current && (
                     <SelectedContour
-                      imagePosition={stagedImagePosition}
                       points={selectedAnnotationRef.current.contour}
                     />
                   )}
 
-                <Annotations
-                  annotationTool={annotationTool}
-                  imagePosition={stagedImagePosition}
-                />
+                <Annotations annotationTool={annotationTool} />
 
                 <ReactKonva.Transformer ref={transformerRef} />
 

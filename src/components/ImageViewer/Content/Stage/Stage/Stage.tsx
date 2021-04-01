@@ -16,9 +16,12 @@ import {
   toolTypeSelector,
 } from "../../../../../store/selectors";
 import {
-  setStageHeight,
-  setStageWidth,
+  applicationSlice,
   setBoundingClientRectWidth,
+  setSelectedAnnotation,
+  setStageHeight,
+  setStageScale,
+  setStageWidth,
 } from "../../../../../store";
 import {
   Provider,
@@ -27,11 +30,6 @@ import {
   useSelector,
 } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
-import {
-  applicationSlice,
-  setSelectedAnnotation,
-  setStageScale,
-} from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
@@ -242,6 +240,8 @@ export const Stage = ({ src }: StageProps) => {
 
     if (!annotated || !annotationTool) return;
 
+    if (!annotationTool.annotated) return;
+
     let combinedMask, combinedContour;
 
     const selectedInstance = selectedAnnotationRef.current;
@@ -269,6 +269,20 @@ export const Stage = ({ src }: StageProps) => {
     annotationTool.boundingBox = annotationTool.computeBoundingBoxFromContours(
       combinedContour
     );
+
+    if (
+      !annotationTool.boundingBox ||
+      !annotationTool.contour ||
+      !annotationTool.mask
+    )
+      return;
+
+    selectedAnnotationRef.current = {
+      ...selectedInstance,
+      boundingBox: annotationTool.boundingBox,
+      contour: annotationTool.contour,
+      mask: annotationTool.mask,
+    };
   }, [selectionMode, annotated]);
 
   useEffect(() => {
@@ -318,12 +332,18 @@ export const Stage = ({ src }: StageProps) => {
   useEffect(() => {
     if (!annotationTool) return;
 
-    if (annotationTool.annotated)
+    if (annotationTool.annotated) {
       dispatch(
         applicationSlice.actions.setAnnotated({
           annotated: annotationTool.annotated,
         })
       );
+
+      if (selectionMode !== AnnotationModeType.New) return;
+      annotationTool.annotate(selectedCategory);
+      if (!annotationTool.annotation) return;
+      selectedAnnotationRef.current = annotationTool.annotation;
+    }
 
     if (selectionMode === AnnotationModeType.New) return;
 
@@ -713,17 +733,17 @@ export const Stage = ({ src }: StageProps) => {
                     />
                   )}
 
-                {annotated && annotationTool && annotationTool.contour && (
-                  <SelectedContour
-                    imagePosition={stagedImagePosition}
-                    points={annotationTool.contour}
-                    scale={stageScale}
-                    stageScale={{
-                      x: stageWidth / imageWidth,
-                      y: stageHeight / imageHeight,
-                    }}
-                  />
-                )}
+                {/*{annotated && annotationTool && annotationTool.contour && (*/}
+                {/*  <SelectedContour*/}
+                {/*    imagePosition={stagedImagePosition}*/}
+                {/*    points={annotationTool.contour}*/}
+                {/*    scale={stageScale}*/}
+                {/*    stageScale={{*/}
+                {/*      x: stageWidth / imageWidth,*/}
+                {/*      y: stageHeight / imageHeight,*/}
+                {/*    }}*/}
+                {/*  />*/}
+                {/*)}*/}
 
                 {selectedAnnotationRef && selectedAnnotationRef.current && (
                   <SelectedContour

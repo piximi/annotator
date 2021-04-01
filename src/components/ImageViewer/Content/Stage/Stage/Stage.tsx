@@ -464,8 +464,8 @@ export const Stage = ({ src }: StageProps) => {
       if (selectionMode === AnnotationModeType.New)
         selectedAnnotationRef.current = null;
 
-      if (selectionMode === AnnotationModeType.Add && !shiftPress)
-        selectedAnnotationRef.current = null;
+      // if (selectionMode === AnnotationModeType.Add && !shiftPress) //FIXME: implement this logic later, when docs are in app
+      //   selectedAnnotationRef.current = null;
 
       if (!annotationTool || !stageRef || !stageRef.current) return;
 

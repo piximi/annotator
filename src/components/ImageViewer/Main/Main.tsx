@@ -17,9 +17,21 @@ const Image = ({ height, width }: ImageProps) => {
   return <ReactKonva.Image height={height} image={image} width={width} />;
 };
 
-export const Main = () => {
-  const [image] = useImage(src);
+type LayerProps = {
+  height: number;
+  position: { x: number; y: number };
+  width: number;
+};
 
+const Layer = ({ height, position, width }: LayerProps) => {
+  return (
+    <ReactKonva.Layer position={position}>
+      <Image height={height} width={width} />
+    </ReactKonva.Layer>
+  );
+};
+
+export const Main = () => {
   const ref = useRef<HTMLDivElement>(null);
   const boundingClientRect = useBoundingClientRect(ref);
 
@@ -57,9 +69,7 @@ export const Main = () => {
   return (
     <main className={classes.content} ref={ref}>
       <ReactKonva.Stage height={stageH} ref={stageRef} width={stageW}>
-        <ReactKonva.Layer position={position}>
-          <Image height={imageH} width={imageW} />
-        </ReactKonva.Layer>
+        <Layer height={imageH} position={position} width={imageW} />
       </ReactKonva.Stage>
     </main>
   );

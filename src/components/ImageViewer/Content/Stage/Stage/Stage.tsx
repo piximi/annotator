@@ -283,7 +283,7 @@ export const Stage = ({ src }: StageProps) => {
       contour: annotationTool.contour,
       mask: annotationTool.mask,
     };
-  }, [selectionMode, annotated]);
+  }, [annotated]);
 
   useEffect(() => {
     if (toolType === ToolType.Zoom) return;

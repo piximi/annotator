@@ -236,7 +236,7 @@ export const Stage = ({ src }: StageProps) => {
   useEffect(() => {
     if (toolType === ToolType.Zoom) return;
 
-    if (selectionMode === AnnotationModeType.New) return; // "New" mode
+    if (selectionMode === AnnotationModeType.New) return;
 
     setSelecting(false);
 
@@ -725,22 +725,17 @@ export const Stage = ({ src }: StageProps) => {
                   />
                 )}
 
-                {selectionMode !== AnnotationModeType.New &&
-                  annotationTool &&
-                  annotationTool.annotating &&
-                  !annotationTool.annotated &&
-                  selectedAnnotationRef &&
-                  selectedAnnotationRef.current && (
-                    <SelectedContour
-                      imagePosition={stagedImagePosition}
-                      points={selectedAnnotationRef.current.contour}
-                      scale={stageScale}
-                      stageScale={{
-                        x: stageWidth / imageWidth,
-                        y: stageHeight / imageHeight,
-                      }}
-                    />
-                  )}
+                {selectedAnnotationRef && selectedAnnotationRef.current && (
+                  <SelectedContour
+                    imagePosition={stagedImagePosition}
+                    points={selectedAnnotationRef.current.contour}
+                    scale={stageScale}
+                    stageScale={{
+                      x: stageWidth / imageWidth,
+                      y: stageHeight / imageHeight,
+                    }}
+                  />
+                )}
 
                 <Annotations
                   annotationTool={annotationTool}

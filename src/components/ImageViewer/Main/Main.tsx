@@ -5,6 +5,7 @@ import useImage from "use-image";
 import src from "../../../images/malaria.png";
 import Konva from "konva";
 import { useBoundingClientRect } from "../../../hooks/useBoundingClientRect";
+import { KonvaEventObject } from "konva/types/Node";
 
 type ImageProps = {
   height: number;
@@ -57,8 +58,16 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     return { x: (width - imageWidth) / 2, y: (height - imageHeight) / 2 };
   }, [width, height, imageWidth, imageHeight]);
 
+  const onWheel = (event: KonvaEventObject<WheelEvent>) => {
+    event.evt.preventDefault();
+
+    const velocity = 1.025;
+
+    setScale(event.evt.deltaY > 0 ? scale * velocity : scale / velocity);
+  };
+
   return (
-    <ReactKonva.Stage height={height} ref={ref} width={width}>
+    <ReactKonva.Stage height={height} onWheel={onWheel} ref={ref} width={width}>
       <Layer height={imageHeight} position={position()} width={imageWidth} />
     </ReactKonva.Stage>
   );

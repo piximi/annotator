@@ -6,6 +6,17 @@ import src from "../../../images/malaria.png";
 import Konva from "konva";
 import { useBoundingClientRect } from "../../../hooks/useBoundingClientRect";
 
+type ImageProps = {
+  height: number;
+  width: number;
+};
+
+const Image = ({ height, width }: ImageProps) => {
+  const [image] = useImage(src);
+
+  return <ReactKonva.Image height={height} image={image} width={width} />;
+};
+
 export const Main = () => {
   const [image] = useImage(src);
 
@@ -47,7 +58,7 @@ export const Main = () => {
     <main className={classes.content} ref={ref}>
       <ReactKonva.Stage height={stageH} ref={stageRef} width={stageW}>
         <ReactKonva.Layer position={position}>
-          <ReactKonva.Image height={imageH} image={image} width={imageW} />
+          <Image height={imageH} width={imageW} />
         </ReactKonva.Layer>
       </ReactKonva.Stage>
     </main>

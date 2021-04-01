@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useStyles } from "./ExampleContent.css";
+import { useStyles } from "./Main.css";
 import * as ReactKonva from "react-konva";
 import useImage from "use-image";
 import src from "../../../images/malaria.png";
 import Konva from "konva";
 import { useBoundingClientRect } from "../../../hooks/useBoundingClientRect";
 
-export const ExampleContent = () => {
+export const Main = () => {
   const [image] = useImage(src);
 
   const ref = useRef<HTMLDivElement>(null);

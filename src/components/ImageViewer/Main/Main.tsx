@@ -49,6 +49,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   const [imageWidth, setImageWidth] = useState<number>(160);
   const [imageHeight, setImageHeight] = useState<number>(120);
 
+  const [automaticCentering, setAutomaticCentering] = useState<boolean>(false);
+
   /*
    * Fetch the image's dimensions from the image ref
    */
@@ -68,21 +70,31 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     setWidth(boundingClientRect.width);
   }, [boundingClientRect]);
 
-  const position = useCallback(() => {
+  const layerPosition = useCallback(() => {
     return { x: (width - imageWidth) / 2, y: (height - imageHeight) / 2 };
   }, [width, height, imageWidth, imageHeight]);
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     event.evt.preventDefault();
 
-    const velocity = 1.01;
+    if (!ref || !ref.current) return;
 
-    setScale(event.evt.deltaY > 0 ? scale * velocity : scale / velocity);
+    const previous = ref.current.scaleX();
+
+    const scaleBy = 1.01;
+
+    setScale(event.evt.deltaY > 0 ? previous * scaleBy : previous / scaleBy);
   };
 
   return (
-    <ReactKonva.Stage height={height} onWheel={onWheel} ref={ref} width={width}>
-      <Layer position={position()}>
+    <ReactKonva.Stage
+      height={height}
+      onWheel={onWheel}
+      ref={ref}
+      scale={{ x: scale, y: scale }}
+      width={width}
+    >
+      <Layer position={layerPosition()}>
         <Image height={imageHeight} ref={imageRef} width={imageWidth} />
       </Layer>
     </ReactKonva.Stage>

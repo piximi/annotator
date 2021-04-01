@@ -5,12 +5,13 @@ import Konva from "konva";
 
 type ImageProps = {
   height: number;
+  position: { x: number; y: number };
   src: string;
   width: number;
 };
 
 export const Image = React.forwardRef<Konva.Image, ImageProps>(
-  ({ height, src, width }, ref) => {
+  ({ height, position, src, width }, ref) => {
     const [image] = useImage(src, "Anonymous");
 
     return (
@@ -18,6 +19,7 @@ export const Image = React.forwardRef<Konva.Image, ImageProps>(
         height={height}
         image={image}
         perfectDrawEnabled={false}
+        position={position}
         ref={ref}
         width={width}
       />

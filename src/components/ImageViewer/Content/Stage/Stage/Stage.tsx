@@ -88,11 +88,6 @@ export const Stage = ({ src }: StageProps) => {
   const stageHeight = useSelector(stageHeightSelector);
   const stageWidth = useSelector(stageWidthSelector);
 
-  const [stagedImagePosition, setStagedImagePosition] = useState<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
-
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
   const stageScale = useSelector(stageScaleSelector);
@@ -180,6 +175,7 @@ export const Stage = ({ src }: StageProps) => {
         selectedAnnotation: undefined,
       })
     );
+
     dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
 
     transformerRef.current?.detach();
@@ -369,15 +365,6 @@ export const Stage = ({ src }: StageProps) => {
       annotationTool.brushSize = penSelectionBrushSize / stageScale;
     }
   }, [penSelectionBrushSize]);
-
-  useEffect(() => {
-    if (!annotationTool) return;
-    annotationTool.stagedImageShape = {
-      width: stageWidth,
-      height: stageHeight,
-    };
-    annotationTool.stagedImagePosition = stagedImagePosition;
-  }, [stageWidth, stageHeight, annotationTool]);
 
   useEffect(() => {
     if (!annotated) return;
@@ -657,50 +644,51 @@ export const Stage = ({ src }: StageProps) => {
                 <Image
                   height={imageHeight}
                   ref={imageRef}
+                  position={layerPosition()}
                   src={src}
                   width={imageWidth}
                 />
 
-                <Selecting tool={tool!} />
+                {/*<Selecting tool={tool!} />*/}
 
-                {currentPosition &&
-                  !annotationTool?.annotating &&
-                  toolType === ToolType.PenAnnotation && (
-                    <ReactKonva.Ellipse
-                      radiusX={
-                        (aspectRatio * penSelectionBrushSize) / stageScale
-                      }
-                      radiusY={penSelectionBrushSize / stageScale}
-                      x={currentPosition.x}
-                      y={currentPosition.y}
-                      stroke="grey"
-                      strokewidth={1}
-                      dash={[2, 2]}
-                    />
-                  )}
+                {/*{currentPosition &&*/}
+                {/*  !annotationTool?.annotating &&*/}
+                {/*  toolType === ToolType.PenAnnotation && (*/}
+                {/*    <ReactKonva.Ellipse*/}
+                {/*      radiusX={*/}
+                {/*        (aspectRatio * penSelectionBrushSize) / stageScale*/}
+                {/*      }*/}
+                {/*      radiusY={penSelectionBrushSize / stageScale}*/}
+                {/*      x={currentPosition.x}*/}
+                {/*      y={currentPosition.y}*/}
+                {/*      stroke="grey"*/}
+                {/*      strokewidth={1}*/}
+                {/*      dash={[2, 2]}*/}
+                {/*    />*/}
+                {/*  )}*/}
 
-                {annotated && annotationTool && annotationTool.contour && (
-                  <SelectedContour points={annotationTool.contour} />
-                )}
+                {/*{annotated && annotationTool && annotationTool.contour && (*/}
+                {/*  <SelectedContour points={annotationTool.contour} />*/}
+                {/*)}*/}
 
-                {selectionMode !== AnnotationModeType.New &&
-                  annotationTool &&
-                  annotationTool.annotating &&
-                  !annotationTool.annotated &&
-                  selectedAnnotationRef &&
-                  selectedAnnotationRef.current && (
-                    <SelectedContour
-                      points={selectedAnnotationRef.current.contour}
-                    />
-                  )}
+                {/*{selectionMode !== AnnotationModeType.New &&*/}
+                {/*  annotationTool &&*/}
+                {/*  annotationTool.annotating &&*/}
+                {/*  !annotationTool.annotated &&*/}
+                {/*  selectedAnnotationRef &&*/}
+                {/*  selectedAnnotationRef.current && (*/}
+                {/*    <SelectedContour*/}
+                {/*      points={selectedAnnotationRef.current.contour}*/}
+                {/*    />*/}
+                {/*  )}*/}
 
-                <Annotations annotationTool={annotationTool} />
+                {/*<Annotations annotationTool={annotationTool} />*/}
 
-                <ReactKonva.Transformer ref={transformerRef} />
+                {/*<ReactKonva.Transformer ref={transformerRef} />*/}
 
-                <ColorAnnotationToolTip
-                  colorAnnotationTool={annotationTool as ColorAnnotationTool}
-                />
+                {/*<ColorAnnotationToolTip*/}
+                {/*  colorAnnotationTool={annotationTool as ColorAnnotationTool}*/}
+                {/*/>*/}
               </ReactKonva.Layer>
             </Provider>
           </ReactKonva.Stage>

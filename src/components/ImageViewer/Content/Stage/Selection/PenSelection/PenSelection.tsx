@@ -4,10 +4,9 @@ import { PenAnnotationTool } from "../../../../../../image/Tool";
 
 type PenSelectionProps = {
   operator: PenAnnotationTool;
-  scale: number;
 };
 
-export const PenSelection = ({ operator, scale }: PenSelectionProps) => {
+export const PenSelection = ({ operator }: PenSelectionProps) => {
   return (
     <ReactKonva.Group>
       <ReactKonva.Line

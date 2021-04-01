@@ -5,13 +5,9 @@ import { useMarchingAnts } from "../../../../../../hooks";
 
 type PolygonalSelectionProps = {
   operator: PolygonalAnnotationTool;
-  scale: number;
 };
 
-export const PolygonalSelection = ({
-  operator,
-  scale,
-}: PolygonalSelectionProps) => {
+export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
   return (
@@ -19,9 +15,9 @@ export const PolygonalSelection = ({
       {operator.origin && (
         <ReactKonva.Circle
           fill="white"
-          radius={3 / scale}
+          radius={3}
           stroke="black"
-          strokeWidth={1 / scale}
+          strokeWidth={1}
           x={operator.origin.x}
           y={operator.origin.y}
         />
@@ -30,9 +26,9 @@ export const PolygonalSelection = ({
       {operator.anchor && (
         <ReactKonva.Circle
           fill="black"
-          radius={3 / scale}
+          radius={3}
           stroke="white"
-          strokeWidth={1 / scale}
+          strokeWidth={1}
           x={operator.anchor.x}
           y={operator.anchor.y}
         />
@@ -41,15 +37,15 @@ export const PolygonalSelection = ({
       <ReactKonva.Line
         points={operator.buffer}
         stroke="black"
-        strokeWidth={1 / scale}
+        strokeWidth={1}
       />
 
       <ReactKonva.Line
-        dash={[4 / scale, 2 / scale]}
+        dash={[4, 2]}
         dashOffset={-dashOffset}
         stroke="white"
         points={operator.buffer}
-        strokeWidth={1 / scale}
+        strokeWidth={1}
       />
     </ReactKonva.Group>
   );

@@ -6,43 +6,33 @@ import * as _ from "lodash";
 type SelectedContourProps = {
   imagePosition: { x: number; y: number };
   points: Array<number>;
-  scale: number;
-  stageScale: { x: number; y: number };
 };
 
 export const SelectedContour = ({
   imagePosition,
   points,
-  scale,
-  stageScale,
 }: SelectedContourProps) => {
   const dashOffset = useMarchingAnts();
-
-  if (!stageScale) return <React.Fragment />;
 
   return (
     <React.Fragment>
       <ReactKonva.Line
-        dash={[4 / scale, 2 / scale]}
+        dash={[4, 2]}
         dashOffset={-dashOffset}
         id="selected"
         points={points}
         stroke="black"
-        strokeWidth={1 / scale}
-        scaleX={stageScale.x}
-        scaleY={stageScale.y}
+        strokeWidth={1}
         x={imagePosition.x}
         y={imagePosition.y}
       />
 
       <ReactKonva.Line
-        dash={[4 / scale, 2 / scale]}
+        dash={[4, 2]}
         dashOffset={-dashOffset}
         points={points}
         stroke="white"
-        strokeWidth={1 / scale}
-        scaleX={stageScale.x}
-        scaleY={stageScale.y}
+        strokeWidth={1}
         x={imagePosition.x}
         y={imagePosition.y}
       />

@@ -679,15 +679,7 @@ export const Stage = ({ src }: StageProps) => {
                   width={imageWidth}
                 />
 
-                <Selecting
-                  imagePosition={stagedImagePosition}
-                  scale={stageScale}
-                  stageScale={{
-                    x: stageWidth / imageWidth,
-                    y: stageHeight / imageHeight,
-                  }}
-                  tool={tool!}
-                />
+                <Selecting imagePosition={stagedImagePosition} tool={tool!} />
 
                 {currentPosition &&
                   !annotationTool?.annotating &&
@@ -709,11 +701,6 @@ export const Stage = ({ src }: StageProps) => {
                   <SelectedContour
                     imagePosition={stagedImagePosition}
                     points={annotationTool.contour}
-                    scale={stageScale}
-                    stageScale={{
-                      x: stageWidth / imageWidth,
-                      y: stageHeight / imageHeight,
-                    }}
                   />
                 )}
 
@@ -726,28 +713,18 @@ export const Stage = ({ src }: StageProps) => {
                     <SelectedContour
                       imagePosition={stagedImagePosition}
                       points={selectedAnnotationRef.current.contour}
-                      scale={stageScale}
-                      stageScale={{
-                        x: stageWidth / imageWidth,
-                        y: stageHeight / imageHeight,
-                      }}
                     />
                   )}
 
                 <Annotations
                   annotationTool={annotationTool}
                   imagePosition={stagedImagePosition}
-                  stageScale={{
-                    x: stageWidth / imageWidth,
-                    y: stageHeight / imageHeight,
-                  }}
                 />
 
                 <ReactKonva.Transformer ref={transformerRef} />
 
                 <ColorAnnotationToolTip
                   colorAnnotationTool={annotationTool as ColorAnnotationTool}
-                  scale={stageScale}
                 />
               </ReactKonva.Layer>
             </Provider>

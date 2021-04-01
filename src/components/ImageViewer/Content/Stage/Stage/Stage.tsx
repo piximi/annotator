@@ -87,8 +87,6 @@ export const Stage = ({ src }: StageProps) => {
   const selectedCategory = useSelector(selectedCategroySelector);
   const selectionMode = useSelector(selectionModeSelector);
 
-  const virtualWidth = 750;
-
   const stageHeight = useSelector(stageHeightSelector);
   const stageWidth = useSelector(stageWidthSelector);
 
@@ -624,19 +622,6 @@ export const Stage = ({ src }: StageProps) => {
   const [imageWidth, setImageWidth] = useState<number>(512);
   const [imageHeight, setImageHeight] = useState<number>(512);
 
-  useEffect(() => {
-    if (!image) return;
-
-    if (!image.shape) return;
-
-    setImageWidth(image.shape.width);
-    setImageHeight(image.shape.height);
-
-    setAspectRatio(image.shape.height / image.shape.width);
-
-    resize();
-  }, [image?.shape]);
-
   const boundingClientRect = useBoundingClientRect(parentDivRef);
 
   useEffect(() => {
@@ -665,20 +650,8 @@ export const Stage = ({ src }: StageProps) => {
     };
   }, [imageWidth, imageHeight, stageWidth, stageHeight]);
 
-  const resize = () => {
-    setStagedImagePosition({
-      x: 0,
-      y: 0,
-    });
-  };
-
-  useEffect(() => {
-    resize();
-    window.addEventListener("resize", resize);
-  }, []);
-
   return (
-    <div id={"parent-div"} ref={parentDivRef} className={classes.parent}>
+    <div ref={parentDivRef} className={classes.parent}>
       <ReactReduxContext.Consumer>
         {({ store }) => (
           <ReactKonva.Stage

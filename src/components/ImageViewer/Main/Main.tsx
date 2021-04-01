@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useStyles } from "./Main.css";
 import * as ReactKonva from "react-konva";
 import useImage from "use-image";
@@ -31,46 +31,49 @@ const Layer = ({ height, position, width }: LayerProps) => {
   );
 };
 
-export const Main = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const boundingClientRect = useBoundingClientRect(ref);
+type StageProps = {
+  boundingClientRect?: DOMRect;
+};
 
-  const stageRef = useRef<Konva.Stage>(null);
+const Stage = ({ boundingClientRect }: StageProps) => {
+  const ref = useRef<Konva.Stage>(null);
+
+  const [width, setWidth] = useState(1000);
+
+  const height = 1000;
 
   const [scale, setScale] = useState(6);
 
-  const [stageW, setStageW] = useState(1000);
+  const imageWidth = 160 * scale;
+  const imageHeight = 120 * scale;
 
-  const stageH = 1000;
-
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-
-  const imageW = 160 * scale;
-  const imageH = 120 * scale;
-
-  useEffect(() => {
-    setPosition({
-      x: (stageW - imageW) / 2,
-      y: (stageH - imageH) / 2,
-    });
-  }, [stageW, stageH, imageW, imageH, scale]);
-
-  /*
-   * Change stage width on window resize
-   */
   useEffect(() => {
     if (!boundingClientRect) return;
 
-    setStageW(boundingClientRect.width);
+    setWidth(boundingClientRect.width);
   }, [boundingClientRect]);
+
+  const position = useCallback(() => {
+    return { x: (width - imageWidth) / 2, y: (height - imageHeight) / 2 };
+  }, [width, height, imageWidth, imageHeight]);
+
+  return (
+    <ReactKonva.Stage height={height} ref={ref} width={width}>
+      <Layer height={imageHeight} position={position()} width={imageWidth} />
+    </ReactKonva.Stage>
+  );
+};
+
+export const Main = () => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const boundingClientRect = useBoundingClientRect(ref);
 
   const classes = useStyles();
 
   return (
     <main className={classes.content} ref={ref}>
-      <ReactKonva.Stage height={stageH} ref={stageRef} width={stageW}>
-        <Layer height={imageH} position={position} width={imageW} />
-      </ReactKonva.Stage>
+      <Stage boundingClientRect={boundingClientRect} />
     </main>
   );
 };

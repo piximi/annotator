@@ -87,13 +87,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   };
 
   return (
-    <ReactKonva.Stage
-      height={height}
-      onWheel={onWheel}
-      ref={ref}
-      scale={{ x: scale, y: scale }}
-      width={width}
-    >
+    <ReactKonva.Stage height={height} onWheel={onWheel} ref={ref} width={width}>
       <Layer position={layerPosition()}>
         <Image height={imageHeight} ref={imageRef} width={imageWidth} />
       </Layer>

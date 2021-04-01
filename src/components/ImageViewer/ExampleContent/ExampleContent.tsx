@@ -16,22 +16,24 @@ export const ExampleContent = () => {
 
   const [scale, setScale] = useState<number>(6);
 
-  const [stageWidth, setStageWidth] = useState<number>(1000);
-  const [stageHeight, setStageHeight] = useState<number>(1000);
+  const [stageW, setStageW] = useState<number>(1000);
 
-  const [imageWidth, setImageWidth] = useState<number>(160 * scale);
-  const [imageHeight, setImageHeight] = useState<number>(120 * scale);
+  const stageH = 1000;
 
-  const [imageX, setImageX] = useState<number>(0);
-  const [imageY, setImageY] = useState<number>(0);
+  const [position, setPosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
 
-  /*
-   * Computes image position
-   */
+  const imageW = 160 * scale;
+  const imageH = 120 * scale;
+
   useEffect(() => {
-    setImageX((stageWidth - imageWidth) / 2);
-    setImageY((stageHeight - imageHeight) / 2);
-  }, [imageHeight, imageWidth, stageHeight, stageWidth]);
+    setPosition({
+      x: (stageW - imageW) / 2,
+      y: (stageH - imageH) / 2,
+    });
+  }, [stageW, stageH, imageW, imageH, scale]);
 
   /*
    * Change stage width on window resize
@@ -39,22 +41,16 @@ export const ExampleContent = () => {
   useEffect(() => {
     if (!boundingClientRect) return;
 
-    setStageWidth(boundingClientRect.width);
+    setStageW(boundingClientRect.width);
   }, [boundingClientRect]);
 
   const classes = useStyles();
 
   return (
     <main className={classes.content} ref={ref}>
-      <ReactKonva.Stage height={stageHeight} ref={stageRef} width={stageWidth}>
-        <ReactKonva.Layer>
-          <ReactKonva.Image
-            height={imageHeight}
-            image={image}
-            width={imageWidth}
-            x={imageX}
-            y={imageY}
-          />
+      <ReactKonva.Stage height={stageH} ref={stageRef} width={stageW}>
+        <ReactKonva.Layer position={position}>
+          <ReactKonva.Image height={imageH} image={image} width={imageW} />
         </ReactKonva.Layer>
       </ReactKonva.Stage>
     </main>

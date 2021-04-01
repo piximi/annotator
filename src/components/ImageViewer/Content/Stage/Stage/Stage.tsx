@@ -1,7 +1,14 @@
 import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
 import Konva from "konva";
-import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
   boundingClientRectWidthSelector,
@@ -16,7 +23,6 @@ import {
   toolTypeSelector,
 } from "../../../../../store/selectors";
 import {
-  setStageHeight,
   setStageWidth,
   setBoundingClientRectWidth,
 } from "../../../../../store";
@@ -55,6 +61,7 @@ import useSound from "use-sound";
 import createAnnotationSoundEffect from "../../../../../sounds/pop-up-on.mp3";
 import deleteAnnotationSoundEffect from "../../../../../sounds/pop-up-off.mp3";
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
+import { useBoundingClientRect } from "../../../../../hooks/useBoundingClientRect";
 
 type StageProps = {
   src: string;
@@ -630,23 +637,35 @@ export const Stage = ({ src }: StageProps) => {
     resize();
   }, [image?.shape]);
 
-  const resize = () => {
-    if (!parentDivRef || !parentDivRef.current) return;
+  const boundingClientRect = useBoundingClientRect(parentDivRef);
 
-    const width = parentDivRef.current.getBoundingClientRect().width;
+  useEffect(() => {
+    if (!boundingClientRect) return;
 
     dispatch(
       setBoundingClientRectWidth({
-        boundingClientRectWidth: parentDivRef.current.getBoundingClientRect()
-          .width,
+        boundingClientRectWidth: boundingClientRect.width,
       })
     );
 
-    dispatch(setStageScale({ stageScale: width / virtualWidth }));
+    dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
+  }, [boundingClientRect, dispatch]);
 
-    dispatch(setStageHeight({ stageHeight: width }));
-    dispatch(setStageWidth({ stageWidth: width }));
+  useEffect(() => {
+    if (!imageRef || !imageRef.current) return;
 
+    setImageWidth(imageRef.current.getWidth() * stageScale);
+    setImageHeight(imageRef.current.getHeight() * stageScale);
+  }, [stageScale]);
+
+  const layerPosition = useCallback(() => {
+    return {
+      x: (stageWidth - imageWidth) / 2,
+      y: (stageHeight - imageHeight) / 2,
+    };
+  }, [imageWidth, imageHeight, stageWidth, stageHeight]);
+
+  const resize = () => {
     setStagedImagePosition({
       x: 0,
       y: 0,
@@ -671,21 +690,21 @@ export const Stage = ({ src }: StageProps) => {
             onClick={onClick}
             onWheel={onWheel}
             ref={stageRef}
-            scale={{
-              x: stageScale,
-              y: stageScale * aspectRatio,
-            }}
             width={stageWidth}
-            x={zoomTool ? zoomTool.x : 0}
-            y={zoomTool ? zoomTool.y : 0}
           >
             <Provider store={store}>
               <ReactKonva.Layer
                 onMouseDown={(event) => onMouseDown(event)}
                 onMouseMove={onMouseMove}
                 onMouseUp={onMouseUp}
+                position={layerPosition}
               >
-                <Image ref={imageRef} src={src} />
+                <Image
+                  height={imageHeight}
+                  ref={imageRef}
+                  src={src}
+                  width={imageWidth}
+                />
 
                 <Selecting
                   imagePosition={stagedImagePosition}

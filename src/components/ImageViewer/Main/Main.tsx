@@ -12,24 +12,23 @@ type ImageProps = {
   width: number;
 };
 
-const Image = ({ height, width }: ImageProps) => {
-  const [image] = useImage(src);
+const Image = React.forwardRef<Konva.Image, ImageProps>(
+  ({ height, width }, ref) => {
+    const [image] = useImage(src);
 
-  return <ReactKonva.Image height={height} image={image} width={width} />;
-};
+    return (
+      <ReactKonva.Image height={height} image={image} ref={ref} width={width} />
+    );
+  }
+);
 
 type LayerProps = {
-  height: number;
   position: { x: number; y: number };
-  width: number;
+  children?: React.ReactNode;
 };
 
-const Layer = ({ height, position, width }: LayerProps) => {
-  return (
-    <ReactKonva.Layer position={position}>
-      <Image height={height} width={width} />
-    </ReactKonva.Layer>
-  );
+const Layer = ({ children, position }: LayerProps) => {
+  return <ReactKonva.Layer position={position}>{children}</ReactKonva.Layer>;
 };
 
 type StageProps = {
@@ -38,6 +37,8 @@ type StageProps = {
 
 const Stage = ({ boundingClientRect }: StageProps) => {
   const ref = useRef<Konva.Stage>(null);
+
+  const imageRef = useRef<Konva.Image>(null);
 
   const [width, setWidth] = useState(1000);
 
@@ -68,7 +69,9 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   return (
     <ReactKonva.Stage height={height} onWheel={onWheel} ref={ref} width={width}>
-      <Layer height={imageHeight} position={position()} width={imageWidth} />
+      <Layer position={position()}>
+        <Image height={imageHeight} ref={imageRef} width={imageWidth} />
+      </Layer>
     </ReactKonva.Stage>
   );
 };

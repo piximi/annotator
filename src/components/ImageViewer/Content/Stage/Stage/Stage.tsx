@@ -733,18 +733,6 @@ export const Stage = ({ src }: StageProps) => {
                     />
                   )}
 
-                {/*{annotated && annotationTool && annotationTool.contour && (*/}
-                {/*  <SelectedContour*/}
-                {/*    imagePosition={stagedImagePosition}*/}
-                {/*    points={annotationTool.contour}*/}
-                {/*    scale={stageScale}*/}
-                {/*    stageScale={{*/}
-                {/*      x: stageWidth / imageWidth,*/}
-                {/*      y: stageHeight / imageHeight,*/}
-                {/*    }}*/}
-                {/*  />*/}
-                {/*)}*/}
-
                 {selectedAnnotationRef && selectedAnnotationRef.current && (
                   <SelectedContour
                     imagePosition={stagedImagePosition}

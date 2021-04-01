@@ -44,11 +44,24 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   const height = 1000;
 
-  const [scale, setScale] = useState(6);
+  const [scale, setScale] = useState(4);
 
-  const imageWidth = 160 * scale;
-  const imageHeight = 120 * scale;
+  const [imageWidth, setImageWidth] = useState<number>(160);
+  const [imageHeight, setImageHeight] = useState<number>(120);
 
+  /*
+   * Fetch the image's dimensions from the image ref
+   */
+  useEffect(() => {
+    if (!imageRef || !imageRef.current) return;
+
+    setImageWidth(imageRef.current.getWidth() * scale);
+    setImageHeight(imageRef.current.getHeight() * scale);
+  }, [imageRef, scale]);
+
+  /*
+   * Dynamically resize the stage width to the container width
+   */
   useEffect(() => {
     if (!boundingClientRect) return;
 
@@ -62,7 +75,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     event.evt.preventDefault();
 
-    const velocity = 1.025;
+    const velocity = 1.001;
 
     setScale(event.evt.deltaY > 0 ? scale * velocity : scale / velocity);
   };

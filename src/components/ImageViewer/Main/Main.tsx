@@ -44,7 +44,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   const height = 1000;
 
-  const [scale, setScale] = useState(4);
+  const [scale, setScale] = useState(1);
 
   const [imageWidth, setImageWidth] = useState<number>(160);
   const [imageHeight, setImageHeight] = useState<number>(120);
@@ -75,7 +75,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     event.evt.preventDefault();
 
-    const velocity = 1.001;
+    const velocity = 1.01;
 
     setScale(event.evt.deltaY > 0 ? scale * velocity : scale / velocity);
   };

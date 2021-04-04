@@ -9,6 +9,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import MapIcon from "@material-ui/icons/Map";
 import InfoIcon from "@material-ui/icons/Info";
+import "./PieMenu.css";
 
 interface CircleButtonProps {
   className?: string;
@@ -171,18 +172,19 @@ export const TestMenuComponent = () => {
     >
       <CircleMenuItem
         onClick={() => alert("Clicked the item")}
+        size={2}
         tooltip="Email"
         tooltipPlacement="right"
       >
         <MailIcon />
       </CircleMenuItem>
-      <CircleMenuItem tooltip="Help">
+      <CircleMenuItem size={2} tooltip="Help">
         <HelpOutlineIcon />
       </CircleMenuItem>
-      <CircleMenuItem tooltip="Location">
+      <CircleMenuItem size={2} tooltip="Location">
         <MapIcon />
       </CircleMenuItem>
-      <CircleMenuItem tooltip="Info">
+      <CircleMenuItem size={2} tooltip="Info">
         <InfoIcon />
       </CircleMenuItem>
     </CircleMenu>
@@ -190,5 +192,5 @@ export const TestMenuComponent = () => {
 };
 
 export const PieMenu = ({ example }: { example: boolean }) => {
-  return <div />;
+  return <TestMenuComponent />;
 };

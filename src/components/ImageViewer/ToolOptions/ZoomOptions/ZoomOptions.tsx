@@ -1,12 +1,12 @@
 import Radio from "@material-ui/core/Radio";
-import React from "react";
+import React, { useEffect } from "react";
 import { RadioGroup } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useDispatch, useSelector } from "react-redux";
 import { ZoomModeType } from "../../../../types/ZoomModeType";
-import { setZoomToolOptions } from "../../../../store";
+import { setZoomToolOptions, setStageScale } from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
 import { zoomToolOptionsSelector } from "../../../../store/selectors";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -84,27 +84,27 @@ export const ZoomOptions = () => {
 
   const marks = [
     {
-      value: -16,
+      value: 0.000625,
       label: "-1600%",
     },
     {
-      value: -8,
+      value: 0.00125,
       label: "-800%",
     },
     {
-      value: -4,
+      value: 0.0025,
       label: "-400%",
     },
     {
-      value: -2,
+      value: 0.005,
       label: "-200%",
     },
     {
-      value: -1.5,
+      value: 0.05,
       label: "-150%",
     },
     {
-      value: -1,
+      value: 0.25,
       label: "-100%",
     },
     {
@@ -149,6 +149,10 @@ export const ZoomOptions = () => {
       setZoomToolOptions({ options: { ...options, scale: marks[value].value } })
     );
   };
+
+  useEffect(() => {
+    dispatch(setStageScale({ stageScale: options.scale }));
+  }, [options]);
 
   return (
     <React.Fragment>

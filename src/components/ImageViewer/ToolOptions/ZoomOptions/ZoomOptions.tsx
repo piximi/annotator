@@ -143,9 +143,12 @@ export const ZoomOptions = () => {
     return marks[value].label;
   };
 
-  // const onChange = () => {
-  //   dispatch(setS)
-  // }
+  const onSliderChange = (value: number) => {
+    //FIXME: this should change a state variable, and onChangeCommitted/onChangeConfirmed we will do the dispatch
+    dispatch(
+      setZoomToolOptions({ options: { ...options, scale: marks[value].value } })
+    );
+  };
 
   return (
     <React.Fragment>
@@ -161,12 +164,13 @@ export const ZoomOptions = () => {
       >
         <ListItem>
           <Slider
-            defaultValue={_.findIndex(
-              marks,
-              (mark) => mark.value === options.scale
-            )}
+            defaultValue={6}
+            onChange={(event: any, value: number | number[]) =>
+              onSliderChange(value as number)
+            }
             valueLabelDisplay="auto"
             valueLabelFormat={valueLabelFormat}
+            value={_.findIndex(marks, (mark) => mark.value === options.scale)}
             min={0}
             max={12}
             step={1}

@@ -8,7 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { ZoomModeType } from "../../../../types/ZoomModeType";
 import { setZoomToolOptions, setStageScale } from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
-import { zoomToolOptionsSelector } from "../../../../store/selectors";
+import {
+  imageSelector,
+  stageWidthSelector,
+  zoomToolOptionsSelector,
+} from "../../../../store/selectors";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../icons";
@@ -22,6 +26,9 @@ export const ZoomOptions = () => {
   const dispatch = useDispatch();
 
   const options = useSelector(zoomToolOptionsSelector);
+
+  const stageWidth = useSelector(stageWidthSelector);
+  const image = useSelector(imageSelector);
 
   const t = useTranslation();
 
@@ -56,7 +63,12 @@ export const ZoomOptions = () => {
       },
     };
 
+    if (!image || !image.shape) return;
+
     dispatch(setZoomToolOptions(payload));
+    //FIXME: image.shape.width is not updated in current setup in Main.tsx
+    //dispatch(setStageScale({stageScale: stageWidth / (image.shape.width) }))
+    dispatch(setStageScale({ stageScale: stageWidth / 1600 }));
   };
 
   const onModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {

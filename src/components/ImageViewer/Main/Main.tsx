@@ -107,14 +107,23 @@ const Stage = ({ boundingClientRect }: StageProps) => {
       <Layer position={layerPosition()}>
         <Image height={imageHeight} ref={imageRef} width={imageWidth} />
 
-        <ReactKonva.Rect
+        <ReactKonva.Line
           dash={[4, 2]}
-          height={95 * scale}
           stroke="black"
           strokeWidth={1}
-          width={100 * scale}
-          x={135 * scale}
-          y={200 * scale}
+          points={[
+            135,
+            200,
+            135 + 100,
+            200,
+            135 + 100,
+            200 + 95,
+            135,
+            200 + 95,
+            135,
+            200,
+          ]}
+          scale={{ x: scale, y: scale }}
         />
       </Layer>
     </ReactKonva.Stage>

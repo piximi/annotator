@@ -17,6 +17,9 @@ import Divider from "@material-ui/core/Divider";
 import { InformationBox } from "../InformationBox";
 import Slider from "@material-ui/core/Slider";
 import * as _ from "lodash";
+import Grid from "@material-ui/core/Grid";
+import ZoomInIcon from "@material-ui/icons/ZoomIn";
+import ZoomOutIcon from "@material-ui/icons/ZoomOut";
 
 export const ZoomOptions = () => {
   const dispatch = useDispatch();
@@ -168,18 +171,31 @@ export const ZoomOptions = () => {
         }
       >
         <ListItem>
-          <Slider
-            defaultValue={6}
-            onChange={(event: any, value: number | number[]) =>
-              onSliderChange(value as number)
-            }
-            valueLabelDisplay="auto"
-            valueLabelFormat={valueLabelFormat}
-            value={_.findIndex(marks, (mark) => mark.value === options.scale)}
-            min={0}
-            max={12}
-            step={1}
-          />
+          <Grid container spacing={2}>
+            <Grid item>
+              <ZoomOutIcon />
+            </Grid>
+            <Grid item xs>
+              <Slider
+                defaultValue={6}
+                onChange={(event: any, value: number | number[]) =>
+                  onSliderChange(value as number)
+                }
+                valueLabelDisplay="auto"
+                valueLabelFormat={valueLabelFormat}
+                value={_.findIndex(
+                  marks,
+                  (mark) => mark.value === options.scale
+                )}
+                min={0}
+                max={12}
+                step={1}
+              />
+            </Grid>
+            <Grid item>
+              <ZoomInIcon />
+            </Grid>
+          </Grid>
         </ListItem>
       </List>
 

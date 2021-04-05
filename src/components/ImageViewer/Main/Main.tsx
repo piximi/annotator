@@ -36,18 +36,21 @@ type StageProps = {
 };
 
 const Stage = ({ boundingClientRect }: StageProps) => {
-  const ref = useRef<Konva.Stage>(null);
+  const stageRef = useRef<Konva.Stage>(null);
 
   const imageRef = useRef<Konva.Image>(null);
 
-  const [width, setWidth] = useState(1000);
+  const [stageWidth, setStageWidth] = useState(1);
 
-  const height = 1000;
+  const stageHeight = 1000;
 
   const [scale, setScale] = useState(1);
 
-  const [imageWidth, setImageWidth] = useState<number>(160);
-  const [imageHeight, setImageHeight] = useState<number>(120);
+  const imageWidth = 1600 * scale;
+  const imageHeight = 1200 * scale;
+
+  // const [imageWidth, setImageWidth] = useState<number>(160);
+  // const [imageHeight, setImageHeight] = useState<number>(120);
 
   const [automaticCentering, setAutomaticCentering] = useState<boolean>(false);
 
@@ -57,8 +60,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   useEffect(() => {
     if (!imageRef || !imageRef.current) return;
 
-    setImageWidth(imageRef.current.getWidth() * scale);
-    setImageHeight(imageRef.current.getHeight() * scale);
+    // setImageWidth(imageWidth * scale);
+    // setImageHeight(imageHeight * scale);
   }, [imageRef, scale]);
 
   /*
@@ -67,29 +70,52 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   useEffect(() => {
     if (!boundingClientRect) return;
 
-    setWidth(boundingClientRect.width);
+    setStageWidth(boundingClientRect.width);
   }, [boundingClientRect]);
 
   const layerPosition = useCallback(() => {
-    return { x: (width - imageWidth) / 2, y: (height - imageHeight) / 2 };
-  }, [width, height, imageWidth, imageHeight]);
+    return {
+      x: (stageWidth - imageWidth) / 2,
+      y: (stageHeight - imageHeight) / 2,
+    };
+  }, [stageWidth, stageHeight, imageWidth, imageHeight]);
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     event.evt.preventDefault();
 
-    if (!ref || !ref.current) return;
+    if (!stageRef || !stageRef.current) return;
 
-    const previous = ref.current.scaleX();
+    // TODO: What do other applications use?
+    const scaleBy = 1.25;
 
-    const scaleBy = 1.01;
-
-    setScale(event.evt.deltaY > 0 ? previous * scaleBy : previous / scaleBy);
+    setScale(event.evt.deltaY > 0 ? scale * scaleBy : scale / scaleBy);
   };
 
+  // useEffect(() => {
+  //   if (!imageRef || !imageRef.current) return;
+  //
+  //   console.info(imageRef.current.scale());
+  // })
+
   return (
-    <ReactKonva.Stage height={height} onWheel={onWheel} ref={ref} width={width}>
+    <ReactKonva.Stage
+      height={stageHeight}
+      onWheel={onWheel}
+      ref={stageRef}
+      width={stageWidth}
+    >
       <Layer position={layerPosition()}>
         <Image height={imageHeight} ref={imageRef} width={imageWidth} />
+
+        <ReactKonva.Rect
+          dash={[4, 2]}
+          height={95 * scale}
+          stroke="black"
+          strokeWidth={1}
+          width={100 * scale}
+          x={135 * scale}
+          y={200 * scale}
+        />
       </Layer>
     </ReactKonva.Stage>
   );

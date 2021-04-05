@@ -127,7 +127,14 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     } else {
       return pointerPosition;
     }
-  }, [pointerPosition, stageWidth, stageHeight, imageWidth, imageHeight]);
+  }, [
+    automaticCentering,
+    pointerPosition,
+    stageWidth,
+    stageHeight,
+    imageWidth,
+    imageHeight,
+  ]);
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {
     if (toolType !== ToolType.Zoom) return;

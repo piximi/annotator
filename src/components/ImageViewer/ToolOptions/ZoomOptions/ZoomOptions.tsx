@@ -156,7 +156,7 @@ export const ZoomOptions = () => {
 
   useEffect(() => {
     dispatch(setStageScale({ stageScale: options.scale }));
-  }, [options.scale]);
+  }, [dispatch, options.scale]);
 
   return (
     <React.Fragment>

@@ -8,6 +8,7 @@ import { useBoundingClientRect } from "../../../hooks/useBoundingClientRect";
 import { KonvaEventObject } from "konva/types/Node";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {
+  imageAspectRatioSelector,
   stageScaleSelector,
   toolTypeSelector,
   zoomToolOptionsSelector,
@@ -86,6 +87,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   const toolType = useSelector(toolTypeSelector);
 
+  const imageAspectRatio = useSelector(imageAspectRatioSelector);
+
   const imageWidth = 1600 * scale;
   const imageHeight = 1200 * scale;
 
@@ -131,10 +134,16 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
     if (!stageRef || !stageRef.current) return;
 
+    if (!imageAspectRatio) return;
+
     if (!automaticCentering) {
       const position = stageRef.current.getPointerPosition();
       if (!position) return;
-      setPointerPosition(position);
+      console.info(position.x - position.x * scale);
+      setPointerPosition({
+        x: position.x - position.x * scale,
+        y: (position.y - position.y * scale) * imageAspectRatio,
+      });
     }
 
     zoom(mode === ZoomModeType.In ? 100 : -100);

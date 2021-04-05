@@ -19,3 +19,4 @@ export { toolTypeSelector } from "./toolTypeSelector";
 export { unknownCategorySelector } from "./unknownCategorySelector";
 export { vibranceSelector } from "./vibranceSelector";
 export { zoomToolOptionsSelector } from "./zoomToolOptionsSelector";
+export { imageAspectRatioSelector } from "./imageAspectRatioSelector";

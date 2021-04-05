@@ -1,5 +1,7 @@
 import { StateType } from "../../types/StateType";
 
-export const imageSelector = ({ state }: { state: StateType }) => {
-  return state.image;
+export const imageAspectRatioSelector = ({ state }: { state: StateType }) => {
+  if (!state.image || !state.image.shape) return;
+
+  return state.image.shape.height / state.image.shape.width;
 };

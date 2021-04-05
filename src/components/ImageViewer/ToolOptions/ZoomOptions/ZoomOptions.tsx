@@ -15,6 +15,7 @@ import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../icons";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import Divider from "@material-ui/core/Divider";
 import { InformationBox } from "../InformationBox";
+import Slider from "@material-ui/core/Slider";
 
 export const ZoomOptions = () => {
   const dispatch = useDispatch();
@@ -83,6 +84,17 @@ export const ZoomOptions = () => {
   return (
     <React.Fragment>
       <InformationBox description="…" name={t("Zoom")} />
+
+      <Divider />
+
+      <Slider
+        defaultValue={30}
+        valueLabelDisplay="auto"
+        step={10}
+        marks
+        min={10}
+        max={110}
+      />
 
       <Divider />
 

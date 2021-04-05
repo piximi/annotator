@@ -7,8 +7,12 @@ import Konva from "konva";
 import { useBoundingClientRect } from "../../../hooks/useBoundingClientRect";
 import { KonvaEventObject } from "konva/types/Node";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { stageScaleSelector } from "../../../store/selectors";
+import {
+  stageScaleSelector,
+  zoomToolOptionsSelector,
+} from "../../../store/selectors";
 import { setStageScale, store } from "../../../store/";
+import { ZoomModeType } from "../../../types/ZoomModeType";
 
 type ImageProps = {
   height: number;
@@ -83,10 +87,20 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   const dispatch = useDispatch();
 
+  // TODO: What do other applications use?
+
   // const [imageWidth, setImageWidth] = useState<number>(160);
   // const [imageHeight, setImageHeight] = useState<number>(120);
 
-  const [automaticCentering, setAutomaticCentering] = useState<boolean>(false);
+  const { automaticCentering, mode } = useSelector(zoomToolOptionsSelector);
+
+  const zoom = (deltaY: number, scaleBy: number = 1.25) => {
+    dispatch(
+      setStageScale({
+        stageScale: deltaY > 0 ? scale * scaleBy : scale / scaleBy,
+      })
+    );
+  };
 
   /*
    * Fetch the image's dimensions from the image ref
@@ -114,19 +128,23 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     };
   }, [stageWidth, stageHeight, imageWidth, imageHeight]);
 
+  const onClick = (event: KonvaEventObject<MouseEvent>) => {
+    if (!stageRef || !stageRef.current) return;
+
+    if (automaticCentering) {
+      zoom(mode === ZoomModeType.In ? 100 : -100);
+    }
+    // else {
+    //     const position = stageRef.current.getPointerPosition();
+    // }
+  };
+
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     event.evt.preventDefault();
 
     if (!stageRef || !stageRef.current) return;
 
-    // TODO: What do other applications use?
-    const scaleBy = 1.25;
-
-    dispatch(
-      setStageScale({
-        stageScale: event.evt.deltaY > 0 ? scale * scaleBy : scale / scaleBy,
-      })
-    );
+    zoom(event.evt.deltaY);
   };
 
   // useEffect(() => {
@@ -138,6 +156,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   return (
     <ReactKonva.Stage
       height={stageHeight}
+      onClick={onClick}
       onWheel={onWheel}
       ref={stageRef}
       width={stageWidth}

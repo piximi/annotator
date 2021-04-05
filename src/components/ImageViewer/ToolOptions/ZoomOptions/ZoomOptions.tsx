@@ -87,14 +87,23 @@ export const ZoomOptions = () => {
 
       <Divider />
 
-      <Slider
-        defaultValue={30}
-        valueLabelDisplay="auto"
-        step={10}
-        marks
-        min={10}
-        max={110}
-      />
+      <List
+        component="nav"
+        subheader={
+          <ListSubheader component="div">{t("Zoom scale")}</ListSubheader>
+        }
+      >
+        <ListItem>
+          <Slider
+            defaultValue={30}
+            valueLabelDisplay="auto"
+            step={10}
+            marks
+            min={10}
+            max={110}
+          />
+        </ListItem>
+      </List>
 
       <Divider />
 

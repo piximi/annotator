@@ -139,7 +139,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     if (!automaticCentering) {
       const position = stageRef.current.getPointerPosition();
       if (!position) return;
-      console.info(position.x - position.x * scale);
       setPointerPosition({
         x: position.x - position.x * scale,
         y: (position.y - position.y * scale) * imageAspectRatio,

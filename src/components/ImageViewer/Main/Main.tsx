@@ -6,6 +6,9 @@ import src from "../../../images/malaria.png";
 import Konva from "konva";
 import { useBoundingClientRect } from "../../../hooks/useBoundingClientRect";
 import { KonvaEventObject } from "konva/types/Node";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { stageScaleSelector } from "../../../store/selectors";
+import { setStageScale, store } from "../../../store/";
 
 type ImageProps = {
   height: number;
@@ -21,6 +24,31 @@ const Image = React.forwardRef<Konva.Image, ImageProps>(
     );
   }
 );
+
+const CustomSelection = () => {
+  const scale = useSelector(stageScaleSelector);
+
+  return (
+    <ReactKonva.Line
+      dash={[4, 2]}
+      stroke="black"
+      strokeWidth={1}
+      points={[
+        135,
+        200,
+        135 + 100,
+        200,
+        135 + 100,
+        200 + 95,
+        135,
+        200 + 95,
+        135,
+        200,
+      ]}
+      scale={{ x: scale, y: scale }}
+    />
+  );
+};
 
 type LayerProps = {
   position: { x: number; y: number };
@@ -48,10 +76,12 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   const stageHeight = 1000;
 
-  const [scale, setScale] = useState(1);
+  const scale = useSelector(stageScaleSelector);
 
   const imageWidth = 1600 * scale;
   const imageHeight = 1200 * scale;
+
+  const dispatch = useDispatch();
 
   // const [imageWidth, setImageWidth] = useState<number>(160);
   // const [imageHeight, setImageHeight] = useState<number>(120);
@@ -92,7 +122,11 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     // TODO: What do other applications use?
     const scaleBy = 1.25;
 
-    setScale(event.evt.deltaY > 0 ? scale * scaleBy : scale / scaleBy);
+    dispatch(
+      setStageScale({
+        stageScale: event.evt.deltaY > 0 ? scale * scaleBy : scale / scaleBy,
+      })
+    );
   };
 
   // useEffect(() => {
@@ -108,28 +142,13 @@ const Stage = ({ boundingClientRect }: StageProps) => {
       ref={stageRef}
       width={stageWidth}
     >
-      <Layer position={layerPosition()}>
-        <Image height={imageHeight} ref={imageRef} width={imageWidth} />
+      <Provider store={store}>
+        <Layer position={layerPosition()}>
+          <Image height={imageHeight} ref={imageRef} width={imageWidth} />
 
-        <ReactKonva.Line
-          dash={[4, 2]}
-          stroke="black"
-          strokeWidth={1}
-          points={[
-            135,
-            200,
-            135 + 100,
-            200,
-            135 + 100,
-            200 + 95,
-            135,
-            200 + 95,
-            135,
-            200,
-          ]}
-          scale={{ x: scale, y: scale }}
-        />
-      </Layer>
+          <CustomSelection />
+        </Layer>
+      </Provider>
     </ReactKonva.Stage>
   );
 };

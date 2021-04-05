@@ -28,7 +28,11 @@ type LayerProps = {
 };
 
 const Layer = ({ children, position }: LayerProps) => {
-  return <ReactKonva.Layer position={position}>{children}</ReactKonva.Layer>;
+  return (
+    <ReactKonva.Layer imageSmoothingEnabled={false} position={position}>
+      {children}
+    </ReactKonva.Layer>
+  );
 };
 
 type StageProps = {

@@ -121,22 +121,32 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     setStageWidth(boundingClientRect.width);
   }, [boundingClientRect]);
 
+  const [pointerPosition, setPointerPosition] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
+
   const layerPosition = useCallback(() => {
-    return {
-      x: (stageWidth - imageWidth) / 2,
-      y: (stageHeight - imageHeight) / 2,
-    };
-  }, [stageWidth, stageHeight, imageWidth, imageHeight]);
+    if (automaticCentering) {
+      return {
+        x: (stageWidth - imageWidth) / 2,
+        y: (stageHeight - imageHeight) / 2,
+      };
+    } else {
+      return pointerPosition;
+    }
+  }, [pointerPosition, stageWidth, stageHeight, imageWidth, imageHeight]);
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {
     if (!stageRef || !stageRef.current) return;
 
-    if (automaticCentering) {
-      zoom(mode === ZoomModeType.In ? 100 : -100);
+    if (!automaticCentering) {
+      const position = stageRef.current.getPointerPosition();
+      if (!position) return;
+      setPointerPosition(position);
     }
-    // else {
-    //     const position = stageRef.current.getPointerPosition();
-    // }
+
+    zoom(mode === ZoomModeType.In ? 100 : -100);
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {

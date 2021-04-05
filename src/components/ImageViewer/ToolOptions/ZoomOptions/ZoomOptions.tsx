@@ -45,6 +45,7 @@ export const ZoomOptions = () => {
     };
 
     dispatch(setZoomToolOptions(payload));
+    dispatch(setStageScale({ stageScale: 1 }));
   };
 
   const onToFitClick = () => {
@@ -152,7 +153,7 @@ export const ZoomOptions = () => {
 
   useEffect(() => {
     dispatch(setStageScale({ stageScale: options.scale }));
-  }, [options]);
+  }, [options.scale]);
 
   return (
     <React.Fragment>

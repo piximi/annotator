@@ -102,16 +102,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   };
 
   /*
-   * Fetch the image's dimensions from the image ref
-   */
-  useEffect(() => {
-    if (!imageRef || !imageRef.current) return;
-
-    // setImageWidth(imageWidth * scale);
-    // setImageHeight(imageHeight * scale);
-  }, [imageRef, scale]);
-
-  /*
    * Dynamically resize the stage width to the container width
    */
   useEffect(() => {

@@ -16,6 +16,7 @@ import { useTranslation } from "../../../../hooks/useTranslation";
 import Divider from "@material-ui/core/Divider";
 import { InformationBox } from "../InformationBox";
 import Slider from "@material-ui/core/Slider";
+import * as _ from "lodash";
 
 export const ZoomOptions = () => {
   const dispatch = useDispatch();
@@ -81,6 +82,71 @@ export const ZoomOptions = () => {
     dispatch(setZoomToolOptions(payload));
   };
 
+  const marks = [
+    {
+      value: -16,
+      label: "-1600%",
+    },
+    {
+      value: -8,
+      label: "-800%",
+    },
+    {
+      value: -4,
+      label: "-400%",
+    },
+    {
+      value: -2,
+      label: "-200%",
+    },
+    {
+      value: -1.5,
+      label: "-150%",
+    },
+    {
+      value: -1,
+      label: "-100%",
+    },
+    {
+      value: 0.5,
+      label: "50%",
+    },
+    {
+      value: 1,
+      label: "100%",
+    },
+    {
+      value: 1.5,
+      label: "150%",
+    },
+    {
+      value: 2,
+      label: "200%",
+    },
+    {
+      value: 4,
+      label: "400%",
+    },
+    {
+      value: 8,
+      label: "800%",
+    },
+    {
+      value: 16,
+      label: "1600%",
+    },
+  ];
+
+  const valueLabelFormat = (value: number) => {
+    if (value < 0 || value >= marks.length) return;
+
+    return marks[value].label;
+  };
+
+  // const onChange = () => {
+  //   dispatch(setS)
+  // }
+
   return (
     <React.Fragment>
       <InformationBox description="…" name={t("Zoom")} />
@@ -95,12 +161,15 @@ export const ZoomOptions = () => {
       >
         <ListItem>
           <Slider
-            defaultValue={30}
+            defaultValue={_.findIndex(
+              marks,
+              (mark) => mark.value === options.scale
+            )}
             valueLabelDisplay="auto"
-            step={10}
-            marks
-            min={10}
-            max={110}
+            valueLabelFormat={valueLabelFormat}
+            min={0}
+            max={12}
+            step={1}
           />
         </ListItem>
       </List>

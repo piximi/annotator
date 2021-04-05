@@ -7,6 +7,7 @@ const initialState: ToolOptionsStateType = {
   zoom: {
     automaticCentering: true,
     mode: ZoomModeType.In,
+    scale: 1.0,
     toActualSize: false,
     toFit: false,
   },

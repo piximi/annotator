@@ -9,10 +9,12 @@ import { KonvaEventObject } from "konva/types/Node";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {
   stageScaleSelector,
+  toolTypeSelector,
   zoomToolOptionsSelector,
 } from "../../../store/selectors";
 import { setStageScale, store } from "../../../store/";
 import { ZoomModeType } from "../../../types/ZoomModeType";
+import { ToolType } from "../../../types/ToolType";
 
 type ImageProps = {
   height: number;
@@ -82,15 +84,12 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   const scale = useSelector(stageScaleSelector);
 
+  const toolType = useSelector(toolTypeSelector);
+
   const imageWidth = 1600 * scale;
   const imageHeight = 1200 * scale;
 
   const dispatch = useDispatch();
-
-  // TODO: What do other applications use?
-
-  // const [imageWidth, setImageWidth] = useState<number>(160);
-  // const [imageHeight, setImageHeight] = useState<number>(120);
 
   const { automaticCentering, mode } = useSelector(zoomToolOptionsSelector);
 
@@ -101,16 +100,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
       })
     );
   };
-
-  /*
-   * Fetch the image's dimensions from the image ref
-   */
-  useEffect(() => {
-    if (!imageRef || !imageRef.current) return;
-
-    // setImageWidth(imageWidth * scale);
-    // setImageHeight(imageHeight * scale);
-  }, [imageRef, scale]);
 
   /*
    * Dynamically resize the stage width to the container width
@@ -138,6 +127,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   }, [pointerPosition, stageWidth, stageHeight, imageWidth, imageHeight]);
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {
+    if (toolType !== ToolType.Zoom) return;
+
     if (!stageRef || !stageRef.current) return;
 
     if (!automaticCentering) {
@@ -150,18 +141,14 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
+    if (toolType !== ToolType.Zoom) return;
+
     event.evt.preventDefault();
 
     if (!stageRef || !stageRef.current) return;
 
     zoom(event.evt.deltaY);
   };
-
-  // useEffect(() => {
-  //   if (!imageRef || !imageRef.current) return;
-  //
-  //   console.info(imageRef.current.scale());
-  // })
 
   return (
     <ReactKonva.Stage

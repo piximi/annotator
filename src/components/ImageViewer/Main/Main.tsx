@@ -10,10 +10,11 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import {
   imageAspectRatioSelector,
   stageScaleSelector,
+  stageWidthSelector,
   toolTypeSelector,
   zoomToolOptionsSelector,
 } from "../../../store/selectors";
-import { setStageScale, store } from "../../../store/";
+import { setStageScale, setStageWidth, store } from "../../../store/";
 import { ZoomModeType } from "../../../types/ZoomModeType";
 import { ToolType } from "../../../types/ToolType";
 
@@ -79,7 +80,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   const imageRef = useRef<Konva.Image>(null);
 
-  const [stageWidth, setStageWidth] = useState(1);
+  const stageWidth = useSelector(stageWidthSelector);
 
   const stageHeight = 1000;
 
@@ -110,7 +111,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   useEffect(() => {
     if (!boundingClientRect) return;
 
-    setStageWidth(boundingClientRect.width);
+    dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
   }, [boundingClientRect]);
 
   const [pointerPosition, setPointerPosition] = useState<{

@@ -133,6 +133,11 @@ const Stage = ({ boundingClientRect }: StageProps) => {
         x: (stageWidth - imageWidth) / 2,
         y: (stageHeight - imageHeight) / 2,
       };
+    } else if (selected && minimum) {
+      return {
+        x: minimum.x,
+        y: minimum.y,
+      };
     } else {
       return pointerPosition;
     }
@@ -198,26 +203,32 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
     setSelecting(false);
     setSelected(true);
+
+    if (!maximum) return;
+
+    dispatch(
+      setStageScale({ stageScale: imageWidth / (maximum.x - minimum.x) })
+    );
   };
 
-  const onClick = (event: KonvaEventObject<MouseEvent>) => {
-    if (toolType !== ToolType.Zoom) return;
-
-    if (!stageRef || !stageRef.current) return;
-
-    if (!imageAspectRatio) return;
-
-    if (!automaticCentering) {
-      const position = stageRef.current.getPointerPosition();
-      if (!position) return;
-      setPointerPosition({
-        x: position.x - position.x * scale,
-        y: (position.y - position.y * scale) * imageAspectRatio,
-      });
-    }
-
-    zoom(mode === ZoomModeType.In ? 100 : -100);
-  };
+  // const onClick = (event: KonvaEventObject<MouseEvent>) => {
+  //   if (toolType !== ToolType.Zoom) return;
+  //
+  //   if (!stageRef || !stageRef.current) return;
+  //
+  //   if (!imageAspectRatio) return;
+  //
+  //   if (!automaticCentering) {
+  //     const position = stageRef.current.getPointerPosition();
+  //     if (!position) return;
+  //     setPointerPosition({
+  //       x: position.x - position.x * scale,
+  //       y: (position.y - position.y * scale) * imageAspectRatio,
+  //     });
+  //   }
+  //
+  //   zoom(mode === ZoomModeType.In ? 100 : -100);
+  // };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     if (toolType !== ToolType.Zoom) return;
@@ -232,7 +243,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   return (
     <ReactKonva.Stage
       height={stageHeight}
-      onClick={onClick}
+      // onClick={onClick}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}

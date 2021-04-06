@@ -112,7 +112,9 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     y: 0,
   });
 
-  const zoom = (deltaY: number, scaleBy: number = 1.25) => {
+  const scaleBy = 1.25;
+
+  const zoom = (deltaY: number, scaleBy: number) => {
     dispatch(
       setStageScale({
         stageScale: deltaY > 0 ? scale * scaleBy : scale / scaleBy,
@@ -235,12 +237,12 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
       if (!position) return;
 
-      setOffset(position);
+      setOffset({ x: position.x * scaleBy, y: position.y * scaleBy });
 
       setPointerPosition(position);
     }
 
-    zoom(mode === ZoomModeType.In ? 100 : -100);
+    zoom(mode === ZoomModeType.In ? 100 : -100, scaleBy);
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
@@ -250,7 +252,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
     if (!stageRef || !stageRef.current) return;
 
-    zoom(event.evt.deltaY);
+    zoom(event.evt.deltaY, scaleBy);
   };
 
   return (

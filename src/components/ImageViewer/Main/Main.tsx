@@ -137,12 +137,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
         y: (stageHeight - (maximum.y - minimum.y) / 2) * scale,
       };
 
-      console.info(center);
-
       return center;
     } else {
-      console.info(stageWidth / 2);
-      console.info(pointerPosition);
       return {
         x: stageWidth - (imageWidth - pointerPosition.x),
         y: stageHeight - (imageHeight - pointerPosition.y),
@@ -229,8 +225,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
       const position = getRelativePointerPosition(imageRef.current);
 
       if (!position) return;
-
-      console.info(position);
 
       setPointerPosition(position);
     }

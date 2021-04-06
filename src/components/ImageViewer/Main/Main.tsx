@@ -17,6 +17,8 @@ import {
 import { setStageScale, setStageWidth, store } from "../../../store/";
 import { ZoomModeType } from "../../../types/ZoomModeType";
 import { ToolType } from "../../../types/ToolType";
+import { Selecting } from "../Content/Stage/Selecting";
+import { ZoomSelection } from "../Content/Stage/Selection/ZoomSelection";
 
 type ImageProps = {
   height: number;
@@ -97,6 +99,12 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   const { automaticCentering, mode } = useSelector(zoomToolOptionsSelector);
 
+  const [minimum, setMinimum] = useState<{ x: number; y: number }>();
+  const [maximum, setMaximum] = useState<{ x: number; y: number }>();
+  const [width, setWidth] = useState<number>(0);
+  const [selecting, setSelecting] = useState<boolean>(false);
+  const [selected, setSelected] = useState<boolean>(false);
+
   const zoom = (deltaY: number, scaleBy: number = 1.25) => {
     dispatch(
       setStageScale({
@@ -137,6 +145,61 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     imageHeight,
   ]);
 
+  // this function will return pointer position relative to the passed node
+  const getRelativePointerPosition = (node: Konva.Node) => {
+    const transform = node.getAbsoluteTransform().copy();
+    // to detect relative position we need to invert transform
+    transform.invert();
+
+    const stage = node.getStage();
+
+    if (!stage) return;
+
+    // get pointer (say mouse or touch) position
+    const pos = stage.getPointerPosition();
+
+    if (!pos) return;
+
+    // now we can find relative point
+    return transform.point(pos);
+  };
+
+  const onMouseDown = () => {
+    if (!imageRef || !imageRef.current) return;
+
+    const relative = getRelativePointerPosition(imageRef.current);
+
+    setMinimum(relative);
+
+    setSelecting(true);
+    setSelected(false);
+  };
+
+  const onMouseMove = () => {
+    if (!selecting) return;
+
+    if (!imageRef || !imageRef.current) return;
+
+    const relative = getRelativePointerPosition(imageRef.current);
+
+    if (!minimum) return;
+
+    setMaximum(relative);
+  };
+
+  const onMouseUp = () => {
+    if (!imageRef || !imageRef.current) return;
+
+    const relative = getRelativePointerPosition(imageRef.current);
+
+    if (!relative || !minimum) return;
+
+    setMaximum(relative);
+
+    setSelecting(false);
+    setSelected(true);
+  };
+
   const onClick = (event: KonvaEventObject<MouseEvent>) => {
     if (toolType !== ToolType.Zoom) return;
 
@@ -170,6 +233,9 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     <ReactKonva.Stage
       height={stageHeight}
       onClick={onClick}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
       onWheel={onWheel}
       ref={stageRef}
       width={stageWidth}
@@ -179,6 +245,12 @@ const Stage = ({ boundingClientRect }: StageProps) => {
           <Image height={imageHeight} ref={imageRef} width={imageWidth} />
 
           <CustomSelection />
+
+          <ZoomSelection
+            minimum={minimum}
+            maximum={maximum}
+            selecting={selecting}
+          />
         </Layer>
       </Provider>
     </ReactKonva.Stage>

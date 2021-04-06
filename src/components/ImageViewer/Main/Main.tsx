@@ -60,13 +60,18 @@ const CustomSelection = () => {
 };
 
 type LayerProps = {
-  position: { x: number; y: number };
   children?: React.ReactNode;
+  offset: { x: number; y: number };
+  position: { x: number; y: number };
 };
 
-const Layer = ({ children, position }: LayerProps) => {
+const Layer = ({ children, offset, position }: LayerProps) => {
   return (
-    <ReactKonva.Layer imageSmoothingEnabled={false} position={position}>
+    <ReactKonva.Layer
+      imageSmoothingEnabled={false}
+      offset={offset}
+      position={position}
+    >
       {children}
     </ReactKonva.Layer>
   );
@@ -102,6 +107,10 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   const [maximum, setMaximum] = useState<{ x: number; y: number }>();
   const [selecting, setSelecting] = useState<boolean>(false);
   const [selected, setSelected] = useState<boolean>(false);
+  const [offset, setOffset] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
 
   const zoom = (deltaY: number, scaleBy: number = 1.25) => {
     dispatch(
@@ -140,8 +149,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
       return center;
     } else {
       return {
-        x: stageWidth - (imageWidth - pointerPosition.x),
-        y: stageHeight - (imageHeight - pointerPosition.y),
+        x: stageWidth - stageWidth / 2,
+        y: stageHeight - stageHeight / 2,
       };
     }
   }, [
@@ -226,6 +235,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
       if (!position) return;
 
+      setOffset(position);
+
       setPointerPosition(position);
     }
 
@@ -254,7 +265,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
       width={stageWidth}
     >
       <Provider store={store}>
-        <Layer position={layerPosition()}>
+        <Layer offset={offset} position={layerPosition()}>
           <Image height={imageHeight} ref={imageRef} width={imageWidth} />
 
           <CustomSelection />

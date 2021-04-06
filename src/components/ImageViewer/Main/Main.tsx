@@ -17,7 +17,6 @@ import {
 import { setStageScale, setStageWidth, store } from "../../../store/";
 import { ZoomModeType } from "../../../types/ZoomModeType";
 import { ToolType } from "../../../types/ToolType";
-import { Selecting } from "../Content/Stage/Selecting";
 import { ZoomSelection } from "../Content/Stage/Selection/ZoomSelection";
 
 type ImageProps = {
@@ -101,7 +100,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   const [minimum, setMinimum] = useState<{ x: number; y: number }>();
   const [maximum, setMaximum] = useState<{ x: number; y: number }>();
-  const [width, setWidth] = useState<number>(0);
   const [selecting, setSelecting] = useState<boolean>(false);
   const [selected, setSelected] = useState<boolean>(false);
 
@@ -133,13 +131,22 @@ const Stage = ({ boundingClientRect }: StageProps) => {
         x: (stageWidth - imageWidth) / 2,
         y: (stageHeight - imageHeight) / 2,
       };
-    } else if (selected && minimum) {
-      return {
-        x: minimum.x,
-        y: minimum.y,
+    } else if (selected && minimum && maximum) {
+      const center = {
+        x: (stageWidth - (maximum.x - minimum.x) / 2) * scale,
+        y: (stageHeight - (maximum.y - minimum.y) / 2) * scale,
       };
+
+      console.info(center);
+
+      return center;
     } else {
-      return pointerPosition;
+      console.info(stageWidth / 2);
+      console.info(pointerPosition);
+      return {
+        x: stageWidth - (imageWidth - pointerPosition.x),
+        y: stageHeight - (imageHeight - pointerPosition.y),
+      };
     }
   }, [
     automaticCentering,
@@ -211,24 +218,25 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     );
   };
 
-  // const onClick = (event: KonvaEventObject<MouseEvent>) => {
-  //   if (toolType !== ToolType.Zoom) return;
-  //
-  //   if (!stageRef || !stageRef.current) return;
-  //
-  //   if (!imageAspectRatio) return;
-  //
-  //   if (!automaticCentering) {
-  //     const position = stageRef.current.getPointerPosition();
-  //     if (!position) return;
-  //     setPointerPosition({
-  //       x: position.x - position.x * scale,
-  //       y: (position.y - position.y * scale) * imageAspectRatio,
-  //     });
-  //   }
-  //
-  //   zoom(mode === ZoomModeType.In ? 100 : -100);
-  // };
+  const onClick = (event: KonvaEventObject<MouseEvent>) => {
+    if (toolType !== ToolType.Zoom) return;
+
+    if (!imageRef || !imageRef.current) return;
+
+    if (!imageAspectRatio) return;
+
+    if (!automaticCentering) {
+      const position = getRelativePointerPosition(imageRef.current);
+
+      if (!position) return;
+
+      console.info(position);
+
+      setPointerPosition(position);
+    }
+
+    zoom(mode === ZoomModeType.In ? 100 : -100);
+  };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
     if (toolType !== ToolType.Zoom) return;
@@ -243,10 +251,10 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   return (
     <ReactKonva.Stage
       height={stageHeight}
-      // onClick={onClick}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
+      onClick={onClick}
+      // onMouseDown={onMouseDown}
+      // onMouseMove={onMouseMove}
+      // onMouseUp={onMouseUp}
       onWheel={onWheel}
       ref={stageRef}
       width={stageWidth}

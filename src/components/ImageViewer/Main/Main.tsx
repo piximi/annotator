@@ -142,13 +142,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
         x: (stageWidth - imageWidth) / 2,
         y: (stageHeight - imageHeight) / 2,
       };
-    } else if (selected && minimum && maximum) {
-      const center = {
-        x: (stageWidth - (maximum.x - minimum.x) / 2) * scale,
-        y: (stageHeight - (maximum.y - minimum.y) / 2) * scale,
-      };
-
-      return center;
     } else {
       return {
         x: stageWidth - stageWidth / 2,
@@ -220,9 +213,17 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
     if (!maximum) return;
 
+    const newScale = imageWidth / (maximum.x - minimum.x);
+    const delta = newScale / scale;
+
     dispatch(
       setStageScale({ stageScale: imageWidth / (maximum.x - minimum.x) })
     );
+
+    const centerX = minimum.x + (maximum.x - minimum.x) / 2;
+    const centerY = minimum.y + (maximum.y - minimum.y) / 2;
+
+    setOffset({ x: centerX * delta, y: centerY * delta });
   };
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {
@@ -238,8 +239,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
       if (!position) return;
 
       setOffset({ x: position.x * scaleBy, y: position.y * scaleBy });
-
-      setPointerPosition(position);
     }
 
     zoom(mode === ZoomModeType.In ? 100 : -100, scaleBy);
@@ -258,10 +257,10 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   return (
     <ReactKonva.Stage
       height={stageHeight}
-      onClick={onClick}
-      // onMouseDown={onMouseDown}
-      // onMouseMove={onMouseMove}
-      // onMouseUp={onMouseUp}
+      // onClick={onClick} //FIXME: disable onClick while other mouse events are activated. Need to fix logix so that both can work together.
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
       onWheel={onWheel}
       ref={stageRef}
       width={stageWidth}

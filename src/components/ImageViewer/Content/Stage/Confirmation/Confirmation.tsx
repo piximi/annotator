@@ -12,13 +12,12 @@ type ConfirmationProps = {
   imagePosition: { x: number; y: number };
   scale: number;
   selected: boolean;
-  stageScale: { x: number; y: number };
 };
 
 export const Confirmation = React.forwardRef<
   React.RefObject<AnnotationType>,
   ConfirmationProps
->(({ annotationTool, imagePosition, scale, selected, stageScale }, ref) => {
+>(({ annotationTool, imagePosition, selected }, ref) => {
   const selectionMode = useSelector(selectionModeSelector);
 
   const [points, setPoints] = useState<Array<number>>([]);
@@ -31,10 +30,7 @@ export const Confirmation = React.forwardRef<
 
       const stagedPoints: Array<number> = _.flatten(
         _.map(_.chunk(annotationTool.contour, 2), (coords: Array<number>) => {
-          return [
-            coords[0] + imagePosition.x / stageScale.x,
-            coords[1] + imagePosition.y / stageScale.y,
-          ];
+          return [coords[0] + imagePosition.x, coords[1] + imagePosition.y];
         })
       );
 
@@ -52,10 +48,7 @@ export const Confirmation = React.forwardRef<
         _.map(
           _.chunk(annotated.current.contour, 2),
           (coords: Array<number>) => {
-            return [
-              coords[0] + imagePosition.x / stageScale.x,
-              coords[1] + imagePosition.y / stageScale.y,
-            ];
+            return [coords[0] + imagePosition.x, coords[1] + imagePosition.y];
           }
         )
       );
@@ -66,23 +59,9 @@ export const Confirmation = React.forwardRef<
 
   return (
     <React.Fragment>
-      {selected && (
-        <SelectedContour
-          imagePosition={imagePosition}
-          points={points}
-          scale={scale}
-          stageScale={stageScale}
-        />
-      )}
+      {selected && <SelectedContour points={points} />}
 
-      {ref && (
-        <SelectedContour
-          imagePosition={imagePosition}
-          points={points}
-          scale={scale}
-          stageScale={stageScale}
-        />
-      )}
+      {ref && <SelectedContour points={points} />}
     </React.Fragment>
   );
 });

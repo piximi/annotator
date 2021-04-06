@@ -7,12 +7,10 @@ import { ColorAnnotationTool } from "../../../../../image/Tool";
 
 type ColorAnnotationToolTipProps = {
   colorAnnotationTool: ColorAnnotationTool;
-  scale: number;
 };
 
 export const ColorAnnotationToolTip = ({
   colorAnnotationTool,
-  scale,
 }: ColorAnnotationToolTipProps) => {
   const [position, setPosition] = useState<{
     x: number;
@@ -58,12 +56,7 @@ export const ColorAnnotationToolTip = ({
       />
       <ReactKonva.Label position={position} opacity={0.75}>
         <ReactKonva.Tag fill={"black"} />
-        <ReactKonva.Text
-          fill={"white"}
-          fontSize={12 / scale}
-          padding={5 / scale}
-          text={text}
-        />
+        <ReactKonva.Text fill={"white"} fontSize={12} padding={5} text={text} />
       </ReactKonva.Label>
     </ReactKonva.Group>
   );

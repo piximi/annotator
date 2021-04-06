@@ -4,18 +4,10 @@ import { MagneticAnnotationTool } from "../../../../../../image/Tool";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type MagneticSelectionProps = {
-  imagePosition: { x: number; y: number };
   operator: MagneticAnnotationTool;
-  scale: number;
-  stageScale: { x: number; y: number };
 };
 
-export const MagneticSelection = ({
-  imagePosition,
-  operator,
-  scale,
-  stageScale,
-}: MagneticSelectionProps) => {
+export const MagneticSelection = ({ operator }: MagneticSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
   if (!operator.origin) return null;
@@ -24,9 +16,9 @@ export const MagneticSelection = ({
     <ReactKonva.Group>
       <ReactKonva.Circle
         fill="white"
-        radius={3 / scale}
+        radius={3}
         stroke="black"
-        strokeWidth={1 / scale}
+        strokeWidth={1}
         x={operator.origin.x}
         y={operator.origin.y}
       />
@@ -34,9 +26,9 @@ export const MagneticSelection = ({
       {operator.anchor && (
         <ReactKonva.Circle
           fill="black"
-          radius={3 / scale}
+          radius={3}
           stroke="white"
-          strokeWidth={1 / scale}
+          strokeWidth={1}
           x={operator.anchor.x}
           y={operator.anchor.y}
         />
@@ -45,21 +37,15 @@ export const MagneticSelection = ({
       <ReactKonva.Line
         points={operator.buffer}
         stroke="black"
-        strokeWidth={1 / scale}
-        scale={stageScale}
-        x={imagePosition.x}
-        y={imagePosition.y}
+        strokeWidth={1}
       />
 
       <ReactKonva.Line
-        dash={[4 / scale, 2 / scale]}
+        dash={[4, 2]}
         dashOffset={-dashOffset}
         stroke="white"
         points={operator.buffer}
-        strokeWidth={1 / scale}
-        scale={stageScale}
-        x={imagePosition.x}
-        y={imagePosition.y}
+        strokeWidth={1}
       />
     </ReactKonva.Group>
   );

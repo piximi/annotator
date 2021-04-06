@@ -57,9 +57,9 @@ const initialState: StateType = {
   selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: AnnotationModeType.New,
   soundEnabled: true,
-  stageHeight: 0,
+  stageHeight: 1000,
   stageScale: 1,
-  stageWidth: 0,
+  stageWidth: 1000,
   toolType: ToolType.RectangularAnnotation,
   vibrance: 0,
 };

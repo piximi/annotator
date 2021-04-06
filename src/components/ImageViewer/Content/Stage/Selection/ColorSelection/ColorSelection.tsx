@@ -4,13 +4,9 @@ import React, { useEffect, useState } from "react";
 
 type ColorSelectionProps = {
   operator: ColorAnnotationTool;
-  stageScale: { x: number; y: number };
 };
 
-export const ColorSelection = ({
-  operator,
-  stageScale,
-}: ColorSelectionProps) => {
+export const ColorSelection = ({ operator }: ColorSelectionProps) => {
   const [image, setImage] = useState<HTMLImageElement>();
 
   useEffect(() => {
@@ -27,8 +23,6 @@ export const ColorSelection = ({
         image={image}
         x={operator.offset.x}
         y={operator.offset.y}
-        scaleX={stageScale.x}
-        scaleY={stageScale.y}
       />
     </ReactKonva.Group>
   );

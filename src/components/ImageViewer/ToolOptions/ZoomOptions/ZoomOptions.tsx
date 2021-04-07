@@ -29,6 +29,7 @@ import * as _ from "lodash";
 import Grid from "@material-ui/core/Grid";
 import ZoomInIcon from "@material-ui/icons/ZoomIn";
 import ZoomOutIcon from "@material-ui/icons/ZoomOut";
+import { offsetSelector } from "../../../../store/selectors/offsetSelector";
 
 export const ZoomOptions = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ export const ZoomOptions = () => {
 
   const scale = useSelector(stageScaleSelector);
   const image = useSelector(imageSelector);
+  const offset = useSelector(offsetSelector);
 
   const onAutomaticCenteringChange = () => {
     const payload = {
@@ -52,8 +54,12 @@ export const ZoomOptions = () => {
 
     dispatch(setZoomToolOptions(payload));
 
-    const offset = { x: (1600 * scale) / 2, y: (1200 * scale) / 2 }; //FIXME before merging with master branch!!!;
-    dispatch(setOffset({ offset: offset }));
+    const centerOffset = {
+      x: (1600 * scale) / 2 - offset.x,
+      y: (1200 * scale) / 2 - offset.y,
+    }; //FIXME hardcoded heights and widths before merging with master branch!;
+
+    dispatch(setOffset({ offset: centerOffset }));
   };
 
   const onToActualSizeClick = () => {

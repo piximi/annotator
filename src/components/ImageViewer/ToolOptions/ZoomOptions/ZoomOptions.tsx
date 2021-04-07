@@ -66,12 +66,14 @@ export const ZoomOptions = () => {
     const payload = {
       options: {
         ...options,
+        automaticCentering: true,
         toActualSize: !options.toActualSize,
       },
     };
 
     dispatch(setZoomToolOptions(payload));
     dispatch(setStageScale({ stageScale: 1 }));
+    dispatch(setOffset({ offset: { x: 0, y: 0 } }));
   };
 
   const onToFitClick = () => {

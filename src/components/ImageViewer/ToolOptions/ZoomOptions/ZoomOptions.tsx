@@ -6,10 +6,15 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useDispatch, useSelector } from "react-redux";
 import { ZoomModeType } from "../../../../types/ZoomModeType";
-import { setZoomToolOptions, setStageScale } from "../../../../store";
+import {
+  setOffset,
+  setZoomToolOptions,
+  setStageScale,
+} from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
 import {
   imageSelector,
+  stageScaleSelector,
   stageWidthSelector,
   zoomToolOptionsSelector,
 } from "../../../../store/selectors";
@@ -31,9 +36,11 @@ export const ZoomOptions = () => {
   const options = useSelector(zoomToolOptionsSelector);
 
   const stageWidth = useSelector(stageWidthSelector);
-  const image = useSelector(imageSelector);
 
   const t = useTranslation();
+
+  const scale = useSelector(stageScaleSelector);
+  const image = useSelector(imageSelector);
 
   const onAutomaticCenteringChange = () => {
     const payload = {
@@ -44,6 +51,9 @@ export const ZoomOptions = () => {
     };
 
     dispatch(setZoomToolOptions(payload));
+
+    const offset = { x: (1600 * scale) / 2, y: (1200 * scale) / 2 }; //FIXME before merging with master branch!!!;
+    dispatch(setOffset({ offset: offset }));
   };
 
   const onToActualSizeClick = () => {

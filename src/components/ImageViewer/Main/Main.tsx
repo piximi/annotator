@@ -14,8 +14,12 @@ import {
   toolTypeSelector,
   zoomToolOptionsSelector,
 } from "../../../store/selectors";
-import { setStageScale, setStageWidth, store } from "../../../store/";
-import { setOffset } from "../../../store/slices";
+import {
+  setOffset,
+  setStageScale,
+  setStageWidth,
+  store,
+} from "../../../store/";
 import { ZoomModeType } from "../../../types/ZoomModeType";
 import { ToolType } from "../../../types/ToolType";
 import { ZoomSelection } from "../Content/Stage/Selection/ZoomSelection";

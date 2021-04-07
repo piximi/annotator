@@ -80,6 +80,7 @@ export const ZoomOptions = () => {
     const payload = {
       options: {
         ...options,
+        automaticCentering: true,
         toFit: !options.toFit,
       },
     };
@@ -90,6 +91,7 @@ export const ZoomOptions = () => {
     //FIXME: image.shape.width is not updated in current setup in Main.tsx
     //dispatch(setStageScale({stageScale: stageWidth / (image.shape.width) }))
     dispatch(setStageScale({ stageScale: stageWidth / 1600 }));
+    dispatch(setOffset({ offset: { x: 0, y: 0 } }));
   };
 
   const onModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {

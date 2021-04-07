@@ -55,8 +55,8 @@ export const ZoomOptions = () => {
     dispatch(setZoomToolOptions(payload));
 
     const centerOffset = {
-      x: (1600 * scale) / 2 - offset.x,
-      y: (1200 * scale) / 2 - offset.y,
+      x: offset.x !== 0 ? 0 : (1600 * scale) / 2 - offset.x,
+      y: offset.y !== 0 ? 0 : (1200 * scale) / 2 - offset.y,
     }; //FIXME hardcoded heights and widths before merging with master branch!;
 
     dispatch(setOffset({ offset: centerOffset }));

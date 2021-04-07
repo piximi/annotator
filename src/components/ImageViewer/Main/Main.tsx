@@ -238,7 +238,11 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
       if (!position) return;
 
-      setOffset({ x: position.x * scaleBy, y: position.y * scaleBy });
+      const pos =
+        mode === ZoomModeType.In
+          ? { x: position.x * scaleBy, y: position.y * scaleBy }
+          : { x: position.x / scaleBy, y: position.y / scaleBy };
+      setOffset(pos);
     }
 
     zoom(mode === ZoomModeType.In ? 100 : -100, scaleBy);
@@ -257,10 +261,10 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   return (
     <ReactKonva.Stage
       height={stageHeight}
-      // onClick={onClick} //FIXME: disable onClick while other mouse events are activated. Need to fix logix so that both can work together.
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
+      onClick={onClick} //FIXME: disable onClick while other mouse events are activated. Need to fix logix so that both can work together.
+      // onMouseDown={onMouseDown}
+      // onMouseMove={onMouseMove}
+      // onMouseUp={onMouseUp}
       onWheel={onWheel}
       ref={stageRef}
       width={stageWidth}

@@ -15,9 +15,11 @@ import {
   zoomToolOptionsSelector,
 } from "../../../store/selectors";
 import { setStageScale, setStageWidth, store } from "../../../store/";
+import { setOffset } from "../../../store/slices";
 import { ZoomModeType } from "../../../types/ZoomModeType";
 import { ToolType } from "../../../types/ToolType";
 import { ZoomSelection } from "../Content/Stage/Selection/ZoomSelection";
+import { offsetSelector } from "../../../store/selectors/offsetSelector";
 
 type ImageProps = {
   height: number;
@@ -92,6 +94,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
   const scale = useSelector(stageScaleSelector);
 
+  const offset = useSelector(offsetSelector);
+
   const toolType = useSelector(toolTypeSelector);
 
   const imageAspectRatio = useSelector(imageAspectRatioSelector);
@@ -107,10 +111,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   const [maximum, setMaximum] = useState<{ x: number; y: number }>();
   const [selecting, setSelecting] = useState<boolean>(false);
   const [selected, setSelected] = useState<boolean>(false);
-  const [offset, setOffset] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
 
   const scaleBy = 1.25;
 
@@ -223,7 +223,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     const centerX = minimum.x + (maximum.x - minimum.x) / 2;
     const centerY = minimum.y + (maximum.y - minimum.y) / 2;
 
-    setOffset({ x: centerX * delta, y: centerY * delta });
+    dispatch(setOffset({ offset: { x: centerX * delta, y: centerY * delta } }));
   };
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {
@@ -242,7 +242,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
         mode === ZoomModeType.In
           ? { x: position.x * scaleBy, y: position.y * scaleBy }
           : { x: position.x / scaleBy, y: position.y / scaleBy };
-      setOffset(pos);
+      dispatch(setOffset({ offset: pos }));
     }
 
     zoom(mode === ZoomModeType.In ? 100 : -100, scaleBy);

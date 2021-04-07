@@ -52,6 +52,7 @@ const initialState: StateType = {
   },
   invertMode: false,
   language: LanguageType.English,
+  offset: { x: 0, y: 0 },
   penSelectionBrushSize: 2,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
@@ -174,6 +175,12 @@ export const applicationSlice = createSlice({
     ) {
       state.language = action.payload.language;
     },
+    setOffset(
+      state: StateType,
+      action: PayloadAction<{ offset: { x: number; y: number } }>
+    ) {
+      state.offset = action.payload.offset;
+    },
     setOperation(
       state: StateType,
       action: PayloadAction<{ operation: ToolType }>
@@ -265,6 +272,7 @@ export const {
   setImageName,
   setInvertMode,
   setLanguage,
+  setOffset,
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,

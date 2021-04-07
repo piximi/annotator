@@ -15,6 +15,7 @@ export type StateType = {
   image?: ImageType;
   invertMode: boolean;
   language: LanguageType;
+  offset: { x: number; y: number };
   penSelectionBrushSize: number;
   saturation: number;
   selectedAnnotation?: string;

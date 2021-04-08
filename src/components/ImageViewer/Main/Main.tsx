@@ -184,8 +184,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   const onMouseDown = () => {
     if (toolType !== ToolType.Zoom) return;
 
-    if (mode === ZoomModeType.Out) return;
-
     if (!imageRef || !imageRef.current) return;
 
     setDragging(false);
@@ -198,6 +196,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   };
 
   const onMouseMove = () => {
+    if (mode === ZoomModeType.Out) return;
+
     if (!selecting) return;
 
     if (!imageRef || !imageRef.current) return;

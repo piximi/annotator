@@ -45,9 +45,9 @@ const CustomSelection = () => {
 
   return (
     <ReactKonva.Line
-      dash={[4, 2]}
+      dash={[4 / scale, 2 / scale]}
       stroke="black"
-      strokeWidth={1}
+      strokeWidth={1 / scale}
       points={[
         135,
         200,

@@ -181,6 +181,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   };
 
   const onMouseDown = () => {
+    if (mode === ZoomModeType.Out) return;
+
     if (!imageRef || !imageRef.current) return;
 
     const relative = getRelativePointerPosition(imageRef.current);
@@ -204,6 +206,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   };
 
   const onMouseUp = () => {
+    if (!selecting) return;
+
     if (!imageRef || !imageRef.current) return;
 
     const relative = getRelativePointerPosition(imageRef.current);

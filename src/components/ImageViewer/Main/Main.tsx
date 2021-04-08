@@ -114,7 +114,8 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   const [minimum, setMinimum] = useState<{ x: number; y: number }>();
   const [maximum, setMaximum] = useState<{ x: number; y: number }>();
   const [selecting, setSelecting] = useState<boolean>(false);
-  const [selected, setSelected] = useState<boolean>(false);
+
+  const [dragging, setDragging] = useState<boolean>(false);
 
   const scaleBy = 1.25;
 
@@ -181,22 +182,27 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   };
 
   const onMouseDown = () => {
+    if (toolType !== ToolType.Zoom) return;
+
     if (mode === ZoomModeType.Out) return;
 
     if (!imageRef || !imageRef.current) return;
+
+    setDragging(false);
 
     const relative = getRelativePointerPosition(imageRef.current);
 
     setMinimum(relative);
 
     setSelecting(true);
-    setSelected(false);
   };
 
   const onMouseMove = () => {
     if (!selecting) return;
 
     if (!imageRef || !imageRef.current) return;
+
+    setDragging(true);
 
     const relative = getRelativePointerPosition(imageRef.current);
 
@@ -210,54 +216,46 @@ const Stage = ({ boundingClientRect }: StageProps) => {
 
     if (!imageRef || !imageRef.current) return;
 
-    const relative = getRelativePointerPosition(imageRef.current);
+    if (dragging) {
+      const relative = getRelativePointerPosition(imageRef.current);
 
-    if (!relative || !minimum) return;
+      if (!relative || !minimum) return;
 
-    setMaximum(relative);
+      setMaximum(relative);
 
-    setSelecting(false);
-    setSelected(true);
+      if (!maximum) return;
 
-    if (!maximum) return;
-
-    const newScale = imageWidth / (maximum.x - minimum.x);
-    const delta = newScale / scale;
-
-    dispatch(
-      setStageScale({ stageScale: imageWidth / (maximum.x - minimum.x) })
-    );
-
-    if (!automaticCentering) {
-      const centerX = minimum.x + (maximum.x - minimum.x) / 2;
-      const centerY = minimum.y + (maximum.y - minimum.y) / 2;
+      const newScale = imageWidth / (maximum.x - minimum.x);
+      const delta = newScale / scale;
 
       dispatch(
-        setOffset({ offset: { x: centerX * delta, y: centerY * delta } })
+        setStageScale({ stageScale: imageWidth / (maximum.x - minimum.x) })
       );
+
+      if (!automaticCentering) {
+        const centerX = minimum.x + (maximum.x - minimum.x) / 2;
+        const centerY = minimum.y + (maximum.y - minimum.y) / 2;
+
+        dispatch(
+          setOffset({ offset: { x: centerX * delta, y: centerY * delta } })
+        );
+      }
+    } else {
+      if (!automaticCentering) {
+        const position = getRelativePointerPosition(imageRef.current);
+
+        if (!position) return;
+
+        const pos =
+          mode === ZoomModeType.In
+            ? { x: position.x * scaleBy, y: position.y * scaleBy }
+            : { x: position.x / scaleBy, y: position.y / scaleBy };
+        dispatch(setOffset({ offset: pos }));
+      }
+
+      zoom(mode === ZoomModeType.In ? 100 : -100, scaleBy);
     }
-  };
-
-  const onClick = (event: KonvaEventObject<MouseEvent>) => {
-    if (toolType !== ToolType.Zoom) return;
-
-    if (!imageRef || !imageRef.current) return;
-
-    if (!imageAspectRatio) return;
-
-    if (!automaticCentering) {
-      const position = getRelativePointerPosition(imageRef.current);
-
-      if (!position) return;
-
-      const pos =
-        mode === ZoomModeType.In
-          ? { x: position.x * scaleBy, y: position.y * scaleBy }
-          : { x: position.x / scaleBy, y: position.y / scaleBy };
-      dispatch(setOffset({ offset: pos }));
-    }
-
-    zoom(mode === ZoomModeType.In ? 100 : -100, scaleBy);
+    setSelecting(false);
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
@@ -273,10 +271,9 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   return (
     <ReactKonva.Stage
       height={stageHeight}
-      onClick={onClick} //FIXME: disable onClick while other mouse events are activated. Need to fix logix so that both can work together.
-      // onMouseDown={onMouseDown}
-      // onMouseMove={onMouseMove}
-      // onMouseUp={onMouseUp}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
       onWheel={onWheel}
       ref={stageRef}
       width={stageWidth}
@@ -288,6 +285,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
           <CustomSelection />
 
           <ZoomSelection
+            dragging={dragging}
             minimum={minimum}
             maximum={maximum}
             selecting={selecting}

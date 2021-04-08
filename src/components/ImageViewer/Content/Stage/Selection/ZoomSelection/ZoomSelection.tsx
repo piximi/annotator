@@ -3,19 +3,22 @@ import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";
 
 type ZoomSelectionProps = {
+  dragging?: boolean;
   minimum?: { x: number; y: number };
   maximum?: { x: number; y: number };
   selecting: boolean;
 };
 
 export const ZoomSelection = ({
+  dragging,
   minimum,
   maximum,
   selecting,
 }: ZoomSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
-  if (!minimum || !maximum || !selecting) return <React.Fragment />;
+  if (!minimum || !maximum || !selecting || !dragging)
+    return <React.Fragment />;
 
   return (
     <React.Fragment>

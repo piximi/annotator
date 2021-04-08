@@ -228,10 +228,14 @@ const Stage = ({ boundingClientRect }: StageProps) => {
       setStageScale({ stageScale: imageWidth / (maximum.x - minimum.x) })
     );
 
-    const centerX = minimum.x + (maximum.x - minimum.x) / 2;
-    const centerY = minimum.y + (maximum.y - minimum.y) / 2;
+    if (!automaticCentering) {
+      const centerX = minimum.x + (maximum.x - minimum.x) / 2;
+      const centerY = minimum.y + (maximum.y - minimum.y) / 2;
 
-    dispatch(setOffset({ offset: { x: centerX * delta, y: centerY * delta } }));
+      dispatch(
+        setOffset({ offset: { x: centerX * delta, y: centerY * delta } })
+      );
+    }
   };
 
   const onClick = (event: KonvaEventObject<MouseEvent>) => {

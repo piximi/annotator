@@ -116,6 +116,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   const [selecting, setSelecting] = useState<boolean>(false);
 
   const [dragging, setDragging] = useState<boolean>(false);
+  const delta = 10;
 
   const scaleBy = 1.25;
 
@@ -209,6 +210,12 @@ const Stage = ({ boundingClientRect }: StageProps) => {
     if (!minimum) return;
 
     setMaximum(relative);
+
+    if (!maximum) return;
+
+    if (dragging && Math.abs(maximum.x - minimum.x) < delta) {
+      setDragging(false);
+    }
   };
 
   const onMouseUp = () => {
@@ -226,7 +233,7 @@ const Stage = ({ boundingClientRect }: StageProps) => {
       if (!maximum) return;
 
       const newScale = imageWidth / (maximum.x - minimum.x);
-      const delta = newScale / scale;
+      const deltaScale = newScale / scale;
 
       dispatch(
         setStageScale({ stageScale: imageWidth / (maximum.x - minimum.x) })
@@ -237,7 +244,9 @@ const Stage = ({ boundingClientRect }: StageProps) => {
         const centerY = minimum.y + (maximum.y - minimum.y) / 2;
 
         dispatch(
-          setOffset({ offset: { x: centerX * delta, y: centerY * delta } })
+          setOffset({
+            offset: { x: centerX * deltaScale, y: centerY * deltaScale },
+          })
         );
       }
     } else {

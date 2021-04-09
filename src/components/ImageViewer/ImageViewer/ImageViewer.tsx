@@ -14,7 +14,7 @@ import { theme } from "./theme";
 import * as ImageJS from "image-js";
 import { ShapeType } from "../../../types/ShapeType";
 import { loadLayersModelThunk } from "../../../store/thunks";
-import { Main } from "../Main/Main";
+import { Main } from "../Main/Main/Main";
 
 type ImageViewerProps = {
   image?: ImageType;

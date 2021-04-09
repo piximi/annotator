@@ -1,10 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useStyles } from "./Main.css";
 import * as ReactKonva from "react-konva";
-import useImage from "use-image";
-import src from "../../../images/malaria.png";
 import Konva from "konva";
-import { useBoundingClientRect } from "../../../hooks/useBoundingClientRect";
 import { KonvaEventObject } from "konva/types/Node";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {
@@ -12,81 +8,25 @@ import {
   stageWidthSelector,
   toolTypeSelector,
   zoomToolOptionsSelector,
-} from "../../../store/selectors";
+} from "../../../../store/selectors";
 import {
   setOffset,
   setStageScale,
   setStageWidth,
   store,
-} from "../../../store/";
-import { ZoomModeType } from "../../../types/ZoomModeType";
-import { ToolType } from "../../../types/ToolType";
-import { ZoomSelection } from "../Content/Stage/Selection/ZoomSelection";
-import { offsetSelector } from "../../../store/selectors/offsetSelector";
-
-type ImageProps = {
-  height: number;
-  width: number;
-};
-
-const Image = React.forwardRef<Konva.Image, ImageProps>(
-  ({ height, width }, ref) => {
-    const [image] = useImage(src);
-
-    return (
-      <ReactKonva.Image height={height} image={image} ref={ref} width={width} />
-    );
-  }
-);
-
-const CustomSelection = () => {
-  const scale = useSelector(stageScaleSelector);
-
-  return (
-    <ReactKonva.Line
-      dash={[4 / scale, 2 / scale]}
-      stroke="black"
-      strokeWidth={1 / scale}
-      points={[
-        135,
-        200,
-        135 + 100,
-        200,
-        135 + 100,
-        200 + 95,
-        135,
-        200 + 95,
-        135,
-        200,
-      ]}
-      scale={{ x: scale, y: scale }}
-    />
-  );
-};
-
-type LayerProps = {
-  children?: React.ReactNode;
-  offset: { x: number; y: number };
-  position: { x: number; y: number };
-};
-
-const Layer = ({ children, offset, position }: LayerProps) => {
-  return (
-    <ReactKonva.Layer
-      imageSmoothingEnabled={false}
-      offset={offset}
-      position={position}
-    >
-      {children}
-    </ReactKonva.Layer>
-  );
-};
+} from "../../../../store";
+import { ZoomModeType } from "../../../../types/ZoomModeType";
+import { ToolType } from "../../../../types/ToolType";
+import { ZoomSelection } from "../../Content/Stage/Selection/ZoomSelection";
+import { offsetSelector } from "../../../../store/selectors/offsetSelector";
+import { Layer } from "../Layer";
+import { Image } from "../../Content/Stage/Image";
 
 type StageProps = {
   boundingClientRect?: DOMRect;
 };
 
-const Stage = ({ boundingClientRect }: StageProps) => {
+export const Stage = ({ boundingClientRect }: StageProps) => {
   const stageRef = useRef<Konva.Stage>(null);
 
   const imageRef = useRef<Konva.Image>(null);
@@ -288,8 +228,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
         <Layer offset={offset} position={layerPosition()}>
           <Image height={imageHeight} ref={imageRef} width={imageWidth} />
 
-          <CustomSelection />
-
           <ZoomSelection
             dragging={dragging}
             minimum={minimum}
@@ -299,19 +237,5 @@ const Stage = ({ boundingClientRect }: StageProps) => {
         </Layer>
       </Provider>
     </ReactKonva.Stage>
-  );
-};
-
-export const Main = () => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const boundingClientRect = useBoundingClientRect(ref);
-
-  const classes = useStyles();
-
-  return (
-    <main className={classes.content} ref={ref}>
-      <Stage boundingClientRect={boundingClientRect} />
-    </main>
   );
 };

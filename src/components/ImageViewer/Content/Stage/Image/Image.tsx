@@ -2,27 +2,24 @@ import * as ReactKonva from "react-konva";
 import React from "react";
 import useImage from "use-image";
 import Konva from "konva";
+import { useSelector } from "react-redux";
+import { imageSrcSelector } from "../../../../../store/selectors";
 
 type ImageProps = {
   height: number;
-  position: { x: number; y: number };
-  src: string;
   width: number;
 };
 
 export const Image = React.forwardRef<Konva.Image, ImageProps>(
-  ({ height, position, src, width }, ref) => {
+  ({ height, width }, ref) => {
+    const src = useSelector(imageSrcSelector);
+
+    if (!src) return <React.Fragment />;
+
     const [image] = useImage(src, "Anonymous");
 
     return (
-      <ReactKonva.Image
-        height={height}
-        image={image}
-        perfectDrawEnabled={false}
-        position={position}
-        ref={ref}
-        width={width}
-      />
+      <ReactKonva.Image height={height} image={image} ref={ref} width={width} />
     );
   }
 );

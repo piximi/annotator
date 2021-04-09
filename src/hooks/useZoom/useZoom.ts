@@ -168,12 +168,7 @@ export const useZoom = (
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
-    dispatch(
-      setStageScale({
-        stageScale:
-          event.evt.deltaY > 0 ? stageScale * 1.25 : stageScale / 1.25,
-      })
-    );
+    zoom(event.evt.deltaY, scaleBy);
   };
 
   return {

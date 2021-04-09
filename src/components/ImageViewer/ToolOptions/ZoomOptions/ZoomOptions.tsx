@@ -208,7 +208,7 @@ export const ZoomOptions = () => {
                 }
                 valueLabelDisplay="auto"
                 value={scale}
-                min={Number.EPSILON}
+                min={0.01}
                 max={10}
                 step={0.01}
               />

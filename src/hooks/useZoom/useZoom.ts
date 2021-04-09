@@ -117,9 +117,10 @@ export const useZoom = (
 
       if (!zoomSelection.maximum || !zoomSelection.minimum) return;
 
-      const newScale =
-        imageWidth / (zoomSelection.maximum.x - zoomSelection.minimum.x);
-      const deltaScale = newScale / stageScale;
+      const deltaScale =
+        imageWidth /
+        (zoomSelection.maximum.x - zoomSelection.minimum.x) /
+        stageScale;
 
       dispatch(
         setStageScale({
@@ -129,16 +130,18 @@ export const useZoom = (
       );
 
       if (!automaticCentering) {
-        const centerX =
-          zoomSelection.minimum.x +
-          (zoomSelection.maximum.x - zoomSelection.minimum.x) / 2;
-        const centerY =
-          zoomSelection.minimum.y +
-          (zoomSelection.maximum.y - zoomSelection.minimum.y) / 2;
+        const center = {
+          x:
+            zoomSelection.minimum.x +
+            (zoomSelection.maximum.x - zoomSelection.minimum.x) / 2,
+          y:
+            zoomSelection.minimum.y +
+            (zoomSelection.maximum.y - zoomSelection.minimum.y) / 2,
+        };
 
         dispatch(
           setOffset({
-            offset: { x: centerX * deltaScale, y: centerY * deltaScale },
+            offset: { x: center.x * deltaScale, y: center.y * deltaScale },
           })
         );
       }

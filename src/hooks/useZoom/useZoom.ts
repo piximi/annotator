@@ -88,23 +88,17 @@ export const useZoom = (
 
     const relative = getRelativePointerPosition(imageRef.current);
 
-    if (!relative) return;
+    if (!relative || !zoomSelection.minimum) return;
 
     dispatch(
       setZoomSelection({
-        zoomSelection: { ...zoomSelection, dragging: true, maximum: relative },
+        zoomSelection: {
+          ...zoomSelection,
+          dragging: Math.abs(relative.x - zoomSelection.minimum.x) >= delta,
+          maximum: relative,
+        },
       })
     );
-
-    if (!zoomSelection.maximum || !zoomSelection.minimum) return;
-
-    if (Math.abs(relative.x - zoomSelection.minimum.x) < delta) {
-      dispatch(
-        setZoomSelection({
-          zoomSelection: { ...zoomSelection, dragging: false },
-        })
-      );
-    }
   };
 
   const onMouseUp = () => {

@@ -39,6 +39,21 @@ export const useZoom = (
     );
   };
 
+  const offset = (
+    point: { x: number; y: number },
+    scaleBy: number,
+    zoomIn: boolean = true
+  ) => {
+    dispatch(
+      setOffset({
+        offset: {
+          x: zoomIn ? point.x * scaleBy : point.x / scaleBy,
+          y: zoomIn ? point.y * scaleBy : point.y / scaleBy,
+        },
+      })
+    );
+  };
+
   // this function will return pointer position relative to the passed node
   const getRelativePointerPosition = (node: Konva.Node) => {
     const transform = node.getAbsoluteTransform().copy();
@@ -117,29 +132,20 @@ export const useZoom = (
 
       if (!zoomSelection.maximum || !zoomSelection.minimum) return;
 
+      const selectedWidth = relative.x - zoomSelection.minimum.x;
+
+      const deltaScale = imageWidth / selectedWidth / stageScale;
+
       if (!automaticCentering) {
-        const center = {
-          x:
-            zoomSelection.minimum.x +
-            (zoomSelection.maximum.x - zoomSelection.minimum.x) / 2,
-          y:
-            zoomSelection.minimum.y +
-            (zoomSelection.maximum.y - zoomSelection.minimum.y) / 2,
-        };
-
-        const deltaScale =
-          imageWidth /
-          (zoomSelection.maximum.x - zoomSelection.minimum.x) /
-          stageScale;
-
-        dispatch(
-          setOffset({
-            offset: { x: center.x * deltaScale, y: center.y * deltaScale },
-          })
+        offset(
+          {
+            x: zoomSelection.minimum.x + selectedWidth / 2,
+            y: zoomSelection.minimum.y + selectedWidth / 2,
+          },
+          deltaScale
         );
       }
-
-      zoom(imageWidth / (relative.x - zoomSelection.minimum.x) / stageScale);
+      zoom(deltaScale);
     } else {
       if (!automaticCentering) {
         const position = getRelativePointerPosition(imageRef.current);

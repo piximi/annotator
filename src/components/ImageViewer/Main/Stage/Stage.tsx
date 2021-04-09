@@ -22,16 +22,13 @@ type StageProps = {
 
 export const Stage = ({ boundingClientRect }: StageProps) => {
   const stageRef = useRef<Konva.Stage>(null);
-
   const imageRef = useRef<Konva.Image>(null);
 
   const stageWidth = useSelector(stageWidthSelector);
   const stageHeight = useSelector(stageHeightSelector);
 
   const scale = useSelector(stageScaleSelector);
-
   const offset = useSelector(offsetSelector);
-
   const image = useSelector(imageSelector);
 
   const imageWidth = (image && image.shape ? image.shape.width : 512) * scale;
@@ -39,21 +36,13 @@ export const Stage = ({ boundingClientRect }: StageProps) => {
 
   const dispatch = useDispatch();
 
-  const { automaticCentering, mode } = useSelector(zoomToolOptionsSelector);
+  const { automaticCentering } = useSelector(zoomToolOptionsSelector);
 
-  /*
-   * Dynamically resize the stage width to the container width
-   */
   useEffect(() => {
     if (!boundingClientRect) return;
 
     dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
   }, [boundingClientRect]);
-
-  const [pointerPosition, setPointerPosition] = useState<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
 
   const layerPosition = useCallback(() => {
     if (automaticCentering) {
@@ -67,14 +56,7 @@ export const Stage = ({ boundingClientRect }: StageProps) => {
         y: stageHeight - stageHeight / 2,
       };
     }
-  }, [
-    automaticCentering,
-    pointerPosition,
-    stageWidth,
-    stageHeight,
-    imageWidth,
-    imageHeight,
-  ]);
+  }, [automaticCentering, stageWidth, stageHeight, imageWidth, imageHeight]);
 
   const { onMouseDown, onMouseMove, onMouseUp, onWheel } = useZoom(
     stageRef,

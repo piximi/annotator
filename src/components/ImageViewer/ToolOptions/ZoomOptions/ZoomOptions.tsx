@@ -20,7 +20,12 @@ import {
 } from "../../../../store/selectors";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { RadioCheckedIcon, RadioUncheckedIcon } from "../../../icons";
+import {
+  CheckboxCheckedIcon,
+  CheckboxUncheckedIcon,
+  RadioCheckedIcon,
+  RadioUncheckedIcon,
+} from "../../../icons";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import Divider from "@material-ui/core/Divider";
 import { InformationBox } from "../InformationBox";
@@ -279,23 +284,23 @@ export const ZoomOptions = () => {
 
       <Divider />
 
-      <List component="nav" dense>
-        <ListItem button onClick={onAutomaticCenteringChange}>
-          <ListItemIcon>
-            <Checkbox
-              checked={options.automaticCentering}
-              disableRipple
-              edge="start"
-              tabIndex={-1}
-            />
-          </ListItemIcon>
-
-          <ListItemText
-            primary={t("Auto-center")}
-            secondary={t("Keep the image centered")}
+      <ListItem button dense onClick={onAutomaticCenteringChange}>
+        <ListItemIcon>
+          <Checkbox
+            checked={options.automaticCentering}
+            disableRipple
+            edge="start"
+            icon={<CheckboxUncheckedIcon />}
+            checkedIcon={<CheckboxCheckedIcon />}
+            tabIndex={-1}
           />
-        </ListItem>
-      </List>
+        </ListItemIcon>
+
+        <ListItemText
+          primary={t("Auto-center")}
+          secondary={t("Keep the image centered")}
+        />
+      </ListItem>
 
       <Divider />
 

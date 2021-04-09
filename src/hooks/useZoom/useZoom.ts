@@ -30,8 +30,6 @@ export const useZoom = (
 
   const imageWidth =
     (image && image.shape ? image.shape.width : 512) * stageScale;
-  const imageHeight =
-    (image && image.shape ? image.shape.height : 512) * stageScale;
 
   const zoom = (deltaY: number, scaleBy: number) => {
     dispatch(

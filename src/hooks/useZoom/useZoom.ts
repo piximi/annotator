@@ -31,10 +31,10 @@ export const useZoom = (
   const imageWidth =
     (image && image.shape ? image.shape.width : 512) * stageScale;
 
-  const zoom = (deltaY: number, scaleBy: number) => {
+  const zoom = (zoomIn: boolean, scaleBy: number) => {
     dispatch(
       setStageScale({
-        stageScale: deltaY > 0 ? stageScale * scaleBy : stageScale / scaleBy,
+        stageScale: zoomIn ? stageScale * scaleBy : stageScale / scaleBy,
       })
     );
   };
@@ -139,7 +139,10 @@ export const useZoom = (
         );
       }
 
-      zoom(1, imageWidth / (relative.x - zoomSelection.minimum.x) / stageScale);
+      zoom(
+        true,
+        imageWidth / (relative.x - zoomSelection.minimum.x) / stageScale
+      );
     } else {
       if (!automaticCentering) {
         const position = getRelativePointerPosition(imageRef.current);
@@ -153,7 +156,7 @@ export const useZoom = (
         dispatch(setOffset({ offset: pos }));
       }
 
-      zoom(mode === ZoomModeType.In ? 100 : -100, scaleBy);
+      zoom(mode === ZoomModeType.In, scaleBy);
     }
     dispatch(
       setZoomSelection({
@@ -163,7 +166,7 @@ export const useZoom = (
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
-    zoom(event.evt.deltaY, scaleBy);
+    zoom(event.evt.deltaY > 0, scaleBy);
   };
 
   return {

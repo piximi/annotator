@@ -39,19 +39,23 @@ export const useZoom = (
     );
   };
 
-  const offset = (
-    point: { x: number; y: number },
+  const zoomAndOffset = (
+    position: { x: number; y: number } | undefined,
     scaleBy: number,
     zoomIn: boolean = true
   ) => {
-    dispatch(
-      setOffset({
-        offset: {
-          x: zoomIn ? point.x * scaleBy : point.x / scaleBy,
-          y: zoomIn ? point.y * scaleBy : point.y / scaleBy,
-        },
-      })
-    );
+    if (!automaticCentering) {
+      if (!position) return;
+      dispatch(
+        setOffset({
+          offset: {
+            x: zoomIn ? position.x * scaleBy : position.x / scaleBy,
+            y: zoomIn ? position.y * scaleBy : position.y / scaleBy,
+          },
+        })
+      );
+    }
+    zoom(scaleBy, zoomIn);
   };
 
   const relativePosition = () => {
@@ -136,27 +140,17 @@ export const useZoom = (
 
       const deltaScale = imageWidth / selectedWidth / stageScale;
 
-      if (!automaticCentering) {
-        offset(
-          {
-            x: zoomSelection.minimum.x + selectedWidth / 2,
-            y: zoomSelection.minimum.y + selectedWidth / 2,
-          },
-          deltaScale
-        );
-      }
-      zoom(deltaScale);
+      zoomAndOffset(
+        {
+          x: zoomSelection.minimum.x + selectedWidth / 2,
+          y: zoomSelection.minimum.y + selectedWidth / 2,
+        },
+        deltaScale
+      );
     } else {
-      if (!automaticCentering) {
-        const position = relativePosition();
-
-        if (!position) return;
-
-        offset(position, scaleBy, mode === ZoomModeType.In);
-      }
-
-      zoom(scaleBy, mode === ZoomModeType.In);
+      zoomAndOffset(relativePosition(), scaleBy, mode === ZoomModeType.In);
     }
+
     dispatch(
       setZoomSelection({
         zoomSelection: { ...zoomSelection, selecting: false },

@@ -27,4 +27,10 @@ export type StateType = {
   stageWidth: number;
   toolType: ToolType;
   vibrance: number;
+  zoomSelection: {
+    dragging: boolean;
+    minimum: { x: number; y: number } | undefined;
+    maximum: { x: number; y: number } | undefined;
+    selecting: boolean;
+  };
 };

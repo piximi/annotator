@@ -1,14 +1,15 @@
 import Konva from "konva";
-import React, { useState } from "react";
+import React from "react";
 import { KonvaEventObject } from "konva/types/Node";
 import { useDispatch, useSelector } from "react-redux";
 import { ToolType } from "../../types/ToolType";
 import { ZoomModeType } from "../../types/ZoomModeType";
-import { setOffset, setStageScale } from "../../store";
+import { setOffset, setStageScale, setZoomSelection } from "../../store";
 import {
   imageSelector,
   stageScaleSelector,
   toolTypeSelector,
+  zoomSelectionSelector,
   zoomToolOptionsSelector,
 } from "../../store/selectors";
 
@@ -25,11 +26,7 @@ export const useZoom = (
   const stageScale = useSelector(stageScaleSelector);
   const toolType = useSelector(toolTypeSelector);
   const { automaticCentering, mode } = useSelector(zoomToolOptionsSelector);
-
-  const [dragging, setDragging] = useState<boolean>(false);
-  const [maximum, setMaximum] = useState<{ x: number; y: number }>();
-  const [minimum, setMinimum] = useState<{ x: number; y: number }>();
-  const [selecting, setSelecting] = useState<boolean>(false);
+  const zoomSelection = useSelector(zoomSelectionSelector);
 
   const imageWidth =
     (image && image.shape ? image.shape.width : 512) * stageScale;
@@ -68,61 +65,84 @@ export const useZoom = (
 
     if (!imageRef || !imageRef.current) return;
 
-    setDragging(false);
-
     const relative = getRelativePointerPosition(imageRef.current);
 
-    setMinimum(relative);
-
-    setSelecting(true);
+    dispatch(
+      setZoomSelection({
+        zoomSelection: {
+          ...zoomSelection,
+          dragging: false,
+          minimum: relative,
+          selecting: true,
+        },
+      })
+    );
   };
 
   const onMouseMove = () => {
     if (mode === ZoomModeType.Out) return;
 
-    if (!selecting) return;
+    if (!zoomSelection.selecting) return;
 
     if (!imageRef || !imageRef.current) return;
 
-    setDragging(true);
-
     const relative = getRelativePointerPosition(imageRef.current);
 
-    if (!minimum) return;
+    if (!relative) return;
 
-    setMaximum(relative);
+    dispatch(
+      setZoomSelection({
+        zoomSelection: { ...zoomSelection, dragging: true, maximum: relative },
+      })
+    );
 
-    if (!maximum) return;
+    if (!zoomSelection.maximum || !zoomSelection.minimum) return;
 
-    if (dragging && Math.abs(maximum.x - minimum.x) < delta) {
-      setDragging(false);
+    if (Math.abs(relative.x - zoomSelection.minimum.x) < delta) {
+      dispatch(
+        setZoomSelection({
+          zoomSelection: { ...zoomSelection, dragging: false },
+        })
+      );
     }
   };
 
   const onMouseUp = () => {
-    if (!selecting) return;
+    if (!zoomSelection.selecting) return;
 
     if (!imageRef || !imageRef.current) return;
 
-    if (dragging) {
+    if (zoomSelection.dragging) {
       const relative = getRelativePointerPosition(imageRef.current);
 
-      if (!relative || !minimum) return;
+      if (!relative) return;
 
-      setMaximum(relative);
+      dispatch(
+        setZoomSelection({
+          zoomSelection: { ...zoomSelection, maximum: relative },
+        })
+      );
 
-      if (!maximum) return;
+      if (!zoomSelection.maximum || !zoomSelection.minimum) return;
 
-      const newScale = imageWidth / (maximum.x - minimum.x);
+      const newScale =
+        imageWidth / (zoomSelection.maximum.x - zoomSelection.minimum.x);
       const deltaScale = newScale / stageScale;
 
       dispatch(
-        setStageScale({ stageScale: imageWidth / (maximum.x - minimum.x) })
+        setStageScale({
+          stageScale:
+            imageWidth / (zoomSelection.maximum.x - zoomSelection.minimum.x),
+        })
       );
 
       if (!automaticCentering) {
-        const centerX = minimum.x + (maximum.x - minimum.x) / 2;
-        const centerY = minimum.y + (maximum.y - minimum.y) / 2;
+        const centerX =
+          zoomSelection.minimum.x +
+          (zoomSelection.maximum.x - zoomSelection.minimum.x) / 2;
+        const centerY =
+          zoomSelection.minimum.y +
+          (zoomSelection.maximum.y - zoomSelection.minimum.y) / 2;
 
         dispatch(
           setOffset({
@@ -145,7 +165,11 @@ export const useZoom = (
 
       zoom(mode === ZoomModeType.In ? 100 : -100, scaleBy);
     }
-    setSelecting(false);
+    dispatch(
+      setZoomSelection({
+        zoomSelection: { ...zoomSelection, selecting: false },
+      })
+    );
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
@@ -158,13 +182,9 @@ export const useZoom = (
   };
 
   return {
-    dragging,
-    maximum,
-    minimum,
     onMouseDown,
     onMouseMove,
     onMouseUp,
     onWheel,
-    selecting,
   };
 };

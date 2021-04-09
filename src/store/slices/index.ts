@@ -28,6 +28,7 @@ export {
   setStageScale,
   setStageWidth,
   setVibrance,
+  setZoomSelection,
 } from "./applicationSlice";
 
 export { setZoomToolOptions } from "./toolOptionsSlice";

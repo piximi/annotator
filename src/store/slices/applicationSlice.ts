@@ -63,6 +63,12 @@ const initialState: StateType = {
   stageWidth: 1000,
   toolType: ToolType.RectangularAnnotation,
   vibrance: 0,
+  zoomSelection: {
+    dragging: false,
+    minimum: undefined,
+    maximum: undefined,
+    selecting: false,
+  },
 };
 
 export const applicationSlice = createSlice({
@@ -244,6 +250,19 @@ export const applicationSlice = createSlice({
     setVibrance(state: StateType, action: PayloadAction<{ vibrance: number }>) {
       state.vibrance = action.payload.vibrance;
     },
+    setZoomSelection(
+      state: StateType,
+      action: PayloadAction<{
+        zoomSelection: {
+          dragging: boolean;
+          minimum: { x: number; y: number } | undefined;
+          maximum: { x: number; y: number } | undefined;
+          selecting: boolean;
+        };
+      }>
+    ) {
+      state.zoomSelection = action.payload.zoomSelection;
+    },
   },
   extraReducers: {
     ["thunks/loadLayersModel/fulfilled"]: (
@@ -284,4 +303,5 @@ export const {
   setStageScale,
   setStageWidth,
   setVibrance,
+  setZoomSelection,
 } = applicationSlice.actions;

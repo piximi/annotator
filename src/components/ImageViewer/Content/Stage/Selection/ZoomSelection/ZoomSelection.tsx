@@ -1,21 +1,15 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";
+import { useSelector } from "react-redux";
+import { zoomSelectionSelector } from "../../../../../../store/selectors";
 
-type ZoomSelectionProps = {
-  dragging?: boolean;
-  minimum?: { x: number; y: number };
-  maximum?: { x: number; y: number };
-  selecting: boolean;
-};
-
-export const ZoomSelection = ({
-  dragging,
-  minimum,
-  maximum,
-  selecting,
-}: ZoomSelectionProps) => {
+export const ZoomSelection = ({}) => {
   const dashOffset = useMarchingAnts();
+
+  const { dragging, minimum, maximum, selecting } = useSelector(
+    zoomSelectionSelector
+  );
 
   if (!minimum || !maximum || !selecting || !dragging)
     return <React.Fragment />;

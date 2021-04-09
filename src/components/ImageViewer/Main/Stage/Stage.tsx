@@ -76,16 +76,10 @@ export const Stage = ({ boundingClientRect }: StageProps) => {
     imageHeight,
   ]);
 
-  const {
-    dragging,
-    maximum,
-    minimum,
-    onMouseDown,
-    onMouseMove,
-    onMouseUp,
-    onWheel,
-    selecting,
-  } = useZoom(stageRef, imageRef);
+  const { onMouseDown, onMouseMove, onMouseUp, onWheel } = useZoom(
+    stageRef,
+    imageRef
+  );
 
   return (
     <ReactKonva.Stage
@@ -101,12 +95,7 @@ export const Stage = ({ boundingClientRect }: StageProps) => {
         <Layer offset={offset} position={layerPosition()}>
           <Image height={imageHeight} ref={imageRef} width={imageWidth} />
 
-          <ZoomSelection
-            dragging={dragging}
-            minimum={minimum}
-            maximum={maximum}
-            selecting={selecting}
-          />
+          <ZoomSelection />
         </Layer>
       </Provider>
     </ReactKonva.Stage>

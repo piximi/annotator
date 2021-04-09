@@ -26,6 +26,7 @@ export {
   setStageWidth,
   setVibrance,
   setZoomToolOptions,
+  setZoomSelection,
 } from "./slices";
 export { store } from "./stores";
 export { echoThunk } from "./thunks";

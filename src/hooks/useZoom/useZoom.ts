@@ -130,14 +130,12 @@ export const useZoom = (
 
       const selectedWidth = relative.x - zoomSelection.minimum.x;
 
-      const deltaScale = imageWidth / selectedWidth / stageScale;
-
       zoomAndOffset(
         {
           x: zoomSelection.minimum.x + selectedWidth / 2,
           y: zoomSelection.minimum.y + selectedWidth / 2,
         },
-        deltaScale
+        imageWidth / selectedWidth / stageScale
       );
     } else {
       zoomAndOffset(

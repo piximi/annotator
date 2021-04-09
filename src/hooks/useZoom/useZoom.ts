@@ -130,7 +130,7 @@ export const useZoom = (
         })
       );
 
-      if (!zoomSelection.maximum || !zoomSelection.minimum) return;
+      if (!zoomSelection.minimum) return;
 
       const selectedWidth = relative.x - zoomSelection.minimum.x;
 
@@ -152,11 +152,7 @@ export const useZoom = (
 
         if (!position) return;
 
-        const pos =
-          mode === ZoomModeType.In
-            ? { x: position.x * scaleBy, y: position.y * scaleBy }
-            : { x: position.x / scaleBy, y: position.y / scaleBy };
-        dispatch(setOffset({ offset: pos }));
+        offset(position, scaleBy, mode === ZoomModeType.In);
       }
 
       zoom(scaleBy, mode === ZoomModeType.In);

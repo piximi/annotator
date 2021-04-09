@@ -6,7 +6,6 @@ import { ToolType } from "../../types/ToolType";
 import { ZoomModeType } from "../../types/ZoomModeType";
 import { setOffset, setStageScale, setZoomSelection } from "../../store";
 import {
-  imageSelector,
   stageScaleSelector,
   toolTypeSelector,
   zoomSelectionSelector,
@@ -15,21 +14,18 @@ import {
 
 export const useZoom = (
   stageRef: React.RefObject<Konva.Stage>,
-  imageRef: React.RefObject<Konva.Image>
+  imageRef: React.RefObject<Konva.Image>,
+  imageWidth: number
 ) => {
   const delta = 10;
   const scaleBy = 1.25;
 
   const dispatch = useDispatch();
 
-  const image = useSelector(imageSelector);
   const stageScale = useSelector(stageScaleSelector);
   const toolType = useSelector(toolTypeSelector);
   const { automaticCentering, mode } = useSelector(zoomToolOptionsSelector);
   const zoomSelection = useSelector(zoomSelectionSelector);
-
-  const imageWidth =
-    (image && image.shape ? image.shape.width : 512) * stageScale;
 
   const zoomAndOffset = (
     position: { x: number; y: number } | undefined,

@@ -60,7 +60,8 @@ export const Stage = ({ boundingClientRect }: StageProps) => {
 
   const { onMouseDown, onMouseMove, onMouseUp, onWheel } = useZoom(
     stageRef,
-    imageRef
+    imageRef,
+    imageWidth
   );
 
   return (
@@ -76,7 +77,6 @@ export const Stage = ({ boundingClientRect }: StageProps) => {
       <Provider store={store}>
         <Layer offset={offset} position={layerPosition()}>
           <Image height={imageHeight} ref={imageRef} width={imageWidth} />
-
           <ZoomSelection />
         </Layer>
       </Provider>

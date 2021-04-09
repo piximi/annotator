@@ -4,7 +4,7 @@ export {
   deleteImageInstance,
   replaceImageInstance,
   setAnnotated,
-  setBoundingClientRectWidth,
+  setBoundingClientRect,
   setBrightness,
   setCategories,
   setCategoryVisibility,

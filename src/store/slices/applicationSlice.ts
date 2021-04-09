@@ -12,7 +12,7 @@ import * as tensorflow from "@tensorflow/tfjs";
 
 const initialState: StateType = {
   annotated: false,
-  boundingClientRectWidth: 1,
+  boundingClientRect: new DOMRect(),
   brightness: 0,
   categories: [
     {
@@ -111,11 +111,11 @@ export const applicationSlice = createSlice({
     ) {
       state.annotated = action.payload.annotated;
     },
-    setBoundingClientRectWidth(
+    setBoundingClientRect(
       state: StateType,
-      action: PayloadAction<{ boundingClientRectWidth: number }>
+      action: PayloadAction<{ boundingClientRect: DOMRect }>
     ) {
-      state.boundingClientRectWidth = action.payload.boundingClientRectWidth;
+      state.boundingClientRect = action.payload.boundingClientRect;
     },
     setBrightness(
       state: StateType,
@@ -279,7 +279,7 @@ export const {
   deleteImageInstance,
   replaceImageInstance,
   setAnnotated,
-  setBoundingClientRectWidth,
+  setBoundingClientRect,
   setBrightness,
   setCategories,
   setCategoryVisibility,

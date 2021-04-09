@@ -20,10 +20,7 @@ import {
   stageWidthSelector,
   toolTypeSelector,
 } from "../../../../../store/selectors";
-import {
-  setStageWidth,
-  setBoundingClientRectWidth,
-} from "../../../../../store";
+import { setStageWidth, setBoundingClientRect } from "../../../../../store";
 import {
   Provider,
   ReactReduxContext,
@@ -103,8 +100,8 @@ export const Stage = ({ src }: StageProps) => {
     if (!boundingClientRect) return;
 
     dispatch(
-      setBoundingClientRectWidth({
-        boundingClientRectWidth: boundingClientRect.width,
+      setBoundingClientRect({
+        boundingClientRect: boundingClientRect,
       })
     );
 

@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import * as ReactKonva from "react-konva";
 import Konva from "konva";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {
+  boundingClientRectSelector,
   imageSelector,
   stageHeightSelector,
   stageScaleSelector,
@@ -16,16 +17,13 @@ import { Layer } from "../Layer";
 import { Image } from "../../Content/Stage/Image";
 import { useZoom } from "../../../../hooks";
 
-type StageProps = {
-  boundingClientRect?: DOMRect;
-};
-
-export const Stage = ({ boundingClientRect }: StageProps) => {
+export const Stage = () => {
   const stageRef = useRef<Konva.Stage>(null);
   const imageRef = useRef<Konva.Image>(null);
 
   const stageWidth = useSelector(stageWidthSelector);
   const stageHeight = useSelector(stageHeightSelector);
+  const boundingClientRect = useSelector(boundingClientRectSelector);
 
   const scale = useSelector(stageScaleSelector);
   const offset = useSelector(offsetSelector);

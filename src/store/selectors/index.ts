@@ -1,4 +1,4 @@
-export { boundingClientRectWidthSelector } from "./boundingClientRectWidthSelector";
+export { boundingClientRectSelector } from "./boundingClientRectSelector";
 export { brightnessSelector } from "./brightnessSelector";
 export { categoriesSelector } from "./categoriesSelector";
 export { contrastSelector } from "./contrastSelector";

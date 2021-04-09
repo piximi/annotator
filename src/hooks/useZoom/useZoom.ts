@@ -31,14 +31,6 @@ export const useZoom = (
   const imageWidth =
     (image && image.shape ? image.shape.width : 512) * stageScale;
 
-  const zoom = (scaleBy: number, zoomIn: boolean = true) => {
-    dispatch(
-      setStageScale({
-        stageScale: zoomIn ? stageScale * scaleBy : stageScale / scaleBy,
-      })
-    );
-  };
-
   const zoomAndOffset = (
     position: { x: number; y: number } | undefined,
     scaleBy: number,
@@ -55,7 +47,11 @@ export const useZoom = (
         })
       );
     }
-    zoom(scaleBy, zoomIn);
+    dispatch(
+      setStageScale({
+        stageScale: zoomIn ? stageScale * scaleBy : stageScale / scaleBy,
+      })
+    );
   };
 
   // this function will return pointer position relative to the passed node
@@ -159,7 +155,7 @@ export const useZoom = (
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
-    zoom(scaleBy, event.evt.deltaY > 0);
+    zoomAndOffset(getRelativePointerPosition(), scaleBy, event.evt.deltaY > 0);
   };
 
   return {

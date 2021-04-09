@@ -641,13 +641,7 @@ export const Stage = ({ src }: StageProps) => {
                 onMouseUp={onMouseUp}
                 position={layerPosition}
               >
-                <Image
-                  height={imageHeight}
-                  ref={imageRef}
-                  position={layerPosition()}
-                  src={src}
-                  width={imageWidth}
-                />
+                <Image height={imageHeight} ref={imageRef} width={imageWidth} />
 
                 <Selecting tool={tool!} />
 

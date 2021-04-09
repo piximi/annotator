@@ -14,9 +14,7 @@ export const Image = React.forwardRef<Konva.Image, ImageProps>(
   ({ height, width }, ref) => {
     const src = useSelector(imageSrcSelector);
 
-    if (!src) return <React.Fragment />;
-
-    const [image] = useImage(src, "Anonymous");
+    const [image] = useImage(src ? src : "", "Anonymous");
 
     return (
       <ReactKonva.Image height={height} image={image} ref={ref} width={width} />

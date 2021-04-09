@@ -54,6 +54,12 @@ export const useZoom = (
     );
   };
 
+  const relativePosition = () => {
+    if (!imageRef || !imageRef.current) return;
+
+    return getRelativePointerPosition(imageRef.current);
+  };
+
   // this function will return pointer position relative to the passed node
   const getRelativePointerPosition = (node: Konva.Node) => {
     const transform = node.getAbsoluteTransform().copy();
@@ -76,9 +82,7 @@ export const useZoom = (
   const onMouseDown = () => {
     if (toolType !== ToolType.Zoom) return;
 
-    if (!imageRef || !imageRef.current) return;
-
-    const relative = getRelativePointerPosition(imageRef.current);
+    const relative = relativePosition();
 
     dispatch(
       setZoomSelection({
@@ -97,9 +101,7 @@ export const useZoom = (
 
     if (!zoomSelection.selecting) return;
 
-    if (!imageRef || !imageRef.current) return;
-
-    const relative = getRelativePointerPosition(imageRef.current);
+    const relative = relativePosition();
 
     if (!relative || !zoomSelection.minimum) return;
 
@@ -117,10 +119,8 @@ export const useZoom = (
   const onMouseUp = () => {
     if (!zoomSelection.selecting) return;
 
-    if (!imageRef || !imageRef.current) return;
-
     if (zoomSelection.dragging) {
-      const relative = getRelativePointerPosition(imageRef.current);
+      const relative = relativePosition();
 
       if (!relative) return;
 
@@ -148,7 +148,7 @@ export const useZoom = (
       zoom(deltaScale);
     } else {
       if (!automaticCentering) {
-        const position = getRelativePointerPosition(imageRef.current);
+        const position = relativePosition();
 
         if (!position) return;
 

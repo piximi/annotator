@@ -8,7 +8,6 @@ import { useBoundingClientRect } from "../../../hooks/useBoundingClientRect";
 import { KonvaEventObject } from "konva/types/Node";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {
-  imageAspectRatioSelector,
   stageScaleSelector,
   stageWidthSelector,
   toolTypeSelector,
@@ -101,8 +100,6 @@ const Stage = ({ boundingClientRect }: StageProps) => {
   const offset = useSelector(offsetSelector);
 
   const toolType = useSelector(toolTypeSelector);
-
-  const imageAspectRatio = useSelector(imageAspectRatioSelector);
 
   const imageWidth = 1600 * scale;
   const imageHeight = 1200 * scale;

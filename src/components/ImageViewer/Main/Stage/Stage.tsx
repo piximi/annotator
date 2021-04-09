@@ -4,6 +4,7 @@ import Konva from "konva";
 import { KonvaEventObject } from "konva/types/Node";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {
+  imageSelector,
   stageScaleSelector,
   stageWidthSelector,
   toolTypeSelector,
@@ -33,7 +34,7 @@ export const Stage = ({ boundingClientRect }: StageProps) => {
 
   const stageWidth = useSelector(stageWidthSelector);
 
-  const stageHeight = 1000;
+  const stageHeight = boundingClientRect ? boundingClientRect.height : 1000;
 
   const scale = useSelector(stageScaleSelector);
 
@@ -41,8 +42,10 @@ export const Stage = ({ boundingClientRect }: StageProps) => {
 
   const toolType = useSelector(toolTypeSelector);
 
-  const imageWidth = 1600 * scale;
-  const imageHeight = 1200 * scale;
+  const image = useSelector(imageSelector);
+
+  const imageWidth = (image && image.shape ? image.shape.width : 512) * scale;
+  const imageHeight = (image && image.shape ? image.shape.height : 512) * scale;
 
   const dispatch = useDispatch();
 

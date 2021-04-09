@@ -1,5 +1,5 @@
 import Radio from "@material-ui/core/Radio";
-import React, { useEffect } from "react";
+import React from "react";
 import { RadioGroup } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ZoomModeType } from "../../../../types/ZoomModeType";
 import {
   setOffset,
-  setZoomToolOptions,
   setStageScale,
+  setZoomToolOptions,
 } from "../../../../store";
 import Checkbox from "@material-ui/core/Checkbox";
 import {
@@ -30,7 +30,6 @@ import { useTranslation } from "../../../../hooks/useTranslation";
 import Divider from "@material-ui/core/Divider";
 import { InformationBox } from "../InformationBox";
 import Slider from "@material-ui/core/Slider";
-import * as _ from "lodash";
 import Grid from "@material-ui/core/Grid";
 import ZoomInIcon from "@material-ui/icons/ZoomIn";
 import ZoomOutIcon from "@material-ui/icons/ZoomOut";
@@ -60,8 +59,16 @@ export const ZoomOptions = () => {
     dispatch(setZoomToolOptions(payload));
 
     const centerOffset = {
-      x: offset.x !== 0 ? 0 : (1600 * scale) / 2 - offset.x,
-      y: offset.y !== 0 ? 0 : (1200 * scale) / 2 - offset.y,
+      x:
+        offset.x !== 0
+          ? 0
+          : ((image && image.shape ? image.shape.width : 512) * scale) / 2 -
+            offset.x,
+      y:
+        offset.y !== 0
+          ? 0
+          : ((image && image.shape ? image.shape.height : 512) * scale) / 2 -
+            offset.y,
     }; //FIXME hardcoded heights and widths before merging with master branch!;
 
     dispatch(setOffset({ offset: centerOffset }));
@@ -95,7 +102,12 @@ export const ZoomOptions = () => {
     dispatch(setZoomToolOptions(payload));
     //FIXME: image.shape.width is not updated in current setup in Main.tsx
     //dispatch(setStageScale({stageScale: stageWidth / (image.shape.width) }))
-    dispatch(setStageScale({ stageScale: stageWidth / 1600 }));
+    dispatch(
+      setStageScale({
+        stageScale:
+          stageWidth / (image && image.shape ? image.shape.width : 512),
+      })
+    );
     dispatch(setOffset({ offset: { x: 0, y: 0 } }));
   };
 

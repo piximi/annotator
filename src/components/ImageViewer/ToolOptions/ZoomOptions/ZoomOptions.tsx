@@ -180,15 +180,8 @@ export const ZoomOptions = () => {
   };
 
   const onSliderChange = (value: number) => {
-    //FIXME: this should change a state variable, and onChangeCommitted/onChangeConfirmed we will do the dispatch
-    dispatch(
-      setZoomToolOptions({ options: { ...options, scale: marks[value].value } })
-    );
+    dispatch(setStageScale({ stageScale: value }));
   };
-
-  useEffect(() => {
-    dispatch(setStageScale({ stageScale: options.scale }));
-  }, [dispatch, options.scale]);
 
   return (
     <React.Fragment>
@@ -209,19 +202,15 @@ export const ZoomOptions = () => {
             </Grid>
             <Grid item xs>
               <Slider
-                defaultValue={6}
+                defaultValue={1}
                 onChange={(event: any, value: number | number[]) =>
                   onSliderChange(value as number)
                 }
                 valueLabelDisplay="auto"
-                valueLabelFormat={valueLabelFormat}
-                value={_.findIndex(
-                  marks,
-                  (mark) => mark.value === options.scale
-                )}
-                min={0}
-                max={12}
-                step={1}
+                value={scale}
+                min={Number.EPSILON}
+                max={10}
+                step={0.01}
               />
             </Grid>
             <Grid item>

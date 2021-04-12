@@ -75,7 +75,7 @@ export class PenAnnotationTool extends AnnotationTool {
 
     this.annotating = false;
 
-    this.points = this.translateStagedPointsToImagePoints(this.buffer);
+    this.points = this.buffer;
 
     this.computeCircleData();
 

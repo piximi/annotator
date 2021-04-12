@@ -57,8 +57,7 @@ export class MagneticAnnotationTool extends AnnotationTool {
 
     if (this.connected(position)) {
       if (this.origin) {
-        const translatedOrigin = this.toImageSpace(this.origin);
-        this.buffer = [...this.buffer, translatedOrigin.x, translatedOrigin.y];
+        this.buffer = [...this.buffer, this.origin.x, this.origin.y];
       }
 
       this.annotated = true;
@@ -84,20 +83,16 @@ export class MagneticAnnotationTool extends AnnotationTool {
     if (!this.image || !this.pathfinder || this.annotated || !this.annotating)
       return;
 
-    const translatedPosition = this.toImageSpace(position);
-
     if (this.anchor) {
-      const translatedAnchor = this.toImageSpace(this.anchor);
-
       const source = getIdx(this.image.width * this.factor, 1)(
-        Math.floor(translatedAnchor.x * this.factor),
-        Math.floor(translatedAnchor.y * this.factor),
+        Math.floor(this.anchor.x * this.factor),
+        Math.floor(this.anchor.y * this.factor),
         0
       );
 
       const destination = getIdx(this.image.width * this.factor, 1)(
-        Math.floor(translatedPosition.x * this.factor),
-        Math.floor(translatedPosition.y * this.factor),
+        Math.floor(position.x * this.factor),
+        Math.floor(position.y * this.factor),
         0
       );
 
@@ -113,8 +108,8 @@ export class MagneticAnnotationTool extends AnnotationTool {
 
       this.buffer = [
         ...this.previous,
-        translatedAnchor.x,
-        translatedAnchor.y,
+        this.anchor.x,
+        this.anchor.y,
         ...this.path,
       ];
 
@@ -122,17 +117,15 @@ export class MagneticAnnotationTool extends AnnotationTool {
     }
 
     if (this.origin) {
-      const translatedOrigin = this.toImageSpace(this.origin);
-
       const source = getIdx(this.image.width * this.factor, 1)(
-        Math.floor(translatedOrigin.x * this.factor),
-        Math.floor(translatedOrigin.y * this.factor),
+        Math.floor(this.origin.x * this.factor),
+        Math.floor(this.origin.y * this.factor),
         0
       );
 
       const destination = getIdx(this.image.width * this.factor, 1)(
-        Math.floor(translatedPosition.x * this.factor),
-        Math.floor(translatedPosition.y * this.factor),
+        Math.floor(position.x * this.factor),
+        Math.floor(position.y * this.factor),
         0
       );
 
@@ -141,7 +134,7 @@ export class MagneticAnnotationTool extends AnnotationTool {
       this.buffer.pop();
       this.buffer.pop();
 
-      this.buffer = [translatedOrigin.x, translatedOrigin.y, ...this.path];
+      this.buffer = [this.origin.x, this.origin.y, ...this.path];
     }
   }
 
@@ -154,15 +147,12 @@ export class MagneticAnnotationTool extends AnnotationTool {
       this.buffer &&
       this.buffer.length > 0
     ) {
-      const translatedPosition = this.toImageSpace(position);
-      const translatedOrigin = this.toImageSpace(this.origin);
-
       this.buffer = [
         ...this.buffer,
-        translatedPosition.x,
-        translatedPosition.y,
-        translatedOrigin.x,
-        translatedOrigin.y,
+        position.x,
+        position.y,
+        this.origin.x,
+        this.origin.y,
       ];
 
       this.annotated = true;
@@ -180,19 +170,15 @@ export class MagneticAnnotationTool extends AnnotationTool {
     }
 
     if (this.anchor && this.image) {
-      const translatedAnchor = this.toImageSpace(this.anchor);
-
       const source = getIdx(this.image.width * this.factor, 1)(
-        Math.floor(translatedAnchor.x * this.factor),
-        Math.floor(translatedAnchor.y * this.factor),
+        Math.floor(this.anchor.x * this.factor),
+        Math.floor(this.anchor.y * this.factor),
         0
       );
 
-      const translatedPosition = this.toImageSpace(position);
-
       const destination = getIdx(this.image.width * this.factor, 1)(
-        Math.floor(translatedPosition.x * this.factor),
-        Math.floor(translatedPosition.y * this.factor),
+        Math.floor(position.x * this.factor),
+        Math.floor(position.y * this.factor),
         0
       );
 
@@ -215,32 +201,28 @@ export class MagneticAnnotationTool extends AnnotationTool {
     if (this.origin && this.buffer.length > 0) {
       if (!this.image || !this.origin || !this.pathfinder) return;
 
-      const translatedOrigin = this.toImageSpace(this.origin);
-
       this.anchor = position;
 
-      const translatedPosition = this.toImageSpace(position);
-
       const source = getIdx(this.image.width * this.factor, 1)(
-        Math.floor(translatedOrigin.x * this.factor),
-        Math.floor(translatedOrigin.y * this.factor),
+        Math.floor(this.origin.x * this.factor),
+        Math.floor(this.origin.y * this.factor),
         0
       );
 
       const destination = getIdx(this.image.width * this.factor, 1)(
-        Math.floor(translatedPosition.x * this.factor),
-        Math.floor(translatedPosition.y * this.factor),
+        Math.floor(position.x * this.factor),
+        Math.floor(position.y * this.factor),
         0
       );
 
       this.path = _.flatten(this.pathfinder.find(source, destination));
 
-      this.buffer = [translatedOrigin.x, translatedOrigin.y, ...this.path];
+      this.buffer = [this.origin.x, this.origin.y, ...this.path];
 
       this.previous = [
         ...this.previous,
-        translatedOrigin.x,
-        translatedOrigin.y,
+        this.origin.x,
+        this.origin.y,
         ...this.path,
       ];
 

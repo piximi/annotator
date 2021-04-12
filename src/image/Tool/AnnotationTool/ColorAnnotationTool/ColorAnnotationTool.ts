@@ -34,15 +34,13 @@ export class ColorAnnotationTool extends AnnotationTool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    if (!this.stagedImageShape) return;
-
     this.annotated = false;
     this.annotating = true;
     this.tolerance = 1;
     this.initialPosition = position;
     this.toolTipPosition = position;
 
-    const { x, y } = this.toImageSpace(position);
+    const { x, y } = position;
 
     this.toleranceMap = makeFloodMap({
       x,
@@ -180,8 +178,6 @@ export class ColorAnnotationTool extends AnnotationTool {
     );
     let roi = overlay.getRoiManager();
 
-    if (!this.stagedImageShape) return;
-
     // Use the watershed function with a single seed to determine the selected region.
     // @ts-ignore
     roi.fromWaterShed({
@@ -193,11 +189,9 @@ export class ColorAnnotationTool extends AnnotationTool {
   };
 
   private updateOverlay(position: { x: number; y: number }) {
-    const { x, y } = this.toImageSpace(position);
-
     const roi = this.fromFlood({
-      x: x,
-      y: y,
+      x: position.x,
+      y: position.y,
       image: this.toleranceMap!,
       tolerance: this.tolerance,
     });
@@ -219,7 +213,7 @@ export class ColorAnnotationTool extends AnnotationTool {
 
     this.overlayData = ColorAnnotationTool.colorOverlay(
       this.roiMask,
-      { x, y },
+      position,
       "red"
     );
   }

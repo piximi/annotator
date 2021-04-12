@@ -9,18 +9,11 @@ export class EllipticalAnnotationTool extends AnnotationTool {
   computeBoundingBox(): [number, number, number, number] | undefined {
     if (!this.center || !this.origin || !this.radius) return undefined;
 
-    if (!this.stagedImageShape) return undefined;
-
-    //true image coordinates
-    const origin = this.toImageSpace(this.origin);
-    const radius = this.toImageSpace(this.radius);
-    const center = this.toImageSpace(this.center);
-
     return [
-      Math.round(origin.x),
-      Math.round(origin.y),
-      Math.round(center.x + radius.x),
-      Math.round(center.y + radius.y),
+      Math.round(this.origin.x),
+      Math.round(this.origin.y),
+      Math.round(this.center.x + this.radius.x),
+      Math.round(this.center.y + this.radius.y),
     ];
   }
 
@@ -47,9 +40,7 @@ export class EllipticalAnnotationTool extends AnnotationTool {
 
       this.annotating = false;
 
-      this.points = this.translateStagedPointsToImagePoints(
-        this.convertToPoints()
-      );
+      this.points = this.convertToPoints();
 
       this._contour = this.points;
 
@@ -75,9 +66,7 @@ export class EllipticalAnnotationTool extends AnnotationTool {
 
       this.annotating = false;
 
-      this.points = this.translateStagedPointsToImagePoints(
-        this.convertToPoints()
-      );
+      this.points = this.convertToPoints();
 
       this._contour = this.points;
 

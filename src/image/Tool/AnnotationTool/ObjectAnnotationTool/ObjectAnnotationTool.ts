@@ -55,25 +55,13 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
   private async predict() {
     if (!this.image || !this.origin || !this.width || !this.height) return;
 
-    if (!this.stagedImageShape) return;
-
     this.annotating = false;
 
-    const origin = this.toImageSpace(this.origin);
-
-    const width = Math.floor(
-      (this.width * this.image.width) / this.stagedImageShape.width
-    );
-
-    const height = Math.floor(
-      (this.height * this.image.height) / this.stagedImageShape.height
-    );
-
     const crop = this.image.crop({
-      x: origin.x,
-      y: origin.y,
-      width: width,
-      height: height,
+      x: this.origin.x,
+      y: this.origin.y,
+      width: this.width,
+      height: this.height,
     });
 
     const prediction = tensorflow.tidy(() => {
@@ -87,6 +75,8 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
         const standardized = resized.div(tensorflow.scalar(255));
         const batch = standardized.expandDims(0);
 
+        if (!this.height || !this.width || !this.origin) return;
+
         if (this.graph) {
           const prediction = this.graph.predict(
             batch
@@ -98,10 +88,13 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
             .sub(0.3)
             .sign()
             .relu()
-            .resizeBilinear([height, width])
+            .resizeBilinear([this.height, this.width])
             .pad([
-              [origin.y, this.image.height - (origin.y + height)],
-              [origin.x, this.image.width - (origin.x + width)],
+              [
+                this.origin.y,
+                this.image.height - (this.origin.y + this.height),
+              ],
+              [this.origin.x, this.image.width - (this.origin.x + this.width)],
               [0, 0],
             ]);
         }

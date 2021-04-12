@@ -1,6 +1,4 @@
 import { AnnotationTool } from "../AnnotationTool";
-import * as _ from "lodash";
-import { drawLine } from "../../../imageHelper";
 
 export class PolygonalAnnotationTool extends AnnotationTool {
   anchor?: { x: number; y: number };
@@ -31,7 +29,7 @@ export class PolygonalAnnotationTool extends AnnotationTool {
       this.annotated = true;
       this.annotating = false;
 
-      this.points = this.translateStagedPointsToImagePoints(this.buffer);
+      this.points = this.buffer;
 
       this._contour = this.points;
       this._mask = this.computeMask();
@@ -95,7 +93,7 @@ export class PolygonalAnnotationTool extends AnnotationTool {
       this.annotated = true;
       this.annotating = false;
 
-      this.points = this.translateStagedPointsToImagePoints(this.buffer);
+      this.points = this.buffer;
 
       this._contour = this.points;
       this._mask = this.computeMask();

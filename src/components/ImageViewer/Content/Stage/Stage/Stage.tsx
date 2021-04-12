@@ -78,14 +78,7 @@ export const Stage = () => {
     onWheel: onZoomWheel,
   } = useZoom(stageRef, imageRef);
 
-  const [annotationTool] = useAnnotationOperator(
-    { x: 0, y: 0 },
-    {
-      width: stageWidth,
-      height: stageHeight,
-    },
-    stageScale
-  );
+  const [annotationTool] = useAnnotationOperator();
 
   const [selecting, setSelecting] = useState<boolean>(false);
 

@@ -14,17 +14,36 @@ import {
   AnnotationTool,
 } from "../../image/Tool";
 import { useSelector } from "react-redux";
-import { imageSrcSelector, toolTypeSelector } from "../../store/selectors";
+import {
+  imageSrcSelector,
+  stageScaleSelector,
+  toolTypeSelector,
+} from "../../store/selectors";
 import { penSelectionBrushSizeSelector } from "../../store/selectors/penSelectionBrushSizeSelector";
+import { imageWidthSelector } from "../../store/selectors/imageWidthSelector";
+import { imageHeightSelector } from "../../store/selectors/imageHeightSelector";
 
-export const useAnnotationOperator = (
-  stagedImagePosition: { x: number; y: number },
-  stagedImageShape: { width: number; height: number },
-  zoomScale?: number
-) => {
+export const useAnnotationOperator = () => {
   const src = useSelector(imageSrcSelector);
-
   const operation = useSelector(toolTypeSelector);
+  const imageWidth = useSelector(imageWidthSelector);
+  const imageHeight = useSelector(imageHeightSelector);
+  const stageScale = useSelector(stageScaleSelector);
+
+  const [stagedImageShape, setStagedImageShape] = useState<{
+    width: number;
+    height: number;
+  }>({ width: 0, height: 0 });
+  const [stagedImagePosition, setStagedImagePosition] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (!imageHeight || !imageWidth) return;
+
+    setStagedImageShape({ width: imageWidth, height: imageHeight });
+  }, [imageHeight, imageWidth]);
 
   const [operator, setOperator] = useState<AnnotationTool>();
 
@@ -91,7 +110,7 @@ export const useAnnotationOperator = (
 
         return;
       case ToolType.PenAnnotation:
-        const scale = zoomScale ? zoomScale : 1;
+        const scale = stageScale ? stageScale : 1;
         PenAnnotationTool.setup(
           image,
           brushSize / scale,

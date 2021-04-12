@@ -1,14 +1,11 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import * as ReactKonva from "react-konva";
 import Konva from "konva";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import {
   boundingClientRectSelector,
-  imageSelector,
   stageHeightSelector,
-  stageScaleSelector,
   stageWidthSelector,
-  zoomToolOptionsSelector,
 } from "../../../../store/selectors";
 import { setStageWidth, store } from "../../../../store";
 import { ZoomSelection } from "../../Content/Stage/Selection/ZoomSelection";
@@ -16,8 +13,6 @@ import { offsetSelector } from "../../../../store/selectors/offsetSelector";
 import { Layer } from "../Layer";
 import { Image } from "../../Content/Stage/Image";
 import { useZoom } from "../../../../hooks";
-import { imageWidthSelector } from "../../../../store/selectors/imageWidthSelector";
-import { imageHeightSelector } from "../../../../store/selectors/imageHeightSelector";
 
 export const Stage = () => {
   const stageRef = useRef<Konva.Stage>(null);
@@ -32,10 +27,8 @@ export const Stage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!boundingClientRect) return;
-
     dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
-  }, [boundingClientRect]);
+  }, [boundingClientRect, dispatch, stageWidth]);
 
   const { onMouseDown, onMouseMove, onMouseUp, onWheel } = useZoom(
     stageRef,

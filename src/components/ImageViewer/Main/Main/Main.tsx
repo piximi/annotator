@@ -14,11 +14,6 @@ export const Main = () => {
 
   const boundingClientRect = useBoundingClientRect(ref);
 
-  useEffect(() => {
-    if (!boundingClientRect) return;
-    dispatch(setBoundingClientRect({ boundingClientRect: boundingClientRect }));
-  }, [boundingClientRect]);
-
   return (
     <main className={classes.content} ref={ref}>
       <Stage />

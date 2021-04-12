@@ -92,21 +92,7 @@ export const Stage = ({ src }: StageProps) => {
   const [imageWidth, setImageWidth] = useState<number>(512);
   const [imageHeight, setImageHeight] = useState<number>(512);
 
-  const boundingClientRect = useBoundingClientRect(parentDivRef);
-
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!boundingClientRect) return;
-
-    dispatch(
-      setBoundingClientRect({
-        boundingClientRect: boundingClientRect,
-      })
-    );
-
-    dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
-  }, [boundingClientRect, dispatch]);
 
   useEffect(() => {
     if (!imageRef || !imageRef.current) return;

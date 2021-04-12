@@ -20,7 +20,7 @@ import {
   stageWidthSelector,
   toolTypeSelector,
 } from "../../../../../store/selectors";
-import { setStageWidth, setBoundingClientRect } from "../../../../../store";
+import { applicationSlice, setSelectedAnnotation } from "../../../../../store";
 import {
   Provider,
   ReactReduxContext,
@@ -28,19 +28,12 @@ import {
   useSelector,
 } from "react-redux";
 import { useStyles } from "../../Content/Content.css";
-import {
-  applicationSlice,
-  setSelectedAnnotation,
-  setStageScale,
-} from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationOperator, useZoom } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
-import { useZoomTool } from "../../../../../hooks/useZoomTool";
-import { KonvaEventObject } from "konva/types/Node";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
@@ -56,7 +49,6 @@ import useSound from "use-sound";
 import createAnnotationSoundEffect from "../../../../../sounds/pop-up-on.mp3";
 import deleteAnnotationSoundEffect from "../../../../../sounds/pop-up-off.mp3";
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
-import { useBoundingClientRect } from "../../../../../hooks/useBoundingClientRect";
 import { Layer } from "../../../Main/Layer";
 import { ZoomSelection } from "../Selection/ZoomSelection";
 
@@ -67,14 +59,11 @@ type StageProps = {
 export const Stage = ({ src }: StageProps) => {
   const imageRef = useRef<Konva.Image>(null);
   const stageRef = useRef<Konva.Stage>(null);
-  const parentDivRef = useRef<HTMLDivElement>(null);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const selectingRef = useRef<Konva.Line | null>(null);
 
   const selectedAnnotationRef = useRef<SelectionType | null>(null);
-
-  const classes = useStyles();
 
   const toolType = useSelector(toolTypeSelector);
 
@@ -91,9 +80,6 @@ export const Stage = ({ src }: StageProps) => {
 
   const stageScale = useSelector(stageScaleSelector);
 
-  const [imageWidth, setImageWidth] = useState<number>(512);
-  const [imageHeight, setImageHeight] = useState<number>(512);
-
   const dispatch = useDispatch();
 
   const {
@@ -103,23 +89,9 @@ export const Stage = ({ src }: StageProps) => {
     onWheel: onZoomWheel,
   } = useZoom(stageRef, imageRef);
 
-  useEffect(() => {
-    if (!imageRef || !imageRef.current) return;
-
-    setImageWidth(imageRef.current.getWidth() * stageScale);
-    setImageHeight(imageRef.current.getHeight() * stageScale);
-  }, [stageScale]);
-
-  const layerPosition = useCallback(() => {
-    return {
-      x: (stageWidth - imageWidth) / 2,
-      y: (stageHeight - imageHeight) / 2,
-    };
-  }, [imageWidth, imageHeight, stageWidth, stageHeight]);
-
   const [annotationTool] = useAnnotationOperator(
     src,
-    layerPosition(),
+    { x: 0, y: 0 },
     {
       width: stageWidth,
       height: stageHeight,
@@ -145,8 +117,6 @@ export const Stage = ({ src }: StageProps) => {
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
   const shiftPress = useKeyPress("Shift");
-
-  const [zooming, setZooming] = useState<boolean>(false);
 
   const [playCreateAnnotationSoundEffect] = useSound(
     createAnnotationSoundEffect
@@ -568,69 +538,67 @@ export const Stage = ({ src }: StageProps) => {
   }, [annotationTool, toolType]);
 
   return (
-    <div ref={parentDivRef} className={classes.parent}>
-      <ReactReduxContext.Consumer>
-        {({ store }) => (
-          <ReactKonva.Stage
-            height={stageHeight}
-            onMouseDown={onZoomMouseDown}
-            onMouseMove={onZoomMouseMove}
-            onMouseUp={onZoomMouseUp}
-            onWheel={onZoomWheel}
-            ref={stageRef}
-            width={stageWidth}
-          >
-            <Provider store={store}>
-              <Layer>
-                <Image ref={imageRef} />
+    <ReactReduxContext.Consumer>
+      {({ store }) => (
+        <ReactKonva.Stage
+          height={stageHeight}
+          onMouseDown={onZoomMouseDown}
+          onMouseMove={onZoomMouseMove}
+          onMouseUp={onZoomMouseUp}
+          onWheel={onZoomWheel}
+          ref={stageRef}
+          width={stageWidth}
+        >
+          <Provider store={store}>
+            <Layer>
+              <Image ref={imageRef} />
 
-                <ZoomSelection />
+              <ZoomSelection />
 
-                <Selecting tool={tool!} />
+              {/*<Selecting tool={tool!} />*/}
 
-                {currentPosition &&
-                  !annotationTool?.annotating &&
-                  toolType === ToolType.PenAnnotation && (
-                    <ReactKonva.Ellipse
-                      radiusX={
-                        (aspectRatio * penSelectionBrushSize) / stageScale
-                      }
-                      radiusY={penSelectionBrushSize / stageScale}
-                      x={currentPosition.x}
-                      y={currentPosition.y}
-                      stroke="grey"
-                      strokewidth={1}
-                      dash={[2, 2]}
-                    />
-                  )}
+              {/*{currentPosition &&*/}
+              {/*  !annotationTool?.annotating &&*/}
+              {/*  toolType === ToolType.PenAnnotation && (*/}
+              {/*    <ReactKonva.Ellipse*/}
+              {/*      radiusX={*/}
+              {/*        (aspectRatio * penSelectionBrushSize) / stageScale*/}
+              {/*      }*/}
+              {/*      radiusY={penSelectionBrushSize / stageScale}*/}
+              {/*      x={currentPosition.x}*/}
+              {/*      y={currentPosition.y}*/}
+              {/*      stroke="grey"*/}
+              {/*      strokewidth={1}*/}
+              {/*      dash={[2, 2]}*/}
+              {/*    />*/}
+              {/*  )}*/}
 
-                {annotated && annotationTool && annotationTool.contour && (
-                  <SelectedContour points={annotationTool.contour} />
-                )}
+              {/*{annotated && annotationTool && annotationTool.contour && (*/}
+              {/*  <SelectedContour points={annotationTool.contour} />*/}
+              {/*)}*/}
 
-                {selectionMode !== AnnotationModeType.New &&
-                  annotationTool &&
-                  annotationTool.annotating &&
-                  !annotationTool.annotated &&
-                  selectedAnnotationRef &&
-                  selectedAnnotationRef.current && (
-                    <SelectedContour
-                      points={selectedAnnotationRef.current.contour}
-                    />
-                  )}
+              {/*{selectionMode !== AnnotationModeType.New &&*/}
+              {/*  annotationTool &&*/}
+              {/*  annotationTool.annotating &&*/}
+              {/*  !annotationTool.annotated &&*/}
+              {/*  selectedAnnotationRef &&*/}
+              {/*  selectedAnnotationRef.current && (*/}
+              {/*    <SelectedContour*/}
+              {/*      points={selectedAnnotationRef.current.contour}*/}
+              {/*    />*/}
+              {/*  )}*/}
 
-                <Annotations annotationTool={annotationTool} />
+              {/*<Annotations annotationTool={annotationTool} />*/}
 
-                <ReactKonva.Transformer ref={transformerRef} />
+              {/*<ReactKonva.Transformer ref={transformerRef} />*/}
 
-                <ColorAnnotationToolTip
-                  colorAnnotationTool={annotationTool as ColorAnnotationTool}
-                />
-              </Layer>
-            </Provider>
-          </ReactKonva.Stage>
-        )}
-      </ReactReduxContext.Consumer>
-    </div>
+              {/*<ColorAnnotationToolTip*/}
+              {/*  colorAnnotationTool={annotationTool as ColorAnnotationTool}*/}
+              {/*/>*/}
+            </Layer>
+          </Provider>
+        </ReactKonva.Stage>
+      )}
+    </ReactReduxContext.Consumer>
   );
 };

@@ -23,7 +23,7 @@ import { penSelectionBrushSizeSelector } from "../../store/selectors/penSelectio
 import { imageWidthSelector } from "../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../store/selectors/imageHeightSelector";
 
-export const useAnnotationOperator = () => {
+export const useAnnotationTool = () => {
   const src = useSelector(imageSrcSelector);
   const operation = useSelector(toolTypeSelector);
   const imageWidth = useSelector(imageWidthSelector);

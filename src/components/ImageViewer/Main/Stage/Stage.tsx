@@ -29,33 +29,13 @@ export const Stage = () => {
 
   const offset = useSelector(offsetSelector);
 
-  const imageWidth = useSelector(imageWidthSelector);
-  const imageHeight = useSelector(imageHeightSelector);
-
   const dispatch = useDispatch();
-
-  const { automaticCentering } = useSelector(zoomToolOptionsSelector);
 
   useEffect(() => {
     if (!boundingClientRect) return;
 
     dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
   }, [boundingClientRect]);
-
-  const layerPosition = useCallback(() => {
-    if (!imageWidth || !imageHeight) return { x: 0, y: 0 };
-    if (automaticCentering) {
-      return {
-        x: (stageWidth - imageWidth) / 2,
-        y: (stageHeight - imageHeight) / 2,
-      };
-    } else {
-      return {
-        x: stageWidth - stageWidth / 2,
-        y: stageHeight - stageHeight / 2,
-      };
-    }
-  }, [automaticCentering, stageWidth, stageHeight, imageWidth, imageHeight]);
 
   const { onMouseDown, onMouseMove, onMouseUp, onWheel } = useZoom(
     stageRef,
@@ -73,7 +53,7 @@ export const Stage = () => {
       width={stageWidth}
     >
       <Provider store={store}>
-        <Layer offset={offset} position={layerPosition()}>
+        <Layer offset={offset}>
           <Image ref={imageRef} />
           <ZoomSelection />
         </Layer>

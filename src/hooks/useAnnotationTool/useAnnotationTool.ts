@@ -21,7 +21,7 @@ import {
 } from "../../store/selectors";
 import { penSelectionBrushSizeSelector } from "../../store/selectors/penSelectionBrushSizeSelector";
 
-export const useAnnotationOperator = () => {
+export const useAnnotationTool = () => {
   const src = useSelector(imageSrcSelector);
   const operation = useSelector(toolTypeSelector);
   const stageScale = useSelector(stageScaleSelector);

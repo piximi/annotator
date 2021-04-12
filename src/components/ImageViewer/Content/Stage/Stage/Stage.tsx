@@ -22,7 +22,7 @@ import {
   useSelector,
 } from "react-redux";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
-import { useAnnotationOperator, useZoom } from "../../../../../hooks";
+import { useAnnotationTool, useZoom } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
@@ -78,7 +78,7 @@ export const Stage = () => {
     onWheel: onZoomWheel,
   } = useZoom(stageRef, imageRef);
 
-  const [annotationTool] = useAnnotationOperator();
+  const [annotationTool] = useAnnotationTool();
 
   const [selecting, setSelecting] = useState<boolean>(false);
 
@@ -354,10 +354,6 @@ export const Stage = () => {
     transform.invert();
 
     return transform.point(position);
-  };
-
-  const onTransformerMouseDown = () => {
-    console.info("Clicked on transformer!");
   };
 
   //FIXME not using useMemo() because could not pass event argument to it

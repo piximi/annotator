@@ -34,7 +34,7 @@ import {
   setStageScale,
 } from "../../../../../store";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
-import { useAnnotationOperator } from "../../../../../hooks";
+import { useAnnotationOperator, useZoom } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
@@ -57,6 +57,8 @@ import createAnnotationSoundEffect from "../../../../../sounds/pop-up-on.mp3";
 import deleteAnnotationSoundEffect from "../../../../../sounds/pop-up-off.mp3";
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
 import { useBoundingClientRect } from "../../../../../hooks/useBoundingClientRect";
+import { Layer } from "../../../Main/Layer";
+import { ZoomSelection } from "../Selection/ZoomSelection";
 
 type StageProps = {
   src: string;
@@ -93,6 +95,13 @@ export const Stage = ({ src }: StageProps) => {
   const [imageHeight, setImageHeight] = useState<number>(512);
 
   const dispatch = useDispatch();
+
+  const {
+    onMouseUp: onZoomMouseUp,
+    onMouseMove: onZoomMouseMove,
+    onMouseDown: onZoomMouseDown,
+    onWheel: onZoomWheel,
+  } = useZoom(stageRef, imageRef);
 
   useEffect(() => {
     if (!imageRef || !imageRef.current) return;
@@ -166,36 +175,6 @@ export const Stage = ({ src }: StageProps) => {
 
     selectingRef.current = null;
   };
-
-  const { zoomTool, onZoomClick, onZoomWheel } = useZoomTool(
-    aspectRatio,
-    toolType,
-    src,
-    stageWidth
-  );
-
-  const onClick = (event: KonvaEventObject<MouseEvent>) => {
-    switch (toolType) {
-      case ToolType.Zoom:
-        if (zooming) return;
-        onZoomClick(event);
-    }
-  };
-
-  const onWheel = (event: KonvaEventObject<WheelEvent>) => {
-    switch (toolType) {
-      case ToolType.Zoom:
-        onZoomWheel(event);
-    }
-  };
-
-  useEffect(() => {
-    if (toolType !== ToolType.Zoom) return;
-
-    if (!zoomTool || !zoomTool.scale) return;
-
-    dispatch(setStageScale({ stageScale: zoomTool.scale }));
-  }, [zoomTool?.scale]);
 
   useEffect(() => {
     if (!selectedAnnotationId || !annotationTool) return;
@@ -460,12 +439,7 @@ export const Stage = ({ src }: StageProps) => {
 
       if (!relative) return;
 
-      if (toolType === ToolType.Zoom) {
-        zoomTool?.onMouseDown(relative);
-        setZooming(false);
-      } else {
-        annotationTool.onMouseDown(relative);
-      }
+      annotationTool.onMouseDown(relative);
 
       update();
     }
@@ -484,12 +458,8 @@ export const Stage = ({ src }: StageProps) => {
       setCurrentPosition(relative);
 
       if (!relative) return;
-      if (toolType === ToolType.Zoom) {
-        zoomTool?.onMouseMove(relative);
-        setZooming(true);
-      } else {
-        annotationTool.onMouseMove(relative);
-      }
+
+      annotationTool.onMouseMove(relative);
 
       update();
     };
@@ -497,7 +467,7 @@ export const Stage = ({ src }: StageProps) => {
     const throttled = _.throttle(func, 5);
 
     return () => throttled();
-  }, [annotationTool, toolType, zoomTool]);
+  }, [annotationTool, toolType]);
 
   const onMouseUp = useMemo(() => {
     const func = async () => {
@@ -511,14 +481,10 @@ export const Stage = ({ src }: StageProps) => {
 
       if (!relative) return;
 
-      if (toolType === ToolType.Zoom) {
-        zoomTool?.onMouseUp(relative);
-      } else {
-        if (toolType === ToolType.ObjectAnnotation)
-          await (annotationTool as ObjectAnnotationTool).onMouseUp(relative);
-        else {
-          annotationTool.onMouseUp(relative);
-        }
+      if (toolType === ToolType.ObjectAnnotation)
+        await (annotationTool as ObjectAnnotationTool).onMouseUp(relative);
+      else {
+        annotationTool.onMouseUp(relative);
       }
 
       update();
@@ -527,7 +493,7 @@ export const Stage = ({ src }: StageProps) => {
     const throttled = _.throttle(func, 10);
 
     return () => throttled();
-  }, [annotationTool, toolType, zoomTool]);
+  }, [annotationTool, toolType]);
 
   useEffect(() => {
     if (!enterPress) return;
@@ -598,33 +564,27 @@ export const Stage = ({ src }: StageProps) => {
   const [tool, setTool] = useState<Tool>();
 
   useEffect(() => {
-    if (toolType === ToolType.Zoom) {
-      setTool(zoomTool);
-    } else {
-      setTool(annotationTool);
-    }
-  }, [annotationTool, toolType, zoomTool]);
+    setTool(annotationTool);
+  }, [annotationTool, toolType]);
 
   return (
     <div ref={parentDivRef} className={classes.parent}>
       <ReactReduxContext.Consumer>
         {({ store }) => (
           <ReactKonva.Stage
-            globalCompositeOperation="destination-over"
             height={stageHeight}
-            onClick={onClick}
-            onWheel={onWheel}
+            onMouseDown={onZoomMouseDown}
+            onMouseMove={onZoomMouseMove}
+            onMouseUp={onZoomMouseUp}
+            onWheel={onZoomWheel}
             ref={stageRef}
             width={stageWidth}
           >
             <Provider store={store}>
-              <ReactKonva.Layer
-                onMouseDown={(event) => onMouseDown(event)}
-                onMouseMove={onMouseMove}
-                onMouseUp={onMouseUp}
-                position={layerPosition}
-              >
+              <Layer>
                 <Image ref={imageRef} />
+
+                <ZoomSelection />
 
                 <Selecting tool={tool!} />
 
@@ -666,7 +626,7 @@ export const Stage = ({ src }: StageProps) => {
                 <ColorAnnotationToolTip
                   colorAnnotationTool={annotationTool as ColorAnnotationTool}
                 />
-              </ReactKonva.Layer>
+              </Layer>
             </Provider>
           </ReactKonva.Stage>
         )}

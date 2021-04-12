@@ -35,11 +35,7 @@ export const Content = ({ onDrop }: ContentProps) => {
 
   return (
     <main className={classes.content} ref={ref}>
-      <div ref={drop}>
-        <div>
-          <Stage src={image!.src} />
-        </div>
-      </div>
+      <Stage src={image!.src} />
     </main>
   );
 };

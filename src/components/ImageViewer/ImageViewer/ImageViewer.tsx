@@ -90,7 +90,8 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
         <CategoriesList />
 
-        <Main />
+        {/*<Main />*/}
+        <Content onDrop={onDrop} />
 
         <ToolOptions />
 

@@ -38,7 +38,7 @@ export const Content = ({ onDrop }: ContentProps) => {
 
   return (
     <main className={classes.content} ref={ref}>
-      <Stage src={image!.src} />
+      <Stage />
     </main>
   );
 };

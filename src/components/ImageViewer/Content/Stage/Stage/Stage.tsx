@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
   imageInstancesSelector,
+  imageSrcSelector,
   invertModeSelector,
   selectedCategroySelector,
   selectionModeSelector,
@@ -44,11 +45,7 @@ import { soundEnabledSelector } from "../../../../../store/selectors/soundEnable
 import { Layer } from "../../../Main/Layer";
 import { ZoomSelection } from "../Selection/ZoomSelection";
 
-type StageProps = {
-  src: string;
-};
-
-export const Stage = ({ src }: StageProps) => {
+export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
   const stageRef = useRef<Konva.Stage>(null);
 
@@ -82,7 +79,6 @@ export const Stage = ({ src }: StageProps) => {
   } = useZoom(stageRef, imageRef);
 
   const [annotationTool] = useAnnotationOperator(
-    src,
     { x: 0, y: 0 },
     {
       width: stageWidth,

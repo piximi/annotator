@@ -14,15 +14,16 @@ import {
   AnnotationTool,
 } from "../../image/Tool";
 import { useSelector } from "react-redux";
-import { toolTypeSelector } from "../../store/selectors";
+import { imageSrcSelector, toolTypeSelector } from "../../store/selectors";
 import { penSelectionBrushSizeSelector } from "../../store/selectors/penSelectionBrushSizeSelector";
 
 export const useAnnotationOperator = (
-  src: string,
   stagedImagePosition: { x: number; y: number },
   stagedImageShape: { width: number; height: number },
   zoomScale?: number
 ) => {
+  const src = useSelector(imageSrcSelector);
+
   const operation = useSelector(toolTypeSelector);
 
   const [operator, setOperator] = useState<AnnotationTool>();
@@ -32,6 +33,8 @@ export const useAnnotationOperator = (
   const brushSize = useSelector(penSelectionBrushSizeSelector);
 
   useEffect(() => {
+    if (!src) return;
+
     const loadImage = async () => {
       const image = await ImageJS.Image.load(src);
       setImage(image);

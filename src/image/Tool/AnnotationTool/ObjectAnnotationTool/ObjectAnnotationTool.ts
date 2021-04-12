@@ -33,16 +33,8 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
     await this.predict();
   }
 
-  static async compile(
-    image: ImageJS.Image,
-    stagedImagePosition: { x: number; y: number },
-    stagedImageShape: { width: number; height: number }
-  ) {
-    const instance = new ObjectAnnotationTool(
-      image,
-      stagedImagePosition,
-      stagedImageShape
-    );
+  static async compile(image: ImageJS.Image) {
+    const instance = new ObjectAnnotationTool(image);
 
     const pathname =
       "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";

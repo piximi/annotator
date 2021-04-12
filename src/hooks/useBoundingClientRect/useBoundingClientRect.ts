@@ -1,13 +1,17 @@
 import useResizeObserver from "@react-hook/resize-observer";
 import React, { useEffect, useLayoutEffect } from "react";
-import { setBoundingClientRect } from "../../store/slices";
+import { setBoundingClientRect, setStageWidth } from "../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
-import { boundingClientRectSelector } from "../../store/selectors";
+import {
+  boundingClientRectSelector,
+  stageWidthSelector,
+} from "../../store/selectors";
 
 export const useBoundingClientRect = (target: React.RefObject<HTMLElement>) => {
   const dispatch = useDispatch();
 
   const boundingClientRect = useSelector(boundingClientRectSelector);
+  const stageWidth = useSelector(stageWidthSelector);
 
   useLayoutEffect(() => {
     if (!target || !target.current) return;
@@ -31,4 +35,8 @@ export const useBoundingClientRect = (target: React.RefObject<HTMLElement>) => {
     if (!boundingClientRect) return;
     dispatch(setBoundingClientRect({ boundingClientRect: boundingClientRect }));
   }, [boundingClientRect, dispatch]);
+
+  useEffect(() => {
+    dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
+  }, [boundingClientRect, dispatch, stageWidth]);
 };

@@ -8,15 +8,17 @@ import {
   stageWidthSelector,
   zoomToolOptionsSelector,
 } from "../../../../store/selectors";
+import { offsetSelector } from "../../../../store/selectors/offsetSelector";
 
 type LayerProps = {
   children?: React.ReactNode;
-  offset: { x: number; y: number };
 };
 
-export const Layer = ({ children, offset }: LayerProps) => {
+export const Layer = ({ children }: LayerProps) => {
   const imageWidth = useSelector(imageWidthSelector);
   const imageHeight = useSelector(imageHeightSelector);
+
+  const offset = useSelector(offsetSelector);
 
   const { automaticCentering } = useSelector(zoomToolOptionsSelector);
 

@@ -1,15 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import * as ReactKonva from "react-konva";
 import Konva from "konva";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import {
-  boundingClientRectSelector,
   stageHeightSelector,
   stageWidthSelector,
 } from "../../../../store/selectors";
-import { setStageWidth, store } from "../../../../store";
+import { store } from "../../../../store";
 import { ZoomSelection } from "../../Content/Stage/Selection/ZoomSelection";
-import { offsetSelector } from "../../../../store/selectors/offsetSelector";
 import { Layer } from "../Layer";
 import { Image } from "../../Content/Stage/Image";
 import { useZoom } from "../../../../hooks";
@@ -20,15 +18,6 @@ export const Stage = () => {
 
   const stageWidth = useSelector(stageWidthSelector);
   const stageHeight = useSelector(stageHeightSelector);
-  const boundingClientRect = useSelector(boundingClientRectSelector);
-
-  const offset = useSelector(offsetSelector);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
-  }, [boundingClientRect, dispatch, stageWidth]);
 
   const { onMouseDown, onMouseMove, onMouseUp, onWheel } = useZoom(
     stageRef,
@@ -46,7 +35,7 @@ export const Stage = () => {
       width={stageWidth}
     >
       <Provider store={store}>
-        <Layer offset={offset}>
+        <Layer>
           <Image ref={imageRef} />
           <ZoomSelection />
         </Layer>

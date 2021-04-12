@@ -28,15 +28,10 @@ export abstract class AnnotationTool extends Tool {
   protected _contour?: Array<number>;
   protected _mask?: Array<number>;
 
-  constructor(
-    image: ImageJS.Image,
-    stagedImagePosition: { x: number; y: number },
-    stagedImageShape: { width: number; height: number }
-  ) {
+  constructor(image: ImageJS.Image) {
     super(image);
 
     this.manager = image.getRoiManager();
-    this.stagedImageShape = stagedImageShape;
   }
 
   /*

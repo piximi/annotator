@@ -16,6 +16,8 @@ import { offsetSelector } from "../../../../store/selectors/offsetSelector";
 import { Layer } from "../Layer";
 import { Image } from "../../Content/Stage/Image";
 import { useZoom } from "../../../../hooks";
+import { imageWidthSelector } from "../../../../store/selectors/imageWidthSelector";
+import { imageHeightSelector } from "../../../../store/selectors/imageHeightSelector";
 
 export const Stage = () => {
   const stageRef = useRef<Konva.Stage>(null);
@@ -25,12 +27,10 @@ export const Stage = () => {
   const stageHeight = useSelector(stageHeightSelector);
   const boundingClientRect = useSelector(boundingClientRectSelector);
 
-  const scale = useSelector(stageScaleSelector);
   const offset = useSelector(offsetSelector);
-  const image = useSelector(imageSelector);
 
-  const imageWidth = (image && image.shape ? image.shape.width : 512) * scale;
-  const imageHeight = (image && image.shape ? image.shape.height : 512) * scale;
+  const imageWidth = useSelector(imageWidthSelector);
+  const imageHeight = useSelector(imageHeightSelector);
 
   const dispatch = useDispatch();
 
@@ -43,6 +43,7 @@ export const Stage = () => {
   }, [boundingClientRect]);
 
   const layerPosition = useCallback(() => {
+    if (!imageWidth || !imageHeight) return { x: 0, y: 0 };
     if (automaticCentering) {
       return {
         x: (stageWidth - imageWidth) / 2,
@@ -58,8 +59,7 @@ export const Stage = () => {
 
   const { onMouseDown, onMouseMove, onMouseUp, onWheel } = useZoom(
     stageRef,
-    imageRef,
-    imageWidth
+    imageRef
   );
 
   return (
@@ -74,7 +74,7 @@ export const Stage = () => {
     >
       <Provider store={store}>
         <Layer offset={offset} position={layerPosition()}>
-          <Image height={imageHeight} ref={imageRef} width={imageWidth} />
+          <Image ref={imageRef} />
           <ZoomSelection />
         </Layer>
       </Provider>

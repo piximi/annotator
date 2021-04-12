@@ -6,6 +6,6 @@ export type ImageType = {
   id: string;
   annotations: Array<AnnotationType>;
   name: string;
-  shape?: ShapeType;
+  shape: ShapeType;
   src: string;
 };

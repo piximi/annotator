@@ -11,11 +11,11 @@ import {
   zoomSelectionSelector,
   zoomToolOptionsSelector,
 } from "../../store/selectors";
+import { imageWidthSelector } from "../../store/selectors/imageWidthSelector";
 
 export const useZoom = (
   stageRef: React.RefObject<Konva.Stage>,
-  imageRef: React.RefObject<Konva.Image>,
-  imageWidth: number
+  imageRef: React.RefObject<Konva.Image>
 ) => {
   const delta = 10;
   const scaleBy = 1.25;
@@ -26,6 +26,8 @@ export const useZoom = (
   const toolType = useSelector(toolTypeSelector);
   const { automaticCentering, mode } = useSelector(zoomToolOptionsSelector);
   const zoomSelection = useSelector(zoomSelectionSelector);
+
+  const imageWidth = useSelector(imageWidthSelector);
 
   const zoomAndOffset = (
     position: { x: number; y: number } | undefined,
@@ -109,6 +111,8 @@ export const useZoom = (
   };
 
   const onMouseUp = () => {
+    if (!imageWidth) return;
+
     if (!zoomSelection.selecting) return;
 
     if (zoomSelection.dragging) {

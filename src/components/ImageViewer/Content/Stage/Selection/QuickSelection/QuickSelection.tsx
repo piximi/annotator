@@ -1,6 +1,8 @@
 import { QuickAnnotationTool } from "../../../../../../image/Tool";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { stageScaleSelector } from "../../../../../../store/selectors";
 
 type QuickSelectionProps = {
   operator: QuickAnnotationTool;
@@ -17,11 +19,16 @@ export const QuickSelection = ({ operator }: QuickSelectionProps) => {
     setImage(image);
   }, [operator.currentMask]);
 
+  const stageScale = useSelector(stageScaleSelector);
+
   if (!operator.currentMask) return null;
 
   return (
     <ReactKonva.Group>
-      <ReactKonva.Image image={image} />
+      <ReactKonva.Image
+        image={image}
+        scale={{ x: stageScale, y: stageScale }}
+      />
     </ReactKonva.Group>
   );
 };

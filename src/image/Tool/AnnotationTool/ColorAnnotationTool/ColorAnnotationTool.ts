@@ -40,11 +40,9 @@ export class ColorAnnotationTool extends AnnotationTool {
     this.initialPosition = position;
     this.toolTipPosition = position;
 
-    const { x, y } = position;
-
     this.toleranceMap = makeFloodMap({
-      x,
-      y,
+      x: Math.floor(position.x),
+      y: Math.floor(position.y),
       image: this.image!,
     });
 
@@ -190,11 +188,13 @@ export class ColorAnnotationTool extends AnnotationTool {
 
   private updateOverlay(position: { x: number; y: number }) {
     const roi = this.fromFlood({
-      x: position.x,
-      y: position.y,
+      x: Math.floor(position.x),
+      y: Math.floor(position.y),
       image: this.toleranceMap!,
       tolerance: this.tolerance,
     });
+
+    console.info(roi);
 
     // @ts-ignore
     this.roiMask = roi.getMasks()[0];
@@ -216,5 +216,7 @@ export class ColorAnnotationTool extends AnnotationTool {
       position,
       "red"
     );
+
+    console.info(this.roiMask.toDataURL());
   }
 }

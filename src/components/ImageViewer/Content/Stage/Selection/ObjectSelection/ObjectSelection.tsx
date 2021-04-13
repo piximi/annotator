@@ -24,24 +24,24 @@ export const ObjectSelection = ({ operator }: ObjectSelectionProps) => {
   return (
     <ReactKonva.Group>
       <ReactKonva.Rect
-        dash={[4, 2]}
+        dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
         scale={{ x: stageScale, y: stageScale }}
         height={operator.height}
         stroke="black"
-        strokeWidth={1}
+        strokeWidth={1 / stageScale}
         width={operator.width}
         x={x}
         y={y}
       />
 
       <ReactKonva.Rect
-        dash={[4, 2]}
+        dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
         height={operator.height}
         scale={{ x: stageScale, y: stageScale }}
         stroke="white"
-        strokeWidth={1}
+        strokeWidth={1 / stageScale}
         width={operator.width}
         x={x}
         y={y}

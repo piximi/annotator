@@ -12,7 +12,7 @@ import * as tensorflow from "@tensorflow/tfjs";
 
 const initialState: StateType = {
   annotated: false,
-  boundingClientRectWidth: 1,
+  boundingClientRect: new DOMRect(),
   brightness: 0,
   categories: [
     {
@@ -52,6 +52,7 @@ const initialState: StateType = {
   },
   invertMode: false,
   language: LanguageType.English,
+  offset: { x: 0, y: 0 },
   penSelectionBrushSize: 2,
   saturation: 0,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
@@ -62,6 +63,12 @@ const initialState: StateType = {
   stageWidth: 1000,
   toolType: ToolType.RectangularAnnotation,
   vibrance: 0,
+  zoomSelection: {
+    dragging: false,
+    minimum: undefined,
+    maximum: undefined,
+    selecting: false,
+  },
 };
 
 export const applicationSlice = createSlice({
@@ -104,11 +111,11 @@ export const applicationSlice = createSlice({
     ) {
       state.annotated = action.payload.annotated;
     },
-    setBoundingClientRectWidth(
+    setBoundingClientRect(
       state: StateType,
-      action: PayloadAction<{ boundingClientRectWidth: number }>
+      action: PayloadAction<{ boundingClientRect: DOMRect }>
     ) {
-      state.boundingClientRectWidth = action.payload.boundingClientRectWidth;
+      state.boundingClientRect = action.payload.boundingClientRect;
     },
     setBrightness(
       state: StateType,
@@ -174,6 +181,12 @@ export const applicationSlice = createSlice({
     ) {
       state.language = action.payload.language;
     },
+    setOffset(
+      state: StateType,
+      action: PayloadAction<{ offset: { x: number; y: number } }>
+    ) {
+      state.offset = action.payload.offset;
+    },
     setOperation(
       state: StateType,
       action: PayloadAction<{ operation: ToolType }>
@@ -237,6 +250,19 @@ export const applicationSlice = createSlice({
     setVibrance(state: StateType, action: PayloadAction<{ vibrance: number }>) {
       state.vibrance = action.payload.vibrance;
     },
+    setZoomSelection(
+      state: StateType,
+      action: PayloadAction<{
+        zoomSelection: {
+          dragging: boolean;
+          minimum: { x: number; y: number } | undefined;
+          maximum: { x: number; y: number } | undefined;
+          selecting: boolean;
+        };
+      }>
+    ) {
+      state.zoomSelection = action.payload.zoomSelection;
+    },
   },
   extraReducers: {
     ["thunks/loadLayersModel/fulfilled"]: (
@@ -253,7 +279,7 @@ export const {
   deleteImageInstance,
   replaceImageInstance,
   setAnnotated,
-  setBoundingClientRectWidth,
+  setBoundingClientRect,
   setBrightness,
   setCategories,
   setCategoryVisibility,
@@ -265,6 +291,7 @@ export const {
   setImageName,
   setInvertMode,
   setLanguage,
+  setOffset,
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,
@@ -276,4 +303,5 @@ export const {
   setStageScale,
   setStageWidth,
   setVibrance,
+  setZoomSelection,
 } = applicationSlice.actions;

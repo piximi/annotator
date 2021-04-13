@@ -6,6 +6,7 @@ import { AnnotationType } from "../../../../../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
 import {
   categoriesSelector,
+  stageScaleSelector,
   toolTypeSelector,
 } from "../../../../../../store/selectors";
 import Konva from "konva";
@@ -32,6 +33,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
   const categories = useSelector(categoriesSelector);
   const toolType = useSelector(toolTypeSelector);
+  const stageScale = useSelector(stageScaleSelector);
 
   const fill = _.find(
     categories,
@@ -67,6 +69,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       opacity={0.5}
       points={annotation.contour}
       ref={ref}
+      scale={{ x: stageScale, y: stageScale }}
       strokeWidth={1}
     />
   );

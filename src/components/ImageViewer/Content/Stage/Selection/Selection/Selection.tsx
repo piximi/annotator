@@ -9,6 +9,7 @@ import {
   PolygonalAnnotationTool,
   QuickAnnotationTool,
   RectangularAnnotationTool,
+  Tool,
 } from "../../../../../../image/Tool";
 import { EllipticalSelection } from "../EllipticalSelection";
 import { ToolType } from "../../../../../../types/ToolType";
@@ -20,10 +21,7 @@ import { RectangularSelection } from "../RectangularSelection";
 import { ColorSelection } from "../ColorSelection/ColorSelection";
 import { QuickSelection } from "../QuickSelection/QuickSelection";
 import { PenSelection } from "../PenSelection";
-
-import { ZoomTool } from "../../../../../../image/Tool/ZoomTool";
 import { ZoomSelection } from "../ZoomSelection";
-import { Tool } from "../../../../../../image/Tool";
 
 type SelectionProps = {
   tool?: Tool;
@@ -55,7 +53,7 @@ export const Selection = ({ tool, toolType }: SelectionProps) => {
         <RectangularSelection operator={tool as RectangularAnnotationTool} />
       );
     case ToolType.Zoom:
-      return <ZoomSelection operator={tool as ZoomTool} />;
+      return <ZoomSelection />;
     case ToolType.QuickAnnotation:
       return <QuickSelection operator={tool as QuickAnnotationTool} />;
     default:

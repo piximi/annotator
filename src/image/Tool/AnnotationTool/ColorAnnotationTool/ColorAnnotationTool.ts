@@ -34,19 +34,15 @@ export class ColorAnnotationTool extends AnnotationTool {
   }
 
   onMouseDown(position: { x: number; y: number }) {
-    if (!this.stagedImageShape) return;
-
     this.annotated = false;
     this.annotating = true;
     this.tolerance = 1;
     this.initialPosition = position;
     this.toolTipPosition = position;
 
-    const { x, y } = this.toImageSpace(position);
-
     this.toleranceMap = makeFloodMap({
-      x,
-      y,
+      x: Math.floor(position.x),
+      y: Math.floor(position.y),
       image: this.image!,
     });
 
@@ -180,8 +176,6 @@ export class ColorAnnotationTool extends AnnotationTool {
     );
     let roi = overlay.getRoiManager();
 
-    if (!this.stagedImageShape) return;
-
     // Use the watershed function with a single seed to determine the selected region.
     // @ts-ignore
     roi.fromWaterShed({
@@ -193,14 +187,14 @@ export class ColorAnnotationTool extends AnnotationTool {
   };
 
   private updateOverlay(position: { x: number; y: number }) {
-    const { x, y } = this.toImageSpace(position);
-
     const roi = this.fromFlood({
-      x: x,
-      y: y,
+      x: Math.floor(position.x),
+      y: Math.floor(position.y),
       image: this.toleranceMap!,
       tolerance: this.tolerance,
     });
+
+    console.info(roi);
 
     // @ts-ignore
     this.roiMask = roi.getMasks()[0];
@@ -210,17 +204,19 @@ export class ColorAnnotationTool extends AnnotationTool {
     if (!this.roiMask) return;
 
     // @ts-ignore
-    this.offset = this.toStageSpace({
+    this.offset = {
       // @ts-ignore
       x: this.roiMask.position[0],
       // @ts-ignore
       y: this.roiMask.position[1],
-    });
+    };
 
     this.overlayData = ColorAnnotationTool.colorOverlay(
       this.roiMask,
-      { x, y },
+      position,
       "red"
     );
+
+    console.info(this.roiMask.toDataURL());
   }
 }

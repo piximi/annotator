@@ -9,18 +9,12 @@ export class RectangularAnnotationTool extends AnnotationTool {
   computeBoundingBox(): [number, number, number, number] | undefined {
     if (!this.origin || !this.width || !this.height) return undefined;
 
-    if (!this.stagedImageShape) return undefined;
-
-    //true image coordinates
-    const origin = this.toImageSpace(this.origin);
-    const width = Math.floor(
-      (this.width * this.image.width) / this.stagedImageShape.width
-    );
-    const height = Math.floor(
-      (this.height * this.image.height) / this.stagedImageShape.height
-    );
-
-    return [origin.x, origin.y, origin.x + width, origin.y + height];
+    return [
+      this.origin.x,
+      this.origin.y,
+      this.origin.x + this.width,
+      this.origin.y + this.height,
+    ];
   }
 
   deselect() {
@@ -43,9 +37,7 @@ export class RectangularAnnotationTool extends AnnotationTool {
     } else {
       this.resize(position);
 
-      this.points = this.translateStagedPointsToImagePoints(
-        this.convertToPoints()
-      );
+      this.points = this.convertToPoints();
 
       this._contour = this.points;
       this._mask = this.computeMask();
@@ -67,9 +59,7 @@ export class RectangularAnnotationTool extends AnnotationTool {
     if (this.width) {
       this.resize(position);
 
-      this.points = this.translateStagedPointsToImagePoints(
-        this.convertToPoints()
-      );
+      this.points = this.convertToPoints();
 
       this._contour = this.points;
       this._mask = this.computeMask();

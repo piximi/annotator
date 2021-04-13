@@ -2,6 +2,8 @@ import * as ReactKonva from "react-konva";
 import React from "react";
 import { PolygonalAnnotationTool } from "../../../../../../image/Tool";
 import { useMarchingAnts } from "../../../../../../hooks";
+import { useSelector } from "react-redux";
+import { stageScaleSelector } from "../../../../../../store/selectors";
 
 type PolygonalSelectionProps = {
   operator: PolygonalAnnotationTool;
@@ -9,6 +11,13 @@ type PolygonalSelectionProps = {
 
 export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
   const dashOffset = useMarchingAnts();
+
+  const stageScale = useSelector(stageScaleSelector);
+
+  if (!operator.origin) return <React.Fragment />;
+
+  const x = operator.origin.x * stageScale;
+  const y = operator.origin.y * stageScale;
 
   return (
     <ReactKonva.Group>
@@ -18,8 +27,8 @@ export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
           radius={3}
           stroke="black"
           strokeWidth={1}
-          x={operator.origin.x}
-          y={operator.origin.y}
+          x={x}
+          y={y}
         />
       )}
 
@@ -29,13 +38,14 @@ export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
           radius={3}
           stroke="white"
           strokeWidth={1}
-          x={operator.anchor.x}
-          y={operator.anchor.y}
+          x={x}
+          y={y}
         />
       )}
 
       <ReactKonva.Line
         points={operator.buffer}
+        scale={{ x: stageScale, y: stageScale }}
         stroke="black"
         strokeWidth={1}
       />
@@ -43,6 +53,7 @@ export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
       <ReactKonva.Line
         dash={[4, 2]}
         dashOffset={-dashOffset}
+        scale={{ x: stageScale, y: stageScale }}
         stroke="white"
         points={operator.buffer}
         strokeWidth={1}

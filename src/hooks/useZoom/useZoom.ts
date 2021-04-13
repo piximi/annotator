@@ -1,5 +1,3 @@
-import Konva from "konva";
-import React from "react";
 import { KonvaEventObject } from "konva/types/Node";
 import { useDispatch, useSelector } from "react-redux";
 import { ToolType } from "../../types/ToolType";
@@ -13,10 +11,7 @@ import {
 } from "../../store/selectors";
 import { imageWidthSelector } from "../../store/selectors/imageWidthSelector";
 
-export const useZoom = (
-  stageRef: React.RefObject<Konva.Stage>,
-  imageRef: React.RefObject<Konva.Image>
-) => {
+export const useZoom = () => {
   const delta = 10;
   const scaleBy = 1.25;
 
@@ -52,83 +47,56 @@ export const useZoom = (
     );
   };
 
-  // this function will return pointer position relative to the passed node
-  const getRelativePointerPosition = () => {
-    if (!imageRef || !imageRef.current) return;
-
-    const transform = imageRef.current.getAbsoluteTransform().copy();
-    // to detect relative position we need to invert transform
-    transform.invert();
-
-    const stage = imageRef.current.getStage();
-
-    if (!stage) return;
-
-    // get pointer (say mouse or touch) position
-    const pos = stage.getPointerPosition();
-
-    if (!pos) return;
-
-    // now we can find relative point
-    return transform.point(pos);
-  };
-
-  const onMouseDown = () => {
+  const onMouseDown = (position: { x: number; y: number }) => {
     if (toolType !== ToolType.Zoom) return;
-
-    const relative = getRelativePointerPosition();
 
     dispatch(
       setZoomSelection({
         zoomSelection: {
           ...zoomSelection,
           dragging: false,
-          minimum: relative,
+          minimum: position,
           selecting: true,
         },
       })
     );
   };
 
-  const onMouseMove = () => {
+  const onMouseMove = (position: { x: number; y: number }) => {
     if (mode === ZoomModeType.Out) return;
 
     if (!zoomSelection.selecting) return;
 
-    const relative = getRelativePointerPosition();
-
-    if (!relative || !zoomSelection.minimum) return;
+    if (!position || !zoomSelection.minimum) return;
 
     dispatch(
       setZoomSelection({
         zoomSelection: {
           ...zoomSelection,
-          dragging: Math.abs(relative.x - zoomSelection.minimum.x) >= delta,
-          maximum: relative,
+          dragging: Math.abs(position.x - zoomSelection.minimum.x) >= delta,
+          maximum: position,
         },
       })
     );
   };
 
-  const onMouseUp = () => {
+  const onMouseUp = (position: { x: number; y: number }) => {
     if (!imageWidth) return;
 
     if (!zoomSelection.selecting) return;
 
     if (zoomSelection.dragging) {
-      const relative = getRelativePointerPosition();
-
-      if (!relative) return;
+      if (!position) return;
 
       dispatch(
         setZoomSelection({
-          zoomSelection: { ...zoomSelection, maximum: relative },
+          zoomSelection: { ...zoomSelection, maximum: position },
         })
       );
 
       if (!zoomSelection.minimum) return;
 
-      const selectedWidth = relative.x - zoomSelection.minimum.x;
+      const selectedWidth = position.x - zoomSelection.minimum.x;
 
       zoomAndOffset(
         {
@@ -138,11 +106,7 @@ export const useZoom = (
         imageWidth / selectedWidth / stageScale
       );
     } else {
-      zoomAndOffset(
-        getRelativePointerPosition(),
-        scaleBy,
-        mode === ZoomModeType.In
-      );
+      zoomAndOffset(position, scaleBy, mode === ZoomModeType.In);
     }
 
     dispatch(
@@ -153,7 +117,12 @@ export const useZoom = (
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
-    zoomAndOffset(getRelativePointerPosition(), scaleBy, event.evt.deltaY > 0);
+    if (!imageWidth) return;
+    zoomAndOffset(
+      { x: imageWidth / 2, y: imageWidth / 2 },
+      scaleBy,
+      event.evt.deltaY > 0
+    );
   };
 
   return {

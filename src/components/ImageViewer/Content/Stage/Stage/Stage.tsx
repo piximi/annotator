@@ -76,7 +76,7 @@ export const Stage = () => {
     onMouseMove: onZoomMouseMove,
     onMouseDown: onZoomMouseDown,
     onWheel: onZoomWheel,
-  } = useZoom(stageRef, imageRef);
+  } = useZoom();
 
   const [annotationTool] = useAnnotationTool();
 
@@ -364,8 +364,18 @@ export const Stage = () => {
     const func = () => {
       if (toolType === ToolType.Pointer) return;
 
+      if (!stageRef || !stageRef.current) return;
+
+      const position = stageRef.current.getPointerPosition();
+
+      if (!position) return;
+
+      const relative = getRelativePointerPosition(position);
+
+      if (!relative) return;
+
       if (toolType === ToolType.Zoom) {
-        onZoomMouseDown();
+        onZoomMouseDown(relative);
       } else {
         if (annotated) deselectAnnotation();
 
@@ -377,15 +387,7 @@ export const Stage = () => {
           selectedAnnotationRef.current = null;
         }
 
-        if (!annotationTool || !stageRef || !stageRef.current) return;
-
-        const position = stageRef.current.getPointerPosition();
-
-        if (!position) return;
-
-        const relative = getRelativePointerPosition(position);
-
-        if (!relative) return;
+        if (!annotationTool) return;
 
         annotationTool.onMouseDown(relative);
 
@@ -398,20 +400,22 @@ export const Stage = () => {
 
   const onMouseMove = useMemo(() => {
     const func = () => {
+      if (!stageRef || !stageRef.current) return;
+
+      const position = stageRef.current.getPointerPosition();
+
+      if (!position) return;
+
+      const relative = getRelativePointerPosition(position);
+
+      setCurrentPosition(relative);
+
+      if (!relative) return;
+
       if (toolType === ToolType.Zoom) {
-        onZoomMouseMove();
+        onZoomMouseMove(relative);
       } else {
-        if (!annotationTool || !stageRef || !stageRef.current) return;
-
-        const position = stageRef.current.getPointerPosition();
-
-        if (!position) return;
-
-        const relative = getRelativePointerPosition(position);
-
-        setCurrentPosition(relative);
-
-        if (!relative) return;
+        if (!annotationTool) return;
 
         annotationTool.onMouseMove(relative);
 
@@ -424,18 +428,20 @@ export const Stage = () => {
 
   const onMouseUp = useMemo(() => {
     const func = () => {
+      if (!stageRef || !stageRef.current) return;
+
+      const position = stageRef.current.getPointerPosition();
+
+      if (!position) return;
+
+      const relative = getRelativePointerPosition(position);
+
+      if (!relative) return;
+
       if (toolType === ToolType.Zoom) {
-        onZoomMouseUp();
+        onZoomMouseUp(relative);
       } else {
-        if (!annotationTool || !stageRef || !stageRef.current) return;
-
-        const position = stageRef.current.getPointerPosition();
-
-        if (!position) return;
-
-        const relative = getRelativePointerPosition(position);
-
-        if (!relative) return;
+        if (!annotationTool) return;
 
         annotationTool.onMouseUp(relative);
 

@@ -19,17 +19,14 @@ export const Stage = () => {
   const stageWidth = useSelector(stageWidthSelector);
   const stageHeight = useSelector(stageHeightSelector);
 
-  const { onMouseDown, onMouseMove, onMouseUp, onWheel } = useZoom(
-    stageRef,
-    imageRef
-  );
+  const { onMouseDown, onMouseMove, onMouseUp, onWheel } = useZoom();
 
   return (
     <ReactKonva.Stage
       height={stageHeight}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
+      // onMouseDown={onMouseDown}
+      // onMouseMove={onMouseMove}
+      // onMouseUp={onMouseUp}
       onWheel={onWheel}
       ref={stageRef}
       width={stageWidth}

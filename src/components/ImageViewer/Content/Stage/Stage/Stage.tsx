@@ -437,7 +437,7 @@ export const Stage = () => {
   }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
 
   const onMouseUp = useMemo(() => {
-    const func = () => {
+    const func = async () => {
       if (!stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
@@ -458,6 +458,11 @@ export const Stage = () => {
       } else {
         if (!annotationTool) return;
 
+        if (toolType === ToolType.ObjectAnnotation) {
+          await (annotationTool as ObjectAnnotationTool).onMouseUp(
+            rawImagePosition
+          );
+        }
         annotationTool.onMouseUp(rawImagePosition);
 
         update();

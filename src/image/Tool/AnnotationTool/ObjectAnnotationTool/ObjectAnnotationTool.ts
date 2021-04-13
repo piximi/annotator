@@ -57,12 +57,17 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
 
     this.annotating = false;
 
+    const width = Math.round(this.width);
+    const height = Math.round(this.height);
+
     const crop = this.image.crop({
       x: this.origin.x,
       y: this.origin.y,
-      width: this.width,
-      height: this.height,
+      width: width,
+      height: height,
     });
+
+    console.info(this.origin.x);
 
     const prediction = tensorflow.tidy(() => {
       if (crop) {
@@ -88,13 +93,10 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
             .sub(0.3)
             .sign()
             .relu()
-            .resizeBilinear([this.height, this.width])
+            .resizeBilinear([height, width])
             .pad([
-              [
-                this.origin.y,
-                this.image.height - (this.origin.y + this.height),
-              ],
-              [this.origin.x, this.image.width - (this.origin.x + this.width)],
+              [this.origin.y, this.image.height - (this.origin.y + height)],
+              [this.origin.x, this.image.width - (this.origin.x + width)],
               [0, 0],
             ]);
         }

@@ -16,21 +16,16 @@ export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
 
   if (!operator.origin) return <React.Fragment />;
 
-  const x = operator.origin.x * stageScale;
-  const y = operator.origin.y * stageScale;
-
   return (
     <ReactKonva.Group>
-      {operator.origin && (
-        <ReactKonva.Circle
-          fill="white"
-          radius={3}
-          stroke="black"
-          strokeWidth={1}
-          x={x}
-          y={y}
-        />
-      )}
+      <ReactKonva.Circle
+        fill="white"
+        radius={3}
+        stroke="black"
+        strokeWidth={1}
+        x={operator.origin.x * stageScale}
+        y={operator.origin.y * stageScale}
+      />
 
       {operator.anchor && (
         <ReactKonva.Circle
@@ -38,8 +33,8 @@ export const PolygonalSelection = ({ operator }: PolygonalSelectionProps) => {
           radius={3}
           stroke="white"
           strokeWidth={1}
-          x={x}
-          y={y}
+          x={operator.anchor.x * stageScale}
+          y={operator.anchor.y * stageScale}
         />
       )}
 

@@ -14,10 +14,7 @@ export const MagneticSelection = ({ operator }: MagneticSelectionProps) => {
 
   const stageScale = useSelector(stageScaleSelector);
 
-  if (!operator.origin) return null;
-
-  const x = operator.origin.x * stageScale;
-  const y = operator.origin.y * stageScale;
+  if (!operator.origin) return <React.Fragment />;
 
   return (
     <ReactKonva.Group>
@@ -26,8 +23,8 @@ export const MagneticSelection = ({ operator }: MagneticSelectionProps) => {
         radius={3}
         stroke="black"
         strokeWidth={1}
-        x={x}
-        y={y}
+        x={operator.origin.x * stageScale}
+        y={operator.origin.y * stageScale}
       />
 
       {operator.anchor && (
@@ -36,8 +33,8 @@ export const MagneticSelection = ({ operator }: MagneticSelectionProps) => {
           radius={3}
           stroke="white"
           strokeWidth={1}
-          x={x}
-          y={y}
+          x={operator.anchor.x * stageScale}
+          y={operator.anchor.y * stageScale}
         />
       )}
 

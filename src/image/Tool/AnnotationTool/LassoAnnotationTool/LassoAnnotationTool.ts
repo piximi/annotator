@@ -108,12 +108,14 @@ export class LassoAnnotationTool extends AnnotationTool {
       this.buffer = [...this.buffer, position.x, position.y];
 
       this.anchor = position;
+      console.info("setting anchor at position,", position);
 
       return;
     }
 
     if (this.origin && this.buffer && this.buffer.length > 0) {
       this.anchor = position;
+      console.info("setting anchor at position,", position);
       return;
     }
   }

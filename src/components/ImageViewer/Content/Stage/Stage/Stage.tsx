@@ -437,11 +437,7 @@ export const Stage = () => {
 
         if (!relative) return;
 
-        // if (toolType === ToolType.ObjectAnnotation) {
-        //   await (annotationTool as ObjectAnnotationTool).onMouseUp(relative);
-        // } else {
-        //   annotationTool.onMouseUp(relative);
-        // }
+        annotationTool.onMouseUp(relative);
 
         update();
       }

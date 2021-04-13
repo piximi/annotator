@@ -351,9 +351,9 @@ export const Stage = () => {
   }, [selectedAnnotationId]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
-    if (!stageRef || !stageRef.current) return;
+    if (!imageRef || !imageRef.current) return;
 
-    const transform = stageRef.current.getAbsoluteTransform().copy();
+    const transform = imageRef.current.getAbsoluteTransform().copy();
 
     transform.invert();
 

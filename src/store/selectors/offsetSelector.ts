@@ -1,5 +1,5 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 
-export const offsetSelector = ({ state }: { state: StateType }) => {
-  return state.offset;
+export const offsetSelector = ({ state }: { state: HistoryStateType }) => {
+  return state.present.offset;
 };

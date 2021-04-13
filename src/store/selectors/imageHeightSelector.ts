@@ -1,7 +1,7 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 
-export const imageHeightSelector = ({ state }: { state: StateType }) => {
-  if (!state.image) return;
+export const imageHeightSelector = ({ state }: { state: HistoryStateType }) => {
+  if (!state.present.image) return;
 
-  return state.image.shape.height * state.stageScale;
+  return state.present.image.shape.height * state.present.stageScale;
 };

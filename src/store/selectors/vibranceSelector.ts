@@ -1,5 +1,5 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 
-export const vibranceSelector = ({ state }: { state: StateType }) => {
-  return state.vibrance;
+export const vibranceSelector = ({ state }: { state: HistoryStateType }) => {
+  return state.present.vibrance;
 };

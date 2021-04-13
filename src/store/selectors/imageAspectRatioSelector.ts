@@ -1,7 +1,11 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 
-export const imageAspectRatioSelector = ({ state }: { state: StateType }) => {
-  if (!state.image || !state.image.shape) return;
+export const imageAspectRatioSelector = ({
+  state,
+}: {
+  state: HistoryStateType;
+}) => {
+  if (!state.present.image || !state.present.image.shape) return;
 
-  return state.image.shape.height / state.image.shape.width;
+  return state.present.image.shape.height / state.present.image.shape.width;
 };

@@ -88,8 +88,6 @@ export const useZoom = (
         },
       })
     );
-
-    console.info("After dispatch");
   };
 
   const onMouseMove = () => {

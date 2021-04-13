@@ -5,7 +5,6 @@ import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
   imageInstancesSelector,
-  imageSrcSelector,
   invertModeSelector,
   selectedCategroySelector,
   selectionModeSelector,
@@ -357,100 +356,83 @@ export const Stage = () => {
   };
 
   //FIXME not using useMemo() because could not pass event argument to it
-  const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
+  const onMouseDown = () => {
     if (toolType === ToolType.Pointer) return;
 
-    // if (event.target.getParent().className === "Transformer") {
-    //   onTransformerMouseDown();
-    //   return;
-    // }
+    if (toolType === ToolType.Zoom) {
+      onZoomMouseDown();
+    } else {
+      if (annotated) deselectAnnotation();
 
-    if (event.evt.button === 0) {
-      if (toolType === ToolType.Zoom) {
-        onZoomMouseDown();
-      } else {
-        if (annotated) deselectAnnotation();
-
-        if (selectionMode === AnnotationModeType.New)
-          selectedAnnotationRef.current = null;
-
-        if (selectionMode === AnnotationModeType.Add && !shiftPress)
-          selectedAnnotationRef.current = null;
-
-        if (!annotationTool || !stageRef || !stageRef.current) return;
-
-        const position = stageRef.current.getPointerPosition();
-
-        if (!position) return;
-
-        const relative = getRelativePointerPosition(position);
-
-        if (!relative) return;
-
-        annotationTool.onMouseDown(relative);
-
-        update();
+      if (selectionMode === AnnotationModeType.New) {
+        selectedAnnotationRef.current = null;
       }
+
+      if (selectionMode === AnnotationModeType.Add && !shiftPress) {
+        selectedAnnotationRef.current = null;
+      }
+
+      if (!annotationTool || !stageRef || !stageRef.current) return;
+
+      const position = stageRef.current.getPointerPosition();
+
+      if (!position) return;
+
+      const relative = getRelativePointerPosition(position);
+
+      if (!relative) return;
+
+      annotationTool.onMouseDown(relative);
+
+      update();
     }
   };
 
-  const onMouseMove = useMemo(() => {
-    const func = () => {
-      if (toolType === ToolType.Zoom) {
-        onZoomMouseMove();
-      } else {
-        if (!annotationTool || !stageRef || !stageRef.current) return;
+  const onMouseMove = () => {
+    if (toolType === ToolType.Zoom) {
+      onZoomMouseMove();
+    } else {
+      if (!annotationTool || !stageRef || !stageRef.current) return;
 
-        const position = stageRef.current.getPointerPosition();
+      const position = stageRef.current.getPointerPosition();
 
-        if (!position) return;
+      if (!position) return;
 
-        const relative = getRelativePointerPosition(position);
+      const relative = getRelativePointerPosition(position);
 
-        setCurrentPosition(relative);
+      setCurrentPosition(relative);
 
-        if (!relative) return;
+      if (!relative) return;
 
-        annotationTool.onMouseMove(relative);
+      annotationTool.onMouseMove(relative);
 
-        update();
-      }
-    };
+      update();
+    }
+  };
 
-    const throttled = _.throttle(func, 5);
+  const onMouseUp = () => {
+    if (toolType === ToolType.Zoom) {
+      onZoomMouseUp();
+    } else {
+      if (!annotationTool || !stageRef || !stageRef.current) return;
 
-    return () => throttled();
-  }, [annotationTool, toolType]);
+      const position = stageRef.current.getPointerPosition();
 
-  const onMouseUp = useMemo(() => {
-    const func = async () => {
-      if (toolType === ToolType.Zoom) {
-        onZoomMouseUp();
-      } else {
-        if (!annotationTool || !stageRef || !stageRef.current) return;
+      if (!position) return;
 
-        const position = stageRef.current.getPointerPosition();
+      const relative = getRelativePointerPosition(position);
 
-        if (!position) return;
+      if (!relative) return;
 
-        const relative = getRelativePointerPosition(position);
+      // if (toolType === ToolType.ObjectAnnotation) {
+      //   await (annotationTool as ObjectAnnotationTool).onMouseUp(relative);
+      // } else {
+      //   annotationTool.onMouseUp(relative);
+      // }
 
-        if (!relative) return;
-
-        if (toolType === ToolType.ObjectAnnotation)
-          await (annotationTool as ObjectAnnotationTool).onMouseUp(relative);
-        else {
-          annotationTool.onMouseUp(relative);
-        }
-
-        update();
-      }
-    };
-
-    const throttled = _.throttle(func, 10);
-
-    return () => throttled();
-  }, [annotationTool, toolType]);
+      update();
+    }
+  };
 
   useEffect(() => {
     if (!enterPress) return;

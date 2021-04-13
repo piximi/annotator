@@ -21,22 +21,14 @@ export abstract class AnnotationTool extends Tool {
   origin?: { x: number; y: number } = undefined;
   buffer?: Array<number> = [];
 
-  stagedImageShape?: { width: number; height: number } = undefined;
-  stagedImagePosition: { x: number; y: number } = { x: 0, y: 0 };
-
   protected _boundingBox?: [number, number, number, number];
   protected _contour?: Array<number>;
   protected _mask?: Array<number>;
 
-  constructor(
-    image: ImageJS.Image,
-    stagedImagePosition: { x: number; y: number },
-    stagedImageShape: { width: number; height: number }
-  ) {
+  constructor(image: ImageJS.Image) {
     super(image);
 
     this.manager = image.getRoiManager();
-    this.stagedImageShape = stagedImageShape;
   }
 
   /*
@@ -81,7 +73,7 @@ export abstract class AnnotationTool extends Tool {
 
     this.buffer.splice(anchorIndex, segment.length, ...segment);
 
-    this._contour = this.translateStagedPointsToImagePoints(this.buffer);
+    this._contour = this.buffer;
     this._mask = this.computeMask();
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
@@ -235,57 +227,6 @@ export abstract class AnnotationTool extends Tool {
   abstract onMouseMove(position: { x: number; y: number }): void;
 
   abstract onMouseUp(position: { x: number; y: number }): void;
-
-  /**
-   * Convert the points in the staged image coordinates to actual image coordinates.
-   */
-  protected translateStagedPointsToImagePoints(points: Array<number>) {
-    const stagedPoints = _.chunk(points, 2);
-    return _.flatten(
-      _.map(stagedPoints, (el: Array<number>) => {
-        const imagePoints = this.toImageSpace({ x: el[0], y: el[1] });
-        return [imagePoints.x, imagePoints.y];
-      })
-    );
-  }
-
-  /**
-   * From coordinates in the staged image to coordinates in image space
-   */
-  protected toImageSpace(position: { x: number; y: number }) {
-    if (!this.stagedImageShape) return position;
-
-    const x_im = Math.floor(
-      ((position.x - this.stagedImagePosition.x) /
-        this.stagedImageShape.width) *
-        this.image.width
-    );
-    const y_im = Math.floor(
-      ((position.y - this.stagedImagePosition.y) /
-        this.stagedImageShape.height) *
-        this.image.height
-    );
-
-    return { x: x_im, y: y_im };
-  }
-
-  /**
-   * From coordinates of the original image to the coordinates in the staged image
-   */
-  protected toStageSpace(position: { x: number; y: number }) {
-    if (!this.stagedImageShape) return position;
-
-    const x_stage = Math.floor(
-      (position.x * this.stagedImageShape.width) / this.image.width +
-        this.stagedImagePosition.x
-    );
-    const y_stage = Math.floor(
-      (position.y * this.stagedImageShape.height) / this.image.height +
-        this.stagedImagePosition.y
-    );
-
-    return { x: x_stage, y: y_stage };
-  }
 
   annotate(category: CategoryType): void {
     if (!this.boundingBox || !this.contour || !this.mask) return;

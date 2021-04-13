@@ -75,7 +75,7 @@ export class PenAnnotationTool extends AnnotationTool {
 
     this.annotating = false;
 
-    this.points = this.translateStagedPointsToImagePoints(this.buffer);
+    this.points = this.buffer;
 
     this.computeCircleData();
 
@@ -99,17 +99,8 @@ export class PenAnnotationTool extends AnnotationTool {
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
   }
 
-  static async setup(
-    image: ImageJS.Image,
-    brushSize: number,
-    stagedImagePosition: { x: number; y: number },
-    stagedImageShape: { width: number; height: number }
-  ) {
-    const operator = new PenAnnotationTool(
-      image,
-      stagedImagePosition,
-      stagedImageShape
-    );
+  static async setup(image: ImageJS.Image, brushSize: number) {
+    const operator = new PenAnnotationTool(image);
 
     operator.brushSize = brushSize;
 

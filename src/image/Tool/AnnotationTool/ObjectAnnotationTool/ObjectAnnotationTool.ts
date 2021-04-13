@@ -33,16 +33,8 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
     await this.predict();
   }
 
-  static async compile(
-    image: ImageJS.Image,
-    stagedImagePosition: { x: number; y: number },
-    stagedImageShape: { width: number; height: number }
-  ) {
-    const instance = new ObjectAnnotationTool(
-      image,
-      stagedImagePosition,
-      stagedImageShape
-    );
+  static async compile(image: ImageJS.Image) {
+    const instance = new ObjectAnnotationTool(image);
 
     const pathname =
       "https://raw.githubusercontent.com/zaidalyafeai/HostedModels/master/unet-128/model.json";
@@ -63,26 +55,19 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
   private async predict() {
     if (!this.image || !this.origin || !this.width || !this.height) return;
 
-    if (!this.stagedImageShape) return;
-
     this.annotating = false;
 
-    const origin = this.toImageSpace(this.origin);
-
-    const width = Math.floor(
-      (this.width * this.image.width) / this.stagedImageShape.width
-    );
-
-    const height = Math.floor(
-      (this.height * this.image.height) / this.stagedImageShape.height
-    );
+    const width = Math.round(this.width);
+    const height = Math.round(this.height);
 
     const crop = this.image.crop({
-      x: origin.x,
-      y: origin.y,
+      x: this.origin.x,
+      y: this.origin.y,
       width: width,
       height: height,
     });
+
+    console.info(this.origin.x);
 
     const prediction = tensorflow.tidy(() => {
       if (crop) {
@@ -94,6 +79,8 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
         const resized = tensorflow.image.resizeBilinear(cropped, size);
         const standardized = resized.div(tensorflow.scalar(255));
         const batch = standardized.expandDims(0);
+
+        if (!this.height || !this.width || !this.origin) return;
 
         if (this.graph) {
           const prediction = this.graph.predict(
@@ -108,8 +95,8 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
             .relu()
             .resizeBilinear([height, width])
             .pad([
-              [origin.y, this.image.height - (origin.y + height)],
-              [origin.x, this.image.width - (origin.x + width)],
+              [this.origin.y, this.image.height - (this.origin.y + height)],
+              [this.origin.x, this.image.width - (this.origin.x + width)],
               [0, 0],
             ]);
         }

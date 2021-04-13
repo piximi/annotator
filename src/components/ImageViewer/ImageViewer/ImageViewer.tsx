@@ -6,7 +6,7 @@ import { ImageViewerAppBar } from "../ImageViewerAppBar";
 import { CategoriesList } from "../CategoriesList";
 import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
-import { echoThunk, setImage, applicationSlice } from "../../../store";
+import { setImage, applicationSlice } from "../../../store";
 import { Content } from "../Content";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
@@ -14,7 +14,6 @@ import { theme } from "./theme";
 import * as ImageJS from "image-js";
 import { ShapeType } from "../../../types/ShapeType";
 import { loadLayersModelThunk } from "../../../store/thunks";
-import { Main } from "../Main/Main/Main";
 
 type ImageViewerProps = {
   image?: ImageType;

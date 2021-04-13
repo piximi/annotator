@@ -1,1 +1,1 @@
-export { useSelectToolsKeyboardShortcuts } from "./useSelectToolsKeyboardShortcuts";
+export { useKeyboardShortcuts } from "./useKeyboardShortcuts";

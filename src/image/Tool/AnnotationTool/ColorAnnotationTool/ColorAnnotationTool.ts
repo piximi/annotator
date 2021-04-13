@@ -204,12 +204,12 @@ export class ColorAnnotationTool extends AnnotationTool {
     if (!this.roiMask) return;
 
     // @ts-ignore
-    this.offset = this.toStageSpace({
+    this.offset = {
       // @ts-ignore
       x: this.roiMask.position[0],
       // @ts-ignore
       y: this.roiMask.position[1],
-    });
+    };
 
     this.overlayData = ColorAnnotationTool.colorOverlay(
       this.roiMask,

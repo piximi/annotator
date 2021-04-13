@@ -12,6 +12,7 @@ import {
   stageScaleSelector,
   stageWidthSelector,
   toolTypeSelector,
+  zoomSelectionSelector,
 } from "../../../../../store/selectors";
 import { applicationSlice, setSelectedAnnotation } from "../../../../../store";
 import {
@@ -91,6 +92,10 @@ export const Stage = () => {
   const annotations = useSelector(imageInstancesSelector);
 
   const annotated = useSelector(annotatedSelector);
+
+  const { dragging: zoomDragging, selecting: zoomSelecting } = useSelector(
+    zoomSelectionSelector
+  );
 
   const backspacePress = useKeyPress("Backspace");
   const deletePress = useKeyPress("Delete");
@@ -355,84 +360,96 @@ export const Stage = () => {
     return transform.point(position);
   };
 
-  //FIXME not using useMemo() because could not pass event argument to it
-  const onMouseDown = () => {
-    if (toolType === ToolType.Pointer) return;
+  const onMouseDown = useMemo(() => {
+    const func = () => {
+      if (toolType === ToolType.Pointer) return;
 
-    if (toolType === ToolType.Zoom) {
-      onZoomMouseDown();
-    } else {
-      if (annotated) deselectAnnotation();
+      if (toolType === ToolType.Zoom) {
+        onZoomMouseDown();
+      } else {
+        if (annotated) deselectAnnotation();
 
-      if (selectionMode === AnnotationModeType.New) {
-        selectedAnnotationRef.current = null;
+        if (selectionMode === AnnotationModeType.New) {
+          selectedAnnotationRef.current = null;
+        }
+
+        if (selectionMode === AnnotationModeType.Add && !shiftPress) {
+          selectedAnnotationRef.current = null;
+        }
+
+        if (!annotationTool || !stageRef || !stageRef.current) return;
+
+        const position = stageRef.current.getPointerPosition();
+
+        if (!position) return;
+
+        const relative = getRelativePointerPosition(position);
+
+        if (!relative) return;
+
+        annotationTool.onMouseDown(relative);
+
+        update();
       }
+    };
+    const throttled = _.throttle(func, 5);
+    return () => throttled();
+  }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
 
-      if (selectionMode === AnnotationModeType.Add && !shiftPress) {
-        selectedAnnotationRef.current = null;
+  const onMouseMove = useMemo(() => {
+    const func = () => {
+      if (toolType === ToolType.Zoom) {
+        onZoomMouseMove();
+      } else {
+        if (!annotationTool || !stageRef || !stageRef.current) return;
+
+        const position = stageRef.current.getPointerPosition();
+
+        if (!position) return;
+
+        const relative = getRelativePointerPosition(position);
+
+        setCurrentPosition(relative);
+
+        if (!relative) return;
+
+        annotationTool.onMouseMove(relative);
+
+        update();
       }
+    };
+    const throttled = _.throttle(func, 5);
+    return () => throttled();
+  }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
 
-      if (!annotationTool || !stageRef || !stageRef.current) return;
+  const onMouseUp = useMemo(() => {
+    const func = () => {
+      if (toolType === ToolType.Zoom) {
+        onZoomMouseUp();
+      } else {
+        if (!annotationTool || !stageRef || !stageRef.current) return;
 
-      const position = stageRef.current.getPointerPosition();
+        const position = stageRef.current.getPointerPosition();
 
-      if (!position) return;
+        if (!position) return;
 
-      const relative = getRelativePointerPosition(position);
+        const relative = getRelativePointerPosition(position);
 
-      if (!relative) return;
+        if (!relative) return;
 
-      annotationTool.onMouseDown(relative);
+        // if (toolType === ToolType.ObjectAnnotation) {
+        //   await (annotationTool as ObjectAnnotationTool).onMouseUp(relative);
+        // } else {
+        //   annotationTool.onMouseUp(relative);
+        // }
 
-      update();
-    }
-  };
+        update();
+      }
+    };
+    const throttled = _.throttle(func, 10);
 
-  const onMouseMove = () => {
-    if (toolType === ToolType.Zoom) {
-      onZoomMouseMove();
-    } else {
-      if (!annotationTool || !stageRef || !stageRef.current) return;
-
-      const position = stageRef.current.getPointerPosition();
-
-      if (!position) return;
-
-      const relative = getRelativePointerPosition(position);
-
-      setCurrentPosition(relative);
-
-      if (!relative) return;
-
-      annotationTool.onMouseMove(relative);
-
-      update();
-    }
-  };
-
-  const onMouseUp = () => {
-    if (toolType === ToolType.Zoom) {
-      onZoomMouseUp();
-    } else {
-      if (!annotationTool || !stageRef || !stageRef.current) return;
-
-      const position = stageRef.current.getPointerPosition();
-
-      if (!position) return;
-
-      const relative = getRelativePointerPosition(position);
-
-      if (!relative) return;
-
-      // if (toolType === ToolType.ObjectAnnotation) {
-      //   await (annotationTool as ObjectAnnotationTool).onMouseUp(relative);
-      // } else {
-      //   annotationTool.onMouseUp(relative);
-      // }
-
-      update();
-    }
-  };
+    return () => throttled();
+  }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
 
   useEffect(() => {
     if (!enterPress) return;

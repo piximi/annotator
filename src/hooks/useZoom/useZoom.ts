@@ -117,6 +117,8 @@ export const useZoom = () => {
   };
 
   const onWheel = (event: KonvaEventObject<WheelEvent>) => {
+    if (toolType !== ToolType.Zoom) return;
+
     if (!imageWidth) return;
     zoomAndOffset(
       { x: imageWidth / 2, y: imageWidth / 2 },

@@ -6,6 +6,7 @@ import { LanguageType } from "./LanguageType";
 
 export type StateType = {
   annotated: boolean;
+  annotating: boolean;
   boundingClientRect: DOMRect;
   brightness: number;
   categories: Array<CategoryType>;

@@ -12,6 +12,7 @@ import * as tensorflow from "@tensorflow/tfjs";
 
 const initialState: StateType = {
   annotated: false,
+  annotating: true,
   boundingClientRect: new DOMRect(),
   brightness: 0,
   categories: [

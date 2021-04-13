@@ -44,6 +44,7 @@ import deleteAnnotationSoundEffect from "../../../../../sounds/pop-up-off.mp3";
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
 import { Layer } from "../Layer";
 import { ZoomSelection } from "../Selection/ZoomSelection";
+import { useKeyboardShortcuts } from "../../../../../hooks/useKeyboardShortcuts";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -544,6 +545,8 @@ export const Stage = () => {
   useEffect(() => {
     setTool(annotationTool);
   }, [annotationTool, toolType]);
+
+  useKeyboardShortcuts();
 
   return (
     <ReactReduxContext.Consumer>

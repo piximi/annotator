@@ -99,11 +99,11 @@ export const useKeyboardShortcuts = () => {
   useHotkeys("1,2,3,4,5,6,7,8,9", (event: KeyboardEvent) => {
     const index = parseInt(event.key) - 1;
 
-    const category = categories[index];
+    const selectedCategory = categories[index];
 
-    if (!category) return;
+    if (!selectedCategory) return;
 
-    dispatch(setSeletedCategory({ selectedCategory: category.id }));
+    dispatch(setSeletedCategory({ selectedCategory: selectedCategory.id }));
   });
 
   /*

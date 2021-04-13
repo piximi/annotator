@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import * as ReactKonva from "react-konva";
 import { useSelector } from "react-redux";
-import { imageWidthSelector } from "../../../../store/selectors/imageWidthSelector";
-import { imageHeightSelector } from "../../../../store/selectors/imageHeightSelector";
+import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
+import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import {
   stageHeightSelector,
   stageWidthSelector,
   zoomToolOptionsSelector,
-} from "../../../../store/selectors";
-import { offsetSelector } from "../../../../store/selectors/offsetSelector";
+} from "../../../../../store/selectors";
+import { offsetSelector } from "../../../../../store/selectors/offsetSelector";
 
 type LayerProps = {
   children?: React.ReactNode;

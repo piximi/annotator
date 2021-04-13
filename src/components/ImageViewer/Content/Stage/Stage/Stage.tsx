@@ -42,7 +42,7 @@ import useSound from "use-sound";
 import createAnnotationSoundEffect from "../../../../../sounds/pop-up-on.mp3";
 import deleteAnnotationSoundEffect from "../../../../../sounds/pop-up-off.mp3";
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
-import { Layer } from "../../../Main/Layer";
+import { Layer } from "../Layer";
 import { ZoomSelection } from "../Selection/ZoomSelection";
 
 export const Stage = () => {

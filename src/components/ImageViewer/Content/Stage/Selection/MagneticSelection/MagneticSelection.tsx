@@ -45,16 +45,16 @@ export const MagneticSelection = ({ operator }: MagneticSelectionProps) => {
         points={operator.buffer}
         scale={{ x: stageScale, y: stageScale }}
         stroke="black"
-        strokeWidth={1}
+        strokeWidth={1 / stageScale}
       />
 
       <ReactKonva.Line
-        dash={[4, 2]}
+        dash={[4 / stageScale, 2 / stageScale]}
         scale={{ x: stageScale, y: stageScale }}
         dashOffset={-dashOffset}
         stroke="white"
         points={operator.buffer}
-        strokeWidth={1}
+        strokeWidth={1 / stageScale}
       />
     </ReactKonva.Group>
   );

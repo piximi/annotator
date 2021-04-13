@@ -28,19 +28,19 @@ export const EllipticalSelection = ({ operator }: EllipticalSelectionProps) => {
         radiusY={operator.radius.y}
         scale={{ x: stageScale, y: stageScale }}
         stroke="black"
-        strokeWidth={1}
+        strokeWidth={1 / stageScale}
         x={x}
         y={y}
       />
 
       <ReactKonva.Ellipse
-        dash={[4, 2]}
+        dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
         radiusX={operator.radius.x}
         radiusY={operator.radius.y}
         scale={{ x: stageScale, y: stageScale }}
         stroke="white"
-        strokeWidth={1}
+        strokeWidth={1 / stageScale}
         x={x}
         y={y}
       />

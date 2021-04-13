@@ -26,18 +26,6 @@ export const ZoomSelection = ({}) => {
         x={minimum.x}
         y={minimum.y}
       />
-
-      {/*<ReactKonva.Rect*/}
-      {/*  dash={[4, 2]}*/}
-      {/*  dashOffset={-dashOffset}*/}
-      {/*  height={maximum.y - minimum.y}*/}
-      {/*  scale={{x: scale, y: scale }}*/}
-      {/*  stroke="white"*/}
-      {/*  strokeWidth={1}*/}
-      {/*  width={maximum.x - minimum.x}*/}
-      {/*  x={minimum.x}*/}
-      {/*  y={minimum.y}*/}
-      {/*/>*/}
     </React.Fragment>
   );
 };

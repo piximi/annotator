@@ -15,22 +15,22 @@ export const SelectedContour = ({ points }: SelectedContourProps) => {
   return (
     <React.Fragment>
       <ReactKonva.Line
-        dash={[4, 2]}
+        dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
         id="selected"
         points={points}
         scale={{ x: stageScale, y: stageScale }}
         stroke="black"
-        strokeWidth={1}
+        strokeWidth={1 / stageScale}
       />
 
       <ReactKonva.Line
-        dash={[4, 2]}
+        dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
         points={points}
         scale={{ x: stageScale, y: stageScale }}
         stroke="white"
-        strokeWidth={1}
+        strokeWidth={1 / stageScale}
       />
     </React.Fragment>
   );

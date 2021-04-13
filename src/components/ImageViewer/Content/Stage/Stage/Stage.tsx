@@ -374,6 +374,11 @@ export const Stage = () => {
 
       if (!relative) return;
 
+      const rawImagePosition = {
+        x: relative.x / stageScale,
+        y: relative.y / stageScale,
+      };
+
       if (toolType === ToolType.Zoom) {
         onZoomMouseDown(relative);
       } else {
@@ -389,7 +394,7 @@ export const Stage = () => {
 
         if (!annotationTool) return;
 
-        annotationTool.onMouseDown(relative);
+        annotationTool.onMouseDown(rawImagePosition);
 
         update();
       }
@@ -412,12 +417,17 @@ export const Stage = () => {
 
       if (!relative) return;
 
+      const rawImagePosition = {
+        x: relative.x / stageScale,
+        y: relative.y / stageScale,
+      };
+
       if (toolType === ToolType.Zoom) {
         onZoomMouseMove(relative);
       } else {
         if (!annotationTool) return;
 
-        annotationTool.onMouseMove(relative);
+        annotationTool.onMouseMove(rawImagePosition);
 
         update();
       }
@@ -438,12 +448,17 @@ export const Stage = () => {
 
       if (!relative) return;
 
+      const rawImagePosition = {
+        x: relative.x / stageScale,
+        y: relative.y / stageScale,
+      };
+
       if (toolType === ToolType.Zoom) {
         onZoomMouseUp(relative);
       } else {
         if (!annotationTool) return;
 
-        annotationTool.onMouseUp(relative);
+        annotationTool.onMouseUp(rawImagePosition);
 
         update();
       }

@@ -183,11 +183,13 @@ export const Stage = () => {
   useEffect(() => {
     if (toolType === ToolType.Zoom) return;
 
-    if (selectionMode === AnnotationModeType.New) return; // "New" mode
+    if (selectionMode === AnnotationModeType.New) return;
 
     setSelecting(false);
 
     if (!annotated || !annotationTool) return;
+
+    if (!annotationTool.annotated) return;
 
     let combinedMask, combinedContour;
 
@@ -216,7 +218,21 @@ export const Stage = () => {
     annotationTool.boundingBox = annotationTool.computeBoundingBoxFromContours(
       combinedContour
     );
-  }, [selectionMode, annotated]);
+
+    if (
+      !annotationTool.boundingBox ||
+      !annotationTool.contour ||
+      !annotationTool.mask
+    )
+      return;
+
+    selectedAnnotationRef.current = {
+      ...selectedInstance,
+      boundingBox: annotationTool.boundingBox,
+      contour: annotationTool.contour,
+      mask: annotationTool.mask,
+    };
+  }, [annotated]);
 
   useEffect(() => {
     if (toolType === ToolType.Zoom) return;
@@ -265,12 +281,18 @@ export const Stage = () => {
   useEffect(() => {
     if (!annotationTool) return;
 
-    if (annotationTool.annotated)
+    if (annotationTool.annotated) {
       dispatch(
         applicationSlice.actions.setAnnotated({
           annotated: annotationTool.annotated,
         })
       );
+
+      if (selectionMode !== AnnotationModeType.New) return;
+      annotationTool.annotate(selectedCategory);
+      if (!annotationTool.annotation) return;
+      selectedAnnotationRef.current = annotationTool.annotation;
+    }
 
     if (selectionMode === AnnotationModeType.New) return;
 
@@ -402,7 +424,15 @@ export const Stage = () => {
     };
     const throttled = _.throttle(func, 5);
     return () => throttled();
-  }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
+  }, [
+    annotated,
+    annotationTool,
+    selectionMode,
+    shiftPress,
+    toolType,
+    zoomDragging,
+    zoomSelecting,
+  ]);
 
   const onMouseMove = useMemo(() => {
     const func = () => {
@@ -582,20 +612,11 @@ export const Stage = () => {
                   />
                 )}
 
-              {annotated && annotationTool && annotationTool.contour && (
-                <SelectedContour points={annotationTool.contour} />
+              {selectedAnnotationRef && selectedAnnotationRef.current && (
+                <SelectedContour
+                  points={selectedAnnotationRef.current.contour}
+                />
               )}
-
-              {selectionMode !== AnnotationModeType.New &&
-                annotationTool &&
-                annotationTool.annotating &&
-                !annotationTool.annotated &&
-                selectedAnnotationRef &&
-                selectedAnnotationRef.current && (
-                  <SelectedContour
-                    points={selectedAnnotationRef.current.contour}
-                  />
-                )}
 
               <Annotations annotationTool={annotationTool} />
 

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { ToolType } from "../../types/ToolType";
 import { useSelector } from "react-redux";
 import { toolTypeSelector } from "../../store/selectors";
+import { useHotkeys } from "react-hotkeys-hook";
+import { setOperation } from "../../store";
 
 export const useHandTool = () => {
   const toolType = useSelector(toolTypeSelector);
@@ -15,6 +17,21 @@ export const useHandTool = () => {
       setDraggable(false);
     }
   }, [toolType]);
+
+  /*
+   * Temporarily select hand tool (Space)
+   */
+  useHotkeys("space", (event: KeyboardEvent) => {
+    if (event.type === "keydown") {
+      if (toolType === ToolType.Hand) return;
+
+      setDraggable(true);
+    }
+
+    if (event.type === "keyup") {
+      setDraggable(false);
+    }
+  });
 
   return { draggable };
 };

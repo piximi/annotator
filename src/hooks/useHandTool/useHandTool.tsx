@@ -16,21 +16,4 @@ export const useHandTool = () => {
       setDraggable(false);
     }
   }, [toolType]);
-
-  /*
-   * Temporarily select hand tool (Space)
-   */
-  useHotkeys("space", (event: KeyboardEvent) => {
-    if (event.type === "keydown") {
-      if (toolType === ToolType.Hand) return;
-
-      setDraggable(true);
-    }
-
-    if (event.type === "keyup") {
-      setDraggable(false);
-    }
-  });
-
-  return { draggable };
 };

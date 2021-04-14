@@ -16,4 +16,6 @@ export const useHandTool = () => {
       setDraggable(false);
     }
   }, [toolType]);
+
+  return { draggable };
 };

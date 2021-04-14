@@ -46,5 +46,5 @@ export const useBoundingClientRect = (target: React.RefObject<HTMLElement>) => {
     dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
     if (!image || !image.shape) return;
     dispatch(setStageScale({ stageScale: stageWidth / image.shape.width }));
-  }, [boundingClientRect, dispatch, stageWidth, image]);
+  }, [boundingClientRect, dispatch, stageWidth, image.shape]);
 };

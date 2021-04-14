@@ -10,6 +10,7 @@ import { toolTypeSelector } from "../../../../store/selectors";
 import { applicationSlice } from "../../../../store";
 import {
   ColorSelectionIcon,
+  HandIcon,
   EllipticalSelectionIcon,
   LassoSelectionIcon,
   MagneticSelectionIcon,
@@ -187,6 +188,20 @@ export const Tools = () => {
         </Tool>
 
         <Divider />
+
+        <Tool
+          name={t("Hand")}
+          onClick={() => {
+            dispatch(
+              applicationSlice.actions.setOperation({
+                operation: OperationType.Hand,
+              })
+            );
+          }}
+          selected={activeOperation === OperationType.Hand}
+        >
+          <HandIcon />
+        </Tool>
 
         <Tool
           name={t("Zoom")}

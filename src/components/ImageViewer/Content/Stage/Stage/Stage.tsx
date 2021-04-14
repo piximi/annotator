@@ -411,10 +411,6 @@ export const Stage = () => {
           selectedAnnotationRef.current = null;
         }
 
-        if (selectionMode === AnnotationModeType.Add && !shiftPress) {
-          selectedAnnotationRef.current = null;
-        }
-
         if (!annotationTool) return;
 
         annotationTool.onMouseDown(rawImagePosition);
@@ -428,7 +424,6 @@ export const Stage = () => {
     annotated,
     annotationTool,
     selectionMode,
-    shiftPress,
     toolType,
     zoomDragging,
     zoomSelecting,

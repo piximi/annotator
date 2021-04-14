@@ -94,6 +94,13 @@ export const useKeyboardShortcuts = () => {
   );
 
   /*
+   * Select arrange tool (V)
+   */
+  useHotkeys("v", () => {
+    dispatch(setOperation({ operation: ToolType.Pointer }));
+  });
+
+  /*
    * Select category (1-9)
    */
   useHotkeys("1,2,3,4,5,6,7,8,9", (event: KeyboardEvent) => {

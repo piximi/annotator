@@ -114,6 +114,13 @@ export const useKeyboardShortcuts = () => {
   });
 
   /*
+   * Select hand tool (H)
+   */
+  useHotkeys("h", () => {
+    dispatch(setOperation({ operation: ToolType.Hand }));
+  });
+
+  /*
    * Select lasso tool (L)
    */
   useHotkeys("l", () => {

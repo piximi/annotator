@@ -72,6 +72,16 @@ export const Stage = () => {
 
   const dispatch = useDispatch();
 
+  const [draggable, setDraggable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (toolType === ToolType.Hand) {
+      setDraggable(true);
+    } else {
+      setDraggable(false);
+    }
+  }, [toolType]);
+
   const {
     onMouseUp: onZoomMouseUp,
     onMouseMove: onZoomMouseMove,
@@ -577,6 +587,7 @@ export const Stage = () => {
     <ReactReduxContext.Consumer>
       {({ store }) => (
         <ReactKonva.Stage
+          draggable={draggable}
           height={stageHeight}
           onMouseDown={onMouseDown}
           onMouseMove={onMouseMove}

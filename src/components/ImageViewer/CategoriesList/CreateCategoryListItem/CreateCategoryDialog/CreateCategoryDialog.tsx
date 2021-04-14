@@ -4,7 +4,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorIcon } from "../../ColorIcon";
 import Grid from "@material-ui/core/Grid";
@@ -16,6 +16,7 @@ import { v4 } from "uuid";
 import { CategoryType } from "../../../../../types/CategoryType";
 import { categoriesSelector } from "../../../../../store/selectors";
 import { useTranslation } from "../../../../../hooks/useTranslation";
+import { useKeyPress } from "../../../../../hooks/useKeyPress";
 
 const COLORS = [
   "#f44336",
@@ -51,6 +52,8 @@ export const CreateCategoryDialog = ({
 
   const categories = useSelector(categoriesSelector);
 
+  const enterPress = useKeyPress("Enter");
+
   const [color, setColor] = React.useState<string>(sample(COLORS)!);
 
   const [name, setName] = useState<string>("");
@@ -77,6 +80,8 @@ export const CreateCategoryDialog = ({
       })
     );
 
+    setName("");
+
     onClose();
 
     setColor(sample(COLORS)!);
@@ -91,6 +96,11 @@ export const CreateCategoryDialog = ({
   };
 
   const t = useTranslation();
+
+  useEffect(() => {
+    if (!enterPress || !name) return;
+    onCreate();
+  }, [enterPress]);
 
   return (
     <Dialog fullWidth maxWidth="xs" onClose={onClose} open={open}>

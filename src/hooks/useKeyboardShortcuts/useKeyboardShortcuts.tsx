@@ -5,16 +5,13 @@ import {
   createdCategoriesSelector,
   toolTypeSelector,
 } from "../../store/selectors";
-import { useHotkeys, useIsHotkeyPressed } from "react-hotkeys-hook";
-import { useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export const useKeyboardShortcuts = () => {
   const dispatch = useDispatch();
 
   const categories = useSelector(createdCategoriesSelector);
   const toolType = useSelector(toolTypeSelector);
-
-  const isPressed = useIsHotkeyPressed();
 
   /*
    * Cycle lasso tools (Shift + L)

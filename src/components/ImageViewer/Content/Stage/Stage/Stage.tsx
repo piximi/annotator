@@ -387,6 +387,8 @@ export const Stage = () => {
     const func = () => {
       if (toolType === ToolType.Pointer) return;
 
+      if (toolType === ToolType.Hand) return;
+
       if (!stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();

@@ -1,6 +1,10 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 import { ToolType } from "../../types/ToolType";
 
-export const toolTypeSelector = ({ state }: { state: StateType }): ToolType => {
-  return state.toolType;
+export const toolTypeSelector = ({
+  state,
+}: {
+  state: HistoryStateType;
+}): ToolType => {
+  return state.present.toolType;
 };

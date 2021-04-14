@@ -1,22 +1,23 @@
 import { ColorAnnotationTool } from "../../../../../../image/Tool";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { stageScaleSelector } from "../../../../../../store/selectors";
 
 type ColorSelectionProps = {
   operator: ColorAnnotationTool;
-  stageScale: { x: number; y: number };
 };
 
-export const ColorSelection = ({
-  operator,
-  stageScale,
-}: ColorSelectionProps) => {
+export const ColorSelection = ({ operator }: ColorSelectionProps) => {
   const [image, setImage] = useState<HTMLImageElement>();
+
+  const stageScale = useSelector(stageScaleSelector);
 
   useEffect(() => {
     const image = new Image();
     image.src = operator.overlayData;
     setImage(image);
+    console.info(image.width);
   }, [operator.overlayData]);
 
   if (!operator.overlayData || !operator.offset) return null;
@@ -25,10 +26,9 @@ export const ColorSelection = ({
     <ReactKonva.Group>
       <ReactKonva.Image
         image={image}
-        x={operator.offset.x}
-        y={operator.offset.y}
-        scaleX={stageScale.x}
-        scaleY={stageScale.y}
+        scale={{ x: stageScale, y: stageScale }}
+        x={operator.offset.x * stageScale}
+        y={operator.offset.y * stageScale}
       />
     </ReactKonva.Group>
   );

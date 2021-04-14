@@ -1,18 +1,14 @@
 import { QuickAnnotationTool } from "../../../../../../image/Tool";
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { stageScaleSelector } from "../../../../../../store/selectors";
 
 type QuickSelectionProps = {
-  imagePosition: { x: number; y: number };
   operator: QuickAnnotationTool;
-  stageScale: { x: number; y: number };
 };
 
-export const QuickSelection = ({
-  imagePosition,
-  operator,
-  stageScale,
-}: QuickSelectionProps) => {
+export const QuickSelection = ({ operator }: QuickSelectionProps) => {
   const [image, setImage] = useState<HTMLImageElement>();
 
   useEffect(() => {
@@ -23,16 +19,15 @@ export const QuickSelection = ({
     setImage(image);
   }, [operator.currentMask]);
 
+  const stageScale = useSelector(stageScaleSelector);
+
   if (!operator.currentMask) return null;
 
   return (
     <ReactKonva.Group>
       <ReactKonva.Image
         image={image}
-        scaleX={stageScale.x}
-        scaleY={stageScale.y}
-        x={imagePosition.x}
-        y={imagePosition.y}
+        scale={{ x: stageScale, y: stageScale }}
       />
     </ReactKonva.Group>
   );

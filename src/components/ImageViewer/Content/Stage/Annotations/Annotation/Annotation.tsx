@@ -6,6 +6,7 @@ import { AnnotationType } from "../../../../../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
 import {
   categoriesSelector,
+  stageScaleSelector,
   toolTypeSelector,
 } from "../../../../../../store/selectors";
 import Konva from "konva";
@@ -19,16 +20,9 @@ import { ToolType } from "../../../../../../types/ToolType";
 type AnnotationProps = {
   annotation: AnnotationType;
   annotationTool?: AnnotationTool;
-  imagePosition: { x: number; y: number };
-  stageScale: { x: number; y: number };
 };
 
-export const Annotation = ({
-  annotation,
-  annotationTool,
-  imagePosition,
-  stageScale,
-}: AnnotationProps) => {
+export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   const ref = useRef<Konva.Line | null>(null);
 
   useEffect(() => {
@@ -39,6 +33,7 @@ export const Annotation = ({
 
   const categories = useSelector(categoriesSelector);
   const toolType = useSelector(toolTypeSelector);
+  const stageScale = useSelector(stageScaleSelector);
 
   const fill = _.find(
     categories,
@@ -74,11 +69,8 @@ export const Annotation = ({
       opacity={0.5}
       points={annotation.contour}
       ref={ref}
+      scale={{ x: stageScale, y: stageScale }}
       strokeWidth={1}
-      scaleX={stageScale.x}
-      scaleY={stageScale.y}
-      x={imagePosition.x}
-      y={imagePosition.y}
     />
   );
 };

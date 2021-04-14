@@ -6,18 +6,10 @@ import { toolTypeSelector } from "../../../../../store/selectors";
 import { Tool } from "../../../../../image/Tool";
 
 type SelectingProps = {
-  imagePosition: { x: number; y: number };
   tool: Tool;
-  scale: number;
-  stageScale: { x: number; y: number };
 };
 
-export const Selecting = ({
-  imagePosition,
-  scale,
-  stageScale,
-  tool,
-}: SelectingProps) => {
+export const Selecting = ({ tool }: SelectingProps) => {
   const annotated = useSelector(annotatedSelector);
 
   const toolType = useSelector(toolTypeSelector);
@@ -26,13 +18,7 @@ export const Selecting = ({
 
   return (
     <React.Fragment>
-      <Selection
-        imagePosition={imagePosition}
-        scale={scale}
-        stageScale={stageScale}
-        tool={tool}
-        toolType={toolType}
-      />
+      <Selection tool={tool} toolType={toolType} />
     </React.Fragment>
   );
 };

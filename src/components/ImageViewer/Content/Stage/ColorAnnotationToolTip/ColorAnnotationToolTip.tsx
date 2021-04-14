@@ -1,18 +1,19 @@
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
-import { toolTypeSelector } from "../../../../../store/selectors";
+import {
+  stageScaleSelector,
+  toolTypeSelector,
+} from "../../../../../store/selectors";
 import { useSelector } from "react-redux";
 import { ToolType } from "../../../../../types/ToolType";
 import { ColorAnnotationTool } from "../../../../../image/Tool";
 
 type ColorAnnotationToolTipProps = {
   colorAnnotationTool: ColorAnnotationTool;
-  scale: number;
 };
 
 export const ColorAnnotationToolTip = ({
   colorAnnotationTool,
-  scale,
 }: ColorAnnotationToolTipProps) => {
   const [position, setPosition] = useState<{
     x: number;
@@ -20,6 +21,8 @@ export const ColorAnnotationToolTip = ({
   }>();
   const [text, setText] = useState<string>("Tolerance: 0%");
   const toolType = useSelector(toolTypeSelector);
+
+  const stageScale = useSelector(stageScaleSelector);
 
   useEffect(() => {
     if (
@@ -42,7 +45,7 @@ export const ColorAnnotationToolTip = ({
   )
     return <React.Fragment />;
 
-  if (!position) return <React.Fragment />;
+  if (!position || !position.x || !position.y) return <React.Fragment />;
 
   return (
     <ReactKonva.Group>
@@ -53,17 +56,16 @@ export const ColorAnnotationToolTip = ({
           colorAnnotationTool.initialPosition.x,
           colorAnnotationTool.initialPosition.y,
         ]}
+        scale={{ x: stageScale, y: stageScale }}
         strokeWidth={1}
         stroke="white"
       />
-      <ReactKonva.Label position={position} opacity={0.75}>
+      <ReactKonva.Label
+        position={{ x: position.x * stageScale, y: position.y * stageScale }}
+        opacity={0.75}
+      >
         <ReactKonva.Tag fill={"black"} />
-        <ReactKonva.Text
-          fill={"white"}
-          fontSize={12 / scale}
-          padding={5 / scale}
-          text={text}
-        />
+        <ReactKonva.Text fill={"white"} fontSize={12} padding={5} text={text} />
       </ReactKonva.Label>
     </ReactKonva.Group>
   );

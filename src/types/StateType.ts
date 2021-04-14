@@ -6,7 +6,8 @@ import { LanguageType } from "./LanguageType";
 
 export type StateType = {
   annotated: boolean;
-  boundingClientRectWidth: number;
+  annotating: boolean;
+  boundingClientRect: DOMRect;
   brightness: number;
   categories: Array<CategoryType>;
   contrast: number;
@@ -15,6 +16,7 @@ export type StateType = {
   image?: ImageType;
   invertMode: boolean;
   language: LanguageType;
+  offset: { x: number; y: number };
   penSelectionBrushSize: number;
   saturation: number;
   selectedAnnotation?: string;
@@ -26,4 +28,10 @@ export type StateType = {
   stageWidth: number;
   toolType: ToolType;
   vibrance: number;
+  zoomSelection: {
+    dragging: boolean;
+    minimum: { x: number; y: number } | undefined;
+    maximum: { x: number; y: number } | undefined;
+    selecting: boolean;
+  };
 };

@@ -1,41 +1,31 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";
-import { ZoomTool } from "../../../../../../image/Tool/ZoomTool";
+import { useSelector } from "react-redux";
+import { zoomSelectionSelector } from "../../../../../../store/selectors";
 
-type ZoomSelectionProps = {
-  operator: ZoomTool;
-  scale: number;
-};
-
-export const ZoomSelection = ({ operator, scale }: ZoomSelectionProps) => {
+export const ZoomSelection = ({}) => {
   const dashOffset = useMarchingAnts();
 
-  if (!operator.minimum || !operator.maximum || !operator.zooming) return null;
+  const { dragging, minimum, maximum, selecting } = useSelector(
+    zoomSelectionSelector
+  );
+
+  if (!minimum || !maximum || !selecting || !dragging)
+    return <React.Fragment />;
 
   return (
-    <ReactKonva.Group>
+    <React.Fragment>
       <ReactKonva.Rect
         dash={[4, 2]}
         dashOffset={-dashOffset}
-        height={operator.maximum.y - operator.minimum.y}
+        height={maximum.y - minimum.y}
         stroke="black"
         strokeWidth={1}
-        width={operator.maximum.x - operator.minimum.x}
-        x={operator.minimum.x}
-        y={operator.minimum.y}
+        width={maximum.x - minimum.x}
+        x={minimum.x}
+        y={minimum.y}
       />
-
-      <ReactKonva.Rect
-        dash={[4, 2]}
-        dashOffset={-dashOffset}
-        height={operator.maximum.y - operator.minimum.y}
-        stroke="white"
-        strokeWidth={1}
-        width={operator.maximum.x - operator.minimum.x}
-        x={operator.minimum.x}
-        y={operator.minimum.y}
-      />
-    </ReactKonva.Group>
+    </React.Fragment>
   );
 };

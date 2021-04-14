@@ -1,50 +1,36 @@
 import * as ReactKonva from "react-konva";
 import React from "react";
 import { useMarchingAnts } from "../../../../../hooks";
-import * as _ from "lodash";
+import { useSelector } from "react-redux";
+import { stageScaleSelector } from "../../../../../store/selectors";
 
 type SelectedContourProps = {
-  imagePosition: { x: number; y: number };
   points: Array<number>;
-  scale: number;
-  stageScale: { x: number; y: number };
 };
 
-export const SelectedContour = ({
-  imagePosition,
-  points,
-  scale,
-  stageScale,
-}: SelectedContourProps) => {
+export const SelectedContour = ({ points }: SelectedContourProps) => {
+  const stageScale = useSelector(stageScaleSelector);
   const dashOffset = useMarchingAnts();
-
-  if (!stageScale) return <React.Fragment />;
 
   return (
     <React.Fragment>
       <ReactKonva.Line
-        dash={[4 / scale, 2 / scale]}
+        dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
         id="selected"
         points={points}
+        scale={{ x: stageScale, y: stageScale }}
         stroke="black"
-        strokeWidth={1 / scale}
-        scaleX={stageScale.x}
-        scaleY={stageScale.y}
-        x={imagePosition.x}
-        y={imagePosition.y}
+        strokeWidth={1 / stageScale}
       />
 
       <ReactKonva.Line
-        dash={[4 / scale, 2 / scale]}
+        dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
         points={points}
+        scale={{ x: stageScale, y: stageScale }}
         stroke="white"
-        strokeWidth={1 / scale}
-        scaleX={stageScale.x}
-        scaleY={stageScale.y}
-        x={imagePosition.x}
-        y={imagePosition.y}
+        strokeWidth={1 / stageScale}
       />
     </React.Fragment>
   );

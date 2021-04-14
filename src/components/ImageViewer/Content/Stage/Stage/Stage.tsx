@@ -4,9 +4,7 @@ import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
-  boundingClientRectWidthSelector,
   imageInstancesSelector,
-  imageSelector,
   invertModeSelector,
   selectedCategroySelector,
   selectionModeSelector,
@@ -14,30 +12,21 @@ import {
   stageScaleSelector,
   stageWidthSelector,
   toolTypeSelector,
+  zoomSelectionSelector,
 } from "../../../../../store/selectors";
-import {
-  applicationSlice,
-  setBoundingClientRectWidth,
-  setSelectedAnnotation,
-  setStageHeight,
-  setStageScale,
-  setStageWidth,
-} from "../../../../../store";
+import { applicationSlice, setSelectedAnnotation } from "../../../../../store";
 import {
   Provider,
   ReactReduxContext,
   useDispatch,
   useSelector,
 } from "react-redux";
-import { useStyles } from "../../Content/Content.css";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
-import { useAnnotationOperator } from "../../../../../hooks";
+import { useAnnotationTool, useZoom } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
-import { useZoomTool } from "../../../../../hooks/useZoomTool";
-import { KonvaEventObject } from "konva/types/Node";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
@@ -53,22 +42,18 @@ import useSound from "use-sound";
 import createAnnotationSoundEffect from "../../../../../sounds/pop-up-on.mp3";
 import deleteAnnotationSoundEffect from "../../../../../sounds/pop-up-off.mp3";
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
+import { Layer } from "../Layer";
+import { ZoomSelection } from "../Selection/ZoomSelection";
+import { useKeyboardShortcuts } from "../../../../../hooks/useKeyboardShortcuts";
 
-type StageProps = {
-  src: string;
-};
-
-export const Stage = ({ src }: StageProps) => {
+export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
   const stageRef = useRef<Konva.Stage>(null);
-  const parentDivRef = useRef<HTMLDivElement>(null);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const selectingRef = useRef<Konva.Line | null>(null);
 
   const selectedAnnotationRef = useRef<SelectionType | null>(null);
-
-  const classes = useStyles();
 
   const toolType = useSelector(toolTypeSelector);
 
@@ -78,30 +63,23 @@ export const Stage = ({ src }: StageProps) => {
   const selectedCategory = useSelector(selectedCategroySelector);
   const selectionMode = useSelector(selectionModeSelector);
 
-  const virtualWidth = 750;
-
   const stageHeight = useSelector(stageHeightSelector);
   const stageWidth = useSelector(stageWidthSelector);
-
-  const [stagedImagePosition, setStagedImagePosition] = useState<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
 
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
   const stageScale = useSelector(stageScaleSelector);
-  const boundingClientRectWidth = useSelector(boundingClientRectWidthSelector);
 
-  const [annotationTool] = useAnnotationOperator(
-    src,
-    stagedImagePosition,
-    {
-      width: stageWidth,
-      height: stageHeight,
-    },
-    stageScale
-  );
+  const dispatch = useDispatch();
+
+  const {
+    onMouseUp: onZoomMouseUp,
+    onMouseMove: onZoomMouseMove,
+    onMouseDown: onZoomMouseDown,
+    onWheel: onZoomWheel,
+  } = useZoom();
+
+  const [annotationTool] = useAnnotationTool();
 
   const [selecting, setSelecting] = useState<boolean>(false);
 
@@ -112,19 +90,19 @@ export const Stage = ({ src }: StageProps) => {
 
   const [, update] = useReducer((x) => x + 1, 0);
 
-  const dispatch = useDispatch();
-
   const annotations = useSelector(imageInstancesSelector);
 
   const annotated = useSelector(annotatedSelector);
+
+  const { dragging: zoomDragging, selecting: zoomSelecting } = useSelector(
+    zoomSelectionSelector
+  );
 
   const backspacePress = useKeyPress("Backspace");
   const deletePress = useKeyPress("Delete");
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
   const shiftPress = useKeyPress("Shift");
-
-  const [zooming, setZooming] = useState<boolean>(false);
 
   const [playCreateAnnotationSoundEffect] = useSound(
     createAnnotationSoundEffect
@@ -145,6 +123,7 @@ export const Stage = ({ src }: StageProps) => {
         selectedAnnotation: undefined,
       })
     );
+
     dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
 
     transformerRef.current?.detach();
@@ -152,36 +131,6 @@ export const Stage = ({ src }: StageProps) => {
 
     selectingRef.current = null;
   };
-
-  const { zoomTool, onZoomClick, onZoomWheel } = useZoomTool(
-    aspectRatio,
-    toolType,
-    src,
-    stageWidth
-  );
-
-  const onClick = (event: KonvaEventObject<MouseEvent>) => {
-    switch (toolType) {
-      case ToolType.Zoom:
-        if (zooming) return;
-        onZoomClick(event);
-    }
-  };
-
-  const onWheel = (event: KonvaEventObject<WheelEvent>) => {
-    switch (toolType) {
-      case ToolType.Zoom:
-        onZoomWheel(event);
-    }
-  };
-
-  useEffect(() => {
-    if (toolType !== ToolType.Zoom) return;
-
-    if (!zoomTool || !zoomTool.scale) return;
-
-    dispatch(setStageScale({ stageScale: zoomTool.scale }));
-  }, [zoomTool?.scale]);
 
   useEffect(() => {
     if (!selectedAnnotationId || !annotationTool) return;
@@ -358,15 +307,6 @@ export const Stage = ({ src }: StageProps) => {
   }, [penSelectionBrushSize]);
 
   useEffect(() => {
-    if (!annotationTool) return;
-    annotationTool.stagedImageShape = {
-      width: stageWidth,
-      height: stageHeight,
-    };
-    annotationTool.stagedImagePosition = stagedImagePosition;
-  }, [stageWidth, stageHeight, annotationTool]);
-
-  useEffect(() => {
     if (!annotated) return;
 
     if (!transformerRef || !transformerRef.current) return;
@@ -434,40 +374,20 @@ export const Stage = ({ src }: StageProps) => {
   }, [selectedAnnotationId]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
-    if (!stageRef || !stageRef.current) return;
+    if (!imageRef || !imageRef.current) return;
 
-    const transform = stageRef.current.getAbsoluteTransform().copy();
+    const transform = imageRef.current.getAbsoluteTransform().copy();
 
     transform.invert();
 
     return transform.point(position);
   };
 
-  const onTransformerMouseDown = () => {
-    console.info("Clicked on transformer!");
-  };
+  const onMouseDown = useMemo(() => {
+    const func = () => {
+      if (toolType === ToolType.Pointer) return;
 
-  //FIXME not using useMemo() because could not pass event argument to it
-  const onMouseDown = (event: Konva.KonvaEventObject<MouseEvent>) => {
-    if (toolType === ToolType.Pointer) return;
-
-    if (event.target.getParent().className === "Transformer") {
-      onTransformerMouseDown();
-      return;
-    }
-
-    if (event.evt.button === 0) {
-      // left click only
-
-      if (annotated) deselectAnnotation();
-
-      if (selectionMode === AnnotationModeType.New)
-        selectedAnnotationRef.current = null;
-
-      // if (selectionMode === AnnotationModeType.Add && !shiftPress) //FIXME: implement this logic later, when docs are in app
-      //   selectedAnnotationRef.current = null;
-
-      if (!annotationTool || !stageRef || !stageRef.current) return;
+      if (!stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -477,20 +397,38 @@ export const Stage = ({ src }: StageProps) => {
 
       if (!relative) return;
 
-      if (toolType === ToolType.Zoom) {
-        zoomTool?.onMouseDown(relative);
-        setZooming(false);
-      } else {
-        annotationTool.onMouseDown(relative);
-      }
+      const rawImagePosition = {
+        x: relative.x / stageScale,
+        y: relative.y / stageScale,
+      };
 
-      update();
-    }
-  };
+      if (toolType === ToolType.Zoom) {
+        onZoomMouseDown(relative);
+      } else {
+        if (annotated) deselectAnnotation();
+
+        if (selectionMode === AnnotationModeType.New) {
+          selectedAnnotationRef.current = null;
+        }
+
+        // if (selectionMode === AnnotationModeType.Add && !shiftPress) {
+        //   selectedAnnotationRef.current = null;
+        // }
+
+        if (!annotationTool) return;
+
+        annotationTool.onMouseDown(rawImagePosition);
+
+        update();
+      }
+    };
+    const throttled = _.throttle(func, 5);
+    return () => throttled();
+  }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
 
   const onMouseMove = useMemo(() => {
     const func = () => {
-      if (!annotationTool || !stageRef || !stageRef.current) return;
+      if (!stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -501,24 +439,29 @@ export const Stage = ({ src }: StageProps) => {
       setCurrentPosition(relative);
 
       if (!relative) return;
+
+      const rawImagePosition = {
+        x: relative.x / stageScale,
+        y: relative.y / stageScale,
+      };
+
       if (toolType === ToolType.Zoom) {
-        zoomTool?.onMouseMove(relative);
-        setZooming(true);
+        onZoomMouseMove(relative);
       } else {
-        annotationTool.onMouseMove(relative);
+        if (!annotationTool) return;
+
+        annotationTool.onMouseMove(rawImagePosition);
+
+        update();
       }
-
-      update();
     };
-
     const throttled = _.throttle(func, 5);
-
     return () => throttled();
-  }, [annotationTool, toolType, zoomTool]);
+  }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
 
   const onMouseUp = useMemo(() => {
     const func = async () => {
-      if (!annotationTool || !stageRef || !stageRef.current) return;
+      if (!stageRef || !stageRef.current) return;
 
       const position = stageRef.current.getPointerPosition();
 
@@ -528,23 +471,30 @@ export const Stage = ({ src }: StageProps) => {
 
       if (!relative) return;
 
+      const rawImagePosition = {
+        x: relative.x / stageScale,
+        y: relative.y / stageScale,
+      };
+
       if (toolType === ToolType.Zoom) {
-        zoomTool?.onMouseUp(relative);
+        onZoomMouseUp(relative);
       } else {
-        if (toolType === ToolType.ObjectAnnotation)
-          await (annotationTool as ObjectAnnotationTool).onMouseUp(relative);
-        else {
-          annotationTool.onMouseUp(relative);
+        if (!annotationTool) return;
+
+        if (toolType === ToolType.ObjectAnnotation) {
+          await (annotationTool as ObjectAnnotationTool).onMouseUp(
+            rawImagePosition
+          );
         }
+        annotationTool.onMouseUp(rawImagePosition);
+
+        update();
       }
-
-      update();
     };
-
     const throttled = _.throttle(func, 10);
 
     return () => throttled();
-  }, [annotationTool, toolType, zoomTool]);
+  }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
 
   useEffect(() => {
     if (!enterPress) return;
@@ -612,159 +562,65 @@ export const Stage = ({ src }: StageProps) => {
     deselectAnnotation();
   }, [backspacePress, deletePress, escapePress]);
 
-  useEffect(() => {
-    if (!stageRef || !stageRef.current) return;
-    const content = document.querySelector(
-      ".konvajs-content"
-    ) as HTMLDivElement;
-    if (!content) return;
-    content.style.marginLeft = "auto";
-    content.style.marginRight = "auto";
-  }, [stageRef.current]);
-
   const [tool, setTool] = useState<Tool>();
 
   useEffect(() => {
-    if (toolType === ToolType.Zoom) {
-      setTool(zoomTool);
-    } else {
-      setTool(annotationTool);
-    }
-  }, [annotationTool, toolType, zoomTool]);
+    setTool(annotationTool);
+  }, [annotationTool, toolType]);
 
-  const image = useSelector(imageSelector);
-
-  const [imageWidth, setImageWidth] = useState<number>(512);
-  const [imageHeight, setImageHeight] = useState<number>(512);
-
-  useEffect(() => {
-    if (!image) return;
-
-    if (!image.shape) return;
-
-    setImageWidth(image.shape.width);
-    setImageHeight(image.shape.height);
-
-    setAspectRatio(image.shape.height / image.shape.width);
-
-    resize();
-  }, [image?.shape]);
-
-  const resize = () => {
-    if (!parentDivRef || !parentDivRef.current) return;
-
-    const width = parentDivRef.current.getBoundingClientRect().width;
-
-    dispatch(
-      setBoundingClientRectWidth({
-        boundingClientRectWidth: parentDivRef.current.getBoundingClientRect()
-          .width,
-      })
-    );
-
-    dispatch(setStageScale({ stageScale: width / virtualWidth }));
-
-    dispatch(setStageHeight({ stageHeight: width }));
-    dispatch(setStageWidth({ stageWidth: width }));
-
-    setStagedImagePosition({
-      x: 0,
-      y: 0,
-    });
-  };
-
-  useEffect(() => {
-    resize();
-    window.addEventListener("resize", resize);
-  }, []);
+  useKeyboardShortcuts();
 
   return (
-    <div id={"parent-div"} ref={parentDivRef} className={classes.parent}>
-      <ReactReduxContext.Consumer>
-        {({ store }) => (
-          <ReactKonva.Stage
-            globalCompositeOperation="destination-over"
-            height={stageHeight}
-            onContextMenu={(event: Konva.KonvaEventObject<MouseEvent>) => {
-              event.evt.preventDefault();
-            }}
-            onClick={onClick}
-            onWheel={onWheel}
-            ref={stageRef}
-            scale={{
-              x: stageScale,
-              y: stageScale * aspectRatio,
-            }}
-            width={stageWidth}
-            x={zoomTool ? zoomTool.x : 0}
-            y={zoomTool ? zoomTool.y : 0}
-          >
-            <Provider store={store}>
-              <ReactKonva.Layer
-                onMouseDown={(event) => onMouseDown(event)}
-                onMouseMove={onMouseMove}
-                onMouseUp={onMouseUp}
-              >
-                <Image ref={imageRef} src={src} />
+    <ReactReduxContext.Consumer>
+      {({ store }) => (
+        <ReactKonva.Stage
+          height={stageHeight}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onWheel={onZoomWheel}
+          ref={stageRef}
+          width={stageWidth}
+        >
+          <Provider store={store}>
+            <Layer>
+              <Image ref={imageRef} />
 
-                <Selecting
-                  imagePosition={stagedImagePosition}
-                  scale={stageScale}
-                  stageScale={{
-                    x: stageWidth / imageWidth,
-                    y: stageHeight / imageHeight,
-                  }}
-                  tool={tool!}
-                />
+              <ZoomSelection />
 
-                {currentPosition &&
-                  !annotationTool?.annotating &&
-                  toolType === ToolType.PenAnnotation && (
-                    <ReactKonva.Ellipse
-                      radiusX={
-                        (aspectRatio * penSelectionBrushSize) / stageScale
-                      }
-                      radiusY={penSelectionBrushSize / stageScale}
-                      x={currentPosition.x}
-                      y={currentPosition.y}
-                      stroke="grey"
-                      strokewidth={1}
-                      dash={[2, 2]}
-                    />
-                  )}
+              <Selecting tool={tool!} />
 
-                {selectedAnnotationRef && selectedAnnotationRef.current && (
-                  <SelectedContour
-                    imagePosition={stagedImagePosition}
-                    points={selectedAnnotationRef.current.contour}
-                    scale={stageScale}
-                    stageScale={{
-                      x: stageWidth / imageWidth,
-                      y: stageHeight / imageHeight,
-                    }}
+              {currentPosition &&
+                !annotationTool?.annotating &&
+                toolType === ToolType.PenAnnotation && (
+                  <ReactKonva.Ellipse
+                    radiusX={(aspectRatio * penSelectionBrushSize) / stageScale}
+                    radiusY={penSelectionBrushSize / stageScale}
+                    x={currentPosition.x}
+                    y={currentPosition.y}
+                    stroke="grey"
+                    strokewidth={1}
+                    dash={[2, 2]}
                   />
                 )}
 
-                <Annotations
-                  annotationTool={annotationTool}
-                  imagePosition={stagedImagePosition}
-                  stageScale={{
-                    x: stageWidth / imageWidth,
-                    y: stageHeight / imageHeight,
-                  }}
+              {selectedAnnotationRef && selectedAnnotationRef.current && (
+                <SelectedContour
+                  points={selectedAnnotationRef.current.contour}
                 />
+              )}
 
-                <ReactKonva.Transformer ref={transformerRef} />
+              <Annotations annotationTool={annotationTool} />
 
-                <ColorAnnotationToolTip
-                  colorAnnotationTool={annotationTool as ColorAnnotationTool}
-                  scale={stageScale}
-                />
-              </ReactKonva.Layer>
-            </Provider>
-          </ReactKonva.Stage>
-        )}
-      </ReactReduxContext.Consumer>
-    </div>
+              <ReactKonva.Transformer ref={transformerRef} />
+
+              <ColorAnnotationToolTip
+                colorAnnotationTool={annotationTool as ColorAnnotationTool}
+              />
+            </Layer>
+          </Provider>
+        </ReactKonva.Stage>
+      )}
+    </ReactReduxContext.Consumer>
   );
 };

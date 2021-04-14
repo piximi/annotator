@@ -4,7 +4,7 @@ export {
   deleteImageInstance,
   replaceImageInstance,
   setAnnotated,
-  setBoundingClientRectWidth,
+  setBoundingClientRect,
   setBrightness,
   setCategories,
   setCategoryVisibility,
@@ -16,6 +16,7 @@ export {
   setImageName,
   setInvertMode,
   setLanguage,
+  setOffset,
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,
@@ -27,6 +28,7 @@ export {
   setStageScale,
   setStageWidth,
   setVibrance,
+  setZoomSelection,
 } from "./applicationSlice";
 
 export { setZoomToolOptions } from "./toolOptionsSlice";

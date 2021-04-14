@@ -1,5 +1,9 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 
-export const soundEnabledSelector = ({ state }: { state: StateType }) => {
-  return state.soundEnabled;
+export const soundEnabledSelector = ({
+  state,
+}: {
+  state: HistoryStateType;
+}) => {
+  return state.present.soundEnabled;
 };

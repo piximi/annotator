@@ -4,7 +4,7 @@ export {
   deleteCategory,
   deleteImageInstance,
   replaceImageInstance,
-  setBoundingClientRectWidth,
+  setBoundingClientRect,
   setBrightness,
   setCategories,
   setCategoryVisibility,
@@ -14,6 +14,7 @@ export {
   setImage,
   setImageInstances,
   setInvertMode,
+  setOffset,
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,
@@ -25,6 +26,7 @@ export {
   setStageWidth,
   setVibrance,
   setZoomToolOptions,
+  setZoomSelection,
 } from "./slices";
 export { store } from "./stores";
 export { echoThunk } from "./thunks";

@@ -2,64 +2,56 @@ import * as ReactKonva from "react-konva";
 import React from "react";
 import { MagneticAnnotationTool } from "../../../../../../image/Tool";
 import { useMarchingAnts } from "../../../../../../hooks";
+import { useSelector } from "react-redux";
+import { stageScaleSelector } from "../../../../../../store/selectors";
 
 type MagneticSelectionProps = {
-  imagePosition: { x: number; y: number };
   operator: MagneticAnnotationTool;
-  scale: number;
-  stageScale: { x: number; y: number };
 };
 
-export const MagneticSelection = ({
-  imagePosition,
-  operator,
-  scale,
-  stageScale,
-}: MagneticSelectionProps) => {
+export const MagneticSelection = ({ operator }: MagneticSelectionProps) => {
   const dashOffset = useMarchingAnts();
 
-  if (!operator.origin) return null;
+  const stageScale = useSelector(stageScaleSelector);
+
+  if (!operator.origin) return <React.Fragment />;
 
   return (
     <ReactKonva.Group>
       <ReactKonva.Circle
         fill="white"
-        radius={3 / scale}
+        radius={3}
         stroke="black"
-        strokeWidth={1 / scale}
-        x={operator.origin.x}
-        y={operator.origin.y}
+        strokeWidth={1}
+        x={operator.origin.x * stageScale}
+        y={operator.origin.y * stageScale}
       />
 
       {operator.anchor && (
         <ReactKonva.Circle
           fill="black"
-          radius={3 / scale}
+          radius={3}
           stroke="white"
-          strokeWidth={1 / scale}
-          x={operator.anchor.x}
-          y={operator.anchor.y}
+          strokeWidth={1}
+          x={operator.anchor.x * stageScale}
+          y={operator.anchor.y * stageScale}
         />
       )}
 
       <ReactKonva.Line
         points={operator.buffer}
+        scale={{ x: stageScale, y: stageScale }}
         stroke="black"
-        strokeWidth={1 / scale}
-        scale={stageScale}
-        x={imagePosition.x}
-        y={imagePosition.y}
+        strokeWidth={1 / stageScale}
       />
 
       <ReactKonva.Line
-        dash={[4 / scale, 2 / scale]}
+        dash={[4 / stageScale, 2 / stageScale]}
+        scale={{ x: stageScale, y: stageScale }}
         dashOffset={-dashOffset}
         stroke="white"
         points={operator.buffer}
-        strokeWidth={1 / scale}
-        scale={stageScale}
-        x={imagePosition.x}
-        y={imagePosition.y}
+        strokeWidth={1 / stageScale}
       />
     </ReactKonva.Group>
   );

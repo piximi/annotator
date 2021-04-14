@@ -1,7 +1,7 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 
-export const imageNameSelector = ({ state }: { state: StateType }) => {
-  if (!state.image) return;
+export const imageNameSelector = ({ state }: { state: HistoryStateType }) => {
+  if (!state.present.image) return;
 
-  return state.image.name;
+  return state.present.image.name;
 };

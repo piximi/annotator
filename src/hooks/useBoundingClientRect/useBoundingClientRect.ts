@@ -1,18 +1,42 @@
 import useResizeObserver from "@react-hook/resize-observer";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
+import { setBoundingClientRect, setStageWidth } from "../../store/slices";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  boundingClientRectSelector,
+  stageWidthSelector,
+} from "../../store/selectors";
 
 export const useBoundingClientRect = (target: React.RefObject<HTMLElement>) => {
-  const [boundingClientRect, setBoundingClientRect] = useState<DOMRect>();
+  const dispatch = useDispatch();
+
+  const boundingClientRect = useSelector(boundingClientRectSelector);
+  const stageWidth = useSelector(stageWidthSelector);
 
   useLayoutEffect(() => {
     if (!target || !target.current) return;
 
-    setBoundingClientRect(target.current.getBoundingClientRect());
-  }, [target]);
+    dispatch(
+      setBoundingClientRect({
+        boundingClientRect: target.current.getBoundingClientRect(),
+      })
+    );
+  }, [dispatch, target]);
 
   useResizeObserver(target, (entry: ResizeObserverEntry) => {
-    setBoundingClientRect(entry.contentRect as DOMRect);
+    dispatch(
+      setBoundingClientRect({
+        boundingClientRect: entry.contentRect as DOMRect,
+      })
+    );
   });
 
-  return boundingClientRect;
+  useEffect(() => {
+    if (!boundingClientRect) return;
+    dispatch(setBoundingClientRect({ boundingClientRect: boundingClientRect }));
+  }, [boundingClientRect, dispatch]);
+
+  useEffect(() => {
+    dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
+  }, [boundingClientRect, dispatch, stageWidth]);
 };

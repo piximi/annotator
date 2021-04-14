@@ -9,6 +9,7 @@ import {
   PolygonalAnnotationTool,
   QuickAnnotationTool,
   RectangularAnnotationTool,
+  Tool,
 } from "../../../../../../image/Tool";
 import { EllipticalSelection } from "../EllipticalSelection";
 import { ToolType } from "../../../../../../types/ToolType";
@@ -20,91 +21,41 @@ import { RectangularSelection } from "../RectangularSelection";
 import { ColorSelection } from "../ColorSelection/ColorSelection";
 import { QuickSelection } from "../QuickSelection/QuickSelection";
 import { PenSelection } from "../PenSelection";
-
-import { ZoomTool } from "../../../../../../image/Tool/ZoomTool";
 import { ZoomSelection } from "../ZoomSelection";
-import { Tool } from "../../../../../../image/Tool";
 
 type SelectionProps = {
-  imagePosition: { x: number; y: number };
-  scale: number;
-  stageScale: { x: number; y: number };
   tool?: Tool;
   toolType?: ToolType;
 };
 
-export const Selection = ({
-  imagePosition,
-  scale,
-  stageScale,
-  tool,
-  toolType,
-}: SelectionProps) => {
+export const Selection = ({ tool, toolType }: SelectionProps) => {
   if (!toolType || !tool) return <React.Fragment />;
 
   switch (toolType) {
     case ToolType.ColorAnnotation:
-      return (
-        <ColorSelection
-          operator={tool as ColorAnnotationTool}
-          stageScale={stageScale}
-        />
-      );
+      return <ColorSelection operator={tool as ColorAnnotationTool} />;
     case ToolType.EllipticalAnnotation:
       return (
-        <EllipticalSelection
-          operator={tool as EllipticalAnnotationTool}
-          scale={scale}
-        />
+        <EllipticalSelection operator={tool as EllipticalAnnotationTool} />
       );
     case ToolType.LassoAnnotation:
-      return (
-        <LassoSelection operator={tool as LassoAnnotationTool} scale={scale} />
-      );
+      return <LassoSelection operator={tool as LassoAnnotationTool} />;
     case ToolType.MagneticAnnotation:
-      return (
-        <MagneticSelection
-          imagePosition={imagePosition}
-          operator={tool as MagneticAnnotationTool}
-          scale={scale}
-          stageScale={stageScale}
-        />
-      );
+      return <MagneticSelection operator={tool as MagneticAnnotationTool} />;
     case ToolType.ObjectAnnotation:
-      return (
-        <ObjectSelection
-          operator={tool as ObjectAnnotationTool}
-          scale={scale}
-        />
-      );
+      return <ObjectSelection operator={tool as ObjectAnnotationTool} />;
     case ToolType.PenAnnotation:
-      return (
-        <PenSelection operator={tool as PenAnnotationTool} scale={scale} />
-      );
+      return <PenSelection operator={tool as PenAnnotationTool} />;
     case ToolType.PolygonalAnnotation:
-      return (
-        <PolygonalSelection
-          operator={tool as PolygonalAnnotationTool}
-          scale={scale}
-        />
-      );
+      return <PolygonalSelection operator={tool as PolygonalAnnotationTool} />;
     case ToolType.RectangularAnnotation:
       return (
-        <RectangularSelection
-          operator={tool as RectangularAnnotationTool}
-          scale={scale}
-        />
+        <RectangularSelection operator={tool as RectangularAnnotationTool} />
       );
     case ToolType.Zoom:
-      return <ZoomSelection operator={tool as ZoomTool} scale={scale} />;
+      return <ZoomSelection />;
     case ToolType.QuickAnnotation:
-      return (
-        <QuickSelection
-          operator={tool as QuickAnnotationTool}
-          imagePosition={imagePosition}
-          stageScale={stageScale}
-        />
-      );
+      return <QuickSelection operator={tool as QuickAnnotationTool} />;
     default:
       return <React.Fragment />;
   }

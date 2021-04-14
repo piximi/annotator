@@ -5,13 +5,16 @@ import {
   createdCategoriesSelector,
   toolTypeSelector,
 } from "../../store/selectors";
-import { useHotkeys } from "react-hotkeys-hook";
+import { useHotkeys, useIsHotkeyPressed } from "react-hotkeys-hook";
+import { useState } from "react";
 
 export const useKeyboardShortcuts = () => {
   const dispatch = useDispatch();
 
   const categories = useSelector(createdCategoriesSelector);
   const toolType = useSelector(toolTypeSelector);
+
+  const isPressed = useIsHotkeyPressed();
 
   /*
    * Cycle lasso tools (Shift + L)
@@ -146,5 +149,26 @@ export const useKeyboardShortcuts = () => {
    */
   useHotkeys("z", () => {
     dispatch(setOperation({ operation: ToolType.Zoom }));
+  });
+
+  /*
+   * Temporarily select hand tool (Space)
+   */
+  const [previousToolType, setPreviousToolType] = useState<ToolType>();
+
+  useHotkeys("space", (event: KeyboardEvent) => {
+    if (event.type === "keydown") {
+      if (toolType === ToolType.Hand) return;
+
+      setPreviousToolType(toolType);
+
+      dispatch(setOperation({ operation: ToolType.Hand }));
+    }
+
+    if (event.type === "keyup") {
+      if (!previousToolType) return;
+
+      dispatch(setOperation({ operation: previousToolType }));
+    }
   });
 };

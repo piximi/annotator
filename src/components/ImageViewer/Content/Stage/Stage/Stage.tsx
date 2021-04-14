@@ -424,7 +424,7 @@ export const Stage = () => {
     };
     const throttled = _.throttle(func, 5);
     return () => throttled();
-  }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
+  }, [annotationTool, selectionMode, toolType, zoomDragging, zoomSelecting]);
 
   const onMouseMove = useMemo(() => {
     const func = () => {

@@ -22,7 +22,7 @@ import {
   useSelector,
 } from "react-redux";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
-import { useAnnotationTool, useZoom } from "../../../../../hooks";
+import { useAnnotationTool, useHandTool, useZoom } from "../../../../../hooks";
 import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
@@ -71,16 +71,6 @@ export const Stage = () => {
   const stageScale = useSelector(stageScaleSelector);
 
   const dispatch = useDispatch();
-
-  const [draggable, setDraggable] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (toolType === ToolType.Hand) {
-      setDraggable(true);
-    } else {
-      setDraggable(false);
-    }
-  }, [toolType]);
 
   const {
     onMouseUp: onZoomMouseUp,
@@ -582,6 +572,8 @@ export const Stage = () => {
   }, [annotationTool, toolType]);
 
   useKeyboardShortcuts();
+
+  const { draggable } = useHandTool();
 
   return (
     <ReactReduxContext.Consumer>

@@ -100,8 +100,7 @@ export const ZoomOptions = () => {
     if (!image || !image.shape) return;
 
     dispatch(setZoomToolOptions(payload));
-    //FIXME: image.shape.width is not updated in current setup in Main.tsx
-    //dispatch(setStageScale({stageScale: stageWidth / (image.shape.width) }))
+
     dispatch(
       setStageScale({
         stageScale:

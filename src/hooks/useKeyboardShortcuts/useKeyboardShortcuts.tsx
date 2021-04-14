@@ -1,4 +1,3 @@
-import { useHotkeys } from "../useHotkeys";
 import { useDispatch, useSelector } from "react-redux";
 import { setOperation, setSeletedCategory } from "../../store";
 import { ToolType } from "../../types/ToolType";
@@ -6,6 +5,7 @@ import {
   createdCategoriesSelector,
   toolTypeSelector,
 } from "../../store/selectors";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export const useKeyboardShortcuts = () => {
   const dispatch = useDispatch();

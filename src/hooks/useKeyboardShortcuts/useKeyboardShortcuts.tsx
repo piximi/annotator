@@ -150,25 +150,4 @@ export const useKeyboardShortcuts = () => {
   useHotkeys("z", () => {
     dispatch(setOperation({ operation: ToolType.Zoom }));
   });
-
-  /*
-   * Temporarily select hand tool (Space)
-   */
-  const [previousToolType, setPreviousToolType] = useState<ToolType>();
-
-  useHotkeys("space", (event: KeyboardEvent) => {
-    if (event.type === "keydown") {
-      if (toolType === ToolType.Hand) return;
-
-      setPreviousToolType(toolType);
-
-      dispatch(setOperation({ operation: ToolType.Hand }));
-    }
-
-    if (event.type === "keyup") {
-      if (!previousToolType) return;
-
-      dispatch(setOperation({ operation: previousToolType }));
-    }
-  });
 };

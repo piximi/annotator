@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { categoriesSelector, imageSelector } from "../../../../store/selectors";
 import * as _ from "lodash";
 import { useTranslation } from "../../../../hooks/useTranslation";
+import { AnnotationType } from "../../../../types/AnnotationType";
 
 export const ExportButton = () => {
   const classes = useStyles();
@@ -20,7 +21,7 @@ export const ExportButton = () => {
 
     const content = {
       src: image.src,
-      instances: image.annotations.map((instance) => {
+      instances: image.annotations.map((instance: AnnotationType) => {
         return {
           boundingBox: instance.boundingBox,
           category: _.find(projectCategories, (category) => {

@@ -96,7 +96,7 @@ export const Stage = () => {
   const annotated = useSelector(annotatedSelector);
   const annotating = useSelector(annotatingSelector);
 
-  const selectedAnnotationRef = useSelector(selectedAnnotationSelector);
+  const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
   const { dragging: zoomDragging, selecting: zoomSelecting } = useSelector(
     zoomSelectionSelector
@@ -168,7 +168,7 @@ export const Stage = () => {
       return instance.id === selectedAnnotationId;
     })[0];
 
-    if (!selectedAnnotationRef) return;
+    if (!selectedAnnotation) return;
 
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({
@@ -201,7 +201,7 @@ export const Stage = () => {
 
     let combinedMask, combinedContour;
 
-    const selectedInstance = selectedAnnotationRef;
+    const selectedInstance = selectedAnnotation;
 
     if (!selectedInstance) return;
 
@@ -268,7 +268,7 @@ export const Stage = () => {
   useEffect(() => {
     if (!selectedAnnotationId) return;
 
-    if (!selectedAnnotationRef) return;
+    if (!selectedAnnotation) return;
 
     const others = annotations?.filter(
       (instance: SelectionType) => instance.id !== selectedAnnotationId
@@ -545,19 +545,19 @@ export const Stage = () => {
 
     if (!annotations || !annotationTool || annotationTool.annotating) return;
 
-    if (!selectedAnnotationRef) return;
+    if (!selectedAnnotation) return;
 
-    if (selectedAnnotationId === selectedAnnotationRef.id) {
+    if (selectedAnnotationId === selectedAnnotation.id) {
       dispatch(
         applicationSlice.actions.replaceImageInstance({
-          id: selectedAnnotationRef.id,
-          instance: selectedAnnotationRef,
+          id: selectedAnnotation.id,
+          instance: selectedAnnotation,
         })
       );
     } else {
       dispatch(
         applicationSlice.actions.setImageInstances({
-          instances: [...annotations, selectedAnnotationRef],
+          instances: [...annotations, selectedAnnotation],
         })
       );
     }
@@ -659,8 +659,8 @@ export const Stage = () => {
                   />
                 )}
 
-              {selectedAnnotationRef && (
-                <SelectedContour points={selectedAnnotationRef.contour} />
+              {selectedAnnotation && (
+                <SelectedContour points={selectedAnnotation.contour} />
               )}
 
               <Annotations annotationTool={annotationTool} />

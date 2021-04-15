@@ -3,6 +3,7 @@ import { ImageType } from "./ImageType";
 import { ToolType } from "./ToolType";
 import { AnnotationModeType } from "./AnnotationModeType";
 import { LanguageType } from "./LanguageType";
+import { AnnotationType } from "./AnnotationType";
 
 export type StateType = {
   annotated: boolean;
@@ -19,6 +20,7 @@ export type StateType = {
   offset: { x: number; y: number };
   penSelectionBrushSize: number;
   saturation: number;
+  selectedAnnotation?: AnnotationType;
   selectedAnnotationId?: string;
   selectedCategory: string;
   selectionMode: AnnotationModeType;

@@ -33,7 +33,7 @@ import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
-import { selectedAnnotationSelectorId } from "../../../../../store/selectors/selectedAnnotationSelectorId";
+import { selectedAnnotationIdSelector } from "../../../../../store/selectors/selectedAnnotationIdSelector";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import {
@@ -63,7 +63,7 @@ export const Stage = () => {
 
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
-  const selectedAnnotationId = useSelector(selectedAnnotationSelectorId);
+  const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
   const selectedCategory = useSelector(selectedCategroySelector);
   const selectionMode = useSelector(selectionModeSelector);
 

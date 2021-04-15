@@ -6,13 +6,13 @@ import {
   invertModeSelector,
 } from "../../store/selectors";
 import { AnnotationTool } from "../../image/Tool/AnnotationTool/AnnotationTool";
-import { selectedAnnotationSelectorId } from "../../store/selectors/selectedAnnotationSelectorId";
+import { selectedAnnotationIdSelector } from "../../store/selectors/selectedAnnotationIdSelector";
 import { applicationSlice } from "../../store/slices";
 
 export const useInvertMode = (annotationTool: AnnotationTool | undefined) => {
   const annotations = useSelector(imageInstancesSelector);
   const invertMode = useSelector(invertModeSelector);
-  const selectedAnnotationId = useSelector(selectedAnnotationSelectorId);
+  const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
 
   const dispatch = useDispatch();
 

@@ -19,7 +19,7 @@ export type StateType = {
   offset: { x: number; y: number };
   penSelectionBrushSize: number;
   saturation: number;
-  selectedAnnotation?: string;
+  selectedAnnotationId?: string;
   selectedCategory: string;
   selectionMode: AnnotationModeType;
   soundEnabled: boolean;

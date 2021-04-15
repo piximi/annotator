@@ -15,7 +15,10 @@ import {
   toolTypeSelector,
   zoomSelectionSelector,
 } from "../../../../../store/selectors";
-import { applicationSlice, setSelectedAnnotation } from "../../../../../store";
+import {
+  applicationSlice,
+  setSelectedAnnotationId,
+} from "../../../../../store";
 import {
   Provider,
   ReactReduxContext,
@@ -30,7 +33,7 @@ import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
-import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
+import { selectedAnnotationSelectorId } from "../../../../../store/selectors/selectedAnnotationSelectorId";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import {
@@ -60,7 +63,7 @@ export const Stage = () => {
 
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
-  const selectedAnnotationId = useSelector(selectedAnnotationSelector);
+  const selectedAnnotationId = useSelector(selectedAnnotationSelectorId);
   const selectedCategory = useSelector(selectedCategroySelector);
   const selectionMode = useSelector(selectionModeSelector);
 
@@ -119,8 +122,8 @@ export const Stage = () => {
     annotationTool.deselect();
 
     dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: undefined,
+      setSelectedAnnotationId({
+        selectedAnnotationId: undefined,
       })
     );
 

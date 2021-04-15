@@ -56,6 +56,7 @@ const initialState: StateType = {
   offset: { x: 0, y: 0 },
   penSelectionBrushSize: 2,
   saturation: 0,
+  selectedAnnotationId: undefined,
   selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: AnnotationModeType.New,
   soundEnabled: true,
@@ -218,11 +219,11 @@ export const applicationSlice = createSlice({
     ) {
       state.selectedCategory = action.payload.selectedCategory;
     },
-    setSelectedAnnotation(
+    setSelectedAnnotationId(
       state: StateType,
-      action: PayloadAction<{ selectedAnnotation: string | undefined }>
+      action: PayloadAction<{ selectedAnnotationId: string | undefined }>
     ) {
-      state.selectedAnnotation = action.payload.selectedAnnotation;
+      state.selectedAnnotationId = action.payload.selectedAnnotationId;
     },
     setSelectionMode(
       state: StateType,
@@ -303,7 +304,7 @@ export const {
   setOperation,
   setPenSelectionBrushSize,
   setSaturation,
-  setSelectedAnnotation,
+  setSelectedAnnotationId,
   setSelectionMode,
   setSeletedCategory,
   setSoundEnabled,

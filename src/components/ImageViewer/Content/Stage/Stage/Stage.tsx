@@ -33,7 +33,7 @@ import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
-import { selectedAnnotationSelectorId } from "../../../../../store/selectors/selectedAnnotationSelectorId";
+import { selectedAnnotationIdSelector } from "../../../../../store/selectors/selectedAnnotationIdSelector";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import {
@@ -49,6 +49,7 @@ import { soundEnabledSelector } from "../../../../../store/selectors/soundEnable
 import { Layer } from "../Layer";
 import { ZoomSelection } from "../Selection/ZoomSelection";
 import { useKeyboardShortcuts } from "../../../../../hooks/useKeyboardShortcuts";
+import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -57,13 +58,11 @@ export const Stage = () => {
   const transformerRef = useRef<Konva.Transformer | null>(null);
   const selectingRef = useRef<Konva.Line | null>(null);
 
-  const selectedAnnotationRef = useRef<SelectionType | null>(null);
-
   const toolType = useSelector(toolTypeSelector);
 
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
-  const selectedAnnotationId = useSelector(selectedAnnotationSelectorId);
+  const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
   const selectedCategory = useSelector(selectedCategroySelector);
   const selectionMode = useSelector(selectionModeSelector);
 
@@ -96,6 +95,8 @@ export const Stage = () => {
 
   const annotated = useSelector(annotatedSelector);
   const annotating = useSelector(annotatingSelector);
+
+  const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
   const { dragging: zoomDragging, selecting: zoomSelecting } = useSelector(
     zoomSelectionSelector
@@ -167,14 +168,18 @@ export const Stage = () => {
       return instance.id === selectedAnnotationId;
     })[0];
 
-    if (!selectedAnnotationRef || !selectedAnnotationRef.current) return;
+    if (!selectedAnnotation) return;
 
-    selectedAnnotationRef.current = {
-      ...instance,
-      boundingBox: invertedBoundingBox,
-      contour: invertedContour,
-      mask: invertedMask,
-    };
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: {
+          ...instance,
+          boundingBox: invertedBoundingBox,
+          contour: invertedContour,
+          mask: invertedMask,
+        },
+      })
+    );
 
     annotationTool.mask = invertedMask;
     annotationTool.boundingBox = invertedBoundingBox;
@@ -196,7 +201,7 @@ export const Stage = () => {
 
     let combinedMask, combinedContour;
 
-    const selectedInstance = selectedAnnotationRef.current;
+    const selectedInstance = selectedAnnotation;
 
     if (!selectedInstance) return;
 
@@ -229,12 +234,16 @@ export const Stage = () => {
     )
       return;
 
-    selectedAnnotationRef.current = {
-      ...selectedInstance,
-      boundingBox: annotationTool.boundingBox,
-      contour: annotationTool.contour,
-      mask: annotationTool.mask,
-    };
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: {
+          ...selectedInstance,
+          boundingBox: annotationTool.boundingBox,
+          contour: annotationTool.contour,
+          mask: annotationTool.mask,
+        },
+      })
+    );
   }, [annotated]);
 
   useEffect(() => {
@@ -259,7 +268,7 @@ export const Stage = () => {
   useEffect(() => {
     if (!selectedAnnotationId) return;
 
-    if (!selectedAnnotationRef || !selectedAnnotationRef.current) return;
+    if (!selectedAnnotation) return;
 
     const others = annotations?.filter(
       (instance: SelectionType) => instance.id !== selectedAnnotationId
@@ -278,7 +287,11 @@ export const Stage = () => {
       })
     );
 
-    selectedAnnotationRef.current = updated;
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: updated,
+      })
+    );
   }, [selectedCategory]);
 
   useEffect(() => {
@@ -294,7 +307,12 @@ export const Stage = () => {
       if (selectionMode !== AnnotationModeType.New) return;
       annotationTool.annotate(selectedCategory);
       if (!annotationTool.annotation) return;
-      selectedAnnotationRef.current = annotationTool.annotation;
+
+      dispatch(
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: annotationTool.annotation,
+        })
+      );
     }
 
     if (selectionMode === AnnotationModeType.New) return;
@@ -355,7 +373,11 @@ export const Stage = () => {
 
     if (!annotationTool.annotation) return;
 
-    selectedAnnotationRef.current = annotationTool.annotation;
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: annotationTool.annotation,
+      })
+    );
   }, [annotated]);
 
   /*
@@ -376,10 +398,14 @@ export const Stage = () => {
 
     if (!annotations) return;
 
-    selectedAnnotationRef.current = annotations.filter((v: SelectionType) => {
-      // @ts-ignore
-      return v.id === selectedAnnotationId;
-    })[0];
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: annotations.filter((v: SelectionType) => {
+          // @ts-ignore
+          return v.id === selectedAnnotationId;
+        })[0],
+      })
+    );
   }, [selectedAnnotationId]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
@@ -419,7 +445,11 @@ export const Stage = () => {
         if (annotated) deselectAnnotation();
 
         if (selectionMode === AnnotationModeType.New) {
-          selectedAnnotationRef.current = null;
+          dispatch(
+            applicationSlice.actions.setSelectedAnnotation({
+              selectedAnnotation: undefined,
+            })
+          );
         }
 
         if (!annotationTool) return;
@@ -515,19 +545,19 @@ export const Stage = () => {
 
     if (!annotations || !annotationTool || annotationTool.annotating) return;
 
-    if (!selectedAnnotationRef || !selectedAnnotationRef.current) return;
+    if (!selectedAnnotation) return;
 
-    if (selectedAnnotationId === selectedAnnotationRef.current.id) {
+    if (selectedAnnotationId === selectedAnnotation.id) {
       dispatch(
         applicationSlice.actions.replaceImageInstance({
-          id: selectedAnnotationRef.current.id,
-          instance: selectedAnnotationRef.current,
+          id: selectedAnnotation.id,
+          instance: selectedAnnotation,
         })
       );
     } else {
       dispatch(
         applicationSlice.actions.setImageInstances({
-          instances: [...annotations, selectedAnnotationRef.current],
+          instances: [...annotations, selectedAnnotation],
         })
       );
     }
@@ -536,7 +566,11 @@ export const Stage = () => {
 
     deselectAnnotation();
 
-    selectedAnnotationRef.current = null;
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: undefined,
+      })
+    );
 
     if (selectionMode !== AnnotationModeType.New)
       dispatch(
@@ -569,7 +603,11 @@ export const Stage = () => {
 
         if (soundEnabled) playDeleteAnnotationSoundEffect();
 
-        selectedAnnotationRef.current = null;
+        dispatch(
+          applicationSlice.actions.setSelectedAnnotation({
+            selectedAnnotation: undefined,
+          })
+        );
       }
     }
 
@@ -621,10 +659,8 @@ export const Stage = () => {
                   />
                 )}
 
-              {selectedAnnotationRef && selectedAnnotationRef.current && (
-                <SelectedContour
-                  points={selectedAnnotationRef.current.contour}
-                />
+              {selectedAnnotation && (
+                <SelectedContour points={selectedAnnotation.contour} />
               )}
 
               <Annotations annotationTool={annotationTool} />

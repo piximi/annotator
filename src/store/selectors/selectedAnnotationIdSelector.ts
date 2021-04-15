@@ -1,6 +1,6 @@
 import { HistoryStateType } from "../../types/HistoryStateType";
 
-export const selectedAnnotationSelectorId = ({
+export const selectedAnnotationIdSelector = ({
   state,
 }: {
   state: HistoryStateType;

@@ -6,12 +6,27 @@ import {
   toolTypeSelector,
 } from "../../store/selectors";
 import { useHotkeys } from "react-hotkeys-hook";
+import { ActionCreators } from "redux-undo";
 
 export const useKeyboardShortcuts = () => {
   const dispatch = useDispatch();
 
   const categories = useSelector(createdCategoriesSelector);
   const toolType = useSelector(toolTypeSelector);
+
+  /*
+  Undo operation (Ctrl+z)
+  */
+  useHotkeys("ctrl+z", () => {
+    dispatch(ActionCreators.undo());
+  });
+
+  /*
+  Undo operation (Cmd+z)
+  */
+  useHotkeys("cmd+z", () => {
+    dispatch(ActionCreators.undo());
+  });
 
   /*
    * Cycle lasso tools (Shift + L)

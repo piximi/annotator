@@ -1,10 +1,10 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 import { AnnotationModeType } from "../../types/AnnotationModeType";
 
 export const selectionModeSelector = ({
   state,
 }: {
-  state: StateType;
+  state: HistoryStateType;
 }): AnnotationModeType => {
   return state.present.selectionMode;
 };

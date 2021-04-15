@@ -1,9 +1,9 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 
 export const annotatingSelector = ({
   state,
 }: {
-  state: StateType;
+  state: HistoryStateType;
 }): boolean => {
   return state.present.annotating;
 };

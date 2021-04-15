@@ -1,5 +1,5 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 
-export const imageSelector = ({ state }: { state: StateType }) => {
+export const imageSelector = ({ state }: { state: HistoryStateType }) => {
   return state.present.image;
 };

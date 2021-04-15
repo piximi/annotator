@@ -1,9 +1,9 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 
 export const stageHeightSelector = ({
   state,
 }: {
-  state: StateType;
+  state: HistoryStateType;
 }): number => {
   return state.present.stageHeight;
 };

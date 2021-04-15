@@ -1,11 +1,11 @@
-import { StateType } from "../../types/StateType";
+import { HistoryStateType } from "../../types/HistoryStateType";
 import * as _ from "lodash";
 import { CategoryType } from "../../types/CategoryType";
 
 export const selectedCategroySelector = ({
   state,
 }: {
-  state: StateType;
+  state: HistoryStateType;
 }): CategoryType => {
   const category = _.find(
     state.present.categories,

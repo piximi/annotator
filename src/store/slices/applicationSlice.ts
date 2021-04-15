@@ -8,71 +8,67 @@ import * as _ from "lodash";
 import colorImage from "../../images/cell-painting.png";
 import { LanguageType } from "../../types/LanguageType";
 import * as tensorflow from "@tensorflow/tfjs";
-import { HistoryStateType } from "../../types/HistoryStateType";
+import { StateType } from "../../types/StateType";
 
-const initialState: HistoryStateType = {
-  future: [],
-  past: [],
-  present: {
-    annotated: false,
-    annotating: true,
-    boundingClientRect: new DOMRect(),
-    brightness: 0,
-    categories: [
-      {
-        color: "#AAAAAA",
-        id: "00000000-0000-0000-0000-000000000000",
-        name: "Unknown",
-        visible: true,
-      },
-      {
-        color: "#a08cd2",
-        id: "00000000-0000-0000-0000-000000000001",
-        name: "Cell membrane",
-        visible: true,
-      },
-      {
-        color: "#b8ddf3",
-        id: "00000000-0000-0000-0000-000000000002",
-        name: "Cell nucleus",
-        visible: true,
-      },
-    ],
-    contrast: 0,
-    exposure: 0,
-    hue: 0,
-    image: {
-      id: "",
-      annotations: [],
-      name: "example.png",
-      shape: {
-        channels: 3,
-        frames: 1,
-        height: 512,
-        planes: 1,
-        width: 512,
-      },
-      src: colorImage,
+const initialState: StateType = {
+  annotated: false,
+  annotating: true,
+  boundingClientRect: new DOMRect(),
+  brightness: 0,
+  categories: [
+    {
+      color: "#AAAAAA",
+      id: "00000000-0000-0000-0000-000000000000",
+      name: "Unknown",
+      visible: true,
     },
-    invertMode: false,
-    language: LanguageType.English,
-    offset: { x: 0, y: 0 },
-    penSelectionBrushSize: 2,
-    saturation: 0,
-    selectedCategory: "00000000-0000-0000-0000-000000000000",
-    selectionMode: AnnotationModeType.New,
-    soundEnabled: true,
-    stageHeight: 1000,
-    stageScale: 1,
-    stageWidth: 1000,
-    toolType: ToolType.RectangularAnnotation,
-    vibrance: 0,
-    zoomSelection: {
-      dragging: false,
-      minimum: undefined,
-      maximum: undefined,
-      selecting: false,
+    {
+      color: "#a08cd2",
+      id: "00000000-0000-0000-0000-000000000001",
+      name: "Cell membrane",
+      visible: true,
     },
+    {
+      color: "#b8ddf3",
+      id: "00000000-0000-0000-0000-000000000002",
+      name: "Cell nucleus",
+      visible: true,
+    },
+  ],
+  contrast: 0,
+  exposure: 0,
+  hue: 0,
+  image: {
+    id: "",
+    annotations: [],
+    name: "example.png",
+    shape: {
+      channels: 3,
+      frames: 1,
+      height: 512,
+      planes: 1,
+      width: 512,
+    },
+    src: colorImage,
+  },
+  invertMode: false,
+  language: LanguageType.English,
+  offset: { x: 0, y: 0 },
+  penSelectionBrushSize: 2,
+  saturation: 0,
+  selectedCategory: "00000000-0000-0000-0000-000000000000",
+  selectionMode: AnnotationModeType.New,
+  soundEnabled: true,
+  stageHeight: 1000,
+  stageScale: 1,
+  stageWidth: 1000,
+  toolType: ToolType.RectangularAnnotation,
+  vibrance: 0,
+  zoomSelection: {
+    dragging: false,
+    minimum: undefined,
+    maximum: undefined,
+    selecting: false,
   },
 };
 
@@ -81,198 +77,182 @@ export const applicationSlice = createSlice({
   name: "image-viewer-application",
   reducers: {
     deleteCategory(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ category: CategoryType }>
     ) {
-      state.present.categories = state.present.categories.filter(
+      state.categories = state.categories.filter(
         (category: CategoryType) => category.id !== action.payload.category.id
       );
     },
     deleteImageInstance(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ id: string }>
     ) {
-      if (!state.present.image) return;
+      if (!state.image) return;
 
-      state.present.image.annotations = state.present.image.annotations.filter(
+      state.image.annotations = state.image.annotations.filter(
         (instance: AnnotationType) => instance.id !== action.payload.id
       );
     },
     replaceImageInstance(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ id: string; instance: AnnotationType }>
     ) {
-      if (!state.present.image) return;
+      if (!state.image) return;
 
-      const instances = state.present.image.annotations.filter(
+      const instances = state.image.annotations.filter(
         (instance: AnnotationType) => instance.id !== action.payload.id
       );
 
-      state.present.image.annotations = [...instances, action.payload.instance];
+      state.image.annotations = [...instances, action.payload.instance];
     },
     setAnnotated(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ annotated: boolean }>
     ) {
-      state.present.annotated = action.payload.annotated;
+      state.annotated = action.payload.annotated;
     },
     setBoundingClientRect(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ boundingClientRect: DOMRect }>
     ) {
-      state.present.boundingClientRect = action.payload.boundingClientRect;
+      state.boundingClientRect = action.payload.boundingClientRect;
     },
     setBrightness(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ brightness: number }>
     ) {
-      state.present.brightness = action.payload.brightness;
+      state.brightness = action.payload.brightness;
     },
     setCategories(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ categories: Array<CategoryType> }>
     ) {
-      state.present.categories = action.payload.categories;
+      state.categories = action.payload.categories;
     },
     setCategoryVisibility(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ category: CategoryType; visible: boolean }>
     ) {
-      const category = _.find(state.present.categories, (category) => {
+      const category = _.find(state.categories, (category) => {
         return category.id === action.payload.category.id;
       });
       if (!category) return;
       category.visible = action.payload.visible;
-      state.present.categories = [
-        ...state.present.categories.filter((category) => {
+      state.categories = [
+        ...state.categories.filter((category) => {
           return category.id !== action.payload.category.id;
         }),
         category,
       ];
     },
-    setContrast(
-      state: HistoryStateType,
-      action: PayloadAction<{ contrast: number }>
-    ) {
-      state.present.contrast = action.payload.contrast;
+    setContrast(state: StateType, action: PayloadAction<{ contrast: number }>) {
+      state.contrast = action.payload.contrast;
     },
-    setExposure(
-      state: HistoryStateType,
-      action: PayloadAction<{ exposure: number }>
-    ) {
-      state.present.exposure = action.payload.exposure;
+    setExposure(state: StateType, action: PayloadAction<{ exposure: number }>) {
+      state.exposure = action.payload.exposure;
     },
-    setHue(state: HistoryStateType, action: PayloadAction<{ hue: number }>) {
-      state.present.hue = action.payload.hue;
+    setHue(state: StateType, action: PayloadAction<{ hue: number }>) {
+      state.hue = action.payload.hue;
     },
-    setImage(
-      state: HistoryStateType,
-      action: PayloadAction<{ image: ImageType }>
-    ) {
-      state.present.image = action.payload.image;
+    setImage(state: StateType, action: PayloadAction<{ image: ImageType }>) {
+      state.image = action.payload.image;
     },
     setImageInstances(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ instances: Array<AnnotationType> }>
     ) {
-      if (!state.present.image) return;
-      state.present.image.annotations = action.payload.instances;
+      if (!state.image) return;
+      state.image.annotations = action.payload.instances;
     },
-    setImageName(
-      state: HistoryStateType,
-      action: PayloadAction<{ name: string }>
-    ) {
-      if (!state.present.image) return;
+    setImageName(state: StateType, action: PayloadAction<{ name: string }>) {
+      if (!state.image) return;
 
-      state.present.image.name = action.payload.name;
+      state.image.name = action.payload.name;
     },
     setInvertMode(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ invertMode: boolean }>
     ) {
-      state.present.invertMode = action.payload.invertMode;
+      state.invertMode = action.payload.invertMode;
     },
     setLanguage(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ language: LanguageType }>
     ) {
-      state.present.language = action.payload.language;
+      state.language = action.payload.language;
     },
     setOffset(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ offset: { x: number; y: number } }>
     ) {
-      state.present.offset = action.payload.offset;
+      state.offset = action.payload.offset;
     },
     setOperation(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ operation: ToolType }>
     ) {
-      state.present.toolType = action.payload.operation;
+      state.toolType = action.payload.operation;
     },
     setPenSelectionBrushSize(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ penSelectionBrushSize: number }>
     ) {
-      state.present.penSelectionBrushSize =
-        action.payload.penSelectionBrushSize;
+      state.penSelectionBrushSize = action.payload.penSelectionBrushSize;
     },
     setSaturation(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ saturation: number }>
     ) {
-      state.present.saturation = action.payload.saturation;
+      state.saturation = action.payload.saturation;
     },
     setSeletedCategory(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ selectedCategory: string }>
     ) {
-      state.present.selectedCategory = action.payload.selectedCategory;
+      state.selectedCategory = action.payload.selectedCategory;
     },
     setSelectedAnnotation(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ selectedAnnotation: string | undefined }>
     ) {
-      state.present.selectedAnnotation = action.payload.selectedAnnotation;
+      state.selectedAnnotation = action.payload.selectedAnnotation;
     },
     setSelectionMode(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ selectionMode: AnnotationModeType }>
     ) {
-      state.present.selectionMode = action.payload.selectionMode;
+      state.selectionMode = action.payload.selectionMode;
     },
     setStageHeight(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ stageHeight: number }>
     ) {
-      state.present.stageHeight = action.payload.stageHeight;
+      state.stageHeight = action.payload.stageHeight;
     },
     setStageScale(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ stageScale: number }>
     ) {
-      state.present.stageScale = action.payload.stageScale;
+      state.stageScale = action.payload.stageScale;
     },
     setStageWidth(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ stageWidth: number }>
     ) {
-      state.present.stageWidth = action.payload.stageWidth;
+      state.stageWidth = action.payload.stageWidth;
     },
     setSoundEnabled(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{ soundEnabled: boolean }>
     ) {
-      state.present.soundEnabled = action.payload.soundEnabled;
+      state.soundEnabled = action.payload.soundEnabled;
     },
-    setVibrance(
-      state: HistoryStateType,
-      action: PayloadAction<{ vibrance: number }>
-    ) {
-      state.present.vibrance = action.payload.vibrance;
+    setVibrance(state: StateType, action: PayloadAction<{ vibrance: number }>) {
+      state.vibrance = action.payload.vibrance;
     },
     setZoomSelection(
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<{
         zoomSelection: {
           dragging: boolean;
@@ -282,12 +262,12 @@ export const applicationSlice = createSlice({
         };
       }>
     ) {
-      state.present.zoomSelection = action.payload.zoomSelection;
+      state.zoomSelection = action.payload.zoomSelection;
     },
   },
   extraReducers: {
     ["thunks/loadLayersModel/fulfilled"]: (
-      state: HistoryStateType,
+      state: StateType,
       action: PayloadAction<tensorflow.LayersModel>
     ) => {
       console.info(action.payload);

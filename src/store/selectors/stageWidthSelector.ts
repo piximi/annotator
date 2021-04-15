@@ -1,9 +1,5 @@
-import { HistoryStateType } from "../../types/HistoryStateType";
+import { StateType } from "../../types/StateType";
 
-export const stageWidthSelector = ({
-  state,
-}: {
-  state: HistoryStateType;
-}): number => {
+export const stageWidthSelector = ({ state }: { state: StateType }): number => {
   return state.present.stageWidth;
 };

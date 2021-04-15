@@ -1,9 +1,9 @@
-import { HistoryStateType } from "../../types/HistoryStateType";
+import { StateType } from "../../types/StateType";
 
 export const zoomSelectionSelector = ({
   state,
 }: {
-  state: HistoryStateType;
+  state: StateType;
 }): {
   dragging: boolean;
   minimum: { x: number; y: number } | undefined;

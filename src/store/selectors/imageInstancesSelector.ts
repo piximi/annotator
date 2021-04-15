@@ -1,9 +1,5 @@
-import { HistoryStateType } from "../../types/HistoryStateType";
+import { StateType } from "../../types/StateType";
 
-export const imageInstancesSelector = ({
-  state,
-}: {
-  state: HistoryStateType;
-}) => {
+export const imageInstancesSelector = ({ state }: { state: StateType }) => {
   return state.present.image?.annotations;
 };

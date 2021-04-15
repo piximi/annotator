@@ -1,5 +1,5 @@
-import { HistoryStateType } from "../../types/HistoryStateType";
+import { StateType } from "../../types/StateType";
 
-export const categoriesSelector = ({ state }: { state: HistoryStateType }) => {
+export const categoriesSelector = ({ state }: { state: StateType }) => {
   return state.present.categories;
 };

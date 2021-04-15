@@ -1,10 +1,6 @@
-import { HistoryStateType } from "../../types/HistoryStateType";
+import { StateType } from "../../types/StateType";
 
-export const visibleCategoriesSelector = ({
-  state,
-}: {
-  state: HistoryStateType;
-}) => {
+export const visibleCategoriesSelector = ({ state }: { state: StateType }) => {
   return state.present.categories
     .filter((category) => category.visible)
     .map((category) => {

@@ -1,9 +1,9 @@
-import { HistoryStateType } from "../../types/HistoryStateType";
+import { StateType } from "../../types/StateType";
 
 export const penSelectionBrushSizeSelector = ({
   state,
 }: {
-  state: HistoryStateType;
+  state: StateType;
 }) => {
   return state.present.penSelectionBrushSize;
 };

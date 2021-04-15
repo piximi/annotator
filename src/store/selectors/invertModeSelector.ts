@@ -1,9 +1,9 @@
-import { HistoryStateType } from "../../types/HistoryStateType";
+import { StateType } from "../../types/StateType";
 
 export const invertModeSelector = ({
   state,
 }: {
-  state: HistoryStateType;
+  state: StateType;
 }): boolean => {
   return state.present.invertMode;
 };

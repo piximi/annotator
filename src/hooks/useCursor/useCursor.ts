@@ -10,8 +10,16 @@ export const useCursor = () => {
 
   useEffect(() => {
     switch (toolType) {
+      case ToolType.EllipticalAnnotation:
+        setCursor("crosshair");
+
+        break;
       case ToolType.PenAnnotation:
         setCursor("none");
+
+        break;
+      case ToolType.RectangularAnnotation:
+        setCursor("crosshair");
 
         break;
       default:

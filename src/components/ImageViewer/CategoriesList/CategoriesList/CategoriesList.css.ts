@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
+import texture from "../../../../images/texture.png";
 
 const settingsWidth = 240;
 const operationsWidth = 56;
@@ -65,5 +66,6 @@ export const useStyles = makeStyles((theme) => ({
   applicationDrawerPaper: {
     zIndex: 0,
     width: theme.spacing(32),
+    backgroundImage: `url(${texture})`,
   },
 }));

@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
+import texture from "../../../../images/texture.png";
 
 const settingsWidth = 240;
 const operationsWidth = 56;
@@ -23,6 +24,7 @@ export const useStyles = makeStyles((theme) => ({
   settingsPaper: {
     width: settingsWidth,
     right: operationsWidth,
+    backgroundImage: `url(${texture})`,
   },
   toolbar: {
     ...theme.mixins.toolbar,

@@ -297,7 +297,7 @@ export const Stage = () => {
     if (selectionMode === AnnotationModeType.New) return;
 
     if (annotationTool.annotating) setSelecting(annotationTool.annotating);
-  });
+  }, [annotationTool?.annotated]);
 
   useEffect(() => {
     if (toolType === ToolType.PenAnnotation) {

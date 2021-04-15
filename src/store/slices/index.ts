@@ -4,6 +4,7 @@ export {
   deleteImageInstance,
   replaceImageInstance,
   setAnnotated,
+  setAnnotating,
   setBoundingClientRect,
   setBrightness,
   setCategories,

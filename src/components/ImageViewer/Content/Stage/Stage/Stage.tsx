@@ -4,6 +4,7 @@ import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
+  annotatingSelector,
   imageInstancesSelector,
   invertModeSelector,
   selectedCategroySelector,
@@ -81,8 +82,6 @@ export const Stage = () => {
 
   const [annotationTool] = useAnnotationTool();
 
-  const [selecting, setSelecting] = useState<boolean>(false);
-
   const [currentPosition, setCurrentPosition] = useState<{
     x: number;
     y: number;
@@ -93,6 +92,7 @@ export const Stage = () => {
   const annotations = useSelector(imageInstancesSelector);
 
   const annotated = useSelector(annotatedSelector);
+  const annotating = useSelector(annotatingSelector);
 
   const { dragging: zoomDragging, selecting: zoomSelecting } = useSelector(
     zoomSelectionSelector
@@ -185,7 +185,7 @@ export const Stage = () => {
 
     if (selectionMode === AnnotationModeType.New) return;
 
-    setSelecting(false);
+    dispatch(applicationSlice.actions.setAnnotating({ annotating: false }));
 
     if (!annotated || !annotationTool) return;
 
@@ -239,7 +239,7 @@ export const Stage = () => {
 
     if (selectionMode === AnnotationModeType.New) return;
 
-    if (!selecting) return;
+    if (!annotating) return;
 
     if (!selectedAnnotationId) return;
 
@@ -251,7 +251,7 @@ export const Stage = () => {
         id: selectedAnnotationId,
       })
     );
-  }, [selecting]);
+  }, [annotating]);
 
   useEffect(() => {
     if (!selectedAnnotationId) return;
@@ -296,7 +296,13 @@ export const Stage = () => {
 
     if (selectionMode === AnnotationModeType.New) return;
 
-    if (annotationTool.annotating) setSelecting(annotationTool.annotating);
+    // if (annotationTool.annotating) setSelecting(annotationTool.annotating);
+    if (annotationTool.annotating)
+      dispatch(
+        applicationSlice.actions.setAnnotating({
+          annotating: annotationTool.annotating,
+        })
+      );
   }, [annotationTool?.annotated, annotationTool?.annotating]);
 
   useEffect(() => {

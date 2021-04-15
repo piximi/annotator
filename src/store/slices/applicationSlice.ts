@@ -12,7 +12,7 @@ import { StateType } from "../../types/StateType";
 
 const initialState: StateType = {
   annotated: false,
-  annotating: true,
+  annotating: false,
   boundingClientRect: new DOMRect(),
   brightness: 0,
   categories: [
@@ -111,6 +111,12 @@ export const applicationSlice = createSlice({
       action: PayloadAction<{ annotated: boolean }>
     ) {
       state.annotated = action.payload.annotated;
+    },
+    setAnnotating(
+      state: StateType,
+      action: PayloadAction<{ annotating: boolean }>
+    ) {
+      state.annotating = action.payload.annotating;
     },
     setBoundingClientRect(
       state: StateType,
@@ -279,6 +285,7 @@ export const {
   deleteCategory,
   deleteImageInstance,
   replaceImageInstance,
+  setAnnotating,
   setAnnotated,
   setBoundingClientRect,
   setBrightness,

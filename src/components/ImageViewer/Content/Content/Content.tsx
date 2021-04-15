@@ -6,6 +6,7 @@ import { useStyles } from "./Content.css";
 import { NativeTypes } from "react-dnd-html5-backend";
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { useBoundingClientRect } from "../../../../hooks/useBoundingClientRect";
+import { useCursor } from "../../../../hooks";
 
 type ContentProps = {
   onDrop: (item: { files: any[] }) => void;
@@ -36,8 +37,10 @@ export const Content = ({ onDrop }: ContentProps) => {
     []
   );
 
+  const { cursor } = useCursor();
+
   return (
-    <main className={classes.content} ref={ref}>
+    <main className={classes.content} ref={ref} style={{ cursor: cursor }}>
       <Stage />
     </main>
   );

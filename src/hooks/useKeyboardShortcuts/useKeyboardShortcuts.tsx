@@ -18,14 +18,14 @@ export const useKeyboardShortcuts = () => {
   Undo operation (Ctrl+z)
   */
   useHotkeys("ctrl+z", () => {
-    dispatch(ActionCreators.undo());
+    dispatch(ActionCreators.jump(-4));
   });
 
   /*
   Undo operation (Cmd+z)
   */
   useHotkeys("cmd+z", () => {
-    dispatch(ActionCreators.undo());
+    dispatch(ActionCreators.jump(-4));
   });
 
   /*

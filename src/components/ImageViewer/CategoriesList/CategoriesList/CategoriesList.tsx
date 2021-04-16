@@ -213,7 +213,6 @@ export const CategoriesList = () => {
               />
 
               <EditCategoryDialog
-                category={category}
                 onCloseDialog={onCloseEditCategoryDialog}
                 openDialog={openEditCategoryDialog}
               />

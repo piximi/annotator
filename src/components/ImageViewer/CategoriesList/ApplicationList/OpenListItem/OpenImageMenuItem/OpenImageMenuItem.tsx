@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ListItemText, MenuItem } from "@material-ui/core";
 
-export const OpenClassifierMenuItem = (props: any) => {
+export const OpenImageMenuItem = (props: any) => {
   const { closeMenu, openClassifier } = props;
 
   const onChange = (e: any) => {

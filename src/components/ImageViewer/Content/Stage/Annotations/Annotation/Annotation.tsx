@@ -23,12 +23,6 @@ type AnnotationProps = {
 };
 
 export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
-  const ref = useRef<Konva.Line | null>(null);
-
-  useEffect(() => {
-    ref.current = new Konva.Line();
-  }, []);
-
   const dispatch = useDispatch();
 
   const categories = useSelector(categoriesSelector);
@@ -44,8 +38,6 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
     if (toolType !== ToolType.Pointer) return;
 
     event.evt.preventDefault();
-
-    if (!ref || !ref.current) return;
 
     dispatch(
       setSeletedCategory({
@@ -68,7 +60,6 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       onClick={onPointerClick}
       opacity={0.5}
       points={annotation.contour}
-      ref={ref}
       scale={{ x: stageScale, y: stageScale }}
       strokeWidth={1}
     />

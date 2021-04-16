@@ -85,11 +85,8 @@ export const ImageViewer = (props: ImageViewerProps) => {
       <div className={classes.root}>
         <CssBaseline />
 
-        <ImageViewerAppBar />
-
         <CategoriesList />
 
-        {/*<Main />*/}
         <Content onDrop={onDrop} />
 
         <ToolOptions />

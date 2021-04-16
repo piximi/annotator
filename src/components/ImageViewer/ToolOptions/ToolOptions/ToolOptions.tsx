@@ -139,10 +139,6 @@ export const ToolOptions = () => {
       classes={{ paper: classes.settingsPaper }}
       variant="permanent"
     >
-      <div className={classes.settingsToolbar} />
-
-      <Divider />
-
       {
         operations[
           operations.findIndex(

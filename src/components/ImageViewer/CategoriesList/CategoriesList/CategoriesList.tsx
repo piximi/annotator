@@ -24,7 +24,7 @@ import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { applicationSlice } from "../../../../store";
 import { useDispatch } from "react-redux";
-import { Divider } from "@material-ui/core";
+import { Chip, Divider } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -34,6 +34,8 @@ import FeedbackIcon from "@material-ui/icons/Feedback";
 import HelpIcon from "@material-ui/icons/Help";
 import OpenIcon from "@material-ui/icons/FolderOpen";
 import SaveIcon from "@material-ui/icons/Save";
+import Typography from "@material-ui/core/Typography";
+import Toolbar from "@material-ui/core/Toolbar";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -103,7 +105,13 @@ export const CategoriesList = () => {
       open
       variant="persistent"
     >
-      <div className={classes.applicationDrawerHeader} />
+      <Toolbar>
+        <Typography className={classes.logo} variant="h6">
+          <strong>Piximi</strong>
+        </Typography>
+      </Toolbar>
+
+      <Divider />
 
       <List component="nav" dense>
         <ListItem button>

@@ -23,12 +23,12 @@ import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { applicationSlice } from "../../../../store";
-import { Divider } from "@material-ui/core";
+import { Divider, Menu, MenuItem } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { AnnotationType } from "../../../../types/AnnotationType";
-import OpenIcon from "@material-ui/icons/FolderOpen";
+import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import SaveIcon from "@material-ui/icons/Save";
 import Typography from "@material-ui/core/Typography";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -37,7 +37,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Box from "@material-ui/core/Box";
 import { MiscellaneousList } from "../MiscellaneousList";
-import { ApplicationList } from "../ApplicationList";
+import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -144,7 +144,55 @@ export const CategoriesList = () => {
 
       <Divider />
 
-      <ApplicationList />
+      <List dense>
+        <PopupState variant="popover">
+          {(popupState) => (
+            <React.Fragment>
+              <ListItem button {...bindTrigger(popupState)}>
+                <ListItemIcon>
+                  <FolderOpenIcon />
+                </ListItemIcon>
+
+                <ListItemText primary="Open" />
+              </ListItem>
+
+              <Menu {...bindMenu(popupState)}>
+                <MenuItem dense onClick={popupState.close}>
+                  <ListItemText primary="Open image" />
+                </MenuItem>
+
+                <MenuItem dense onClick={popupState.close}>
+                  <ListItemText primary="Open example image" />
+                </MenuItem>
+              </Menu>
+            </React.Fragment>
+          )}
+        </PopupState>
+
+        <PopupState variant="popover">
+          {(popupState) => (
+            <React.Fragment>
+              <ListItem button {...bindTrigger(popupState)}>
+                <ListItemIcon>
+                  <SaveIcon />
+                </ListItemIcon>
+
+                <ListItemText primary="Save" />
+              </ListItem>
+
+              <Menu {...bindMenu(popupState)}>
+                <MenuItem dense onClick={popupState.close}>
+                  <ListItemText primary="Save annotations" />
+                </MenuItem>
+
+                <MenuItem dense disabled onClick={popupState.close}>
+                  <ListItemText primary="Save classifier" />
+                </MenuItem>
+              </Menu>
+            </React.Fragment>
+          )}
+        </PopupState>
+      </List>
 
       <Divider />
 

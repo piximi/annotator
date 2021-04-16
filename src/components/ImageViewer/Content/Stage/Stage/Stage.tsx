@@ -128,8 +128,6 @@ export const Stage = () => {
       })
     );
 
-    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
-
     transformerRef.current?.detach();
     transformerRef.current?.getLayer()?.batchDraw();
 
@@ -444,7 +442,10 @@ export const Stage = () => {
       if (toolType === ToolType.Zoom) {
         onZoomMouseDown(relative);
       } else {
-        if (annotated) deselectAnnotation();
+        if (annotated) {
+          deselectAnnotation();
+          dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
+        }
 
         if (selectionMode === AnnotationModeType.New) {
           dispatch(
@@ -567,6 +568,7 @@ export const Stage = () => {
     if (soundEnabled) playCreateAnnotationSoundEffect();
 
     deselectAnnotation();
+    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
 
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({

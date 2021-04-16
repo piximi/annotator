@@ -6,7 +6,7 @@ import { CategoryType } from "../../../../types/CategoryType";
 import {
   createdCategoriesSelector,
   imageInstancesSelector,
-  selectedCategroySelector,
+  selectedCategorySelector,
   unknownCategorySelector,
 } from "../../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,7 +42,7 @@ export const CategoriesList = () => {
   const classes = useStyles();
 
   const createdCategories = useSelector(createdCategoriesSelector);
-  const selectedCategory = useSelector(selectedCategroySelector);
+  const selectedCategory = useSelector(selectedCategorySelector);
   const unknownCategory = useSelector(unknownCategorySelector);
 
   const annotations = useSelector(imageInstancesSelector);
@@ -74,7 +74,15 @@ export const CategoriesList = () => {
     );
   };
 
-  const onCategoryMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onCategoryMenuOpen = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    category: CategoryType
+  ) => {
+    dispatch(
+      applicationSlice.actions.setSeletedCategory({
+        selectedCategory: category.id,
+      })
+    );
     setAnchorEl(event.currentTarget);
   };
 
@@ -175,7 +183,10 @@ export const CategoriesList = () => {
                 />
 
                 <ListItemSecondaryAction>
-                  <IconButton edge="end" onClick={onCategoryMenuOpen}>
+                  <IconButton
+                    edge="end"
+                    onClick={(event) => onCategoryMenuOpen(event, category)}
+                  >
                     <MoreHorizIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
@@ -185,20 +196,20 @@ export const CategoriesList = () => {
                 anchorElCategoryMenu={anchorEl}
                 category={category}
                 onCloseCategoryMenu={onCategoryMenuClose}
-                onOpenCategoryMenu={onCategoryMenuOpen}
+                onOpenCategoryMenu={(event) =>
+                  onCategoryMenuOpen(event, category)
+                }
                 onOpenDeleteCategoryDialog={onOpenDeleteCategoryDialog}
                 onOpenEditCategoryDialog={onOpenEditCategoryDialog}
                 openCategoryMenu={Boolean(anchorEl)}
               />
 
               <DeleteCategoryDialog
-                category={category}
                 onClose={onCloseDeleteCategoryDialog}
                 open={openDeleteCategoryDialog}
               />
 
               <EditCategoryDialog
-                category={category}
                 onCloseDialog={onCloseEditCategoryDialog}
                 openDialog={openEditCategoryDialog}
               />

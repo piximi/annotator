@@ -10,35 +10,30 @@ import { AnnotationType } from "../../../../types/AnnotationType";
 import { applicationSlice } from "../../../../store";
 import {
   imageInstancesSelector,
-  selectedCategroySelector,
+  selectedCategorySelector,
 } from "../../../../store/selectors";
 
 type DeleteCategoryDialogProps = {
-  category: CategoryType;
   onClose: () => void;
   open: boolean;
 };
 
 export const DeleteCategoryDialog = ({
-  category,
   onClose,
   open,
 }: DeleteCategoryDialogProps) => {
   const dispatch = useDispatch();
 
-  const activeCategory = useSelector(selectedCategroySelector);
+  const category = useSelector(selectedCategorySelector);
 
   const selections = useSelector(imageInstancesSelector);
 
   const onDelete = () => {
-    //change activeCategory if we are about to delete it
-    if (activeCategory.id === category.id) {
-      dispatch(
-        applicationSlice.actions.setSeletedCategory({
-          selectedCategory: "00000000-0000-0000-0000-000000000000",
-        })
-      );
-    }
+    dispatch(
+      applicationSlice.actions.setSeletedCategory({
+        selectedCategory: "00000000-0000-0000-0000-000000000000",
+      })
+    );
 
     dispatch(applicationSlice.actions.deleteCategory({ category: category }));
 

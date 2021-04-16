@@ -2,7 +2,7 @@ import { HistoryStateType } from "../../types/HistoryStateType";
 import * as _ from "lodash";
 import { CategoryType } from "../../types/CategoryType";
 
-export const selectedCategroySelector = ({
+export const selectedCategorySelector = ({
   state,
 }: {
   state: HistoryStateType;

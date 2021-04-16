@@ -4,27 +4,30 @@ import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import { ColorIcon } from "../ColorIcon";
 import { useStyles } from "./EditCategoryDialog.css";
 import { CategoryType } from "../../../../types/CategoryType";
 import { applicationSlice } from "../../../../store";
-import { categoriesSelector } from "../../../../store/selectors";
+import {
+  categoriesSelector,
+  selectedCategorySelector,
+} from "../../../../store/selectors";
 
 type EditCategoryDialogProps = {
-  category: CategoryType;
   onCloseDialog: () => void;
   openDialog: boolean;
 };
 
 export const EditCategoryDialog = ({
-  category,
   onCloseDialog,
   openDialog,
 }: EditCategoryDialogProps) => {
   const dispatch = useDispatch();
+
+  const category = useSelector(selectedCategorySelector);
 
   const classes = useStyles();
 
@@ -34,11 +37,14 @@ export const EditCategoryDialog = ({
     setColor(color.hex);
   };
 
+  useEffect(() => {
+    setName(category.name);
+    setColor(category.color);
+  }, [category]);
+
   const [name, setName] = useState<string>(category.name);
 
   const onNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    debugger;
-
     setName(event.target.value);
   };
 

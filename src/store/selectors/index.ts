@@ -13,7 +13,7 @@ export { imageSelector } from "./imageSelector";
 export { imageSrcSelector } from "./imageSrcSelector";
 export { invertModeSelector } from "./invertModeSelector";
 export { saturationSelector } from "./saturationSelector";
-export { selectedCategroySelector } from "./selectedCategroySelector";
+export { selectedCategorySelector } from "./selectedCategorySelector";
 export { selectionModeSelector } from "./selectionModeSelector";
 export { stageHeightSelector } from "./stageHeightSelector";
 export { stageScaleSelector } from "./stageScaleSelector";

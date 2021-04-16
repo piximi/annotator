@@ -3,8 +3,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import { CategoryType } from "../../../../../types/CategoryType";
 import { useTranslation } from "../../../../../hooks/useTranslation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../../store";
+import { selectedCategorySelector } from "../../../../../store/selectors";
 
 type HideOrShowCategoryMenuItemProps = {
   category: CategoryType;
@@ -14,10 +15,11 @@ type HideOrShowCategoryMenuItemProps = {
 };
 
 export const HideOrShowCategoryMenuItem = ({
-  category,
   onCloseCategoryMenu,
 }: HideOrShowCategoryMenuItemProps) => {
   const dispatch = useDispatch();
+
+  const category = useSelector(selectedCategorySelector);
 
   const onClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     dispatch(

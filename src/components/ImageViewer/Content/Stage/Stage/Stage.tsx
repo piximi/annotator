@@ -7,7 +7,7 @@ import {
   annotatingSelector,
   imageInstancesSelector,
   invertModeSelector,
-  selectedCategroySelector,
+  selectedCategorySelector,
   selectionModeSelector,
   stageHeightSelector,
   stageScaleSelector,
@@ -63,7 +63,7 @@ export const Stage = () => {
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
   const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
-  const selectedCategory = useSelector(selectedCategroySelector);
+  const selectedCategory = useSelector(selectedCategorySelector);
   const selectionMode = useSelector(selectionModeSelector);
 
   const stageHeight = useSelector(stageHeightSelector);
@@ -76,6 +76,7 @@ export const Stage = () => {
   const dispatch = useDispatch();
 
   const {
+    deselect: onZoomDeselect,
     onMouseUp: onZoomMouseUp,
     onMouseMove: onZoomMouseMove,
     onMouseDown: onZoomMouseDown,
@@ -620,6 +621,12 @@ export const Stage = () => {
       }
     }
   }, [backspacePress, deletePress, escapePress]);
+
+  useEffect(() => {
+    if (!escape) return;
+    if (toolType !== ToolType.Zoom) return;
+    onZoomDeselect();
+  }, [escapePress]);
 
   const [tool, setTool] = useState<Tool>();
 

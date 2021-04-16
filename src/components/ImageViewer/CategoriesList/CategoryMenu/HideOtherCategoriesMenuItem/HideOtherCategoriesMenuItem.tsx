@@ -5,20 +5,23 @@ import { CategoryType } from "../../../../../types/CategoryType";
 import { useTranslation } from "../../../../../hooks/useTranslation";
 import { applicationSlice } from "../../../../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { categoriesSelector } from "../../../../../store/selectors";
+import {
+  categoriesSelector,
+  selectedCategorySelector,
+} from "../../../../../store/selectors";
 
 type HideOtherCategoriesMenuItemProps = {
-  category: CategoryType;
   onCloseCategoryMenu: (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => void;
 };
 
 export const HideOtherCategoriesMenuItem = ({
-  category,
   onCloseCategoryMenu,
 }: HideOtherCategoriesMenuItemProps) => {
   const categories = useSelector(categoriesSelector);
+
+  const category = useSelector(selectedCategorySelector);
 
   const dispatch = useDispatch();
 

@@ -191,9 +191,9 @@ export const Stage = () => {
 
     if (selectionMode === AnnotationModeType.New) return;
 
-    dispatch(applicationSlice.actions.setAnnotating({ annotating: false }));
-
     if (!annotated || !annotationTool) return;
+
+    dispatch(applicationSlice.actions.setAnnotating({ annotating: false }));
 
     if (!annotationTool.annotated) return;
 
@@ -315,7 +315,6 @@ export const Stage = () => {
 
     if (selectionMode === AnnotationModeType.New) return;
 
-    // if (annotationTool.annotating) setSelecting(annotationTool.annotating);
     if (annotationTool.annotating)
       dispatch(
         applicationSlice.actions.setAnnotating({

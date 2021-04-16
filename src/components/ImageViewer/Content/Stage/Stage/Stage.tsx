@@ -377,6 +377,11 @@ export const Stage = () => {
         selectedAnnotation: annotationTool.annotation,
       })
     );
+    dispatch(
+      setSelectedAnnotationId({
+        selectedAnnotationId: annotationTool.annotation.id,
+      })
+    );
   }, [annotated]);
 
   /*

@@ -619,6 +619,7 @@ export const Stage = () => {
     if (soundEnabled) playCreateAnnotationSoundEffect();
 
     deselectAnnotation();
+
     dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
 
     dispatch(
@@ -633,6 +634,13 @@ export const Stage = () => {
           selectionMode: AnnotationModeType.New,
         })
       );
+
+    if (!selectedAnnotationsIds.length) return;
+
+    _.map(selectedAnnotationsIds, (annotationId: string) => {
+      const transformerId = "tr-".concat(annotationId);
+      detachTransformer(transformerId);
+    });
   }, [enterPress]);
 
   useEffect(() => {

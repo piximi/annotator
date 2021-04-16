@@ -58,7 +58,7 @@ const initialState: StateType = {
   saturation: 0,
   selectedAnnotation: undefined,
   selectedAnnotationId: undefined,
-  selectedAnnotations: [],
+  selectedAnnotationsIds: [],
   selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: AnnotationModeType.New,
   soundEnabled: true,
@@ -227,9 +227,9 @@ export const applicationSlice = createSlice({
     ) {
       state.selectedAnnotation = action.payload.selectedAnnotation;
       if (action.payload.selectedAnnotation)
-        state.selectedAnnotations = [
-          ...state.selectedAnnotations,
-          action.payload.selectedAnnotation,
+        state.selectedAnnotationsIds = [
+          ...state.selectedAnnotationsIds,
+          action.payload.selectedAnnotation.id,
         ];
     },
     setSelectedAnnotationId(

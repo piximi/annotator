@@ -58,15 +58,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       })
     );
 
-    if (selectedAnnotationsIds.length === 0) {
-      dispatch(
-        addSelectedAnnotationId({ selectedAnnotationId: annotation.id })
-      );
-    }
-
     if (!shiftPress) return;
-
-    if (!annotation.id) return;
 
     if (_.includes(selectedAnnotationsIds, annotation.id)) return;
 

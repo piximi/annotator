@@ -623,6 +623,7 @@ export const Stage = () => {
   }, [backspacePress, deletePress, escapePress]);
 
   useEffect(() => {
+    if (!escape) return;
     if (toolType !== ToolType.Zoom) return;
     onZoomDeselect();
   }, [escapePress]);

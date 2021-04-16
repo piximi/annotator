@@ -4,6 +4,7 @@ export {
   applicationSlice,
   deleteCategory,
   deleteImageInstance,
+  deleteSelectedAnnotationId,
   replaceImageInstance,
   setAnnotated,
   setAnnotating,

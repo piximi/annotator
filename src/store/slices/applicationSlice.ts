@@ -106,6 +106,14 @@ export const applicationSlice = createSlice({
         (instance: AnnotationType) => instance.id !== action.payload.id
       );
     },
+    deleteSelectedAnnotationId(
+      state: StateType,
+      action: PayloadAction<{ selectedAnnotationId: string }>
+    ) {
+      state.selectedAnnotationsIds = state.selectedAnnotationsIds.filter(
+        (id: string) => id !== action.payload.selectedAnnotationId
+      );
+    },
     replaceImageInstance(
       state: StateType,
       action: PayloadAction<{ id: string; instance: AnnotationType }>
@@ -301,6 +309,7 @@ export const applicationSlice = createSlice({
 
 export const {
   addSelectedAnnotationId,
+  deleteSelectedAnnotationId,
   deleteCategory,
   deleteImageInstance,
   replaceImageInstance,

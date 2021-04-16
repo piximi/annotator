@@ -18,6 +18,7 @@ import {
 import {
   applicationSlice,
   setSelectedAnnotationId,
+  deleteSelectedAnnotationId,
 } from "../../../../../store";
 import {
   Provider,
@@ -120,6 +121,26 @@ export const Stage = () => {
   );
 
   const soundEnabled = useSelector(soundEnabledSelector);
+
+  const deselectAllAnnotations = () => {
+    _.map(selectedAnnotationsIds, (annotationId: string) => {
+      dispatch(
+        deleteSelectedAnnotationId({ selectedAnnotationId: annotationId })
+      );
+
+      if (!stageRef || !stageRef.current) return;
+      const transformerId = "tr-".concat(annotationId);
+      const transformer = stageRef.current.findOne(`#${transformerId}`);
+      const line = stageRef.current.findOne(`#${annotationId}`);
+
+      if (!line) return;
+
+      if (!transformer) return;
+
+      (transformer as Konva.Transformer).detach();
+      (transformer as Konva.Transformer).getLayer()?.batchDraw();
+    });
+  };
 
   const deselectAnnotation = () => {
     if (!annotationTool) return;
@@ -629,11 +650,15 @@ export const Stage = () => {
   useEffect(() => {
     if (selectedAnnotationId) {
       if (backspacePress || escapePress || deletePress) {
-        dispatch(
-          applicationSlice.actions.deleteImageInstance({
-            id: selectedAnnotationId,
-          })
-        );
+        _.map(selectedAnnotationsIds, (annotationId: string) => {
+          dispatch(
+            applicationSlice.actions.deleteImageInstance({
+              id: annotationId,
+            })
+          );
+        });
+
+        deselectAllAnnotations();
 
         if (soundEnabled) playDeleteAnnotationSoundEffect();
 

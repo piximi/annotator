@@ -47,6 +47,19 @@ export const useZoom = () => {
     );
   };
 
+  const deselect = () => {
+    dispatch(
+      setZoomSelection({
+        zoomSelection: {
+          maximum: undefined,
+          minimum: undefined,
+          selecting: false,
+          dragging: false,
+        },
+      })
+    );
+  };
+
   const onMouseDown = (position: { x: number; y: number }) => {
     if (toolType !== ToolType.Zoom) return;
 
@@ -128,6 +141,7 @@ export const useZoom = () => {
   };
 
   return {
+    deselect,
     onMouseDown,
     onMouseMove,
     onMouseUp,

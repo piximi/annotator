@@ -76,6 +76,7 @@ export const Stage = () => {
   const dispatch = useDispatch();
 
   const {
+    deselect: onZoomDeselect,
     onMouseUp: onZoomMouseUp,
     onMouseMove: onZoomMouseMove,
     onMouseDown: onZoomMouseDown,
@@ -620,6 +621,11 @@ export const Stage = () => {
       }
     }
   }, [backspacePress, deletePress, escapePress]);
+
+  useEffect(() => {
+    if (toolType !== ToolType.Zoom) return;
+    onZoomDeselect();
+  }, [escapePress]);
 
   const [tool, setTool] = useState<Tool>();
 

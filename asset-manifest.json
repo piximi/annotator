@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.js": "/image-viewer/static/js/main.fb1f9938.chunk.js",
-    "main.js.map": "/image-viewer/static/js/main.fb1f9938.chunk.js.map",
-    "runtime-main.js": "/image-viewer/static/js/runtime-main.d1854da1.js",
-    "runtime-main.js.map": "/image-viewer/static/js/runtime-main.d1854da1.js.map",
-    "static/js/2.94775182.chunk.js": "/image-viewer/static/js/2.94775182.chunk.js",
-    "static/js/2.94775182.chunk.js.map": "/image-viewer/static/js/2.94775182.chunk.js.map",
-    "static/js/3.41020543.chunk.js": "/image-viewer/static/js/3.41020543.chunk.js",
-    "static/js/3.41020543.chunk.js.map": "/image-viewer/static/js/3.41020543.chunk.js.map",
-    "static/js/4.905f1797.chunk.js": "/image-viewer/static/js/4.905f1797.chunk.js",
-    "static/js/4.905f1797.chunk.js.map": "/image-viewer/static/js/4.905f1797.chunk.js.map",
+    "main.js": "/image-viewer/static/js/main.39c48ae2.chunk.js",
+    "main.js.map": "/image-viewer/static/js/main.39c48ae2.chunk.js.map",
+    "runtime-main.js": "/image-viewer/static/js/runtime-main.d1741cf0.js",
+    "runtime-main.js.map": "/image-viewer/static/js/runtime-main.d1741cf0.js.map",
+    "static/js/2.cb9811fe.chunk.js": "/image-viewer/static/js/2.cb9811fe.chunk.js",
+    "static/js/2.cb9811fe.chunk.js.map": "/image-viewer/static/js/2.cb9811fe.chunk.js.map",
+    "static/js/3.7bd9f8c5.chunk.js": "/image-viewer/static/js/3.7bd9f8c5.chunk.js",
+    "static/js/3.7bd9f8c5.chunk.js.map": "/image-viewer/static/js/3.7bd9f8c5.chunk.js.map",
+    "static/js/4.06d7f2aa.chunk.js": "/image-viewer/static/js/4.06d7f2aa.chunk.js",
+    "static/js/4.06d7f2aa.chunk.js.map": "/image-viewer/static/js/4.06d7f2aa.chunk.js.map",
     "index.html": "/image-viewer/index.html",
-    "static/js/2.94775182.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.94775182.chunk.js.LICENSE.txt",
-    "static/js/3.41020543.chunk.js.LICENSE.txt": "/image-viewer/static/js/3.41020543.chunk.js.LICENSE.txt",
+    "static/js/2.cb9811fe.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.cb9811fe.chunk.js.LICENSE.txt",
+    "static/js/3.7bd9f8c5.chunk.js.LICENSE.txt": "/image-viewer/static/js/3.7bd9f8c5.chunk.js.LICENSE.txt",
     "static/media/CheckboxChecked.6700c862.svg": "/image-viewer/static/media/CheckboxChecked.6700c862.svg",
     "static/media/CheckboxUnchecked.1714692b.svg": "/image-viewer/static/media/CheckboxUnchecked.1714692b.svg",
     "static/media/ColorAdjustment.b6d05bdf.svg": "/image-viewer/static/media/ColorAdjustment.b6d05bdf.svg",
@@ -38,8 +38,8 @@
     "static/media/texture.2ed6f96c.png": "/image-viewer/static/media/texture.2ed6f96c.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.d1854da1.js",
-    "static/js/2.94775182.chunk.js",
-    "static/js/main.fb1f9938.chunk.js"
+    "static/js/runtime-main.d1741cf0.js",
+    "static/js/2.cb9811fe.chunk.js",
+    "static/js/main.39c48ae2.chunk.js"
   ]
 }

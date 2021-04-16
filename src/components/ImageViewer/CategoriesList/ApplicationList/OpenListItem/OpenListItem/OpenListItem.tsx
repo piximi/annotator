@@ -1,27 +1,38 @@
-import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import {
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  MenuList,
+} from "@material-ui/core";
 import * as React from "react";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
-import { OpenMenuList } from "../OpenMenuList";
-import { useMenu } from "../../../../../../hooks";
+import PopupState, { bindTrigger } from "material-ui-popup-state";
 
 export const OpenListItem = () => {
-  const { anchorEl, onClose, onOpen, open } = useMenu();
-
   return (
-    <React.Fragment>
-      <ListItem button onClick={onOpen}>
-        <ListItemIcon>
-          <FolderOpenIcon />
-        </ListItemIcon>
+    <PopupState popupId="demo-popup-menu" variant="popover">
+      {(popupState) => (
+        <React.Fragment>
+          <ListItem button {...bindTrigger(popupState)}>
+            <ListItemIcon>
+              <FolderOpenIcon />
+            </ListItemIcon>
 
-        <ListItemText primary="Open" />
-      </ListItem>
+            <ListItemText primary="Open" />
+          </ListItem>
 
-      <OpenMenuList
-        anchorEl={anchorEl}
-        closeMenu={() => {}}
-        openedMenu={open}
-      />
-    </React.Fragment>
+          <MenuList dense>
+            <MenuItem>
+              <ListItemText primary="Open image" />
+            </MenuItem>
+
+            <MenuItem>
+              <ListItemText primary="Open example image" />
+            </MenuItem>
+          </MenuList>
+        </React.Fragment>
+      )}
+    </PopupState>
   );
 };

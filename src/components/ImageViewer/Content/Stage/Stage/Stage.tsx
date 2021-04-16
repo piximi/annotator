@@ -289,30 +289,29 @@ export const Stage = () => {
   }, [annotating]);
 
   useEffect(() => {
-    if (!selectedAnnotationId) return;
+    if (!selectedAnnotationsIds) return;
 
-    if (!selectedAnnotation) return;
+    if (!annotations) return;
+
+    const updated = _.map(selectedAnnotationsIds, (annotationId) => {
+      return {
+        ...annotations?.filter(
+          (instance: SelectionType) => instance.id === annotationId
+        )[0],
+        categoryId: selectedCategory.id,
+      } as SelectionType;
+    });
 
     const others = annotations?.filter(
-      (instance: SelectionType) => instance.id !== selectedAnnotationId
+      (instance: SelectionType) =>
+        !_.includes(selectedAnnotationsIds, instance.id)
     );
 
-    const updated: SelectionType = {
-      ...annotations?.filter(
-        (instance: SelectionType) => instance.id === selectedAnnotationId
-      )[0],
-      categoryId: selectedCategory.id,
-    } as SelectionType;
-
+    // debugger;
+    //
     dispatch(
       applicationSlice.actions.setImageInstances({
-        instances: [...(others as Array<SelectionType>), updated],
-      })
-    );
-
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: updated,
+        instances: [...others, ...updated],
       })
     );
   }, [selectedCategory]);
@@ -650,13 +649,15 @@ export const Stage = () => {
   useEffect(() => {
     if (selectedAnnotationId) {
       if (backspacePress || escapePress || deletePress) {
-        _.map(selectedAnnotationsIds, (annotationId: string) => {
-          dispatch(
-            applicationSlice.actions.deleteImageInstance({
-              id: annotationId,
-            })
-          );
-        });
+        if (deletePress || backspacePress) {
+          _.map(selectedAnnotationsIds, (annotationId: string) => {
+            dispatch(
+              applicationSlice.actions.deleteImageInstance({
+                id: annotationId,
+              })
+            );
+          });
+        }
 
         deselectAllAnnotations();
 

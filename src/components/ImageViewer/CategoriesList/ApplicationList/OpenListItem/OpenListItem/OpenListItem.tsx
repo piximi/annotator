@@ -2,13 +2,14 @@ import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import * as React from "react";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import { OpenMenuList } from "../OpenMenuList";
+import { useMenu } from "../../../../../../hooks";
 
 export const OpenListItem = () => {
-  const { anchorEl, openedMenu, openMenu, closeMenu } = useMenu();
+  const { anchorEl, onClose, onOpen, open } = useMenu();
 
   return (
     <React.Fragment>
-      <ListItem button onClick={openMenu}>
+      <ListItem button onClick={onOpen}>
         <ListItemIcon>
           <FolderOpenIcon />
         </ListItemIcon>
@@ -18,8 +19,8 @@ export const OpenListItem = () => {
 
       <OpenMenuList
         anchorEl={anchorEl}
-        closeMenu={closeMenu}
-        openedMenu={openedMenu}
+        closeMenu={() => {}}
+        openedMenu={open}
       />
     </React.Fragment>
   );

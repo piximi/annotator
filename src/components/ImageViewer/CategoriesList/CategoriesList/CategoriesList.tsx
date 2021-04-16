@@ -36,6 +36,10 @@ import OpenIcon from "@material-ui/icons/FolderOpen";
 import SaveIcon from "@material-ui/icons/Save";
 import Typography from "@material-ui/core/Typography";
 import Toolbar from "@material-ui/core/Toolbar";
+import MenuIcon from "@material-ui/icons/Menu";
+import AppBar from "@material-ui/core/AppBar";
+import Tooltip from "@material-ui/core/Tooltip";
+import Box from "@material-ui/core/Box";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -105,11 +109,32 @@ export const CategoriesList = () => {
       open
       variant="persistent"
     >
-      <Toolbar>
-        <Typography className={classes.logo} variant="h6">
-          <strong>Piximi</strong>
-        </Typography>
-      </Toolbar>
+      <Box
+        style={{ paddingTop: 60 }}
+        className={classes.toolbar}
+        display="flex"
+        justifyContent="flex-end"
+        px={8}
+      />
+
+      <AppBar className={classes.appBar} color="default">
+        <Toolbar disableGutters={true}>
+          <Tooltip title={(true ? "Hide " : "Show ") + "sidebar"}>
+            <IconButton
+              aria-label="open sidebar"
+              className={classes.menuButton}
+              color="inherit"
+              onClick={() => {}}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Tooltip>
+
+          <Typography variant="h6" color="inherit">
+            Piximi
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
       <Divider />
 

@@ -6,7 +6,30 @@ const operationsWidth = 56;
 
 export const useStyles = makeStyles((theme) => ({
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: "rgba(0, 0, 0, 0)",
+    borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+    boxShadow: "none",
+    position: "absolute",
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  appBarShiftLeft: {
+    marginLeft: 240,
+  },
+  menuButton: {
+    marginLeft: 12,
+    marginRight: 20,
+  },
+  hide: {
+    display: "none",
   },
   root: {
     display: "flex",

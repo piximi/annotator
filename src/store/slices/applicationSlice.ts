@@ -79,6 +79,15 @@ export const applicationSlice = createSlice({
   initialState: initialState,
   name: "image-viewer-application",
   reducers: {
+    addSelectedAnnotationId(
+      state: StateType,
+      action: PayloadAction<{ selectedAnnotationId: string }>
+    ) {
+      state.selectedAnnotationsIds = [
+        ...state.selectedAnnotationsIds,
+        action.payload.selectedAnnotationId,
+      ];
+    },
     deleteCategory(
       state: StateType,
       action: PayloadAction<{ category: CategoryType }>
@@ -226,11 +235,6 @@ export const applicationSlice = createSlice({
       action: PayloadAction<{ selectedAnnotation: AnnotationType | undefined }>
     ) {
       state.selectedAnnotation = action.payload.selectedAnnotation;
-      if (action.payload.selectedAnnotation)
-        state.selectedAnnotationsIds = [
-          ...state.selectedAnnotationsIds,
-          action.payload.selectedAnnotation.id,
-        ];
     },
     setSelectedAnnotationId(
       state: StateType,
@@ -296,6 +300,7 @@ export const applicationSlice = createSlice({
 });
 
 export const {
+  addSelectedAnnotationId,
   deleteCategory,
   deleteImageInstance,
   replaceImageInstance,

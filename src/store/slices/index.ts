@@ -1,4 +1,5 @@
 export {
+  addSelectedAnnotationId,
   applicationSlice,
   deleteCategory,
   deleteImageInstance,

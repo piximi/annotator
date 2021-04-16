@@ -12,10 +12,13 @@ import {
 import Konva from "konva";
 import { AnnotationTool } from "../../../../../../image/Tool";
 import {
+  addSelectedAnnotationId,
   setSelectedAnnotationId,
   setSeletedCategory,
 } from "../../../../../../store";
 import { ToolType } from "../../../../../../types/ToolType";
+import { selectedAnnotationsIdsSelector } from "../../../../../../store/selectors/selectedAnnotationsIdsSelector";
+import { useKeyPress } from "../../../../../../hooks/useKeyPress";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -28,6 +31,10 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   const categories = useSelector(categoriesSelector);
   const toolType = useSelector(toolTypeSelector);
   const stageScale = useSelector(stageScaleSelector);
+
+  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
+
+  const shiftPress = useKeyPress("Shift");
 
   const fill = _.find(
     categories,
@@ -50,6 +57,14 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
         selectedAnnotationId: annotation.id,
       })
     );
+
+    if (!shiftPress) return;
+
+    if (!annotation.id) return;
+
+    if (_.includes(selectedAnnotationsIds, annotation.id)) return;
+
+    dispatch(addSelectedAnnotationId({ selectedAnnotationId: annotation.id }));
   };
 
   return (

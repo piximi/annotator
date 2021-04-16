@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.js": "/image-viewer/static/js/main.0a034698.chunk.js",
-    "main.js.map": "/image-viewer/static/js/main.0a034698.chunk.js.map",
-    "runtime-main.js": "/image-viewer/static/js/runtime-main.d1741cf0.js",
-    "runtime-main.js.map": "/image-viewer/static/js/runtime-main.d1741cf0.js.map",
-    "static/js/2.cb9811fe.chunk.js": "/image-viewer/static/js/2.cb9811fe.chunk.js",
-    "static/js/2.cb9811fe.chunk.js.map": "/image-viewer/static/js/2.cb9811fe.chunk.js.map",
-    "static/js/3.7bd9f8c5.chunk.js": "/image-viewer/static/js/3.7bd9f8c5.chunk.js",
-    "static/js/3.7bd9f8c5.chunk.js.map": "/image-viewer/static/js/3.7bd9f8c5.chunk.js.map",
-    "static/js/4.06d7f2aa.chunk.js": "/image-viewer/static/js/4.06d7f2aa.chunk.js",
-    "static/js/4.06d7f2aa.chunk.js.map": "/image-viewer/static/js/4.06d7f2aa.chunk.js.map",
+    "main.js": "/image-viewer/static/js/main.8b6c0c8b.chunk.js",
+    "main.js.map": "/image-viewer/static/js/main.8b6c0c8b.chunk.js.map",
+    "runtime-main.js": "/image-viewer/static/js/runtime-main.46fd6518.js",
+    "runtime-main.js.map": "/image-viewer/static/js/runtime-main.46fd6518.js.map",
+    "static/js/2.5aef3a54.chunk.js": "/image-viewer/static/js/2.5aef3a54.chunk.js",
+    "static/js/2.5aef3a54.chunk.js.map": "/image-viewer/static/js/2.5aef3a54.chunk.js.map",
+    "static/js/3.ccc4335a.chunk.js": "/image-viewer/static/js/3.ccc4335a.chunk.js",
+    "static/js/3.ccc4335a.chunk.js.map": "/image-viewer/static/js/3.ccc4335a.chunk.js.map",
+    "static/js/4.f753a1f8.chunk.js": "/image-viewer/static/js/4.f753a1f8.chunk.js",
+    "static/js/4.f753a1f8.chunk.js.map": "/image-viewer/static/js/4.f753a1f8.chunk.js.map",
     "index.html": "/image-viewer/index.html",
-    "static/js/2.cb9811fe.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.cb9811fe.chunk.js.LICENSE.txt",
-    "static/js/3.7bd9f8c5.chunk.js.LICENSE.txt": "/image-viewer/static/js/3.7bd9f8c5.chunk.js.LICENSE.txt",
+    "static/js/2.5aef3a54.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.5aef3a54.chunk.js.LICENSE.txt",
+    "static/js/3.ccc4335a.chunk.js.LICENSE.txt": "/image-viewer/static/js/3.ccc4335a.chunk.js.LICENSE.txt",
     "static/media/CheckboxChecked.6700c862.svg": "/image-viewer/static/media/CheckboxChecked.6700c862.svg",
     "static/media/CheckboxUnchecked.1714692b.svg": "/image-viewer/static/media/CheckboxUnchecked.1714692b.svg",
     "static/media/ColorAdjustment.b6d05bdf.svg": "/image-viewer/static/media/ColorAdjustment.b6d05bdf.svg",
@@ -32,14 +32,13 @@
     "static/media/Selection.4e4701f2.svg": "/image-viewer/static/media/Selection.4e4701f2.svg",
     "static/media/Zoom.58f47de7.svg": "/image-viewer/static/media/Zoom.58f47de7.svg",
     "static/media/cell-painting.f118ef08.png": "/image-viewer/static/media/cell-painting.f118ef08.png",
-    "static/media/malaria.5b73ad75.png": "/image-viewer/static/media/malaria.5b73ad75.png",
     "static/media/pop-up-off.83c6ba5b.mp3": "/image-viewer/static/media/pop-up-off.83c6ba5b.mp3",
     "static/media/pop-up-on.b776a1ef.mp3": "/image-viewer/static/media/pop-up-on.b776a1ef.mp3",
     "static/media/texture.2ed6f96c.png": "/image-viewer/static/media/texture.2ed6f96c.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.d1741cf0.js",
-    "static/js/2.cb9811fe.chunk.js",
-    "static/js/main.0a034698.chunk.js"
+    "static/js/runtime-main.46fd6518.js",
+    "static/js/2.5aef3a54.chunk.js",
+    "static/js/main.8b6c0c8b.chunk.js"
   ]
 }

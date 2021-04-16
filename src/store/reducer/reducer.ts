@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { applicationSlice } from "../slices";
 import { toolOptionsSlice } from "../slices/toolOptionsSlice";
-import undoable from "redux-undo";
+import undoable, { groupByActionTypes } from "redux-undo";
 import { StateType } from "../../types/StateType";
 import { HistoryStateType } from "../../types/HistoryStateType";
 import * as _ from "lodash";
@@ -19,11 +19,15 @@ const filterActions = (
     "image-viewer-application/setSelectedAnnotation",
     "image-viewer-application/setSelectedAnnotationId",
   ];
+  console.info(previousHistory);
   return _.includes(actions, action.type);
 };
 
 const reducers = {
-  state: undoable(applicationSlice.reducer, { filter: filterActions }),
+  state: undoable(applicationSlice.reducer, {
+    filter: filterActions,
+    groupBy: groupByActionTypes("image-viewer-application/deleteImageInstance"),
+  }),
   toolOptions: toolOptionsSlice.reducer,
 };
 

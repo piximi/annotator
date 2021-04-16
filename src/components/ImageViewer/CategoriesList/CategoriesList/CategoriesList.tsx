@@ -9,7 +9,7 @@ import {
   selectedCategroySelector,
   unknownCategorySelector,
 } from "../../../../store/selectors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "./CategoriesList.css";
 import { CollapsibleList } from "../CollapsibleList";
 import { CreateCategoryListItem } from "../CreateCategoryListItem";
@@ -23,8 +23,7 @@ import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { applicationSlice } from "../../../../store";
-import { useDispatch } from "react-redux";
-import { Chip, Divider } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemIcon from "@material-ui/core/ListItemIcon";

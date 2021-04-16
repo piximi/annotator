@@ -1,4 +1,3 @@
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import React from "react";
 import { useStyles } from "./ToolOptions.css";

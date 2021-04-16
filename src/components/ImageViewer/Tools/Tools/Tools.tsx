@@ -1,4 +1,3 @@
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import React from "react";
@@ -10,8 +9,8 @@ import { toolTypeSelector } from "../../../../store/selectors";
 import { applicationSlice } from "../../../../store";
 import {
   ColorSelectionIcon,
-  HandIcon,
   EllipticalSelectionIcon,
+  HandIcon,
   LassoSelectionIcon,
   MagneticSelectionIcon,
   ObjectSelectionIcon,

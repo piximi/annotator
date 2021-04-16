@@ -29,6 +29,9 @@ import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { AnnotationType } from "../../../../types/AnnotationType";
+import SettingsIcon from "@material-ui/icons/Settings";
+import FeedbackIcon from "@material-ui/icons/Feedback";
+import HelpIcon from "@material-ui/icons/Help";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -180,6 +183,34 @@ export const CategoriesList = () => {
           </ListItem>
         </List>
       </CollapsibleList>
+
+      <Divider />
+
+      <List component="nav" dense>
+        <ListItem button>
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Settings")} />
+        </ListItem>
+
+        <ListItem button>
+          <ListItemIcon>
+            <FeedbackIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Send feedback")} />
+        </ListItem>
+
+        <ListItem button>
+          <ListItemIcon>
+            <HelpIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Help")} />
+        </ListItem>
+      </List>
     </Drawer>
   );
 };

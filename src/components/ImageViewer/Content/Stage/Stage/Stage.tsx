@@ -234,6 +234,7 @@ export const Stage = () => {
     )
       return;
 
+    console.info("Dispatching line 237");
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: {
@@ -372,6 +373,8 @@ export const Stage = () => {
     annotationTool.annotate(selectedCategory);
 
     if (!annotationTool.annotation) return;
+
+    if (selectionMode !== AnnotationModeType.New) return;
 
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({

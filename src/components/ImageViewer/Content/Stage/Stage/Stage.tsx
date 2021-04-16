@@ -50,6 +50,7 @@ import { Layer } from "../Layer";
 import { ZoomSelection } from "../Selection/ZoomSelection";
 import { useKeyboardShortcuts } from "../../../../../hooks/useKeyboardShortcuts";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
+import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -63,6 +64,7 @@ export const Stage = () => {
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
   const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
+  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
   const selectedCategory = useSelector(selectedCategorySelector);
   const selectionMode = useSelector(selectionModeSelector);
 
@@ -413,6 +415,26 @@ export const Stage = () => {
     );
   }, [selectedAnnotationId]);
 
+  useEffect(() => {
+    _.map(selectedAnnotationsIds, (annotationId) => {
+      if (!stageRef || !stageRef.current) return;
+
+      const transformerId = "tr-".concat(annotationId);
+      const transformer = stageRef.current.findOne(`#${transformerId}`);
+      const line = stageRef.current.findOne(`#${annotationId}`);
+
+      if (!line) return;
+
+      (transformer as Konva.Transformer).nodes([line]);
+
+      const layer = (transformer as Konva.Transformer).getLayer();
+
+      if (!layer) return;
+
+      layer.batchDraw();
+    });
+  }, [selectedAnnotationsIds.length]);
+
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;
 
@@ -678,6 +700,14 @@ export const Stage = () => {
               )}
 
               <Annotations annotationTool={annotationTool} />
+
+              <ReactKonva.Transformer ref={transformerRef} />
+
+              {selectedAnnotationsIds.map((annotationId, idx) => {
+                return (
+                  <ReactKonva.Transformer id={"tr-".concat(annotationId)} />
+                );
+              })}
 
               <ReactKonva.Transformer ref={transformerRef} />
 

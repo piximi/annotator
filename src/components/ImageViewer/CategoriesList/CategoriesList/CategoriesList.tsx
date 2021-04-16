@@ -207,7 +207,6 @@ export const CategoriesList = () => {
               />
 
               <DeleteCategoryDialog
-                category={category}
                 onClose={onCloseDeleteCategoryDialog}
                 open={openDeleteCategoryDialog}
               />

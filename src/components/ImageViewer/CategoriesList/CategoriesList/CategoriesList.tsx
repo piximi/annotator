@@ -32,6 +32,8 @@ import { AnnotationType } from "../../../../types/AnnotationType";
 import SettingsIcon from "@material-ui/icons/Settings";
 import FeedbackIcon from "@material-ui/icons/Feedback";
 import HelpIcon from "@material-ui/icons/Help";
+import OpenIcon from "@material-ui/icons/FolderOpen";
+import SaveIcon from "@material-ui/icons/Save";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -102,6 +104,26 @@ export const CategoriesList = () => {
       variant="persistent"
     >
       <div className={classes.applicationDrawerHeader} />
+
+      <List component="nav" dense>
+        <ListItem button>
+          <ListItemIcon>
+            <OpenIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Open")} />
+        </ListItem>
+
+        <ListItem button>
+          <ListItemIcon>
+            <SaveIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Save")} />
+        </ListItem>
+      </List>
+
+      <Divider />
 
       <CollapsibleList primary={t("Categories")}>
         {createdCategories.map((category: CategoryType) => {

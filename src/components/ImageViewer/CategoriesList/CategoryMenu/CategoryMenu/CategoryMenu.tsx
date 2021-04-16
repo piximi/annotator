@@ -56,7 +56,6 @@ export const CategoryMenu = ({
     >
       <MenuList dense variant="menu">
         <HideOtherCategoriesMenuItem
-          category={category}
           onCloseCategoryMenu={onCloseCategoryMenu}
         />
 

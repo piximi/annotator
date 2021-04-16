@@ -28,9 +28,6 @@ import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { AnnotationType } from "../../../../types/AnnotationType";
-import SettingsIcon from "@material-ui/icons/Settings";
-import FeedbackIcon from "@material-ui/icons/Feedback";
-import HelpIcon from "@material-ui/icons/Help";
 import OpenIcon from "@material-ui/icons/FolderOpen";
 import SaveIcon from "@material-ui/icons/Save";
 import Typography from "@material-ui/core/Typography";
@@ -39,6 +36,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AppBar from "@material-ui/core/AppBar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Box from "@material-ui/core/Box";
+import { MiscellaneousList } from "../MiscellaneousList";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -251,31 +249,7 @@ export const CategoriesList = () => {
 
       <Divider />
 
-      <List component="nav" dense>
-        <ListItem button>
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Settings")} />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon>
-            <FeedbackIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Send feedback")} />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon>
-            <HelpIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Help")} />
-        </ListItem>
-      </List>
+      <MiscellaneousList />
     </Drawer>
   );
 };

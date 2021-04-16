@@ -6,7 +6,7 @@ import { CategoryType } from "../../../../types/CategoryType";
 import {
   createdCategoriesSelector,
   imageInstancesSelector,
-  selectedCategroySelector,
+  selectedCategorySelector,
   unknownCategorySelector,
 } from "../../../../store/selectors";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,7 +44,7 @@ export const CategoriesList = () => {
   const classes = useStyles();
 
   const createdCategories = useSelector(createdCategoriesSelector);
-  const selectedCategory = useSelector(selectedCategroySelector);
+  const selectedCategory = useSelector(selectedCategorySelector);
   const unknownCategory = useSelector(unknownCategorySelector);
 
   const annotations = useSelector(imageInstancesSelector);

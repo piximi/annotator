@@ -13,7 +13,7 @@ import { CategoryType } from "../../../../types/CategoryType";
 import { applicationSlice } from "../../../../store";
 import {
   categoriesSelector,
-  selectedCategroySelector,
+  selectedCategorySelector,
 } from "../../../../store/selectors";
 
 type EditCategoryDialogProps = {
@@ -27,7 +27,7 @@ export const EditCategoryDialog = ({
 }: EditCategoryDialogProps) => {
   const dispatch = useDispatch();
 
-  const category = useSelector(selectedCategroySelector);
+  const category = useSelector(selectedCategorySelector);
 
   const classes = useStyles();
 

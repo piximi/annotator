@@ -10,7 +10,7 @@ import { AnnotationType } from "../../../../types/AnnotationType";
 import { applicationSlice } from "../../../../store";
 import {
   imageInstancesSelector,
-  selectedCategroySelector,
+  selectedCategorySelector,
 } from "../../../../store/selectors";
 
 type DeleteCategoryDialogProps = {
@@ -24,7 +24,7 @@ export const DeleteCategoryDialog = ({
 }: DeleteCategoryDialogProps) => {
   const dispatch = useDispatch();
 
-  const category = useSelector(selectedCategroySelector);
+  const category = useSelector(selectedCategorySelector);
 
   const selections = useSelector(imageInstancesSelector);
 

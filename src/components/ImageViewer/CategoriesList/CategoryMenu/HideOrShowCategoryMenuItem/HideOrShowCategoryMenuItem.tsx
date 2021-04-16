@@ -5,7 +5,7 @@ import { CategoryType } from "../../../../../types/CategoryType";
 import { useTranslation } from "../../../../../hooks/useTranslation";
 import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../../store";
-import { selectedCategroySelector } from "../../../../../store/selectors";
+import { selectedCategorySelector } from "../../../../../store/selectors";
 
 type HideOrShowCategoryMenuItemProps = {
   category: CategoryType;
@@ -19,7 +19,7 @@ export const HideOrShowCategoryMenuItem = ({
 }: HideOrShowCategoryMenuItemProps) => {
   const dispatch = useDispatch();
 
-  const category = useSelector(selectedCategroySelector);
+  const category = useSelector(selectedCategorySelector);
 
   const onClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     dispatch(

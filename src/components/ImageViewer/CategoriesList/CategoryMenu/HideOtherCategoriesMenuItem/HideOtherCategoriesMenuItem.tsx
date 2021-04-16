@@ -7,7 +7,7 @@ import { applicationSlice } from "../../../../../store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   categoriesSelector,
-  selectedCategroySelector,
+  selectedCategorySelector,
 } from "../../../../../store/selectors";
 
 type HideOtherCategoriesMenuItemProps = {
@@ -21,7 +21,7 @@ export const HideOtherCategoriesMenuItem = ({
 }: HideOtherCategoriesMenuItemProps) => {
   const categories = useSelector(categoriesSelector);
 
-  const category = useSelector(selectedCategroySelector);
+  const category = useSelector(selectedCategorySelector);
 
   const dispatch = useDispatch();
 

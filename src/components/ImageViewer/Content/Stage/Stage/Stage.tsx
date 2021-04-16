@@ -7,7 +7,7 @@ import {
   annotatingSelector,
   imageInstancesSelector,
   invertModeSelector,
-  selectedCategroySelector,
+  selectedCategorySelector,
   selectionModeSelector,
   stageHeightSelector,
   stageScaleSelector,
@@ -63,7 +63,7 @@ export const Stage = () => {
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
   const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
-  const selectedCategory = useSelector(selectedCategroySelector);
+  const selectedCategory = useSelector(selectedCategorySelector);
   const selectionMode = useSelector(selectionModeSelector);
 
   const stageHeight = useSelector(stageHeightSelector);

@@ -709,8 +709,6 @@ export const Stage = () => {
                 );
               })}
 
-              <ReactKonva.Transformer ref={transformerRef} />
-
               <ColorAnnotationToolTip
                 colorAnnotationTool={annotationTool as ColorAnnotationTool}
               />

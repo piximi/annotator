@@ -1,17 +1,14 @@
 import * as React from "react";
-import { ConnectedOpenListItem } from "../OpenListItem/OpenListItem";
-import { NewClassifierListItem } from "../NewClassifierListItem";
-import { ConnectedSaveListItem } from "../SaveListItem/SaveListItem";
-import { List, Paper } from "@material-ui/core";
+import { OpenListItem } from "../OpenListItem";
+import { SaveListItem } from "../SaveListItem";
+import { List } from "@material-ui/core";
 
 export const ApplicationList = () => {
   return (
     <List dense>
-      <NewClassifierListItem />
+      <OpenListItem />
 
-      <ConnectedOpenListItem />
-
-      <ConnectedSaveListItem />
+      <SaveListItem />
     </List>
   );
 };

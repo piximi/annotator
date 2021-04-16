@@ -1,1 +1,1 @@
-export { ConnectedOpenClassifierMenuItem } from "./ConnectedOpenClassifierMenuItem";
+export { OpenClassifierMenuItem } from "./OpenClassifierMenuItem";

@@ -1,16 +1,15 @@
 import * as React from "react";
 import SaveIcon from "@material-ui/icons/Save";
-
-import { useMenu } from "@piximi/hooks";
-import { SaveMenuList } from "../../../../index";
 import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { SaveMenuList } from "../SaveMenuList";
+import { useMenu } from "../../../../../../hooks";
 
 export const SaveListItem = () => {
-  const { anchorEl, openedMenu, openMenu, closeMenu } = useMenu();
+  const { anchorEl, onClose, onOpen, open } = useMenu();
 
   return (
     <React.Fragment>
-      <ListItem button onClick={openMenu}>
+      <ListItem button onClick={onOpen}>
         <ListItemIcon>
           <SaveIcon />
         </ListItemIcon>
@@ -18,7 +17,7 @@ export const SaveListItem = () => {
         <ListItemText primary="Save" />
       </ListItem>
 
-      <SaveMenuList anchorEl={anchorEl} onClose={closeMenu} open={openedMenu} />
+      <SaveMenuList anchorEl={anchorEl} onClose={() => {}} open={open} />
     </React.Fragment>
   );
 };

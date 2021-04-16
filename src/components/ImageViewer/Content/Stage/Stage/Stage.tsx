@@ -51,6 +51,7 @@ import { ZoomSelection } from "../Selection/ZoomSelection";
 import { useKeyboardShortcuts } from "../../../../../hooks/useKeyboardShortcuts";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
+import { Transformers } from "../Transformers/Transformers";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -425,6 +426,8 @@ export const Stage = () => {
 
       if (!line) return;
 
+      if (!transformer) return;
+
       (transformer as Konva.Transformer).nodes([line]);
 
       const layer = (transformer as Konva.Transformer).getLayer();
@@ -703,11 +706,7 @@ export const Stage = () => {
 
               <ReactKonva.Transformer ref={transformerRef} />
 
-              {selectedAnnotationsIds.map((annotationId, idx) => {
-                return (
-                  <ReactKonva.Transformer id={"tr-".concat(annotationId)} />
-                );
-              })}
+              <Transformers />
 
               <ColorAnnotationToolTip
                 colorAnnotationTool={annotationTool as ColorAnnotationTool}

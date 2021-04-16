@@ -58,6 +58,8 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       })
     );
 
+    dispatch(addSelectedAnnotationId({ selectedAnnotationId: annotation.id }));
+
     if (!shiftPress) return;
 
     if (!annotation.id) return;

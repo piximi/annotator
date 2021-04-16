@@ -128,8 +128,6 @@ export const Stage = () => {
       })
     );
 
-    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
-
     transformerRef.current?.detach();
     transformerRef.current?.getLayer()?.batchDraw();
 
@@ -193,9 +191,9 @@ export const Stage = () => {
 
     if (selectionMode === AnnotationModeType.New) return;
 
-    dispatch(applicationSlice.actions.setAnnotating({ annotating: false }));
-
     if (!annotated || !annotationTool) return;
+
+    dispatch(applicationSlice.actions.setAnnotating({ annotating: false }));
 
     if (!annotationTool.annotated) return;
 
@@ -317,7 +315,6 @@ export const Stage = () => {
 
     if (selectionMode === AnnotationModeType.New) return;
 
-    // if (annotationTool.annotating) setSelecting(annotationTool.annotating);
     if (annotationTool.annotating)
       dispatch(
         applicationSlice.actions.setAnnotating({
@@ -372,6 +369,8 @@ export const Stage = () => {
     annotationTool.annotate(selectedCategory);
 
     if (!annotationTool.annotation) return;
+
+    if (selectionMode !== AnnotationModeType.New) return;
 
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({
@@ -442,7 +441,10 @@ export const Stage = () => {
       if (toolType === ToolType.Zoom) {
         onZoomMouseDown(relative);
       } else {
-        if (annotated) deselectAnnotation();
+        if (annotated) {
+          deselectAnnotation();
+          dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
+        }
 
         if (selectionMode === AnnotationModeType.New) {
           dispatch(
@@ -565,6 +567,7 @@ export const Stage = () => {
     if (soundEnabled) playCreateAnnotationSoundEffect();
 
     deselectAnnotation();
+    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
 
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({
@@ -608,10 +611,9 @@ export const Stage = () => {
             selectedAnnotation: undefined,
           })
         );
+        deselectAnnotation();
       }
     }
-
-    deselectAnnotation();
   }, [backspacePress, deletePress, escapePress]);
 
   const [tool, setTool] = useState<Tool>();

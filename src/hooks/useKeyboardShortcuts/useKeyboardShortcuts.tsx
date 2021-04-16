@@ -18,7 +18,7 @@ export const useKeyboardShortcuts = () => {
   Undo operation (Ctrl+z)
   */
   useHotkeys("ctrl+z", () => {
-    dispatch(ActionCreators.jump(-2));
+    dispatch(ActionCreators.jump(-5)); //undo should be allowed only if user did an accidental delete or an accidental modification to the selected annotation
   });
 
   /*

@@ -37,6 +37,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Box from "@material-ui/core/Box";
 import { MiscellaneousList } from "../MiscellaneousList";
+import { ApplicationList } from "../ApplicationList";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -143,23 +144,7 @@ export const CategoriesList = () => {
 
       <Divider />
 
-      <List component="nav" dense>
-        <ListItem button>
-          <ListItemIcon>
-            <OpenIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Open")} />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon>
-            <SaveIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Save")} />
-        </ListItem>
-      </List>
+      <ApplicationList />
 
       <Divider />
 

@@ -6,16 +6,15 @@ import {
   ListItemIcon,
   ListItemText,
   MenuItem,
-  MenuList,
+  Menu,
 } from "@material-ui/core";
-import PopupState, { bindTrigger } from "material-ui-popup-state";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
-import Divider from "@material-ui/core/Divider";
 
 export const ApplicationList = () => {
   return (
     <List dense>
-      <PopupState popupId="demo-popup-menu" variant="popover">
+      <PopupState variant="popover">
         {(popupState) => (
           <React.Fragment>
             <ListItem button {...bindTrigger(popupState)}>
@@ -26,15 +25,15 @@ export const ApplicationList = () => {
               <ListItemText primary="Open" />
             </ListItem>
 
-            <MenuList dense>
-              <MenuItem>
+            <Menu {...bindMenu(popupState)}>
+              <MenuItem dense onClick={popupState.close}>
                 <ListItemText primary="Open image" />
               </MenuItem>
 
-              <MenuItem>
+              <MenuItem dense onClick={popupState.close}>
                 <ListItemText primary="Open example image" />
               </MenuItem>
-            </MenuList>
+            </Menu>
           </React.Fragment>
         )}
       </PopupState>

@@ -39,6 +39,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AppBar from "@material-ui/core/AppBar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Box from "@material-ui/core/Box";
+import { MiscellaneousList } from "../MiscellaneousList";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -240,31 +241,7 @@ export const CategoriesList = () => {
 
       <Divider />
 
-      <List component="nav" dense>
-        <ListItem button>
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Settings")} />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon>
-            <FeedbackIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Send feedback")} />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon>
-            <HelpIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Help")} />
-        </ListItem>
-      </List>
+      <MiscellaneousList />
     </Drawer>
   );
 };

@@ -40,10 +40,6 @@ export const Tools = () => {
       classes={{ paper: classes.paper }}
       variant="permanent"
     >
-      <div className={classes.toolbar} />
-
-      <Divider />
-
       <Tool
         name={t("Pointer")}
         onClick={() => {
@@ -57,8 +53,6 @@ export const Tools = () => {
       >
         <SelectionIcon />
       </Tool>
-
-      <Divider />
 
       <List>
         <Tool
@@ -186,8 +180,6 @@ export const Tools = () => {
         >
           <ObjectSelectionIcon />
         </Tool>
-
-        <Divider />
 
         <Tool
           name={t("Hand")}

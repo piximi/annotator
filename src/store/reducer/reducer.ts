@@ -14,8 +14,10 @@ const filterActions = (
   const actions = [
     "image-viewer-application/setImageInstances",
     "image-viewer-application/setAnnotated",
+    "image-viewer-application/setAnnotating",
     "image-viewer-application/deleteImageInstance",
     "image-viewer-application/setSelectedAnnotation",
+    "image-viewer-application/setSelectedAnnotationId",
   ];
   return _.includes(actions, action.type);
 };

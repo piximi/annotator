@@ -122,23 +122,24 @@ export const Stage = () => {
 
   const soundEnabled = useSelector(soundEnabledSelector);
 
+  const detachTransformer = (transformerId: string) => {
+    if (!stageRef || !stageRef.current) return;
+    const transformer = stageRef.current.findOne(`#${transformerId}`);
+
+    if (!transformer) return;
+
+    (transformer as Konva.Transformer).detach();
+    (transformer as Konva.Transformer).getLayer()?.batchDraw();
+  };
+
   const deselectAllAnnotations = () => {
     _.map(selectedAnnotationsIds, (annotationId: string) => {
       dispatch(
         deleteSelectedAnnotationId({ selectedAnnotationId: annotationId })
       );
 
-      if (!stageRef || !stageRef.current) return;
       const transformerId = "tr-".concat(annotationId);
-      const transformer = stageRef.current.findOne(`#${transformerId}`);
-      const line = stageRef.current.findOne(`#${annotationId}`);
-
-      if (!line) return;
-
-      if (!transformer) return;
-
-      (transformer as Konva.Transformer).detach();
-      (transformer as Konva.Transformer).getLayer()?.batchDraw();
+      detachTransformer(transformerId);
     });
   };
 

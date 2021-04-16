@@ -137,7 +137,6 @@ export const Stage = () => {
       dispatch(
         deleteSelectedAnnotationId({ selectedAnnotationId: annotationId })
       );
-
       const transformerId = "tr-".concat(annotationId);
       detachTransformer(transformerId);
     });
@@ -637,10 +636,7 @@ export const Stage = () => {
 
     if (!selectedAnnotationsIds.length) return;
 
-    _.map(selectedAnnotationsIds, (annotationId: string) => {
-      const transformerId = "tr-".concat(annotationId);
-      detachTransformer(transformerId);
-    });
+    deselectAllAnnotations();
   }, [enterPress]);
 
   useEffect(() => {

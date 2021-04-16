@@ -234,7 +234,6 @@ export const Stage = () => {
     )
       return;
 
-    console.info("Dispatching line 237");
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: {
@@ -611,10 +610,9 @@ export const Stage = () => {
             selectedAnnotation: undefined,
           })
         );
+        deselectAnnotation();
       }
     }
-
-    deselectAnnotation();
   }, [backspacePress, deletePress, escapePress]);
 
   const [tool, setTool] = useState<Tool>();

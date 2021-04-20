@@ -430,25 +430,6 @@ export const Stage = () => {
     );
   }, [annotated]);
 
-  /*
-   * Connect Konva.Transformer to selected annotation Konva.Node
-   */
-  useEffect(() => {
-    if (!stageRef || !stageRef.current) return;
-
-    if (!selectedAnnotation || !selectedAnnotation.id) return;
-
-    const node = stageRef.current.findOne(`#${selectedAnnotation.id}`);
-
-    if (!node) return;
-
-    if (!transformerRef || !transformerRef.current) return;
-
-    transformerRef.current.nodes([node]);
-
-    if (!annotations) return;
-  }, [selectedAnnotation?.id]);
-
   useEffect(() => {
     _.map(selectedAnnotationsIds, (annotationId) => {
       if (!stageRef || !stageRef.current) return;

@@ -1,1 +1,0 @@
-export { OpenExampleImageMenuItem } from "./OpenExampleImageMenuItem";

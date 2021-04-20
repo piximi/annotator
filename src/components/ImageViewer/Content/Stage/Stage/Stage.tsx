@@ -134,15 +134,17 @@ export const Stage = () => {
   };
 
   const deselectAllTransformers = () => {
-    _.map(selectedAnnotationsIds, (annotationId: string) => {
-      const transformerId = "tr-".concat(annotationId);
-      detachTransformer(transformerId);
+    if (!stageRef || !stageRef.current) return;
+
+    const transformers = stageRef.current.find("Transformer").toArray();
+    transformers.forEach((tr: any) => {
+      (tr as Konva.Transformer).detach();
+      (tr as Konva.Transformer).getLayer()?.batchDraw();
     });
   };
 
   const deselectAllAnnotations = () => {
     dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
-    deselectAllTransformers();
   };
 
   const deselectAnnotation = () => {
@@ -649,6 +651,7 @@ export const Stage = () => {
     if (!selectedAnnotationsIds.length) return;
 
     deselectAllAnnotations();
+    deselectAllTransformers();
   }, [enterPress]);
 
   useEffect(() => {
@@ -677,6 +680,7 @@ export const Stage = () => {
         }
 
         deselectAllAnnotations();
+        deselectAllTransformers();
 
         if (soundEnabled) playDeleteAnnotationSoundEffect();
 

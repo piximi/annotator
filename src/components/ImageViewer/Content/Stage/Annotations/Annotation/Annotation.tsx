@@ -12,8 +12,8 @@ import {
 import Konva from "konva";
 import { AnnotationTool } from "../../../../../../image/Tool";
 import {
-  addSelectedAnnotationId,
   setSelectedAnnotation,
+  setSelectedAnnotationsIds,
   setSeletedCategory,
 } from "../../../../../../store";
 import { ToolType } from "../../../../../../types/ToolType";
@@ -58,11 +58,21 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       })
     );
 
+    dispatch(
+      setSelectedAnnotationsIds({
+        selectedAnnotationsIds: [...selectedAnnotationsIds, annotation.id],
+      })
+    );
+
     if (!shiftPress) return;
 
     if (_.includes(selectedAnnotationsIds, annotation.id)) return;
 
-    dispatch(addSelectedAnnotationId({ selectedAnnotationId: annotation.id }));
+    dispatch(
+      setSelectedAnnotationsIds({
+        selectedAnnotationsIds: [...selectedAnnotationsIds, annotation.id],
+      })
+    );
   };
 
   return (

@@ -79,14 +79,11 @@ export const applicationSlice = createSlice({
   initialState: initialState,
   name: "image-viewer-application",
   reducers: {
-    addSelectedAnnotationId(
+    setSelectedAnnotationsIds(
       state: StateType,
-      action: PayloadAction<{ selectedAnnotationId: string }>
+      action: PayloadAction<{ selectedAnnotationsIds: Array<string> }>
     ) {
-      state.selectedAnnotationsIds = [
-        ...state.selectedAnnotationsIds,
-        action.payload.selectedAnnotationId,
-      ];
+      state.selectedAnnotationsIds = action.payload.selectedAnnotationsIds;
     },
     deleteCategory(
       state: StateType,
@@ -104,14 +101,6 @@ export const applicationSlice = createSlice({
 
       state.image.annotations = state.image.annotations.filter(
         (instance: AnnotationType) => instance.id !== action.payload.id
-      );
-    },
-    deleteSelectedAnnotationId(
-      state: StateType,
-      action: PayloadAction<{ selectedAnnotationId: string }>
-    ) {
-      state.selectedAnnotationsIds = state.selectedAnnotationsIds.filter(
-        (id: string) => id !== action.payload.selectedAnnotationId
       );
     },
     replaceImageInstance(
@@ -244,12 +233,6 @@ export const applicationSlice = createSlice({
     ) {
       state.selectedAnnotation = action.payload.selectedAnnotation;
     },
-    setSelectedAnnotationId(
-      state: StateType,
-      action: PayloadAction<{ selectedAnnotationId: string | undefined }>
-    ) {
-      state.selectedAnnotationId = action.payload.selectedAnnotationId;
-    },
     setSelectionMode(
       state: StateType,
       action: PayloadAction<{ selectionMode: AnnotationModeType }>
@@ -308,8 +291,6 @@ export const applicationSlice = createSlice({
 });
 
 export const {
-  addSelectedAnnotationId,
-  deleteSelectedAnnotationId,
   deleteCategory,
   deleteImageInstance,
   replaceImageInstance,
@@ -332,7 +313,7 @@ export const {
   setPenSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,
-  setSelectedAnnotationId,
+  setSelectedAnnotationsIds,
   setSelectionMode,
   setSeletedCategory,
   setSoundEnabled,

@@ -17,8 +17,8 @@ import {
 } from "../../../../../store/selectors";
 import {
   applicationSlice,
-  deleteSelectedAnnotationId,
   setSelectedAnnotation,
+  setSelectedAnnotationsIds,
 } from "../../../../../store";
 import {
   Provider,
@@ -136,9 +136,7 @@ export const Stage = () => {
 
   const deselectAllAnnotations = () => {
     _.map(selectedAnnotationsIds, (annotationId: string) => {
-      dispatch(
-        deleteSelectedAnnotationId({ selectedAnnotationId: annotationId })
-      );
+      dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
       const transformerId = "tr-".concat(annotationId);
       detachTransformer(transformerId);
     });
@@ -270,6 +268,15 @@ export const Stage = () => {
         },
       })
     );
+
+    dispatch(
+      setSelectedAnnotationsIds({
+        selectedAnnotationsIds: [
+          ...selectedAnnotationsIds,
+          selectedInstance.id,
+        ],
+      })
+    );
   }, [annotated]);
 
   useEffect(() => {
@@ -312,6 +319,8 @@ export const Stage = () => {
         !_.includes(selectedAnnotationsIds, instance.id)
     );
 
+    console.info(others);
+
     dispatch(
       applicationSlice.actions.setImageInstances({
         instances: [...others, ...updated],
@@ -336,6 +345,15 @@ export const Stage = () => {
       dispatch(
         applicationSlice.actions.setSelectedAnnotation({
           selectedAnnotation: annotationTool.annotation,
+        })
+      );
+
+      dispatch(
+        setSelectedAnnotationsIds({
+          selectedAnnotationsIds: [
+            ...selectedAnnotationsIds,
+            annotationTool.annotation.id,
+          ],
         })
       );
     }
@@ -607,20 +625,30 @@ export const Stage = () => {
       return annotation.id;
     });
 
-    if (annotationIds.includes(selectedAnnotation.id)) {
-      dispatch(
-        applicationSlice.actions.replaceImageInstance({
-          id: selectedAnnotation.id,
-          instance: selectedAnnotation,
-        })
-      );
-    } else {
-      dispatch(
-        applicationSlice.actions.setImageInstances({
-          instances: [...annotations, selectedAnnotation],
-        })
-      );
-    }
+    // if (annotationIds.includes(selectedAnnotation.id)) {
+    //   dispatch(
+    //     applicationSlice.actions.replaceImageInstance({
+    //       id: selectedAnnotation.id,
+    //       instance: selectedAnnotation,
+    //     })
+    //   );
+    // } else {
+    //   dispatch(
+    //     applicationSlice.actions.setImageInstances({
+    //       instances: [...annotations, selectedAnnotation],
+    //     })
+    //   );
+    // }
+    console.info(selectedAnnotationsIds);
+    _.forEach(selectedAnnotationsIds, (selectedAnnotationId: string) => {
+      if (!annotationIds.includes(selectedAnnotationId)) {
+        dispatch(
+          applicationSlice.actions.setImageInstances({
+            instances: [...annotations, selectedAnnotation],
+          })
+        );
+      }
+    });
 
     if (soundEnabled) playCreateAnnotationSoundEffect();
 

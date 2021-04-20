@@ -133,12 +133,16 @@ export const Stage = () => {
     (transformer as Konva.Transformer).getLayer()?.batchDraw();
   };
 
-  const deselectAllAnnotations = () => {
+  const deselectAllTransformers = () => {
     _.map(selectedAnnotationsIds, (annotationId: string) => {
-      dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
       const transformerId = "tr-".concat(annotationId);
       detachTransformer(transformerId);
     });
+  };
+
+  const deselectAllAnnotations = () => {
+    dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
+    deselectAllTransformers();
   };
 
   const deselectAnnotation = () => {

@@ -65,13 +65,23 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
         })
       );
     else {
-      if (_.includes(selectedAnnotationsIds, annotation.id)) return; //FIXME if this still necessary?
-
-      dispatch(
+      //unselect if already there
+      if (_.includes(selectedAnnotationsIds, annotation.id)) {
         setSelectedAnnotationsIds({
-          selectedAnnotationsIds: [...selectedAnnotationsIds, annotation.id],
-        })
-      );
+          selectedAnnotationsIds: _.filter(
+            selectedAnnotationsIds,
+            (annotationId: string) => {
+              return annotationId !== annotation.id;
+            }
+          ),
+        });
+      } else {
+        dispatch(
+          setSelectedAnnotationsIds({
+            selectedAnnotationsIds: [...selectedAnnotationsIds, annotation.id],
+          })
+        );
+      }
     }
   };
 

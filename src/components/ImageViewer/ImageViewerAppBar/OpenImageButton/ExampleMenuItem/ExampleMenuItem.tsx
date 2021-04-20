@@ -1,6 +1,6 @@
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
-import { ExampleImageDialog } from "../ExampleImageDialog";
+import { ExampleImageDialog } from "../../../CategoriesList/ExampleImageDialog";
 
 type ExampleMenuItemProps = {
   onClose: () => void;

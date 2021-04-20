@@ -40,6 +40,7 @@ import { MiscellaneousList } from "../MiscellaneousList";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import * as ImageJS from "image-js";
 import { ShapeType } from "../../../../types/ShapeType";
+import { ExampleImageDialog } from "../ExampleImageDialog";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -162,6 +163,20 @@ export const CategoriesList = () => {
     }
   };
 
+  const [openExampleImageDialog, setOpenExampleImageDialog] = React.useState(
+    false
+  );
+
+  const onOpenExampleImageDialog = (onClose: () => void) => {
+    setOpenExampleImageDialog(true);
+
+    onClose();
+  };
+
+  const onCloseExampleImageDialog = (onClose: () => void) => {
+    setOpenExampleImageDialog(false);
+  };
+
   const t = useTranslation();
 
   return (
@@ -227,8 +242,15 @@ export const CategoriesList = () => {
                   />
                 </MenuItem>
 
-                <MenuItem dense onClick={popupState.close}>
+                <MenuItem
+                  dense
+                  onClick={() => onOpenExampleImageDialog(popupState.close)}
+                >
                   <ListItemText primary="Open example image" />
+                  <ExampleImageDialog
+                    onClose={() => onCloseExampleImageDialog(popupState.close)}
+                    open={openExampleImageDialog}
+                  />
                 </MenuItem>
               </Menu>
             </React.Fragment>

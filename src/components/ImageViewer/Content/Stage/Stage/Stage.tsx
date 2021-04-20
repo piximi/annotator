@@ -37,7 +37,6 @@ import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
-import { selectedAnnotationIdSelector } from "../../../../../store/selectors/selectedAnnotationIdSelector";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import {
@@ -625,21 +624,7 @@ export const Stage = () => {
       return annotation.id;
     });
 
-    // if (annotationIds.includes(selectedAnnotation.id)) {
-    //   dispatch(
-    //     applicationSlice.actions.replaceImageInstance({
-    //       id: selectedAnnotation.id,
-    //       instance: selectedAnnotation,
-    //     })
-    //   );
-    // } else {
-    //   dispatch(
-    //     applicationSlice.actions.setImageInstances({
-    //       instances: [...annotations, selectedAnnotation],
-    //     })
-    //   );
-    // }
-    console.info(selectedAnnotationsIds);
+    // add instance only if not already there
     _.forEach(selectedAnnotationsIds, (selectedAnnotationId: string) => {
       if (!annotationIds.includes(selectedAnnotationId)) {
         dispatch(

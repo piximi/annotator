@@ -146,12 +146,6 @@ export const Stage = () => {
 
     annotationTool.deselect();
 
-    dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
-
     transformerRef.current?.detach();
     transformerRef.current?.getLayer()?.batchDraw();
 

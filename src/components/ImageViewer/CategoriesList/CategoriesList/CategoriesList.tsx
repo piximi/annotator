@@ -1,7 +1,7 @@
 import Drawer from "@material-ui/core/Drawer";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { CategoryType } from "../../../../types/CategoryType";
 import {
   createdCategoriesSelector,
@@ -22,7 +22,7 @@ import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
-import { applicationSlice } from "../../../../store";
+import { applicationSlice, setImage } from "../../../../store";
 import { Divider, Menu, MenuItem } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -38,6 +38,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Box from "@material-ui/core/Box";
 import { MiscellaneousList } from "../MiscellaneousList";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
+import * as ImageJS from "image-js";
+import { ShapeType } from "../../../../types/ShapeType";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -105,6 +107,61 @@ export const CategoriesList = () => {
     );
   };
 
+  const onOpenImage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    onClose: () => void
+  ) => {
+    onClose();
+
+    event.persist();
+
+    if (event.currentTarget.files) {
+      const file = event.currentTarget.files[0];
+
+      const reader = new FileReader();
+
+      reader.onload = async (event: ProgressEvent<FileReader>) => {
+        if (event.target) {
+          const src = event.target.result;
+
+          const image = new Image();
+
+          image.onload = () => {};
+
+          image.src = src as string;
+        }
+      };
+
+      file.arrayBuffer().then((buffer) => {
+        ImageJS.Image.load(buffer).then((image) => {
+          const name = file.name;
+
+          const shape: ShapeType = {
+            channels: 4,
+            frames: 1,
+            height: image.height,
+            planes: 1,
+            width: image.width,
+          };
+
+          dispatch(
+            setImage({
+              image: {
+                id: "",
+                annotations: [],
+                name: name,
+                shape: shape,
+                src: image.toDataURL(),
+              },
+            })
+          );
+        });
+      });
+
+      reader.readAsDataURL(file);
+    }
+  };
+
   const t = useTranslation();
 
   return (
@@ -157,8 +214,17 @@ export const CategoriesList = () => {
               </ListItem>
 
               <Menu {...bindMenu(popupState)}>
-                <MenuItem dense onClick={popupState.close}>
+                <MenuItem component="label" dense>
                   <ListItemText primary="Open image" />
+                  <input
+                    accept="image/*"
+                    hidden
+                    id="open-image"
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      onOpenImage(event, popupState.close)
+                    }
+                    type="file"
+                  />
                 </MenuItem>
 
                 <MenuItem dense onClick={popupState.close}>

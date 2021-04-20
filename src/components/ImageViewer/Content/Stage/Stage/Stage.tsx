@@ -289,6 +289,8 @@ export const Stage = () => {
         id: selectedAnnotation.id,
       })
     );
+    const transformerId = "tr-".concat(selectedAnnotation.id);
+    detachTransformer(transformerId);
   }, [annotating]);
 
   useEffect(() => {

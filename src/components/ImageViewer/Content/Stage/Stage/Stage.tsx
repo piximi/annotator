@@ -145,6 +145,11 @@ export const Stage = () => {
 
   const deselectAllAnnotations = () => {
     dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: undefined,
+      })
+    );
   };
 
   const deselectAnnotation = () => {
@@ -431,7 +436,9 @@ export const Stage = () => {
   }, [annotated]);
 
   useEffect(() => {
-    _.map(selectedAnnotationsIds, (annotationId) => {
+    if (!stageRef || !stageRef.current) return;
+
+    _.forEach(selectedAnnotationsIds, (annotationId) => {
       if (!stageRef || !stageRef.current) return;
 
       const transformerId = "tr-".concat(annotationId);
@@ -616,12 +623,6 @@ export const Stage = () => {
 
     dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
 
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
-
     if (selectionMode !== AnnotationModeType.New)
       dispatch(
         applicationSlice.actions.setSelectionMode({
@@ -665,15 +666,18 @@ export const Stage = () => {
 
         if (soundEnabled) playDeleteAnnotationSoundEffect();
 
-        dispatch(
-          applicationSlice.actions.setSelectedAnnotation({
-            selectedAnnotation: undefined,
-          })
-        );
         deselectAnnotation();
       }
     }
   }, [backspacePress, deletePress, escapePress]);
+
+  useEffect(() => {
+    if (!annotations) return;
+    if (annotations.length === 0) {
+      deselectAllTransformers();
+      deselectAllAnnotations();
+    }
+  }, [annotations]);
 
   useEffect(() => {
     if (!escape) return;

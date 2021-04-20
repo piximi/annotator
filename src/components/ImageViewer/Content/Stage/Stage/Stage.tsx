@@ -17,8 +17,8 @@ import {
 } from "../../../../../store/selectors";
 import {
   applicationSlice,
-  setSelectedAnnotationId,
   deleteSelectedAnnotationId,
+  setSelectedAnnotation,
 } from "../../../../../store";
 import {
   Provider,
@@ -28,7 +28,10 @@ import {
 } from "react-redux";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationTool, useHandTool, useZoom } from "../../../../../hooks";
-import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
+import {
+  AnnotationType,
+  AnnotationType as SelectionType,
+} from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
@@ -65,7 +68,6 @@ export const Stage = () => {
 
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
-  const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
   const selectedCategory = useSelector(selectedCategorySelector);
   const selectionMode = useSelector(selectionModeSelector);
@@ -148,8 +150,8 @@ export const Stage = () => {
     annotationTool.deselect();
 
     dispatch(
-      setSelectedAnnotationId({
-        selectedAnnotationId: undefined,
+      setSelectedAnnotation({
+        selectedAnnotation: undefined,
       })
     );
 
@@ -160,13 +162,14 @@ export const Stage = () => {
   };
 
   useEffect(() => {
-    if (!selectedAnnotationId || !annotationTool) return;
+    if (!selectedAnnotation || !selectedAnnotation.id || !annotationTool)
+      return;
 
     if (!annotations) return;
 
     const selectedInstance: SelectionType = annotations.filter(
       (instance: SelectionType) => {
-        return instance.id === selectedAnnotationId;
+        return instance.id === selectedAnnotation.id;
       }
     )[0];
 
@@ -188,13 +191,13 @@ export const Stage = () => {
     );
 
     const instance = annotations.filter((instance: SelectionType) => {
-      return instance.id === selectedAnnotationId;
+      return instance.id === selectedAnnotation.id;
     })[0];
 
     if (!selectedAnnotation) return;
 
     dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
+      setSelectedAnnotation({
         selectedAnnotation: {
           ...instance,
           boundingBox: invertedBoundingBox,
@@ -276,14 +279,14 @@ export const Stage = () => {
 
     if (!annotating) return;
 
-    if (!selectedAnnotationId) return;
+    if (!selectedAnnotation || !selectedAnnotation.id) return;
 
     transformerRef.current?.detach();
 
     //remove the existing Operator since it's essentially been replaced
     dispatch(
       applicationSlice.actions.deleteImageInstance({
-        id: selectedAnnotationId,
+        id: selectedAnnotation.id,
       })
     );
   }, [annotating]);
@@ -402,8 +405,8 @@ export const Stage = () => {
       })
     );
     dispatch(
-      setSelectedAnnotationId({
-        selectedAnnotationId: annotationTool.annotation.id,
+      setSelectedAnnotation({
+        selectedAnnotation: annotationTool.annotation,
       })
     );
   }, [annotated]);
@@ -414,9 +417,9 @@ export const Stage = () => {
   useEffect(() => {
     if (!stageRef || !stageRef.current) return;
 
-    if (!selectedAnnotationId) return;
+    if (!selectedAnnotation || !selectedAnnotation.id) return;
 
-    const node = stageRef.current.findOne(`#${selectedAnnotationId}`);
+    const node = stageRef.current.findOne(`#${selectedAnnotation.id}`);
 
     if (!node) return;
 
@@ -430,11 +433,11 @@ export const Stage = () => {
       applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: annotations.filter((v: SelectionType) => {
           // @ts-ignore
-          return v.id === selectedAnnotationId;
+          return v.id === selectedAnnotation.id;
         })[0],
       })
     );
-  }, [selectedAnnotationId]);
+  }, [selectedAnnotation?.id]);
 
   useEffect(() => {
     _.map(selectedAnnotationsIds, (annotationId) => {
@@ -600,7 +603,11 @@ export const Stage = () => {
 
     if (!selectedAnnotation) return;
 
-    if (selectedAnnotationId === selectedAnnotation.id) {
+    const annotationIds = _.map(annotations, (annotation: AnnotationType) => {
+      return annotation.id;
+    });
+
+    if (annotationIds.includes(selectedAnnotation.id)) {
       dispatch(
         applicationSlice.actions.replaceImageInstance({
           id: selectedAnnotation.id,
@@ -652,7 +659,7 @@ export const Stage = () => {
   }, [enterPress]);
 
   useEffect(() => {
-    if (selectedAnnotationId) {
+    if (selectedAnnotationsIds) {
       if (backspacePress || escapePress || deletePress) {
         if (deletePress || backspacePress) {
           _.map(selectedAnnotationsIds, (annotationId: string) => {

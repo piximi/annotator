@@ -13,7 +13,7 @@ import Konva from "konva";
 import { AnnotationTool } from "../../../../../../image/Tool";
 import {
   addSelectedAnnotationId,
-  setSelectedAnnotationId,
+  setSelectedAnnotation,
   setSeletedCategory,
 } from "../../../../../../store";
 import { ToolType } from "../../../../../../types/ToolType";
@@ -53,8 +53,8 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
     );
 
     dispatch(
-      setSelectedAnnotationId({
-        selectedAnnotationId: annotation.id,
+      setSelectedAnnotation({
+        selectedAnnotation: annotation,
       })
     );
 

@@ -12,8 +12,8 @@ import {
 import Konva from "konva";
 import { AnnotationTool } from "../../../../../../image/Tool";
 import {
-  addSelectedAnnotationId,
-  setSelectedAnnotationId,
+  setSelectedAnnotation,
+  setSelectedAnnotationsIds,
   setSeletedCategory,
 } from "../../../../../../store";
 import { ToolType } from "../../../../../../types/ToolType";
@@ -53,18 +53,36 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
     );
 
     dispatch(
-      setSelectedAnnotationId({
-        selectedAnnotationId: annotation.id,
+      setSelectedAnnotation({
+        selectedAnnotation: annotation,
       })
     );
 
-    if (!shiftPress) return;
-
-    if (!annotation.id) return;
-
-    if (_.includes(selectedAnnotationsIds, annotation.id)) return;
-
-    dispatch(addSelectedAnnotationId({ selectedAnnotationId: annotation.id }));
+    if (!shiftPress)
+      dispatch(
+        setSelectedAnnotationsIds({
+          selectedAnnotationsIds: [annotation.id],
+        })
+      );
+    else {
+      //unselect if already there
+      if (_.includes(selectedAnnotationsIds, annotation.id)) {
+        setSelectedAnnotationsIds({
+          selectedAnnotationsIds: _.filter(
+            selectedAnnotationsIds,
+            (annotationId: string) => {
+              return annotationId !== annotation.id;
+            }
+          ),
+        });
+      } else {
+        dispatch(
+          setSelectedAnnotationsIds({
+            selectedAnnotationsIds: [...selectedAnnotationsIds, annotation.id],
+          })
+        );
+      }
+    }
   };
 
   return (

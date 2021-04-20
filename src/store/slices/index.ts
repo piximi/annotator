@@ -1,5 +1,4 @@
 export {
-  addSelectedAnnotationId,
   applicationSlice,
   deleteCategory,
   deleteImageInstance,
@@ -23,7 +22,7 @@ export {
   setPenSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,
-  setSelectedAnnotationId,
+  setSelectedAnnotationsIds,
   setSelectionMode,
   setSeletedCategory,
   setSoundEnabled,

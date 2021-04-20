@@ -1,6 +1,5 @@
 export { reducer } from "./reducer";
 export {
-  addSelectedAnnotationId,
   applicationSlice,
   deleteCategory,
   deleteImageInstance,
@@ -22,7 +21,7 @@ export {
   setPenSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,
-  setSelectedAnnotationId,
+  setSelectedAnnotationsIds,
   setSelectionMode,
   setSeletedCategory,
   setStageHeight,

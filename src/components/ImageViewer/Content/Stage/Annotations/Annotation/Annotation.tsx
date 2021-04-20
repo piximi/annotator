@@ -58,21 +58,21 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       })
     );
 
-    dispatch(
-      setSelectedAnnotationsIds({
-        selectedAnnotationsIds: [...selectedAnnotationsIds, annotation.id],
-      })
-    );
+    if (!shiftPress)
+      dispatch(
+        setSelectedAnnotationsIds({
+          selectedAnnotationsIds: [annotation.id],
+        })
+      );
+    else {
+      if (_.includes(selectedAnnotationsIds, annotation.id)) return; //FIXME if this still necessary?
 
-    if (!shiftPress) return;
-
-    if (_.includes(selectedAnnotationsIds, annotation.id)) return;
-
-    dispatch(
-      setSelectedAnnotationsIds({
-        selectedAnnotationsIds: [...selectedAnnotationsIds, annotation.id],
-      })
-    );
+      dispatch(
+        setSelectedAnnotationsIds({
+          selectedAnnotationsIds: [...selectedAnnotationsIds, annotation.id],
+        })
+      );
+    }
   };
 
   return (

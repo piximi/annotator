@@ -441,15 +441,6 @@ export const Stage = () => {
     transformerRef.current.nodes([node]);
 
     if (!annotations) return;
-
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: annotations.filter((v: SelectionType) => {
-          // @ts-ignore
-          return v.id === selectedAnnotation.id;
-        })[0],
-      })
-    );
   }, [selectedAnnotation?.id]);
 
   useEffect(() => {
@@ -457,6 +448,7 @@ export const Stage = () => {
       if (!stageRef || !stageRef.current) return;
 
       const transformerId = "tr-".concat(annotationId);
+
       const transformer = stageRef.current.findOne(`#${transformerId}`);
       const line = stageRef.current.findOne(`#${annotationId}`);
 
@@ -472,7 +464,7 @@ export const Stage = () => {
 
       layer.batchDraw();
     });
-  }, [selectedAnnotationsIds.length]);
+  }, [selectedAnnotationsIds]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;

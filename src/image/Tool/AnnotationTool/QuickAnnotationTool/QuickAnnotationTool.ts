@@ -10,7 +10,7 @@ export class QuickAnnotationTool extends AnnotationTool {
   superpixels?: Int32Array;
   currentMask?: ImageJS.Image;
   map?: Uint8Array | Uint8ClampedArray;
-  masks?: { [key: number]: Array<Int32Array | ImageJS.Image> };
+  masks?: { [key: number]: ImageJS.Image };
 
   flatPixelCoordinate(position: { x: number; y: number }) {
     return Math.round(position.x) + Math.round(position.y) * this.image.width;
@@ -57,9 +57,7 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     this.currentSuperpixel = this.superpixels[pixel];
 
-    const mask = this.masks[this.currentSuperpixel];
-
-    this.currentMask = mask[1] as ImageJS.Image;
+    this.currentMask = this.masks[this.currentSuperpixel];
 
     this.annotating = true;
   }
@@ -77,11 +75,9 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     this.currentSuperpixel = superpixel;
 
-    const mask = this.masks[superpixel];
-
     const prevMask = this.currentMask;
 
-    this.currentMask = mask[1] as ImageJS.Image;
+    this.currentMask = this.masks[superpixel];
 
     if (!this.annotating) return;
 
@@ -182,7 +178,7 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     const unique = _.uniq(superpixels);
 
-    const masks: { [key: number]: Array<Int32Array | ImageJS.Image> } = {};
+    const masks: { [key: number]: ImageJS.Image } = {};
 
     _.forEach(unique, (superpixel) => {
       const binaryData = superpixels.map((pixel: number) => {
@@ -200,12 +196,10 @@ export class QuickAnnotationTool extends AnnotationTool {
         { components: 1, alpha: 0 }
       );
 
-      const colorMask = QuickAnnotationTool.colorSuperpixelMap(
+      masks[superpixel] = QuickAnnotationTool.colorSuperpixelMap(
         binaryImage,
         "green"
       );
-
-      masks[superpixel] = [binaryData, colorMask];
     });
 
     instance.masks = masks;

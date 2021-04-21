@@ -50,7 +50,6 @@ export const ColorIcon = ({ color, onColorChange }: ColorIconButtonProps) => {
   };
 
   const onChange = (color: ColorResult) => {
-    console.info(color);
     onColorChange(color);
     onCloseColorPicker();
   };

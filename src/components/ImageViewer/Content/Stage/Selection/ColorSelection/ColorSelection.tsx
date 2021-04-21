@@ -17,7 +17,6 @@ export const ColorSelection = ({ operator }: ColorSelectionProps) => {
     const image = new Image();
     image.src = operator.overlayData;
     setImage(image);
-    console.info(image.width);
   }, [operator.overlayData]);
 
   if (!operator.overlayData || !operator.offset) return null;

@@ -318,14 +318,10 @@ export const Stage = () => {
       } as SelectionType;
     });
 
-    console.info(updated);
-
     const others = annotations?.filter(
       (instance: SelectionType) =>
         !_.includes(selectedAnnotationsIds, instance.id)
     );
-
-    console.info(others);
 
     dispatch(
       applicationSlice.actions.setImageInstances({

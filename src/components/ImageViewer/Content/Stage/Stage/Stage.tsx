@@ -55,6 +55,7 @@ import { useKeyboardShortcuts } from "../../../../../hooks/useKeyboardShortcuts"
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
 import { Transformers } from "../Transformers/Transformers";
+import { useShiftPress } from "../../../../../hooks/useKeyPress/useKeyPress";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -112,7 +113,7 @@ export const Stage = () => {
   const deletePress = useKeyPress("Delete");
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
-  const shiftPress = useKeyPress("Shift");
+  useShiftPress();
 
   const [playCreateAnnotationSoundEffect] = useSound(
     createAnnotationSoundEffect
@@ -162,22 +163,6 @@ export const Stage = () => {
 
     selectingRef.current = null;
   };
-
-  useEffect(() => {
-    if (!shiftPress) {
-      dispatch(
-        applicationSlice.actions.setSelectionMode({
-          selectionMode: AnnotationModeType.New,
-        })
-      );
-    } else {
-      dispatch(
-        applicationSlice.actions.setSelectionMode({
-          selectionMode: AnnotationModeType.Add,
-        })
-      );
-    }
-  }, [shiftPress]);
 
   useEffect(() => {
     if (!selectedAnnotation || !selectedAnnotation.id || !annotationTool)

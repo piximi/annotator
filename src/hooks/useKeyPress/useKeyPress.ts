@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { applicationSlice } from "../../store/slices";
+import { AnnotationModeType } from "../../types/AnnotationModeType";
+import { useDispatch } from "react-redux";
 
 export function useKeyPress(targetKey: string) {
   // State for keeping track of whether key is pressed
@@ -31,3 +34,24 @@ export function useKeyPress(targetKey: string) {
 
   return keyPressed;
 }
+
+export const useShiftPress = () => {
+  const dispatch = useDispatch();
+
+  const shiftPress = useKeyPress("Shift");
+  useEffect(() => {
+    if (!shiftPress) {
+      dispatch(
+        applicationSlice.actions.setSelectionMode({
+          selectionMode: AnnotationModeType.New,
+        })
+      );
+    } else {
+      dispatch(
+        applicationSlice.actions.setSelectionMode({
+          selectionMode: AnnotationModeType.Add,
+        })
+      );
+    }
+  }, [shiftPress]);
+};

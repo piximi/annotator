@@ -159,7 +159,7 @@ export class QuickAnnotationTool extends AnnotationTool {
       }
     });
 
-    return new ImageJS.Image(512, 512, bazData, {
+    return new ImageJS.Image(this.image.width, this.image.height, bazData, {
       components: 3,
       alpha: 1,
     });

@@ -13,6 +13,10 @@ export class QuickAnnotationTool extends AnnotationTool {
   map?: Uint8Array | Uint8ClampedArray;
   masks?: { [key: number]: Array<Int32Array | ImageJS.Image> };
 
+  flatPixelCoordinate(position: { x: number; y: number }) {
+    return Math.round(position.x) + Math.round(position.y) * this.image.width;
+  }
+
   computeObjectSelectionMask(): Array<number> | undefined {
     if (!this.currentMask) return;
 
@@ -51,8 +55,7 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     if (!this.superpixels || !this.masks) return;
 
-    const pixel =
-      Math.round(position.x) + Math.round(position.y) * this.image.width;
+    const pixel = this.flatPixelCoordinate(position);
 
     this.currentSuperpixel = this.superpixels[pixel];
 
@@ -69,8 +72,8 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     if (!this.superpixels || !this.masks) return;
 
-    const pixel =
-      Math.round(position.x) + Math.round(position.y) * this.image.width;
+    const pixel = this.flatPixelCoordinate(position);
+
     const superpixel = this.superpixels[pixel];
 
     if (superpixel === this.currentSuperpixel) return; // don't draw superpixel mask if already on that superpixel

@@ -25,6 +25,7 @@ export const useStyles = makeStyles((theme) => ({
     width: settingsWidth,
     right: operationsWidth,
     backgroundImage: `url(${texture})`,
+    boxShadow: "inset 0 0 16px #000000",
   },
   toolbar: {
     ...theme.mixins.toolbar,

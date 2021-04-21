@@ -16,7 +16,7 @@ export class QuickAnnotationTool extends AnnotationTool {
     return Math.round(position.x) + Math.round(position.y) * this.image.width;
   }
 
-  computeObjectSelectionMask(): Array<number> | undefined {
+  computeQuickSelectionMask(): Array<number> | undefined {
     if (!this.currentMask) return;
 
     return encode(this.currentMask.grey().data as Uint8Array);
@@ -116,7 +116,7 @@ export class QuickAnnotationTool extends AnnotationTool {
     );
 
     this._contour = this.points;
-    this._mask = this.computeObjectSelectionMask();
+    this._mask = this.computeQuickSelectionMask();
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
     this.annotated = true;

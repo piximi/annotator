@@ -67,8 +67,6 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
       height: height,
     });
 
-    console.info(this.origin.x);
-
     const prediction = tensorflow.tidy(() => {
       if (crop) {
         const cropped: tensorflow.Tensor3D = tensorflow.browser.fromPixels(

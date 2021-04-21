@@ -19,7 +19,6 @@ const filterActions = (
     "image-viewer-application/setSelectedAnnotation",
     "image-viewer-application/setSelectedAnnotationId",
   ];
-  console.info(previousHistory);
   return _.includes(actions, action.type);
 };
 

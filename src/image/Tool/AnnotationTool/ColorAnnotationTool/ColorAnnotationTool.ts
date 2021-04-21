@@ -194,8 +194,6 @@ export class ColorAnnotationTool extends AnnotationTool {
       tolerance: this.tolerance,
     });
 
-    console.info(roi);
-
     // @ts-ignore
     this.roiMask = roi.getMasks()[0];
     // @ts-ignore
@@ -216,7 +214,5 @@ export class ColorAnnotationTool extends AnnotationTool {
       position,
       "red"
     );
-
-    console.info(this.roiMask.toDataURL());
   }
 }

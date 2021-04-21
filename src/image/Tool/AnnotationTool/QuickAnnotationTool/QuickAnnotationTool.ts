@@ -135,8 +135,6 @@ export class QuickAnnotationTool extends AnnotationTool {
     // @ts-ignore
     const greyMatrix = greyData.getMatrix().data;
 
-    console.info(greyData.toDataURL());
-
     const bar = greyMatrix.map((el: Array<number>) => {
       return Array.from(el);
     });

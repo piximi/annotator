@@ -4,14 +4,12 @@ import HelpIcon from "@material-ui/icons/Help";
 
 export const HelpListItem = () => {
   return (
-    <React.Fragment>
-      <ListItem dense disabled button>
-        <ListItemIcon>
-          <HelpIcon />
-        </ListItemIcon>
+    <ListItem dense disabled button>
+      <ListItemIcon>
+        <HelpIcon />
+      </ListItemIcon>
 
-        <ListItemText primary="Help" />
-      </ListItem>
-    </React.Fragment>
+      <ListItemText primary="Help" />
+    </ListItem>
   );
 };

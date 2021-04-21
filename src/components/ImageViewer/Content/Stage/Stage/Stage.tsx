@@ -17,7 +17,8 @@ import {
 } from "../../../../../store/selectors";
 import {
   applicationSlice,
-  setSelectedAnnotationId,
+  setSelectedAnnotation,
+  setSelectedAnnotationsIds,
 } from "../../../../../store";
 import {
   Provider,
@@ -27,13 +28,15 @@ import {
 } from "react-redux";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationTool, useHandTool, useZoom } from "../../../../../hooks";
-import { AnnotationType as SelectionType } from "../../../../../types/AnnotationType";
+import {
+  AnnotationType,
+  AnnotationType as SelectionType,
+} from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
-import { selectedAnnotationIdSelector } from "../../../../../store/selectors/selectedAnnotationIdSelector";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import {
@@ -50,6 +53,8 @@ import { Layer } from "../Layer";
 import { ZoomSelection } from "../Selection/ZoomSelection";
 import { useKeyboardShortcuts } from "../../../../../hooks/useKeyboardShortcuts";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
+import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
+import { Transformers } from "../Transformers/Transformers";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -62,7 +67,7 @@ export const Stage = () => {
 
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
-  const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
+  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
   const selectedCategory = useSelector(selectedCategorySelector);
   const selectionMode = useSelector(selectionModeSelector);
 
@@ -118,16 +123,39 @@ export const Stage = () => {
 
   const soundEnabled = useSelector(soundEnabledSelector);
 
+  const detachTransformer = (transformerId: string) => {
+    if (!stageRef || !stageRef.current) return;
+    const transformer = stageRef.current.findOne(`#${transformerId}`);
+
+    if (!transformer) return;
+
+    (transformer as Konva.Transformer).detach();
+    (transformer as Konva.Transformer).getLayer()?.batchDraw();
+  };
+
+  const deselectAllTransformers = () => {
+    if (!stageRef || !stageRef.current) return;
+
+    const transformers = stageRef.current.find("Transformer").toArray();
+    transformers.forEach((tr: any) => {
+      (tr as Konva.Transformer).detach();
+      (tr as Konva.Transformer).getLayer()?.batchDraw();
+    });
+  };
+
+  const deselectAllAnnotations = () => {
+    dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: undefined,
+      })
+    );
+  };
+
   const deselectAnnotation = () => {
     if (!annotationTool) return;
 
     annotationTool.deselect();
-
-    dispatch(
-      setSelectedAnnotationId({
-        selectedAnnotationId: undefined,
-      })
-    );
 
     transformerRef.current?.detach();
     transformerRef.current?.getLayer()?.batchDraw();
@@ -136,13 +164,14 @@ export const Stage = () => {
   };
 
   useEffect(() => {
-    if (!selectedAnnotationId || !annotationTool) return;
+    if (!selectedAnnotation || !selectedAnnotation.id || !annotationTool)
+      return;
 
     if (!annotations) return;
 
     const selectedInstance: SelectionType = annotations.filter(
       (instance: SelectionType) => {
-        return instance.id === selectedAnnotationId;
+        return instance.id === selectedAnnotation.id;
       }
     )[0];
 
@@ -164,13 +193,13 @@ export const Stage = () => {
     );
 
     const instance = annotations.filter((instance: SelectionType) => {
-      return instance.id === selectedAnnotationId;
+      return instance.id === selectedAnnotation.id;
     })[0];
 
     if (!selectedAnnotation) return;
 
     dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
+      setSelectedAnnotation({
         selectedAnnotation: {
           ...instance,
           boundingBox: invertedBoundingBox,
@@ -243,6 +272,15 @@ export const Stage = () => {
         },
       })
     );
+
+    dispatch(
+      setSelectedAnnotationsIds({
+        selectedAnnotationsIds: [
+          ...selectedAnnotationsIds,
+          selectedInstance.id,
+        ],
+      })
+    );
   }, [annotated]);
 
   useEffect(() => {
@@ -252,43 +290,42 @@ export const Stage = () => {
 
     if (!annotating) return;
 
-    if (!selectedAnnotationId) return;
+    if (!selectedAnnotation || !selectedAnnotation.id) return;
 
     transformerRef.current?.detach();
 
     //remove the existing Operator since it's essentially been replaced
     dispatch(
       applicationSlice.actions.deleteImageInstance({
-        id: selectedAnnotationId,
+        id: selectedAnnotation.id,
       })
     );
+    const transformerId = "tr-".concat(selectedAnnotation.id);
+    detachTransformer(transformerId);
   }, [annotating]);
 
   useEffect(() => {
-    if (!selectedAnnotationId) return;
+    if (!selectedAnnotationsIds) return;
 
-    if (!selectedAnnotation) return;
+    if (!annotations) return;
+
+    const updated = _.map(selectedAnnotationsIds, (annotationId) => {
+      return {
+        ...annotations?.filter(
+          (instance: SelectionType) => instance.id === annotationId
+        )[0],
+        categoryId: selectedCategory.id,
+      } as SelectionType;
+    });
 
     const others = annotations?.filter(
-      (instance: SelectionType) => instance.id !== selectedAnnotationId
+      (instance: SelectionType) =>
+        !_.includes(selectedAnnotationsIds, instance.id)
     );
-
-    const updated: SelectionType = {
-      ...annotations?.filter(
-        (instance: SelectionType) => instance.id === selectedAnnotationId
-      )[0],
-      categoryId: selectedCategory.id,
-    } as SelectionType;
 
     dispatch(
       applicationSlice.actions.setImageInstances({
-        instances: [...(others as Array<SelectionType>), updated],
-      })
-    );
-
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: updated,
+        instances: [...others, ...updated],
       })
     );
   }, [selectedCategory]);
@@ -310,6 +347,15 @@ export const Stage = () => {
       dispatch(
         applicationSlice.actions.setSelectedAnnotation({
           selectedAnnotation: annotationTool.annotation,
+        })
+      );
+
+      dispatch(
+        setSelectedAnnotationsIds({
+          selectedAnnotationsIds: [
+            ...selectedAnnotationsIds,
+            annotationTool.annotation.id,
+          ],
         })
       );
     }
@@ -379,39 +425,36 @@ export const Stage = () => {
       })
     );
     dispatch(
-      setSelectedAnnotationId({
-        selectedAnnotationId: annotationTool.annotation.id,
+      setSelectedAnnotation({
+        selectedAnnotation: annotationTool.annotation,
       })
     );
   }, [annotated]);
 
-  /*
-   * Connect Konva.Transformer to selected annotation Konva.Node
-   */
   useEffect(() => {
     if (!stageRef || !stageRef.current) return;
 
-    if (!selectedAnnotationId) return;
+    _.forEach(selectedAnnotationsIds, (annotationId) => {
+      if (!stageRef || !stageRef.current) return;
 
-    const node = stageRef.current.findOne(`#${selectedAnnotationId}`);
+      const transformerId = "tr-".concat(annotationId);
 
-    if (!node) return;
+      const transformer = stageRef.current.findOne(`#${transformerId}`);
+      const line = stageRef.current.findOne(`#${annotationId}`);
 
-    if (!transformerRef || !transformerRef.current) return;
+      if (!line) return;
 
-    transformerRef.current.nodes([node]);
+      if (!transformer) return;
 
-    if (!annotations) return;
+      (transformer as Konva.Transformer).nodes([line]);
 
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: annotations.filter((v: SelectionType) => {
-          // @ts-ignore
-          return v.id === selectedAnnotationId;
-        })[0],
-      })
-    );
-  }, [selectedAnnotationId]);
+      const layer = (transformer as Konva.Transformer).getLayer();
+
+      if (!layer) return;
+
+      layer.batchDraw();
+    });
+  }, [selectedAnnotationsIds]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;
@@ -555,31 +598,26 @@ export const Stage = () => {
 
     if (!selectedAnnotation) return;
 
-    if (selectedAnnotationId === selectedAnnotation.id) {
-      dispatch(
-        applicationSlice.actions.replaceImageInstance({
-          id: selectedAnnotation.id,
-          instance: selectedAnnotation,
-        })
-      );
-    } else {
-      dispatch(
-        applicationSlice.actions.setImageInstances({
-          instances: [...annotations, selectedAnnotation],
-        })
-      );
-    }
+    const annotationIds = _.map(annotations, (annotation: AnnotationType) => {
+      return annotation.id;
+    });
+
+    // add instance only if not already there
+    _.forEach(selectedAnnotationsIds, (selectedAnnotationId: string) => {
+      if (!annotationIds.includes(selectedAnnotationId)) {
+        dispatch(
+          applicationSlice.actions.setImageInstances({
+            instances: [...annotations, selectedAnnotation],
+          })
+        );
+      }
+    });
 
     if (soundEnabled) playCreateAnnotationSoundEffect();
 
     deselectAnnotation();
-    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
 
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
+    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
 
     if (selectionMode !== AnnotationModeType.New)
       dispatch(
@@ -587,6 +625,11 @@ export const Stage = () => {
           selectionMode: AnnotationModeType.New,
         })
       );
+
+    if (!selectedAnnotationsIds.length) return;
+
+    deselectAllAnnotations();
+    deselectAllTransformers();
   }, [enterPress]);
 
   useEffect(() => {
@@ -602,25 +645,39 @@ export const Stage = () => {
   }, [enterPress]);
 
   useEffect(() => {
-    if (selectedAnnotationId) {
+    if (selectedAnnotationsIds) {
       if (backspacePress || escapePress || deletePress) {
-        dispatch(
-          applicationSlice.actions.deleteImageInstance({
-            id: selectedAnnotationId,
-          })
-        );
+        if (deletePress || backspacePress) {
+          _.map(selectedAnnotationsIds, (annotationId: string) => {
+            dispatch(
+              applicationSlice.actions.deleteImageInstance({
+                id: annotationId,
+              })
+            );
+          });
+        }
+
+        deselectAllAnnotations();
+        deselectAllTransformers();
 
         if (soundEnabled) playDeleteAnnotationSoundEffect();
 
-        dispatch(
-          applicationSlice.actions.setSelectedAnnotation({
-            selectedAnnotation: undefined,
-          })
-        );
         deselectAnnotation();
       }
     }
   }, [backspacePress, deletePress, escapePress]);
+
+  /*/
+  Detach transformers and selections when all annotations are removed
+   */
+  useEffect(() => {
+    if (!annotations) return;
+
+    if (annotations.length) return;
+
+    deselectAllTransformers();
+    deselectAllAnnotations();
+  }, [annotations?.length]);
 
   useEffect(() => {
     if (!escape) return;
@@ -680,6 +737,8 @@ export const Stage = () => {
               <Annotations annotationTool={annotationTool} />
 
               <ReactKonva.Transformer ref={transformerRef} />
+
+              <Transformers />
 
               <ColorAnnotationToolTip
                 colorAnnotationTool={annotationTool as ColorAnnotationTool}

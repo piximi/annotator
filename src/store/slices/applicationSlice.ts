@@ -79,6 +79,12 @@ export const applicationSlice = createSlice({
   initialState: initialState,
   name: "image-viewer-application",
   reducers: {
+    setSelectedAnnotationsIds(
+      state: StateType,
+      action: PayloadAction<{ selectedAnnotationsIds: Array<string> }>
+    ) {
+      state.selectedAnnotationsIds = action.payload.selectedAnnotationsIds;
+    },
     deleteCategory(
       state: StateType,
       action: PayloadAction<{ category: CategoryType }>
@@ -226,17 +232,6 @@ export const applicationSlice = createSlice({
       action: PayloadAction<{ selectedAnnotation: AnnotationType | undefined }>
     ) {
       state.selectedAnnotation = action.payload.selectedAnnotation;
-      if (action.payload.selectedAnnotation)
-        state.selectedAnnotationsIds = [
-          ...state.selectedAnnotationsIds,
-          action.payload.selectedAnnotation.id,
-        ];
-    },
-    setSelectedAnnotationId(
-      state: StateType,
-      action: PayloadAction<{ selectedAnnotationId: string | undefined }>
-    ) {
-      state.selectedAnnotationId = action.payload.selectedAnnotationId;
     },
     setSelectionMode(
       state: StateType,
@@ -318,7 +313,7 @@ export const {
   setPenSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,
-  setSelectedAnnotationId,
+  setSelectedAnnotationsIds,
   setSelectionMode,
   setSeletedCategory,
   setSoundEnabled,

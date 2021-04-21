@@ -12,10 +12,13 @@ import {
 import Konva from "konva";
 import { AnnotationTool } from "../../../../../../image/Tool";
 import {
-  setSelectedAnnotationId,
+  setSelectedAnnotation,
+  setSelectedAnnotationsIds,
   setSeletedCategory,
 } from "../../../../../../store";
 import { ToolType } from "../../../../../../types/ToolType";
+import { selectedAnnotationsIdsSelector } from "../../../../../../store/selectors/selectedAnnotationsIdsSelector";
+import { useKeyPress } from "../../../../../../hooks/useKeyPress";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -23,17 +26,15 @@ type AnnotationProps = {
 };
 
 export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
-  const ref = useRef<Konva.Line | null>(null);
-
-  useEffect(() => {
-    ref.current = new Konva.Line();
-  }, []);
-
   const dispatch = useDispatch();
 
   const categories = useSelector(categoriesSelector);
   const toolType = useSelector(toolTypeSelector);
   const stageScale = useSelector(stageScaleSelector);
+
+  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
+
+  const shiftPress = useKeyPress("Shift");
 
   const fill = _.find(
     categories,
@@ -45,8 +46,6 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
     event.evt.preventDefault();
 
-    if (!ref || !ref.current) return;
-
     dispatch(
       setSeletedCategory({
         selectedCategory: annotation.categoryId,
@@ -54,10 +53,36 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
     );
 
     dispatch(
-      setSelectedAnnotationId({
-        selectedAnnotationId: annotation.id,
+      setSelectedAnnotation({
+        selectedAnnotation: annotation,
       })
     );
+
+    if (!shiftPress)
+      dispatch(
+        setSelectedAnnotationsIds({
+          selectedAnnotationsIds: [annotation.id],
+        })
+      );
+    else {
+      //unselect if already there
+      if (_.includes(selectedAnnotationsIds, annotation.id)) {
+        setSelectedAnnotationsIds({
+          selectedAnnotationsIds: _.filter(
+            selectedAnnotationsIds,
+            (annotationId: string) => {
+              return annotationId !== annotation.id;
+            }
+          ),
+        });
+      } else {
+        dispatch(
+          setSelectedAnnotationsIds({
+            selectedAnnotationsIds: [...selectedAnnotationsIds, annotation.id],
+          })
+        );
+      }
+    }
   };
 
   return (
@@ -68,7 +93,6 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       onClick={onPointerClick}
       opacity={0.5}
       points={annotation.contour}
-      ref={ref}
       scale={{ x: stageScale, y: stageScale }}
       strokeWidth={1}
     />

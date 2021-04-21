@@ -1,12 +1,12 @@
 import Dialog from "@material-ui/core/Dialog";
 import React from "react";
-import { ShapeType } from "../../../../../types/ShapeType";
-import { setImage } from "../../../../../store";
+import { ShapeType } from "../../../../types/ShapeType";
+import { setImage } from "../../../../store";
 import { useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import malaria from "../../../../../images/malaria.png";
+import malaria from "../../../../images/malaria.png";
 
 type ExampleImageDialogProps = {
   onClose: () => void;

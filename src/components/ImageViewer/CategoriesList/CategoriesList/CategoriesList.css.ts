@@ -90,5 +90,6 @@ export const useStyles = makeStyles((theme) => ({
     zIndex: 0,
     width: theme.spacing(32),
     backgroundImage: `url(${texture})`,
+    boxShadow: "inset 0 0 16px #000000",
   },
 }));

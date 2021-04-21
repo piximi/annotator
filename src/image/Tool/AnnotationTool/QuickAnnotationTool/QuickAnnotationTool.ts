@@ -63,8 +63,6 @@ export class QuickAnnotationTool extends AnnotationTool {
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (this.annotated) return;
-
     if (!this.superpixels || !this.masks) return;
 
     const pixel = this.flatPixelCoordinate(position);

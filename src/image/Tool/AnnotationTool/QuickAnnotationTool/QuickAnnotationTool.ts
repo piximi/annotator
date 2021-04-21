@@ -16,27 +16,7 @@ export class QuickAnnotationTool extends AnnotationTool {
   computeObjectSelectionMask(): Array<number> | undefined {
     if (!this.currentMask) return;
 
-    const greyData = this.currentMask.grey();
-
-    const binaryMask = new ImageJS.Image(
-      this.currentMask.width,
-      this.currentMask.height,
-      {
-        alpha: 0,
-        bitDepth: 1,
-        components: 1,
-      }
-    );
-
-    for (let x = 0; x < binaryMask.width; x++) {
-      for (let y = 0; y < binaryMask.height; y++) {
-        if (greyData.getPixelXY(x, y)[0] > 0) {
-          binaryMask.setBitXY(x, y);
-        }
-      }
-    }
-
-    return encode(binaryMask.data as Uint8Array);
+    return encode(this.currentMask.grey().data as Uint8Array);
   }
 
   filter(): {

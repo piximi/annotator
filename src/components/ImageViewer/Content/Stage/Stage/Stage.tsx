@@ -667,13 +667,17 @@ export const Stage = () => {
     }
   }, [backspacePress, deletePress, escapePress]);
 
+  /*/
+  Detach transformers and selections when all annotations are removed
+   */
   useEffect(() => {
     if (!annotations) return;
-    if (annotations.length === 0) {
-      deselectAllTransformers();
-      deselectAllAnnotations();
-    }
-  }, [annotations]);
+
+    if (annotations.length) return;
+
+    deselectAllTransformers();
+    deselectAllAnnotations();
+  }, [annotations?.length]);
 
   useEffect(() => {
     if (!escape) return;

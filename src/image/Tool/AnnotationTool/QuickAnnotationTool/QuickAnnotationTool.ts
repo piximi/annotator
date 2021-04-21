@@ -59,7 +59,7 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     const mask = this.masks[this.currentSuperpixel];
 
-    this.currentMask = mask[2] as ImageJS.Image;
+    this.currentMask = mask[1] as ImageJS.Image;
 
     this.annotating = true;
   }
@@ -81,7 +81,7 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     const prevMask = this.currentMask;
 
-    this.currentMask = mask[2] as ImageJS.Image;
+    this.currentMask = mask[1] as ImageJS.Image;
 
     if (!this.annotating) return;
 
@@ -216,7 +216,7 @@ export class QuickAnnotationTool extends AnnotationTool {
         "green"
       );
 
-      masks[superpixel] = [binaryData, colorData, colorMask];
+      masks[superpixel] = [binaryData, colorMask];
     });
 
     instance.masks = masks;

@@ -82,20 +82,15 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     const mask = this.masks[superpixel];
 
+    const prevMask = this.currentMask;
+
     this.currentMask = mask[2] as ImageJS.Image;
 
     if (!this.annotating) return;
 
-    if (!this.currentData) return;
+    if (!this.currentMask || !prevMask) return;
 
-    const colorData = mask[1] as Int32Array;
-
-    this.currentData = this.addImages(colorData, this.currentData);
-    this.currentMask = new ImageJS.Image(
-      this.image.width,
-      this.image.height,
-      this.currentData
-    );
+    this.currentMask = this.addImages(prevMask, this.currentMask);
   }
 
   onMouseUp(position: { x: number; y: number }) {
@@ -171,14 +166,22 @@ export class QuickAnnotationTool extends AnnotationTool {
     return [Int32Array.from(_.flatten(foo)), overlay];
   }
 
-  private addImages(foo: Int32Array, bar: Int32Array) {
-    return foo.map((el, i) => {
+  private addImages(foo: ImageJS.Image, bar: ImageJS.Image) {
+    const fooData = foo.data;
+    const barData = bar.data;
+
+    const bazData = fooData.map((el: number, i: number) => {
       if ((i + 1) % 4 === 0) {
         // opacity should not be added
-        return Math.max(el, bar[i]);
+        return Math.max(el, barData[i]);
       } else {
-        return Math.min(el + bar[i], 255); //FIXME this is going to be wrong for mixed colors (not just R, G or B)
+        return Math.min(el + barData[i], 255); //FIXME this is going to be wrong for mixed colors (not just R, G or B)
       }
+    });
+
+    return new ImageJS.Image(512, 512, bazData, {
+      components: 3,
+      alpha: 1,
     });
   }
 

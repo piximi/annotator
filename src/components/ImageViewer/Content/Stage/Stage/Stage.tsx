@@ -164,6 +164,22 @@ export const Stage = () => {
   };
 
   useEffect(() => {
+    if (!shiftPress) {
+      dispatch(
+        applicationSlice.actions.setSelectionMode({
+          selectionMode: AnnotationModeType.New,
+        })
+      );
+    } else {
+      dispatch(
+        applicationSlice.actions.setSelectionMode({
+          selectionMode: AnnotationModeType.Add,
+        })
+      );
+    }
+  }, [shiftPress]);
+
+  useEffect(() => {
     if (!selectedAnnotation || !selectedAnnotation.id || !annotationTool)
       return;
 

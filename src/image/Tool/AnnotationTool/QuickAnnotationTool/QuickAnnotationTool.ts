@@ -132,17 +132,6 @@ export class QuickAnnotationTool extends AnnotationTool {
   private static colorSuperpixelMap(mask: ImageJS.Image, color: string) {
     const fillColor = [255, 0, 0, 150];
 
-    const foo: Array<Array<number>> = [];
-    for (let y = 0; y < mask.height; y++) {
-      for (let x = 0; x < mask.width; x++) {
-        if (mask.getPixelXY(x, y)[0] === 255) {
-          foo.push(fillColor);
-        } else {
-          foo.push([0, 0, 0, 0]);
-        }
-      }
-    }
-
     let overlay = new ImageJS.Image(
       mask.width,
       mask.height,
@@ -160,7 +149,7 @@ export class QuickAnnotationTool extends AnnotationTool {
       }
     }
 
-    return [Int32Array.from(_.flatten(foo)), overlay];
+    return overlay;
   }
 
   private addImages(foo: ImageJS.Image, bar: ImageJS.Image) {
@@ -211,7 +200,7 @@ export class QuickAnnotationTool extends AnnotationTool {
         { components: 1, alpha: 0 }
       );
 
-      const [colorData, colorMask] = QuickAnnotationTool.colorSuperpixelMap(
+      const colorMask = QuickAnnotationTool.colorSuperpixelMap(
         binaryImage,
         "green"
       );

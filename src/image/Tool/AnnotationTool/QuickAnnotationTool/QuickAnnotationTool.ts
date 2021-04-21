@@ -91,6 +91,7 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     const pad = 1; //we pad here to be robust to the case where ROI is along a border of the image.
     // Otherwise the isoLine algorithm is going to return the wrong mask. We pad to not have any pixel on the border.
+    // this is just for visualization purposes and does not change the underlying true mask data
 
     //@ts-ignore
     const padded = this.currentMask.pad({

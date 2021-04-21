@@ -28,8 +28,6 @@ import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { AnnotationType } from "../../../../types/AnnotationType";
-import OpenIcon from "@material-ui/icons/FolderOpen";
-import SaveIcon from "@material-ui/icons/Save";
 import Typography from "@material-ui/core/Typography";
 import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -37,6 +35,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Box from "@material-ui/core/Box";
 import { MiscellaneousList } from "../MiscellaneousList";
+import { ApplicationList } from "../ApplicationList";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -143,23 +142,7 @@ export const CategoriesList = () => {
 
       <Divider />
 
-      <List component="nav" dense>
-        <ListItem button>
-          <ListItemIcon>
-            <OpenIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Open")} />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon>
-            <SaveIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Save")} />
-        </ListItem>
-      </List>
+      <ApplicationList />
 
       <Divider />
 

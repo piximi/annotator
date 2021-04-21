@@ -55,3 +55,24 @@ export const useShiftPress = () => {
     }
   }, [shiftPress]);
 };
+
+export const useAltPress = () => {
+  const dispatch = useDispatch();
+
+  const optionPress = useKeyPress("Alt"); //Option key on Mac keyboards
+  useEffect(() => {
+    if (!optionPress) {
+      dispatch(
+        applicationSlice.actions.setSelectionMode({
+          selectionMode: AnnotationModeType.New,
+        })
+      );
+    } else {
+      dispatch(
+        applicationSlice.actions.setSelectionMode({
+          selectionMode: AnnotationModeType.Subtract,
+        })
+      );
+    }
+  }, [optionPress]);
+};

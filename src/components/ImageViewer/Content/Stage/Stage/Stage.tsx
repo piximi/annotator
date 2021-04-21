@@ -55,7 +55,10 @@ import { useKeyboardShortcuts } from "../../../../../hooks/useKeyboardShortcuts"
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
 import { Transformers } from "../Transformers/Transformers";
-import { useShiftPress } from "../../../../../hooks/useKeyPress/useKeyPress";
+import {
+  useAltPress,
+  useShiftPress,
+} from "../../../../../hooks/useKeyPress/useKeyPress";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -114,6 +117,7 @@ export const Stage = () => {
   const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
   useShiftPress();
+  useAltPress();
 
   const [playCreateAnnotationSoundEffect] = useSound(
     createAnnotationSoundEffect

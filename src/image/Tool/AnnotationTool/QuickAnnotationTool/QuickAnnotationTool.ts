@@ -5,7 +5,6 @@ import * as _ from "lodash";
 import { encode } from "../../../rle";
 
 export class QuickAnnotationTool extends AnnotationTool {
-  currentData?: Int32Array;
   colorMasks?: Array<string>;
   currentSuperpixel?: number;
   superpixels?: Int32Array;
@@ -44,7 +43,6 @@ export class QuickAnnotationTool extends AnnotationTool {
     this.annotated = false;
     this.annotating = false;
 
-    this.currentData = undefined;
     this.colorMasks = undefined;
     this.currentSuperpixel = undefined;
     this.currentMask = undefined;
@@ -62,7 +60,6 @@ export class QuickAnnotationTool extends AnnotationTool {
     const mask = this.masks[this.currentSuperpixel];
 
     this.currentMask = mask[2] as ImageJS.Image;
-    this.currentData = mask[1] as Int32Array;
 
     this.annotating = true;
   }

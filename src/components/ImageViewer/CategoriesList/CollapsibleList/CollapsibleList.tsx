@@ -23,8 +23,8 @@ export const CollapsibleList = ({
   };
 
   return (
-    <List dense>
-      <ListItem button dense onClick={onClick}>
+    <List>
+      <ListItem button onClick={onClick}>
         <ListItemIcon>
           {collapsed ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </ListItemIcon>
@@ -33,7 +33,7 @@ export const CollapsibleList = ({
       </ListItem>
 
       <Collapse in={collapsed} timeout="auto" unmountOnExit>
-        <List component="div" dense disablePadding>
+        <List component="div" disablePadding>
           {children}
         </List>
       </Collapse>

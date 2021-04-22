@@ -12,7 +12,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "./CategoriesList.css";
 import { CollapsibleList } from "../CollapsibleList";
-import { CreateCategoryListItem } from "../CreateCategoryListItem";
 import { CategoryListItemCheckbox } from "../CategoryListItemCheckbox";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
@@ -55,6 +54,8 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import FeedbackIcon from "@material-ui/icons/Feedback";
 import HelpIcon from "@material-ui/icons/Help";
 import { SettingsDialog } from "../../ImageViewerAppBar/SettingsButton/SettingsDialog";
+import AddIcon from "@material-ui/icons/Add";
+import { CreateCategoryDialog } from "../CreateCategoryListItem/CreateCategoryDialog";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -220,6 +221,12 @@ export const CategoriesList = () => {
 
   const onCloseHelpDialog = () => setOpenHelpDialog(false);
 
+  const {
+    onClose: onCloseCreateCategoryDialog,
+    onOpen: onOpenCreateCategoryDialog,
+    open: openCreateCategoryDialog,
+  } = useDialog();
+
   const t = useTranslation();
 
   return (
@@ -259,7 +266,7 @@ export const CategoriesList = () => {
 
       <Divider />
 
-      <List dense>
+      <List>
         <PopupState variant="popover">
           {(popupState) => (
             <React.Fragment>
@@ -272,7 +279,7 @@ export const CategoriesList = () => {
               </ListItem>
 
               <Menu {...bindMenu(popupState)}>
-                <MenuItem component="label" dense>
+                <MenuItem component="label">
                   <ListItemText primary="Open image" />
                   <input
                     accept="image/*"
@@ -286,7 +293,6 @@ export const CategoriesList = () => {
                 </MenuItem>
 
                 <MenuItem
-                  dense
                   onClick={() => onOpenExampleImageDialog(popupState.close)}
                 >
                   <ListItemText primary="Open example image" />
@@ -312,11 +318,11 @@ export const CategoriesList = () => {
               </ListItem>
 
               <Menu {...bindMenu(popupState)}>
-                <MenuItem dense onClick={popupState.close}>
+                <MenuItem onClick={popupState.close}>
                   <ListItemText primary="Save annotations" />
                 </MenuItem>
 
-                <MenuItem dense disabled onClick={popupState.close}>
+                <MenuItem disabled onClick={popupState.close}>
                   <ListItemText primary="Save classifier" />
                 </MenuItem>
               </Menu>
@@ -333,7 +339,6 @@ export const CategoriesList = () => {
             <div key={category.id}>
               <ListItem
                 button
-                dense
                 id={category.id}
                 onClick={(event) => onCategoryClick(event, category)}
                 selected={category.id === selectedCategory.id}
@@ -383,7 +388,6 @@ export const CategoriesList = () => {
 
         <ListItem
           button
-          dense
           id={unknownCategory.id}
           onClick={(event) => onCategoryClick(event, unknownCategory)}
           selected={unknownCategory.id === selectedCategory.id}
@@ -397,11 +401,22 @@ export const CategoriesList = () => {
           />
         </ListItem>
 
-        <CreateCategoryListItem />
+        <ListItem button onClick={onOpenCreateCategoryDialog}>
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Create category")} />
+
+          <CreateCategoryDialog
+            onClose={onCloseCreateCategoryDialog}
+            open={openCreateCategoryDialog}
+          />
+        </ListItem>
 
         <Divider />
 
-        <List component="nav" dense>
+        <List>
           <ListItem button onClick={onClearAllAnnotations}>
             <ListItemIcon>
               <DeleteIcon color="disabled" />

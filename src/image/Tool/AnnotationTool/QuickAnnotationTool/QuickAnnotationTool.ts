@@ -124,29 +124,6 @@ export class QuickAnnotationTool extends AnnotationTool {
     this.annotating = false;
   }
 
-  private static colorSuperpixelMap(mask: ImageJS.Image, color: string) {
-    const fillColor = [255, 0, 0, 150];
-
-    let overlay = new ImageJS.Image(
-      mask.width,
-      mask.height,
-      new Uint8Array(mask.width * mask.height * 4),
-      { alpha: 1 }
-    );
-    // roiPaint doesn't respect alpha, so we'll paint it ourselves.
-    for (let x = 0; x < mask.width; x++) {
-      for (let y = 0; y < mask.height; y++) {
-        if (mask.getPixelXY(x, y)[0] === 255) {
-          overlay.setPixelXY(x, y, fillColor);
-        } else {
-          overlay.setPixelXY(x, y, [0, 0, 0, 0]);
-        }
-      }
-    }
-
-    return overlay;
-  }
-
   private addImages(foo: ImageJS.Image, bar: ImageJS.Image) {
     const fooData = foo.data;
     const barData = bar.data;
@@ -180,25 +157,16 @@ export class QuickAnnotationTool extends AnnotationTool {
     const masks: { [key: number]: ImageJS.Image } = {};
 
     _.forEach(unique, (superpixel) => {
-      const binaryData = superpixels.map((pixel: number) => {
-        if (pixel === superpixel) {
-          return 255;
-        } else {
-          return 0;
-        }
-      });
-
-      const binaryImage = new ImageJS.Image(
+      masks[superpixel] = new ImageJS.Image(
         image.width,
         image.height,
-        binaryData,
-        { components: 1, alpha: 0 }
+        new Uint8Array(image.width * image.height * 4),
+        { alpha: 1 }
       );
+    });
 
-      masks[superpixel] = QuickAnnotationTool.colorSuperpixelMap(
-        binaryImage,
-        "green"
-      );
+    superpixels.forEach((pixel: number, index: number) => {
+      masks[pixel].setPixel(index, [255, 0, 0, 150]);
     });
 
     instance.masks = masks;

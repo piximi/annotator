@@ -59,6 +59,7 @@ import {
   useAltPress,
   useShiftPress,
 } from "../../../../../hooks/useKeyPress/useKeyPress";
+import { useWindowFocusHandler } from "../../../../../hooks/useWindowFocusHandler/useWindowFocusHandler";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -118,6 +119,7 @@ export const Stage = () => {
   const escapePress = useKeyPress("Escape");
   useShiftPress();
   useAltPress();
+  useWindowFocusHandler();
 
   const [playCreateAnnotationSoundEffect] = useSound(
     createAnnotationSoundEffect

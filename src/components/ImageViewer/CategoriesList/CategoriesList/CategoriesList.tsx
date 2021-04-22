@@ -398,8 +398,8 @@ export const CategoriesList = () => {
 
       <Divider />
 
-      <List dense>
-        <ListItem dense button onClick={onOpenSettingsDialog}>
+      <List>
+        <ListItem button onClick={onOpenSettingsDialog}>
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>

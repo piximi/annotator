@@ -665,7 +665,9 @@ export const Stage = () => {
         deselectAllAnnotations();
         deselectAllTransformers();
 
-        if (soundEnabled) playDeleteAnnotationSoundEffect();
+        if (!_.isEmpty(annotations) && soundEnabled) {
+          playDeleteAnnotationSoundEffect();
+        }
 
         deselectAnnotation();
       }

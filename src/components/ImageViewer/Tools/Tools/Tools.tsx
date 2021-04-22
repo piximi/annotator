@@ -38,6 +38,7 @@ export const Tools = () => {
       classes={{ paper: classes.paper }}
       variant="permanent"
     >
+      <br />
       <Tool
         name={t("Pointer")}
         onClick={() => {
@@ -52,6 +53,7 @@ export const Tools = () => {
         <SelectionIcon />
       </Tool>
 
+      <br />
       <Tool
         name={t("Rectangular annotation")}
         onClick={() => {
@@ -80,6 +82,8 @@ export const Tools = () => {
         <EllipticalSelectionIcon />
       </Tool>
 
+      <br />
+
       <Tool
         name={t("Pen annotation")}
         onClick={() => {
@@ -93,6 +97,8 @@ export const Tools = () => {
       >
         <PenSelectionIcon />
       </Tool>
+
+      <br />
 
       <Tool
         name={t("Lasso annotation")}
@@ -136,6 +142,8 @@ export const Tools = () => {
         <MagneticSelectionIcon />
       </Tool>
 
+      <br />
+
       <Tool
         name={t("Color annotation")}
         onClick={() => {
@@ -177,7 +185,7 @@ export const Tools = () => {
       >
         <ObjectSelectionIcon />
       </Tool>
-
+      <br />
       <Tool
         name={t("Hand")}
         onClick={() => {

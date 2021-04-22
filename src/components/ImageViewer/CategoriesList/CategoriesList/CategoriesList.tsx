@@ -43,6 +43,7 @@ import { ExampleImageDialog } from "../ExampleImageDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
 import FeedbackIcon from "@material-ui/icons/Feedback";
 import HelpIcon from "@material-ui/icons/Help";
+import { SettingsDialog } from "../../ImageViewerAppBar/SettingsButton/SettingsDialog";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -184,6 +185,7 @@ export const CategoriesList = () => {
   const onOpenSettingsDialog = () => {
     setSettingsDialogOpened(true);
   };
+
   const onCloseSettingsDialog = () => {
     setSettingsDialogOpened(false);
   };
@@ -382,12 +384,17 @@ export const CategoriesList = () => {
       <Divider />
 
       <List dense>
-        <ListItem dense button disabled>
+        <ListItem dense button onClick={onOpenSettingsDialog}>
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
 
           <ListItemText primary="Settings" />
+
+          <SettingsDialog
+            onClose={onCloseSettingsDialog}
+            open={settingsDialogOpened}
+          />
         </ListItem>
 
         <ListItem button disabled>

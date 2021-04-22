@@ -425,12 +425,14 @@ export const CategoriesList = () => {
           />
         </ListItem>
 
-        <ListItem dense disabled button>
+        <ListItem button onClick={onOpenHelpDialog}>
           <ListItemIcon>
             <HelpIcon />
           </ListItemIcon>
 
           <ListItemText primary="Help" />
+
+          <Dialog onClose={onCloseHelpDialog} open={openHelpDialog} />
         </ListItem>
       </List>
     </Drawer>

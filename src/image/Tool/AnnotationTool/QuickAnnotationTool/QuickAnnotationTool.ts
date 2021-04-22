@@ -157,23 +157,16 @@ export class QuickAnnotationTool extends AnnotationTool {
     const masks: { [key: number]: ImageJS.Image } = {};
 
     _.forEach(unique, (superpixel) => {
-      const overlay = new ImageJS.Image(
+      masks[superpixel] = new ImageJS.Image(
         image.width,
         image.height,
         new Uint8Array(image.width * image.height * 4),
         { alpha: 1 }
       );
+    });
 
-      // console.info("Before map")
-      superpixels.forEach((pixel: number, index: number) => {
-        if (pixel === superpixel) {
-          overlay.setPixel(index, [255, 0, 0, 150]);
-        } else {
-          overlay.setPixel(index, [0, 0, 0, 0]);
-        }
-      });
-
-      masks[superpixel] = overlay;
+    superpixels.forEach((pixel: number, index: number) => {
+      masks[pixel].setPixel(index, [255, 0, 0, 150]);
     });
 
     instance.masks = masks;

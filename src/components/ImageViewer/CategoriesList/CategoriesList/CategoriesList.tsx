@@ -23,7 +23,7 @@ import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { applicationSlice, setImage } from "../../../../store";
-import { Divider, Menu, MenuItem } from "@material-ui/core";
+import { Dialog, Divider, Menu, MenuItem } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -189,6 +189,21 @@ export const CategoriesList = () => {
   const onCloseSettingsDialog = () => {
     setSettingsDialogOpened(false);
   };
+
+  const [
+    openSendFeedbackDialog,
+    setOpenSendFeedbackDialog,
+  ] = React.useState<boolean>(false);
+
+  const onOpenSendFeedbackDialog = () => setOpenSendFeedbackDialog(true);
+
+  const onCloseSendFeedbackDialog = () => setOpenSendFeedbackDialog(false);
+
+  const [openHelpDialog, setOpenHelpDialog] = React.useState<boolean>(false);
+
+  const onOpenHelpDialog = () => setOpenHelpDialog(true);
+
+  const onCloseHelpDialog = () => setOpenHelpDialog(false);
 
   const t = useTranslation();
 
@@ -397,12 +412,17 @@ export const CategoriesList = () => {
           />
         </ListItem>
 
-        <ListItem button disabled>
+        <ListItem button onClick={onOpenSendFeedbackDialog}>
           <ListItemIcon>
             <FeedbackIcon />
           </ListItemIcon>
 
           <ListItemText primary="Send feedback" />
+
+          <Dialog
+            onClose={onCloseSendFeedbackDialog}
+            open={openSendFeedbackDialog}
+          />
         </ListItem>
 
         <ListItem dense disabled button>

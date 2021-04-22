@@ -23,7 +23,17 @@ import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { applicationSlice, setImage } from "../../../../store";
-import { Dialog, Divider, Menu, MenuItem } from "@material-ui/core";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Menu,
+  MenuItem,
+  TextField,
+} from "@material-ui/core";
 import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -32,6 +42,7 @@ import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import SaveIcon from "@material-ui/icons/Save";
 import Typography from "@material-ui/core/Typography";
 import Toolbar from "@material-ui/core/Toolbar";
+import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
 import AppBar from "@material-ui/core/AppBar";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -422,7 +433,36 @@ export const CategoriesList = () => {
           <Dialog
             onClose={onCloseSendFeedbackDialog}
             open={openSendFeedbackDialog}
-          />
+          >
+            <DialogTitle>{t("Send feedback")}</DialogTitle>
+
+            <DialogContent>
+              <DialogContentText>
+                Vestibulum eu vestibulum nibh, quis commodo sapien. Donec a sem
+                nec augue rutrum tristique. Nam pretium nec dui in sagittis.
+              </DialogContentText>
+
+              <TextField
+                autoFocus
+                margin="dense"
+                id="feedback"
+                multiline
+                rows={12}
+                fullWidth
+                variant="filled"
+              />
+            </DialogContent>
+
+            <DialogActions>
+              <Button onClick={onCloseSendFeedbackDialog} color="primary">
+                Cancel
+              </Button>
+
+              <Button onClick={onCloseSendFeedbackDialog} color="primary">
+                Send feedback
+              </Button>
+            </DialogActions>
+          </Dialog>
         </ListItem>
 
         <ListItem button onClick={onOpenHelpDialog}>
@@ -432,7 +472,9 @@ export const CategoriesList = () => {
 
           <ListItemText primary="Help" />
 
-          <Dialog onClose={onCloseHelpDialog} open={openHelpDialog} />
+          <Dialog onClose={onCloseHelpDialog} open={openHelpDialog}>
+            <DialogTitle>{t("Help")}</DialogTitle>
+          </Dialog>
         </ListItem>
       </List>
     </Drawer>

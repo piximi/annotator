@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { applicationSlice } from "../../store/slices";
 import { AnnotationModeType } from "../../types/AnnotationModeType";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { selectedAnnotationSelector } from "../../store/selectors/selectedAnnotationSelector";
 
 export function useKeyPress(targetKey: string) {
   // State for keeping track of whether key is pressed
@@ -38,6 +39,8 @@ export function useKeyPress(targetKey: string) {
 export const useShiftPress = () => {
   const dispatch = useDispatch();
 
+  const selectedAnnotation = useSelector(selectedAnnotationSelector);
+
   const shiftPress = useKeyPress("Shift");
   useEffect(() => {
     if (!shiftPress) {
@@ -47,6 +50,7 @@ export const useShiftPress = () => {
         })
       );
     } else {
+      if (!selectedAnnotation) return;
       dispatch(
         applicationSlice.actions.setSelectionMode({
           selectionMode: AnnotationModeType.Add,
@@ -59,6 +63,8 @@ export const useShiftPress = () => {
 export const useAltPress = () => {
   const dispatch = useDispatch();
 
+  const selectedAnnotation = useSelector(selectedAnnotationSelector);
+
   const optionPress = useKeyPress("Alt"); //Option key on Mac keyboards
   useEffect(() => {
     if (!optionPress) {
@@ -68,6 +74,7 @@ export const useAltPress = () => {
         })
       );
     } else {
+      if (!selectedAnnotation) return;
       dispatch(
         applicationSlice.actions.setSelectionMode({
           selectionMode: AnnotationModeType.Subtract,

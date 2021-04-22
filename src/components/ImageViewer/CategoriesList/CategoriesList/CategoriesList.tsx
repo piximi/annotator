@@ -55,6 +55,8 @@ import FeedbackIcon from "@material-ui/icons/Feedback";
 import HelpIcon from "@material-ui/icons/Help";
 import { SettingsDialog } from "../../ImageViewerAppBar/SettingsButton/SettingsDialog";
 import AddIcon from "@material-ui/icons/Add";
+import CloseIcon from "@material-ui/icons/Close";
+import DescriptionIcon from "@material-ui/icons/Description";
 import { CreateCategoryDialog } from "../CreateCategoryListItem/CreateCategoryDialog";
 
 export const CategoriesList = () => {
@@ -217,9 +219,9 @@ export const CategoriesList = () => {
 
   const [openHelpDialog, setOpenHelpDialog] = React.useState<boolean>(false);
 
-  const onOpenHelpDialog = () => setOpenHelpDialog(true);
+  const onOpenHelpDialog = () => setOpenHelpDialog(!openHelpDialog);
 
-  const onCloseHelpDialog = () => setOpenHelpDialog(false);
+  const onCloseHelpDialog = () => setOpenHelpDialog(!openHelpDialog);
 
   const {
     onClose: onCloseCreateCategoryDialog,
@@ -491,11 +493,68 @@ export const CategoriesList = () => {
 
           <ListItemText primary="Help" />
 
-          <Dialog onClose={onCloseHelpDialog} open={openHelpDialog}>
-            <DialogTitle>{t("Help")}</DialogTitle>
-          </Dialog>
+          <HelpDialog onClose={onCloseHelpDialog} open={openHelpDialog} />
         </ListItem>
       </List>
     </Drawer>
+  );
+};
+
+type HelpDialogProps = {
+  onClose: () => void;
+  open: boolean;
+};
+
+const HelpDialog = ({ onClose, open }: HelpDialogProps) => {
+  const t = useTranslation();
+
+  return (
+    <Dialog fullWidth maxWidth="xs" onClose={onClose} open={open}>
+      <AppBar position="relative">
+        <Toolbar>
+          <Typography style={{ flexGrow: 1 }} variant="h6">
+            <DialogTitle>{t("Help")}</DialogTitle>
+          </Typography>
+
+          <IconButton onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      <List>
+        <ListItem button>
+          <ListItemIcon>
+            <DescriptionIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("What’s new?")} />
+        </ListItem>
+
+        <ListItem button>
+          <ListItemIcon>
+            <DescriptionIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Open images")} />
+        </ListItem>
+
+        <ListItem button>
+          <ListItemIcon>
+            <DescriptionIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Make annotations")} />
+        </ListItem>
+
+        <ListItem button>
+          <ListItemIcon>
+            <DescriptionIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Save annotations")} />
+        </ListItem>
+      </List>
+    </Dialog>
   );
 };

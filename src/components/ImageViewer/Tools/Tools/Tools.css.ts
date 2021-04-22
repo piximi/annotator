@@ -18,4 +18,9 @@ export const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
   },
+  child: {
+    position: "absolute",
+    top: "50%",
+    transform: "translateY(-50%)",
+  },
 }));

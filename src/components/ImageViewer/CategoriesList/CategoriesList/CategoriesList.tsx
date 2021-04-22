@@ -36,11 +36,13 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AppBar from "@material-ui/core/AppBar";
 import Tooltip from "@material-ui/core/Tooltip";
 import Box from "@material-ui/core/Box";
-import { MiscellaneousList } from "../MiscellaneousList";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import * as ImageJS from "image-js";
 import { ShapeType } from "../../../../types/ShapeType";
 import { ExampleImageDialog } from "../ExampleImageDialog";
+import SettingsIcon from "@material-ui/icons/Settings";
+import FeedbackIcon from "@material-ui/icons/Feedback";
+import HelpIcon from "@material-ui/icons/Help";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -370,7 +372,31 @@ export const CategoriesList = () => {
 
       <Divider />
 
-      <MiscellaneousList />
+      <List dense>
+        <ListItem dense button disabled>
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+
+          <ListItemText primary="Settings" />
+        </ListItem>
+
+        <ListItem button disabled>
+          <ListItemIcon>
+            <FeedbackIcon />
+          </ListItemIcon>
+
+          <ListItemText primary="Send feedback" />
+        </ListItem>
+
+        <ListItem dense disabled button>
+          <ListItemIcon>
+            <HelpIcon />
+          </ListItemIcon>
+
+          <ListItemText primary="Help" />
+        </ListItem>
+      </List>
     </Drawer>
   );
 };

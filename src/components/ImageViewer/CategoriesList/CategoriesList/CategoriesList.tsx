@@ -179,6 +179,15 @@ export const CategoriesList = () => {
     setOpenExampleImageDialog(false);
   };
 
+  const [settingsDialogOpened, setSettingsDialogOpened] = React.useState(false);
+
+  const onOpenSettingsDialog = () => {
+    setSettingsDialogOpened(true);
+  };
+  const onCloseSettingsDialog = () => {
+    setSettingsDialogOpened(false);
+  };
+
   const t = useTranslation();
 
   return (

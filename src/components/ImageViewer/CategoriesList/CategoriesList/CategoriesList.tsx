@@ -191,14 +191,14 @@ export const CategoriesList = () => {
     setOpenExampleImageDialog(false);
   };
 
-  const [settingsDialogOpened, setSettingsDialogOpened] = React.useState(false);
+  const [openSettingsDialog, setOpenSettingsDialog] = React.useState(false);
 
   const onOpenSettingsDialog = () => {
-    setSettingsDialogOpened(true);
+    setOpenSettingsDialog(!openSettingsDialog);
   };
 
   const onCloseSettingsDialog = () => {
-    setSettingsDialogOpened(false);
+    setOpenSettingsDialog(!openSettingsDialog);
   };
 
   const [
@@ -206,9 +206,13 @@ export const CategoriesList = () => {
     setOpenSendFeedbackDialog,
   ] = React.useState<boolean>(false);
 
-  const onOpenSendFeedbackDialog = () => setOpenSendFeedbackDialog(true);
+  const onOpenSendFeedbackDialog = () => {
+    setOpenSendFeedbackDialog(!openSendFeedbackDialog);
+  };
 
-  const onCloseSendFeedbackDialog = () => setOpenSendFeedbackDialog(false);
+  const onCloseSendFeedbackDialog = () => {
+    setOpenSendFeedbackDialog(!openSendFeedbackDialog);
+  };
 
   const [openHelpDialog, setOpenHelpDialog] = React.useState<boolean>(false);
 
@@ -419,7 +423,7 @@ export const CategoriesList = () => {
 
           <SettingsDialog
             onClose={onCloseSettingsDialog}
-            open={settingsDialogOpened}
+            open={openSettingsDialog}
           />
         </ListItem>
 

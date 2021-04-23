@@ -29,6 +29,7 @@ import { ZoomOptions } from "../ZoomOptions";
 import { useSelector } from "react-redux";
 import { toolTypeSelector } from "../../../../store/selectors";
 import { useTranslation } from "react-i18next";
+import { HandToolOptions } from "../HandToolOptions/HandToolOptions";
 
 export const ToolOptions = () => {
   const classes = useStyles();
@@ -113,7 +114,7 @@ export const ToolOptions = () => {
       icon: <HandIcon />,
       method: ToolType.Hand,
       name: "Hand",
-      options: <React.Fragment />,
+      options: <HandToolOptions />,
     },
     {
       description: "Description of zoom here.",

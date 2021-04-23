@@ -295,6 +295,8 @@ export const Stage = () => {
   useEffect(() => {
     if (toolType === ToolType.Zoom) return;
 
+    if (toolType === ToolType.Pointer) return;
+
     if (selectionMode === AnnotationModeType.New) return;
 
     if (!annotating) return;
@@ -394,19 +396,6 @@ export const Stage = () => {
     if (!annotationTool || !annotationTool.contour) return;
 
     if (!stageRef || !stageRef.current) return;
-
-    const transform = stageRef.current.getAbsoluteTransform().copy();
-
-    const scaledContour: Array<number> = _.flatten(
-      _.chunk(annotationTool.contour, 2).map((el: Array<number>) => {
-        const transformed = transform.point({ x: el[0], y: el[1] });
-        return [transformed.x, transformed.y];
-      })
-    );
-
-    selectingRef.current = new Konva.Line<Konva.LineConfig>({
-      points: scaledContour,
-    });
 
     const node = stageRef.current.findOne("#selected");
 

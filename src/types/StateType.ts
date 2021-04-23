@@ -29,6 +29,7 @@ export type StateType = {
   stageHeight: number;
   stageScale: number;
   stageWidth: number;
+  stagePosition: { x: number; y: number };
   toolType: ToolType;
   vibrance: number;
   zoomSelection: {

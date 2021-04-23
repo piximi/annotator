@@ -27,6 +27,7 @@ export {
   setSeletedCategory,
   setSoundEnabled,
   setStageHeight,
+  setStagePosition,
   setStageScale,
   setStageWidth,
   setVibrance,

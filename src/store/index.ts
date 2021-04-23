@@ -25,6 +25,7 @@ export {
   setSelectionMode,
   setSeletedCategory,
   setStageHeight,
+  setStagePosition,
   setStageScale,
   setStageWidth,
   setVibrance,

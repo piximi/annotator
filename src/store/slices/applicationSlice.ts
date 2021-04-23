@@ -65,6 +65,7 @@ const initialState: StateType = {
   stageHeight: 1000,
   stageScale: 1,
   stageWidth: 1000,
+  stagePosition: { x: 0, y: 0 },
   toolType: ToolType.RectangularAnnotation,
   vibrance: 0,
   zoomSelection: {
@@ -245,6 +246,12 @@ export const applicationSlice = createSlice({
     ) {
       state.stageHeight = action.payload.stageHeight;
     },
+    setStagePosition(
+      state: StateType,
+      action: PayloadAction<{ stagePosition: { x: number; y: number } }>
+    ) {
+      state.stagePosition = action.payload.stagePosition;
+    },
     setStageScale(
       state: StateType,
       action: PayloadAction<{ stageScale: number }>
@@ -318,6 +325,7 @@ export const {
   setSeletedCategory,
   setSoundEnabled,
   setStageHeight,
+  setStagePosition,
   setStageScale,
   setStageWidth,
   setVibrance,

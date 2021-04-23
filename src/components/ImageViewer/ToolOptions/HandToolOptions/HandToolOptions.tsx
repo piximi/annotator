@@ -9,6 +9,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 export const HandToolOptions = () => {
   const t = useTranslation();
 
+  const onResetClick = () => {};
+
   return (
     <React.Fragment>
       <InformationBox description="…" name={t("Hand tool")} />
@@ -16,7 +18,7 @@ export const HandToolOptions = () => {
       <Divider />
 
       <List dense>
-        <ListItem button onClick={() => {}}>
+        <ListItem button onClick={onResetClick}>
           <ListItemText>{t("Reset position")}</ListItemText>
         </ListItem>
       </List>

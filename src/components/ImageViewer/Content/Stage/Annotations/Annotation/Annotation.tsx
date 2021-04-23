@@ -96,7 +96,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
         scale={{ x: stageScale, y: stageScale }}
         strokeWidth={1}
       />
-      <ReactKonva.Line
+      <ReactKonva.Line // transform needs to attach to a line that does not use scale prop
         closed
         fill={fill}
         id={annotation.id}

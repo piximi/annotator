@@ -7,7 +7,10 @@ import {
   imageInstancesSelector,
   stageScaleSelector,
 } from "../../../../../store/selectors";
-import { applicationSlice } from "../../../../../store/slices";
+import {
+  applicationSlice,
+  setSelectedAnnotationsIds,
+} from "../../../../../store/slices";
 import Konva from "konva";
 
 type box = {
@@ -89,8 +92,6 @@ export const Transformer = ({
     const centerX = relativeBoundBox.x + relativeBoundBox.width / 2;
     const centerY = relativeBoundBox.y + relativeBoundBox.height / 2;
 
-    console.info(scaleX, scaleY);
-    console.info(centerX, centerY);
     // change image anniotatons with new contour
     const annotation = _.filter(annotations, (annotation: AnnotationType) => {
       return annotation.id === annotationId;
@@ -113,7 +114,7 @@ export const Transformer = ({
       })
     );
 
-    const updated = { ...annotation, contour: resizedContour }; //FIXME: update boudngin box too
+    const updated = { ...annotation, contour: resizedContour }; //FIXME: update bounding box too
 
     dispatch(
       applicationSlice.actions.setImageInstances({
@@ -125,6 +126,13 @@ export const Transformer = ({
 
     transformerRef.current.detach();
     transformerRef.current.getLayer()?.batchDraw();
+
+    dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: undefined,
+      })
+    );
   };
 
   return (

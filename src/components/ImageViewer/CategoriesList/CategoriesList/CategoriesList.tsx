@@ -125,12 +125,6 @@ export const CategoriesList = () => {
     );
   };
 
-  const {
-    onClose: onCloseCreateCategoryDialog,
-    onOpen: onOpenCreateCategoryDialog,
-    open: openCreateCategoryDialog,
-  } = useDialog();
-
   const t = useTranslation();
 
   return (

@@ -86,15 +86,28 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   };
 
   return (
-    <ReactKonva.Line
-      closed
-      fill={fill}
-      id={annotation.id}
-      onClick={onPointerClick}
-      opacity={0.5}
-      points={annotation.contour}
-      scale={{ x: stageScale, y: stageScale }}
-      strokeWidth={1}
-    />
+    <ReactKonva.Group>
+      <ReactKonva.Line
+        closed
+        fill={fill}
+        onClick={onPointerClick}
+        opacity={0.5}
+        points={annotation.contour}
+        scale={{ x: stageScale, y: stageScale }}
+        strokeWidth={1}
+      />
+      <ReactKonva.Line
+        closed
+        fill={fill}
+        id={annotation.id}
+        onClick={onPointerClick}
+        opacity={0.5}
+        points={annotation.contour.map((point: number) => {
+          return point * stageScale;
+        })}
+        strokeWidth={1}
+        visible={false}
+      />
+    </ReactKonva.Group>
   );
 };

@@ -1,21 +1,8 @@
-import * as ReactKonva from "react-konva";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
-import {
-  imageInstancesSelector,
-  stageScaleSelector,
-} from "../../../../../store/selectors";
 
 import { Transformer } from "../Transformer/Transformer";
-
-type box = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotation: number;
-};
 
 type TransformersProps = {
   transformPosition: ({

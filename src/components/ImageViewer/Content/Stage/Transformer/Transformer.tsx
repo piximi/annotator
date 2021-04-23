@@ -155,7 +155,7 @@ export const Transformer = ({
         ...annotation,
         contour: resizedContour,
         boundingBox: computeBoundingBoxFromContours(resizedContour),
-      }; //FIXME: update bounding box too
+      };
 
       dispatch(
         applicationSlice.actions.setImageInstances({

@@ -1,5 +1,5 @@
 import * as ReactKonva from "react-konva";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
 import {
@@ -29,6 +29,10 @@ type TransformersProps = {
 
 export const Transformers = ({ transformPosition }: TransformersProps) => {
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
+
+  useEffect(() => {
+    console.info(selectedAnnotationsIds);
+  }, [selectedAnnotationsIds]);
 
   if (!selectedAnnotationsIds) return <React.Fragment />;
 

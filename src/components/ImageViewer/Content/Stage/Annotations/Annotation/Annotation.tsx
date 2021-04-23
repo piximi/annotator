@@ -85,6 +85,8 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
     }
   };
 
+  if (!annotation || !annotation.contour) return <React.Fragment />;
+
   return (
     <ReactKonva.Group>
       <ReactKonva.Line

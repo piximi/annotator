@@ -67,7 +67,6 @@ export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
   const stageRef = useRef<Konva.Stage>(null);
 
-  const transformerRef = useRef<Konva.Transformer | null>(null);
   const selectingRef = useRef<Konva.Line | null>(null);
 
   const toolType = useSelector(toolTypeSelector);
@@ -167,10 +166,12 @@ export const Stage = () => {
 
     annotationTool.deselect();
 
-    transformerRef.current?.detach();
-    transformerRef.current?.getLayer()?.batchDraw();
+    if (!selectedAnnotation) return;
 
     selectingRef.current = null;
+
+    const transformerId = "tr-".concat(selectedAnnotation.id);
+    detachTransformer(transformerId);
   };
 
   useEffect(() => {
@@ -304,7 +305,7 @@ export const Stage = () => {
 
     if (!selectedAnnotation || !selectedAnnotation.id) return;
 
-    transformerRef.current?.detach();
+    // transformerRef.current?.detach();
 
     //remove the existing Operator since it's essentially been replaced
     dispatch(
@@ -392,7 +393,7 @@ export const Stage = () => {
   useEffect(() => {
     if (!annotated) return;
 
-    if (!transformerRef || !transformerRef.current) return;
+    // if (!transformerRef || !transformerRef.current) return;
 
     if (!annotationTool || !annotationTool.contour) return;
 
@@ -402,13 +403,13 @@ export const Stage = () => {
 
     if (!node) return;
 
-    transformerRef.current.nodes([node]);
-
-    const layer = transformerRef.current.getLayer();
-
-    if (!layer) return;
-
-    layer.batchDraw();
+    // transformerRef.current.nodes([node]);
+    //
+    // const layer = transformerRef.current.getLayer();
+    //
+    // if (!layer) return;
+    //
+    // layer.batchDraw();
 
     if (!annotationTool) return;
 
@@ -746,7 +747,7 @@ export const Stage = () => {
 
               <Annotations annotationTool={annotationTool} />
 
-              <ReactKonva.Transformer ref={transformerRef} />
+              {/*<ReactKonva.Transformer ref={transformerRef} />*/}
 
               <Transformers transformPosition={getRelativePointerPosition} />
 

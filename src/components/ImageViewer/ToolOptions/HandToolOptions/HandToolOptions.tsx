@@ -5,11 +5,21 @@ import { useTranslation } from "../../../../hooks/useTranslation";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import { useDispatch } from "react-redux";
+import { applicationSlice } from "../../../../store/slices";
 
 export const HandToolOptions = () => {
   const t = useTranslation();
 
-  const onResetClick = () => {};
+  const dispatch = useDispatch();
+
+  const onResetClick = () => {
+    dispatch(
+      applicationSlice.actions.setStagePosition({
+        stagePosition: { x: 0, y: 0 },
+      })
+    );
+  };
 
   return (
     <React.Fragment>

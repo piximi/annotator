@@ -60,6 +60,7 @@ import {
   useShiftPress,
 } from "../../../../../hooks/useKeyPress/useKeyPress";
 import { useWindowFocusHandler } from "../../../../../hooks/useWindowFocusHandler/useWindowFocusHandler";
+import { stagePositionSelector } from "../../../../../store/selectors/stagePositionSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -78,6 +79,7 @@ export const Stage = () => {
 
   const stageHeight = useSelector(stageHeightSelector);
   const stageWidth = useSelector(stageWidthSelector);
+  const stagePosition = useSelector(stagePositionSelector);
 
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
@@ -714,6 +716,7 @@ export const Stage = () => {
           onMouseMove={onMouseMove}
           onMouseUp={onMouseUp}
           onWheel={onZoomWheel}
+          position={stagePosition}
           ref={stageRef}
           width={stageWidth}
         >

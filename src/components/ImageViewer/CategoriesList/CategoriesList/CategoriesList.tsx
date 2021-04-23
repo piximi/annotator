@@ -172,30 +172,7 @@ export const CategoriesList = () => {
 
       <List>
         <OpenListItem />
-
-        <PopupState variant="popover">
-          {(popupState) => (
-            <React.Fragment>
-              <ListItem button {...bindTrigger(popupState)}>
-                <ListItemIcon>
-                  <SaveIcon />
-                </ListItemIcon>
-
-                <ListItemText primary="Save" />
-              </ListItem>
-
-              <Menu {...bindMenu(popupState)}>
-                <MenuItem onClick={popupState.close}>
-                  <ListItemText primary="Save annotations" />
-                </MenuItem>
-
-                <MenuItem disabled onClick={popupState.close}>
-                  <ListItemText primary="Save classifier" />
-                </MenuItem>
-              </Menu>
-            </React.Fragment>
-          )}
-        </PopupState>
+        <SaveListItem />
       </List>
 
       <Divider />
@@ -321,6 +298,18 @@ type OpenMenuProps = {
 type HelpDialogProps = {
   onClose: () => void;
   open: boolean;
+};
+
+type SaveAnnotationsMenuItemProps = {
+  popupState: any;
+};
+
+type SaveModelMenuItemProps = {
+  popupState: any;
+};
+
+type SaveMenuProps = {
+  popupState: any;
 };
 
 type SendFeedbackDialogProps = {
@@ -517,6 +506,56 @@ const OpenMenu = ({ popupState }: OpenMenuProps) => {
 
       <OpenExampleImageMenuItem popupState={popupState} />
     </Menu>
+  );
+};
+
+const SaveAnnotationsMenuItem = ({
+  popupState,
+}: SaveAnnotationsMenuItemProps) => {
+  return (
+    <MenuItem onClick={popupState.close}>
+      <ListItemText primary="Save annotations" />
+    </MenuItem>
+  );
+};
+
+const SaveMenu = ({ popupState }: SaveMenuProps) => {
+  return (
+    <Menu {...bindMenu(popupState)}>
+      <SaveAnnotationsMenuItem popupState={popupState} />
+
+      <SaveModelMenuItem popupState={popupState} />
+    </Menu>
+  );
+};
+
+const SaveModelMenuItem = ({ popupState }: SaveModelMenuItemProps) => {
+  const t = useTranslation();
+
+  return (
+    <MenuItem disabled onClick={popupState.close}>
+      <ListItemText primary={t("Save model")} />
+    </MenuItem>
+  );
+};
+
+const SaveListItem = () => {
+  const t = useTranslation();
+
+  return (
+    <PopupState variant="popover">
+      {(popupState) => (
+        <ListItem button {...bindTrigger(popupState)}>
+          <ListItemIcon>
+            <SaveIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Save")} />
+
+          <SaveMenu popupState={popupState} />
+        </ListItem>
+      )}
+    </PopupState>
   );
 };
 

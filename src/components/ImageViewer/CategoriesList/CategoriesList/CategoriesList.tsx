@@ -125,103 +125,6 @@ export const CategoriesList = () => {
     );
   };
 
-  const onOpenImage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    onClose: () => void
-  ) => {
-    onClose();
-
-    event.persist();
-
-    if (event.currentTarget.files) {
-      const file = event.currentTarget.files[0];
-
-      const reader = new FileReader();
-
-      reader.onload = async (event: ProgressEvent<FileReader>) => {
-        if (event.target) {
-          const src = event.target.result;
-
-          const image = new Image();
-
-          image.onload = () => {};
-
-          image.src = src as string;
-        }
-      };
-
-      file.arrayBuffer().then((buffer) => {
-        ImageJS.Image.load(buffer).then((image) => {
-          const name = file.name;
-
-          const shape: ShapeType = {
-            channels: 4,
-            frames: 1,
-            height: image.height,
-            planes: 1,
-            width: image.width,
-          };
-
-          dispatch(
-            setImage({
-              image: {
-                id: "",
-                annotations: [],
-                name: name,
-                shape: shape,
-                src: image.toDataURL(),
-              },
-            })
-          );
-        });
-      });
-
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const [openExampleImageDialog, setOpenExampleImageDialog] = React.useState(
-    false
-  );
-
-  const onOpenExampleImageDialog = (onClose: () => void) => {
-    setOpenExampleImageDialog(true);
-  };
-
-  const onCloseExampleImageDialog = (onClose: () => void) => {
-    setOpenExampleImageDialog(false);
-    onClose();
-  };
-
-  const [openSettingsDialog, setOpenSettingsDialog] = React.useState(false);
-
-  const onOpenSettingsDialog = () => {
-    setOpenSettingsDialog(!openSettingsDialog);
-  };
-
-  const onCloseSettingsDialog = () => {
-    setOpenSettingsDialog(!openSettingsDialog);
-  };
-
-  const [
-    openSendFeedbackDialog,
-    setOpenSendFeedbackDialog,
-  ] = React.useState<boolean>(false);
-
-  const onOpenSendFeedbackDialog = () => {
-    setOpenSendFeedbackDialog(!openSendFeedbackDialog);
-  };
-
-  const onCloseSendFeedbackDialog = () => {
-    setOpenSendFeedbackDialog(!openSendFeedbackDialog);
-  };
-
-  const [openHelpDialog, setOpenHelpDialog] = React.useState<boolean>(false);
-
-  const onOpenHelpDialog = () => setOpenHelpDialog(!openHelpDialog);
-
-  const onCloseHelpDialog = () => setOpenHelpDialog(!openHelpDialog);
-
   const {
     onClose: onCloseCreateCategoryDialog,
     onOpen: onOpenCreateCategoryDialog,
@@ -268,44 +171,7 @@ export const CategoriesList = () => {
       <Divider />
 
       <List>
-        <PopupState variant="popover">
-          {(popupState) => (
-            <React.Fragment>
-              <ListItem button {...bindTrigger(popupState)}>
-                <ListItemIcon>
-                  <FolderOpenIcon />
-                </ListItemIcon>
-
-                <ListItemText primary="Open" />
-              </ListItem>
-
-              <Menu {...bindMenu(popupState)}>
-                <MenuItem component="label">
-                  <ListItemText primary="Open image" />
-                  <input
-                    accept="image/*"
-                    hidden
-                    id="open-image"
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      onOpenImage(event, popupState.close)
-                    }
-                    type="file"
-                  />
-                </MenuItem>
-
-                <MenuItem
-                  onClick={() => onOpenExampleImageDialog(popupState.close)}
-                >
-                  <ListItemText primary="Open example image" />
-                  <ExampleImageDialog
-                    onClose={() => onCloseExampleImageDialog(popupState.close)}
-                    open={openExampleImageDialog}
-                  />
-                </MenuItem>
-              </Menu>
-            </React.Fragment>
-          )}
-        </PopupState>
+        <OpenListItem />
 
         <PopupState variant="popover">
           {(popupState) => (
@@ -430,76 +296,34 @@ export const CategoriesList = () => {
       <Divider />
 
       <List>
-        <ListItem button onClick={onOpenSettingsDialog}>
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
+        <SettingsListItem />
 
-          <ListItemText primary="Settings" />
+        <SendFeedbackListItem />
 
-          <SettingsDialog
-            onClose={onCloseSettingsDialog}
-            open={openSettingsDialog}
-          />
-        </ListItem>
-
-        <ListItem button onClick={onOpenSendFeedbackDialog}>
-          <ListItemIcon>
-            <FeedbackIcon />
-          </ListItemIcon>
-
-          <ListItemText primary="Send feedback" />
-
-          <Dialog
-            onClose={onCloseSendFeedbackDialog}
-            open={openSendFeedbackDialog}
-          >
-            <DialogTitle>{t("Send feedback")}</DialogTitle>
-
-            <DialogContent>
-              <DialogContentText>
-                Vestibulum eu vestibulum nibh, quis commodo sapien. Donec a sem
-                nec augue rutrum tristique. Nam pretium nec dui in sagittis.
-              </DialogContentText>
-
-              <TextField
-                autoFocus
-                margin="dense"
-                id="feedback"
-                multiline
-                rows={12}
-                fullWidth
-                variant="filled"
-              />
-            </DialogContent>
-
-            <DialogActions>
-              <Button onClick={onCloseSendFeedbackDialog} color="primary">
-                Cancel
-              </Button>
-
-              <Button onClick={onCloseSendFeedbackDialog} color="primary">
-                Send feedback
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </ListItem>
-
-        <ListItem button onClick={onOpenHelpDialog}>
-          <ListItemIcon>
-            <HelpIcon />
-          </ListItemIcon>
-
-          <ListItemText primary="Help" />
-
-          <HelpDialog onClose={onCloseHelpDialog} open={openHelpDialog} />
-        </ListItem>
+        <HelpListItem />
       </List>
     </Drawer>
   );
 };
 
+type OpenExampleImageMenuItemProps = {
+  popupState: any;
+};
+
+type OpenImageMenuItemProps = {
+  popupState: any;
+};
+
+type OpenMenuProps = {
+  popupState: any;
+};
+
 type HelpDialogProps = {
+  onClose: () => void;
+  open: boolean;
+};
+
+type SendFeedbackDialogProps = {
   onClose: () => void;
   open: boolean;
 };
@@ -555,5 +379,216 @@ const HelpDialog = ({ onClose, open }: HelpDialogProps) => {
         </ListItem>
       </List>
     </Dialog>
+  );
+};
+
+const HelpListItem = () => {
+  const { onClose, onOpen, open } = useDialog();
+
+  return (
+    <ListItem button onClick={onOpen}>
+      <ListItemIcon>
+        <HelpIcon />
+      </ListItemIcon>
+
+      <ListItemText primary="Help" />
+
+      <HelpDialog onClose={onClose} open={open} />
+    </ListItem>
+  );
+};
+
+const OpenExampleImageMenuItem = ({
+  popupState,
+}: OpenExampleImageMenuItemProps) => {
+  const { onClose, onOpen, open } = useDialog();
+
+  return (
+    <MenuItem onClick={onOpen}>
+      <ListItemText primary="Open example image" />
+      <ExampleImageDialog
+        onClose={() => {
+          onClose();
+
+          popupState.close();
+        }}
+        open={open}
+      />
+    </MenuItem>
+  );
+};
+
+const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
+  const dispatch = useDispatch();
+
+  const onOpenImage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    onClose: () => void
+  ) => {
+    onClose();
+
+    event.persist();
+
+    if (event.currentTarget.files) {
+      const file = event.currentTarget.files[0];
+
+      const reader = new FileReader();
+
+      reader.onload = async (event: ProgressEvent<FileReader>) => {
+        if (event.target) {
+          const src = event.target.result;
+
+          const image = new Image();
+
+          image.onload = () => {};
+
+          image.src = src as string;
+        }
+      };
+
+      file.arrayBuffer().then((buffer) => {
+        ImageJS.Image.load(buffer).then((image) => {
+          const name = file.name;
+
+          const shape: ShapeType = {
+            channels: 4,
+            frames: 1,
+            height: image.height,
+            planes: 1,
+            width: image.width,
+          };
+
+          dispatch(
+            setImage({
+              image: {
+                id: "",
+                annotations: [],
+                name: name,
+                shape: shape,
+                src: image.toDataURL(),
+              },
+            })
+          );
+        });
+      });
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  return (
+    <MenuItem component="label">
+      <ListItemText primary="Open image" />
+      <input
+        accept="image/*"
+        hidden
+        id="open-image"
+        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+          onOpenImage(event, popupState.close)
+        }
+        type="file"
+      />
+    </MenuItem>
+  );
+};
+
+const OpenListItem = () => {
+  return (
+    <PopupState variant="popover">
+      {(popupState) => (
+        <ListItem button {...bindTrigger(popupState)}>
+          <ListItemIcon>
+            <FolderOpenIcon />
+          </ListItemIcon>
+
+          <ListItemText primary="Open" />
+
+          <OpenMenu popupState={popupState} />
+        </ListItem>
+      )}
+    </PopupState>
+  );
+};
+
+const OpenMenu = ({ popupState }: OpenMenuProps) => {
+  return (
+    <Menu {...bindMenu(popupState)}>
+      <OpenImageMenuItem popupState={popupState} />
+
+      <OpenExampleImageMenuItem popupState={popupState} />
+    </Menu>
+  );
+};
+
+const SendFeedbackDialog = ({ onClose, open }: SendFeedbackDialogProps) => {
+  const t = useTranslation();
+
+  return (
+    <Dialog onClose={onClose} open={open}>
+      <DialogTitle>{t("Send feedback")}</DialogTitle>
+
+      <DialogContent>
+        <DialogContentText>
+          Vestibulum eu vestibulum nibh, quis commodo sapien. Donec a sem nec
+          augue rutrum tristique. Nam pretium nec dui in sagittis.
+        </DialogContentText>
+
+        <TextField
+          autoFocus
+          margin="dense"
+          id="feedback"
+          multiline
+          rows={12}
+          fullWidth
+          variant="filled"
+        />
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={onClose} color="primary">
+          Cancel
+        </Button>
+
+        <Button onClick={onClose} color="primary">
+          Send feedback
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const SendFeedbackListItem = () => {
+  const { onClose, onOpen, open } = useDialog();
+
+  const t = useTranslation();
+
+  return (
+    <ListItem button onClick={onOpen}>
+      <ListItemIcon>
+        <FeedbackIcon />
+      </ListItemIcon>
+
+      <ListItemText primary={t("Send feedback")} />
+
+      <SendFeedbackDialog onClose={onClose} open={open} />
+    </ListItem>
+  );
+};
+
+const SettingsListItem = () => {
+  const { onClose, onOpen, open } = useDialog();
+
+  const t = useTranslation();
+
+  return (
+    <ListItem button onClick={onOpen}>
+      <ListItemIcon>
+        <SettingsIcon />
+      </ListItemIcon>
+
+      <ListItemText primary={t("Settings")} />
+
+      <SettingsDialog onClose={onClose} open={open} />
+    </ListItem>
   );
 };

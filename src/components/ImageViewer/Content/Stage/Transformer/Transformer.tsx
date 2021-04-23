@@ -1,5 +1,5 @@
 import * as ReactKonva from "react-konva";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import * as _ from "lodash";
 import { AnnotationType } from "../../../../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import {
   stageScaleSelector,
 } from "../../../../../store/selectors";
 import { applicationSlice } from "../../../../../store/slices";
+import Konva from "konva";
 
 type box = {
   x: number;
@@ -33,6 +34,8 @@ export const Transformer = ({
   annotationId,
 }: TransformerProps) => {
   const annotations = useSelector(imageInstancesSelector);
+
+  const transformerRef = useRef<Konva.Transformer | null>(null);
 
   const dispatch = useDispatch();
 
@@ -117,6 +120,11 @@ export const Transformer = ({
         instances: [...others, updated],
       })
     );
+
+    if (!transformerRef || !transformerRef.current) return;
+
+    transformerRef.current.detach();
+    transformerRef.current.getLayer()?.batchDraw();
   };
 
   return (
@@ -125,6 +133,7 @@ export const Transformer = ({
       centeredScaling={true}
       onTransformEnd={onTransformEnd}
       id={"tr-".concat(annotationId)}
+      ref={transformerRef}
     />
   );
 };

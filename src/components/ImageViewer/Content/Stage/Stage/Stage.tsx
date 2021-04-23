@@ -61,6 +61,7 @@ import {
 } from "../../../../../hooks/useKeyPress/useKeyPress";
 import { useWindowFocusHandler } from "../../../../../hooks/useWindowFocusHandler/useWindowFocusHandler";
 import { stagePositionSelector } from "../../../../../store/selectors/stagePositionSelector";
+import { KonvaEventObject } from "konva/types/Node";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -464,7 +465,15 @@ export const Stage = () => {
     return transform.point(position);
   };
 
-  const onMouseDown = useMemo(() => {
+  const onMouseDown = (event: KonvaEventObject<MouseEvent>) => {
+    if (event.target.getParent().className === "Transformer") {
+      console.info("Clicked on transformer");
+    } else {
+      memoizedOnMouseDown();
+    }
+  };
+
+  const memoizedOnMouseDown = useMemo(() => {
     const func = () => {
       if (toolType === ToolType.Pointer) return;
 
@@ -701,7 +710,7 @@ export const Stage = () => {
         <ReactKonva.Stage
           draggable={draggable}
           height={stageHeight}
-          onMouseDown={onMouseDown}
+          onMouseDown={(evt) => onMouseDown(evt)}
           onMouseMove={onMouseMove}
           onMouseUp={onMouseUp}
           onWheel={onZoomWheel}

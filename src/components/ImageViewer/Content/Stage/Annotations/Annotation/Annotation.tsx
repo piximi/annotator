@@ -88,6 +88,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   };
 
   useEffect(() => {
+    if (!annotation || !annotation.contour) return;
     setScaledContour(
       annotation.contour.map((point: number) => {
         return point * stageScale;

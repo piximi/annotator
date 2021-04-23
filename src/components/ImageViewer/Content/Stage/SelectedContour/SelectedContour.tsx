@@ -16,6 +16,7 @@ export const SelectedContour = () => {
 
   useEffect(() => {
     if (!selectedAnnotation) return;
+
     setScaledContour(
       selectedAnnotation.contour.map((point: number) => {
         return point * stageScale;

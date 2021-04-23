@@ -467,11 +467,8 @@ export const Stage = () => {
   };
 
   const onMouseDown = (event: KonvaEventObject<MouseEvent>) => {
-    if (event.target.getParent().className === "Transformer") {
-      console.info("Clicked on transformer");
-    } else {
-      memoizedOnMouseDown();
-    }
+    if (event.target.getParent().className === "Transformer") return;
+    memoizedOnMouseDown();
   };
 
   const memoizedOnMouseDown = useMemo(() => {

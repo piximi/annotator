@@ -17,10 +17,6 @@ type TransformersProps = {
 export const Transformers = ({ transformPosition }: TransformersProps) => {
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
-  useEffect(() => {
-    console.info(selectedAnnotationsIds);
-  }, [selectedAnnotationsIds]);
-
   if (!selectedAnnotationsIds) return <React.Fragment />;
 
   return (

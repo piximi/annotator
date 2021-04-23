@@ -9,9 +9,11 @@ import {
 } from "../../../../../store/selectors";
 import {
   applicationSlice,
+  setSelectedAnnotation,
   setSelectedAnnotationsIds,
 } from "../../../../../store/slices";
 import Konva from "konva";
+import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 
 type box = {
   x: number;
@@ -37,6 +39,8 @@ export const Transformer = ({
   annotationId,
 }: TransformerProps) => {
   const annotations = useSelector(imageInstancesSelector);
+
+  const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
 
@@ -101,38 +105,57 @@ export const Transformer = ({
       return annotation.id !== annotationId;
     });
 
-    if (!annotation) return;
+    if (!annotation && selectedAnnotation) {
+      const contour = selectedAnnotation.contour;
 
-    const contour = annotation.contour;
+      const resizedContour = _.flatten(
+        _.map(_.chunk(contour, 2), (el: Array<number>) => {
+          return [
+            centerX + scaleX * (el[0] - centerX),
+            centerY + scaleY * (el[1] - centerY),
+          ];
+        })
+      );
 
-    const resizedContour = _.flatten(
-      _.map(_.chunk(contour, 2), (el: Array<number>) => {
-        return [
-          centerX + scaleX * (el[0] - centerX),
-          centerY + scaleY * (el[1] - centerY),
-        ];
-      })
-    );
+      dispatch(
+        setSelectedAnnotation({
+          selectedAnnotation: {
+            ...selectedAnnotation,
+            contour: resizedContour,
+          },
+        })
+      );
+    } else {
+      const contour = annotation.contour;
 
-    const updated = { ...annotation, contour: resizedContour }; //FIXME: update bounding box too
+      const resizedContour = _.flatten(
+        _.map(_.chunk(contour, 2), (el: Array<number>) => {
+          return [
+            centerX + scaleX * (el[0] - centerX),
+            centerY + scaleY * (el[1] - centerY),
+          ];
+        })
+      );
 
-    dispatch(
-      applicationSlice.actions.setImageInstances({
-        instances: [...others, updated],
-      })
-    );
+      const updated = { ...annotation, contour: resizedContour }; //FIXME: update bounding box too
 
-    if (!transformerRef || !transformerRef.current) return;
+      dispatch(
+        applicationSlice.actions.setImageInstances({
+          instances: [...others, updated],
+        })
+      );
+      if (!transformerRef || !transformerRef.current) return;
 
-    transformerRef.current.detach();
-    transformerRef.current.getLayer()?.batchDraw();
+      transformerRef.current.detach();
+      transformerRef.current.getLayer()?.batchDraw();
 
-    dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
+      dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
+      dispatch(
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: undefined,
+        })
+      );
+    }
   };
 
   return (

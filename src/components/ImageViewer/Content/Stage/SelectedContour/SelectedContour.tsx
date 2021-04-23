@@ -5,11 +5,7 @@ import { useSelector } from "react-redux";
 import { stageScaleSelector } from "../../../../../store/selectors";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 
-type SelectedContourProps = {
-  points: Array<number>;
-};
-
-export const SelectedContour = ({ points }: SelectedContourProps) => {
+export const SelectedContour = () => {
   const stageScale = useSelector(stageScaleSelector);
 
   const dashOffset = useMarchingAnts();
@@ -19,20 +15,23 @@ export const SelectedContour = ({ points }: SelectedContourProps) => {
   const [scaledContour, setScaledContour] = useState<Array<number>>([]);
 
   useEffect(() => {
-    if (!points) return;
+    if (!selectedAnnotation) return;
     setScaledContour(
-      points.map((point: number) => {
+      selectedAnnotation.contour.map((point: number) => {
         return point * stageScale;
       })
     );
-  }, [stageScale, points]);
+  }, [stageScale, selectedAnnotation, selectedAnnotation?.contour]);
+
+  if (!selectedAnnotation || !selectedAnnotation.contour)
+    return <React.Fragment />;
 
   return (
     <React.Fragment>
       <ReactKonva.Line
         dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
-        points={points}
+        points={selectedAnnotation.contour}
         scale={{ x: stageScale, y: stageScale }}
         stroke="black"
         strokeWidth={1 / stageScale}
@@ -41,7 +40,7 @@ export const SelectedContour = ({ points }: SelectedContourProps) => {
       <ReactKonva.Line
         dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
-        points={points}
+        points={selectedAnnotation.contour}
         scale={{ x: stageScale, y: stageScale }}
         stroke="white"
         strokeWidth={1 / stageScale}

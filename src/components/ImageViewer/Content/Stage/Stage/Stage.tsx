@@ -741,9 +741,7 @@ export const Stage = () => {
                   />
                 )}
 
-              {selectedAnnotation && (
-                <SelectedContour points={selectedAnnotation.contour} />
-              )}
+              <SelectedContour />
 
               <Annotations annotationTool={annotationTool} />
 

@@ -739,7 +739,7 @@ export const Stage = () => {
 
               <ReactKonva.Transformer ref={transformerRef} />
 
-              <Transformers />
+              <Transformers transformPosition={getRelativePointerPosition} />
 
               <ColorAnnotationToolTip
                 colorAnnotationTool={annotationTool as ColorAnnotationTool}

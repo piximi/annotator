@@ -12,7 +12,17 @@ type box = {
   rotation: number;
 };
 
-export const Transformers = () => {
+type TransformersProps = {
+  transformPosition: ({
+    x,
+    y,
+  }: {
+    x: number;
+    y: number;
+  }) => { x: number; y: number } | undefined;
+};
+
+export const Transformers = ({ transformPosition }: TransformersProps) => {
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
   const [boundBox, setBoundBox] = useState<box>({
@@ -28,14 +38,22 @@ export const Transformers = () => {
   if (!selectedAnnotationsIds) return <React.Fragment />;
 
   const boundingBoxFunc = (oldBox: box, newBox: box) => {
-    setBoundBox({
-      x: newBox.x,
-      y: newBox.y,
-      width: newBox.width / stageScale,
-      height: newBox.height / stageScale,
-      rotation: 0,
-    });
+    setBoundBox(newBox);
     return newBox;
+  };
+
+  const getRelativeBox = (boundBox: box) => {
+    const relativePosition = transformPosition({
+      x: boundBox.x,
+      y: boundBox.y,
+    });
+    if (!relativePosition) return;
+    return {
+      x: relativePosition.x / stageScale,
+      y: relativePosition.y / stageScale,
+      height: boundBox.height / stageScale,
+      width: boundBox.width / stageScale,
+    };
   };
 
   return (
@@ -45,7 +63,7 @@ export const Transformers = () => {
           <ReactKonva.Transformer
             boundBoxFunc={boundingBoxFunc}
             onTransformEnd={() => {
-              console.info(boundBox);
+              console.info(getRelativeBox(boundBox));
             }}
             id={"tr-".concat(annotationId)}
           />

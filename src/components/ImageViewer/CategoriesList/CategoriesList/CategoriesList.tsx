@@ -245,18 +245,7 @@ export const CategoriesList = () => {
           />
         </ListItem>
 
-        <ListItem button onClick={onOpenCreateCategoryDialog}>
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Create category")} />
-
-          <CreateCategoryDialog
-            onClose={onCloseCreateCategoryDialog}
-            open={openCreateCategoryDialog}
-          />
-        </ListItem>
+        <CreateCategoryListItem />
 
         <Divider />
 
@@ -315,6 +304,24 @@ type SaveMenuProps = {
 type SendFeedbackDialogProps = {
   onClose: () => void;
   open: boolean;
+};
+
+const CreateCategoryListItem = () => {
+  const { onClose, onOpen, open } = useDialog();
+
+  const t = useTranslation();
+
+  return (
+    <ListItem button onClick={onOpen}>
+      <ListItemIcon>
+        <AddIcon />
+      </ListItemIcon>
+
+      <ListItemText primary={t("Create category")} />
+
+      <CreateCategoryDialog onClose={onClose} open={open} />
+    </ListItem>
+  );
 };
 
 const HelpDialog = ({ onClose, open }: HelpDialogProps) => {

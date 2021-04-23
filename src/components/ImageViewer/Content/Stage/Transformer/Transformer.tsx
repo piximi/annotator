@@ -58,6 +58,19 @@ export const Transformer = ({
 
   const stageScale = useSelector(stageScaleSelector);
 
+  const computeBoundingBoxFromContours = (
+    contour: Array<number>
+  ): [number, number, number, number] => {
+    const pairs = _.chunk(contour, 2);
+
+    return [
+      Math.round(_.min(_.map(pairs, _.first))!),
+      Math.round(_.min(_.map(pairs, _.last))!),
+      Math.round(_.max(_.map(pairs, _.first))!),
+      Math.round(_.max(_.map(pairs, _.last))!),
+    ];
+  };
+
   const boundingBoxFunc = (oldBox: box, newBox: box) => {
     if (!boundBox) setStartBox(oldBox);
     setBoundBox(newBox);
@@ -122,6 +135,7 @@ export const Transformer = ({
           selectedAnnotation: {
             ...selectedAnnotation,
             contour: resizedContour,
+            boundingBox: computeBoundingBoxFromContours(resizedContour),
           },
         })
       );
@@ -137,7 +151,11 @@ export const Transformer = ({
         })
       );
 
-      const updated = { ...annotation, contour: resizedContour }; //FIXME: update bounding box too
+      const updated = {
+        ...annotation,
+        contour: resizedContour,
+        boundingBox: computeBoundingBoxFromContours(resizedContour),
+      }; //FIXME: update bounding box too
 
       dispatch(
         applicationSlice.actions.setImageInstances({

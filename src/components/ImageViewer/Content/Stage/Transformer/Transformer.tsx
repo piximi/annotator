@@ -2,11 +2,12 @@ import * as ReactKonva from "react-konva";
 import React, { useState } from "react";
 import * as _ from "lodash";
 import { AnnotationType } from "../../../../../types/AnnotationType";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   imageInstancesSelector,
   stageScaleSelector,
 } from "../../../../../store/selectors";
+import { applicationSlice } from "../../../../../store/slices";
 
 type box = {
   x: number;
@@ -32,6 +33,8 @@ export const Transformer = ({
   annotationId,
 }: TransformerProps) => {
   const annotations = useSelector(imageInstancesSelector);
+
+  const dispatch = useDispatch();
 
   const [boundBox, setBoundBox] = useState<box | null>(null);
 
@@ -84,7 +87,36 @@ export const Transformer = ({
     const centerY = relativeBoundBox.y + relativeBoundBox.height / 2;
 
     console.info(scaleX, scaleY);
-    // change image annotations with new contour
+    console.info(centerX, centerY);
+    // change image anniotatons with new contour
+    const annotation = _.filter(annotations, (annotation: AnnotationType) => {
+      return annotation.id === annotationId;
+    })[0];
+
+    const others = _.filter(annotations, (annotation: AnnotationType) => {
+      return annotation.id !== annotationId;
+    });
+
+    if (!annotation) return;
+
+    const contour = annotation.contour;
+
+    const resizedContour = _.flatten(
+      _.map(_.chunk(contour, 2), (el: Array<number>) => {
+        return [
+          centerX + scaleX * (el[0] - centerX),
+          centerY + scaleY * (el[1] - centerY),
+        ];
+      })
+    );
+
+    const updated = { ...annotation, contour: resizedContour }; //FIXME: update boudngin box too
+
+    dispatch(
+      applicationSlice.actions.setImageInstances({
+        instances: [...others, updated],
+      })
+    );
   };
 
   return (

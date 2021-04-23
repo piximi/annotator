@@ -186,12 +186,11 @@ export const CategoriesList = () => {
 
   const onOpenExampleImageDialog = (onClose: () => void) => {
     setOpenExampleImageDialog(true);
-
-    onClose();
   };
 
   const onCloseExampleImageDialog = (onClose: () => void) => {
     setOpenExampleImageDialog(false);
+    onClose();
   };
 
   const [openSettingsDialog, setOpenSettingsDialog] = React.useState(false);

@@ -1,5 +1,5 @@
 import * as ReactKonva from "react-konva";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useMarchingAnts } from "../../../../../hooks";
 import { useSelector } from "react-redux";
 import { stageScaleSelector } from "../../../../../store/selectors";
@@ -15,6 +15,17 @@ export const SelectedContour = ({ points }: SelectedContourProps) => {
   const dashOffset = useMarchingAnts();
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
+
+  const [scaledContour, setScaledContour] = useState<Array<number>>([]);
+
+  useEffect(() => {
+    if (!points) return;
+    setScaledContour(
+      points.map((point: number) => {
+        return point * stageScale;
+      })
+    );
+  }, [stageScale, points]);
 
   return (
     <React.Fragment>
@@ -40,10 +51,8 @@ export const SelectedContour = ({ points }: SelectedContourProps) => {
         dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
         id={selectedAnnotation?.id}
-        points={points.map((point: number) => {
-          return point * stageScale;
-        })}
-        stroke="black"
+        points={scaledContour}
+        stroke="blue"
         strokeWidth={1 / stageScale}
         viisble={false}
       />

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CategoryType } from "../../../../../../types/CategoryType";
 import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
@@ -27,6 +27,8 @@ type AnnotationProps = {
 
 export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   const dispatch = useDispatch();
+
+  const [scaledContour, setScaledContour] = useState<Array<number>>([]);
 
   const categories = useSelector(categoriesSelector);
   const toolType = useSelector(toolTypeSelector);
@@ -85,6 +87,14 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
     }
   };
 
+  useEffect(() => {
+    setScaledContour(
+      annotation.contour.map((point: number) => {
+        return point * stageScale;
+      })
+    );
+  }, [stageScale, annotation.contour]);
+
   if (!annotation || !annotation.contour) return <React.Fragment />;
 
   return (
@@ -104,9 +114,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
         id={annotation.id}
         onClick={onPointerClick}
         opacity={0.5}
-        points={annotation.contour.map((point: number) => {
-          return point * stageScale;
-        })}
+        points={scaledContour}
         strokeWidth={1}
         visible={false}
       />

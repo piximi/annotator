@@ -144,11 +144,6 @@ export const Transformer = ({
           instances: [...others, updated],
         })
       );
-      if (!transformerRef || !transformerRef.current) return;
-
-      transformerRef.current.detach();
-      transformerRef.current.getLayer()?.batchDraw();
-
       dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
       dispatch(
         applicationSlice.actions.setSelectedAnnotation({

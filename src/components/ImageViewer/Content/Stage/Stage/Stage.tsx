@@ -472,7 +472,11 @@ export const Stage = () => {
   };
 
   const onMouseDown = (event: KonvaEventObject<MouseEvent>) => {
-    if (event.target.getParent().className === "Transformer") return;
+    if (
+      !event.target.getParent() ||
+      event.target.getParent().className === "Transformer"
+    )
+      return;
     memoizedOnMouseDown();
   };
 

@@ -57,8 +57,6 @@ export class RectangularAnnotationTool extends AnnotationTool {
   onMouseUp(position: { x: number; y: number }) {
     if (this.annotated || !this.annotating) return;
     if (this.width) {
-      this.resize(position);
-
       this.points = this.convertToPoints();
 
       this._contour = this.points;

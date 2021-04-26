@@ -60,8 +60,6 @@ export class EllipticalAnnotationTool extends AnnotationTool {
     if (this.annotated || !this.annotating) return;
 
     if (this.radius) {
-      this.resize(position);
-
       this.annotated = true;
 
       this.annotating = false;

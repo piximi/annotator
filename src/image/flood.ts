@@ -1,4 +1,12 @@
 import * as ImageJS from "image-js";
+import PriorityQueue from "ts-priority-queue";
+
+const dirs = [
+  [1, 0],
+  [0, 1],
+  [-1, 0],
+  [0, -1],
+];
 
 class Position {
   x: number;
@@ -77,7 +85,7 @@ export const makeFloodMap = ({
       tol.push(Math.floor((red + green + blue) / 3));
     }
   } else if (image.data.length === image.width * image.height) {
-    //gresycale
+    //greyscale
     for (let i = 0; i < image.data.length; i++) {
       const grey = Math.abs(image.data[i] - color[0]);
       tol.push(Math.floor((grey / image.maxValue) * 255));
@@ -88,4 +96,42 @@ export const makeFloodMap = ({
     alpha: 0,
     components: 1,
   });
+};
+
+// Expand a watershed map until the desired tolerance is reached.
+export const doFlood = ({
+  floodMap,
+  toleranceMap,
+  queue,
+  tolerance,
+  maxTol,
+  seen,
+}: {
+  floodMap: ImageJS.Image;
+  toleranceMap: ImageJS.Image;
+  queue: PriorityQueue<Array<number>>;
+  tolerance: number;
+  maxTol: number;
+  seen: Set<number>;
+}) => {
+  while (queue.length > 0 && queue.peek()[2] <= tolerance) {
+    let currentPoint = queue.dequeue();
+    maxTol = Math.max(currentPoint[2], maxTol);
+    floodMap.setPixelXY(currentPoint[0], currentPoint[1], [maxTol]);
+    for (let dir of dirs) {
+      let newX = currentPoint[0] + dir[0];
+      let newY = currentPoint[1] + dir[1];
+      let idx = newX + newY * toleranceMap.width;
+      if (
+        !seen.has(idx) &&
+        newX >= 0 &&
+        newY >= 0 &&
+        newX < toleranceMap.width &&
+        newY < toleranceMap.height
+      ) {
+        queue.queue([newX, newY, toleranceMap.getPixelXY(newX, newY)[0]]);
+        seen.add(idx);
+      }
+    }
+  }
 };

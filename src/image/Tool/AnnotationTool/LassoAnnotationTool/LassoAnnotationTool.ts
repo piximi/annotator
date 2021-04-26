@@ -45,6 +45,7 @@ export class LassoAnnotationTool extends AnnotationTool {
 
       if (!this.origin) {
         this.origin = position;
+        this.buffer = [...this.buffer, position.x, position.y];
       }
     }
   }

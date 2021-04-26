@@ -14,6 +14,8 @@ import {
 } from "../../../../../store/slices";
 import Konva from "konva";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
+import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
+import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 
 type box = {
   x: number;
@@ -44,6 +46,10 @@ export const Transformer = ({
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
 
+  const imageWidth = useSelector(imageWidthSelector);
+
+  const imageHeight = useSelector(imageHeightSelector);
+
   const dispatch = useDispatch();
 
   const [boundBox, setBoundBox] = useState<box | null>(null);
@@ -73,6 +79,19 @@ export const Transformer = ({
 
   const boundingBoxFunc = (oldBox: box, newBox: box) => {
     if (!boundBox) setStartBox(oldBox);
+
+    const relativeNewBox = getRelativeBox(newBox);
+
+    if (!imageWidth || !imageHeight || !relativeNewBox)
+      return boundBox ? boundBox : startBox;
+    if (
+      relativeNewBox.x + relativeNewBox.width > imageWidth / stageScale ||
+      relativeNewBox.y + relativeNewBox.height > imageHeight / stageScale ||
+      relativeNewBox.x + relativeNewBox.width < 0 ||
+      relativeNewBox.y + relativeNewBox.height < 0
+    )
+      return boundBox ? boundBox : startBox;
+
     setBoundBox(newBox);
     return newBox;
   };

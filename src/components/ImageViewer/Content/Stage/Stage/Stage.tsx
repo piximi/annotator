@@ -483,9 +483,12 @@ export const Stage = () => {
 
       if (!position) return;
 
+      console.info("absolute", position);
       const relative = getRelativePointerPosition(position);
 
       if (!relative) return;
+
+      console.info("relative", relative.x / stageScale);
 
       const rawImagePosition = {
         x: relative.x / stageScale,
@@ -539,6 +542,9 @@ export const Stage = () => {
       setCurrentPosition(relative);
 
       if (!relative) return;
+
+      if (relative.x / stageScale > 512 || relative.y / stageScale > 512)
+        return;
 
       const rawImagePosition = {
         x: relative.x / stageScale,

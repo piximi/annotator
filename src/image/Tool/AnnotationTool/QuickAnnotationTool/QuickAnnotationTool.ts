@@ -6,11 +6,11 @@ import { encode } from "../../../rle";
 
 export class QuickAnnotationTool extends AnnotationTool {
   colorMasks?: Array<string>;
-  currentSuperpixel?: number;
+  currentSuperpixels: Set<number> = new Set<number>();
+  lastSuperpixel: number = 0;
   superpixels?: Int32Array;
   currentMask?: ImageJS.Image;
   map?: Uint8Array | Uint8ClampedArray;
-  masks?: { [key: number]: ImageJS.Image };
 
   flatPixelCoordinate(position: { x: number; y: number }) {
     return Math.round(position.x) + Math.round(position.y) * this.image.width;
@@ -44,7 +44,8 @@ export class QuickAnnotationTool extends AnnotationTool {
     this.annotating = false;
 
     this.colorMasks = undefined;
-    this.currentSuperpixel = undefined;
+    this.currentSuperpixels.clear();
+    this.lastSuperpixel = 0;
     this.currentMask = undefined;
   }
 
@@ -52,10 +53,6 @@ export class QuickAnnotationTool extends AnnotationTool {
     if (this.annotated) return;
 
     if (!this.superpixels || !this.currentMask) return;
-
-    const pixel = this.flatPixelCoordinate(position);
-
-    this.currentSuperpixel = this.superpixels[pixel];
 
     this.annotating = true;
   }
@@ -67,15 +64,13 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     const superpixel = this.superpixels[pixel];
 
-    if (superpixel === this.currentSuperpixel) return; // don't draw superpixel mask if already on that superpixel
+    if (this.currentSuperpixels.has(superpixel)) return; // don't draw superpixel mask if already on that superpixel
 
-    this.currentSuperpixel = superpixel;
+    this.lastSuperpixel = superpixel;
 
-    // const prevMask = this.currentMask;
-
-    console.info("Beore if statement");
     if (!this.annotating) {
-      console.info("In if statement");
+      this.currentSuperpixels.clear();
+
       this.currentMask = new ImageJS.Image(
         this.image.width,
         this.image.height,
@@ -84,13 +79,13 @@ export class QuickAnnotationTool extends AnnotationTool {
       );
     }
 
+    this.currentSuperpixels.add(superpixel);
+
     this.superpixels.forEach((pixel: number, index: number) => {
-      if (pixel === this.currentSuperpixel) {
+      if (pixel === superpixel) {
         this.currentMask!.setPixel(index, [255, 0, 0, 150]);
       }
     });
-
-    if (!this.annotating) return;
   }
 
   onMouseUp(position: { x: number; y: number }) {
@@ -122,25 +117,6 @@ export class QuickAnnotationTool extends AnnotationTool {
     this.annotating = false;
   }
 
-  private addImages(foo: ImageJS.Image, bar: ImageJS.Image) {
-    const fooData = foo.data;
-    const barData = bar.data;
-
-    const bazData = fooData.map((el: number, i: number) => {
-      if ((i + 1) % 4 === 0) {
-        // opacity should not be added
-        return Math.max(el, barData[i]);
-      } else {
-        return Math.min(el + barData[i], 255); //FIXME this is going to be wrong for mixed colors (not just R, G or B)
-      }
-    });
-
-    return new ImageJS.Image(this.image.width, this.image.height, bazData, {
-      components: 3,
-      alpha: 1,
-    });
-  }
-
   static setup(image: ImageJS.Image) {
     const instance = new QuickAnnotationTool(image);
 
@@ -149,25 +125,6 @@ export class QuickAnnotationTool extends AnnotationTool {
     instance.map = map;
 
     instance.superpixels = superpixels;
-
-    // const unique = _.uniq(superpixels);
-    //
-    // const masks: { [key: number]: ImageJS.Image } = {};
-    //
-    // _.forEach(unique, (superpixel) => {
-    //   masks[superpixel] = new ImageJS.Image(
-    //     image.width,
-    //     image.height,
-    //     new Uint8Array(image.width * image.height * 4),
-    //     { alpha: 1 }
-    //   );
-    // });
-    //
-    // superpixels.forEach((pixel: number, index: number) => {
-    //   masks[pixel].setPixel(index, [255, 0, 0, 150]);
-    // });
-    //
-    // instance.masks = masks;
 
     return instance;
   }

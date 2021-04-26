@@ -1,19 +1,29 @@
 import { AnnotationTool } from "../AnnotationTool";
-import { makeFloodMap } from "../../../flood";
+import { doFlood, makeFloodMap } from "../../../flood";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
 import { encode } from "../../../rle";
+import PriorityQueue from "ts-priority-queue";
 
 export class ColorAnnotationTool extends AnnotationTool {
   roiContour?: ImageJS.Image;
   roiMask?: ImageJS.Image;
+  roiManager?: ImageJS.RoiManager;
   offset?: { x: number; y: number };
   overlayData: string = "";
   points: Array<number> = [];
   initialPosition: { x: number; y: number } = { x: 0, y: 0 };
   tolerance: number = 1;
   toleranceMap?: ImageJS.Image;
+  floodMap?: ImageJS.Image;
+  toleranceQueue: PriorityQueue<Array<number>> = new PriorityQueue({
+    comparator: function (a: Array<number>, b: Array<number>) {
+      return a[2] - b[2];
+    },
+  });
   toolTipPosition?: { x: number; y: number };
+  maxTol: number = 0;
+  seen: Set<number> = new Set();
 
   deselect() {
     this.annotated = false;
@@ -21,6 +31,7 @@ export class ColorAnnotationTool extends AnnotationTool {
 
     this.overlayData = "";
 
+    this.roiManager = undefined;
     this.roiMask = undefined;
     this.roiContour = undefined;
 
@@ -31,12 +42,16 @@ export class ColorAnnotationTool extends AnnotationTool {
 
     this.tolerance = 1;
     this.toleranceMap = undefined;
+    this.toleranceQueue.clear();
+    this.seen.clear();
+    this.maxTol = 0;
   }
 
   onMouseDown(position: { x: number; y: number }) {
     this.annotated = false;
     this.annotating = true;
     this.tolerance = 1;
+    this.maxTol = 0;
     this.initialPosition = position;
     this.toolTipPosition = position;
 
@@ -45,6 +60,33 @@ export class ColorAnnotationTool extends AnnotationTool {
       y: Math.floor(position.y),
       image: this.image!,
     });
+
+    const empty = new Array(this.image.height * this.image.width).fill(
+      Infinity
+    );
+
+    this.floodMap = new ImageJS.Image(
+      this.image.width,
+      this.image.height,
+      empty,
+      {
+        alpha: 0,
+        components: 1,
+      }
+    );
+
+    this.toleranceQueue.clear();
+    this.seen.clear();
+    this.roiManager = this.floodMap.getRoiManager();
+
+    this.toleranceQueue.queue([
+      Math.floor(position.x),
+      Math.floor(position.y),
+      0,
+    ]);
+    const idx =
+      Math.floor(position.x) + Math.floor(position.y) * this.image.width;
+    this.seen.add(idx);
 
     this.updateOverlay(position);
   }
@@ -66,9 +108,12 @@ export class ColorAnnotationTool extends AnnotationTool {
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (!this.roiContour || !this.roiMask) return;
+    if (!this.roiManager || !this.roiMask) return;
 
-    const greyData = _.chunk(this.roiContour.getRGBAData(), 4).map((chunk) => {
+    // @ts-ignore
+    this.roiContour = this.roiManager.getMasks({ kind: "contour" })[0];
+
+    const greyData = _.chunk(this.roiContour!.getRGBAData(), 4).map((chunk) => {
       if (chunk[0] === 255) {
         return 255;
       } else return 0;
@@ -157,48 +202,27 @@ export class ColorAnnotationTool extends AnnotationTool {
     return overlay.toDataURL();
   }
 
-  private fromFlood = ({
-    x,
-    y,
-    image,
-    tolerance,
-  }: {
-    x: number;
-    y: number;
-    image: ImageJS.Image;
-    tolerance: number;
-  }) => {
-    let overlay = new ImageJS.Image(
-      image.width,
-      image.height,
-      new Uint8ClampedArray(image.width * image.height * 4),
-      { alpha: 1 }
-    );
-    let roi = overlay.getRoiManager();
-
-    // Use the watershed function with a single seed to determine the selected region.
-    // @ts-ignore
-    roi.fromWaterShed({
-      image: image,
-      fillMaxValue: tolerance,
-      points: [[x, y]],
-    });
-    return roi;
-  };
-
   private updateOverlay(position: { x: number; y: number }) {
-    const roi = this.fromFlood({
-      x: Math.floor(position.x),
-      y: Math.floor(position.y),
-      image: this.toleranceMap!,
-      tolerance: this.tolerance,
+    if (this.maxTol <= this.tolerance) {
+      doFlood({
+        floodMap: this.floodMap!,
+        toleranceMap: this.toleranceMap!,
+        queue: this.toleranceQueue,
+        tolerance: this.tolerance,
+        maxTol: this.maxTol,
+        seen: this.seen,
+      });
+    }
+    // Make a threshold mask
+    const mask = this.floodMap!.mask({
+      threshold: this.tolerance,
+      invert: true,
     });
-
     // @ts-ignore
-    this.roiMask = roi.getMasks()[0];
+    this.roiManager.fromMask(mask);
     // @ts-ignore
-    this.roiContour = roi.getMasks({ kind: "contour" })[0];
-
+    this.roiMask = this.roiManager.getMasks()[0];
+    // @ts-ignore
     if (!this.roiMask) return;
 
     // @ts-ignore

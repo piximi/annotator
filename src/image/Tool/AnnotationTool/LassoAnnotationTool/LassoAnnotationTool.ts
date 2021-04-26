@@ -102,18 +102,20 @@ export class LassoAnnotationTool extends AnnotationTool {
     }
 
     if (this.anchor) {
-      this.buffer.pop();
-      this.buffer.pop();
-
-      this.buffer = [...this.buffer, position.x, position.y];
-
-      this.anchor = position;
+      this.anchor = {
+        x: this.buffer[this.buffer.length - 2],
+        y: this.buffer[this.buffer.length - 1],
+      };
 
       return;
     }
 
     if (this.origin && this.buffer && this.buffer.length > 0) {
-      this.anchor = position;
+      this.anchor = {
+        x: this.buffer[this.buffer.length - 2],
+        y: this.buffer[this.buffer.length - 1],
+      };
+
       return;
     }
   }

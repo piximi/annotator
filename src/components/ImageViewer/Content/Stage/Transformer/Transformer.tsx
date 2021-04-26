@@ -147,6 +147,7 @@ export const Transformer = ({
         })
       );
 
+      //Found this to be necessary to detach transformer before re-attaching
       dispatch(
         applicationSlice.actions.setSelectedAnnotation({
           selectedAnnotation: undefined,
@@ -162,6 +163,8 @@ export const Transformer = ({
           },
         })
       );
+
+      setBoundBox(null);
     } else {
       const contour = annotation.contour;
 

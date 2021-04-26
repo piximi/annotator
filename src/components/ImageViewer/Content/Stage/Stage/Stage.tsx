@@ -588,6 +588,16 @@ export const Stage = () => {
 
       if (!relative) return;
 
+      if (!relative || !imageWidth || !imageHeight) return;
+
+      if (
+        relative.x > imageWidth ||
+        relative.y > imageHeight ||
+        relative.x < 0 ||
+        relative.y < 0
+      )
+        return;
+
       const rawImagePosition = {
         x: relative.x / stageScale,
         y: relative.y / stageScale,

@@ -9,6 +9,7 @@ export class QuickAnnotationTool extends AnnotationTool {
   currentSuperpixels: Set<number> = new Set<number>();
   lastSuperpixel: number = 0;
   superpixels?: Int32Array;
+  superpixelsMap?: { [key: number]: Array<number> };
   currentMask?: ImageJS.Image;
   map?: Uint8Array | Uint8ClampedArray;
 
@@ -81,10 +82,8 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     this.currentSuperpixels.add(superpixel);
 
-    this.superpixels.forEach((pixel: number, index: number) => {
-      if (pixel === superpixel) {
-        this.currentMask!.setPixel(index, [255, 0, 0, 150]);
-      }
+    this.superpixelsMap![superpixel].forEach((index: number) => {
+      this.currentMask!.setPixel(index, [255, 0, 0, 150]);
     });
   }
 
@@ -125,6 +124,15 @@ export class QuickAnnotationTool extends AnnotationTool {
     instance.map = map;
 
     instance.superpixels = superpixels;
+
+    instance.superpixelsMap = {};
+
+    superpixels.forEach((pixel: number, index: number) => {
+      if (!(pixel in instance.superpixelsMap!)) {
+        instance.superpixelsMap![pixel] = [];
+      }
+      instance.superpixelsMap![pixel].push(index);
+    });
 
     return instance;
   }

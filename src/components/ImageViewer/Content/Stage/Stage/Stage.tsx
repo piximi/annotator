@@ -650,7 +650,7 @@ export const Stage = () => {
   }, [enterPress]);
 
   useEffect(() => {
-    if (selectedAnnotationsIds) {
+    if (selectedAnnotationsIds.length) {
       if (backspacePress || escapePress || deletePress) {
         if (deletePress || backspacePress) {
           _.map(selectedAnnotationsIds, (annotationId: string) => {

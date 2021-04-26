@@ -51,19 +51,17 @@ export class QuickAnnotationTool extends AnnotationTool {
   onMouseDown(position: { x: number; y: number }) {
     if (this.annotated) return;
 
-    if (!this.superpixels || !this.masks) return;
+    if (!this.superpixels || !this.currentMask) return;
 
     const pixel = this.flatPixelCoordinate(position);
 
     this.currentSuperpixel = this.superpixels[pixel];
 
-    this.currentMask = this.masks[this.currentSuperpixel];
-
     this.annotating = true;
   }
 
   onMouseMove(position: { x: number; y: number }) {
-    if (!this.superpixels || !this.masks) return;
+    if (!this.superpixels) return;
 
     const pixel = this.flatPixelCoordinate(position);
 
@@ -73,15 +71,26 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     this.currentSuperpixel = superpixel;
 
-    const prevMask = this.currentMask;
+    // const prevMask = this.currentMask;
 
-    this.currentMask = this.masks[superpixel];
+    console.info("Beore if statement");
+    if (!this.annotating) {
+      console.info("In if statement");
+      this.currentMask = new ImageJS.Image(
+        this.image.width,
+        this.image.height,
+        new Uint8Array(this.image.width * this.image.height * 4),
+        { alpha: 1 }
+      );
+    }
+
+    this.superpixels.forEach((pixel: number, index: number) => {
+      if (pixel === this.currentSuperpixel) {
+        this.currentMask!.setPixel(index, [255, 0, 0, 150]);
+      }
+    });
 
     if (!this.annotating) return;
-
-    if (!this.currentMask || !prevMask) return;
-
-    this.currentMask = this.addImages(prevMask, this.currentMask);
   }
 
   onMouseUp(position: { x: number; y: number }) {
@@ -141,24 +150,24 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     instance.superpixels = superpixels;
 
-    const unique = _.uniq(superpixels);
-
-    const masks: { [key: number]: ImageJS.Image } = {};
-
-    _.forEach(unique, (superpixel) => {
-      masks[superpixel] = new ImageJS.Image(
-        image.width,
-        image.height,
-        new Uint8Array(image.width * image.height * 4),
-        { alpha: 1 }
-      );
-    });
-
-    superpixels.forEach((pixel: number, index: number) => {
-      masks[pixel].setPixel(index, [255, 0, 0, 150]);
-    });
-
-    instance.masks = masks;
+    // const unique = _.uniq(superpixels);
+    //
+    // const masks: { [key: number]: ImageJS.Image } = {};
+    //
+    // _.forEach(unique, (superpixel) => {
+    //   masks[superpixel] = new ImageJS.Image(
+    //     image.width,
+    //     image.height,
+    //     new Uint8Array(image.width * image.height * 4),
+    //     { alpha: 1 }
+    //   );
+    // });
+    //
+    // superpixels.forEach((pixel: number, index: number) => {
+    //   masks[pixel].setPixel(index, [255, 0, 0, 150]);
+    // });
+    //
+    // instance.masks = masks;
 
     return instance;
   }

@@ -17,7 +17,7 @@ export const QuickSelection = ({ operator }: QuickSelectionProps) => {
     const image = new Image();
     image.src = operator.currentMask.toDataURL();
     setImage(image);
-  }, [operator.currentMask]);
+  }, [operator.currentMask, operator.currentSuperpixel]);
 
   const stageScale = useSelector(stageScaleSelector);
 

@@ -177,8 +177,8 @@ export class MagneticAnnotationTool extends AnnotationTool {
       );
 
       const destination = getIdx(this.image.width * this.factor, 1)(
-        Math.floor(position.x * this.factor),
-        Math.floor(position.y * this.factor),
+        Math.floor(this.buffer[this.buffer.length - 2] * this.factor),
+        Math.floor(this.buffer[this.buffer.length - 1] * this.factor),
         0
       );
 
@@ -193,7 +193,10 @@ export class MagneticAnnotationTool extends AnnotationTool {
 
       this.previous = [...this.previous, ...this.path];
 
-      this.anchor = position;
+      this.anchor = {
+        x: this.buffer[this.buffer.length - 2],
+        y: this.buffer[this.buffer.length - 1],
+      };
 
       return;
     }
@@ -201,7 +204,10 @@ export class MagneticAnnotationTool extends AnnotationTool {
     if (this.origin && this.buffer.length > 0) {
       if (!this.image || !this.origin || !this.pathfinder) return;
 
-      this.anchor = position;
+      this.anchor = {
+        x: this.buffer[this.buffer.length - 2],
+        y: this.buffer[this.buffer.length - 1],
+      };
 
       const source = getIdx(this.image.width * this.factor, 1)(
         Math.floor(this.origin.x * this.factor),
@@ -210,8 +216,8 @@ export class MagneticAnnotationTool extends AnnotationTool {
       );
 
       const destination = getIdx(this.image.width * this.factor, 1)(
-        Math.floor(position.x * this.factor),
-        Math.floor(position.y * this.factor),
+        Math.floor(this.buffer[this.buffer.length - 2] * this.factor),
+        Math.floor(this.buffer[this.buffer.length - 1] * this.factor),
         0
       );
 

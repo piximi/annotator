@@ -148,6 +148,12 @@ export const Transformer = ({
       );
 
       dispatch(
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: undefined,
+        })
+      );
+
+      dispatch(
         setSelectedAnnotation({
           selectedAnnotation: {
             ...selectedAnnotation,

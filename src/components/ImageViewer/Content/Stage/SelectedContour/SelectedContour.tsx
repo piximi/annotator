@@ -22,7 +22,7 @@ export const SelectedContour = () => {
         return point * stageScale;
       })
     );
-  }, [stageScale, selectedAnnotation, selectedAnnotation?.contour]);
+  }, [stageScale, selectedAnnotation?.contour]);
 
   if (!selectedAnnotation || !selectedAnnotation.contour)
     return <React.Fragment />;

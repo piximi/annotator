@@ -44,8 +44,6 @@ export const Transformer = ({
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
-  const transformerRef = useRef<Konva.Transformer | null>(null);
-
   const imageWidth = useSelector(imageWidthSelector);
 
   const imageHeight = useSelector(imageHeightSelector);
@@ -196,7 +194,6 @@ export const Transformer = ({
       centeredScaling={true}
       onTransformEnd={onTransformEnd}
       id={"tr-".concat(annotationId)}
-      ref={transformerRef}
     />
   );
 };

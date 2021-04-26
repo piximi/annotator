@@ -98,7 +98,7 @@ export const makeFloodMap = ({
   });
 };
 
-// Generate a tolerance map and associate it with the image itself
+// Expand a watershed map until the desired tolerance is reached.
 export const doFlood = ({
   floodMap,
   toleranceMap,

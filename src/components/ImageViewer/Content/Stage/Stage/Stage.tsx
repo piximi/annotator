@@ -62,6 +62,8 @@ import {
 import { useWindowFocusHandler } from "../../../../../hooks/useWindowFocusHandler/useWindowFocusHandler";
 import { stagePositionSelector } from "../../../../../store/selectors/stagePositionSelector";
 import { KonvaEventObject } from "konva/types/Node";
+import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
+import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -80,6 +82,9 @@ export const Stage = () => {
   const stageHeight = useSelector(stageHeightSelector);
   const stageWidth = useSelector(stageWidthSelector);
   const stagePosition = useSelector(stagePositionSelector);
+
+  const imageWidth = useSelector(imageWidthSelector);
+  const imageHeight = useSelector(imageHeightSelector);
 
   const [aspectRatio, setAspectRatio] = useState<number>(1);
 
@@ -483,12 +488,9 @@ export const Stage = () => {
 
       if (!position) return;
 
-      console.info("absolute", position);
       const relative = getRelativePointerPosition(position);
 
       if (!relative) return;
-
-      console.info("relative", relative.x / stageScale);
 
       const rawImagePosition = {
         x: relative.x / stageScale,
@@ -541,9 +543,14 @@ export const Stage = () => {
 
       setCurrentPosition(relative);
 
-      if (!relative) return;
+      if (!relative || !imageWidth || !imageHeight) return;
 
-      if (relative.x / stageScale > 512 || relative.y / stageScale > 512)
+      if (
+        relative.x > imageWidth ||
+        relative.y > imageHeight ||
+        relative.x < 0 ||
+        relative.y < 0
+      )
         return;
 
       const rawImagePosition = {

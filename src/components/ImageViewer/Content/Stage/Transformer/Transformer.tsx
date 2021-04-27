@@ -5,6 +5,7 @@ import { AnnotationType } from "../../../../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
 import {
   imageInstancesSelector,
+  imageSelector,
   stageScaleSelector,
 } from "../../../../../store/selectors";
 import {
@@ -14,8 +15,6 @@ import {
 } from "../../../../../store/slices";
 import Konva from "konva";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
-import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
-import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 
 type box = {
   x: number;
@@ -44,10 +43,6 @@ export const Transformer = ({
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
-  const imageWidth = useSelector(imageWidthSelector);
-
-  const imageHeight = useSelector(imageHeightSelector);
-
   const transformerRef = useRef<Konva.Transformer | null>(null);
 
   const dispatch = useDispatch();
@@ -63,6 +58,13 @@ export const Transformer = ({
   });
 
   const stageScale = useSelector(stageScaleSelector);
+
+  const image = useSelector(imageSelector);
+
+  if (!image || !image.shape) return <React.Fragment />;
+
+  const imageWidth = image.shape.width;
+  const imageHeight = image.shape.height;
 
   const computeBoundingBoxFromContours = (
     contour: Array<number>
@@ -85,8 +87,8 @@ export const Transformer = ({
     if (!imageWidth || !imageHeight || !relativeNewBox)
       return boundBox ? boundBox : startBox;
     if (
-      relativeNewBox.x + relativeNewBox.width > imageWidth / stageScale ||
-      relativeNewBox.y + relativeNewBox.height > imageHeight / stageScale ||
+      relativeNewBox.x + relativeNewBox.width > imageWidth ||
+      relativeNewBox.y + relativeNewBox.height > imageHeight ||
       relativeNewBox.x + relativeNewBox.width < 0 ||
       relativeNewBox.y + relativeNewBox.height < 0
     )
@@ -156,6 +158,21 @@ export const Transformer = ({
         })
       );
 
+      // const maskImage = new ImageJS.Image({
+      //   width: this.image.width,
+      //   height: this.image.height,
+      //   bitDepth: 8,
+      // });
+      //
+      // const coords = _.chunk(resizedContour, 2);
+      //
+      // const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
+      // simplify(connectedPoints, 1, true);
+      // slpf(connectedPoints, maskImage);
+      //
+      // //@ts-ignore
+      // const resizedMask = encode(maskImage.getChannel(0).data);
+
       //Found this to be necessary to detach transformer before re-attaching
       dispatch(
         applicationSlice.actions.setSelectedAnnotation({
@@ -169,6 +186,7 @@ export const Transformer = ({
             ...selectedAnnotation,
             contour: resizedContour,
             boundingBox: computeBoundingBoxFromContours(resizedContour),
+            // mask: resizedMask,
           },
         })
       );

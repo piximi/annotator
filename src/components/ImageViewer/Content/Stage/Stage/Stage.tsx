@@ -64,6 +64,7 @@ import { stagePositionSelector } from "../../../../../store/selectors/stagePosit
 import { KonvaEventObject } from "konva/types/Node";
 import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
+import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -86,8 +87,6 @@ export const Stage = () => {
   const imageWidth = useSelector(imageWidthSelector);
   const imageHeight = useSelector(imageHeightSelector);
 
-  const [aspectRatio, setAspectRatio] = useState<number>(1);
-
   const stageScale = useSelector(stageScaleSelector);
 
   const dispatch = useDispatch();
@@ -101,11 +100,6 @@ export const Stage = () => {
   } = useZoom();
 
   const [annotationTool] = useAnnotationTool();
-
-  const [currentPosition, setCurrentPosition] = useState<{
-    x: number;
-    y: number;
-  } | null>();
 
   const [, update] = useReducer((x) => x + 1, 0);
 
@@ -327,14 +321,19 @@ export const Stage = () => {
 
     if (!annotations) return;
 
-    const updated = _.map(selectedAnnotationsIds, (annotationId) => {
-      return {
-        ...annotations?.filter(
-          (instance: SelectionType) => instance.id === annotationId
-        )[0],
-        categoryId: selectedCategory.id,
-      } as SelectionType;
-    });
+    const selectedAnnotations = _.map(
+      selectedAnnotationsIds,
+      (annotationId) => {
+        const confirmedAnnotation = {
+          ...annotations?.filter(
+            (instance: SelectionType) => instance.id === annotationId
+          )[0],
+        };
+        return !_.isEmpty(confirmedAnnotation)
+          ? { ...confirmedAnnotation, categoryId: selectedCategory.id }
+          : { ...selectedAnnotation, categoryId: selectedCategory.id };
+      }
+    );
 
     const others = annotations?.filter(
       (instance: SelectionType) =>
@@ -343,7 +342,10 @@ export const Stage = () => {
 
     dispatch(
       applicationSlice.actions.setImageInstances({
-        instances: [...others, ...updated],
+        instances: [
+          ...others,
+          ...(selectedAnnotations as Array<AnnotationType>),
+        ],
       })
     );
   }, [selectedCategory]);
@@ -545,9 +547,14 @@ export const Stage = () => {
 
       const relative = getRelativePointerPosition(position);
 
-      setCurrentPosition(relative);
-
       if (!relative || !imageWidth || !imageHeight) return;
+
+      if (toolType === ToolType.PenAnnotation)
+        dispatch(
+          applicationSlice.actions.setCurrentPosition({
+            currentPosition: relative,
+          })
+        );
 
       if (
         relative.x > imageWidth ||
@@ -743,19 +750,7 @@ export const Stage = () => {
 
               <Selecting tool={tool!} />
 
-              {currentPosition &&
-                !annotationTool?.annotating &&
-                toolType === ToolType.PenAnnotation && (
-                  <ReactKonva.Ellipse
-                    radiusX={(aspectRatio * penSelectionBrushSize) / stageScale}
-                    radiusY={penSelectionBrushSize / stageScale}
-                    x={currentPosition.x}
-                    y={currentPosition.y}
-                    stroke="grey"
-                    strokewidth={1}
-                    dash={[2, 2]}
-                  />
-                )}
+              <PenAnnotationToolTip annotationTool={annotationTool} />
 
               <SelectedContour />
 

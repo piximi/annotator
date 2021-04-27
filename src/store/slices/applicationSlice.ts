@@ -35,6 +35,7 @@ const initialState: StateType = {
       visible: true,
     },
   ],
+  currentPosition: undefined,
   contrast: 0,
   exposure: 0,
   hue: 0,
@@ -164,6 +165,12 @@ export const applicationSlice = createSlice({
     },
     setContrast(state: StateType, action: PayloadAction<{ contrast: number }>) {
       state.contrast = action.payload.contrast;
+    },
+    setCurrentPosition(
+      state: StateType,
+      action: PayloadAction<{ currentPosition: { x: number; y: number } }>
+    ) {
+      state.currentPosition = action.payload.currentPosition;
     },
     setExposure(state: StateType, action: PayloadAction<{ exposure: number }>) {
       state.exposure = action.payload.exposure;
@@ -308,6 +315,7 @@ export const {
   setCategories,
   setCategoryVisibility,
   setContrast,
+  setCurrentPosition,
   setExposure,
   setHue,
   setImage,

@@ -8,6 +8,7 @@ export {
   setBoundingClientRect,
   setBrightness,
   setCategories,
+  setCurrentPosition,
   setCategoryVisibility,
   setContrast,
   setExposure,

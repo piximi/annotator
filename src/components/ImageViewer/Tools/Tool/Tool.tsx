@@ -4,8 +4,16 @@ import React from "react";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+} from "@material-ui/core";
+import image from "../../../../images/contemplative-reptile.jpeg";
+import { useStyles } from "./Tool.css";
 
-type TipProps = {
+type TooltipCardProps = {
   name: string;
 };
 
@@ -16,17 +24,27 @@ type ToolProps = {
   selected: boolean;
 };
 
-const Tip = ({ name }: TipProps) => {
+const TooltipCard = ({ name }: TooltipCardProps) => {
+  const classes = useStyles();
+
   return (
-    <React.Fragment>
-      <Typography>{name}</Typography>
-    </React.Fragment>
+    <Card>
+      <CardActionArea>
+        <CardMedia className={classes.cardMedia} image={image} />
+
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {name}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 };
 
 export const Tool = ({ children, name, onClick, selected }: ToolProps) => {
   return (
-    <Tooltip aria-label={name} title={<Tip name={name} />}>
+    <Tooltip aria-label={name} title={<TooltipCard name={name} />}>
       <ListItem button onClick={onClick} selected={selected}>
         <ListItemIcon>
           <SvgIcon fontSize="small">{children}</SvgIcon>

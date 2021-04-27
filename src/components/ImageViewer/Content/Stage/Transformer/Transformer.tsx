@@ -200,7 +200,6 @@ export const Transformer = ({
   return (
     <ReactKonva.Transformer
       boundBoxFunc={boundingBoxFunc}
-      centeredScaling={true}
       onTransformEnd={onTransformEnd}
       id={"tr-".concat(annotationId)}
     />

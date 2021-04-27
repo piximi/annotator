@@ -10,7 +10,7 @@ export const useStyles = makeStyles((theme) => ({
     width: "200px",
   },
   cardMedia: {
-    height: 170,
+    height: 230,
   },
   drawer: {
     flexShrink: 0,

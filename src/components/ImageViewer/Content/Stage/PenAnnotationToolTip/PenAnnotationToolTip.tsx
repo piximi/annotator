@@ -28,11 +28,11 @@ export const PenAnnotationToolTip = ({
     !currentPosition ||
     !annotationTool ||
     annotationTool.annotating ||
-    toolType !== ToolType.PenAnnotation
+    toolType !== ToolType.PenAnnotation ||
+    !imageWidth ||
+    !imageHeight
   )
     return <React.Fragment />;
-
-  if (!imageWidth || !imageHeight) return <React.Fragment />;
 
   if (
     currentPosition.x > imageWidth - penSelectionBrushSize ||

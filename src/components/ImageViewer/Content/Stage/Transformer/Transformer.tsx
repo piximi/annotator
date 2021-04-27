@@ -149,8 +149,6 @@ export const Transformer = ({
     simplify(connectedPoints, 1, true);
     slpf(connectedPoints, maskImage);
 
-    console.info(maskImage.toDataURL());
-
     //@ts-ignore
     return encode(maskImage.getChannel(0).data);
   };

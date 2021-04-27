@@ -88,8 +88,6 @@ export const Stage = () => {
   const imageWidth = useSelector(imageWidthSelector);
   const imageHeight = useSelector(imageHeightSelector);
 
-  const [aspectRatio, setAspectRatio] = useState<number>(1);
-
   const stageScale = useSelector(stageScaleSelector);
 
   const dispatch = useDispatch();

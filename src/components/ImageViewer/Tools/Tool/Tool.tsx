@@ -28,7 +28,7 @@ const TooltipCard = ({ name }: TooltipCardProps) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.card}>
+    <Card className={classes.card} raised>
       <CardActionArea>
         <CardMedia className={classes.cardMedia} image={image} />
 

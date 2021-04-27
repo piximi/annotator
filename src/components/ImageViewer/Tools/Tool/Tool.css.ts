@@ -3,8 +3,14 @@ import { makeStyles } from "@material-ui/core/styles";
 const operationsWidth = 56;
 
 export const useStyles = makeStyles((theme) => ({
+  card: {
+    width: "100%",
+  },
+  cardContent: {
+    width: "300px",
+  },
   cardMedia: {
-    height: 140,
+    height: 170,
   },
   drawer: {
     flexShrink: 0,
@@ -20,5 +26,9 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
+  },
+  tooltip: {
+    backgroundColor: "transparent !important",
+    maxWidth: "none",
   },
 }));

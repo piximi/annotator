@@ -28,7 +28,7 @@ const TooltipCard = ({ name }: TooltipCardProps) => {
   const classes = useStyles();
 
   return (
-    <Card>
+    <Card className={classes.card}>
       <CardActionArea>
         <CardMedia className={classes.cardMedia} image={image} />
 
@@ -43,8 +43,10 @@ const TooltipCard = ({ name }: TooltipCardProps) => {
 };
 
 export const Tool = ({ children, name, onClick, selected }: ToolProps) => {
+  const classes = useStyles();
+
   return (
-    <Tooltip aria-label={name} title={<TooltipCard name={name} />}>
+    <Tooltip className={classes.tooltip} title={<TooltipCard name={name} />}>
       <ListItem button onClick={onClick} selected={selected}>
         <ListItemIcon>
           <SvgIcon fontSize="small">{children}</SvgIcon>

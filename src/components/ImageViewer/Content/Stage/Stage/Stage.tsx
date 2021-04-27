@@ -64,6 +64,8 @@ import { stagePositionSelector } from "../../../../../store/selectors/stagePosit
 import { KonvaEventObject } from "konva/types/Node";
 import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
+import { currentPositionSelector } from "../../../../../store/selectors/currentPositionSelector";
+import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -102,10 +104,7 @@ export const Stage = () => {
 
   const [annotationTool] = useAnnotationTool();
 
-  const [currentPosition, setCurrentPosition] = useState<{
-    x: number;
-    y: number;
-  } | null>();
+  const currentPosition = useSelector(currentPositionSelector);
 
   const [, update] = useReducer((x) => x + 1, 0);
 
@@ -545,9 +544,14 @@ export const Stage = () => {
 
       const relative = getRelativePointerPosition(position);
 
-      setCurrentPosition(relative);
-
       if (!relative || !imageWidth || !imageHeight) return;
+
+      if (toolType === ToolType.PenAnnotation)
+        dispatch(
+          applicationSlice.actions.setCurrentPosition({
+            currentPosition: relative,
+          })
+        );
 
       if (
         relative.x > imageWidth ||
@@ -743,19 +747,7 @@ export const Stage = () => {
 
               <Selecting tool={tool!} />
 
-              {currentPosition &&
-                !annotationTool?.annotating &&
-                toolType === ToolType.PenAnnotation && (
-                  <ReactKonva.Ellipse
-                    radiusX={(aspectRatio * penSelectionBrushSize) / stageScale}
-                    radiusY={penSelectionBrushSize / stageScale}
-                    x={currentPosition.x}
-                    y={currentPosition.y}
-                    stroke="grey"
-                    strokewidth={1}
-                    dash={[2, 2]}
-                  />
-                )}
+              <PenAnnotationToolTip annotationTool={annotationTool} />
 
               <SelectedContour />
 

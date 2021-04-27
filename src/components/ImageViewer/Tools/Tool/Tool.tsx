@@ -61,8 +61,8 @@ export const Tool = ({ children, name, onClick, selected }: ToolProps) => {
   return (
     <Tooltip
       classes={{ tooltip: classes.tooltip }}
-      title={<TooltipCard name={name} />}
       placement="left"
+      title={<TooltipCard name={name} />}
     >
       <ListItem button onClick={onClick} selected={selected}>
         <ListItemIcon>

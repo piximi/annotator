@@ -64,7 +64,6 @@ import { stagePositionSelector } from "../../../../../store/selectors/stagePosit
 import { KonvaEventObject } from "konva/types/Node";
 import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
-import { currentPositionSelector } from "../../../../../store/selectors/currentPositionSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 
 export const Stage = () => {
@@ -101,8 +100,6 @@ export const Stage = () => {
   } = useZoom();
 
   const [annotationTool] = useAnnotationTool();
-
-  const currentPosition = useSelector(currentPositionSelector);
 
   const [, update] = useReducer((x) => x + 1, 0);
 

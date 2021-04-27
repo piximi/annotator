@@ -48,6 +48,8 @@ export const Transformer = ({
 
   const imageHeight = useSelector(imageHeightSelector);
 
+  const transformerRef = useRef<Konva.Transformer | null>(null);
+
   const dispatch = useDispatch();
 
   const [boundBox, setBoundBox] = useState<box | null>(null);
@@ -123,8 +125,15 @@ export const Transformer = ({
     // get necessary parameters for transfromation
     const scaleX = relativeBoundBox.width / relativeStartBox.width;
     const scaleY = relativeBoundBox.height / relativeStartBox.height;
-    const centerX = relativeBoundBox.x + relativeBoundBox.width / 2;
-    const centerY = relativeBoundBox.y + relativeBoundBox.height / 2;
+
+    const oppositeAnchorPosition = getOppositeAnchorPosition();
+    const scaledOppositeAnchorPosition = {
+      x: oppositeAnchorPosition.x / stageScale,
+      y: oppositeAnchorPosition.y / stageScale,
+    };
+
+    const centerX = scaledOppositeAnchorPosition.x + relativeBoundBox.x;
+    const centerY = scaledOppositeAnchorPosition.y + relativeBoundBox.y;
 
     // change image anniotatons with new contour
     const annotation = _.filter(annotations, (annotation: AnnotationType) => {
@@ -197,12 +206,62 @@ export const Transformer = ({
     }
   };
 
+  const getOppositeAnchorPosition = () => {
+    if (!transformerRef || !transformerRef.current) return { x: 0, y: 0 };
+    const activeAnchor = transformerRef.current.getActiveAnchor();
+    switch (activeAnchor) {
+      case "bottom-right": {
+        return transformerRef.current
+          .findOne(".".concat("top-left"))
+          .position();
+      }
+      case "bottom-center": {
+        return transformerRef.current
+          .findOne(".".concat("top-center"))
+          .position();
+      }
+      case "bottom-left": {
+        return transformerRef.current
+          .findOne(".".concat("top-right"))
+          .position();
+      }
+      case "middle-left": {
+        return transformerRef.current
+          .findOne(".".concat("middle-right"))
+          .position();
+      }
+      case "top-left": {
+        return transformerRef.current
+          .findOne(".".concat("bottom-right"))
+          .position();
+      }
+      case "top-center": {
+        return transformerRef.current
+          .findOne(".".concat("bottom-center"))
+          .position();
+      }
+      case "top-right": {
+        return transformerRef.current
+          .findOne(".".concat("bottom-left"))
+          .position();
+      }
+      case "middle-right": {
+        return transformerRef.current
+          .findOne(".".concat("middle-left"))
+          .position();
+      }
+      default: {
+        return { x: 0, y: 0 };
+      }
+    }
+  };
+
   return (
     <ReactKonva.Transformer
       boundBoxFunc={boundingBoxFunc}
-      centeredScaling={true}
       onTransformEnd={onTransformEnd}
       id={"tr-".concat(annotationId)}
+      ref={transformerRef}
     />
   );
 };

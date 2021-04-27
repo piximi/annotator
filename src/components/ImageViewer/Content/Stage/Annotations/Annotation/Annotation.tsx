@@ -49,12 +49,6 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
     event.evt.preventDefault();
 
     dispatch(
-      setSeletedCategory({
-        selectedCategory: annotation.categoryId,
-      })
-    );
-
-    dispatch(
       setSelectedAnnotation({
         selectedAnnotation: annotation,
       })
@@ -85,6 +79,12 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
         );
       }
     }
+
+    dispatch(
+      setSeletedCategory({
+        selectedCategory: annotation.categoryId,
+      })
+    );
   };
 
   useEffect(() => {

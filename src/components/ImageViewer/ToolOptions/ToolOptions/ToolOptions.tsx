@@ -30,6 +30,8 @@ import { useSelector } from "react-redux";
 import { toolTypeSelector } from "../../../../store/selectors";
 import { useTranslation } from "react-i18next";
 import { HandToolOptions } from "../HandToolOptions/HandToolOptions";
+import { Divider } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 
 export const ToolOptions = () => {
   const classes = useStyles();
@@ -139,6 +141,14 @@ export const ToolOptions = () => {
       classes={{ paper: classes.settingsPaper }}
       variant="permanent"
     >
+      <Box
+        style={{ paddingTop: 60 }}
+        className={classes.toolbar}
+        display="flex"
+        justifyContent="flex-end"
+        px={8}
+      />
+
       {
         operations[
           operations.findIndex(

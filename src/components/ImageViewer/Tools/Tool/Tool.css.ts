@@ -11,6 +11,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   cardHeader: {
     position: "absolute",
+    width: "100%",
   },
   cardMedia: {
     height: 230,

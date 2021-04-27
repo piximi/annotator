@@ -85,8 +85,6 @@ export const ImageViewer = (props: ImageViewerProps) => {
       <div className={classes.root}>
         <CssBaseline />
 
-        {/*<TooltipCard name="Foo"/>*/}
-
         <CategoriesList />
 
         <Content onDrop={onDrop} />

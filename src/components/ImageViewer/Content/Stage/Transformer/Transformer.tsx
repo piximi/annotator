@@ -126,13 +126,14 @@ export const Transformer = ({
     const scaleX = relativeBoundBox.width / relativeStartBox.width;
     const scaleY = relativeBoundBox.height / relativeStartBox.height;
 
-    const anchorPosition = getAnchorPosition();
+    const oppositeAnchorPosition = getOppositeAnchorPosition();
+    const scaledOppositeAnchorPosition = {
+      x: oppositeAnchorPosition.x / stageScale,
+      y: oppositeAnchorPosition.y / stageScale,
+    };
 
-    const centerX = anchorPosition.x + relativeBoundBox.x;
-    const centerY = anchorPosition.y + relativeBoundBox.y;
-
-    // const centerX = relativeBoundBox.x + relativeBoundBox.width / 2;
-    // const centerY = relativeBoundBox.y + relativeBoundBox.height / 2;
+    const centerX = scaledOppositeAnchorPosition.x + relativeBoundBox.x;
+    const centerY = scaledOppositeAnchorPosition.y + relativeBoundBox.y;
 
     // change image anniotatons with new contour
     const annotation = _.filter(annotations, (annotation: AnnotationType) => {
@@ -205,7 +206,7 @@ export const Transformer = ({
     }
   };
 
-  const getAnchorPosition = () => {
+  const getOppositeAnchorPosition = () => {
     if (!transformerRef || !transformerRef.current) return { x: 0, y: 0 };
     const activeAnchor = transformerRef.current.getActiveAnchor();
     switch (activeAnchor) {
@@ -255,16 +256,10 @@ export const Transformer = ({
     }
   };
 
-  const onTransformStart = () => {
-    const centerPosition = getAnchorPosition();
-    console.info(centerPosition);
-  };
-
   return (
     <ReactKonva.Transformer
       boundBoxFunc={boundingBoxFunc}
       onTransformEnd={onTransformEnd}
-      onTransformStart={onTransformStart}
       id={"tr-".concat(annotationId)}
       ref={transformerRef}
     />

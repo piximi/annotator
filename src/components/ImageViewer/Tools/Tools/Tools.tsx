@@ -55,7 +55,7 @@ export const Tools = () => {
 
       <br />
       <Tool
-        name={t("Rectangular annotation")}
+        name={t("Rectangular annotation (M)")}
         onClick={() => {
           dispatch(
             applicationSlice.actions.setOperation({
@@ -85,7 +85,7 @@ export const Tools = () => {
       <br />
 
       <Tool
-        name={t("Pen annotation")}
+        name={t("Freehand annotation")}
         onClick={() => {
           dispatch(
             applicationSlice.actions.setOperation({
@@ -101,7 +101,7 @@ export const Tools = () => {
       <br />
 
       <Tool
-        name={t("Lasso annotation")}
+        name={t("Lasso annotation (L)")}
         onClick={() => {
           dispatch(
             applicationSlice.actions.setOperation({

@@ -19,7 +19,7 @@ export const InformationBox = ({ description, name }: InformationBoxProps) => {
         <Typography variant="h6" color="inherit">
           &nbsp;
         </Typography>
-        <Typography>{name}</Typography>
+        <Typography style={{ marginLeft: 12 }}>{name}</Typography>
       </Toolbar>
     </AppBar>
   );

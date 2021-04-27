@@ -266,6 +266,10 @@ export const CategoriesList = () => {
   );
 };
 
+type OpenAnnotationsMenuItemProps = {
+  popupState: any;
+};
+
 type OpenExampleImageMenuItemProps = {
   popupState: any;
 };
@@ -388,6 +392,16 @@ const HelpListItem = () => {
   );
 };
 
+const OpenAnnotationsMenuItem = ({
+  popupState,
+}: OpenAnnotationsMenuItemProps) => {
+  return (
+    <MenuItem onClick={popupState.close}>
+      <ListItemText primary="Open annotations" />
+    </MenuItem>
+  );
+};
+
 const OpenExampleImageMenuItem = ({
   popupState,
 }: OpenExampleImageMenuItemProps) => {
@@ -506,6 +520,8 @@ const OpenMenu = ({ popupState }: OpenMenuProps) => {
   return (
     <Menu {...bindMenu(popupState)}>
       <OpenImageMenuItem popupState={popupState} />
+
+      <OpenAnnotationsMenuItem popupState={popupState} />
 
       <OpenExampleImageMenuItem popupState={popupState} />
     </Menu>

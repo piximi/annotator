@@ -9,11 +9,13 @@ import Collapse from "@material-ui/core/Collapse";
 
 type CollapsibleListProps = {
   children: any;
+  dense: boolean;
   primary: string;
 };
 
 export const CollapsibleList = ({
   children,
+  dense,
   primary,
 }: CollapsibleListProps) => {
   const [collapsed, setCollapsed] = React.useState(true);
@@ -23,7 +25,7 @@ export const CollapsibleList = ({
   };
 
   return (
-    <List>
+    <List dense={dense}>
       <ListItem button onClick={onClick}>
         <ListItemIcon>
           {collapsed ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -33,7 +35,7 @@ export const CollapsibleList = ({
       </ListItem>
 
       <Collapse in={collapsed} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
+        <List component="div" dense={dense} disablePadding>
           {children}
         </List>
       </Collapse>

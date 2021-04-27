@@ -3,6 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 const operationsWidth = 56;
 
 export const useStyles = makeStyles((theme) => ({
+  cardMedia: {
+    height: 140,
+  },
   drawer: {
     flexShrink: 0,
     whiteSpace: "nowrap",

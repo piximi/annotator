@@ -130,8 +130,8 @@ export const CategoriesList = () => {
   return (
     <Drawer
       anchor="left"
-      className={classes.applicationDrawer}
-      classes={{ paper: classes.applicationDrawerPaper }}
+      className={classes.drawer}
+      classes={{ paper: classes.paper }}
       open
       variant="persistent"
     >
@@ -148,7 +148,7 @@ export const CategoriesList = () => {
           <Tooltip title={(true ? "Hide " : "Show ") + "sidebar"}>
             <IconButton
               aria-label="open sidebar"
-              className={classes.menuButton}
+              className={classes.iconButton}
               color="inherit"
               onClick={() => {}}
             >
@@ -164,14 +164,14 @@ export const CategoriesList = () => {
 
       <Divider />
 
-      <List>
+      <List dense>
         <OpenListItem />
         <SaveListItem />
       </List>
 
       <Divider />
 
-      <CollapsibleList primary={t("Categories")}>
+      <CollapsibleList dense primary={t("Categories")}>
         {createdCategories.map((category: CategoryType) => {
           return (
             <div key={category.id}>
@@ -240,22 +240,22 @@ export const CategoriesList = () => {
         </ListItem>
 
         <CreateCategoryListItem />
-
-        <Divider />
-
-        <List>
-          <ListItem button onClick={onClearAllAnnotations}>
-            <ListItemIcon>
-              <DeleteIcon color="disabled" />
-            </ListItemIcon>
-            <ListItemText primary={t("Clear all annotations")} />
-          </ListItem>
-        </List>
       </CollapsibleList>
 
       <Divider />
 
-      <List>
+      <List dense>
+        <ListItem button onClick={onClearAllAnnotations}>
+          <ListItemIcon>
+            <DeleteIcon color="disabled" />
+          </ListItemIcon>
+          <ListItemText primary={t("Clear all annotations")} />
+        </ListItem>
+      </List>
+
+      <Divider />
+
+      <List dense>
         <SettingsListItem />
 
         <SendFeedbackListItem />

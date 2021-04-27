@@ -35,8 +35,8 @@ export const PenAnnotationToolTip = ({
   if (!imageWidth || !imageHeight) return <React.Fragment />;
 
   if (
-    currentPosition.x > imageWidth ||
-    currentPosition.y > imageHeight ||
+    currentPosition.x > imageWidth - penSelectionBrushSize ||
+    currentPosition.y > imageHeight - penSelectionBrushSize ||
     currentPosition.x < 0 ||
     currentPosition.y < 0
   )

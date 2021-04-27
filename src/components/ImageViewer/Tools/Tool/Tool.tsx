@@ -9,11 +9,14 @@ import {
   CardActionArea,
   CardActions,
   Button,
+  CardHeader,
+  IconButton,
   CardContent,
   CardMedia,
 } from "@material-ui/core";
 import image from "../../../../images/contemplative-reptile.jpeg";
 import { useStyles } from "./Tool.css";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 type TooltipCardProps = {
   name: string;
@@ -26,13 +29,24 @@ type ToolProps = {
   selected: boolean;
 };
 
-const TooltipCard = ({ name }: TooltipCardProps) => {
+export const TooltipCard = ({ name }: TooltipCardProps) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.card} raised variant="outlined">
       <CardActionArea>
-        <CardMedia className={classes.cardMedia} image={image} />
+        <div>
+          <CardHeader
+            action={
+              <IconButton aria-label="settings">
+                <CancelIcon />
+              </IconButton>
+            }
+            className={classes.cardHeader}
+          />
+
+          <CardMedia className={classes.cardMedia} image={image} />
+        </div>
 
         <CardContent>
           <Typography gutterBottom variant="h6" component="h2">

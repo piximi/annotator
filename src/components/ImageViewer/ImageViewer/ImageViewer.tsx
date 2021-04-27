@@ -13,6 +13,7 @@ import { theme } from "./theme";
 import * as ImageJS from "image-js";
 import { ShapeType } from "../../../types/ShapeType";
 import { loadLayersModelThunk } from "../../../store/thunks";
+import { TooltipCard } from "../Tools/Tool/Tool";
 
 type ImageViewerProps = {
   image?: ImageType;
@@ -83,6 +84,8 @@ export const ImageViewer = (props: ImageViewerProps) => {
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
         <CssBaseline />
+
+        {/*<TooltipCard name="Foo"/>*/}
 
         <CategoriesList />
 

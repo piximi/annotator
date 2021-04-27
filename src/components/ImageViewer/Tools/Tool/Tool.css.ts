@@ -9,6 +9,9 @@ export const useStyles = makeStyles((theme) => ({
   cardContent: {
     width: "200px",
   },
+  cardHeader: {
+    position: "absolute",
+  },
   cardMedia: {
     height: 230,
   },

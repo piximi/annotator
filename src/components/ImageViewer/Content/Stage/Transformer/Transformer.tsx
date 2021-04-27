@@ -15,6 +15,11 @@ import {
 } from "../../../../../store/slices";
 import Konva from "konva";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
+import { connectPoints } from "../../../../../image/imageHelper";
+import { simplify } from "../../../../../image/simplify/simplify";
+import { slpf } from "../../../../../image/polygon-fill/slpf";
+import { encode } from "../../../../../image/rle";
+import * as ImageJS from "image-js";
 
 type box = {
   x: number;
@@ -116,6 +121,21 @@ export const Transformer = ({
     };
   };
 
+  const resizeContour = (
+    contour: Array<number>,
+    center: { x: number; y: number },
+    scale: { x: number; y: number }
+  ) => {
+    return _.flatten(
+      _.map(_.chunk(contour, 2), (el: Array<number>) => {
+        return [
+          center.x + scale.x * (el[0] - center.x),
+          center.y + scale.y * (el[1] - center.y),
+        ];
+      })
+    );
+  };
+
   const onTransformEnd = () => {
     if (!boundBox || !startBox) return;
 
@@ -146,33 +166,9 @@ export const Transformer = ({
       return annotation.id !== annotationId;
     });
 
+    let contour: Array<number>;
+
     if (!annotation && selectedAnnotation) {
-      const contour = selectedAnnotation.contour;
-
-      const resizedContour = _.flatten(
-        _.map(_.chunk(contour, 2), (el: Array<number>) => {
-          return [
-            centerX + scaleX * (el[0] - centerX),
-            centerY + scaleY * (el[1] - centerY),
-          ];
-        })
-      );
-
-      // const maskImage = new ImageJS.Image({
-      //   width: this.image.width,
-      //   height: this.image.height,
-      //   bitDepth: 8,
-      // });
-      //
-      // const coords = _.chunk(resizedContour, 2);
-      //
-      // const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
-      // simplify(connectedPoints, 1, true);
-      // slpf(connectedPoints, maskImage);
-      //
-      // //@ts-ignore
-      // const resizedMask = encode(maskImage.getChannel(0).data);
-
       //Found this to be necessary to detach transformer before re-attaching
       dispatch(
         applicationSlice.actions.setSelectedAnnotation({
@@ -180,13 +176,38 @@ export const Transformer = ({
         })
       );
 
+      contour = selectedAnnotation.contour;
+
+      const resizedContour = resizeContour(
+        contour,
+        { x: centerX, y: centerY },
+        { x: scaleX, y: scaleY }
+      );
+
+      const maskImage = new ImageJS.Image({
+        width: imageWidth,
+        height: imageHeight,
+        bitDepth: 8,
+      });
+
+      const coords = _.chunk(resizedContour, 2);
+
+      const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
+      simplify(connectedPoints, 1, true);
+      slpf(connectedPoints, maskImage);
+
+      console.info(maskImage.toDataURL());
+
+      //@ts-ignore
+      const resizedMask = encode(maskImage.getChannel(0).data);
+
       dispatch(
         setSelectedAnnotation({
           selectedAnnotation: {
             ...selectedAnnotation,
             contour: resizedContour,
             boundingBox: computeBoundingBoxFromContours(resizedContour),
-            // mask: resizedMask,
+            mask: resizedMask,
           },
         })
       );
@@ -195,13 +216,10 @@ export const Transformer = ({
     } else {
       const contour = annotation.contour;
 
-      const resizedContour = _.flatten(
-        _.map(_.chunk(contour, 2), (el: Array<number>) => {
-          return [
-            centerX + scaleX * (el[0] - centerX),
-            centerY + scaleY * (el[1] - centerY),
-          ];
-        })
+      const resizedContour = resizeContour(
+        contour,
+        { x: centerX, y: centerY },
+        { x: scaleX, y: scaleY }
       );
 
       const updated = {

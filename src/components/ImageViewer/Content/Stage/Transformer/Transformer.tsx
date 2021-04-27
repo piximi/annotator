@@ -136,6 +136,25 @@ export const Transformer = ({
     );
   };
 
+  const resizeMask = (points: Array<number>) => {
+    const maskImage = new ImageJS.Image({
+      width: imageWidth,
+      height: imageHeight,
+      bitDepth: 8,
+    });
+
+    const coords = _.chunk(points, 2);
+
+    const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
+    simplify(connectedPoints, 1, true);
+    slpf(connectedPoints, maskImage);
+
+    console.info(maskImage.toDataURL());
+
+    //@ts-ignore
+    return encode(maskImage.getChannel(0).data);
+  };
+
   const onTransformEnd = () => {
     if (!boundBox || !startBox) return;
 
@@ -184,22 +203,7 @@ export const Transformer = ({
         { x: scaleX, y: scaleY }
       );
 
-      const maskImage = new ImageJS.Image({
-        width: imageWidth,
-        height: imageHeight,
-        bitDepth: 8,
-      });
-
-      const coords = _.chunk(resizedContour, 2);
-
-      const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
-      simplify(connectedPoints, 1, true);
-      slpf(connectedPoints, maskImage);
-
-      console.info(maskImage.toDataURL());
-
-      //@ts-ignore
-      const resizedMask = encode(maskImage.getChannel(0).data);
+      const resizedMask = resizeMask(resizedContour);
 
       dispatch(
         setSelectedAnnotation({
@@ -222,10 +226,13 @@ export const Transformer = ({
         { x: scaleX, y: scaleY }
       );
 
+      const resizedMask = resizeMask(resizedContour);
+
       const updated = {
         ...annotation,
         contour: resizedContour,
         boundingBox: computeBoundingBoxFromContours(resizedContour),
+        mask: resizedMask,
       };
 
       dispatch(

@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   cardContent: {
-    width: "300px",
+    width: "200px",
   },
   cardMedia: {
     height: 170,

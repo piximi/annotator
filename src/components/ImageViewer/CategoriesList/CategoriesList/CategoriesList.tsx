@@ -486,15 +486,17 @@ const OpenListItem = () => {
   return (
     <PopupState variant="popover">
       {(popupState) => (
-        <ListItem button {...bindTrigger(popupState)}>
-          <ListItemIcon>
-            <FolderOpenIcon />
-          </ListItemIcon>
+        <React.Fragment>
+          <ListItem button {...bindTrigger(popupState)}>
+            <ListItemIcon>
+              <FolderOpenIcon />
+            </ListItemIcon>
 
-          <ListItemText primary="Open" />
+            <ListItemText primary="Open" />
+          </ListItem>
 
           <OpenMenu popupState={popupState} />
-        </ListItem>
+        </React.Fragment>
       )}
     </PopupState>
   );

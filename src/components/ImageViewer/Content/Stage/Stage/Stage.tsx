@@ -321,14 +321,19 @@ export const Stage = () => {
 
     if (!annotations) return;
 
-    const updated = _.map(selectedAnnotationsIds, (annotationId) => {
-      return {
-        ...annotations?.filter(
-          (instance: SelectionType) => instance.id === annotationId
-        )[0],
-        categoryId: selectedCategory.id,
-      } as SelectionType;
-    });
+    const selectedAnnotations = _.map(
+      selectedAnnotationsIds,
+      (annotationId) => {
+        const confirmedAnnotation = {
+          ...annotations?.filter(
+            (instance: SelectionType) => instance.id === annotationId
+          )[0],
+        };
+        return !_.isEmpty(confirmedAnnotation)
+          ? { ...confirmedAnnotation, categoryId: selectedCategory.id }
+          : { ...selectedAnnotation, categoryId: selectedCategory.id };
+      }
+    );
 
     const others = annotations?.filter(
       (instance: SelectionType) =>
@@ -337,7 +342,10 @@ export const Stage = () => {
 
     dispatch(
       applicationSlice.actions.setImageInstances({
-        instances: [...others, ...updated],
+        instances: [
+          ...others,
+          ...(selectedAnnotations as Array<AnnotationType>),
+        ],
       })
     );
   }, [selectedCategory]);

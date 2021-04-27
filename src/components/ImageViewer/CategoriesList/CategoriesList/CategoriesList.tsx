@@ -130,8 +130,8 @@ export const CategoriesList = () => {
   return (
     <Drawer
       anchor="left"
-      className={classes.applicationDrawer}
-      classes={{ paper: classes.applicationDrawerPaper }}
+      className={classes.drawer}
+      classes={{ paper: classes.paper }}
       open
       variant="persistent"
     >
@@ -148,7 +148,7 @@ export const CategoriesList = () => {
           <Tooltip title={(true ? "Hide " : "Show ") + "sidebar"}>
             <IconButton
               aria-label="open sidebar"
-              className={classes.menuButton}
+              className={classes.iconButton}
               color="inherit"
               onClick={() => {}}
             >

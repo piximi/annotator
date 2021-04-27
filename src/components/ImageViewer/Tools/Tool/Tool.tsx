@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import {
   Card,
   CardActionArea,
+  CardActions,
+  Button,
   CardContent,
   CardMedia,
 } from "@material-ui/core";
@@ -34,7 +36,7 @@ const TooltipCard = ({ name }: TooltipCardProps) => {
 
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Lizard
+            {name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -42,6 +44,12 @@ const TooltipCard = ({ name }: TooltipCardProps) => {
           </Typography>
         </CardContent>
       </CardActionArea>
+
+      <CardActions>
+        <Button size="small" color="primary">
+          Learn More
+        </Button>
+      </CardActions>
     </Card>
   );
 };

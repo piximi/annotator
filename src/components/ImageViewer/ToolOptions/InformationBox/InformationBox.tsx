@@ -1,6 +1,9 @@
 import Box from "@material-ui/core/Box";
 import React from "react";
 import { Typography } from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import { useStyles } from "./InformationBox.css";
 
 type InformationBoxProps = {
   description: string;
@@ -8,13 +11,16 @@ type InformationBoxProps = {
 };
 
 export const InformationBox = ({ description, name }: InformationBoxProps) => {
-  return (
-    <Box p={2}>
-      <Typography variant="subtitle1">{name}</Typography>
+  const classes = useStyles();
 
-      <Typography variant="body2">
-        <em>{description}</em>
-      </Typography>
-    </Box>
+  return (
+    <AppBar className={classes.appBar} color="default">
+      <Toolbar disableGutters={true}>
+        <Typography variant="h6" color="inherit">
+          &nbsp;
+        </Typography>
+        <Typography style={{ marginLeft: 12 }}>{name}</Typography>
+      </Toolbar>
+    </AppBar>
   );
 };

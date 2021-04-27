@@ -7,10 +7,6 @@ export const useStyles = makeStyles((theme) => ({
     borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
     boxShadow: "none",
     position: "absolute",
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
   },
   drawer: {
     flexShrink: 0,
@@ -21,9 +17,9 @@ export const useStyles = makeStyles((theme) => ({
     marginRight: 20,
   },
   paper: {
-    zIndex: 0,
-    width: theme.spacing(32),
     boxShadow: "inset 0 0 16px #000000",
+    width: theme.spacing(32),
+    zIndex: 0,
   },
   toolbar: {
     ...theme.mixins.toolbar,

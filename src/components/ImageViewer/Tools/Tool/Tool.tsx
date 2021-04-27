@@ -1,6 +1,6 @@
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import React from "react";
+import React, { useState } from "react";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
@@ -20,6 +20,7 @@ import CancelIcon from "@material-ui/icons/Cancel";
 
 type TooltipCardProps = {
   name: string;
+  onClose: () => void;
 };
 
 type ToolProps = {
@@ -29,7 +30,7 @@ type ToolProps = {
   selected: boolean;
 };
 
-export const TooltipCard = ({ name }: TooltipCardProps) => {
+export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
   const classes = useStyles();
 
   return (
@@ -38,7 +39,7 @@ export const TooltipCard = ({ name }: TooltipCardProps) => {
         <div>
           <CardHeader
             action={
-              <IconButton aria-label="settings">
+              <IconButton onClick={onClose}>
                 <CancelIcon />
               </IconButton>
             }
@@ -72,11 +73,24 @@ export const TooltipCard = ({ name }: TooltipCardProps) => {
 export const Tool = ({ children, name, onClick, selected }: ToolProps) => {
   const classes = useStyles();
 
+  const [open, setOpen] = useState<boolean>(false);
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  const onOpen = () => {
+    setOpen(true);
+  };
+
   return (
     <Tooltip
       classes={{ tooltip: classes.tooltip }}
+      onClose={onClose}
+      onOpen={onOpen}
+      open={open}
       placement="left"
-      title={<TooltipCard name={name} />}
+      title={<TooltipCard name={name} onClose={onClose} />}
     >
       <ListItem button onClick={onClick} selected={selected}>
         <ListItemIcon>

@@ -523,6 +523,8 @@ const OpenMenu = ({ popupState }: OpenMenuProps) => {
 
       <OpenAnnotationsMenuItem popupState={popupState} />
 
+      <Divider />
+
       <OpenExampleImageMenuItem popupState={popupState} />
     </Menu>
   );

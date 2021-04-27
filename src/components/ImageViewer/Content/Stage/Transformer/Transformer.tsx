@@ -5,6 +5,7 @@ import { AnnotationType } from "../../../../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
 import {
   imageInstancesSelector,
+  imageSelector,
   stageScaleSelector,
 } from "../../../../../store/selectors";
 import {
@@ -14,8 +15,11 @@ import {
 } from "../../../../../store/slices";
 import Konva from "konva";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
-import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
-import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
+import { connectPoints } from "../../../../../image/imageHelper";
+import { simplify } from "../../../../../image/simplify/simplify";
+import { slpf } from "../../../../../image/polygon-fill/slpf";
+import { encode } from "../../../../../image/rle";
+import * as ImageJS from "image-js";
 
 type box = {
   x: number;
@@ -44,10 +48,6 @@ export const Transformer = ({
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
-  const imageWidth = useSelector(imageWidthSelector);
-
-  const imageHeight = useSelector(imageHeightSelector);
-
   const transformerRef = useRef<Konva.Transformer | null>(null);
 
   const dispatch = useDispatch();
@@ -63,6 +63,13 @@ export const Transformer = ({
   });
 
   const stageScale = useSelector(stageScaleSelector);
+
+  const image = useSelector(imageSelector);
+
+  if (!image || !image.shape) return <React.Fragment />;
+
+  const imageWidth = image.shape.width;
+  const imageHeight = image.shape.height;
 
   const computeBoundingBoxFromContours = (
     contour: Array<number>
@@ -85,8 +92,8 @@ export const Transformer = ({
     if (!imageWidth || !imageHeight || !relativeNewBox)
       return boundBox ? boundBox : startBox;
     if (
-      relativeNewBox.x + relativeNewBox.width > imageWidth / stageScale ||
-      relativeNewBox.y + relativeNewBox.height > imageHeight / stageScale ||
+      relativeNewBox.x + relativeNewBox.width > imageWidth ||
+      relativeNewBox.y + relativeNewBox.height > imageHeight ||
       relativeNewBox.x + relativeNewBox.width < 0 ||
       relativeNewBox.y + relativeNewBox.height < 0
     )
@@ -112,6 +119,38 @@ export const Transformer = ({
       width: boundBox.width / stageScale,
       rotation: 0,
     };
+  };
+
+  const resizeContour = (
+    contour: Array<number>,
+    center: { x: number; y: number },
+    scale: { x: number; y: number }
+  ) => {
+    return _.flatten(
+      _.map(_.chunk(contour, 2), (el: Array<number>) => {
+        return [
+          center.x + scale.x * (el[0] - center.x),
+          center.y + scale.y * (el[1] - center.y),
+        ];
+      })
+    );
+  };
+
+  const resizeMask = (points: Array<number>) => {
+    const maskImage = new ImageJS.Image({
+      width: imageWidth,
+      height: imageHeight,
+      bitDepth: 8,
+    });
+
+    const coords = _.chunk(points, 2);
+
+    const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
+    simplify(connectedPoints, 1, true);
+    slpf(connectedPoints, maskImage);
+
+    //@ts-ignore
+    return encode(maskImage.getChannel(0).data);
   };
 
   const onTransformEnd = () => {
@@ -144,18 +183,9 @@ export const Transformer = ({
       return annotation.id !== annotationId;
     });
 
+    let contour: Array<number>;
+
     if (!annotation && selectedAnnotation) {
-      const contour = selectedAnnotation.contour;
-
-      const resizedContour = _.flatten(
-        _.map(_.chunk(contour, 2), (el: Array<number>) => {
-          return [
-            centerX + scaleX * (el[0] - centerX),
-            centerY + scaleY * (el[1] - centerY),
-          ];
-        })
-      );
-
       //Found this to be necessary to detach transformer before re-attaching
       dispatch(
         applicationSlice.actions.setSelectedAnnotation({
@@ -163,12 +193,23 @@ export const Transformer = ({
         })
       );
 
+      contour = selectedAnnotation.contour;
+
+      const resizedContour = resizeContour(
+        contour,
+        { x: centerX, y: centerY },
+        { x: scaleX, y: scaleY }
+      );
+
+      const resizedMask = resizeMask(resizedContour);
+
       dispatch(
         setSelectedAnnotation({
           selectedAnnotation: {
             ...selectedAnnotation,
             contour: resizedContour,
             boundingBox: computeBoundingBoxFromContours(resizedContour),
+            mask: resizedMask,
           },
         })
       );
@@ -177,19 +218,19 @@ export const Transformer = ({
     } else {
       const contour = annotation.contour;
 
-      const resizedContour = _.flatten(
-        _.map(_.chunk(contour, 2), (el: Array<number>) => {
-          return [
-            centerX + scaleX * (el[0] - centerX),
-            centerY + scaleY * (el[1] - centerY),
-          ];
-        })
+      const resizedContour = resizeContour(
+        contour,
+        { x: centerX, y: centerY },
+        { x: scaleX, y: scaleY }
       );
+
+      const resizedMask = resizeMask(resizedContour);
 
       const updated = {
         ...annotation,
         contour: resizedContour,
         boundingBox: computeBoundingBoxFromContours(resizedContour),
+        mask: resizedMask,
       };
 
       dispatch(

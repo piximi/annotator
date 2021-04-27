@@ -6,6 +6,8 @@ import { currentPositionSelector } from "../../../../../store/selectors/currentP
 import { AnnotationTool } from "../../../../../image/Tool/AnnotationTool/AnnotationTool";
 import { toolTypeSelector } from "../../../../../store/selectors";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
+import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
+import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 
 type PenAnnotationToolTipProps = {
   annotationTool?: AnnotationTool;
@@ -19,11 +21,24 @@ export const PenAnnotationToolTip = ({
 
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
 
+  const imageWidth = useSelector(imageWidthSelector);
+  const imageHeight = useSelector(imageHeightSelector);
+
   if (
     !currentPosition ||
     !annotationTool ||
     annotationTool.annotating ||
     toolType !== ToolType.PenAnnotation
+  )
+    return <React.Fragment />;
+
+  if (!imageWidth || !imageHeight) return <React.Fragment />;
+
+  if (
+    currentPosition.x > imageWidth ||
+    currentPosition.y > imageHeight ||
+    currentPosition.x < 0 ||
+    currentPosition.y < 0
   )
     return <React.Fragment />;
 

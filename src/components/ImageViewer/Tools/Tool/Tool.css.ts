@@ -28,7 +28,7 @@ export const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
   },
   tooltip: {
-    backgroundColor: "transparent !important",
+    backgroundColor: "transparent",
     maxWidth: "none",
   },
 }));

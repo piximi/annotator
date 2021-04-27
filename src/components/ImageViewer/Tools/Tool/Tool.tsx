@@ -46,7 +46,10 @@ export const Tool = ({ children, name, onClick, selected }: ToolProps) => {
   const classes = useStyles();
 
   return (
-    <Tooltip className={classes.tooltip} title={<TooltipCard name={name} />}>
+    <Tooltip
+      classes={{ tooltip: classes.tooltip }}
+      title={<TooltipCard name={name} />}
+    >
       <ListItem button onClick={onClick} selected={selected}>
         <ListItemIcon>
           <SvgIcon fontSize="small">{children}</SvgIcon>

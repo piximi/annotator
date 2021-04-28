@@ -10,7 +10,7 @@ import {
 } from "../../../../../store/selectors";
 import {
   applicationSlice,
-  setSelectedAnnotation,
+  setSelectedAnnotationId,
   setSelectedAnnotations,
 } from "../../../../../store/slices";
 import Konva from "konva";
@@ -20,7 +20,7 @@ import { simplify } from "../../../../../image/simplify/simplify";
 import { slpf } from "../../../../../image/polygon-fill/slpf";
 import { encode } from "../../../../../image/rle";
 import * as ImageJS from "image-js";
-import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
+import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
 
 type box = {
   x: number;
@@ -48,6 +48,8 @@ export const Transformer = ({
   const annotations = useSelector(imageInstancesSelector);
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
+
+  const unselectedAnnotations = useSelector(unselectedAnnotationsSelector);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
 
@@ -189,8 +191,8 @@ export const Transformer = ({
     if (!annotation && selectedAnnotation) {
       //Found this to be necessary to detach transformer before re-attaching
       dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: undefined,
+        applicationSlice.actions.setSelectedAnnotationId({
+          selectedAnnotationId: undefined,
         })
       );
 
@@ -205,13 +207,16 @@ export const Transformer = ({
       const resizedMask = resizeMask(resizedContour);
 
       dispatch(
-        setSelectedAnnotation({
-          selectedAnnotation: {
-            ...selectedAnnotation,
-            contour: resizedContour,
-            boundingBox: computeBoundingBoxFromContours(resizedContour),
-            mask: resizedMask,
-          },
+        setSelectedAnnotations({
+          selectedAnnotations: [
+            ...unselectedAnnotations,
+            {
+              ...selectedAnnotation,
+              contour: resizedContour,
+              boundingBox: computeBoundingBoxFromContours(resizedContour),
+              mask: resizedMask,
+            },
+          ],
         })
       );
 
@@ -241,8 +246,8 @@ export const Transformer = ({
       );
       dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
       dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: undefined,
+        applicationSlice.actions.setSelectedAnnotationId({
+          selectedAnnotationId: undefined,
         })
       );
     }

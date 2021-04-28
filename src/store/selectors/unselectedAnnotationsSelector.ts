@@ -1,14 +1,14 @@
 import { HistoryStateType } from "../../types/HistoryStateType";
 import { AnnotationType } from "../../types/AnnotationType";
 
-export const selectedAnnotationSelector = ({
+export const unselectedAnnotationsSelector = ({
   state,
 }: {
   state: HistoryStateType;
-}): AnnotationType | undefined => {
+}): Array<AnnotationType> => {
   return state.present.selectedAnnotations.filter(
     (annotation: AnnotationType) => {
-      return annotation.id === state.present.selectedAnnotationId;
+      return annotation.id !== state.present.selectedAnnotationId;
     }
-  )[0];
+  );
 };

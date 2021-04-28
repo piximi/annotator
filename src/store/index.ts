@@ -11,6 +11,7 @@ export {
   setCategories,
   setCategoryVisibility,
   setContrast,
+  setCurrentIndex,
   setCurrentPosition,
   setExposure,
   setHue,

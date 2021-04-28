@@ -12,6 +12,7 @@ export type StateType = {
   brightness: number;
   categories: Array<CategoryType>;
   contrast: number;
+  currentIndex: number;
   currentPosition?: { x: number; y: number };
   exposure: number;
   hue: number;

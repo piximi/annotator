@@ -5,13 +5,19 @@ import { visibleCategoriesSelector } from "../../../../../../store/selectors/vis
 import { Annotation } from "../Annotation";
 import { imageInstancesSelector } from "../../../../../../store/selectors";
 import { AnnotationTool } from "../../../../../../image/Tool";
+import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
+import { selectedAnnotationsIdsSelector } from "../../../../../../store/selectors/selectedAnnotationsIdsSelector";
 
 type AnnotationsProps = {
   annotationTool?: AnnotationTool;
 };
 
 export const Annotations = ({ annotationTool }: AnnotationsProps) => {
-  const annotations = useSelector(imageInstancesSelector);
+  const confirmedAnnotations = useSelector(imageInstancesSelector);
+
+  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
+
+  const selectedAnnotations = useSelector(selectedAnnotationsSelector);
 
   const visibleCategories = useSelector(visibleCategoriesSelector);
 
@@ -20,14 +26,20 @@ export const Annotations = ({ annotationTool }: AnnotationsProps) => {
   >([]);
 
   useEffect(() => {
-    if (!annotations) return;
+    if (!confirmedAnnotations) return;
+
+    const others = confirmedAnnotations.filter((annotation: AnnotationType) => {
+      return !selectedAnnotationsIds.includes(annotation.id);
+    });
+
+    const allAnnotations = [...others, ...selectedAnnotations];
 
     setVisibleAnnotations(
-      annotations.filter((annotation: AnnotationType) =>
+      allAnnotations.filter((annotation: AnnotationType) =>
         visibleCategories.includes(annotation.categoryId)
       )
     );
-  }, [annotations, visibleCategories]);
+  }, [confirmedAnnotations, visibleCategories, selectedAnnotations]);
 
   return (
     <React.Fragment>

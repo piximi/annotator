@@ -76,15 +76,20 @@ export const getOverlappingAnnotations = (
   position: { x: number; y: number },
   annotations: Array<AnnotationType>
 ) => {
-  return annotations.filter((annotation: AnnotationType) => {
-    const boundingBox = annotation.boundingBox;
-    if (
-      position.x >= boundingBox[0] &&
-      position.x <= boundingBox[2] &&
-      position.y >= boundingBox[1] &&
-      position.y <= boundingBox[3]
-    ) {
-      return annotation.id;
+  const overlappingAnnotations = annotations.filter(
+    (annotation: AnnotationType) => {
+      const boundingBox = annotation.boundingBox;
+      if (
+        position.x >= boundingBox[0] &&
+        position.x <= boundingBox[2] &&
+        position.y >= boundingBox[1] &&
+        position.y <= boundingBox[3]
+      ) {
+        return annotation;
+      }
     }
+  );
+  return overlappingAnnotations.map((annotation: AnnotationType) => {
+    return annotation.id;
   });
 };

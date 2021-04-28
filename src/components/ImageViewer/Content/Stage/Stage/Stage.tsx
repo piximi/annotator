@@ -66,6 +66,7 @@ import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSel
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { currentPositionSelector } from "../../../../../store/selectors/currentPositionSelector";
+import { getOverlappingAnnotations } from "../../../../../image/imageHelper";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -89,8 +90,6 @@ export const Stage = () => {
   const imageHeight = useSelector(imageHeightSelector);
 
   const stageScale = useSelector(stageScaleSelector);
-
-  const currentPosition = useSelector(currentPositionSelector);
 
   const dispatch = useDispatch();
 
@@ -444,8 +443,6 @@ export const Stage = () => {
   useEffect(() => {
     if (!stageRef || !stageRef.current) return;
 
-    console.info(currentPosition);
-
     _.forEach(selectedAnnotationsIds, (annotationId) => {
       if (!stageRef || !stageRef.current) return;
 
@@ -455,9 +452,6 @@ export const Stage = () => {
       const line = stageRef.current.findOne(`#${annotationId}`);
 
       if (!line) return;
-
-      if (currentPosition)
-        console.info((line as Konva.Shape).intersects(currentPosition));
 
       if (!transformer) return;
 

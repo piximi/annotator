@@ -6,6 +6,7 @@ import { AnnotationType } from "../../../../../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
 import {
   categoriesSelector,
+  imageInstancesSelector,
   stageScaleSelector,
   toolTypeSelector,
 } from "../../../../../../store/selectors";
@@ -19,6 +20,9 @@ import {
 import { ToolType } from "../../../../../../types/ToolType";
 import { selectedAnnotationsIdsSelector } from "../../../../../../store/selectors/selectedAnnotationsIdsSelector";
 import { useKeyPress } from "../../../../../../hooks/useKeyPress";
+import { getOverlappingAnnotations } from "../../../../../../image/imageHelper";
+import { currentPositionSelector } from "../../../../../../store/selectors/currentPositionSelector";
+import { selectedAnnotationSelector } from "../../../../../../store/selectors/selectedAnnotationSelector";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -36,7 +40,18 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
+  const selectedAnnotation = useSelector(selectedAnnotationSelector);
+
+  const currentPosition = useSelector(currentPositionSelector);
+
+  const annotations = useSelector(imageInstancesSelector);
+
   const shiftPress = useKeyPress("Shift");
+
+  const [overlappingAnnotationsIds, setOverlappingAnnotationsIds] = useState<
+    Array<string>
+  >([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const fill = _.find(
     categories,
@@ -48,19 +63,42 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
     event.evt.preventDefault();
 
+    //handle case of overlapping annotations
+    if (currentPosition && annotations) {
+      const scaledCurrentPosition = {
+        x: currentPosition.x / stageScale,
+        y: currentPosition.y / stageScale,
+      };
+      setOverlappingAnnotationsIds(
+        getOverlappingAnnotations(scaledCurrentPosition, annotations)
+      );
+      if (
+        overlappingAnnotationsIds.length > 1 &&
+        selectedAnnotation &&
+        overlappingAnnotationsIds.includes(selectedAnnotation.id)
+      ) {
+        //if annotation has already been selected and there are multiple annotations
+        setCurrentIndex(
+          currentIndex + 1 === overlappingAnnotationsIds.length
+            ? 0
+            : currentIndex + 1
+        );
+      }
+    }
+
     dispatch(
       setSelectedAnnotation({
         selectedAnnotation: annotation,
       })
     );
 
-    if (!shiftPress)
+    if (!shiftPress) {
       dispatch(
         setSelectedAnnotationsIds({
           selectedAnnotationsIds: [annotation.id],
         })
       );
-    else {
+    } else {
       //unselect if already there
       if (_.includes(selectedAnnotationsIds, annotation.id)) {
         setSelectedAnnotationsIds({

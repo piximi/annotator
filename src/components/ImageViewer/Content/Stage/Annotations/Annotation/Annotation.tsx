@@ -42,6 +42,10 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
   const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
 
+  const selectedAnnotations = useSelector(selectedAnnotationsSelector);
+
+  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
+
   const currentPosition = useSelector(currentPositionSelector);
 
   const annotations = useSelector(imageInstancesSelector);
@@ -83,22 +87,13 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       selectedAnnotationId &&
       overlappingAnnotationsIds.includes(selectedAnnotationId)
     ) {
-      //if annotation has already been selected and there are multiple annotations
-      console.info(overlappingAnnotationsIds);
-      console.info(selectedAnnotationId);
-      console.info(
-        currentIndex + 1 === overlappingAnnotationsIds.length
-          ? 0
-          : currentIndex + 1
-      );
-
       setCurrentIndex(
         currentIndex + 1 === overlappingAnnotationsIds.length
           ? 0
           : currentIndex + 1
       );
       const nextAnnotationId = overlappingAnnotationsIds[currentIndex];
-      console.info(nextAnnotationId);
+
       currentAnnotation = annotations.filter((annotation: AnnotationType) => {
         return annotation.id === nextAnnotationId;
       })[0];
@@ -106,46 +101,39 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       currentAnnotation = annotation;
     }
 
-    dispatch(
-      setSelectedAnnotationId({
-        selectedAnnotationId: currentAnnotation.id,
-      })
-    );
+    if (!shiftPress) {
+      dispatch(
+        setSelectedAnnotationId({
+          selectedAnnotationId: currentAnnotation.id,
+        })
+      );
 
-    dispatch(
-      setSelectedAnnotations({
-        selectedAnnotations: [currentAnnotation],
-      })
-    );
+      dispatch(
+        setSelectedAnnotations({
+          selectedAnnotations: [currentAnnotation],
+        })
+      );
+    }
 
-    // if (!shiftPress) {
-    //   dispatch(
-    //     setSelectedAnnotations({
-    //       selectedAnnotations: [currentAnnotation],
-    //     })
-    //   );
-    // }
-    //TODO FIX unselect
-
-    // else {
-    //   //unselect if already there
-    //   if (_.includes(selectedAnnotationsIds, currentAnnotation.id)) {
-    //     setSelectedAnnotations({
-    //       selectedAnnotations: _.filter(
-    //         selectedAnnotations,
-    //         (annotation: AnnotationType) => {
-    //           return annotation !== currentAnnotation;
-    //         }
-    //       ),
-    //     });
-    //   } else {
-    //     dispatch(
-    //       setSelectedAnnotations({
-    //         selectedAnnotations: [...selectedAnnotations, currentAnnotation],
-    //       })
-    //     );
-    //   }
-    // }
+    if (shiftPress) {
+      if (selectedAnnotationsIds.includes(currentAnnotation.id)) {
+        dispatch(
+          setSelectedAnnotations({
+            selectedAnnotations: selectedAnnotations.filter(
+              (annotation: AnnotationType) => {
+                return annotation.id !== currentAnnotation.id;
+              }
+            ),
+          })
+        );
+      } else {
+        dispatch(
+          setSelectedAnnotations({
+            selectedAnnotations: [...selectedAnnotations, currentAnnotation],
+          })
+        );
+      }
+    }
 
     dispatch(
       setSeletedCategory({

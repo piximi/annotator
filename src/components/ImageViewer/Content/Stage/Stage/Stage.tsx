@@ -65,6 +65,7 @@ import { KonvaEventObject } from "konva/types/Node";
 import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
+import { currentPositionSelector } from "../../../../../store/selectors/currentPositionSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -88,6 +89,8 @@ export const Stage = () => {
   const imageHeight = useSelector(imageHeightSelector);
 
   const stageScale = useSelector(stageScaleSelector);
+
+  const currentPosition = useSelector(currentPositionSelector);
 
   const dispatch = useDispatch();
 
@@ -441,6 +444,8 @@ export const Stage = () => {
   useEffect(() => {
     if (!stageRef || !stageRef.current) return;
 
+    console.info(currentPosition);
+
     _.forEach(selectedAnnotationsIds, (annotationId) => {
       if (!stageRef || !stageRef.current) return;
 
@@ -484,8 +489,6 @@ export const Stage = () => {
 
   const memoizedOnMouseDown = useMemo(() => {
     const func = () => {
-      if (toolType === ToolType.Pointer) return;
-
       if (toolType === ToolType.Hand) return;
 
       if (!stageRef || !stageRef.current) return;
@@ -497,6 +500,15 @@ export const Stage = () => {
       const relative = getRelativePointerPosition(position);
 
       if (!relative) return;
+
+      if (toolType === ToolType.Pointer) {
+        dispatch(
+          applicationSlice.actions.setCurrentPosition({
+            currentPosition: relative,
+          })
+        );
+        return;
+      }
 
       const rawImagePosition = {
         x: relative.x / stageScale,

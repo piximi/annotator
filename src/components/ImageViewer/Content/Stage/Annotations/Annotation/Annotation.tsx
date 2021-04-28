@@ -157,12 +157,19 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
     <ReactKonva.Group>
       <ReactKonva.Line
         closed
+        onClick={onPointerClick}
+        points={annotation.contour}
+        scale={{ x: stageScale, y: stageScale }}
+        stroke="white"
+        strokeWidth={1}
+      />
+      <ReactKonva.Line
+        closed
         fill={fill}
         onClick={onPointerClick}
         opacity={0.5}
         points={annotation.contour}
         scale={{ x: stageScale, y: stageScale }}
-        strokeWidth={1}
       />
       <ReactKonva.Line // transform needs to attach to a line that does not use scale prop
         closed
@@ -171,7 +178,6 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
         onClick={onPointerClick}
         opacity={0.5}
         points={scaledContour}
-        strokeWidth={1}
         visible={false}
       />
     </ReactKonva.Group>

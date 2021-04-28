@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import * as ImageJS from "image-js";
+import { AnnotationType } from "../types/AnnotationType";
 
 export const connectPoints = (
   coordinates: Array<Array<number>>,
@@ -69,4 +70,21 @@ export const getIdx = (width: number, nchannels: number) => {
     index = index || 0;
     return Math.floor((width * y + x) * nchannels + index);
   };
+};
+
+export const getOverlappingAnnotations = (
+  position: { x: number; y: number },
+  annotations: Array<AnnotationType>
+) => {
+  return annotations.filter((annotation: AnnotationType) => {
+    const boundingBox = annotation.boundingBox;
+    if (
+      position.x >= boundingBox[0] &&
+      position.x <= boundingBox[2] &&
+      position.y >= boundingBox[1] &&
+      position.y <= boundingBox[3]
+    ) {
+      return annotation.id;
+    }
+  });
 };

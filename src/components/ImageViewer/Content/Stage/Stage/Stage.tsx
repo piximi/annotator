@@ -456,6 +456,9 @@ export const Stage = () => {
 
       if (!line) return;
 
+      if (currentPosition)
+        console.info((line as Konva.Shape).intersects(currentPosition));
+
       if (!transformer) return;
 
       (transformer as Konva.Transformer).nodes([line]);

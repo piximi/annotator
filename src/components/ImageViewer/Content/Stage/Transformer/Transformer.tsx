@@ -220,6 +220,12 @@ export const Transformer = ({
         })
       );
 
+      dispatch(
+        applicationSlice.actions.setSelectedAnnotationId({
+          selectedAnnotationId: selectedAnnotation.id,
+        })
+      );
+
       setBoundBox(null);
     } else {
       const contour = annotation.contour;

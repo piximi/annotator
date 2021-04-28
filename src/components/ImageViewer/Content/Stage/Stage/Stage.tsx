@@ -527,6 +527,11 @@ export const Stage = () => {
               selectedAnnotation: undefined,
             })
           );
+          dispatch(
+            applicationSlice.actions.setSelectedAnnotations({
+              selectedAnnotations: [],
+            })
+          );
         }
 
         if (!annotationTool) return;

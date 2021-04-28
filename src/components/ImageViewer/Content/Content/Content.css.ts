@@ -7,6 +7,7 @@ export const useStyles = makeStyles((theme) => ({
     boxShadow: "none",
     left: theme.spacing(32),
     position: "absolute",
+    opacity: "50%",
   },
   content: {
     backgroundColor: theme.palette.background.default,

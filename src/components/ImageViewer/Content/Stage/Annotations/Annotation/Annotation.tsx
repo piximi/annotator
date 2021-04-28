@@ -14,8 +14,8 @@ import Konva from "konva";
 import { AnnotationTool } from "../../../../../../image/Tool";
 import {
   setSelectedAnnotation,
-  setSelectedAnnotationsIds,
   setSeletedCategory,
+  setSelectedAnnotations,
 } from "../../../../../../store";
 import { ToolType } from "../../../../../../types/ToolType";
 import { selectedAnnotationsIdsSelector } from "../../../../../../store/selectors/selectedAnnotationsIdsSelector";
@@ -23,6 +23,7 @@ import { useKeyPress } from "../../../../../../hooks/useKeyPress";
 import { getOverlappingAnnotations } from "../../../../../../image/imageHelper";
 import { currentPositionSelector } from "../../../../../../store/selectors/currentPositionSelector";
 import { selectedAnnotationSelector } from "../../../../../../store/selectors/selectedAnnotationSelector";
+import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -41,6 +42,8 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
+
+  const selectedAnnotations = useSelector(selectedAnnotationsSelector);
 
   const currentPosition = useSelector(currentPositionSelector);
 
@@ -104,28 +107,25 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
     if (!shiftPress) {
       dispatch(
-        setSelectedAnnotationsIds({
-          selectedAnnotationsIds: [currentAnnotation.id],
+        setSelectedAnnotations({
+          selectedAnnotations: [currentAnnotation],
         })
       );
     } else {
       //unselect if already there
       if (_.includes(selectedAnnotationsIds, currentAnnotation.id)) {
-        setSelectedAnnotationsIds({
-          selectedAnnotationsIds: _.filter(
-            selectedAnnotationsIds,
-            (annotationId: string) => {
-              return annotationId !== currentAnnotation.id;
+        setSelectedAnnotations({
+          selectedAnnotations: _.filter(
+            selectedAnnotations,
+            (annotation: AnnotationType) => {
+              return annotation !== currentAnnotation;
             }
           ),
         });
       } else {
         dispatch(
-          setSelectedAnnotationsIds({
-            selectedAnnotationsIds: [
-              ...selectedAnnotationsIds,
-              currentAnnotation.id,
-            ],
+          setSelectedAnnotations({
+            selectedAnnotations: [...selectedAnnotations, currentAnnotation],
           })
         );
       }

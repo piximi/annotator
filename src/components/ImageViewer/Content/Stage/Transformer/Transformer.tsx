@@ -11,7 +11,7 @@ import {
 import {
   applicationSlice,
   setSelectedAnnotation,
-  setSelectedAnnotationsIds,
+  setSelectedAnnotations,
 } from "../../../../../store/slices";
 import Konva from "konva";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
@@ -20,6 +20,7 @@ import { simplify } from "../../../../../image/simplify/simplify";
 import { slpf } from "../../../../../image/polygon-fill/slpf";
 import { encode } from "../../../../../image/rle";
 import * as ImageJS from "image-js";
+import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 
 type box = {
   x: number;
@@ -238,7 +239,7 @@ export const Transformer = ({
           instances: [...others, updated],
         })
       );
-      dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
+      dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
       dispatch(
         applicationSlice.actions.setSelectedAnnotation({
           selectedAnnotation: undefined,

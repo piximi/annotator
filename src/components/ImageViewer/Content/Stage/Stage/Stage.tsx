@@ -18,7 +18,7 @@ import {
 import {
   applicationSlice,
   setSelectedAnnotation,
-  setSelectedAnnotationsIds,
+  setSelectedAnnotations,
 } from "../../../../../store";
 import {
   Provider,
@@ -67,6 +67,7 @@ import { imageHeightSelector } from "../../../../../store/selectors/imageHeightS
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { currentPositionSelector } from "../../../../../store/selectors/currentPositionSelector";
 import { getOverlappingAnnotations } from "../../../../../image/imageHelper";
+import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -80,6 +81,8 @@ export const Stage = () => {
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
   const selectedCategory = useSelector(selectedCategorySelector);
+
+  const selectedAnnotations = useSelector(selectedAnnotationsSelector);
   const selectionMode = useSelector(selectionModeSelector);
 
   const stageHeight = useSelector(stageHeightSelector);
@@ -154,7 +157,8 @@ export const Stage = () => {
   };
 
   const deselectAllAnnotations = () => {
-    dispatch(setSelectedAnnotationsIds({ selectedAnnotationsIds: [] }));
+    dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
+    dispatch(setSelectedAnnotations);
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: undefined,
@@ -286,11 +290,8 @@ export const Stage = () => {
     );
 
     dispatch(
-      setSelectedAnnotationsIds({
-        selectedAnnotationsIds: [
-          ...selectedAnnotationsIds,
-          selectedInstance.id,
-        ],
+      setSelectedAnnotations({
+        selectedAnnotations: [...selectedAnnotations, selectedInstance],
       })
     );
   }, [annotated]);
@@ -373,10 +374,10 @@ export const Stage = () => {
       );
 
       dispatch(
-        setSelectedAnnotationsIds({
-          selectedAnnotationsIds: [
-            ...selectedAnnotationsIds,
-            annotationTool.annotation.id,
+        setSelectedAnnotations({
+          selectedAnnotations: [
+            ...selectedAnnotations,
+            annotationTool.annotation,
           ],
         })
       );

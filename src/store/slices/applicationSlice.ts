@@ -59,6 +59,7 @@ const initialState: StateType = {
   saturation: 0,
   selectedAnnotation: undefined,
   selectedAnnotationId: undefined,
+  selectedAnnotations: [],
   selectedAnnotationsIds: [],
   selectedCategory: "00000000-0000-0000-0000-000000000000",
   selectionMode: AnnotationModeType.New,
@@ -81,6 +82,12 @@ export const applicationSlice = createSlice({
   initialState: initialState,
   name: "image-viewer-application",
   reducers: {
+    setSelectedAnnotations(
+      state: StateType,
+      action: PayloadAction<{ selectedAnnotations: Array<AnnotationType> }>
+    ) {
+      state.selectedAnnotations = action.payload.selectedAnnotations;
+    },
     setSelectedAnnotationsIds(
       state: StateType,
       action: PayloadAction<{ selectedAnnotationsIds: Array<string> }>
@@ -328,6 +335,7 @@ export const {
   setPenSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,
+  setSelectedAnnotations,
   setSelectedAnnotationsIds,
   setSelectionMode,
   setSeletedCategory,

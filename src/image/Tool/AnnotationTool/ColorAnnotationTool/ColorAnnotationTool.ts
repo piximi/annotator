@@ -199,7 +199,7 @@ export class ColorAnnotationTool extends AnnotationTool {
     // Set the origin point to white, for visibility.
     overlay.setPixelXY(position.x, position.y, [255, 255, 255, 255]);
 
-    return overlay.toDataURL();
+    return overlay.toDataURL("image-png", { useCanvas: true });
   }
 
   private updateOverlay(position: { x: number; y: number }) {

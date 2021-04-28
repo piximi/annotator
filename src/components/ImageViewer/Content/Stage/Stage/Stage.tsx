@@ -326,33 +326,46 @@ export const Stage = () => {
 
     if (!annotations) return;
 
-    const selectedAnnotations = _.map(
-      selectedAnnotationsIds,
-      (annotationId) => {
-        const confirmedAnnotation = {
-          ...annotations?.filter(
-            (instance: SelectionType) => instance.id === annotationId
-          )[0],
-        };
-        return !_.isEmpty(confirmedAnnotation)
-          ? { ...confirmedAnnotation, categoryId: selectedCategory.id }
-          : { ...selectedAnnotation, categoryId: selectedCategory.id };
+    const updatedAnnotations = _.map(
+      selectedAnnotations,
+      (annotation: AnnotationType) => {
+        return { ...annotation, categoryId: selectedCategory.id };
       }
     );
 
-    const others = annotations?.filter(
-      (instance: SelectionType) =>
-        !_.includes(selectedAnnotationsIds, instance.id)
-    );
-
     dispatch(
-      applicationSlice.actions.setImageInstances({
-        instances: [
-          ...others,
-          ...(selectedAnnotations as Array<AnnotationType>),
-        ],
+      applicationSlice.actions.setSelectedAnnotations({
+        selectedAnnotations: updatedAnnotations,
       })
     );
+
+    // const selectedAnnotations = _.map(
+    //   selectedAnnotationsIds,
+    //   (annotationId) => {
+    //     const confirmedAnnotation = {
+    //       ...annotations?.filter(
+    //         (instance: SelectionType) => instance.id === annotationId
+    //       )[0],
+    //     };
+    //     return !_.isEmpty(confirmedAnnotation)
+    //       ? { ...confirmedAnnotation, categoryId: selectedCategory.id }
+    //       : { ...selectedAnnotation, categoryId: selectedCategory.id };
+    //   }
+    // );
+
+    // const others = annotations?.filter(
+    //   (instance: SelectionType) =>
+    //     !_.includes(selectedAnnotationsIds, instance.id)
+    // );
+
+    // dispatch(
+    //   applicationSlice.actions.setImageInstances({
+    //     instances: [
+    //       ...others,
+    //       ...(selectedAnnotations as Array<AnnotationType>),
+    //     ],
+    //   })
+    // );
   }, [selectedCategory]);
 
   useEffect(() => {
@@ -639,22 +652,15 @@ export const Stage = () => {
 
     if (!annotations || !annotationTool || annotationTool.annotating) return;
 
-    if (!selectedAnnotation) return;
-
-    const annotationIds = _.map(annotations, (annotation: AnnotationType) => {
-      return annotation.id;
+    const others = annotations.filter((annotation: AnnotationType) => {
+      return !selectedAnnotationsIds.includes(annotation.id);
     });
 
-    // add instance only if not already there
-    _.forEach(selectedAnnotations, (selectedAnnotation: AnnotationType) => {
-      if (!annotationIds.includes(selectedAnnotation.id)) {
-        dispatch(
-          applicationSlice.actions.setImageInstances({
-            instances: [...annotations, selectedAnnotation],
-          })
-        );
-      }
-    });
+    dispatch(
+      applicationSlice.actions.setImageInstances({
+        instances: [...others, ...selectedAnnotations],
+      })
+    );
 
     if (soundEnabled) playCreateAnnotationSoundEffect();
 

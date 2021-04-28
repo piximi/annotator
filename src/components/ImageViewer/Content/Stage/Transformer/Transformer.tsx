@@ -10,7 +10,6 @@ import {
 } from "../../../../../store/selectors";
 import {
   applicationSlice,
-  setSelectedAnnotationId,
   setSelectedAnnotations,
 } from "../../../../../store/slices";
 import Konva from "konva";
@@ -20,7 +19,6 @@ import { simplify } from "../../../../../image/simplify/simplify";
 import { slpf } from "../../../../../image/polygon-fill/slpf";
 import { encode } from "../../../../../image/rle";
 import * as ImageJS from "image-js";
-import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
 
 type box = {
   x: number;
@@ -48,8 +46,6 @@ export const Transformer = ({
   const annotations = useSelector(imageInstancesSelector);
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
-
-  const unselectedAnnotations = useSelector(unselectedAnnotationsSelector);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
 
@@ -209,7 +205,6 @@ export const Transformer = ({
       dispatch(
         setSelectedAnnotations({
           selectedAnnotations: [
-            ...unselectedAnnotations,
             {
               ...selectedAnnotation,
               contour: resizedContour,

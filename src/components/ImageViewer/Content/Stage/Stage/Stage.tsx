@@ -66,7 +66,6 @@ import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSel
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
-import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -82,7 +81,6 @@ export const Stage = () => {
   const selectedCategory = useSelector(selectedCategorySelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
-  const unselectedAnnotations = useSelector(unselectedAnnotationsSelector);
   const selectionMode = useSelector(selectionModeSelector);
 
   const stageHeight = useSelector(stageHeightSelector);
@@ -217,7 +215,6 @@ export const Stage = () => {
     dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [
-          ...unselectedAnnotations,
           {
             ...instance,
             boundingBox: invertedBoundingBox,
@@ -284,7 +281,6 @@ export const Stage = () => {
     dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [
-          ...unselectedAnnotations,
           {
             ...selectedInstance,
             boundingBox: annotationTool.boundingBox,

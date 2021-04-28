@@ -21,9 +21,7 @@ export type StateType = {
   offset: { x: number; y: number };
   penSelectionBrushSize: number;
   saturation: number;
-  selectedAnnotation?: AnnotationType;
   selectedAnnotations: Array<AnnotationType>;
-  selectedAnnotationsIds: Array<string>;
   selectedAnnotationId?: string;
   selectedCategory: string;
   selectionMode: AnnotationModeType;

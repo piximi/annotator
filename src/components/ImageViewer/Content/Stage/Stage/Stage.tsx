@@ -17,7 +17,7 @@ import {
 } from "../../../../../store/selectors";
 import {
   applicationSlice,
-  setSelectedAnnotation,
+  setSelectedAnnotationId,
   setSelectedAnnotations,
 } from "../../../../../store";
 import {
@@ -68,6 +68,7 @@ import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolT
 import { currentPositionSelector } from "../../../../../store/selectors/currentPositionSelector";
 import { getOverlappingAnnotations } from "../../../../../image/imageHelper";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
+import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -83,6 +84,7 @@ export const Stage = () => {
   const selectedCategory = useSelector(selectedCategorySelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
+  const unselectedAnnotations = useSelector(unselectedAnnotationsSelector);
   const selectionMode = useSelector(selectionModeSelector);
 
   const stageHeight = useSelector(stageHeightSelector);
@@ -160,8 +162,8 @@ export const Stage = () => {
     dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
     dispatch(setSelectedAnnotations);
     dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
+      applicationSlice.actions.setSelectedAnnotationId({
+        selectedAnnotationId: undefined,
       })
     );
   };
@@ -215,13 +217,16 @@ export const Stage = () => {
     if (!selectedAnnotation) return;
 
     dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: {
-          ...instance,
-          boundingBox: invertedBoundingBox,
-          contour: invertedContour,
-          mask: invertedMask,
-        },
+      setSelectedAnnotations({
+        selectedAnnotations: [
+          ...unselectedAnnotations,
+          {
+            ...instance,
+            boundingBox: invertedBoundingBox,
+            contour: invertedContour,
+            mask: invertedMask,
+          },
+        ],
       })
     );
 
@@ -279,19 +284,16 @@ export const Stage = () => {
       return;
 
     dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: {
-          ...selectedInstance,
-          boundingBox: annotationTool.boundingBox,
-          contour: annotationTool.contour,
-          mask: annotationTool.mask,
-        },
-      })
-    );
-
-    dispatch(
       setSelectedAnnotations({
-        selectedAnnotations: [...selectedAnnotations, selectedInstance],
+        selectedAnnotations: [
+          ...unselectedAnnotations,
+          {
+            ...selectedInstance,
+            boundingBox: annotationTool.boundingBox,
+            contour: annotationTool.contour,
+            mask: annotationTool.mask,
+          },
+        ],
       })
     );
   }, [annotated]);
@@ -368,8 +370,8 @@ export const Stage = () => {
       if (!annotationTool.annotation) return;
 
       dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: annotationTool.annotation,
+        applicationSlice.actions.setSelectedAnnotationId({
+          selectedAnnotationId: annotationTool.annotation.id,
         })
       );
 
@@ -430,13 +432,8 @@ export const Stage = () => {
     if (selectionMode !== AnnotationModeType.New) return;
 
     dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: annotationTool.annotation,
-      })
-    );
-    dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: annotationTool.annotation,
+      setSelectedAnnotationId({
+        selectedAnnotationId: annotationTool.annotation.id,
       })
     );
   }, [annotated]);
@@ -523,8 +520,8 @@ export const Stage = () => {
 
         if (selectionMode === AnnotationModeType.New) {
           dispatch(
-            applicationSlice.actions.setSelectedAnnotation({
-              selectedAnnotation: undefined,
+            applicationSlice.actions.setSelectedAnnotationId({
+              selectedAnnotationId: undefined,
             })
           );
           dispatch(
@@ -649,8 +646,8 @@ export const Stage = () => {
     });
 
     // add instance only if not already there
-    _.forEach(selectedAnnotationsIds, (selectedAnnotationId: string) => {
-      if (!annotationIds.includes(selectedAnnotationId)) {
+    _.forEach(selectedAnnotations, (selectedAnnotation: AnnotationType) => {
+      if (!annotationIds.includes(selectedAnnotation.id)) {
         dispatch(
           applicationSlice.actions.setImageInstances({
             instances: [...annotations, selectedAnnotation],

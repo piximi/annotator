@@ -49,15 +49,15 @@ export const Content = ({ onDrop }: ContentProps) => {
 
   return (
     <React.Fragment>
-      <AppBar className={classes.appBar} color="default">
-        <Toolbar>
-          <Typography variant="h6" color="inherit">
-            &nbsp;
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      {/*<AppBar className={classes.appBar} color="default">*/}
+      {/*  <Toolbar>*/}
+      {/*    <Typography variant="h6" color="inherit">*/}
+      {/*      &nbsp;*/}
+      {/*    </Typography>*/}
+      {/*  </Toolbar>*/}
+      {/*</AppBar>*/}
 
-      <Divider />
+      {/*<Divider />*/}
 
       <main className={classes.content} ref={ref} style={{ cursor: cursor }}>
         <Stage />

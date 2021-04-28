@@ -144,18 +144,7 @@ export const CategoriesList = () => {
       />
 
       <AppBar className={classes.appBar} color="default">
-        <Toolbar disableGutters={true}>
-          <Tooltip title={(true ? "Hide " : "Show ") + "sidebar"}>
-            <IconButton
-              aria-label="open sidebar"
-              className={classes.iconButton}
-              color="inherit"
-              onClick={() => {}}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Tooltip>
-
+        <Toolbar>
           <Typography variant="h6" color="inherit">
             Piximi
           </Typography>

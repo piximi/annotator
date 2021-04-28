@@ -63,56 +63,69 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
     event.evt.preventDefault();
 
-    //handle case of overlapping annotations
-    if (currentPosition && annotations) {
-      const scaledCurrentPosition = {
-        x: currentPosition.x / stageScale,
-        y: currentPosition.y / stageScale,
-      };
-      setOverlappingAnnotationsIds(
-        getOverlappingAnnotations(scaledCurrentPosition, annotations)
+    if (!currentPosition) return;
+
+    if (!annotations) return;
+
+    const scaledCurrentPosition = {
+      x: currentPosition.x / stageScale,
+      y: currentPosition.y / stageScale,
+    };
+    setOverlappingAnnotationsIds(
+      getOverlappingAnnotations(scaledCurrentPosition, annotations)
+    );
+
+    let currentAnnotation: AnnotationType;
+
+    if (
+      overlappingAnnotationsIds.length > 1 &&
+      selectedAnnotation &&
+      overlappingAnnotationsIds.includes(selectedAnnotation.id)
+    ) {
+      //if annotation has already been selected and there are multiple annotations
+      setCurrentIndex(
+        currentIndex + 1 === overlappingAnnotationsIds.length
+          ? 0
+          : currentIndex + 1
       );
-      if (
-        overlappingAnnotationsIds.length > 1 &&
-        selectedAnnotation &&
-        overlappingAnnotationsIds.includes(selectedAnnotation.id)
-      ) {
-        //if annotation has already been selected and there are multiple annotations
-        setCurrentIndex(
-          currentIndex + 1 === overlappingAnnotationsIds.length
-            ? 0
-            : currentIndex + 1
-        );
-      }
+      const nextAnnotationId = overlappingAnnotationsIds[currentIndex];
+      currentAnnotation = annotations.filter((annotation: AnnotationType) => {
+        return annotation.id === nextAnnotationId;
+      })[0];
+    } else {
+      currentAnnotation = annotation;
     }
 
     dispatch(
       setSelectedAnnotation({
-        selectedAnnotation: annotation,
+        selectedAnnotation: currentAnnotation,
       })
     );
 
     if (!shiftPress) {
       dispatch(
         setSelectedAnnotationsIds({
-          selectedAnnotationsIds: [annotation.id],
+          selectedAnnotationsIds: [currentAnnotation.id],
         })
       );
     } else {
       //unselect if already there
-      if (_.includes(selectedAnnotationsIds, annotation.id)) {
+      if (_.includes(selectedAnnotationsIds, currentAnnotation.id)) {
         setSelectedAnnotationsIds({
           selectedAnnotationsIds: _.filter(
             selectedAnnotationsIds,
             (annotationId: string) => {
-              return annotationId !== annotation.id;
+              return annotationId !== currentAnnotation.id;
             }
           ),
         });
       } else {
         dispatch(
           setSelectedAnnotationsIds({
-            selectedAnnotationsIds: [...selectedAnnotationsIds, annotation.id],
+            selectedAnnotationsIds: [
+              ...selectedAnnotationsIds,
+              currentAnnotation.id,
+            ],
           })
         );
       }
@@ -120,7 +133,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
     dispatch(
       setSeletedCategory({
-        selectedCategory: annotation.categoryId,
+        selectedCategory: currentAnnotation.categoryId,
       })
     );
   };

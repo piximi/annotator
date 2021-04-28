@@ -65,8 +65,6 @@ import { KonvaEventObject } from "konva/types/Node";
 import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
-import { currentPositionSelector } from "../../../../../store/selectors/currentPositionSelector";
-import { getOverlappingAnnotations } from "../../../../../image/imageHelper";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
 
@@ -309,8 +307,6 @@ export const Stage = () => {
 
     if (!selectedAnnotation || !selectedAnnotation.id) return;
 
-    // transformerRef.current?.detach();
-
     //remove the existing Operator since it's essentially been replaced
     dispatch(
       applicationSlice.actions.deleteImageInstance({
@@ -338,34 +334,6 @@ export const Stage = () => {
         selectedAnnotations: updatedAnnotations,
       })
     );
-
-    // const selectedAnnotations = _.map(
-    //   selectedAnnotationsIds,
-    //   (annotationId) => {
-    //     const confirmedAnnotation = {
-    //       ...annotations?.filter(
-    //         (instance: SelectionType) => instance.id === annotationId
-    //       )[0],
-    //     };
-    //     return !_.isEmpty(confirmedAnnotation)
-    //       ? { ...confirmedAnnotation, categoryId: selectedCategory.id }
-    //       : { ...selectedAnnotation, categoryId: selectedCategory.id };
-    //   }
-    // );
-
-    // const others = annotations?.filter(
-    //   (instance: SelectionType) =>
-    //     !_.includes(selectedAnnotationsIds, instance.id)
-    // );
-
-    // dispatch(
-    //   applicationSlice.actions.setImageInstances({
-    //     instances: [
-    //       ...others,
-    //       ...(selectedAnnotations as Array<AnnotationType>),
-    //     ],
-    //   })
-    // );
   }, [selectedCategory]);
 
   useEffect(() => {
@@ -427,14 +395,6 @@ export const Stage = () => {
     const node = stageRef.current.findOne("#selected");
 
     if (!node) return;
-
-    // transformerRef.current.nodes([node]);
-    //
-    // const layer = transformerRef.current.getLayer();
-    //
-    // if (!layer) return;
-    //
-    // layer.batchDraw();
 
     if (!annotationTool) return;
 

@@ -39,7 +39,7 @@ export const Annotations = ({ annotationTool }: AnnotationsProps) => {
         visibleCategories.includes(annotation.categoryId)
       )
     );
-  }, [confirmedAnnotations, visibleCategories, selectedAnnotations]);
+  }, [confirmedAnnotations, selectedAnnotations]);
 
   return (
     <React.Fragment>

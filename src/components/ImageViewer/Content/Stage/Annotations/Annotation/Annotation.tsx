@@ -24,6 +24,7 @@ import { getOverlappingAnnotations } from "../../../../../../image/imageHelper";
 import { currentPositionSelector } from "../../../../../../store/selectors/currentPositionSelector";
 import { selectedAnnotationSelector } from "../../../../../../store/selectors/selectedAnnotationSelector";
 import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
+import { selectedAnnotationIdSelector } from "../../../../../../store/selectors/selectedAnnotationIdSelector";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -39,11 +40,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
   const toolType = useSelector(toolTypeSelector);
   const stageScale = useSelector(stageScaleSelector);
 
-  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
-
-  const selectedAnnotation = useSelector(selectedAnnotationSelector);
-
-  const selectedAnnotations = useSelector(selectedAnnotationsSelector);
+  const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
 
   const currentPosition = useSelector(currentPositionSelector);
 
@@ -51,9 +48,8 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
   const shiftPress = useKeyPress("Shift");
 
-  const [overlappingAnnotationsIds, setOverlappingAnnotationsIds] = useState<
-    Array<string>
-  >([]);
+  let overlappingAnnotationsIds: Array<string> = [];
+
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const fill = _.find(
@@ -74,24 +70,35 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       x: currentPosition.x / stageScale,
       y: currentPosition.y / stageScale,
     };
-    setOverlappingAnnotationsIds(
-      getOverlappingAnnotations(scaledCurrentPosition, annotations)
+
+    overlappingAnnotationsIds = getOverlappingAnnotations(
+      scaledCurrentPosition,
+      annotations
     );
 
     let currentAnnotation: AnnotationType;
 
     if (
       overlappingAnnotationsIds.length > 1 &&
-      selectedAnnotation &&
-      overlappingAnnotationsIds.includes(selectedAnnotation.id)
+      selectedAnnotationId &&
+      overlappingAnnotationsIds.includes(selectedAnnotationId)
     ) {
       //if annotation has already been selected and there are multiple annotations
+      console.info(overlappingAnnotationsIds);
+      console.info(selectedAnnotationId);
+      console.info(
+        currentIndex + 1 === overlappingAnnotationsIds.length
+          ? 0
+          : currentIndex + 1
+      );
+
       setCurrentIndex(
         currentIndex + 1 === overlappingAnnotationsIds.length
           ? 0
           : currentIndex + 1
       );
       const nextAnnotationId = overlappingAnnotationsIds[currentIndex];
+      console.info(nextAnnotationId);
       currentAnnotation = annotations.filter((annotation: AnnotationType) => {
         return annotation.id === nextAnnotationId;
       })[0];
@@ -105,31 +112,40 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       })
     );
 
-    if (!shiftPress) {
-      dispatch(
-        setSelectedAnnotations({
-          selectedAnnotations: [currentAnnotation],
-        })
-      );
-    } else {
-      //unselect if already there
-      if (_.includes(selectedAnnotationsIds, currentAnnotation.id)) {
-        setSelectedAnnotations({
-          selectedAnnotations: _.filter(
-            selectedAnnotations,
-            (annotation: AnnotationType) => {
-              return annotation !== currentAnnotation;
-            }
-          ),
-        });
-      } else {
-        dispatch(
-          setSelectedAnnotations({
-            selectedAnnotations: [...selectedAnnotations, currentAnnotation],
-          })
-        );
-      }
-    }
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [currentAnnotation],
+      })
+    );
+
+    // if (!shiftPress) {
+    //   dispatch(
+    //     setSelectedAnnotations({
+    //       selectedAnnotations: [currentAnnotation],
+    //     })
+    //   );
+    // }
+    //TODO FIX unselect
+
+    // else {
+    //   //unselect if already there
+    //   if (_.includes(selectedAnnotationsIds, currentAnnotation.id)) {
+    //     setSelectedAnnotations({
+    //       selectedAnnotations: _.filter(
+    //         selectedAnnotations,
+    //         (annotation: AnnotationType) => {
+    //           return annotation !== currentAnnotation;
+    //         }
+    //       ),
+    //     });
+    //   } else {
+    //     dispatch(
+    //       setSelectedAnnotations({
+    //         selectedAnnotations: [...selectedAnnotations, currentAnnotation],
+    //       })
+    //     );
+    //   }
+    // }
 
     dispatch(
       setSeletedCategory({

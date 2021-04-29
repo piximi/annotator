@@ -88,7 +88,7 @@ export const ZoomOptions = () => {
     dispatch(setOffset({ offset: { x: 0, y: 0 } }));
   };
 
-  const onToFitClick = () => {
+  const onToFullSizeClick = () => {
     const payload = {
       options: {
         ...options,
@@ -105,6 +105,29 @@ export const ZoomOptions = () => {
       setStageScale({
         stageScale:
           stageWidth / (image && image.shape ? image.shape.width : 512),
+      })
+    );
+    dispatch(setOffset({ offset: { x: 0, y: 0 } }));
+  };
+
+  const onToFitClick = () => {
+    const payload = {
+      options: {
+        ...options,
+        automaticCentering: true,
+        toFit: !options.toFit,
+      },
+    };
+
+    if (!image || !image.shape) return;
+
+    dispatch(setZoomToolOptions(payload));
+
+    dispatch(
+      setStageScale({
+        stageScale:
+          (0.95 * stageWidth) /
+          (image && image.shape ? image.shape.width : 512),
       })
     );
     dispatch(setOffset({ offset: { x: 0, y: 0 } }));
@@ -318,6 +341,10 @@ export const ZoomOptions = () => {
       <List dense>
         <ListItem button onClick={onToActualSizeClick}>
           <ListItemText>{t("Actual size")}</ListItemText>
+        </ListItem>
+
+        <ListItem button onClick={onToFullSizeClick}>
+          <ListItemText>{t("Full size")}</ListItemText>
         </ListItem>
 
         <ListItem button onClick={onToFitClick}>

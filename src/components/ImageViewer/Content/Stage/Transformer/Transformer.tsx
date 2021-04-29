@@ -72,6 +72,107 @@ export const Transformer = ({
   const imageWidth = image.shape.width;
   const imageHeight = image.shape.height;
 
+  const computeResizedContour = () => {
+    if (!boundBox || !startBox) return;
+
+    const relativeBoundBox = getRelativeBox(boundBox);
+    const relativeStartBox = getRelativeBox(startBox);
+
+    if (!relativeBoundBox || !relativeStartBox) return;
+
+    // get necessary parameters for transfromation
+    const scaleX = relativeBoundBox.width / relativeStartBox.width;
+    const scaleY = relativeBoundBox.height / relativeStartBox.height;
+
+    // change image anniotatons with new contour
+    const annotation = _.filter(annotations, (annotation: AnnotationType) => {
+      return annotation.id === annotationId;
+    })[0];
+
+    const others = _.filter(annotations, (annotation: AnnotationType) => {
+      return annotation.id !== annotationId;
+    });
+
+    let contour: Array<number>;
+
+    if (!annotation && selectedAnnotation) {
+      // Found this to be necessary to detach transformer before re-attaching
+      dispatch(
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: undefined,
+        })
+      );
+
+      contour = selectedAnnotation.contour;
+
+      if (!center) return;
+
+      const resizedContour = resizeContour(contour, center, {
+        x: scaleX,
+        y: scaleY,
+      });
+
+      const resizedMask = resizeMask(resizedContour);
+
+      dispatch(
+        setSelectedAnnotations({
+          selectedAnnotations: [
+            {
+              ...selectedAnnotation,
+              contour: resizedContour,
+              boundingBox: computeBoundingBoxFromContours(resizedContour),
+              mask: resizedMask,
+            },
+          ],
+        })
+      );
+
+      dispatch(
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: {
+            ...selectedAnnotation,
+            contour: resizedContour,
+            boundingBox: computeBoundingBoxFromContours(resizedContour),
+            mask: resizedMask,
+          },
+        })
+      );
+
+      setBoundBox(null);
+    } else {
+      const contour = annotation.contour;
+      debugger;
+
+      if (!center) return;
+
+      const resizedContour = resizeContour(contour, center, {
+        x: scaleX,
+        y: scaleY,
+      });
+
+      const resizedMask = resizeMask(resizedContour);
+
+      const updated = {
+        ...annotation,
+        contour: resizedContour,
+        boundingBox: computeBoundingBoxFromContours(resizedContour),
+        mask: resizedMask,
+      };
+
+      dispatch(
+        applicationSlice.actions.setImageInstances({
+          instances: [...others, updated],
+        })
+      );
+      dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
+      dispatch(
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: undefined,
+        })
+      );
+    }
+  };
+
   const computeBoundingBoxFromContours = (
     contour: Array<number>
   ): [number, number, number, number] => {
@@ -156,104 +257,6 @@ export const Transformer = ({
   };
 
   const onTransformEnd = () => {
-    if (!boundBox || !startBox) return;
-
-    const relativeBoundBox = getRelativeBox(boundBox);
-    const relativeStartBox = getRelativeBox(startBox);
-
-    if (!relativeBoundBox || !relativeStartBox) return;
-
-    // get necessary parameters for transfromation
-    const scaleX = relativeBoundBox.width / relativeStartBox.width;
-    const scaleY = relativeBoundBox.height / relativeStartBox.height;
-
-    // change image anniotatons with new contour
-    const annotation = _.filter(annotations, (annotation: AnnotationType) => {
-      return annotation.id === annotationId;
-    })[0];
-
-    const others = _.filter(annotations, (annotation: AnnotationType) => {
-      return annotation.id !== annotationId;
-    });
-
-    let contour: Array<number>;
-
-    if (!annotation && selectedAnnotation) {
-      // Found this to be necessary to detach transformer before re-attaching
-      dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: undefined,
-        })
-      );
-
-      contour = selectedAnnotation.contour;
-
-      if (!center) return;
-
-      const resizedContour = resizeContour(contour, center, {
-        x: scaleX,
-        y: scaleY,
-      });
-
-      const resizedMask = resizeMask(resizedContour);
-
-      dispatch(
-        setSelectedAnnotations({
-          selectedAnnotations: [
-            {
-              ...selectedAnnotation,
-              contour: resizedContour,
-              boundingBox: computeBoundingBoxFromContours(resizedContour),
-              mask: resizedMask,
-            },
-          ],
-        })
-      );
-
-      dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: {
-            ...selectedAnnotation,
-            contour: resizedContour,
-            boundingBox: computeBoundingBoxFromContours(resizedContour),
-            mask: resizedMask,
-          },
-        })
-      );
-
-      setBoundBox(null);
-    } else {
-      const contour = annotation.contour;
-
-      if (!center) return;
-
-      const resizedContour = resizeContour(contour, center, {
-        x: scaleX,
-        y: scaleY,
-      });
-
-      const resizedMask = resizeMask(resizedContour);
-
-      const updated = {
-        ...annotation,
-        contour: resizedContour,
-        boundingBox: computeBoundingBoxFromContours(resizedContour),
-        mask: resizedMask,
-      };
-
-      dispatch(
-        applicationSlice.actions.setImageInstances({
-          instances: [...others, updated],
-        })
-      );
-      dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
-      dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: undefined,
-        })
-      );
-    }
-
     setCenter(undefined);
   };
 
@@ -323,7 +326,7 @@ export const Transformer = ({
         x: scaledOppositeAnchorPosition.x + relativeStartBox.x,
         y: scaledOppositeAnchorPosition.y + relativeStartBox.y,
       });
-    }
+    } else computeResizedContour();
   };
 
   return (

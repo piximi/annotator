@@ -17,7 +17,7 @@ import {
 } from "../../../../../store/selectors";
 import {
   applicationSlice,
-  setSelectedAnnotationId,
+  setSelectedAnnotation,
   setSelectedAnnotations,
 } from "../../../../../store";
 import {
@@ -156,10 +156,9 @@ export const Stage = () => {
 
   const deselectAllAnnotations = () => {
     dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
-    dispatch(setSelectedAnnotations);
     dispatch(
-      applicationSlice.actions.setSelectedAnnotationId({
-        selectedAnnotationId: undefined,
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: undefined,
       })
     );
   };
@@ -347,8 +346,8 @@ export const Stage = () => {
       if (!annotationTool.annotation) return;
 
       dispatch(
-        applicationSlice.actions.setSelectedAnnotationId({
-          selectedAnnotationId: annotationTool.annotation.id,
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: annotationTool.annotation,
         })
       );
 
@@ -401,8 +400,8 @@ export const Stage = () => {
     if (selectionMode !== AnnotationModeType.New) return;
 
     dispatch(
-      setSelectedAnnotationId({
-        selectedAnnotationId: annotationTool.annotation.id,
+      setSelectedAnnotation({
+        selectedAnnotation: annotationTool.annotation,
       })
     );
   }, [annotated]);
@@ -489,8 +488,8 @@ export const Stage = () => {
 
         if (selectionMode === AnnotationModeType.New) {
           dispatch(
-            applicationSlice.actions.setSelectedAnnotationId({
-              selectedAnnotationId: undefined,
+            applicationSlice.actions.setSelectedAnnotation({
+              selectedAnnotation: undefined,
             })
           );
           dispatch(

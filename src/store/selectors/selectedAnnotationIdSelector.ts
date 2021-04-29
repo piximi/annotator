@@ -5,5 +5,6 @@ export const selectedAnnotationIdSelector = ({
 }: {
   state: HistoryStateType;
 }): string | undefined => {
-  return state.present.selectedAnnotationId;
+  if (!state.present.selectedAnnotation) return undefined;
+  else return state.present.selectedAnnotation.id;
 };

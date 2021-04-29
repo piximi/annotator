@@ -23,7 +23,7 @@ export type StateType = {
   penSelectionBrushSize: number;
   saturation: number;
   selectedAnnotations: Array<AnnotationType>;
-  selectedAnnotationId?: string;
+  selectedAnnotation: AnnotationType | undefined;
   selectedCategory: string;
   selectionMode: AnnotationModeType;
   soundEnabled: boolean;

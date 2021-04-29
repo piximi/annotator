@@ -14,7 +14,7 @@ import Konva from "konva";
 import { AnnotationTool } from "../../../../../../image/Tool";
 import {
   applicationSlice,
-  setSelectedAnnotationId,
+  setSelectedAnnotation,
   setSelectedAnnotations,
   setSeletedCategory,
 } from "../../../../../../store";
@@ -107,8 +107,8 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
     if (!shiftPress) {
       dispatch(
-        setSelectedAnnotationId({
-          selectedAnnotationId: currentAnnotation.id,
+        setSelectedAnnotation({
+          selectedAnnotation: currentAnnotation,
         })
       );
 

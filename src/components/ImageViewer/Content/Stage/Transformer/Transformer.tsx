@@ -185,10 +185,10 @@ export const Transformer = ({
     let contour: Array<number>;
 
     if (!annotation && selectedAnnotation) {
-      //Found this to be necessary to detach transformer before re-attaching
+      // Found this to be necessary to detach transformer before re-attaching
       dispatch(
-        applicationSlice.actions.setSelectedAnnotationId({
-          selectedAnnotationId: undefined,
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: undefined,
         })
       );
 
@@ -216,8 +216,13 @@ export const Transformer = ({
       );
 
       dispatch(
-        applicationSlice.actions.setSelectedAnnotationId({
-          selectedAnnotationId: selectedAnnotation.id,
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: {
+            ...selectedAnnotation,
+            contour: resizedContour,
+            boundingBox: computeBoundingBoxFromContours(resizedContour),
+            mask: resizedMask,
+          },
         })
       );
 
@@ -247,8 +252,8 @@ export const Transformer = ({
       );
       dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
       dispatch(
-        applicationSlice.actions.setSelectedAnnotationId({
-          selectedAnnotationId: undefined,
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: undefined,
         })
       );
     }

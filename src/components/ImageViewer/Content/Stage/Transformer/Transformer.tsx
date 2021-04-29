@@ -84,7 +84,7 @@ export const Transformer = ({
     const scaleX = relativeBoundBox.width / relativeStartBox.width;
     const scaleY = relativeBoundBox.height / relativeStartBox.height;
 
-    // Found this to be necessary to detach transformer before re-attaching
+    //Found this to be necessary to detach transformer before re-attaching
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: undefined,
@@ -102,31 +102,13 @@ export const Transformer = ({
       y: scaleY,
     });
 
-    const resizedMask = resizeMask(resizedContour);
+    const updatedAnnotation = {
+      ...selectedAnnotation,
+      contour: resizedContour,
+      boundingBox: computeBoundingBoxFromContours(resizedContour),
+    };
 
-    dispatch(
-      setSelectedAnnotations({
-        selectedAnnotations: [
-          {
-            ...selectedAnnotation,
-            contour: resizedContour,
-            boundingBox: computeBoundingBoxFromContours(resizedContour),
-            mask: resizedMask,
-          },
-        ],
-      })
-    );
-
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: {
-          ...selectedAnnotation,
-          contour: resizedContour,
-          boundingBox: computeBoundingBoxFromContours(resizedContour),
-          mask: resizedMask,
-        },
-      })
-    );
+    updateSelectedAnnotation(updatedAnnotation);
 
     setBoundBox(null);
   };
@@ -215,7 +197,34 @@ export const Transformer = ({
   };
 
   const onTransformEnd = () => {
+    if (!selectedAnnotation) return;
+
+    const contour = selectedAnnotation.contour;
+
+    const resizedMask = resizeMask(contour);
+
+    const updatedAnnotation = {
+      ...selectedAnnotation,
+      mask: resizedMask,
+    };
+
+    updateSelectedAnnotation(updatedAnnotation);
+
     setCenter(undefined);
+  };
+
+  const updateSelectedAnnotation = (updatedAnnotation: AnnotationType) => {
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [updatedAnnotation],
+      })
+    );
+
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: updatedAnnotation,
+      })
+    );
   };
 
   const getOppositeAnchorPosition = () => {

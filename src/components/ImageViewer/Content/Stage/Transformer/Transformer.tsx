@@ -84,93 +84,51 @@ export const Transformer = ({
     const scaleX = relativeBoundBox.width / relativeStartBox.width;
     const scaleY = relativeBoundBox.height / relativeStartBox.height;
 
-    // change image anniotatons with new contour
-    const annotation = _.filter(annotations, (annotation: AnnotationType) => {
-      return annotation.id === annotationId;
-    })[0];
+    // Found this to be necessary to detach transformer before re-attaching
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: undefined,
+      })
+    );
 
-    const others = _.filter(annotations, (annotation: AnnotationType) => {
-      return annotation.id !== annotationId;
+    if (!selectedAnnotation) return;
+
+    const contour = selectedAnnotation.contour;
+
+    if (!center) return;
+
+    const resizedContour = resizeContour(contour, center, {
+      x: scaleX,
+      y: scaleY,
     });
 
-    let contour: Array<number>;
+    const resizedMask = resizeMask(resizedContour);
 
-    if (!annotation && selectedAnnotation) {
-      // Found this to be necessary to detach transformer before re-attaching
-      dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: undefined,
-        })
-      );
-
-      contour = selectedAnnotation.contour;
-
-      if (!center) return;
-
-      const resizedContour = resizeContour(contour, center, {
-        x: scaleX,
-        y: scaleY,
-      });
-
-      const resizedMask = resizeMask(resizedContour);
-
-      dispatch(
-        setSelectedAnnotations({
-          selectedAnnotations: [
-            {
-              ...selectedAnnotation,
-              contour: resizedContour,
-              boundingBox: computeBoundingBoxFromContours(resizedContour),
-              mask: resizedMask,
-            },
-          ],
-        })
-      );
-
-      dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: {
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [
+          {
             ...selectedAnnotation,
             contour: resizedContour,
             boundingBox: computeBoundingBoxFromContours(resizedContour),
             mask: resizedMask,
           },
-        })
-      );
+        ],
+      })
+    );
 
-      setBoundBox(null);
-    } else {
-      const contour = annotation.contour;
-      debugger;
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: {
+          ...selectedAnnotation,
+          contour: resizedContour,
+          boundingBox: computeBoundingBoxFromContours(resizedContour),
+          mask: resizedMask,
+        },
+      })
+    );
 
-      if (!center) return;
-
-      const resizedContour = resizeContour(contour, center, {
-        x: scaleX,
-        y: scaleY,
-      });
-
-      const resizedMask = resizeMask(resizedContour);
-
-      const updated = {
-        ...annotation,
-        contour: resizedContour,
-        boundingBox: computeBoundingBoxFromContours(resizedContour),
-        mask: resizedMask,
-      };
-
-      dispatch(
-        applicationSlice.actions.setImageInstances({
-          instances: [...others, updated],
-        })
-      );
-      dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
-      dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: undefined,
-        })
-      );
-    }
+    setBoundBox(null);
   };
 
   const computeBoundingBoxFromContours = (

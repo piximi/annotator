@@ -310,6 +310,7 @@ export const Transformer = ({
       onTransformEnd={onTransformEnd}
       id={"tr-".concat(annotationId)}
       ref={transformerRef}
+      rotateEnabled={false}
     />
   );
 };

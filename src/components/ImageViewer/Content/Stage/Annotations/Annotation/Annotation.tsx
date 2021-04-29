@@ -11,7 +11,6 @@ import {
   toolTypeSelector,
 } from "../../../../../../store/selectors";
 import Konva from "konva";
-import { AnnotationTool } from "../../../../../../image/Tool";
 import {
   applicationSlice,
   setSelectedAnnotation,
@@ -29,10 +28,9 @@ import { currentIndexSelector } from "../../../../../../store/selectors/currentI
 
 type AnnotationProps = {
   annotation: AnnotationType;
-  annotationTool?: AnnotationTool;
 };
 
-export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
+export const Annotation = ({ annotation }: AnnotationProps) => {
   const dispatch = useDispatch();
 
   const [scaledContour, setScaledContour] = useState<Array<number>>([]);

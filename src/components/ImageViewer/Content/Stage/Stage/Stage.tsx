@@ -738,7 +738,7 @@ export const Stage = () => {
 
               <SelectedContour />
 
-              <Annotations annotationTool={annotationTool} />
+              <Annotations />
 
               <Transformers transformPosition={getRelativePointerPosition} />
 

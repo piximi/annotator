@@ -81,15 +81,12 @@ export class QuickAnnotationTool extends AnnotationTool {
     if (!this.annotating) {
       this.currentSuperpixels.clear();
 
-      console.info("Creating this.currentMask here");
-
       this.currentMask = new ImageJS.Image(
         this.image.width,
         this.image.height,
         new Uint8Array(this.image.width * this.image.height * 4),
         { alpha: 1 }
       );
-      console.info(this.currentMask);
     }
 
     this.currentSuperpixels.add(superpixel);

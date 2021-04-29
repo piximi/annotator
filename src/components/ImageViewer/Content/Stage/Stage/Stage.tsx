@@ -434,10 +434,6 @@ export const Stage = () => {
     });
   }, [selectedAnnotationsIds, selectedAnnotation?.contour]);
 
-  useEffect(() => {
-    console.info("That just changed");
-  }, [selectedAnnotation?.contour]);
-
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;
 

@@ -93,10 +93,11 @@ export const Transformer = ({
     if (
       relativeNewBox.x + relativeNewBox.width > imageWidth ||
       relativeNewBox.y + relativeNewBox.height > imageHeight ||
-      relativeNewBox.x + relativeNewBox.width < 0 ||
-      relativeNewBox.y + relativeNewBox.height < 0
-    )
+      relativeNewBox.x < 0 ||
+      relativeNewBox.y < 0
+    ) {
       return boundBox ? boundBox : startBox;
+    }
 
     setBoundBox(newBox);
     return newBox;

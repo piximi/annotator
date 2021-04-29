@@ -289,6 +289,17 @@ export const Stage = () => {
         ],
       })
     );
+
+    dispatch(
+      setSelectedAnnotation({
+        selectedAnnotation: {
+          ...selectedInstance,
+          boundingBox: annotationTool.boundingBox,
+          contour: annotationTool.contour,
+          mask: annotationTool.mask,
+        },
+      })
+    );
   }, [annotated]);
 
   useEffect(() => {
@@ -381,15 +392,7 @@ export const Stage = () => {
   useEffect(() => {
     if (!annotated) return;
 
-    // if (!transformerRef || !transformerRef.current) return;
-
     if (!annotationTool || !annotationTool.contour) return;
-
-    if (!stageRef || !stageRef.current) return;
-
-    const node = stageRef.current.findOne("#selected");
-
-    if (!node) return;
 
     if (!annotationTool) return;
 
@@ -430,6 +433,10 @@ export const Stage = () => {
       layer.batchDraw();
     });
   }, [selectedAnnotationsIds, selectedAnnotation?.contour]);
+
+  useEffect(() => {
+    console.info("That just changed");
+  }, [selectedAnnotation?.contour]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;

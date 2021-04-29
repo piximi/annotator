@@ -662,27 +662,25 @@ export const Stage = () => {
   }, [enterPress]);
 
   useEffect(() => {
-    if (selectedAnnotationsIds.length) {
-      if (backspacePress || escapePress || deletePress) {
-        if (deletePress || backspacePress) {
-          _.map(selectedAnnotationsIds, (annotationId: string) => {
-            dispatch(
-              applicationSlice.actions.deleteImageInstance({
-                id: annotationId,
-              })
-            );
-          });
-        }
-
-        deselectAllAnnotations();
-        deselectAllTransformers();
-
-        if (!_.isEmpty(annotations) && soundEnabled) {
-          playDeleteAnnotationSoundEffect();
-        }
-
-        deselectAnnotation();
+    if (backspacePress || escapePress || deletePress) {
+      if (deletePress || backspacePress) {
+        _.map(selectedAnnotationsIds, (annotationId: string) => {
+          dispatch(
+            applicationSlice.actions.deleteImageInstance({
+              id: annotationId,
+            })
+          );
+        });
       }
+
+      deselectAllAnnotations();
+      deselectAllTransformers();
+
+      if (!_.isEmpty(annotations) && soundEnabled) {
+        playDeleteAnnotationSoundEffect();
+      }
+
+      deselectAnnotation();
     }
   }, [backspacePress, deletePress, escapePress]);
 

@@ -340,6 +340,16 @@ export const Stage = () => {
         selectedAnnotations: updatedAnnotations,
       })
     );
+    if (!selectedAnnotation) return;
+
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: {
+          ...selectedAnnotation,
+          categoryId: selectedCategory.id,
+        },
+      })
+    );
   }, [selectedCategory]);
 
   useEffect(() => {

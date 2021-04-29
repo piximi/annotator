@@ -61,6 +61,8 @@ export const Transformer = ({
     rotation: 0,
   });
 
+  const [center, setCenter] = useState<{ x: number; y: number } | undefined>();
+
   const stageScale = useSelector(stageScaleSelector);
 
   const image = useSelector(imageSelector);
@@ -165,15 +167,6 @@ export const Transformer = ({
     const scaleX = relativeBoundBox.width / relativeStartBox.width;
     const scaleY = relativeBoundBox.height / relativeStartBox.height;
 
-    const oppositeAnchorPosition = getOppositeAnchorPosition();
-    const scaledOppositeAnchorPosition = {
-      x: oppositeAnchorPosition.x / stageScale,
-      y: oppositeAnchorPosition.y / stageScale,
-    };
-
-    const centerX = scaledOppositeAnchorPosition.x + relativeBoundBox.x;
-    const centerY = scaledOppositeAnchorPosition.y + relativeBoundBox.y;
-
     // change image anniotatons with new contour
     const annotation = _.filter(annotations, (annotation: AnnotationType) => {
       return annotation.id === annotationId;
@@ -195,11 +188,12 @@ export const Transformer = ({
 
       contour = selectedAnnotation.contour;
 
-      const resizedContour = resizeContour(
-        contour,
-        { x: centerX, y: centerY },
-        { x: scaleX, y: scaleY }
-      );
+      if (!center) return;
+
+      const resizedContour = resizeContour(contour, center, {
+        x: scaleX,
+        y: scaleY,
+      });
 
       const resizedMask = resizeMask(resizedContour);
 
@@ -231,11 +225,12 @@ export const Transformer = ({
     } else {
       const contour = annotation.contour;
 
-      const resizedContour = resizeContour(
-        contour,
-        { x: centerX, y: centerY },
-        { x: scaleX, y: scaleY }
-      );
+      if (!center) return;
+
+      const resizedContour = resizeContour(contour, center, {
+        x: scaleX,
+        y: scaleY,
+      });
 
       const resizedMask = resizeMask(resizedContour);
 
@@ -258,6 +253,8 @@ export const Transformer = ({
         })
       );
     }
+
+    setCenter(undefined);
   };
 
   const getOppositeAnchorPosition = () => {
@@ -310,9 +307,29 @@ export const Transformer = ({
     }
   };
 
+  const onTransform = () => {
+    if (!center) {
+      const oppositeAnchorPosition = getOppositeAnchorPosition();
+      const scaledOppositeAnchorPosition = {
+        x: oppositeAnchorPosition.x / stageScale,
+        y: oppositeAnchorPosition.y / stageScale,
+      };
+
+      const relativeStartBox = getRelativeBox(startBox);
+
+      if (!relativeStartBox) return;
+
+      setCenter({
+        x: scaledOppositeAnchorPosition.x + relativeStartBox.x,
+        y: scaledOppositeAnchorPosition.y + relativeStartBox.y,
+      });
+    }
+  };
+
   return (
     <ReactKonva.Transformer
       boundBoxFunc={boundingBoxFunc}
+      onTransform={onTransform}
       onTransformEnd={onTransformEnd}
       id={"tr-".concat(annotationId)}
       ref={transformerRef}

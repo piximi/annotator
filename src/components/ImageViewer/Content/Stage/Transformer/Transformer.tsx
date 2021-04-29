@@ -11,6 +11,7 @@ import {
 import {
   applicationSlice,
   setSelectedAnnotations,
+  setSelectedAnnotation,
 } from "../../../../../store/slices";
 import Konva from "konva";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
@@ -19,6 +20,7 @@ import { simplify } from "../../../../../image/simplify/simplify";
 import { slpf } from "../../../../../image/polygon-fill/slpf";
 import { encode } from "../../../../../image/rle";
 import * as ImageJS from "image-js";
+import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 
 type box = {
   x: number;
@@ -46,6 +48,8 @@ export const Transformer = ({
   const annotations = useSelector(imageInstancesSelector);
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
+
+  const selectedAnnotations = useSelector(selectedAnnotationsSelector);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
 
@@ -296,11 +300,34 @@ export const Transformer = ({
     } else computeResizedContour();
   };
 
+  const onTransformStart = () => {
+    dispatch(
+      setSelectedAnnotation({
+        selectedAnnotation: selectedAnnotations.filter(
+          (annotation: AnnotationType) => {
+            return annotation.id === annotationId;
+          }
+        )[0],
+      })
+    );
+
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [
+          selectedAnnotations.filter((annotation: AnnotationType) => {
+            return annotation.id === annotationId;
+          })[0],
+        ],
+      })
+    );
+  };
+
   return (
     <ReactKonva.Transformer
       boundBoxFunc={boundingBoxFunc}
       onTransform={onTransform}
       onTransformEnd={onTransformEnd}
+      onTransformStart={onTransformStart}
       id={"tr-".concat(annotationId)}
       ref={transformerRef}
       rotateEnabled={false}

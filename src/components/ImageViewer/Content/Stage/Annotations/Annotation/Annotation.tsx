@@ -136,6 +136,11 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
             selectedAnnotations: [...selectedAnnotations, currentAnnotation],
           })
         );
+        dispatch(
+          setSelectedAnnotation({
+            selectedAnnotation: currentAnnotation,
+          })
+        );
       }
     }
 

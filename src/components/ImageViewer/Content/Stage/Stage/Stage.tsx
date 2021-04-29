@@ -442,7 +442,7 @@ export const Stage = () => {
 
       layer.batchDraw();
     });
-  }, [selectedAnnotationsIds, selectedAnnotation?.contour]);
+  }, [selectedAnnotationsIds, selectedAnnotation?.mask]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;

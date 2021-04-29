@@ -56,7 +56,7 @@ const initialState: StateType = {
   invertMode: false,
   language: LanguageType.English,
   offset: { x: 0, y: 0 },
-  penSelectionBrushSize: 2,
+  penSelectionBrushSize: 32,
   saturation: 0,
   selectedAnnotation: undefined,
   selectedAnnotations: [],

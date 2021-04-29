@@ -24,10 +24,10 @@ export const useStyles = makeStyles((theme) => ({
   settingsPaper: {
     width: settingsWidth,
     right: operationsWidth,
-    backgroundImage: `url(${texture})`,
     boxShadow: "inset 0 0 16px #000000",
   },
   toolbar: {
+    backgroundImage: `url(${texture})`,
     ...theme.mixins.toolbar,
   },
   settingsToolbar: {

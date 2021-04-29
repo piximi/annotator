@@ -7,14 +7,6 @@ import { NativeTypes } from "react-dnd-html5-backend";
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { useBoundingClientRect } from "../../../../hooks/useBoundingClientRect";
 import { useCursor } from "../../../../hooks";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import Typography from "@material-ui/core/Typography";
-import Drawer from "@material-ui/core/Drawer";
-import Divider from "@material-ui/core/Divider";
 
 type ContentProps = {
   onDrop: (item: { files: any[] }) => void;

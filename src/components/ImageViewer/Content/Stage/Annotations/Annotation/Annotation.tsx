@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CategoryType } from "../../../../../../types/CategoryType";
 import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
@@ -13,18 +13,19 @@ import {
 import Konva from "konva";
 import { AnnotationTool } from "../../../../../../image/Tool";
 import {
-  setSeletedCategory,
+  applicationSlice,
+  setSelectedAnnotation,
   setSelectedAnnotations,
-  setSelectedAnnotationId,
+  setSeletedCategory,
 } from "../../../../../../store";
 import { ToolType } from "../../../../../../types/ToolType";
 import { selectedAnnotationsIdsSelector } from "../../../../../../store/selectors/selectedAnnotationsIdsSelector";
 import { useKeyPress } from "../../../../../../hooks/useKeyPress";
 import { getOverlappingAnnotations } from "../../../../../../image/imageHelper";
 import { currentPositionSelector } from "../../../../../../store/selectors/currentPositionSelector";
-import { selectedAnnotationSelector } from "../../../../../../store/selectors/selectedAnnotationSelector";
 import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
 import { selectedAnnotationIdSelector } from "../../../../../../store/selectors/selectedAnnotationIdSelector";
+import { currentIndexSelector } from "../../../../../../store/selectors/currentIndexSelector";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -54,7 +55,7 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
   let overlappingAnnotationsIds: Array<string> = [];
 
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const currentIndex = useSelector(currentIndexSelector);
 
   const fill = _.find(
     categories,
@@ -87,10 +88,13 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
       selectedAnnotationId &&
       overlappingAnnotationsIds.includes(selectedAnnotationId)
     ) {
-      setCurrentIndex(
-        currentIndex + 1 === overlappingAnnotationsIds.length
-          ? 0
-          : currentIndex + 1
+      dispatch(
+        applicationSlice.actions.setCurrentIndex({
+          currentIndex:
+            currentIndex + 1 === overlappingAnnotationsIds.length
+              ? 0
+              : currentIndex + 1,
+        })
       );
       const nextAnnotationId = overlappingAnnotationsIds[currentIndex];
 
@@ -103,8 +107,8 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
 
     if (!shiftPress) {
       dispatch(
-        setSelectedAnnotationId({
-          selectedAnnotationId: currentAnnotation.id,
+        setSelectedAnnotation({
+          selectedAnnotation: currentAnnotation,
         })
       );
 
@@ -130,6 +134,11 @@ export const Annotation = ({ annotation, annotationTool }: AnnotationProps) => {
         dispatch(
           setSelectedAnnotations({
             selectedAnnotations: [...selectedAnnotations, currentAnnotation],
+          })
+        );
+        dispatch(
+          setSelectedAnnotation({
+            selectedAnnotation: currentAnnotation,
           })
         );
       }

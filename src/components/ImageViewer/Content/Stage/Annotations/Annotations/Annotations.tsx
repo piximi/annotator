@@ -13,7 +13,7 @@ type AnnotationsProps = {
 };
 
 export const Annotations = ({ annotationTool }: AnnotationsProps) => {
-  const confirmedAnnotations = useSelector(imageInstancesSelector);
+  const annotations = useSelector(imageInstancesSelector);
 
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
@@ -26,20 +26,25 @@ export const Annotations = ({ annotationTool }: AnnotationsProps) => {
   >([]);
 
   useEffect(() => {
-    if (!confirmedAnnotations) return;
+    if (!annotations) return;
 
-    const others = confirmedAnnotations.filter((annotation: AnnotationType) => {
-      return !selectedAnnotationsIds.includes(annotation.id);
-    });
+    const unselectedAnnotations = annotations.filter(
+      (annotation: AnnotationType) => {
+        return !selectedAnnotationsIds.includes(annotation.id);
+      }
+    );
 
-    const allAnnotations = [...others, ...selectedAnnotations];
+    const updatedAnnotations = [
+      ...unselectedAnnotations,
+      ...selectedAnnotations,
+    ];
 
     setVisibleAnnotations(
-      allAnnotations.filter((annotation: AnnotationType) =>
+      updatedAnnotations.filter((annotation: AnnotationType) =>
         visibleCategories.includes(annotation.categoryId)
       )
     );
-  }, [confirmedAnnotations, selectedAnnotations]);
+  }, [annotations, selectedAnnotations]);
 
   return (
     <React.Fragment>

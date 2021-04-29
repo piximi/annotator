@@ -1,7 +1,11 @@
 import Dialog from "@material-ui/core/Dialog";
 import React from "react";
 import { ShapeType } from "../../../../types/ShapeType";
-import { setImage } from "../../../../store";
+import {
+  setImage,
+  setSelectedAnnotations,
+  setSelectedAnnotation,
+} from "../../../../store";
 import { useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -56,6 +60,18 @@ export const ExampleImageDialog = ({
           shape: shape,
           src: data as string,
         },
+      })
+    );
+
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [],
+      })
+    );
+
+    dispatch(
+      setSelectedAnnotation({
+        selectedAnnotation: undefined,
       })
     );
   };

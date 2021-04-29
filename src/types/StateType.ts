@@ -12,6 +12,7 @@ export type StateType = {
   brightness: number;
   categories: Array<CategoryType>;
   contrast: number;
+  currentIndex: number;
   currentPosition?: { x: number; y: number };
   exposure: number;
   hue: number;
@@ -22,7 +23,7 @@ export type StateType = {
   penSelectionBrushSize: number;
   saturation: number;
   selectedAnnotations: Array<AnnotationType>;
-  selectedAnnotationId?: string;
+  selectedAnnotation: AnnotationType | undefined;
   selectedCategory: string;
   selectionMode: AnnotationModeType;
   soundEnabled: boolean;

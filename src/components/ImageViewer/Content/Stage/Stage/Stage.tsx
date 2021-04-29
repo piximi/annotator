@@ -17,7 +17,7 @@ import {
 } from "../../../../../store/selectors";
 import {
   applicationSlice,
-  setSelectedAnnotationId,
+  setSelectedAnnotation,
   setSelectedAnnotations,
 } from "../../../../../store";
 import {
@@ -156,10 +156,9 @@ export const Stage = () => {
 
   const deselectAllAnnotations = () => {
     dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
-    dispatch(setSelectedAnnotations);
     dispatch(
-      applicationSlice.actions.setSelectedAnnotationId({
-        selectedAnnotationId: undefined,
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: undefined,
       })
     );
   };
@@ -290,6 +289,17 @@ export const Stage = () => {
         ],
       })
     );
+
+    dispatch(
+      setSelectedAnnotation({
+        selectedAnnotation: {
+          ...selectedInstance,
+          boundingBox: annotationTool.boundingBox,
+          contour: annotationTool.contour,
+          mask: annotationTool.mask,
+        },
+      })
+    );
   }, [annotated]);
 
   useEffect(() => {
@@ -330,6 +340,16 @@ export const Stage = () => {
         selectedAnnotations: updatedAnnotations,
       })
     );
+    if (!selectedAnnotation) return;
+
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: {
+          ...selectedAnnotation,
+          categoryId: selectedCategory.id,
+        },
+      })
+    );
   }, [selectedCategory]);
 
   useEffect(() => {
@@ -347,8 +367,8 @@ export const Stage = () => {
       if (!annotationTool.annotation) return;
 
       dispatch(
-        applicationSlice.actions.setSelectedAnnotationId({
-          selectedAnnotationId: annotationTool.annotation.id,
+        applicationSlice.actions.setSelectedAnnotation({
+          selectedAnnotation: annotationTool.annotation,
         })
       );
 
@@ -382,15 +402,7 @@ export const Stage = () => {
   useEffect(() => {
     if (!annotated) return;
 
-    // if (!transformerRef || !transformerRef.current) return;
-
     if (!annotationTool || !annotationTool.contour) return;
-
-    if (!stageRef || !stageRef.current) return;
-
-    const node = stageRef.current.findOne("#selected");
-
-    if (!node) return;
 
     if (!annotationTool) return;
 
@@ -401,8 +413,8 @@ export const Stage = () => {
     if (selectionMode !== AnnotationModeType.New) return;
 
     dispatch(
-      setSelectedAnnotationId({
-        selectedAnnotationId: annotationTool.annotation.id,
+      setSelectedAnnotation({
+        selectedAnnotation: annotationTool.annotation,
       })
     );
   }, [annotated]);
@@ -430,7 +442,7 @@ export const Stage = () => {
 
       layer.batchDraw();
     });
-  }, [selectedAnnotationsIds, selectedAnnotation?.contour]);
+  }, [selectedAnnotationsIds, selectedAnnotation?.mask]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;
@@ -489,8 +501,8 @@ export const Stage = () => {
 
         if (selectionMode === AnnotationModeType.New) {
           dispatch(
-            applicationSlice.actions.setSelectedAnnotationId({
-              selectedAnnotationId: undefined,
+            applicationSlice.actions.setSelectedAnnotation({
+              selectedAnnotation: undefined,
             })
           );
           dispatch(
@@ -650,27 +662,25 @@ export const Stage = () => {
   }, [enterPress]);
 
   useEffect(() => {
-    if (selectedAnnotationsIds.length) {
-      if (backspacePress || escapePress || deletePress) {
-        if (deletePress || backspacePress) {
-          _.map(selectedAnnotationsIds, (annotationId: string) => {
-            dispatch(
-              applicationSlice.actions.deleteImageInstance({
-                id: annotationId,
-              })
-            );
-          });
-        }
-
-        deselectAllAnnotations();
-        deselectAllTransformers();
-
-        if (!_.isEmpty(annotations) && soundEnabled) {
-          playDeleteAnnotationSoundEffect();
-        }
-
-        deselectAnnotation();
+    if (backspacePress || escapePress || deletePress) {
+      if (deletePress || backspacePress) {
+        _.map(selectedAnnotationsIds, (annotationId: string) => {
+          dispatch(
+            applicationSlice.actions.deleteImageInstance({
+              id: annotationId,
+            })
+          );
+        });
       }
+
+      deselectAllAnnotations();
+      deselectAllTransformers();
+
+      if (!_.isEmpty(annotations) && soundEnabled) {
+        playDeleteAnnotationSoundEffect();
+      }
+
+      deselectAnnotation();
     }
   }, [backspacePress, deletePress, escapePress]);
 

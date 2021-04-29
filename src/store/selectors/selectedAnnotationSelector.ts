@@ -6,9 +6,5 @@ export const selectedAnnotationSelector = ({
 }: {
   state: HistoryStateType;
 }): AnnotationType | undefined => {
-  return state.present.selectedAnnotations.filter(
-    (annotation: AnnotationType) => {
-      return annotation.id === state.present.selectedAnnotationId;
-    }
-  )[0];
+  return state.present.selectedAnnotation;
 };

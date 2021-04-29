@@ -21,7 +21,12 @@ import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
-import { applicationSlice, setImage } from "../../../../store";
+import {
+  applicationSlice,
+  setImage,
+  setSelectedAnnotation,
+  setSelectedAnnotations,
+} from "../../../../store";
 import {
   Dialog,
   DialogActions,
@@ -460,6 +465,18 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
                 shape: shape,
                 src: image.toDataURL(),
               },
+            })
+          );
+
+          dispatch(
+            setSelectedAnnotations({
+              selectedAnnotations: [],
+            })
+          );
+
+          dispatch(
+            setSelectedAnnotation({
+              selectedAnnotation: undefined,
             })
           );
         });

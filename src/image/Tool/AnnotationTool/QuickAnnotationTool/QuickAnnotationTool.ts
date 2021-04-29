@@ -53,7 +53,16 @@ export class QuickAnnotationTool extends AnnotationTool {
   onMouseDown(position: { x: number; y: number }) {
     if (this.annotated) return;
 
-    if (!this.superpixels || !this.currentMask) return;
+    if (!this.currentMask) {
+      this.currentMask = new ImageJS.Image(
+        this.image.width,
+        this.image.height,
+        new Uint8Array(this.image.width * this.image.height * 4),
+        { alpha: 1 }
+      );
+    }
+
+    if (!this.superpixels) return;
 
     this.annotating = true;
   }
@@ -72,12 +81,15 @@ export class QuickAnnotationTool extends AnnotationTool {
     if (!this.annotating) {
       this.currentSuperpixels.clear();
 
+      console.info("Creating this.currentMask here");
+
       this.currentMask = new ImageJS.Image(
         this.image.width,
         this.image.height,
         new Uint8Array(this.image.width * this.image.height * 4),
         { alpha: 1 }
       );
+      console.info(this.currentMask);
     }
 
     this.currentSuperpixels.add(superpixel);

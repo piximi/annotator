@@ -36,7 +36,6 @@ import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/pe
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { SelectedContour } from "../SelectedContour";
 import { Image } from "../Image";
-import { Annotations } from "../Annotations";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import {
@@ -66,6 +65,7 @@ import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSel
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
+import { Annotations } from "../Annotations/Annotations";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -364,22 +364,6 @@ export const Stage = () => {
 
       if (selectionMode !== AnnotationModeType.New) return;
       annotationTool.annotate(selectedCategory);
-      if (!annotationTool.annotation) return;
-
-      dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: annotationTool.annotation,
-        })
-      );
-
-      dispatch(
-        setSelectedAnnotations({
-          selectedAnnotations: [
-            ...selectedAnnotations,
-            annotationTool.annotation,
-          ],
-        })
-      );
     }
 
     if (selectionMode === AnnotationModeType.New) return;
@@ -415,6 +399,12 @@ export const Stage = () => {
     dispatch(
       setSelectedAnnotation({
         selectedAnnotation: annotationTool.annotation,
+      })
+    );
+
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [annotationTool.annotation],
       })
     );
   }, [annotated]);

@@ -30,6 +30,7 @@ export const SelectedContour = () => {
   // then this use effect is activated and the scaled contour is scaled once again (too much) and then the transform attaches to that one.
   useEffect(() => {
     if (!selectedAnnotation) return;
+    console.info("Here again");
     setScaledContour(
       selectedAnnotation.contour.map((point: number) => {
         return point * stageScale;
@@ -56,8 +57,8 @@ export const SelectedContour = () => {
               closed
               dash={[4 / stageScale, 2 / stageScale]}
               dashOffset={-dashOffset}
-              fill={fill}
-              opacity={0.5}
+              // fill={fill}
+              // opacity={0.5}
               points={annotation.contour}
               scale={{ x: stageScale, y: stageScale }}
               stroke="black"
@@ -74,9 +75,12 @@ export const SelectedContour = () => {
             />
 
             <ReactKonva.Line
+              closed
               dash={[4 / stageScale, 2 / stageScale]}
               dashOffset={-dashOffset}
+              fill={fill}
               id={annotation.id}
+              opacity={0.5}
               points={scaledContour}
               stroke="blue"
               strokeWidth={1 / stageScale}

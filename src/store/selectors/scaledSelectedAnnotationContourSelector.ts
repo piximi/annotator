@@ -8,7 +8,6 @@ export const scaledSelectedAnnotationContourSelector = ({
 }): Array<number> | undefined => {
   const stageScale = state.present.stageScale;
   if (!state.present.selectedAnnotation) return;
-  console.info("Here");
   return state.present.selectedAnnotation.contour.map((point: number) => {
     return point * stageScale;
   });

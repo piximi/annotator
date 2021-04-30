@@ -208,6 +208,7 @@ export const Transformer = ({
     updateSelectedAnnotation(updatedAnnotation);
 
     setCenter(undefined);
+    setBoundBox(null);
   };
 
   const updateSelectedAnnotation = (updatedAnnotation: AnnotationType) => {

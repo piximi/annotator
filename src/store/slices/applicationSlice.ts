@@ -103,7 +103,16 @@ export const applicationSlice = createSlice({
     openAnnotations(
       state: StateType,
       action: PayloadAction<{ annotations: Array<SerializedAnnotationType> }>
-    ) {},
+    ) {
+      /*
+       * User is expected to open the image before opening annotations.
+       */
+      if (!state.image) return;
+
+      action.payload.annotations.forEach(
+        (annotation: SerializedAnnotationType) => {}
+      );
+    },
     replaceImageInstance(
       state: StateType,
       action: PayloadAction<{ id: string; instance: AnnotationType }>

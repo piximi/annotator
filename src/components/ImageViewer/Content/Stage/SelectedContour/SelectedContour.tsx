@@ -24,8 +24,10 @@ export const SelectedContour = () => {
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
 
-  const [scaledContour, setScaledContour] = useState<Array<number>>();
+  const [scaledContour, setScaledContour] = useState<Array<number>>([]);
 
+  // FIXME The problem here is that when the contour of selectedAnnotation is updated at the end of a transform, its new contour is dispatch
+  // then this use effect is activated and the scaled contour is scaled once again (too much) and then the transform attaches to that one.
   useEffect(() => {
     if (!selectedAnnotation) return;
     setScaledContour(
@@ -33,7 +35,7 @@ export const SelectedContour = () => {
         return point * stageScale;
       })
     );
-  }, [stageScale, selectedAnnotation?.id]);
+  }, [stageScale, selectedAnnotation, selectedAnnotation?.contour]); //.contour is needed
 
   if (!selectedAnnotation || !selectedAnnotation.contour)
     return <React.Fragment />;

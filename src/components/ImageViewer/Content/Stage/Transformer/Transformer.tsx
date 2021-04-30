@@ -118,7 +118,6 @@ export const Transformer = ({
   const boundingBoxFunc = (oldBox: box, newBox: box) => {
     if (!boundBox) {
       setStartBox(oldBox);
-      console.info("Here only once");
     }
 
     const relativeNewBox = getRelativeBox(newBox);
@@ -199,6 +198,12 @@ export const Transformer = ({
       boundingBox: computeBoundingBoxFromContours(resizedContour),
       mask: resizedMask,
     };
+
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: undefined,
+      })
+    );
 
     updateSelectedAnnotation(updatedAnnotation);
 
@@ -289,25 +294,25 @@ export const Transformer = ({
   };
 
   const onTransformStart = () => {
-    dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: selectedAnnotations.filter(
-          (annotation: AnnotationType) => {
-            return annotation.id === annotationId;
-          }
-        )[0],
-      })
-    );
-
-    dispatch(
-      setSelectedAnnotations({
-        selectedAnnotations: [
-          selectedAnnotations.filter((annotation: AnnotationType) => {
-            return annotation.id === annotationId;
-          })[0],
-        ],
-      })
-    );
+    // dispatch(
+    //   setSelectedAnnotation({
+    //     selectedAnnotation: selectedAnnotations.filter(
+    //       (annotation: AnnotationType) => {
+    //         return annotation.id === annotationId;
+    //       }
+    //     )[0],
+    //   })
+    // );
+    //
+    // dispatch(
+    //   setSelectedAnnotations({
+    //     selectedAnnotations: [
+    //       selectedAnnotations.filter((annotation: AnnotationType) => {
+    //         return annotation.id === annotationId;
+    //       })[0],
+    //     ],
+    //   })
+    // );
   };
 
   return (

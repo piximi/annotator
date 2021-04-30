@@ -61,6 +61,7 @@ import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { CreateCategoryDialog } from "../CreateCategoryListItem/CreateCategoryDialog";
+import { saveAnnotationsSelector } from "../../../../store/selectors/saveAnnotationsSelector";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -537,8 +538,12 @@ const OpenMenu = ({ popupState }: OpenMenuProps) => {
 const SaveAnnotationsMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
+  const annotations = useSelector(saveAnnotationsSelector);
+
   const onClick = () => {
     popupState.close();
+
+    console.info(annotations);
   };
 
   return (

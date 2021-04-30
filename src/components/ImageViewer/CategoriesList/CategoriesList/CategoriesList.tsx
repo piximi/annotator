@@ -537,8 +537,12 @@ const OpenMenu = ({ popupState }: OpenMenuProps) => {
 const SaveAnnotationsMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
+  const onClick = () => {
+    popupState.close();
+  };
+
   return (
-    <MenuItem onClick={popupState.close}>
+    <MenuItem onClick={onClick}>
       <ListItemText primary="Save annotations" />
     </MenuItem>
   );

@@ -137,6 +137,27 @@ export const Stage = () => {
 
   const soundEnabled = useSelector(soundEnabledSelector);
 
+  const attachTransformer = (id: string) => {
+    if (!stageRef || !stageRef.current) return;
+
+    const transformerId = "tr-".concat(id);
+
+    const transformer = stageRef.current.findOne(`#${transformerId}`);
+    const line = stageRef.current.findOne(`#${id}`);
+
+    if (!line) return;
+
+    if (!transformer) return;
+
+    (transformer as Konva.Transformer).nodes([line]);
+
+    const layer = (transformer as Konva.Transformer).getLayer();
+
+    if (!layer) return;
+
+    layer.batchDraw();
+  };
+
   const detachTransformer = (transformerId: string) => {
     if (!stageRef || !stageRef.current) return;
     const transformer = stageRef.current.findOne(`#${transformerId}`);
@@ -396,32 +417,14 @@ export const Stage = () => {
     // );
   }, [annotated]);
 
-  const attachTransformer = (id: string) => {
-    if (!stageRef || !stageRef.current) return;
-
-    const transformerId = "tr-".concat(id);
-
-    const transformer = stageRef.current.findOne(`#${transformerId}`);
-    const line = stageRef.current.findOne(`#${id}`);
-
-    if (!line) return;
-
-    if (!transformer) return;
-
-    (transformer as Konva.Transformer).nodes([line]);
-
-    const layer = (transformer as Konva.Transformer).getLayer();
-
-    if (!layer) return;
-
-    layer.batchDraw();
-  };
-
   useEffect(() => {
+    console.info(newAnnotation);
     if (newAnnotation) attachTransformer(newAnnotation.id);
 
     //attach transformer to all selected confirmed annotations
     _.forEach(selectedAnnotationsIds, (annotationId) => {
+      console.info(annotationId);
+      detachTransformer("tr-".concat(annotationId));
       attachTransformer(annotationId);
     });
   }, [selectedAnnotationsIds, newAnnotation, selectedAnnotation?.mask]);
@@ -620,6 +623,9 @@ export const Stage = () => {
       const others = annotations.filter((annotation: AnnotationType) => {
         return !selectedAnnotationsIds.includes(annotation.id);
       });
+
+      console.info(selectedAnnotations);
+      console.info(others);
 
       dispatch(
         applicationSlice.actions.setImageInstances({

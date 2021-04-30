@@ -1,26 +1,26 @@
 import * as ReactKonva from "react-konva";
 import React, { useRef, useState } from "react";
 import * as _ from "lodash";
-import { AnnotationType } from "../../../../../types/AnnotationType";
+import { AnnotationType } from "../../../../../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
 import {
   imageInstancesSelector,
   imageSelector,
   stageScaleSelector,
-} from "../../../../../store/selectors";
+} from "../../../../../../store/selectors";
 import {
   applicationSlice,
   setSelectedAnnotations,
   setSelectedAnnotation,
-} from "../../../../../store/slices";
+} from "../../../../../../store/slices";
 import Konva from "konva";
-import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
-import { connectPoints } from "../../../../../image/imageHelper";
-import { simplify } from "../../../../../image/simplify/simplify";
-import { slpf } from "../../../../../image/polygon-fill/slpf";
-import { encode } from "../../../../../image/rle";
+import { selectedAnnotationSelector } from "../../../../../../store/selectors/selectedAnnotationSelector";
+import { connectPoints } from "../../../../../../image/imageHelper";
+import { simplify } from "../../../../../../image/simplify/simplify";
+import { slpf } from "../../../../../../image/polygon-fill/slpf";
+import { encode } from "../../../../../../image/rle";
 import * as ImageJS from "image-js";
-import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
+import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
 
 type box = {
   x: number;
@@ -41,7 +41,7 @@ type TransformerProps = {
   annotationId: string;
 };
 
-export const Transformer = ({
+export const NewAnnotationTransformer = ({
   transformPosition,
   annotationId,
 }: TransformerProps) => {

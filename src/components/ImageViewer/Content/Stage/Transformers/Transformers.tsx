@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
 
-import { Transformer } from "../Transformer/Transformer";
+import { SelectedAnnotationsTransformers } from "./SelectedAnnotationsTransformers/SelectedAnnotationsTransformers";
 import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
 
 type TransformersProps = {
@@ -24,20 +24,13 @@ export const Transformers = ({ transformPosition }: TransformersProps) => {
 
   return (
     <>
-      {selectedAnnotationsIds.map((annotationId, idx) => {
-        return (
-          <Transformer
-            transformPosition={transformPosition}
-            annotationId={annotationId}
-          />
-        );
-      })}
-      {newAnnotation && (
-        <Transformer
-          transformPosition={transformPosition}
-          annotationId={newAnnotation.id}
-        />
-      )}
+      <SelectedAnnotationsTransformers transformPosition={transformPosition} />
+      {/*{newAnnotation && (*/}
+      {/*  <SelectedAnnotationsTransformer*/}
+      {/*    transformPosition={transformPosition}*/}
+      {/*    annotationId={newAnnotation.id}*/}
+      {/*  />*/}
+      {/*)}*/}
     </>
   );
 };

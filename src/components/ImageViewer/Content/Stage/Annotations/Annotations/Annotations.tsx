@@ -14,19 +14,24 @@ export const Annotations = () => {
     Array<AnnotationType>
   >([]);
 
-  useEffect(() => {
-    if (!annotations) return;
+  //   //FIXME bring back visible annotations
 
-    setVisibleAnnotations(
-      annotations.filter((annotation: AnnotationType) =>
-        visibleCategories.includes(annotation.categoryId)
-      )
-    );
-  }, [annotations, visibleCategories]);
+  // useEffect(() => {
+  //   if (!annotations) return;
+  //
+  //   //FIXME bring back visible annotations
+  //   setVisibleAnnotations(
+  //     annotations.filter((annotation: AnnotationType) =>
+  //       visibleCategories.includes(annotation.categoryId)
+  //     )
+  //   );
+  // }, [annotations, visibleCategories]);
+
+  if (!annotations) return <React.Fragment />;
 
   return (
     <React.Fragment>
-      {visibleAnnotations.map((annotation: AnnotationType) => (
+      {annotations.map((annotation: AnnotationType) => (
         <Annotation annotation={annotation} key={annotation.id} />
       ))}
     </React.Fragment>

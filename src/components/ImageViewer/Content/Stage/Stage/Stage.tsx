@@ -396,58 +396,35 @@ export const Stage = () => {
     // );
   }, [annotated]);
 
-  useEffect(() => {
+  const attachTransformer = (id: string) => {
     if (!stageRef || !stageRef.current) return;
 
-    if (newAnnotation) {
-      // attach transform to a new unconfirmed selection
-      const transformerId = "tr-".concat(newAnnotation.id);
+    const transformerId = "tr-".concat(id);
 
-      console.info("405");
-      const transformer = stageRef.current.findOne(`#${transformerId}`);
-      const line = stageRef.current.findOne(`#${newAnnotation.id}`);
+    const transformer = stageRef.current.findOne(`#${transformerId}`);
+    const line = stageRef.current.findOne(`#${id}`);
 
-      console.info(stageRef.current.getChildren());
+    if (!line) return;
 
-      if (!line) return;
+    if (!transformer) return;
 
-      console.info("412");
+    (transformer as Konva.Transformer).nodes([line]);
 
-      if (!transformer) return;
+    const layer = (transformer as Konva.Transformer).getLayer();
 
-      console.info("416");
+    if (!layer) return;
 
-      (transformer as Konva.Transformer).nodes([line]);
+    layer.batchDraw();
+  };
 
-      console.info("Here");
-
-      const layer = (transformer as Konva.Transformer).getLayer();
-
-      if (!layer) return;
-
-      layer.batchDraw();
-    }
+  useEffect(() => {
+    if (newAnnotation) attachTransformer(newAnnotation.id);
 
     //attach transformer to all selected confirmed annotations
     _.forEach(selectedAnnotationsIds, (annotationId) => {
-      const transformerId = "tr-".concat(annotationId);
-
-      const transformer = stageRef!.current!.findOne(`#${transformerId}`);
-      const line = stageRef!.current!.findOne(`#${annotationId}`);
-
-      if (!line) return;
-
-      if (!transformer) return;
-
-      (transformer as Konva.Transformer).nodes([line]);
-
-      const layer = (transformer as Konva.Transformer).getLayer();
-
-      if (!layer) return;
-
-      layer.batchDraw();
+      attachTransformer(annotationId);
     });
-  }, [selectedAnnotationsIds, selectedAnnotation?.mask]);
+  }, [selectedAnnotationsIds, newAnnotation, selectedAnnotation?.mask]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;

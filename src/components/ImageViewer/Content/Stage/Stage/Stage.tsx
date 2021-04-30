@@ -15,11 +15,7 @@ import {
   toolTypeSelector,
   zoomSelectionSelector,
 } from "../../../../../store/selectors";
-import {
-  applicationSlice,
-  setSelectedAnnotation,
-  setSelectedAnnotations,
-} from "../../../../../store";
+import { applicationSlice, setSelectedAnnotations } from "../../../../../store";
 import {
   Provider,
   ReactReduxContext,
@@ -67,6 +63,7 @@ import { imageHeightSelector } from "../../../../../store/selectors/imageHeightS
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
+import { SelectedAnnotation } from "../Annotations/SelectedAnnotation/SelectedAnnotation";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -267,23 +264,33 @@ export const Stage = () => {
     if (!annotationTool.annotated) return;
 
     let combinedMask, combinedContour;
+    let instance;
 
-    const selectedInstance = selectedAnnotation;
+    if (!newAnnotation && !selectedAnnotation) return;
 
-    if (!selectedInstance) return;
+    instance = newAnnotation;
+
+    if (selectedAnnotation) {
+      //this is necessary to mark special selection as a new selection and delete the previous image instance
+      applicationSlice.actions.setNewAnnotation({
+        newAnnotation: selectedAnnotation,
+      });
+      dispatch(
+        applicationSlice.actions.deleteImageInstance({
+          id: selectedAnnotation.id,
+        })
+      );
+      instance = selectedAnnotation;
+    }
+
+    if (!instance) return;
 
     if (selectionMode === AnnotationModeType.Add) {
-      [combinedMask, combinedContour] = annotationTool.add(
-        selectedInstance.mask
-      );
+      [combinedMask, combinedContour] = annotationTool.add(instance.mask);
     } else if (selectionMode === AnnotationModeType.Subtract) {
-      [combinedMask, combinedContour] = annotationTool.subtract(
-        selectedInstance.mask
-      );
+      [combinedMask, combinedContour] = annotationTool.subtract(instance.mask);
     } else if (selectionMode === AnnotationModeType.Intersect) {
-      [combinedMask, combinedContour] = annotationTool.intersect(
-        selectedInstance.mask
-      );
+      [combinedMask, combinedContour] = annotationTool.intersect(instance.mask);
     }
 
     annotationTool.mask = combinedMask;
@@ -294,6 +301,8 @@ export const Stage = () => {
       combinedContour
     );
 
+    console.info("Made it here");
+
     if (
       !annotationTool.boundingBox ||
       !annotationTool.contour ||
@@ -302,22 +311,9 @@ export const Stage = () => {
       return;
 
     dispatch(
-      setSelectedAnnotations({
-        selectedAnnotations: [
-          {
-            ...selectedInstance,
-            boundingBox: annotationTool.boundingBox,
-            contour: annotationTool.contour,
-            mask: annotationTool.mask,
-          },
-        ],
-      })
-    );
-
-    dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: {
-          ...selectedInstance,
+      applicationSlice.actions.setNewAnnotation({
+        newAnnotation: {
+          ...instance,
           boundingBox: annotationTool.boundingBox,
           contour: annotationTool.contour,
           mask: annotationTool.mask,
@@ -724,9 +720,11 @@ export const Stage = () => {
 
               <PenAnnotationToolTip annotationTool={annotationTool} />
 
-              <NewAnnotation newAnnotation={newAnnotation} />
+              <NewAnnotation />
 
               <Annotations />
+
+              {/*<SelectedAnnotation/>*/}
 
               <Transformers transformPosition={getRelativePointerPosition} />
 

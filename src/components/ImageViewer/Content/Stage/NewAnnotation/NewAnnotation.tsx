@@ -9,12 +9,9 @@ import {
 import * as _ from "lodash";
 import { CategoryType } from "../../../../../types/CategoryType";
 import { AnnotationType } from "../../../../../types/AnnotationType";
+import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
 
-type NewAnnotationProps = {
-  newAnnotation: AnnotationType | undefined;
-};
-
-export const NewAnnotation = ({ newAnnotation }: NewAnnotationProps) => {
+export const NewAnnotation = () => {
   const stageScale = useSelector(stageScaleSelector);
 
   const dashOffset = useMarchingAnts();
@@ -22,6 +19,8 @@ export const NewAnnotation = ({ newAnnotation }: NewAnnotationProps) => {
   const [scaledContour, setScaledContour] = useState<Array<number>>([]);
 
   const categories = useSelector(categoriesSelector);
+
+  const newAnnotation = useSelector(newAnnotationSelector);
 
   useEffect(() => {
     if (!newAnnotation || !newAnnotation.contour) return;

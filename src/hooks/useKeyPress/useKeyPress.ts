@@ -3,6 +3,7 @@ import { applicationSlice } from "../../store/slices";
 import { AnnotationModeType } from "../../types/AnnotationModeType";
 import { useDispatch, useSelector } from "react-redux";
 import { selectedAnnotationSelector } from "../../store/selectors/selectedAnnotationSelector";
+import { newAnnotationSelector } from "../../store/selectors/newAnnotationSelector";
 
 export function useKeyPress(targetKey: string) {
   // State for keeping track of whether key is pressed
@@ -39,6 +40,8 @@ export function useKeyPress(targetKey: string) {
 export const useShiftPress = () => {
   const dispatch = useDispatch();
 
+  const newAnnotation = useSelector(newAnnotationSelector);
+
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
   const shiftPress = useKeyPress("Shift");
@@ -50,7 +53,7 @@ export const useShiftPress = () => {
         })
       );
     } else {
-      if (!selectedAnnotation) return;
+      if (!newAnnotation && !selectedAnnotation) return;
       dispatch(
         applicationSlice.actions.setSelectionMode({
           selectionMode: AnnotationModeType.Add,

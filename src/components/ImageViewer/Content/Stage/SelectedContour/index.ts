@@ -1,1 +1,0 @@
-export { SelectedContour } from "./SelectedContour";

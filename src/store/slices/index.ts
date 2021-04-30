@@ -19,6 +19,7 @@ export {
   setImageName,
   setInvertMode,
   setLanguage,
+  setNewAnnotation,
   setOffset,
   setOperation,
   setPenSelectionBrushSize,

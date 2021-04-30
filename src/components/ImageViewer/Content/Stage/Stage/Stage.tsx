@@ -34,7 +34,7 @@ import {
 } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
-import { SelectedContour } from "../SelectedContour";
+import { NewAnnotation } from "../NewAnnotation/NewAnnotation";
 import { Image } from "../Image";
 import { Annotations } from "../Annotations";
 import { Selecting } from "../Selecting";
@@ -66,6 +66,7 @@ import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSel
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
+import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -82,6 +83,8 @@ export const Stage = () => {
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
   const selectionMode = useSelector(selectionModeSelector);
+
+  const newAnnotation = useSelector(newAnnotationSelector);
 
   const stageHeight = useSelector(stageHeightSelector);
   const stageWidth = useSelector(stageWidthSelector);
@@ -378,31 +381,59 @@ export const Stage = () => {
     if (selectionMode !== AnnotationModeType.New) return;
 
     dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: annotationTool.annotation,
+      applicationSlice.actions.setNewAnnotation({
+        newAnnotation: annotationTool.annotation,
       })
     );
 
-    dispatch(
-      setSelectedAnnotations({
-        selectedAnnotations: [
-          ...selectedAnnotations,
-          annotationTool.annotation,
-        ],
-      })
-    );
+    // dispatch(
+    //   setSelectedAnnotations({
+    //     selectedAnnotations: [
+    //       ...selectedAnnotations,
+    //       annotationTool.annotation,
+    //     ],
+    //   })
+    // );
   }, [annotated]);
 
   useEffect(() => {
     if (!stageRef || !stageRef.current) return;
 
-    _.forEach(selectedAnnotationsIds, (annotationId) => {
-      if (!stageRef || !stageRef.current) return;
+    if (newAnnotation) {
+      // attach transform to a new unconfirmed selection
+      const transformerId = "tr-".concat(newAnnotation.id);
 
+      console.info("405");
+      const transformer = stageRef.current.findOne(`#${transformerId}`);
+      const line = stageRef.current.findOne(`#${newAnnotation.id}`);
+
+      console.info(stageRef.current.getChildren());
+
+      if (!line) return;
+
+      console.info("412");
+
+      if (!transformer) return;
+
+      console.info("416");
+
+      (transformer as Konva.Transformer).nodes([line]);
+
+      console.info("Here");
+
+      const layer = (transformer as Konva.Transformer).getLayer();
+
+      if (!layer) return;
+
+      layer.batchDraw();
+    }
+
+    //attach transformer to all selected confirmed annotations
+    _.forEach(selectedAnnotationsIds, (annotationId) => {
       const transformerId = "tr-".concat(annotationId);
 
-      const transformer = stageRef.current.findOne(`#${transformerId}`);
-      const line = stageRef.current.findOne(`#${annotationId}`);
+      const transformer = stageRef!.current!.findOne(`#${transformerId}`);
+      const line = stageRef!.current!.findOne(`#${annotationId}`);
 
       if (!line) return;
 
@@ -595,15 +626,30 @@ export const Stage = () => {
 
     if (!annotations || !annotationTool || annotationTool.annotating) return;
 
-    const others = annotations.filter((annotation: AnnotationType) => {
-      return !selectedAnnotationsIds.includes(annotation.id);
-    });
+    if (newAnnotation) {
+      //confirm a new annotation
+      dispatch(
+        applicationSlice.actions.setImageInstances({
+          instances: [...annotations, newAnnotation],
+        })
+      );
+      dispatch(
+        applicationSlice.actions.setNewAnnotation({
+          newAnnotation: undefined,
+        })
+      );
+    } else {
+      //change existing annotations
+      const others = annotations.filter((annotation: AnnotationType) => {
+        return !selectedAnnotationsIds.includes(annotation.id);
+      });
 
-    dispatch(
-      applicationSlice.actions.setImageInstances({
-        instances: [...others, ...selectedAnnotations],
-      })
-    );
+      dispatch(
+        applicationSlice.actions.setImageInstances({
+          instances: [...others, ...selectedAnnotations],
+        })
+      );
+    }
 
     if (soundEnabled) playCreateAnnotationSoundEffect();
 
@@ -711,7 +757,7 @@ export const Stage = () => {
 
               <PenAnnotationToolTip annotationTool={annotationTool} />
 
-              <SelectedContour />
+              <NewAnnotation />
 
               <Annotations />
 

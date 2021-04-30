@@ -6,40 +6,39 @@ import {
   categoriesSelector,
   stageScaleSelector,
 } from "../../../../../store/selectors";
-import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 import * as _ from "lodash";
 import { CategoryType } from "../../../../../types/CategoryType";
+import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
 
-export const SelectedContour = () => {
+export const NewAnnotation = () => {
   const stageScale = useSelector(stageScaleSelector);
 
   const dashOffset = useMarchingAnts();
 
-  const selectedAnnotation = useSelector(selectedAnnotationSelector);
+  const newAnnotation = useSelector(newAnnotationSelector);
 
   const [scaledContour, setScaledContour] = useState<Array<number>>([]);
 
   const categories = useSelector(categoriesSelector);
 
   useEffect(() => {
-    if (!selectedAnnotation) return;
+    if (!newAnnotation) return;
 
     setScaledContour(
-      selectedAnnotation.contour.map((point: number) => {
+      newAnnotation.contour.map((point: number) => {
         return point * stageScale;
       })
     );
-  }, [stageScale, selectedAnnotation?.contour]);
+  }, [stageScale, newAnnotation?.contour]);
 
-  if (!selectedAnnotation) return <React.Fragment />;
+  if (!newAnnotation) return <React.Fragment />;
 
   const fill = _.find(
     categories,
-    (category: CategoryType) => category.id === selectedAnnotation.categoryId
+    (category: CategoryType) => category.id === newAnnotation.categoryId
   )?.color;
 
-  if (!selectedAnnotation || !selectedAnnotation.contour)
-    return <React.Fragment />;
+  if (!newAnnotation || !newAnnotation.contour) return <React.Fragment />;
 
   return (
     <React.Fragment>
@@ -49,7 +48,7 @@ export const SelectedContour = () => {
         dashOffset={-dashOffset}
         fill={fill}
         opacity={0.5}
-        points={selectedAnnotation.contour}
+        points={newAnnotation.contour}
         scale={{ x: stageScale, y: stageScale }}
         stroke="black"
         strokeWidth={1 / stageScale}
@@ -58,7 +57,7 @@ export const SelectedContour = () => {
       <ReactKonva.Line
         dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
-        points={selectedAnnotation.contour}
+        points={newAnnotation.contour}
         scale={{ x: stageScale, y: stageScale }}
         stroke="white"
         strokeWidth={1 / stageScale}
@@ -67,7 +66,7 @@ export const SelectedContour = () => {
       <ReactKonva.Line
         dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
-        id={selectedAnnotation?.id}
+        id={newAnnotation?.id}
         points={scaledContour}
         stroke="blue"
         strokeWidth={1 / stageScale}

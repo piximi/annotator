@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
 
 import { Transformer } from "../Transformer/Transformer";
+import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
 
 type TransformersProps = {
   transformPosition: ({
@@ -17,7 +18,9 @@ type TransformersProps = {
 export const Transformers = ({ transformPosition }: TransformersProps) => {
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
-  if (!selectedAnnotationsIds) return <React.Fragment />;
+  const newAnnotation = useSelector(newAnnotationSelector);
+
+  if (!selectedAnnotationsIds && newAnnotation) return <React.Fragment />;
 
   return (
     <>
@@ -29,6 +32,12 @@ export const Transformers = ({ transformPosition }: TransformersProps) => {
           />
         );
       })}
+      {newAnnotation && (
+        <Transformer
+          transformPosition={transformPosition}
+          annotationId={newAnnotation.id}
+        />
+      )}
     </>
   );
 };

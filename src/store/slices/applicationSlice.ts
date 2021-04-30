@@ -55,6 +55,7 @@ const initialState: StateType = {
   },
   invertMode: false,
   language: LanguageType.English,
+  newAnnotation: undefined,
   offset: { x: 0, y: 0 },
   penSelectionBrushSize: 32,
   saturation: 0,
@@ -205,6 +206,12 @@ export const applicationSlice = createSlice({
     ) {
       state.language = action.payload.language;
     },
+    setNewAnnotation(
+      state: StateType,
+      action: PayloadAction<{ newAnnotation: AnnotationType | undefined }>
+    ) {
+      state.newAnnotation = action.payload.newAnnotation;
+    },
     setOffset(
       state: StateType,
       action: PayloadAction<{ offset: { x: number; y: number } }>
@@ -330,6 +337,7 @@ export const {
   setImageName,
   setInvertMode,
   setLanguage,
+  setNewAnnotation,
   setOffset,
   setOperation,
   setPenSelectionBrushSize,

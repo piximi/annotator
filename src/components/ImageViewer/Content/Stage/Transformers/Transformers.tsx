@@ -4,6 +4,7 @@ import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/s
 
 import { SelectedAnnotationsTransformers } from "./SelectedAnnotationsTransformers/SelectedAnnotationsTransformers";
 import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
+import { NewAnnotationTransformer } from "./NewAnnotationTransformer/NewAnnotationTransformer";
 
 type TransformersProps = {
   transformPosition: ({
@@ -25,12 +26,7 @@ export const Transformers = ({ transformPosition }: TransformersProps) => {
   return (
     <>
       <SelectedAnnotationsTransformers transformPosition={transformPosition} />
-      {/*{newAnnotation && (*/}
-      {/*  <SelectedAnnotationsTransformer*/}
-      {/*    transformPosition={transformPosition}*/}
-      {/*    annotationId={newAnnotation.id}*/}
-      {/*  />*/}
-      {/*)}*/}
+      <NewAnnotationTransformer transformPosition={transformPosition} />
     </>
   );
 };

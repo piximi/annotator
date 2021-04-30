@@ -418,16 +418,18 @@ export const Stage = () => {
   }, [annotated]);
 
   useEffect(() => {
-    console.info(newAnnotation);
     if (newAnnotation) attachTransformer(newAnnotation.id);
 
     //attach transformer to all selected confirmed annotations
     _.forEach(selectedAnnotationsIds, (annotationId) => {
-      console.info(annotationId);
-      detachTransformer("tr-".concat(annotationId));
+      // detachTransformer("tr-".concat(annotationId));
       attachTransformer(annotationId);
     });
-  }, [selectedAnnotationsIds, newAnnotation, selectedAnnotation?.mask]);
+  }, [
+    selectedAnnotationsIds,
+    newAnnotation?.contour,
+    selectedAnnotation?.mask,
+  ]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;
@@ -484,7 +486,6 @@ export const Stage = () => {
           dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
         }
 
-        console.info("Line 503 and 517");
         if (selectionMode === AnnotationModeType.New) {
           dispatch(
             applicationSlice.actions.setSelectedAnnotation({
@@ -624,9 +625,6 @@ export const Stage = () => {
         return !selectedAnnotationsIds.includes(annotation.id);
       });
 
-      console.info(selectedAnnotations);
-      console.info(others);
-
       dispatch(
         applicationSlice.actions.setImageInstances({
           instances: [...others, ...selectedAnnotations],
@@ -740,7 +738,7 @@ export const Stage = () => {
 
               <PenAnnotationToolTip annotationTool={annotationTool} />
 
-              <NewAnnotation />
+              <NewAnnotation newAnnotation={newAnnotation} />
 
               <Annotations />
 

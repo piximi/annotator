@@ -9,27 +9,41 @@ import {
 import * as _ from "lodash";
 import { CategoryType } from "../../../../../types/CategoryType";
 import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
+import { AnnotationType } from "../../../../../types/AnnotationType";
 
-export const NewAnnotation = () => {
+type NewAnnotationProps = {
+  newAnnotation: AnnotationType | undefined;
+};
+
+export const NewAnnotation = ({ newAnnotation }: NewAnnotationProps) => {
   const stageScale = useSelector(stageScaleSelector);
 
   const dashOffset = useMarchingAnts();
-
-  const newAnnotation = useSelector(newAnnotationSelector);
 
   const [scaledContour, setScaledContour] = useState<Array<number>>([]);
 
   const categories = useSelector(categoriesSelector);
 
+  const [annotationId, setAnnotationId] = useState<string>();
+
   useEffect(() => {
-    if (!newAnnotation) return;
+    if (!newAnnotation || !newAnnotation.contour) return;
 
     setScaledContour(
       newAnnotation.contour.map((point: number) => {
         return point * stageScale;
       })
     );
-  }, [stageScale, newAnnotation?.contour]);
+  }, [stageScale]);
+
+  useEffect(() => {
+    if (!newAnnotation) return;
+    setScaledContour(
+      newAnnotation.contour.map((point: number) => {
+        return point * stageScale;
+      })
+    );
+  }, [newAnnotation?.id]);
 
   if (!newAnnotation) return <React.Fragment />;
 

@@ -85,13 +85,6 @@ export const SelectedAnnotationTransformer = ({
     const scaleX = relativeBoundBox.width / relativeStartBox.width;
     const scaleY = relativeBoundBox.height / relativeStartBox.height;
 
-    //Found this to be necessary to detach transformer before re-attaching
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
-
     if (!selectedAnnotation) return;
 
     const contour = selectedAnnotation.contour;

@@ -1,5 +1,5 @@
 import * as ReactKonva from "react-konva";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useMarchingAnts } from "../../../../../hooks";
 import { useSelector } from "react-redux";
 import {
@@ -11,6 +11,7 @@ import * as _ from "lodash";
 import { CategoryType } from "../../../../../types/CategoryType";
 import { AnnotationType } from "../../../../../types/AnnotationType";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
+import { scaledSelectedAnnotationContourSelector } from "../../../../../store/selectors/scaledSelectedAnnotationContourSelector";
 
 export const SelectedContour = () => {
   const stageScale = useSelector(stageScaleSelector);
@@ -19,21 +20,11 @@ export const SelectedContour = () => {
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
-  const [scaledContour, setScaledContour] = useState<Array<number>>([]);
+  const scaledContour = useSelector(scaledSelectedAnnotationContourSelector);
 
   const categories = useSelector(categoriesSelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
-
-  useEffect(() => {
-    if (!selectedAnnotation) return;
-
-    setScaledContour(
-      selectedAnnotation.contour.map((point: number) => {
-        return point * stageScale;
-      })
-    );
-  }, [stageScale, selectedAnnotation]);
 
   if (!selectedAnnotation || !selectedAnnotation.contour)
     return <React.Fragment />;
@@ -43,7 +34,7 @@ export const SelectedContour = () => {
     (category: CategoryType) => category.id === selectedAnnotation.categoryId
   )?.color;
 
-  if (!selectedAnnotations) return <React.Fragment />;
+  if (!selectedAnnotations || !scaledContour) return <React.Fragment />;
 
   return (
     <React.Fragment>

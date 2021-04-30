@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CategoryType } from "../../../../../../types/CategoryType";
 import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
@@ -18,7 +18,6 @@ import {
   setSeletedCategory,
 } from "../../../../../../store";
 import { ToolType } from "../../../../../../types/ToolType";
-import { selectedAnnotationsIdsSelector } from "../../../../../../store/selectors/selectedAnnotationsIdsSelector";
 import { useKeyPress } from "../../../../../../hooks/useKeyPress";
 import { getOverlappingAnnotations } from "../../../../../../image/imageHelper";
 import { currentPositionSelector } from "../../../../../../store/selectors/currentPositionSelector";
@@ -33,8 +32,6 @@ type AnnotationProps = {
 export const Annotation = ({ annotation }: AnnotationProps) => {
   const dispatch = useDispatch();
 
-  const [scaledContour, setScaledContour] = useState<Array<number>>([]);
-
   const categories = useSelector(categoriesSelector);
   const toolType = useSelector(toolTypeSelector);
   const stageScale = useSelector(stageScaleSelector);
@@ -42,8 +39,6 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
   const selectedAnnotationId = useSelector(selectedAnnotationIdSelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
-
-  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
   const currentPosition = useSelector(currentPositionSelector);
 
@@ -137,15 +132,6 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
     );
   };
 
-  useEffect(() => {
-    if (!annotation || !annotation.contour) return;
-    setScaledContour(
-      annotation.contour.map((point: number) => {
-        return point * stageScale;
-      })
-    );
-  }, [stageScale, annotation.contour]);
-
   if (!annotation || !annotation.contour) return <React.Fragment />;
 
   return (
@@ -165,15 +151,6 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
         opacity={0.5}
         points={annotation.contour}
         scale={{ x: stageScale, y: stageScale }}
-      />
-      <ReactKonva.Line // transform needs to attach to a line that does not use scale prop
-        closed
-        fill={fill}
-        id={annotation.id}
-        onClick={onPointerClick}
-        opacity={0.5}
-        points={scaledContour}
-        visible={false}
       />
     </ReactKonva.Group>
   );

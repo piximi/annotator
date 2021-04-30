@@ -105,12 +105,26 @@ export const applicationSlice = createSlice({
       action: PayloadAction<{ annotations: Array<SerializedAnnotationType> }>
     ) {
       /*
-       * User is expected to open the image before opening annotations.
+       * NOTE: Users are expected to open their image before opening the
+       * corresponding annotations. -- Allen
        */
       if (!state.image) return;
 
-      action.payload.annotations.forEach(
-        (annotation: SerializedAnnotationType) => {}
+      state.image.annotations = action.payload.annotations.map(
+        (annotation: SerializedAnnotationType): AnnotationType => {
+          return {
+            boundingBox: [
+              annotation.annotationBoundingBoxX,
+              annotation.annotationBoundingBoxY,
+              annotation.annotationBoundingBoxWidth,
+              annotation.annotationBoundingBoxHeight,
+            ],
+            categoryId: annotation.annotationCategoryId,
+            contour: [],
+            id: annotation.annotationId,
+            mask: [],
+          };
+        }
       );
     },
     replaceImageInstance(

@@ -301,7 +301,6 @@ export const Stage = () => {
     )
       return;
 
-    console.info("Line 280");
     dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [
@@ -315,7 +314,6 @@ export const Stage = () => {
       })
     );
 
-    console.info("Line 293");
     dispatch(
       setSelectedAnnotation({
         selectedAnnotation: {
@@ -340,7 +338,6 @@ export const Stage = () => {
       }
     );
 
-    console.info("Line 340");
     dispatch(
       applicationSlice.actions.setSelectedAnnotations({
         selectedAnnotations: updatedAnnotations,
@@ -348,7 +345,6 @@ export const Stage = () => {
     );
     if (!selectedAnnotation) return;
 
-    console.info("Line 347");
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: {
@@ -406,15 +402,6 @@ export const Stage = () => {
         newAnnotation: annotationTool.annotation,
       })
     );
-
-    // dispatch(
-    //   setSelectedAnnotations({
-    //     selectedAnnotations: [
-    //       ...selectedAnnotations,
-    //       annotationTool.annotation,
-    //     ],
-    //   })
-    // );
   }, [annotated]);
 
   useEffect(() => {
@@ -422,7 +409,6 @@ export const Stage = () => {
 
     //attach transformer to all selected confirmed annotations
     _.forEach(selectedAnnotationsIds, (annotationId) => {
-      // detachTransformer("tr-".concat(annotationId));
       attachTransformer(annotationId);
     });
   }, [

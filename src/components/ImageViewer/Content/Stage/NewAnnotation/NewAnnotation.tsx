@@ -8,7 +8,6 @@ import {
 } from "../../../../../store/selectors";
 import * as _ from "lodash";
 import { CategoryType } from "../../../../../types/CategoryType";
-import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
 import { AnnotationType } from "../../../../../types/AnnotationType";
 
 type NewAnnotationProps = {
@@ -23,8 +22,6 @@ export const NewAnnotation = ({ newAnnotation }: NewAnnotationProps) => {
   const [scaledContour, setScaledContour] = useState<Array<number>>([]);
 
   const categories = useSelector(categoriesSelector);
-
-  const [annotationId, setAnnotationId] = useState<string>();
 
   useEffect(() => {
     if (!newAnnotation || !newAnnotation.contour) return;

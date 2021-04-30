@@ -25,7 +25,6 @@ import { currentPositionSelector } from "../../../../../../store/selectors/curre
 import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
 import { selectedAnnotationIdSelector } from "../../../../../../store/selectors/selectedAnnotationIdSelector";
 import { currentIndexSelector } from "../../../../../../store/selectors/currentIndexSelector";
-import { selectedAnnotationSelector } from "../../../../../../store/selectors/selectedAnnotationSelector";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -55,8 +54,6 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
   let overlappingAnnotationsIds: Array<string> = [];
 
   const currentIndex = useSelector(currentIndexSelector);
-
-  const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
   const fill = _.find(
     categories,

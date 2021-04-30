@@ -81,7 +81,7 @@ export const Stage = () => {
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
   const selectionMode = useSelector(selectionModeSelector);
 
-  const newAnnotation = useSelector(newAnnotationSelector);
+  // const newAnnotation = useSelector(newAnnotationSelector);
 
   const stageHeight = useSelector(stageHeightSelector);
   const stageWidth = useSelector(stageWidthSelector);
@@ -266,14 +266,14 @@ export const Stage = () => {
     let combinedMask, combinedContour;
     let instance;
 
-    if (!newAnnotation && !selectedAnnotation) return;
+    if (!selectedAnnotation) return;
 
-    instance = newAnnotation;
+    // instance = newAnnotation;
 
     if (selectedAnnotation) {
       //this is necessary to mark special selection as a new selection and delete the previous image instance
-      applicationSlice.actions.setNewAnnotation({
-        newAnnotation: selectedAnnotation,
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: selectedAnnotation,
       });
       dispatch(
         applicationSlice.actions.deleteImageInstance({
@@ -311,8 +311,8 @@ export const Stage = () => {
       return;
 
     dispatch(
-      applicationSlice.actions.setNewAnnotation({
-        newAnnotation: {
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: {
           ...instance,
           boundingBox: annotationTool.boundingBox,
           contour: annotationTool.contour,
@@ -394,24 +394,20 @@ export const Stage = () => {
     if (selectionMode !== AnnotationModeType.New) return;
 
     dispatch(
-      applicationSlice.actions.setNewAnnotation({
-        newAnnotation: annotationTool.annotation,
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: annotationTool.annotation,
       })
     );
   }, [annotated]);
 
   useEffect(() => {
-    if (newAnnotation) attachTransformer(newAnnotation.id);
+    if (selectedAnnotation) attachTransformer(selectedAnnotation.id);
 
     //attach transformer to all selected confirmed annotations
     _.forEach(selectedAnnotationsIds, (annotationId) => {
       attachTransformer(annotationId);
     });
-  }, [
-    selectedAnnotationsIds,
-    newAnnotation?.contour,
-    selectedAnnotation?.mask,
-  ]);
+  }, [selectedAnnotationsIds, selectedAnnotation?.mask]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;
@@ -589,30 +585,30 @@ export const Stage = () => {
 
     if (!annotations || !annotationTool || annotationTool.annotating) return;
 
-    if (newAnnotation) {
-      //confirm a new annotation
-      dispatch(
-        applicationSlice.actions.setImageInstances({
-          instances: [...annotations, newAnnotation],
-        })
-      );
-      dispatch(
-        applicationSlice.actions.setNewAnnotation({
-          newAnnotation: undefined,
-        })
-      );
-    } else {
-      //change existing annotations
-      const others = annotations.filter((annotation: AnnotationType) => {
-        return !selectedAnnotationsIds.includes(annotation.id);
-      });
+    // if (newAnnotation) {
+    //   //confirm a new annotation
+    //   dispatch(
+    //     applicationSlice.actions.setImageInstances({
+    //       instances: [...annotations, newAnnotation],
+    //     })
+    //   );
+    //   dispatch(
+    //     applicationSlice.actions.setNewAnnotation({
+    //       newAnnotation: undefined,
+    //     })
+    //   );
+    // } else {
+    //change existing annotations
+    const others = annotations.filter((annotation: AnnotationType) => {
+      return !selectedAnnotationsIds.includes(annotation.id);
+    });
 
-      dispatch(
-        applicationSlice.actions.setImageInstances({
-          instances: [...others, ...selectedAnnotations],
-        })
-      );
-    }
+    dispatch(
+      applicationSlice.actions.setImageInstances({
+        instances: [...others, ...selectedAnnotations],
+      })
+    );
+    // }
 
     if (soundEnabled) playCreateAnnotationSoundEffect();
 
@@ -720,7 +716,7 @@ export const Stage = () => {
 
               <PenAnnotationToolTip annotationTool={annotationTool} />
 
-              <NewAnnotation />
+              {/*<NewAnnotation />*/}
 
               <Annotations />
 

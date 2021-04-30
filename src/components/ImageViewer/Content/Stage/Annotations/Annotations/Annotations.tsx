@@ -5,6 +5,7 @@ import { visibleCategoriesSelector } from "../../../../../../store/selectors/vis
 import { Annotation } from "../Annotation";
 import { imageInstancesSelector } from "../../../../../../store/selectors";
 import { newAnnotationSelector } from "../../../../../../store/selectors/newAnnotationSelector";
+import { selectedAnnotationSelector } from "../../../../../../store/selectors/selectedAnnotationSelector";
 
 export const Annotations = () => {
   const annotations = useSelector(imageInstancesSelector);
@@ -12,6 +13,8 @@ export const Annotations = () => {
   const newAnnotation = useSelector(newAnnotationSelector);
 
   const visibleCategories = useSelector(visibleCategoriesSelector);
+
+  const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
   const [visibleAnnotations, setVisibleAnnotations] = useState<
     Array<AnnotationType>
@@ -37,7 +40,12 @@ export const Annotations = () => {
       {annotations.map((annotation: AnnotationType) => (
         <Annotation annotation={annotation} key={annotation.id} />
       ))}
-      {/*{newAnnotation && <Annotation annotation={newAnnotation} key={newAnnotation.id} />}*/}
+      {selectedAnnotation && (
+        <Annotation
+          annotation={selectedAnnotation}
+          key={selectedAnnotation.id}
+        />
+      )}
     </React.Fragment>
   );
 };

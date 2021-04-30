@@ -15,7 +15,6 @@ import {
 import Konva from "konva";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
-import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
 import {
   computeBoundingBoxFromContours,
   getOppositeAnchorPosition,
@@ -49,8 +48,6 @@ export const Transformer = ({
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
-
-  const newAnnotation = useSelector(newAnnotationSelector);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
 
@@ -91,37 +88,22 @@ export const Transformer = ({
 
     let contour;
 
-    if (newAnnotation) {
-      contour = newAnnotation.contour;
-      if (!center || !contour) return;
+    if (!selectedAnnotation) return;
 
-      const resizedContour = resizeContour(contour, center, {
-        x: scaleX,
-        y: scaleY,
-      });
-      const updatedAnnotation = {
-        ...newAnnotation,
-        contour: resizedContour,
-        boundingBox: computeBoundingBoxFromContours(resizedContour),
-      };
+    contour = selectedAnnotation.contour;
+    if (!center || !contour) return;
 
-      updateNewAnnotation(updatedAnnotation);
-    } else if (selectedAnnotation) {
-      contour = selectedAnnotation.contour;
-      if (!center || !contour) return;
+    const resizedContour = resizeContour(contour, center, {
+      x: scaleX,
+      y: scaleY,
+    });
+    const updatedAnnotation = {
+      ...selectedAnnotation,
+      contour: resizedContour,
+      boundingBox: computeBoundingBoxFromContours(resizedContour),
+    };
 
-      const resizedContour = resizeContour(contour, center, {
-        x: scaleX,
-        y: scaleY,
-      });
-      const updatedAnnotation = {
-        ...selectedAnnotation,
-        contour: resizedContour,
-        boundingBox: computeBoundingBoxFromContours(resizedContour),
-      };
-
-      updateSelectedAnnotation(updatedAnnotation);
-    }
+    updateSelectedAnnotation(updatedAnnotation);
 
     setBoundBox(null);
   };
@@ -178,14 +160,6 @@ export const Transformer = ({
     );
   };
 
-  const updateNewAnnotation = (updatedAnnotation: AnnotationType) => {
-    dispatch(
-      setNewAnnotation({
-        newAnnotation: updatedAnnotation,
-      })
-    );
-  };
-
   const onTransform = () => {
     if (!center) {
       if (!transformerRef || !transformerRef.current) return { x: 0, y: 0 };
@@ -209,27 +183,25 @@ export const Transformer = ({
   };
 
   const onTransformStart = () => {
-    if (newAnnotation) return;
-
-    dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: selectedAnnotations.filter(
-          (annotation: AnnotationType) => {
-            return annotation.id === annotationId;
-          }
-        )[0],
-      })
-    );
-
-    dispatch(
-      setSelectedAnnotations({
-        selectedAnnotations: [
-          selectedAnnotations.filter((annotation: AnnotationType) => {
-            return annotation.id === annotationId;
-          })[0],
-        ],
-      })
-    );
+    // dispatch(
+    //   setSelectedAnnotation({
+    //     selectedAnnotation: selectedAnnotations.filter(
+    //       (annotation: AnnotationType) => {
+    //         return annotation.id === annotationId;
+    //       }
+    //     )[0],
+    //   })
+    // );
+    //
+    // dispatch(
+    //   setSelectedAnnotations({
+    //     selectedAnnotations: [
+    //       selectedAnnotations.filter((annotation: AnnotationType) => {
+    //         return annotation.id === annotationId;
+    //       })[0],
+    //     ],
+    //   })
+    // );
   };
 
   const onTransformEnd = () => {
@@ -237,28 +209,15 @@ export const Transformer = ({
 
     let contour;
 
-    if (newAnnotation) {
-      contour = newAnnotation.contour;
+    contour = selectedAnnotation.contour;
 
-      const resizedMask = resizeMask(contour, imageWidth, imageHeight);
+    const resizedMask = resizeMask(contour, imageWidth, imageHeight);
 
-      const updatedAnnotation = {
-        ...newAnnotation,
-        mask: resizedMask,
-      };
-
-      updateNewAnnotation(updatedAnnotation);
-    } else if (selectedAnnotation) {
-      contour = selectedAnnotation.contour;
-
-      const resizedMask = resizeMask(contour, imageWidth, imageHeight);
-
-      const updatedAnnotation = {
-        ...selectedAnnotation,
-        mask: resizedMask,
-      };
-      updateSelectedAnnotation(updatedAnnotation);
-    }
+    const updatedAnnotation = {
+      ...selectedAnnotation,
+      mask: resizedMask,
+    };
+    updateSelectedAnnotation(updatedAnnotation);
 
     setCenter(undefined);
   };

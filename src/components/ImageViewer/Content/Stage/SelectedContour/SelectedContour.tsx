@@ -2,8 +2,13 @@ import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 import { useMarchingAnts } from "../../../../../hooks";
 import { useSelector } from "react-redux";
-import { stageScaleSelector } from "../../../../../store/selectors";
+import {
+  imageInstancesSelector,
+  stageScaleSelector,
+} from "../../../../../store/selectors";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
+import { AnnotationType } from "../../../../../types/AnnotationType";
+import { Simulate } from "react-dom/test-utils";
 
 export const SelectedContour = () => {
   const stageScale = useSelector(stageScaleSelector);
@@ -11,6 +16,10 @@ export const SelectedContour = () => {
   const dashOffset = useMarchingAnts();
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
+
+  const annotations = useSelector(imageInstancesSelector);
+
+  const [visible, setVisible] = useState<boolean>(true);
 
   const [scaledContour, setScaledContour] = useState<Array<number>>([]);
 
@@ -24,8 +33,22 @@ export const SelectedContour = () => {
     );
   }, [stageScale, selectedAnnotation?.contour]);
 
+  useEffect(() => {
+    if (!annotations || !selectedAnnotation) return;
+
+    const foo = annotations.filter((annotation: AnnotationType) => {
+      return annotation.id === selectedAnnotation.id;
+    });
+
+    foo.length ? setVisible(false) : setVisible(true);
+
+    console.info(visible);
+  }, [annotations, selectedAnnotation?.id]);
+
   if (!selectedAnnotation || !selectedAnnotation.contour)
     return <React.Fragment />;
+
+  if (!visible) return <React.Fragment />;
 
   return (
     <React.Fragment>

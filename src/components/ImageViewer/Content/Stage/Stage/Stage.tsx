@@ -66,6 +66,7 @@ import { imageHeightSelector } from "../../../../../store/selectors/imageHeightS
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 import { Annotations } from "../Annotations/Annotations";
+import { scaledSelectedAnnotationContourSelector } from "../../../../../store/selectors/scaledSelectedAnnotationContourSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -113,6 +114,7 @@ export const Stage = () => {
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
+  const scaledContour = useSelector(scaledSelectedAnnotationContourSelector);
   const { dragging: zoomDragging, selecting: zoomSelecting } = useSelector(
     zoomSelectionSelector
   );
@@ -432,7 +434,7 @@ export const Stage = () => {
 
       layer.batchDraw();
     });
-  }, [selectedAnnotationsIds, selectedAnnotation?.mask]);
+  }, [selectedAnnotationsIds, scaledContour]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;

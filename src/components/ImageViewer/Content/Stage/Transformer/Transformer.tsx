@@ -45,8 +45,6 @@ export const Transformer = ({
   transformPosition,
   annotationId,
 }: TransformerProps) => {
-  const annotations = useSelector(imageInstancesSelector);
-
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
@@ -66,6 +64,8 @@ export const Transformer = ({
   });
 
   const [center, setCenter] = useState<{ x: number; y: number } | undefined>();
+
+  const [resizedContour, setResizedContour] = useState<Array<number>>([]);
 
   const stageScale = useSelector(stageScaleSelector);
 
@@ -88,33 +88,18 @@ export const Transformer = ({
     const scaleX = relativeBoundBox.width / relativeStartBox.width;
     const scaleY = relativeBoundBox.height / relativeStartBox.height;
 
-    //Found this to be necessary to detach transformer before re-attaching
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
-
     if (!selectedAnnotation) return;
 
     const contour = selectedAnnotation.contour;
 
     if (!center) return;
 
-    const resizedContour = resizeContour(contour, center, {
-      x: scaleX,
-      y: scaleY,
-    });
-
-    const updatedAnnotation = {
-      ...selectedAnnotation,
-      contour: resizedContour,
-      boundingBox: computeBoundingBoxFromContours(resizedContour),
-    };
-
-    updateSelectedAnnotation(updatedAnnotation);
-
-    setBoundBox(null);
+    setResizedContour(
+      resizeContour(contour, center, {
+        x: scaleX,
+        y: scaleY,
+      })
+    );
   };
 
   const computeBoundingBoxFromContours = (
@@ -131,7 +116,10 @@ export const Transformer = ({
   };
 
   const boundingBoxFunc = (oldBox: box, newBox: box) => {
-    if (!boundBox) setStartBox(oldBox);
+    if (!boundBox) {
+      setStartBox(oldBox);
+      console.info("Here only once");
+    }
 
     const relativeNewBox = getRelativeBox(newBox);
 
@@ -203,12 +191,12 @@ export const Transformer = ({
   const onTransformEnd = () => {
     if (!selectedAnnotation) return;
 
-    const contour = selectedAnnotation.contour;
-
-    const resizedMask = resizeMask(contour);
+    const resizedMask = resizeMask(resizedContour);
 
     const updatedAnnotation = {
       ...selectedAnnotation,
+      contour: resizedContour,
+      boundingBox: computeBoundingBoxFromContours(resizedContour),
       mask: resizedMask,
     };
 

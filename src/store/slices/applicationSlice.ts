@@ -99,6 +99,7 @@ export const applicationSlice = createSlice({
         (instance: AnnotationType) => instance.id !== action.payload.id
       );
     },
+    openAnnotations(state: StateType, action: PayloadAction<any>) {},
     replaceImageInstance(
       state: StateType,
       action: PayloadAction<{ id: string; instance: AnnotationType }>

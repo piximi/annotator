@@ -40,7 +40,7 @@ export const SelectedContour = () => {
     <React.Fragment>
       {selectedAnnotations.map((annotation: AnnotationType) => {
         return (
-          <React.Fragment>
+          <React.Fragment key={annotation.id}>
             <ReactKonva.Line
               closed
               dash={[4 / stageScale, 2 / stageScale]}

@@ -118,28 +118,16 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
     }
 
     if (shiftPress) {
-      if (selectedAnnotationsIds.includes(currentAnnotation.id)) {
-        dispatch(
-          setSelectedAnnotations({
-            selectedAnnotations: selectedAnnotations.filter(
-              (annotation: AnnotationType) => {
-                return annotation.id !== currentAnnotation.id;
-              }
-            ),
-          })
-        );
-      } else {
-        dispatch(
-          setSelectedAnnotations({
-            selectedAnnotations: [...selectedAnnotations, currentAnnotation],
-          })
-        );
-        dispatch(
-          setSelectedAnnotation({
-            selectedAnnotation: currentAnnotation,
-          })
-        );
-      }
+      dispatch(
+        setSelectedAnnotations({
+          selectedAnnotations: [...selectedAnnotations, currentAnnotation],
+        })
+      );
+      dispatch(
+        setSelectedAnnotation({
+          selectedAnnotation: currentAnnotation,
+        })
+      );
     }
 
     dispatch(

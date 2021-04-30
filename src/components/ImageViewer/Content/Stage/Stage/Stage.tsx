@@ -277,6 +277,7 @@ export const Stage = () => {
     )
       return;
 
+    console.info("Line 280");
     dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [
@@ -290,6 +291,7 @@ export const Stage = () => {
       })
     );
 
+    console.info("Line 293");
     dispatch(
       setSelectedAnnotation({
         selectedAnnotation: {
@@ -303,27 +305,6 @@ export const Stage = () => {
   }, [annotated]);
 
   useEffect(() => {
-    if (toolType === ToolType.Zoom) return;
-
-    if (toolType === ToolType.Pointer) return;
-
-    if (selectionMode === AnnotationModeType.New) return;
-
-    if (!annotating) return;
-
-    if (!selectedAnnotation || !selectedAnnotation.id) return;
-
-    //remove the existing Operator since it's essentially been replaced
-    dispatch(
-      applicationSlice.actions.deleteImageInstance({
-        id: selectedAnnotation.id,
-      })
-    );
-    const transformerId = "tr-".concat(selectedAnnotation.id);
-    detachTransformer(transformerId);
-  }, [annotating]);
-
-  useEffect(() => {
     if (!selectedAnnotationsIds) return;
 
     if (!annotations) return;
@@ -335,6 +316,7 @@ export const Stage = () => {
       }
     );
 
+    console.info("Line 340");
     dispatch(
       applicationSlice.actions.setSelectedAnnotations({
         selectedAnnotations: updatedAnnotations,
@@ -342,6 +324,7 @@ export const Stage = () => {
     );
     if (!selectedAnnotation) return;
 
+    console.info("Line 347");
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: {
@@ -364,22 +347,6 @@ export const Stage = () => {
 
       if (selectionMode !== AnnotationModeType.New) return;
       annotationTool.annotate(selectedCategory);
-      if (!annotationTool.annotation) return;
-
-      dispatch(
-        applicationSlice.actions.setSelectedAnnotation({
-          selectedAnnotation: annotationTool.annotation,
-        })
-      );
-
-      dispatch(
-        setSelectedAnnotations({
-          selectedAnnotations: [
-            ...selectedAnnotations,
-            annotationTool.annotation,
-          ],
-        })
-      );
     }
 
     if (selectionMode === AnnotationModeType.New) return;
@@ -402,8 +369,6 @@ export const Stage = () => {
   useEffect(() => {
     if (!annotated) return;
 
-    if (!annotationTool || !annotationTool.contour) return;
-
     if (!annotationTool) return;
 
     annotationTool.annotate(selectedCategory);
@@ -413,8 +378,17 @@ export const Stage = () => {
     if (selectionMode !== AnnotationModeType.New) return;
 
     dispatch(
-      setSelectedAnnotation({
+      applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: annotationTool.annotation,
+      })
+    );
+
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [
+          ...selectedAnnotations,
+          annotationTool.annotation,
+        ],
       })
     );
   }, [annotated]);
@@ -499,6 +473,7 @@ export const Stage = () => {
           dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
         }
 
+        console.info("Line 503 and 517");
         if (selectionMode === AnnotationModeType.New) {
           dispatch(
             applicationSlice.actions.setSelectedAnnotation({

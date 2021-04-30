@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
-
-import { SelectedAnnotationsTransformers } from "./SelectedAnnotationsTransformers/SelectedAnnotationsTransformers";
+import { useSelector } from "react-redux";
+import { Transformer } from "../Transformer/Transformer";
 import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
-import { NewAnnotationTransformer } from "./NewAnnotationTransformer/NewAnnotationTransformer";
 
-type TransformersProps = {
+type TransformerProps = {
   transformPosition: ({
     x,
     y,
@@ -16,17 +14,27 @@ type TransformersProps = {
   }) => { x: number; y: number } | undefined;
 };
 
-export const Transformers = ({ transformPosition }: TransformersProps) => {
+export const Transformers = ({ transformPosition }: TransformerProps) => {
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
   const newAnnotation = useSelector(newAnnotationSelector);
 
-  if (!selectedAnnotationsIds && newAnnotation) return <React.Fragment />;
-
   return (
     <>
-      <SelectedAnnotationsTransformers transformPosition={transformPosition} />
-      <NewAnnotationTransformer transformPosition={transformPosition} />
+      {selectedAnnotationsIds.map((annotationId: string) => {
+        return (
+          <Transformer
+            transformPosition={transformPosition}
+            annotationId={annotationId}
+          />
+        );
+      })}
+      {newAnnotation && (
+        <Transformer
+          transformPosition={transformPosition}
+          annotationId={newAnnotation.id}
+        />
+      )}
     </>
   );
 };

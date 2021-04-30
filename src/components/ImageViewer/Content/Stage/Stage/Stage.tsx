@@ -50,7 +50,6 @@ import { ZoomSelection } from "../Selection/ZoomSelection";
 import { useKeyboardShortcuts } from "../../../../../hooks/useKeyboardShortcuts";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
-import { Transformers } from "../Transformers/Transformers";
 import {
   useAltPress,
   useShiftPress,
@@ -64,6 +63,7 @@ import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolT
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 import { newAnnotationSelector } from "../../../../../store/selectors/newAnnotationSelector";
 import { SelectedAnnotation } from "../Annotations/SelectedAnnotation/SelectedAnnotation";
+import { Transformers } from "../Transformers/Transformers";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -723,8 +723,6 @@ export const Stage = () => {
               <NewAnnotation />
 
               <Annotations />
-
-              {/*<SelectedAnnotation/>*/}
 
               <Transformers transformPosition={getRelativePointerPosition} />
 

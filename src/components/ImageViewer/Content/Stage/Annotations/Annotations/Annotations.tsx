@@ -4,9 +4,12 @@ import { useSelector } from "react-redux";
 import { visibleCategoriesSelector } from "../../../../../../store/selectors/visibleCategoriesSelector";
 import { Annotation } from "../Annotation";
 import { imageInstancesSelector } from "../../../../../../store/selectors";
+import { newAnnotationSelector } from "../../../../../../store/selectors/newAnnotationSelector";
 
 export const Annotations = () => {
   const annotations = useSelector(imageInstancesSelector);
+
+  const newAnnotation = useSelector(newAnnotationSelector);
 
   const visibleCategories = useSelector(visibleCategoriesSelector);
 
@@ -34,6 +37,7 @@ export const Annotations = () => {
       {annotations.map((annotation: AnnotationType) => (
         <Annotation annotation={annotation} key={annotation.id} />
       ))}
+      {/*{newAnnotation && <Annotation annotation={newAnnotation} key={newAnnotation.id} />}*/}
     </React.Fragment>
   );
 };

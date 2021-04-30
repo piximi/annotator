@@ -4,15 +4,9 @@ import { useSelector } from "react-redux";
 import { visibleCategoriesSelector } from "../../../../../../store/selectors/visibleCategoriesSelector";
 import { Annotation } from "../Annotation";
 import { imageInstancesSelector } from "../../../../../../store/selectors";
-import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
-import { selectedAnnotationsIdsSelector } from "../../../../../../store/selectors/selectedAnnotationsIdsSelector";
 
 export const Annotations = () => {
   const annotations = useSelector(imageInstancesSelector);
-
-  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
-
-  const selectedAnnotations = useSelector(selectedAnnotationsSelector);
 
   const visibleCategories = useSelector(visibleCategoriesSelector);
 
@@ -23,23 +17,12 @@ export const Annotations = () => {
   useEffect(() => {
     if (!annotations) return;
 
-    const unselectedAnnotations = annotations.filter(
-      (annotation: AnnotationType) => {
-        return !selectedAnnotationsIds.includes(annotation.id);
-      }
-    );
-
-    const updatedAnnotations = [
-      ...unselectedAnnotations,
-      ...selectedAnnotations,
-    ];
-
     setVisibleAnnotations(
-      updatedAnnotations.filter((annotation: AnnotationType) =>
+      annotations.filter((annotation: AnnotationType) =>
         visibleCategories.includes(annotation.categoryId)
       )
     );
-  }, [annotations, selectedAnnotations]);
+  }, [annotations]);
 
   return (
     <React.Fragment>

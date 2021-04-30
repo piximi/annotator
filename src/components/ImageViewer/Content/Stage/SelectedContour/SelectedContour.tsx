@@ -2,8 +2,13 @@ import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
 import { useMarchingAnts } from "../../../../../hooks";
 import { useSelector } from "react-redux";
-import { stageScaleSelector } from "../../../../../store/selectors";
+import {
+  categoriesSelector,
+  stageScaleSelector,
+} from "../../../../../store/selectors";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
+import * as _ from "lodash";
+import { CategoryType } from "../../../../../types/CategoryType";
 
 export const SelectedContour = () => {
   const stageScale = useSelector(stageScaleSelector);
@@ -14,6 +19,8 @@ export const SelectedContour = () => {
 
   const [scaledContour, setScaledContour] = useState<Array<number>>([]);
 
+  const categories = useSelector(categoriesSelector);
+
   useEffect(() => {
     if (!selectedAnnotation) return;
 
@@ -22,16 +29,24 @@ export const SelectedContour = () => {
         return point * stageScale;
       })
     );
-  }, [stageScale, selectedAnnotation?.contour]);
+  }, [stageScale, selectedAnnotation]);
 
   if (!selectedAnnotation || !selectedAnnotation.contour)
     return <React.Fragment />;
 
+  const fill = _.find(
+    categories,
+    (category: CategoryType) => category.id === selectedAnnotation.categoryId
+  )?.color;
+
   return (
     <React.Fragment>
       <ReactKonva.Line
+        closed
         dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
+        fill={fill}
+        opacity={0.5}
         points={selectedAnnotation.contour}
         scale={{ x: stageScale, y: stageScale }}
         stroke="black"

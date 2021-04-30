@@ -29,13 +29,8 @@ export const Annotations = () => {
       }
     );
 
-    const updatedAnnotations = [
-      ...unselectedAnnotations,
-      ...selectedAnnotations,
-    ];
-
     setVisibleAnnotations(
-      updatedAnnotations.filter((annotation: AnnotationType) =>
+      unselectedAnnotations.filter((annotation: AnnotationType) =>
         visibleCategories.includes(annotation.categoryId)
       )
     );

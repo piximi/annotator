@@ -102,7 +102,7 @@ export const applicationSlice = createSlice({
     },
     openAnnotations(
       state: StateType,
-      action: PayloadAction<SerializedAnnotationType>
+      action: PayloadAction<{ annotations: Array<SerializedAnnotationType> }>
     ) {},
     replaceImageInstance(
       state: StateType,

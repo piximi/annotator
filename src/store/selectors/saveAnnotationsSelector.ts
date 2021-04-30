@@ -1,6 +1,7 @@
 import { HistoryStateType } from "../../types/HistoryStateType";
 import { AnnotationType } from "../../types/AnnotationType";
 import { CategoryType } from "../../types/CategoryType";
+import { decode } from "../../image/rle";
 
 export const saveAnnotationsSelector = ({
   state,
@@ -40,7 +41,7 @@ export const saveAnnotationsSelector = ({
       annotationCategoryId: category.id,
       annotationCategoryName: category.name,
       annotationId: annotation.id,
-      annotationMask: annotation.mask,
+      annotationMask: decode(annotation.mask),
     };
   });
 };

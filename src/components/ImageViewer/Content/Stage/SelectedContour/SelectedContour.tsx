@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useMarchingAnts } from "../../../../../hooks";
 import { useSelector } from "react-redux";
 import {
-  imageInstancesSelector,
+  categoriesSelector,
   stageScaleSelector,
 } from "../../../../../store/selectors";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
-import { AnnotationType } from "../../../../../types/AnnotationType";
-import { Simulate } from "react-dom/test-utils";
+import * as _ from "lodash";
+import { CategoryType } from "../../../../../types/CategoryType";
 
 export const SelectedContour = () => {
   const stageScale = useSelector(stageScaleSelector);
@@ -17,11 +17,9 @@ export const SelectedContour = () => {
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
-  const annotations = useSelector(imageInstancesSelector);
-
-  const [visible, setVisible] = useState<boolean>(true);
-
   const [scaledContour, setScaledContour] = useState<Array<number>>([]);
+
+  const categories = useSelector(categoriesSelector);
 
   useEffect(() => {
     if (!selectedAnnotation) return;
@@ -33,28 +31,24 @@ export const SelectedContour = () => {
     );
   }, [stageScale, selectedAnnotation?.contour]);
 
-  useEffect(() => {
-    if (!annotations || !selectedAnnotation) return;
+  if (!selectedAnnotation) return <React.Fragment />;
 
-    const foo = annotations.filter((annotation: AnnotationType) => {
-      return annotation.id === selectedAnnotation.id;
-    });
-
-    foo.length ? setVisible(false) : setVisible(true);
-
-    console.info(visible);
-  }, [annotations, selectedAnnotation?.id]);
+  const fill = _.find(
+    categories,
+    (category: CategoryType) => category.id === selectedAnnotation.categoryId
+  )?.color;
 
   if (!selectedAnnotation || !selectedAnnotation.contour)
     return <React.Fragment />;
 
-  if (!visible) return <React.Fragment />;
-
   return (
     <React.Fragment>
       <ReactKonva.Line
+        closed
         dash={[4 / stageScale, 2 / stageScale]}
         dashOffset={-dashOffset}
+        fill={fill}
+        opacity={0.5}
         points={selectedAnnotation.contour}
         scale={{ x: stageScale, y: stageScale }}
         stroke="black"

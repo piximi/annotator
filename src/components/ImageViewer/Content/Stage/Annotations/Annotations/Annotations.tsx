@@ -22,7 +22,7 @@ export const Annotations = () => {
         visibleCategories.includes(annotation.categoryId)
       )
     );
-  }, [annotations]);
+  }, [annotations, visibleCategories]);
 
   return (
     <React.Fragment>

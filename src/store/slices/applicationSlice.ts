@@ -9,6 +9,7 @@ import colorImage from "../../images/cell-painting.png";
 import { LanguageType } from "../../types/LanguageType";
 import * as tensorflow from "@tensorflow/tfjs";
 import { StateType } from "../../types/StateType";
+import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 
 const initialState: StateType = {
   annotated: false,
@@ -99,7 +100,10 @@ export const applicationSlice = createSlice({
         (instance: AnnotationType) => instance.id !== action.payload.id
       );
     },
-    openAnnotations(state: StateType, action: PayloadAction<any>) {},
+    openAnnotations(
+      state: StateType,
+      action: PayloadAction<SerializedAnnotationType>
+    ) {},
     replaceImageInstance(
       state: StateType,
       action: PayloadAction<{ id: string; instance: AnnotationType }>

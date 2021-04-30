@@ -1,13 +1,13 @@
 import { HistoryStateType } from "../../types/HistoryStateType";
 import { AnnotationType } from "../../types/AnnotationType";
 import { CategoryType } from "../../types/CategoryType";
-import { decode } from "../../image/rle";
+import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 
 export const saveAnnotationsSelector = ({
   state,
 }: {
   state: HistoryStateType;
-}): Array<any> => {
+}): Array<SerializedAnnotationType> => {
   const image = state.present.image;
 
   if (!image) return [];
@@ -41,7 +41,7 @@ export const saveAnnotationsSelector = ({
       annotationCategoryId: category.id,
       annotationCategoryName: category.name,
       annotationId: annotation.id,
-      annotationMask: decode(annotation.mask),
+      annotationMask: annotation.mask.join(" "),
     };
   });
 };

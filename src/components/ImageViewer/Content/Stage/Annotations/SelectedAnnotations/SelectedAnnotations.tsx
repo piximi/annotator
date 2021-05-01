@@ -1,19 +1,18 @@
 import * as ReactKonva from "react-konva";
 import React, { useEffect, useState } from "react";
-import { useMarchingAnts } from "../../../../../hooks";
+import { useMarchingAnts } from "../../../../../../hooks";
 import { useSelector } from "react-redux";
 import {
   categoriesSelector,
   stageScaleSelector,
-} from "../../../../../store/selectors";
-import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
+} from "../../../../../../store/selectors";
+import { selectedAnnotationSelector } from "../../../../../../store/selectors/selectedAnnotationSelector";
 import * as _ from "lodash";
-import { CategoryType } from "../../../../../types/CategoryType";
-import { AnnotationType } from "../../../../../types/AnnotationType";
-import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
-import { scaledSelectedAnnotationContourSelector } from "../../../../../store/selectors/scaledSelectedAnnotationContourSelector";
+import { CategoryType } from "../../../../../../types/CategoryType";
+import { AnnotationType } from "../../../../../../types/AnnotationType";
+import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
 
-export const SelectedContour = () => {
+export const SelectedAnnotations = () => {
   const stageScale = useSelector(stageScaleSelector);
 
   const dashOffset = useMarchingAnts();
@@ -30,7 +29,6 @@ export const SelectedContour = () => {
   // then this use effect is activated and the scaled contour is scaled once again (too much) and then the transform attaches to that one.
   useEffect(() => {
     if (!selectedAnnotation) return;
-    console.info("Here again");
     setScaledContour(
       selectedAnnotation.contour.map((point: number) => {
         return point * stageScale;

@@ -34,7 +34,6 @@ import {
 } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
-import { SelectedContour } from "../SelectedContour";
 import { Image } from "../Image";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
@@ -65,8 +64,8 @@ import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSel
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
-import { Annotations } from "../Annotations/Annotations";
 import { scaledSelectedAnnotationContourSelector } from "../../../../../store/selectors/scaledSelectedAnnotationContourSelector";
+import { Annotations } from "../Annotations/Annotations";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -728,9 +727,11 @@ export const Stage = () => {
 
               <PenAnnotationToolTip annotationTool={annotationTool} />
 
-              <SelectedContour />
-
               <Annotations />
+
+              {/*<ßelectedAnnotations />*/}
+
+              {/*<UnselectedAnnotations />*/}
 
               <Transformers transformPosition={getRelativePointerPosition} />
 

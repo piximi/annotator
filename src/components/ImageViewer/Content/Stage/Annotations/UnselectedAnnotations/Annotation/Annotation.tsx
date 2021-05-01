@@ -1,29 +1,29 @@
 import React from "react";
-import { CategoryType } from "../../../../../../types/CategoryType";
+import { CategoryType } from "../../../../../../../types/CategoryType";
 import * as ReactKonva from "react-konva";
 import * as _ from "lodash";
-import { AnnotationType } from "../../../../../../types/AnnotationType";
+import { AnnotationType } from "../../../../../../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
 import {
   categoriesSelector,
   imageInstancesSelector,
   stageScaleSelector,
   toolTypeSelector,
-} from "../../../../../../store/selectors";
+} from "../../../../../../../store/selectors";
 import Konva from "konva";
 import {
   applicationSlice,
   setSelectedAnnotation,
   setSelectedAnnotations,
   setSeletedCategory,
-} from "../../../../../../store";
-import { ToolType } from "../../../../../../types/ToolType";
-import { useKeyPress } from "../../../../../../hooks/useKeyPress";
-import { getOverlappingAnnotations } from "../../../../../../image/imageHelper";
-import { currentPositionSelector } from "../../../../../../store/selectors/currentPositionSelector";
-import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
-import { selectedAnnotationIdSelector } from "../../../../../../store/selectors/selectedAnnotationIdSelector";
-import { currentIndexSelector } from "../../../../../../store/selectors/currentIndexSelector";
+} from "../../../../../../../store";
+import { ToolType } from "../../../../../../../types/ToolType";
+import { useKeyPress } from "../../../../../../../hooks/useKeyPress";
+import { getOverlappingAnnotations } from "../../../../../../../image/imageHelper";
+import { currentPositionSelector } from "../../../../../../../store/selectors/currentPositionSelector";
+import { selectedAnnotationsSelector } from "../../../../../../../store/selectors/selectedAnnotationsSelector";
+import { selectedAnnotationIdSelector } from "../../../../../../../store/selectors/selectedAnnotationIdSelector";
+import { currentIndexSelector } from "../../../../../../../store/selectors/currentIndexSelector";
 
 type AnnotationProps = {
   annotation: AnnotationType;

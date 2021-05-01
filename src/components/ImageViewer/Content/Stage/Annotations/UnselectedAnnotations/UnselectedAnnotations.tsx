@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { AnnotationType } from "../../../../../../types/AnnotationType";
 import { useSelector } from "react-redux";
-import { imageInstancesSelector } from "../../../../../store/selectors";
-import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
-import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
-import { visibleCategoriesSelector } from "../../../../../store/selectors/visibleCategoriesSelector";
-import { AnnotationType } from "../../../../../types/AnnotationType";
-import { Annotation } from "../Annotations/Annotation";
+import { visibleCategoriesSelector } from "../../../../../../store/selectors/visibleCategoriesSelector";
+import { Annotation } from "./Annotation";
+import { imageInstancesSelector } from "../../../../../../store/selectors";
+import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
+import { selectedAnnotationsIdsSelector } from "../../../../../../store/selectors/selectedAnnotationsIdsSelector";
 
-export const SelectedAnnotations = () => {
+export const UnselectedAnnotations = () => {
   const annotations = useSelector(imageInstancesSelector);
 
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
@@ -29,13 +29,8 @@ export const SelectedAnnotations = () => {
       }
     );
 
-    const updatedAnnotations = [
-      ...unselectedAnnotations,
-      ...selectedAnnotations,
-    ];
-
     setVisibleAnnotations(
-      updatedAnnotations.filter((annotation: AnnotationType) =>
+      unselectedAnnotations.filter((annotation: AnnotationType) =>
         visibleCategories.includes(annotation.categoryId)
       )
     );

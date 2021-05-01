@@ -76,11 +76,7 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
 
     let currentAnnotation: AnnotationType;
 
-    if (
-      overlappingAnnotationsIds.length > 1 &&
-      selectedAnnotationId &&
-      overlappingAnnotationsIds.includes(selectedAnnotationId)
-    ) {
+    if (overlappingAnnotationsIds.length > 1) {
       dispatch(
         applicationSlice.actions.setCurrentIndex({
           currentIndex:

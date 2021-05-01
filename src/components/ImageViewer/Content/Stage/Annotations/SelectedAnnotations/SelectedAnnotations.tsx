@@ -1,5 +1,5 @@
 import * as ReactKonva from "react-konva";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useMarchingAnts } from "../../../../../../hooks";
 import { useSelector } from "react-redux";
 import {
@@ -23,28 +23,12 @@ export const SelectedAnnotations = () => {
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
 
-  const [scaledContour, setScaledContour] = useState<Array<number>>([]);
-
-  // FIXME The problem here is that when the contour of selectedAnnotation is updated at the end of a transform, its new contour is dispatch
-  // then this use effect is activated and the scaled contour is scaled once again (too much) and then the transform attaches to that one.
-  useEffect(() => {
-    if (!selectedAnnotation) return;
-    setScaledContour(
-      selectedAnnotation.contour.map((point: number) => {
-        return point * stageScale;
-      })
-    );
-  }, [stageScale, selectedAnnotation, selectedAnnotation?.contour]); //.contour is needed
-
-  if (!selectedAnnotation || !selectedAnnotation.contour)
-    return <React.Fragment />;
+  if (!selectedAnnotations || !selectedAnnotation) return <React.Fragment />;
 
   const fill = _.find(
     categories,
     (category: CategoryType) => category.id === selectedAnnotation.categoryId
   )?.color;
-
-  if (!selectedAnnotations || !scaledContour) return <React.Fragment />;
 
   return (
     <React.Fragment>
@@ -79,7 +63,9 @@ export const SelectedAnnotations = () => {
               fill={fill}
               id={annotation.id}
               opacity={0.5}
-              points={scaledContour}
+              points={annotation.contour.map((point: number) => {
+                return point * stageScale;
+              })}
               stroke="blue"
               strokeWidth={1 / stageScale}
               viisble={false}
@@ -88,37 +74,5 @@ export const SelectedAnnotations = () => {
         );
       })}
     </React.Fragment>
-    // <React.Fragment>
-    //   <ReactKonva.Line
-    //     closed
-    //     dash={[4 / stageScale, 2 / stageScale]}
-    //     dashOffset={-dashOffset}
-    //     fill={fill}
-    //     opacity={0.5}
-    //     points={selectedAnnotation.contour}
-    //     scale={{ x: stageScale, y: stageScale }}
-    //     stroke="black"
-    //     strokeWidth={1 / stageScale}
-    //   />
-    //
-    //   <ReactKonva.Line
-    //     dash={[4 / stageScale, 2 / stageScale]}
-    //     dashOffset={-dashOffset}
-    //     points={selectedAnnotation.contour}
-    //     scale={{ x: stageScale, y: stageScale }}
-    //     stroke="white"
-    //     strokeWidth={1 / stageScale}
-    //   />
-    //
-    //   <ReactKonva.Line
-    //     dash={[4 / stageScale, 2 / stageScale]}
-    //     dashOffset={-dashOffset}
-    //     id={selectedAnnotation?.id}
-    //     points={scaledContour}
-    //     stroke="blue"
-    //     strokeWidth={1 / stageScale}
-    //     viisble={false}
-    //   />
-    // </React.Fragment>
   );
 };

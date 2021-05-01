@@ -729,10 +729,6 @@ export const Stage = () => {
 
               <Annotations />
 
-              {/*<ßelectedAnnotations />*/}
-
-              {/*<UnselectedAnnotations />*/}
-
               <Transformers transformPosition={getRelativePointerPosition} />
 
               <ColorAnnotationToolTip

@@ -5,12 +5,12 @@ import { visibleCategoriesSelector } from "../../../../../../store/selectors/vis
 import { Annotation } from "./Annotation";
 import { imageInstancesSelector } from "../../../../../../store/selectors";
 import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
-import { selectedAnnotationsIdsSelector } from "../../../../../../store/selectors/selectedAnnotationsIdsSelector";
+import { unselectedAnnotationsSelector } from "../../../../../../store/selectors/unselectedAnnotationsSelector";
 
 export const UnselectedAnnotations = () => {
   const annotations = useSelector(imageInstancesSelector);
 
-  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
+  const unselectedAnnotations = useSelector(unselectedAnnotationsSelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
 
@@ -22,12 +22,6 @@ export const UnselectedAnnotations = () => {
 
   useEffect(() => {
     if (!annotations) return;
-
-    const unselectedAnnotations = annotations.filter(
-      (annotation: AnnotationType) => {
-        return !selectedAnnotationsIds.includes(annotation.id);
-      }
-    );
 
     setVisibleAnnotations(
       unselectedAnnotations.filter((annotation: AnnotationType) =>

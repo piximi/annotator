@@ -66,6 +66,7 @@ import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolT
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 import { scaledSelectedAnnotationContourSelector } from "../../../../../store/selectors/scaledSelectedAnnotationContourSelector";
 import { Annotations } from "../Annotations/Annotations";
+import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -81,6 +82,7 @@ export const Stage = () => {
   const selectedCategory = useSelector(selectedCategorySelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
+  const unselectedAnnotations = useSelector(unselectedAnnotationsSelector);
   const selectionMode = useSelector(selectionModeSelector);
 
   const stageHeight = useSelector(stageHeightSelector);
@@ -302,27 +304,6 @@ export const Stage = () => {
       })
     );
   }, [annotated]);
-
-  useEffect(() => {
-    if (toolType === ToolType.Zoom) return;
-
-    if (toolType === ToolType.Pointer) return;
-
-    if (selectionMode === AnnotationModeType.New) return;
-
-    if (!annotating) return;
-
-    if (!selectedAnnotation || !selectedAnnotation.id) return;
-
-    //remove the existing Operator since it's essentially been replaced
-    dispatch(
-      applicationSlice.actions.deleteImageInstance({
-        id: selectedAnnotation.id,
-      })
-    );
-    const transformerId = "tr-".concat(selectedAnnotation.id);
-    detachTransformer(transformerId);
-  }, [annotating]);
 
   useEffect(() => {
     if (!selectedAnnotationsIds) return;
@@ -611,13 +592,9 @@ export const Stage = () => {
 
     if (!annotations || !annotationTool || annotationTool.annotating) return;
 
-    const others = annotations.filter((annotation: AnnotationType) => {
-      return !selectedAnnotationsIds.includes(annotation.id);
-    });
-
     dispatch(
       applicationSlice.actions.setImageInstances({
-        instances: [...others, ...selectedAnnotations],
+        instances: [...unselectedAnnotations, ...selectedAnnotations],
       })
     );
 

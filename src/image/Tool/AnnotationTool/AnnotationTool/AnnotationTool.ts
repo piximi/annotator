@@ -110,30 +110,6 @@ export abstract class AnnotationTool extends Tool {
     return [encode(data), _.flatten(contours)];
   }
 
-  invert(mask: Array<number>, encoded = false): Array<number> {
-    if (encoded) {
-      mask = Array.from(decode(mask));
-    }
-
-    mask.forEach((currentValue: number, index: number) => {
-      if (currentValue === 255) {
-        mask[index] = 0;
-      } else mask[index] = 255;
-    });
-
-    if (encoded) {
-      mask = encode(Uint8Array.from(mask));
-    }
-    return mask;
-  }
-
-  invertContour(contour: Array<number>): Array<number> {
-    //using https://jsbin.com/tevejujafi/3/edit?html,js,output and https://en.wikipedia.org/wiki/Nonzero-rule
-    const frame = [0, 0, 512, 0, 512, 512, 0, 512, 0, 0];
-    const counterClockWiseContours = _.flatten(_.reverse(_.chunk(contour, 2)));
-    return _.concat(frame, counterClockWiseContours);
-  }
-
   /*
    * Subtracting from a Operator deselects the areas you draw over, keeping
    * the rest of your existing Operator.

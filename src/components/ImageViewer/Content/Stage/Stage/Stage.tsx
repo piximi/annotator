@@ -28,10 +28,7 @@ import {
 } from "react-redux";
 import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationTool, useHandTool, useZoom } from "../../../../../hooks";
-import {
-  AnnotationType,
-  AnnotationType as SelectionType,
-} from "../../../../../types/AnnotationType";
+import { AnnotationType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
 import { Image } from "../Image";
@@ -67,6 +64,11 @@ import { selectedAnnotationsSelector } from "../../../../../store/selectors/sele
 import { scaledSelectedAnnotationContourSelector } from "../../../../../store/selectors/scaledSelectedAnnotationContourSelector";
 import { Annotations } from "../Annotations/Annotations";
 import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
+import {
+  computeBoundingBoxFromContours,
+  invertContour,
+  invertMask,
+} from "../../../../../image/imageHelper";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -189,15 +191,11 @@ export const Stage = () => {
     )
       return;
 
-    const invertedMask = annotationTool.invert(selectedAnnotation.mask, true);
+    const invertedMask = invertMask(selectedAnnotation.mask, true);
 
-    const invertedContour = annotationTool.invertContour(
-      selectedAnnotation.contour
-    );
+    const invertedContour = invertContour(selectedAnnotation.contour);
 
-    const invertedBoundingBox = annotationTool.computeBoundingBoxFromContours(
-      invertedContour
-    );
+    const invertedBoundingBox = computeBoundingBoxFromContours(invertedContour);
 
     dispatch(
       setSelectedAnnotations({
@@ -568,6 +566,11 @@ export const Stage = () => {
     if (!enterPress) return;
 
     if (!annotations || !annotationTool || annotationTool.annotating) return;
+
+    // const bar = decode(selectedAnnotations[0].mask);
+    // const foo = new ImageJS.Image(512, 512, bar, {components: 1, alpha: 0})
+    // console.info(foo.toDataURL())
+    // console.info(selectedAnnotations[0].contour)
 
     dispatch(
       applicationSlice.actions.setImageInstances({

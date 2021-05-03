@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import * as ImageJS from "image-js";
 import { AnnotationType } from "../types/AnnotationType";
+import { decode, encode } from "./rle";
 
 export const connectPoints = (
   coordinates: Array<Array<number>>,
@@ -92,4 +93,44 @@ export const getOverlappingAnnotations = (
   return overlappingAnnotations.map((annotation: AnnotationType) => {
     return annotation.id;
   });
+};
+
+export const invertMask = (
+  mask: Array<number>,
+  encoded = false
+): Array<number> => {
+  if (encoded) {
+    mask = Array.from(decode(mask));
+  }
+
+  mask.forEach((currentValue: number, index: number) => {
+    if (currentValue === 255) {
+      mask[index] = 0;
+    } else mask[index] = 255;
+  });
+
+  if (encoded) {
+    mask = encode(Uint8Array.from(mask));
+  }
+  return mask;
+};
+
+export const invertContour = (contour: Array<number>): Array<number> => {
+  //using https://jsbin.com/tevejujafi/3/edit?html,js,output and https://en.wikipedia.org/wiki/Nonzero-rule
+  const frame = [0, 0, 512, 0, 512, 512, 0, 512, 0, 0]; //FIXME this should use actual image width and height
+  const counterClockWiseContours = _.flatten(_.reverse(_.chunk(contour, 2)));
+  return _.concat(frame, counterClockWiseContours);
+};
+
+export const computeBoundingBoxFromContours = (
+  contour: Array<number>
+): [number, number, number, number] => {
+  const pairs = _.chunk(contour, 2);
+
+  return [
+    Math.round(_.min(_.map(pairs, _.first))!),
+    Math.round(_.min(_.map(pairs, _.last))!),
+    Math.round(_.max(_.map(pairs, _.first))!),
+    Math.round(_.max(_.map(pairs, _.last))!),
+  ];
 };

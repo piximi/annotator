@@ -9,7 +9,7 @@ import {
   zoomSelectionSelector,
   zoomToolOptionsSelector,
 } from "../../store/selectors";
-import { imageWidthSelector } from "../../store/selectors/imageWidthSelector";
+import { scaledImageWidthSelector } from "../../store/selectors/scaledImageWidthSelector";
 
 export const useZoom = () => {
   const delta = 10;
@@ -22,7 +22,7 @@ export const useZoom = () => {
   const { automaticCentering, mode } = useSelector(zoomToolOptionsSelector);
   const zoomSelection = useSelector(zoomSelectionSelector);
 
-  const imageWidth = useSelector(imageWidthSelector);
+  const imageWidth = useSelector(scaledImageWidthSelector);
 
   const zoomAndOffset = (
     position: { x: number; y: number } | undefined,

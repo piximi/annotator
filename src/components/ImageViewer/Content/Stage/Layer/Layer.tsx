@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import * as ReactKonva from "react-konva";
 import { useSelector } from "react-redux";
-import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
-import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
+import { scaledImageWidthSelector } from "../../../../../store/selectors/scaledImageWidthSelector";
+import { scaledImageHeightSelector } from "../../../../../store/selectors/scaledImageHeightSelector";
 import {
   stageHeightSelector,
   stageWidthSelector,
@@ -15,8 +15,8 @@ type LayerProps = {
 };
 
 export const Layer = ({ children }: LayerProps) => {
-  const imageWidth = useSelector(imageWidthSelector);
-  const imageHeight = useSelector(imageHeightSelector);
+  const imageWidth = useSelector(scaledImageWidthSelector);
+  const imageHeight = useSelector(scaledImageHeightSelector);
 
   const offset = useSelector(offsetSelector);
 

@@ -6,8 +6,8 @@ import { currentPositionSelector } from "../../../../../store/selectors/currentP
 import { AnnotationTool } from "../../../../../image/Tool/AnnotationTool/AnnotationTool";
 import { toolTypeSelector } from "../../../../../store/selectors";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
-import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
-import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
+import { scaledImageWidthSelector } from "../../../../../store/selectors/scaledImageWidthSelector";
+import { scaledImageHeightSelector } from "../../../../../store/selectors/scaledImageHeightSelector";
 
 type PenAnnotationToolTipProps = {
   annotationTool?: AnnotationTool;
@@ -21,8 +21,8 @@ export const PenAnnotationToolTip = ({
 
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
 
-  const imageWidth = useSelector(imageWidthSelector);
-  const imageHeight = useSelector(imageHeightSelector);
+  const imageWidth = useSelector(scaledImageWidthSelector);
+  const imageHeight = useSelector(scaledImageHeightSelector);
 
   if (
     !currentPosition ||

@@ -57,8 +57,8 @@ import {
 import { useWindowFocusHandler } from "../../../../../hooks/useWindowFocusHandler/useWindowFocusHandler";
 import { stagePositionSelector } from "../../../../../store/selectors/stagePositionSelector";
 import { KonvaEventObject } from "konva/types/Node";
-import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
-import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
+import { scaledImageWidthSelector } from "../../../../../store/selectors/scaledImageWidthSelector";
+import { scaledImageHeightSelector } from "../../../../../store/selectors/scaledImageHeightSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 import { scaledSelectedAnnotationContourSelector } from "../../../../../store/selectors/scaledSelectedAnnotationContourSelector";
@@ -69,6 +69,8 @@ import {
   invertContour,
   invertMask,
 } from "../../../../../image/imageHelper";
+import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
+import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -90,6 +92,9 @@ export const Stage = () => {
   const stageHeight = useSelector(stageHeightSelector);
   const stageWidth = useSelector(stageWidthSelector);
   const stagePosition = useSelector(stagePositionSelector);
+
+  const scaledImageWidth = useSelector(scaledImageWidthSelector);
+  const scaledImageHeight = useSelector(scaledImageHeightSelector);
 
   const imageWidth = useSelector(imageWidthSelector);
   const imageHeight = useSelector(imageHeightSelector);
@@ -487,7 +492,7 @@ export const Stage = () => {
 
       const relative = getRelativePointerPosition(position);
 
-      if (!relative || !imageWidth || !imageHeight) return;
+      if (!relative || !scaledImageWidth || !scaledImageHeight) return;
 
       if (toolType === ToolType.PenAnnotation)
         dispatch(
@@ -497,8 +502,8 @@ export const Stage = () => {
         );
 
       if (
-        relative.x > imageWidth ||
-        relative.y > imageHeight ||
+        relative.x > scaledImageWidth ||
+        relative.y > scaledImageHeight ||
         relative.x < 0 ||
         relative.y < 0
       )
@@ -545,7 +550,7 @@ export const Stage = () => {
       } else {
         if (!annotationTool) return;
 
-        if (!relative || !imageWidth || !imageHeight) return;
+        if (!relative || !scaledImageWidth || !scaledImageHeight) return;
 
         if (toolType === ToolType.ObjectAnnotation) {
           await (annotationTool as ObjectAnnotationTool).onMouseUp(

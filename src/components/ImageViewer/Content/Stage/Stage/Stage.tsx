@@ -180,45 +180,30 @@ export const Stage = () => {
   };
 
   useEffect(() => {
-    if (!selectedAnnotation || !selectedAnnotation.id || !annotationTool)
-      return;
-
-    if (!annotations) return;
-
-    const selectedInstance: SelectionType = annotations.filter(
-      (instance: SelectionType) => {
-        return instance.id === selectedAnnotation.id;
-      }
-    )[0];
+    if (!annotationTool) return;
 
     if (
-      !selectedInstance ||
-      !selectedInstance.mask ||
-      !selectedInstance.contour
+      !selectedAnnotation ||
+      !selectedAnnotation.mask ||
+      !selectedAnnotation.contour
     )
       return;
 
-    const invertedMask = annotationTool.invert(selectedInstance.mask, true);
+    const invertedMask = annotationTool.invert(selectedAnnotation.mask, true);
 
     const invertedContour = annotationTool.invertContour(
-      selectedInstance.contour
+      selectedAnnotation.contour
     );
 
     const invertedBoundingBox = annotationTool.computeBoundingBoxFromContours(
       invertedContour
     );
 
-    const instance = annotations.filter((instance: SelectionType) => {
-      return instance.id === selectedAnnotation.id;
-    })[0];
-
-    if (!selectedAnnotation) return;
-
     dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [
           {
-            ...instance,
+            ...selectedAnnotation,
             boundingBox: invertedBoundingBox,
             contour: invertedContour,
             mask: invertedMask,
@@ -226,12 +211,6 @@ export const Stage = () => {
         ],
       })
     );
-
-    annotationTool.mask = invertedMask;
-    annotationTool.boundingBox = invertedBoundingBox;
-    annotationTool.contour = invertedContour;
-
-    dispatch(applicationSlice.actions.setAnnotated({ annotated: true }));
   }, [invertMode]);
 
   useEffect(() => {
@@ -247,21 +226,19 @@ export const Stage = () => {
 
     let combinedMask, combinedContour;
 
-    const selectedInstance = selectedAnnotation;
-
-    if (!selectedInstance) return;
+    if (!selectedAnnotation) return;
 
     if (selectionMode === AnnotationModeType.Add) {
       [combinedMask, combinedContour] = annotationTool.add(
-        selectedInstance.mask
+        selectedAnnotation.mask
       );
     } else if (selectionMode === AnnotationModeType.Subtract) {
       [combinedMask, combinedContour] = annotationTool.subtract(
-        selectedInstance.mask
+        selectedAnnotation.mask
       );
     } else if (selectionMode === AnnotationModeType.Intersect) {
       [combinedMask, combinedContour] = annotationTool.intersect(
-        selectedInstance.mask
+        selectedAnnotation.mask
       );
     }
 
@@ -284,7 +261,7 @@ export const Stage = () => {
       setSelectedAnnotations({
         selectedAnnotations: [
           {
-            ...selectedInstance,
+            ...selectedAnnotation,
             boundingBox: annotationTool.boundingBox,
             contour: annotationTool.contour,
             mask: annotationTool.mask,
@@ -296,7 +273,7 @@ export const Stage = () => {
     dispatch(
       setSelectedAnnotation({
         selectedAnnotation: {
-          ...selectedInstance,
+          ...selectedAnnotation,
           boundingBox: annotationTool.boundingBox,
           contour: annotationTool.contour,
           mask: annotationTool.mask,

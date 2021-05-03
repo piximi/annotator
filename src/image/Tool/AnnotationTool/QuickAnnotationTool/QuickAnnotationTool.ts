@@ -5,6 +5,7 @@ import * as _ from "lodash";
 import { encode } from "../../../rle";
 
 export class QuickAnnotationTool extends AnnotationTool {
+  brushsize: number = 40;
   colorMasks?: Array<string>;
   currentSuperpixels: Set<number> = new Set<number>();
   lastSuperpixel: number = 0;
@@ -125,8 +126,10 @@ export class QuickAnnotationTool extends AnnotationTool {
     this.annotating = false;
   }
 
-  static setup(image: ImageJS.Image) {
+  static setup(image: ImageJS.Image, brushsize: number) {
     const instance = new QuickAnnotationTool(image);
+
+    instance.brushsize = brushsize;
 
     const { count, map, superpixels } = instance.filter();
 

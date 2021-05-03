@@ -21,6 +21,7 @@ export type StateType = {
   language: LanguageType;
   offset: { x: number; y: number };
   penSelectionBrushSize: number;
+  quickSelectionBrushSize: number;
   saturation: number;
   selectedAnnotations: Array<AnnotationType>;
   selectedAnnotation: AnnotationType | undefined;

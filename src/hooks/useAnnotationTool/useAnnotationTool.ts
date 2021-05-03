@@ -72,12 +72,12 @@ export const useAnnotationTool = () => {
 
         return;
       case ToolType.PenAnnotation:
-        const scale = stageScale ? stageScale : 1;
-        PenAnnotationTool.setup(image, brushSize / scale).then(
-          (operator: PenAnnotationTool) => {
-            setOperator(operator);
-          }
-        );
+        PenAnnotationTool.setup(
+          image,
+          brushSize / (stageScale ? stageScale : 1)
+        ).then((operator: PenAnnotationTool) => {
+          setOperator(operator);
+        });
 
         return;
       case ToolType.PolygonalAnnotation:
@@ -85,7 +85,10 @@ export const useAnnotationTool = () => {
 
         return;
       case ToolType.QuickAnnotation:
-        const quickSelectionOperator = QuickAnnotationTool.setup(image);
+        const quickSelectionOperator = QuickAnnotationTool.setup(
+          image,
+          brushSize / (stageScale ? stageScale : 1)
+        );
         setOperator(quickSelectionOperator);
 
         return;

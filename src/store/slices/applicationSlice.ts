@@ -58,6 +58,7 @@ const initialState: StateType = {
   language: LanguageType.English,
   offset: { x: 0, y: 0 },
   penSelectionBrushSize: 32,
+  quickSelectionBrushSize: 40,
   saturation: 0,
   selectedAnnotation: undefined,
   selectedAnnotations: [],
@@ -251,6 +252,12 @@ export const applicationSlice = createSlice({
     ) {
       state.penSelectionBrushSize = action.payload.penSelectionBrushSize;
     },
+    setQuickSelectionBrushSize(
+      state: StateType,
+      action: PayloadAction<{ quickSelectionBrushSize: number }>
+    ) {
+      state.quickSelectionBrushSize = action.payload.quickSelectionBrushSize;
+    },
     setSaturation(
       state: StateType,
       action: PayloadAction<{ saturation: number }>
@@ -361,6 +368,7 @@ export const {
   setOffset,
   setOperation,
   setPenSelectionBrushSize,
+  setQuickSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,
   setSelectedAnnotations,

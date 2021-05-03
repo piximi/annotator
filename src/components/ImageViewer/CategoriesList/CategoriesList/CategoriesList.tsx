@@ -61,7 +61,7 @@ import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { CreateCategoryDialog } from "../CreateCategoryListItem/CreateCategoryDialog";
-import { saveAnnotationsSelector } from "../../../../store/selectors/saveAnnotationsSelector";
+import { serializedAnnotationsSelector } from "../../../../store/selectors/serializedAnnotationsSelector";
 import { saveAs } from "file-saver";
 
 export const CategoriesList = () => {
@@ -579,14 +579,14 @@ const OpenMenu = ({ popupState }: OpenMenuProps) => {
 const SaveAnnotationsMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
-  const annotations = useSelector(saveAnnotationsSelector);
+  const annotations = useSelector(serializedAnnotationsSelector);
 
   const onSaveAnnotations = () => {
     popupState.close();
     const blob = new Blob([JSON.stringify(annotations)], {
       type: "application/json;charset=utf-8",
     });
-    saveAs(blob, "foo.json");
+    saveAs(blob, `${annotations[0].imageFilename}.json`);
   };
 
   return (

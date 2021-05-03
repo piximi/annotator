@@ -10,6 +10,8 @@ import { LanguageType } from "../../types/LanguageType";
 import * as tensorflow from "@tensorflow/tfjs";
 import { StateType } from "../../types/StateType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
+import { isoLines } from "marchingsquares";
+import { decode } from "../../image/rle";
 
 const initialState: StateType = {
   annotated: false,
@@ -113,6 +115,23 @@ export const applicationSlice = createSlice({
 
       state.image.annotations = action.payload.annotations.map(
         (annotation: SerializedAnnotationType): AnnotationType => {
+          const mask = annotation.annotationMask
+            .split(" ")
+            .map((x: string) => parseInt(x));
+
+          const decoded = _.map(
+            _.chunk(decode(mask), state.image?.shape.width),
+            (el: Array<number>) => {
+              return Array.from(el);
+            }
+          );
+
+          const contour = isoLines(decoded, 1).sort(
+            (a: Array<number>, b: Array<number>) => {
+              return b.length - a.length;
+            }
+          )[0];
+
           return {
             boundingBox: [
               annotation.annotationBoundingBoxX,
@@ -121,9 +140,9 @@ export const applicationSlice = createSlice({
               annotation.annotationBoundingBoxHeight,
             ],
             categoryId: annotation.annotationCategoryId,
-            contour: [],
+            contour: contour,
             id: annotation.annotationId,
-            mask: [],
+            mask: mask,
           };
         }
       );

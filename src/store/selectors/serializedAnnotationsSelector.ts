@@ -3,7 +3,7 @@ import { AnnotationType } from "../../types/AnnotationType";
 import { CategoryType } from "../../types/CategoryType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 
-export const saveAnnotationsSelector = ({
+export const serializedAnnotationsSelector = ({
   state,
 }: {
   state: HistoryStateType;

@@ -126,11 +126,11 @@ export const applicationSlice = createSlice({
             }
           );
 
-          const contour = isoLines(decoded, 1).sort(
-            (a: Array<number>, b: Array<number>) => {
+          const contour = _.flatten(
+            isoLines(decoded, 1).sort((a: Array<number>, b: Array<number>) => {
               return b.length - a.length;
-            }
-          )[0];
+            })[0]
+          ) as Array<number>;
 
           return {
             boundingBox: [

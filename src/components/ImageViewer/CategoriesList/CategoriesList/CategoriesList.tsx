@@ -62,6 +62,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { CreateCategoryDialog } from "../CreateCategoryListItem/CreateCategoryDialog";
 import { saveAnnotationsSelector } from "../../../../store/selectors/saveAnnotationsSelector";
+import { saveAs } from "file-saver";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -388,9 +389,49 @@ const HelpListItem = () => {
 const OpenAnnotationsMenuItem = ({
   popupState,
 }: OpenAnnotationsMenuItemProps) => {
+  const dispatch = useDispatch();
+
+  const onOpenAnnotations = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    onClose: () => void
+  ) => {
+    onClose();
+
+    event.persist();
+
+    if (event.currentTarget.files) {
+      const file = event.currentTarget.files[0];
+
+      const reader = new FileReader();
+
+      reader.onload = async (event: ProgressEvent<FileReader>) => {
+        if (event.target && event.target.result) {
+          const annotations = JSON.parse(event.target.result as string);
+
+          dispatch(
+            applicationSlice.actions.openAnnotations({
+              annotations: annotations,
+            })
+          );
+        }
+      };
+
+      reader.readAsText(file);
+    }
+  };
+
   return (
-    <MenuItem onClick={popupState.close}>
+    <MenuItem component="label">
       <ListItemText primary="Open annotations" />
+      <input
+        accept="application/json"
+        hidden
+        id="open-annotations"
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          onOpenAnnotations(event, popupState.close)
+        }
+        type="file"
+      />
     </MenuItem>
   );
 };
@@ -540,14 +581,16 @@ const SaveAnnotationsMenuItem = ({
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(saveAnnotationsSelector);
 
-  const onClick = () => {
+  const onSaveAnnotations = () => {
     popupState.close();
-
-    console.info(annotations);
+    const blob = new Blob([JSON.stringify(annotations)], {
+      type: "application/json;charset=utf-8",
+    });
+    saveAs(blob, "foo.json");
   };
 
   return (
-    <MenuItem onClick={onClick}>
+    <MenuItem onClick={onSaveAnnotations}>
       <ListItemText primary="Save annotations" />
     </MenuItem>
   );

@@ -198,7 +198,13 @@ export const Stage = () => {
 
     const invertedMask = invertMask(selectedAnnotation.mask, true);
 
-    const invertedContour = invertContour(selectedAnnotation.contour);
+    if (!imageWidth || !imageHeight) return;
+
+    const invertedContour = invertContour(
+      selectedAnnotation.contour,
+      imageWidth,
+      imageHeight
+    );
 
     const invertedBoundingBox = computeBoundingBoxFromContours(invertedContour);
 

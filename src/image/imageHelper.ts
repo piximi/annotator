@@ -115,9 +115,24 @@ export const invertMask = (
   return mask;
 };
 
-export const invertContour = (contour: Array<number>): Array<number> => {
+export const invertContour = (
+  contour: Array<number>,
+  imageWidth: number,
+  imageHeight: number
+): Array<number> => {
   //using https://jsbin.com/tevejujafi/3/edit?html,js,output and https://en.wikipedia.org/wiki/Nonzero-rule
-  const frame = [0, 0, 512, 0, 512, 512, 0, 512, 0, 0]; //FIXME this should use actual image width and height
+  const frame = [
+    0,
+    0,
+    imageWidth,
+    0,
+    imageWidth,
+    imageHeight,
+    0,
+    imageHeight,
+    0,
+    0,
+  ];
   const counterClockWiseContours = _.flatten(_.reverse(_.chunk(contour, 2)));
   return _.concat(frame, counterClockWiseContours);
 };

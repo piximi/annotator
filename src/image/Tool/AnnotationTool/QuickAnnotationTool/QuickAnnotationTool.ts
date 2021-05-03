@@ -25,8 +25,6 @@ export class QuickAnnotationTool extends AnnotationTool {
   }
 
   filter(): {
-    count: number;
-    map: Uint8Array | Uint8ClampedArray;
     superpixels: Int32Array;
   } {
     const data = this.image.getRGBAData();
@@ -38,7 +36,7 @@ export class QuickAnnotationTool extends AnnotationTool {
       this.brushsize
     );
 
-    return { count, map, superpixels };
+    return { superpixels };
   }
 
   deselect() {
@@ -137,9 +135,7 @@ export class QuickAnnotationTool extends AnnotationTool {
   update(brushsize: number) {
     this.brushsize = brushsize;
 
-    const { count, map, superpixels } = this.filter();
-
-    this.map = map;
+    const { superpixels } = this.filter();
 
     this.superpixels = superpixels;
 

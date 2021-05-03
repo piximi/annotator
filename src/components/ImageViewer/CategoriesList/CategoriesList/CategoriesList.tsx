@@ -622,15 +622,16 @@ const SaveListItem = () => {
   return (
     <PopupState variant="popover">
       {(popupState) => (
-        <ListItem button {...bindTrigger(popupState)}>
-          <ListItemIcon>
-            <SaveIcon />
-          </ListItemIcon>
+        <React.Fragment>
+          <ListItem button {...bindTrigger(popupState)}>
+            <ListItemIcon>
+              <SaveIcon />
+            </ListItemIcon>
 
-          <ListItemText primary={t("Save")} />
-
+            <ListItemText primary={t("Save")} />
+          </ListItem>
           <SaveMenu popupState={popupState} />
-        </ListItem>
+        </React.Fragment>
       )}
     </PopupState>
   );

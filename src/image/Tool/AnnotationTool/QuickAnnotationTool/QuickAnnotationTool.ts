@@ -35,7 +35,7 @@ export class QuickAnnotationTool extends AnnotationTool {
       data,
       this.image.width,
       this.image.height,
-      40
+      this.brushsize
     );
 
     return { count, map, superpixels };
@@ -129,23 +129,27 @@ export class QuickAnnotationTool extends AnnotationTool {
   static setup(image: ImageJS.Image, brushsize: number) {
     const instance = new QuickAnnotationTool(image);
 
-    instance.brushsize = brushsize;
-
-    const { count, map, superpixels } = instance.filter();
-
-    instance.map = map;
-
-    instance.superpixels = superpixels;
-
-    instance.superpixelsMap = {};
-
-    superpixels.forEach((pixel: number, index: number) => {
-      if (!(pixel in instance.superpixelsMap!)) {
-        instance.superpixelsMap![pixel] = [];
-      }
-      instance.superpixelsMap![pixel].push(index);
-    });
+    instance.update(brushsize);
 
     return instance;
+  }
+
+  update(brushsize: number) {
+    this.brushsize = brushsize;
+
+    const { count, map, superpixels } = this.filter();
+
+    this.map = map;
+
+    this.superpixels = superpixels;
+
+    this.superpixelsMap = {};
+
+    superpixels.forEach((pixel: number, index: number) => {
+      if (!(pixel in this.superpixelsMap!)) {
+        this.superpixelsMap![pixel] = [];
+      }
+      this.superpixelsMap![pixel].push(index);
+    });
   }
 }

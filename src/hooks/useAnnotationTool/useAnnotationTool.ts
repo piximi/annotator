@@ -20,6 +20,7 @@ import {
   toolTypeSelector,
 } from "../../store/selectors";
 import { penSelectionBrushSizeSelector } from "../../store/selectors/penSelectionBrushSizeSelector";
+import { quickSelectionBrushSizeSelector } from "../../store/selectors/quickSelectionBrushSizeSelector";
 
 export const useAnnotationTool = () => {
   const src = useSelector(imageSrcSelector);
@@ -30,7 +31,9 @@ export const useAnnotationTool = () => {
 
   const [image, setImage] = useState<ImageJS.Image>();
 
-  const brushSize = useSelector(penSelectionBrushSizeSelector);
+  const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
+
+  const quickSelectionBrushSize = useSelector(quickSelectionBrushSizeSelector);
 
   useEffect(() => {
     if (!src) return;
@@ -74,7 +77,7 @@ export const useAnnotationTool = () => {
       case ToolType.PenAnnotation:
         PenAnnotationTool.setup(
           image,
-          brushSize / (stageScale ? stageScale : 1)
+          penSelectionBrushSize / (stageScale ? stageScale : 1)
         ).then((operator: PenAnnotationTool) => {
           setOperator(operator);
         });
@@ -87,7 +90,7 @@ export const useAnnotationTool = () => {
       case ToolType.QuickAnnotation:
         const quickSelectionOperator = QuickAnnotationTool.setup(
           image,
-          brushSize / (stageScale ? stageScale : 1)
+          quickSelectionBrushSize / Math.round(stageScale ? stageScale : 1)
         );
         setOperator(quickSelectionOperator);
 

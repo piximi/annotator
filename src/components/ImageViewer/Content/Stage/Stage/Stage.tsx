@@ -71,6 +71,7 @@ import {
 } from "../../../../../image/imageHelper";
 import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
+import { quickSelectionBrushSizeSelector } from "../../../../../store/selectors/quickSelectionBrushSizeSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -83,6 +84,7 @@ export const Stage = () => {
   const invertMode = useSelector(invertModeSelector);
   const penSelectionBrushSize = useSelector(penSelectionBrushSizeSelector);
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
+  const quickSelectionBrushSize = useSelector(quickSelectionBrushSizeSelector);
   const selectedCategory = useSelector(selectedCategorySelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
@@ -350,6 +352,13 @@ export const Stage = () => {
       annotationTool.brushSize = penSelectionBrushSize / stageScale;
     }
   }, [penSelectionBrushSize]);
+
+  useEffect(() => {
+    if (toolType === ToolType.QuickAnnotation) {
+      //@ts-ignore
+      annotationTool.update(Math.round(quickSelectionBrushSize / stageScale));
+    }
+  }, [quickSelectionBrushSize]);
 
   useEffect(() => {
     if (!annotated) return;

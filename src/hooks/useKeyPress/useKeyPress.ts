@@ -36,30 +36,6 @@ export function useKeyPress(targetKey: string) {
   return keyPressed;
 }
 
-export const useShiftPress = () => {
-  const dispatch = useDispatch();
-
-  const selectedAnnotation = useSelector(selectedAnnotationSelector);
-
-  const shiftPress = useKeyPress("Shift");
-  useEffect(() => {
-    if (!shiftPress) {
-      dispatch(
-        applicationSlice.actions.setSelectionMode({
-          selectionMode: AnnotationModeType.New,
-        })
-      );
-    } else {
-      if (!selectedAnnotation) return;
-      dispatch(
-        applicationSlice.actions.setSelectionMode({
-          selectionMode: AnnotationModeType.Add,
-        })
-      );
-    }
-  }, [shiftPress]);
-};
-
 export const useAltPress = () => {
   const dispatch = useDispatch();
 

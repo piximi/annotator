@@ -1,5 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setOperation, setSeletedCategory } from "../../store";
+import {
+  applicationSlice,
+  setOperation,
+  setSeletedCategory,
+} from "../../store";
 import { ToolType } from "../../types/ToolType";
 import {
   createdCategoriesSelector,
@@ -7,6 +11,8 @@ import {
 } from "../../store/selectors";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ActionCreators } from "redux-undo";
+import { AnnotationModeType } from "../../types/AnnotationModeType";
+import hotkeys from "hotkeys-js";
 
 export const useKeyboardShortcuts = () => {
   const dispatch = useDispatch();
@@ -169,4 +175,19 @@ export const useKeyboardShortcuts = () => {
   useHotkeys("z", () => {
     dispatch(setOperation({ operation: ToolType.Zoom }));
   });
+
+  useHotkeys(
+    "*",
+    () => {
+      if (hotkeys.shift) {
+        if (toolType === ToolType.Pointer) return; //pointer tool has its own shift handler for multiple selections
+        dispatch(
+          applicationSlice.actions.setSelectionMode({
+            selectionMode: AnnotationModeType.Add,
+          })
+        );
+      }
+    },
+    [toolType]
+  );
 };

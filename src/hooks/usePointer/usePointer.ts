@@ -16,8 +16,10 @@ import {
 } from "../../store/selectors";
 import { selectedAnnotationsSelector } from "../../store/selectors/selectedAnnotationsSelector";
 import { currentPositionSelector } from "../../store/selectors/currentPositionSelector";
-import { useKeyPress } from "../useKeyPress";
 import { currentIndexSelector } from "../../store/selectors/currentIndexSelector";
+import { useHotkeys } from "react-hotkeys-hook";
+import hotkeys from "hotkeys-js";
+import { useState } from "react";
 
 export const usePointer = () => {
   const dispatch = useDispatch();
@@ -32,11 +34,35 @@ export const usePointer = () => {
 
   const stageScale = useSelector(stageScaleSelector);
 
-  const shiftPress = useKeyPress("Shift");
-
   let overlappingAnnotationsIds: Array<string> = [];
 
   const currentIndex = useSelector(currentIndexSelector);
+
+  const [shift, setShift] = useState<boolean>(false);
+
+  useHotkeys(
+    "*",
+    (event) => {
+      if (hotkeys.shift) {
+        if (event.type === "keyup") {
+          setShift(false);
+        }
+      }
+    },
+    { keyup: true }
+  );
+
+  useHotkeys(
+    "*",
+    (event) => {
+      if (hotkeys.shift) {
+        if (event.type === "keydown") {
+          setShift(true);
+        }
+      }
+    },
+    { keydown: true }
+  );
 
   const onPointerClick = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (toolType !== ToolType.Pointer) return;
@@ -81,7 +107,7 @@ export const usePointer = () => {
       })[0];
     }
 
-    if (!shiftPress) {
+    if (!shift) {
       dispatch(
         setSelectedAnnotation({
           selectedAnnotation: currentAnnotation,
@@ -95,7 +121,7 @@ export const usePointer = () => {
       );
     }
 
-    if (shiftPress) {
+    if (shift) {
       dispatch(
         setSelectedAnnotations({
           selectedAnnotations: [...selectedAnnotations, currentAnnotation],

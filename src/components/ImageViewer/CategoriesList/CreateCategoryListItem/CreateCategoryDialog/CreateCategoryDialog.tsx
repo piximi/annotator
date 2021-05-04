@@ -96,8 +96,6 @@ export const CreateCategoryDialog = ({
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    onCreate();
   };
 
   return (

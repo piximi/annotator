@@ -1,5 +1,8 @@
 import { ToolType } from "../../types/ToolType";
-import { getOverlappingAnnotations } from "../../image/imageHelper";
+import {
+  getAnnotationsInBox,
+  getOverlappingAnnotations,
+} from "../../image/imageHelper";
 import { AnnotationType } from "../../types/AnnotationType";
 import {
   applicationSlice,
@@ -104,6 +107,35 @@ export const usePointer = () => {
       dispatch(
         setPointerSelection({
           pointerSelection: { ...pointerSelection, maximum: position },
+        })
+      );
+
+      if (!pointerSelection.minimum || !annotations) return;
+
+      const scaledMinimum = {
+        x: pointerSelection.minimum.x / stageScale,
+        y: pointerSelection.minimum.y / stageScale,
+      };
+      const scaledMaximum = {
+        x: position.x / stageScale,
+        y: position.y / stageScale,
+      };
+
+      const allAnnotations = getAnnotationsInBox(
+        scaledMinimum,
+        scaledMaximum,
+        annotations
+      );
+
+      dispatch(
+        setSelectedAnnotations({
+          selectedAnnotations: allAnnotations,
+        })
+      );
+
+      dispatch(
+        setSelectedAnnotation({
+          selectedAnnotation: allAnnotations[0],
         })
       );
     } else {

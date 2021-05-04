@@ -73,6 +73,9 @@ export const getIdx = (width: number, nchannels: number) => {
   };
 };
 
+/*
+Given a click at a position, return all overlapping annotations ids
+ */
 export const getOverlappingAnnotations = (
   position: { x: number; y: number },
   annotations: Array<AnnotationType>
@@ -92,6 +95,21 @@ export const getOverlappingAnnotations = (
   );
   return overlappingAnnotations.map((annotation: AnnotationType) => {
     return annotation.id;
+  });
+};
+
+export const getAnnotationsInBox = (
+  minimum: { x: number; y: number },
+  maximum: { x: number; y: number },
+  annotations: Array<AnnotationType>
+) => {
+  return annotations.filter((annotation: AnnotationType) => {
+    return (
+      minimum.x <= annotation.boundingBox[0] &&
+      minimum.y <= annotation.boundingBox[1] &&
+      maximum.x >= annotation.boundingBox[2] &&
+      maximum.y >= annotation.boundingBox[3]
+    );
   });
 };
 

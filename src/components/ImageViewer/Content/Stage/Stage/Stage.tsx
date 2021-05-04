@@ -132,7 +132,6 @@ export const Stage = () => {
 
   const backspacePress = useKeyPress("Backspace");
   const deletePress = useKeyPress("Delete");
-  const escapePress = useKeyPress("Escape");
   useShiftPress();
   useAltPress();
   useWindowFocusHandler();
@@ -640,7 +639,7 @@ export const Stage = () => {
   );
 
   useEffect(() => {
-    if (backspacePress || escapePress || deletePress) {
+    if (backspacePress || deletePress) {
       if (deletePress || backspacePress) {
         _.map(selectedAnnotationsIds, (annotationId: string) => {
           dispatch(
@@ -660,7 +659,21 @@ export const Stage = () => {
 
       deselectAnnotation();
     }
-  }, [backspacePress, deletePress, escapePress]);
+  }, [backspacePress, deletePress]);
+
+  useHotkeys("escape", () => {
+    deselectAllAnnotations();
+    deselectAllTransformers();
+
+    if (!_.isEmpty(annotations) && soundEnabled) {
+      playDeleteAnnotationSoundEffect();
+    }
+
+    deselectAnnotation();
+
+    if (toolType !== ToolType.Zoom) return;
+    onZoomDeselect();
+  });
 
   /*/
   Detach transformers and selections when all annotations are removed
@@ -673,12 +686,6 @@ export const Stage = () => {
     deselectAllTransformers();
     deselectAllAnnotations();
   }, [annotations?.length]);
-
-  useEffect(() => {
-    if (!escape) return;
-    if (toolType !== ToolType.Zoom) return;
-    onZoomDeselect();
-  }, [escapePress]);
 
   const [tool, setTool] = useState<Tool>();
 

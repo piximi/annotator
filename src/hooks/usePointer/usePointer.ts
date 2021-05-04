@@ -23,6 +23,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import hotkeys from "hotkeys-js";
 import { useState } from "react";
 import { pointerSelectionSelector } from "../../store/selectors/pointerSelectionSelector";
+import { selectedAnnotationsIdsSelector } from "../../store/selectors/selectedAnnotationsIdsSelector";
 
 export const usePointer = () => {
   const dispatch = useDispatch();
@@ -32,6 +33,8 @@ export const usePointer = () => {
   const toolType = useSelector(toolTypeSelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
+
+  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
   const pointerSelection = useSelector(pointerSelectionSelector);
 
@@ -121,7 +124,7 @@ export const usePointer = () => {
         y: position.y / stageScale,
       };
 
-      const allAnnotations = getAnnotationsInBox(
+      const annotationsInBox = getAnnotationsInBox(
         scaledMinimum,
         scaledMaximum,
         annotations
@@ -130,20 +133,29 @@ export const usePointer = () => {
       if (!shift) {
         dispatch(
           setSelectedAnnotations({
-            selectedAnnotations: allAnnotations,
+            selectedAnnotations: annotationsInBox,
           })
         );
       } else {
+        //only include if not already selected
+        const additionalAnnotations = annotationsInBox.filter(
+          (annotation: AnnotationType) => {
+            return !selectedAnnotationsIds.includes(annotation.id);
+          }
+        );
         dispatch(
           setSelectedAnnotations({
-            selectedAnnotations: [...selectedAnnotations, ...allAnnotations],
+            selectedAnnotations: [
+              ...selectedAnnotations,
+              ...additionalAnnotations,
+            ],
           })
         );
       }
 
       dispatch(
         setSelectedAnnotation({
-          selectedAnnotation: allAnnotations[0],
+          selectedAnnotation: annotationsInBox[0],
         })
       );
     } else {
@@ -212,7 +224,8 @@ export const usePointer = () => {
       );
     }
 
-    if (shift) {
+    if (shift && !selectedAnnotationsIds.includes(currentAnnotation.id)) {
+      //include newly selected annotation if not already selected
       dispatch(
         setSelectedAnnotations({
           selectedAnnotations: [...selectedAnnotations, currentAnnotation],

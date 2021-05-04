@@ -40,9 +40,51 @@ export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
       description =
         "Click or draw a rectangular selection to select annotations. Hold shift to add additional annotations to your selections.";
       break;
-    default:
+    case "Rectangular annotation (M)":
       description =
-        "Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica";
+        "Click to draw a rectangular annotation. Release to close the annotation.";
+      break;
+    case "Elliptical annotation":
+      description =
+        "Click to  draw an elliptical annotation. Release to close the annotation.";
+      break;
+    case "Freehand annotation":
+      description =
+        "Paint over pixels by clicking and dragging over the desired area. Release to close the annotation.";
+      break;
+    case "Lasso annotation (L)":
+      description =
+        "Draw a lasso annotation. Click and release to create new anchor points. Hit enter to automatically close the selection.";
+      break;
+    case "Polygonal annotation":
+      description =
+        "Draw a polygonal annotation. Click and release to create new anchor points. Hit enter to automatically close the selection.";
+      break;
+    case "Magnetic annotation":
+      description =
+        "Automatically snap onto the edges of an object. Click and release to create new anchor points.";
+      break;
+    case "Color annotation":
+      description =
+        "Click and drag to select a region of similar color intensities. Release to close the annotation.";
+      break;
+    case "Quick annotation":
+      description =
+        "Click and drag to select a region of superpixels. Release to close the annotation.";
+      break;
+    case "Object annotation":
+      description =
+        "Select a rectangular annotation around a desired object to automatically generate its boundaries.";
+      break;
+    case "Hand":
+      description = "Pan image.";
+      break;
+    case "Zoom":
+      description =
+        "Zoom in or out of the image by making a rectangular selection or clicking/wheeling in or out of the image.";
+      break;
+    default:
+      description = "";
   }
 
   return (

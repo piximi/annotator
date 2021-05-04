@@ -96,37 +96,39 @@ export const CreateCategoryDialog = ({
 
   return (
     <Dialog fullWidth maxWidth="xs" onClose={onClose} open={open}>
-      <DialogTitle>{t("Create category")}</DialogTitle>
+      <form>
+        <DialogTitle>{t("Create category")}</DialogTitle>
 
-      <DialogContent className={classes.createCategoryDialogContent}>
-        <div className={classes.createCategoryDialogGrid}>
-          <Grid container component="form" spacing={1}>
-            <Grid item xs={2} className={classes.createCategoryDialogItem}>
-              <ColorIcon color={color} onColorChange={onColorChange} />
+        <DialogContent className={classes.createCategoryDialogContent}>
+          <div className={classes.createCategoryDialogGrid}>
+            <Grid container spacing={1}>
+              <Grid item xs={2} className={classes.createCategoryDialogItem}>
+                <ColorIcon color={color} onColorChange={onColorChange} />
+              </Grid>
+              <Grid item xs={10}>
+                <TextField
+                  autoFocus
+                  fullWidth
+                  id="name"
+                  label={t("Name")}
+                  margin="dense"
+                  onChange={onNameChange}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={10}>
-              <TextField
-                autoFocus
-                fullWidth
-                id="name"
-                label={t("Name")}
-                margin="dense"
-                onChange={onNameChange}
-              />
-            </Grid>
-          </Grid>
-        </div>
-      </DialogContent>
+          </div>
+        </DialogContent>
 
-      <DialogActions>
-        <Button onClick={onClose} color="primary">
-          {t("Cancel")}
-        </Button>
+        <DialogActions>
+          <Button onClick={onClose} color="primary">
+            {t("Cancel")}
+          </Button>
 
-        <Button onClick={onCreate} color="primary">
-          {t("Create")}
-        </Button>
-      </DialogActions>
+          <Button onClick={onCreate} color="primary">
+            {t("Create")}
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

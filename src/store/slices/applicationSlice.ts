@@ -60,6 +60,11 @@ const initialState: StateType = {
   language: LanguageType.English,
   offset: { x: 0, y: 0 },
   penSelectionBrushSize: 32,
+  pointerSelection: {
+    minimum: undefined,
+    maximum: undefined,
+    selecting: false,
+  },
   quickSelectionBrushSize: 40,
   saturation: 0,
   selectedAnnotation: undefined,
@@ -271,6 +276,19 @@ export const applicationSlice = createSlice({
     ) {
       state.penSelectionBrushSize = action.payload.penSelectionBrushSize;
     },
+    setPointerSelection(
+      state: StateType,
+      action: PayloadAction<{
+        pointerSelection: {
+          dragging: boolean;
+          minimum: { x: number; y: number } | undefined;
+          maximum: { x: number; y: number } | undefined;
+          selecting: boolean;
+        };
+      }>
+    ) {
+      state.pointerSelection = action.payload.pointerSelection;
+    },
     setQuickSelectionBrushSize(
       state: StateType,
       action: PayloadAction<{ quickSelectionBrushSize: number }>
@@ -387,6 +405,7 @@ export const {
   setOffset,
   setOperation,
   setPenSelectionBrushSize,
+  setPointerSelection,
   setQuickSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,

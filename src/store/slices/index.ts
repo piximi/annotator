@@ -22,6 +22,7 @@ export {
   setOffset,
   setOperation,
   setPenSelectionBrushSize,
+  setPointerSelection,
   setQuickSelectionBrushSize,
   setSaturation,
   setSelectedAnnotation,

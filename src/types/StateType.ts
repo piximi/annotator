@@ -21,6 +21,11 @@ export type StateType = {
   language: LanguageType;
   offset: { x: number; y: number };
   penSelectionBrushSize: number;
+  pointerSelection: {
+    selecting: boolean;
+    minimum: { x: number; y: number } | undefined;
+    maximum: { x: number; y: number } | undefined;
+  };
   quickSelectionBrushSize: number;
   saturation: number;
   selectedAnnotations: Array<AnnotationType>;

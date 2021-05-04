@@ -12,9 +12,12 @@ export const PointerSelection = () => {
 
   const toolType = useSelector(toolTypeSelector);
 
-  const { minimum, maximum, selecting } = useSelector(pointerSelectionSelector);
+  const { dragging, minimum, maximum, selecting } = useSelector(
+    pointerSelectionSelector
+  );
 
-  if (!minimum || !maximum || !selecting) return <React.Fragment />;
+  if (!minimum || !maximum || !selecting || !dragging)
+    return <React.Fragment />;
 
   if (toolType !== ToolType.Pointer) return <React.Fragment />;
 

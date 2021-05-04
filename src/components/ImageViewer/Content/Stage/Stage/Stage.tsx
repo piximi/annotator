@@ -72,6 +72,7 @@ import {
 import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { quickSelectionBrushSizeSelector } from "../../../../../store/selectors/quickSelectionBrushSizeSelector";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -131,7 +132,6 @@ export const Stage = () => {
 
   const backspacePress = useKeyPress("Backspace");
   const deletePress = useKeyPress("Delete");
-  const enterPress = useKeyPress("Enter");
   const escapePress = useKeyPress("Escape");
   useShiftPress();
   useAltPress();
@@ -582,52 +582,62 @@ export const Stage = () => {
     return () => throttled();
   }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
 
-  useEffect(() => {
-    if (!enterPress) return;
+  useHotkeys(
+    "enter",
+    () => {
+      if (!annotations || !annotationTool || annotationTool.annotating) return;
 
-    if (!annotations || !annotationTool || annotationTool.annotating) return;
-
-    // const bar = decode(selectedAnnotations[0].mask);
-    // const foo = new ImageJS.Image(512, 512, bar, {components: 1, alpha: 0})
-    // console.info(foo.toDataURL())
-    // console.info(selectedAnnotations[0].contour)
-
-    dispatch(
-      applicationSlice.actions.setImageInstances({
-        instances: [...unselectedAnnotations, ...selectedAnnotations],
-      })
-    );
-
-    if (soundEnabled) playCreateAnnotationSoundEffect();
-
-    deselectAnnotation();
-
-    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
-
-    if (selectionMode !== AnnotationModeType.New)
       dispatch(
-        applicationSlice.actions.setSelectionMode({
-          selectionMode: AnnotationModeType.New,
+        applicationSlice.actions.setImageInstances({
+          instances: [...unselectedAnnotations, ...selectedAnnotations],
         })
       );
 
-    if (!selectedAnnotationsIds.length) return;
+      if (soundEnabled) playCreateAnnotationSoundEffect();
 
-    deselectAllAnnotations();
-    deselectAllTransformers();
-  }, [enterPress]);
+      deselectAnnotation();
 
-  useEffect(() => {
-    if (
-      toolType !== ToolType.PolygonalAnnotation &&
-      toolType !== ToolType.LassoAnnotation
-    )
-      return;
+      dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
 
-    if (!annotationTool) return;
+      if (selectionMode !== AnnotationModeType.New)
+        dispatch(
+          applicationSlice.actions.setSelectionMode({
+            selectionMode: AnnotationModeType.New,
+          })
+        );
 
-    annotationTool.connect();
-  }, [enterPress]);
+      if (!selectedAnnotationsIds.length) return;
+
+      deselectAllAnnotations();
+      deselectAllTransformers();
+    },
+    [
+      annotations,
+      annotationTool,
+      annotationTool?.annotating,
+      dispatch,
+      selectedAnnotations,
+      unselectedAnnotations,
+      selectionMode,
+      selectedAnnotationsIds,
+    ]
+  );
+
+  useHotkeys(
+    "enter",
+    () => {
+      if (
+        toolType !== ToolType.PolygonalAnnotation &&
+        toolType !== ToolType.LassoAnnotation
+      )
+        return;
+
+      if (!annotationTool) return;
+
+      annotationTool.connect();
+    },
+    [toolType, annotationTool]
+  );
 
   useEffect(() => {
     if (backspacePress || escapePress || deletePress) {

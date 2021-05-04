@@ -22,6 +22,7 @@ export type StateType = {
   offset: { x: number; y: number };
   penSelectionBrushSize: number;
   pointerSelection: {
+    dragging: boolean;
     selecting: boolean;
     minimum: { x: number; y: number } | undefined;
     maximum: { x: number; y: number } | undefined;

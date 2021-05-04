@@ -7,6 +7,8 @@ import {
   setSelectedAnnotation,
   setSelectedAnnotations,
   setSeletedCategory,
+  setPointerSelection,
+  setZoomSelection,
 } from "../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,15 +22,21 @@ import { currentIndexSelector } from "../../store/selectors/currentIndexSelector
 import { useHotkeys } from "react-hotkeys-hook";
 import hotkeys from "hotkeys-js";
 import { useState } from "react";
+import { pointerSelectionSelector } from "../../store/selectors/pointerSelectionSelector";
+import { ZoomModeType } from "../../types/ZoomModeType";
 
 export const usePointer = () => {
   const dispatch = useDispatch();
+
+  const delta = 10;
 
   const toolType = useSelector(toolTypeSelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
 
   const currentPosition = useSelector(currentPositionSelector);
+
+  const pointerSelection = useSelector(pointerSelectionSelector);
 
   const annotations = useSelector(imageInstancesSelector);
 
@@ -64,24 +72,59 @@ export const usePointer = () => {
     { keydown: true }
   );
 
-  const onMouseDown = () => {
-    console.info("Mouse down!");
+  const onMouseDown = (position: { x: number; y: number }) => {
+    dispatch(
+      setPointerSelection({
+        pointerSelection: {
+          ...pointerSelection,
+          dragging: false,
+          minimum: position,
+          selecting: true,
+        },
+      })
+    );
   };
 
-  const onMouseMove = () => {
-    console.info("Mouse move!");
+  const onMouseMove = (position: { x: number; y: number }) => {
+    if (!pointerSelection.selecting) return;
+
+    if (!position || !pointerSelection.minimum) return;
+
+    dispatch(
+      setPointerSelection({
+        pointerSelection: {
+          ...pointerSelection,
+          dragging: Math.abs(position.x - pointerSelection.minimum.x) >= delta,
+          maximum: position,
+        },
+      })
+    );
   };
 
-  const onMouseUp = () => {
-    console.info("Mouse up!");
+  const onMouseUp = (position: { x: number; y: number }) => {
+    if (!pointerSelection.selecting) return;
+
+    if (pointerSelection.dragging) {
+      if (!position) return;
+
+      dispatch(
+        setPointerSelection({
+          pointerSelection: { ...pointerSelection, maximum: position },
+        })
+      );
+    }
+
+    dispatch(
+      setPointerSelection({
+        pointerSelection: { ...pointerSelection, selecting: false },
+      })
+    );
   };
 
   const onPointerClick = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (toolType !== ToolType.Pointer) return;
 
     event.evt.preventDefault();
-
-    console.info(event.target.attrs.id);
 
     if (!currentPosition) return;
 

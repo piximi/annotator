@@ -61,6 +61,7 @@ const initialState: StateType = {
   offset: { x: 0, y: 0 },
   penSelectionBrushSize: 32,
   pointerSelection: {
+    dragging: false,
     minimum: undefined,
     maximum: undefined,
     selecting: false,

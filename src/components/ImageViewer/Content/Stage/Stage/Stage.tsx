@@ -70,6 +70,7 @@ import { quickSelectionBrushSizeSelector } from "../../../../../store/selectors/
 import { useHotkeys } from "react-hotkeys-hook";
 import { PointerSelection } from "../Selection/PointerSelection";
 import { usePointer } from "../../../../../hooks/usePointer/usePointer";
+import { pointerSelectionSelector } from "../../../../../store/selectors/pointerSelectionSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -132,6 +133,11 @@ export const Stage = () => {
   const { dragging: zoomDragging, selecting: zoomSelecting } = useSelector(
     zoomSelectionSelector
   );
+
+  const {
+    dragging: pointerDragging,
+    selecting: pointerSelecting,
+  } = useSelector(pointerSelectionSelector);
 
   useWindowFocusHandler();
 
@@ -448,7 +454,7 @@ export const Stage = () => {
             currentPosition: relative,
           })
         );
-        onPointerMouseDown();
+        onPointerMouseDown(relative);
         return;
       }
 
@@ -490,6 +496,8 @@ export const Stage = () => {
   }, [
     annotated,
     annotationTool,
+    pointerDragging,
+    pointerSelecting,
     selectionMode,
     toolType,
     zoomDragging,
@@ -531,7 +539,7 @@ export const Stage = () => {
       if (toolType === ToolType.Zoom) {
         onZoomMouseMove(relative);
       } else if (toolType === ToolType.Pointer) {
-        onPointerMouseMove();
+        onPointerMouseMove(relative);
       } else {
         if (!annotationTool) return;
 
@@ -542,7 +550,14 @@ export const Stage = () => {
     };
     const throttled = _.throttle(func, 5);
     return () => throttled();
-  }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
+  }, [
+    annotationTool,
+    pointerDragging,
+    pointerSelecting,
+    toolType,
+    zoomDragging,
+    zoomSelecting,
+  ]);
 
   const onMouseUp = useMemo(() => {
     const func = async () => {
@@ -564,7 +579,7 @@ export const Stage = () => {
       if (toolType === ToolType.Zoom) {
         onZoomMouseUp(relative);
       } else if (toolType === ToolType.Pointer) {
-        onPointerMouseUp();
+        onPointerMouseUp(relative);
       } else {
         if (!annotationTool) return;
 
@@ -583,7 +598,14 @@ export const Stage = () => {
     const throttled = _.throttle(func, 10);
 
     return () => throttled();
-  }, [annotationTool, toolType, zoomDragging, zoomSelecting]);
+  }, [
+    annotationTool,
+    pointerDragging,
+    pointerSelecting,
+    toolType,
+    zoomDragging,
+    zoomSelecting,
+  ]);
 
   useHotkeys(
     "enter",

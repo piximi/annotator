@@ -24,7 +24,7 @@ export const PointerSelection = () => {
         dash={[4, 2]}
         dashOffset={-dashOffset}
         height={maximum.y - minimum.y}
-        stroke="black"
+        stroke="white"
         strokeWidth={1}
         width={maximum.x - minimum.x}
         x={minimum.x}

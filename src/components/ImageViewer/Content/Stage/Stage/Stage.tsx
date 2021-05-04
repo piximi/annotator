@@ -49,7 +49,6 @@ import { useKeyboardShortcuts } from "../../../../../hooks/useKeyboardShortcuts"
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
 import { selectedAnnotationsIdsSelector } from "../../../../../store/selectors/selectedAnnotationsIdsSelector";
 import { Transformers } from "../Transformers/Transformers";
-import { useAltPress } from "../../../../../hooks/useKeyPress/useKeyPress";
 import { useWindowFocusHandler } from "../../../../../hooks/useWindowFocusHandler/useWindowFocusHandler";
 import { stagePositionSelector } from "../../../../../store/selectors/stagePositionSelector";
 import { KonvaEventObject } from "konva/types/Node";
@@ -126,7 +125,6 @@ export const Stage = () => {
     zoomSelectionSelector
   );
 
-  useAltPress();
   useWindowFocusHandler();
 
   const [playCreateAnnotationSoundEffect] = useSound(

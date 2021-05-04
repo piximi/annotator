@@ -187,6 +187,13 @@ export const useKeyboardShortcuts = () => {
           })
         );
       }
+      if (hotkeys.alt) {
+        dispatch(
+          applicationSlice.actions.setSelectionMode({
+            selectionMode: AnnotationModeType.Subtract,
+          })
+        );
+      }
     },
     [toolType]
   );

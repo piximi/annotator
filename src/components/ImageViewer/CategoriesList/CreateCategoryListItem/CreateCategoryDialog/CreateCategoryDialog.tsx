@@ -4,7 +4,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorIcon } from "../../ColorIcon";
 import Grid from "@material-ui/core/Grid";
@@ -94,9 +94,15 @@ export const CreateCategoryDialog = ({
 
   const t = useTranslation();
 
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    onCreate();
+  };
+
   return (
     <Dialog fullWidth maxWidth="xs" onClose={onClose} open={open}>
-      <form>
+      <form onSubmit={(event) => onSubmit(event)}>
         <DialogTitle>{t("Create category")}</DialogTitle>
 
         <DialogContent className={classes.createCategoryDialogContent}>
@@ -124,7 +130,7 @@ export const CreateCategoryDialog = ({
             {t("Cancel")}
           </Button>
 
-          <Button onClick={onCreate} color="primary">
+          <Button onClick={onCreate} color="primary" type="submit">
             {t("Create")}
           </Button>
         </DialogActions>

@@ -162,7 +162,7 @@ export const usePointer = () => {
 
     if (!position) return;
 
-    if (!annotations) return;
+    if (!annotations || !annotations.length) return;
 
     const scaledCurrentPosition = {
       x: position.x / stageScale,
@@ -195,6 +195,8 @@ export const usePointer = () => {
         return annotation.id === overlappingAnnotationsIds[0];
       })[0];
     }
+
+    if (!currentAnnotation) return;
 
     if (!shift) {
       dispatch(

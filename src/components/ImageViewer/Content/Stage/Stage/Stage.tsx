@@ -26,7 +26,6 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
-import { useKeyPress } from "../../../../../hooks/useKeyPress";
 import { useAnnotationTool, useHandTool, useZoom } from "../../../../../hooks";
 import { AnnotationType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
@@ -130,8 +129,6 @@ export const Stage = () => {
     zoomSelectionSelector
   );
 
-  const backspacePress = useKeyPress("Backspace");
-  const deletePress = useKeyPress("Delete");
   useShiftPress();
   useAltPress();
   useWindowFocusHandler();
@@ -638,18 +635,16 @@ export const Stage = () => {
     [toolType, annotationTool]
   );
 
-  useEffect(() => {
-    if (backspacePress || deletePress) {
-      if (deletePress || backspacePress) {
-        _.map(selectedAnnotationsIds, (annotationId: string) => {
-          dispatch(
-            applicationSlice.actions.deleteImageInstance({
-              id: annotationId,
-            })
-          );
-        });
-      }
-
+  useHotkeys(
+    "backspace, delete",
+    () => {
+      _.map(selectedAnnotationsIds, (annotationId: string) => {
+        dispatch(
+          applicationSlice.actions.deleteImageInstance({
+            id: annotationId,
+          })
+        );
+      });
       deselectAllAnnotations();
       deselectAllTransformers();
 
@@ -658,22 +653,27 @@ export const Stage = () => {
       }
 
       deselectAnnotation();
-    }
-  }, [backspacePress, deletePress]);
+    },
+    [selectedAnnotationsIds, annotations]
+  );
 
-  useHotkeys("escape", () => {
-    deselectAllAnnotations();
-    deselectAllTransformers();
+  useHotkeys(
+    "escape",
+    () => {
+      deselectAllAnnotations();
+      deselectAllTransformers();
 
-    if (!_.isEmpty(annotations) && soundEnabled) {
-      playDeleteAnnotationSoundEffect();
-    }
+      if (!_.isEmpty(annotations) && soundEnabled) {
+        playDeleteAnnotationSoundEffect();
+      }
 
-    deselectAnnotation();
+      deselectAnnotation();
 
-    if (toolType !== ToolType.Zoom) return;
-    onZoomDeselect();
-  });
+      if (toolType !== ToolType.Zoom) return;
+      onZoomDeselect();
+    },
+    [annotations]
+  );
 
   /*/
   Detach transformers and selections when all annotations are removed

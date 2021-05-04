@@ -127,11 +127,19 @@ export const usePointer = () => {
         annotations
       );
 
-      dispatch(
-        setSelectedAnnotations({
-          selectedAnnotations: allAnnotations,
-        })
-      );
+      if (!shift) {
+        dispatch(
+          setSelectedAnnotations({
+            selectedAnnotations: allAnnotations,
+          })
+        );
+      } else {
+        dispatch(
+          setSelectedAnnotations({
+            selectedAnnotations: [...selectedAnnotations, ...allAnnotations],
+          })
+        );
+      }
 
       dispatch(
         setSelectedAnnotation({

@@ -295,25 +295,25 @@ export const Transformer = ({
   };
 
   const onTransformStart = () => {
-    // dispatch(
-    //   setSelectedAnnotation({
-    //     selectedAnnotation: selectedAnnotations.filter(
-    //       (annotation: AnnotationType) => {
-    //         return annotation.id === annotationId;
-    //       }
-    //     )[0],
-    //   })
-    // );
-    //
-    // dispatch(
-    //   setSelectedAnnotations({
-    //     selectedAnnotations: [
-    //       selectedAnnotations.filter((annotation: AnnotationType) => {
-    //         return annotation.id === annotationId;
-    //       })[0],
-    //     ],
-    //   })
-    // );
+    dispatch(
+      setSelectedAnnotation({
+        selectedAnnotation: selectedAnnotations.filter(
+          (annotation: AnnotationType) => {
+            return annotation.id === annotationId;
+          }
+        )[0],
+      })
+    );
+
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [
+          selectedAnnotations.filter((annotation: AnnotationType) => {
+            return annotation.id === annotationId;
+          })[0],
+        ],
+      })
+    );
   };
 
   return (

@@ -33,6 +33,18 @@ type ToolProps = {
 export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
   const classes = useStyles();
 
+  let description: string;
+
+  switch (name) {
+    case "Pointer":
+      description =
+        "Click or draw a rectangular selection to select annotations. Hold shift to add additional annotations to your selections.";
+      break;
+    default:
+      description =
+        "Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica";
+  }
+
   return (
     <Card className={classes.card} raised variant="outlined">
       <CardActionArea>
@@ -55,8 +67,7 @@ export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
           </Typography>
 
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+            {description}
           </Typography>
         </CardContent>
       </CardActionArea>

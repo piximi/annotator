@@ -68,6 +68,7 @@ import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSel
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { quickSelectionBrushSizeSelector } from "../../../../../store/selectors/quickSelectionBrushSizeSelector";
 import { useHotkeys } from "react-hotkeys-hook";
+import { PointerSelection } from "../Selection/PointerSelection";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -714,6 +715,8 @@ export const Stage = () => {
               <Selecting tool={tool!} />
 
               <PenAnnotationToolTip annotationTool={annotationTool} />
+
+              <PointerSelection />
 
               <Annotations />
 

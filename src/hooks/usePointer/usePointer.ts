@@ -1,14 +1,12 @@
-import Konva from "konva";
 import { ToolType } from "../../types/ToolType";
 import { getOverlappingAnnotations } from "../../image/imageHelper";
 import { AnnotationType } from "../../types/AnnotationType";
 import {
   applicationSlice,
+  setPointerSelection,
   setSelectedAnnotation,
   setSelectedAnnotations,
   setSeletedCategory,
-  setPointerSelection,
-  setZoomSelection,
 } from "../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,13 +15,11 @@ import {
   toolTypeSelector,
 } from "../../store/selectors";
 import { selectedAnnotationsSelector } from "../../store/selectors/selectedAnnotationsSelector";
-import { currentPositionSelector } from "../../store/selectors/currentPositionSelector";
 import { currentIndexSelector } from "../../store/selectors/currentIndexSelector";
 import { useHotkeys } from "react-hotkeys-hook";
 import hotkeys from "hotkeys-js";
 import { useState } from "react";
 import { pointerSelectionSelector } from "../../store/selectors/pointerSelectionSelector";
-import { ZoomModeType } from "../../types/ZoomModeType";
 
 export const usePointer = () => {
   const dispatch = useDispatch();
@@ -33,8 +29,6 @@ export const usePointer = () => {
   const toolType = useSelector(toolTypeSelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
-
-  const currentPosition = useSelector(currentPositionSelector);
 
   const pointerSelection = useSelector(pointerSelectionSelector);
 
@@ -112,6 +106,8 @@ export const usePointer = () => {
           pointerSelection: { ...pointerSelection, maximum: position },
         })
       );
+    } else {
+      onClick(position);
     }
 
     dispatch(
@@ -121,18 +117,16 @@ export const usePointer = () => {
     );
   };
 
-  const onPointerClick = (event: Konva.KonvaEventObject<MouseEvent>) => {
+  const onClick = (position: { x: number; y: number }) => {
     if (toolType !== ToolType.Pointer) return;
 
-    event.evt.preventDefault();
-
-    if (!currentPosition) return;
+    if (!position) return;
 
     if (!annotations) return;
 
     const scaledCurrentPosition = {
-      x: currentPosition.x / stageScale,
-      y: currentPosition.y / stageScale,
+      x: position.x / stageScale,
+      y: position.y / stageScale,
     };
 
     overlappingAnnotationsIds = getOverlappingAnnotations(
@@ -158,7 +152,7 @@ export const usePointer = () => {
       })[0];
     } else {
       currentAnnotation = annotations.filter((annotation: AnnotationType) => {
-        return annotation.id === event.target.attrs.id;
+        return annotation.id === overlappingAnnotationsIds[0];
       })[0];
     }
 
@@ -196,5 +190,5 @@ export const usePointer = () => {
     );
   };
 
-  return { onMouseDown, onMouseUp, onMouseMove, onPointerClick };
+  return { onMouseDown, onMouseUp, onMouseMove, onPointerClick: onClick };
 };

@@ -8,7 +8,6 @@ import {
   categoriesSelector,
   stageScaleSelector,
 } from "../../../../../../../store/selectors";
-import { usePointer } from "../../../../../../../hooks/usePointer/usePointer";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -17,8 +16,6 @@ type AnnotationProps = {
 export const Annotation = ({ annotation }: AnnotationProps) => {
   const categories = useSelector(categoriesSelector);
   const stageScale = useSelector(stageScaleSelector);
-
-  const { onPointerClick } = usePointer();
 
   const fill = _.find(
     categories,
@@ -31,7 +28,6 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
     <ReactKonva.Group>
       <ReactKonva.Line
         closed
-        onClick={onPointerClick}
         points={annotation.contour}
         scale={{ x: stageScale, y: stageScale }}
         stroke="white"
@@ -41,7 +37,6 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
         closed
         id={annotation.id}
         fill={fill}
-        onClick={onPointerClick}
         opacity={0.5}
         points={annotation.contour}
         scale={{ x: stageScale, y: stageScale }}

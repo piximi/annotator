@@ -64,6 +64,18 @@ export const usePointer = () => {
     { keydown: true }
   );
 
+  const onMouseDown = () => {
+    console.info("Mouse down!");
+  };
+
+  const onMouseMove = () => {
+    console.info("Mouse move!");
+  };
+
+  const onMouseUp = () => {
+    console.info("Mouse up!");
+  };
+
   const onPointerClick = (event: Konva.KonvaEventObject<MouseEvent>) => {
     if (toolType !== ToolType.Pointer) return;
 
@@ -141,5 +153,5 @@ export const usePointer = () => {
     );
   };
 
-  return { onPointerClick };
+  return { onMouseDown, onMouseUp, onMouseMove, onPointerClick };
 };

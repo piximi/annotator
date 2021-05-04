@@ -69,6 +69,7 @@ import { imageHeightSelector } from "../../../../../store/selectors/imageHeightS
 import { quickSelectionBrushSizeSelector } from "../../../../../store/selectors/quickSelectionBrushSizeSelector";
 import { useHotkeys } from "react-hotkeys-hook";
 import { PointerSelection } from "../Selection/PointerSelection";
+import { usePointer } from "../../../../../hooks/usePointer/usePointer";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -109,6 +110,12 @@ export const Stage = () => {
     onMouseDown: onZoomMouseDown,
     onWheel: onZoomWheel,
   } = useZoom();
+
+  const {
+    onMouseDown: onPointerMouseDown,
+    onMouseMove: onPointerMouseMove,
+    onMouseUp: onPointerMouseUp,
+  } = usePointer();
 
   const [annotationTool] = useAnnotationTool();
 
@@ -441,6 +448,7 @@ export const Stage = () => {
             currentPosition: relative,
           })
         );
+        onPointerMouseDown();
         return;
       }
 
@@ -522,6 +530,8 @@ export const Stage = () => {
 
       if (toolType === ToolType.Zoom) {
         onZoomMouseMove(relative);
+      } else if (toolType === ToolType.Pointer) {
+        onPointerMouseMove();
       } else {
         if (!annotationTool) return;
 
@@ -553,6 +563,8 @@ export const Stage = () => {
 
       if (toolType === ToolType.Zoom) {
         onZoomMouseUp(relative);
+      } else if (toolType === ToolType.Pointer) {
+        onPointerMouseUp();
       } else {
         if (!annotationTool) return;
 

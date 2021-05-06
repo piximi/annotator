@@ -94,6 +94,11 @@ export const Stage = () => {
   const stageWidth = useSelector(stageWidthSelector);
   const stagePosition = useSelector(stagePositionSelector);
 
+  const [currentPosition, setCurrentPosition] = useState<{
+    x: number;
+    y: number;
+  }>();
+
   const scaledImageWidth = useSelector(scaledImageWidthSelector);
   const scaledImageHeight = useSelector(scaledImageHeightSelector);
 
@@ -449,11 +454,6 @@ export const Stage = () => {
       if (!relative) return;
 
       if (toolType === ToolType.Pointer) {
-        dispatch(
-          applicationSlice.actions.setCurrentPosition({
-            currentPosition: relative,
-          })
-        );
         onPointerMouseDown(relative);
         return;
       }
@@ -516,12 +516,7 @@ export const Stage = () => {
 
       if (!relative || !scaledImageWidth || !scaledImageHeight) return;
 
-      if (toolType === ToolType.PenAnnotation)
-        dispatch(
-          applicationSlice.actions.setCurrentPosition({
-            currentPosition: relative,
-          })
-        );
+      if (toolType === ToolType.PenAnnotation) setCurrentPosition(relative);
 
       if (
         relative.x > scaledImageWidth ||
@@ -748,7 +743,10 @@ export const Stage = () => {
 
               <Selecting tool={tool!} />
 
-              <PenAnnotationToolTip annotationTool={annotationTool} />
+              <PenAnnotationToolTip
+                currentPosition={currentPosition}
+                annotationTool={annotationTool}
+              />
 
               <PointerSelection />
 

@@ -10,7 +10,6 @@ import { LanguageType } from "../../types/LanguageType";
 import * as tensorflow from "@tensorflow/tfjs";
 import { StateType } from "../../types/StateType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
-import { isoLines } from "marchingsquares";
 import { decode } from "../../image/rle";
 import { computeContours } from "../../image/imageHelper";
 
@@ -40,7 +39,6 @@ const initialState: StateType = {
     },
   ],
   currentIndex: 0,
-  currentPosition: undefined,
   contrast: 0,
   exposure: 0,
   hue: 0,
@@ -217,12 +215,6 @@ export const applicationSlice = createSlice({
     ) {
       state.currentIndex = action.payload.currentIndex;
     },
-    setCurrentPosition(
-      state: StateType,
-      action: PayloadAction<{ currentPosition: { x: number; y: number } }>
-    ) {
-      state.currentPosition = action.payload.currentPosition;
-    },
     setExposure(state: StateType, action: PayloadAction<{ exposure: number }>) {
       state.exposure = action.payload.exposure;
     },
@@ -392,7 +384,6 @@ export const {
   setCategoryVisibility,
   setContrast,
   setCurrentIndex,
-  setCurrentPosition,
   setExposure,
   setHue,
   setImage,

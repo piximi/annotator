@@ -4,6 +4,7 @@ import * as ImageJS from "image-js";
 import * as _ from "lodash";
 import { encode } from "../../../rle";
 import PriorityQueue from "ts-priority-queue";
+import { computeContours } from "../../../imageHelper";
 
 export class ColorAnnotationTool extends AnnotationTool {
   roiContour?: ImageJS.Image;
@@ -136,7 +137,7 @@ export class ColorAnnotationTool extends AnnotationTool {
     const offsetY = this.roiMask.position[1];
 
     this._contour = _.flatten(
-      _.chunk(this.computeContours(bar), 2).map((el: Array<number>) => {
+      _.chunk(computeContours(bar), 2).map((el: Array<number>) => {
         return [el[0] + offsetX, el[1] + offsetY];
       })
     );

@@ -12,6 +12,7 @@ import { StateType } from "../../types/StateType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 import { isoLines } from "marchingsquares";
 import { decode } from "../../image/rle";
+import { computeContours } from "../../image/imageHelper";
 
 const initialState: StateType = {
   annotated: false,
@@ -132,11 +133,7 @@ export const applicationSlice = createSlice({
             }
           );
 
-          const contour = _.flatten(
-            isoLines(decoded, 1).sort((a: Array<number>, b: Array<number>) => {
-              return b.length - a.length;
-            })[0]
-          ) as Array<number>;
+          const contour = computeContours(decoded);
 
           return {
             boundingBox: [

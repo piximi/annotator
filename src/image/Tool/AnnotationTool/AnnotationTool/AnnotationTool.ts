@@ -2,7 +2,7 @@ import { AnnotationType } from "../../../../types/AnnotationType";
 import * as ImageJS from "image-js";
 import { CategoryType } from "../../../../types/CategoryType";
 import * as _ from "lodash";
-import { connectPoints, drawLine } from "../../../imageHelper";
+import { computeContours, connectPoints, drawLine } from "../../../imageHelper";
 import { simplify } from "../../../simplify/simplify";
 import { slpf } from "../../../polygon-fill/slpf";
 import * as uuid from "uuid";
@@ -51,7 +51,7 @@ export abstract class AnnotationTool extends Tool {
       return Array.from(el);
     });
 
-    const contours = this.computeContours(mat);
+    const contours = computeContours(mat);
 
     return [encode(data), contours];
   }
@@ -105,7 +105,7 @@ export abstract class AnnotationTool extends Tool {
     const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
       return Array.from(el);
     });
-    const contours = this.computeContours(mat);
+    const contours = computeContours(mat);
 
     return [encode(data), contours];
   }
@@ -129,7 +129,7 @@ export abstract class AnnotationTool extends Tool {
     const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
       return Array.from(el);
     });
-    const contours = this.computeContours(mat);
+    const contours = computeContours(mat);
 
     return [encode(data), contours];
   }
@@ -155,38 +155,6 @@ export abstract class AnnotationTool extends Tool {
       Math.round(_.max(_.map(pairs, _.first))!),
       Math.round(_.max(_.map(pairs, _.last))!),
     ];
-  }
-
-  computeContours(data: Array<Array<number>>): Array<number> {
-    //pad array to obtain better estimate of contours around mask
-    const pad = 10;
-    const padY = new Array(data[0].length + 2 * pad).fill(0);
-    const padX = new Array(pad).fill(0);
-
-    const paddedMatrix: Array<Array<number>> = [];
-
-    let i;
-    for (i = 0; i < pad; i++) {
-      paddedMatrix.push(padY);
-    }
-    data.forEach((row: Array<number>) => {
-      paddedMatrix.push(padX.concat(row).concat(padX));
-    });
-    for (i = 0; i < pad; i++) {
-      paddedMatrix.push(padY);
-    }
-
-    const largestIsoline = isoLines(paddedMatrix, 1).sort(
-      (a: Array<number>, b: Array<number>) => {
-        return b.length - a.length;
-      }
-    )[0];
-
-    return _.flatten(
-      largestIsoline.map((coord: Array<number>) => {
-        return [Math.round(coord[0] - pad), Math.round(coord[1] - pad)];
-      })
-    );
   }
 
   computeMask() {

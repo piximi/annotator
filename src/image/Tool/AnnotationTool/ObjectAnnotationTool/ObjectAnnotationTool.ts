@@ -3,6 +3,7 @@ import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
 import * as _ from "lodash";
 import { encode } from "../../../rle";
+import { computeContours } from "../../../imageHelper";
 
 export class ObjectAnnotationTool extends RectangularAnnotationTool {
   graph?: tensorflow.LayersModel;
@@ -118,7 +119,7 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
         return Array.from(el);
       });
 
-      this._contour = this.computeContours(bar);
+      this._contour = computeContours(bar);
 
       // @ts-ignore
       this._mask = encode(this.output.getChannel(0).data);

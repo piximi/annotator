@@ -1,7 +1,7 @@
 import { AnnotationTool } from "../AnnotationTool";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
-import { connectPoints } from "../../../imageHelper";
+import { computeContours, connectPoints } from "../../../imageHelper";
 import { encode } from "../../../rle";
 
 export class PenAnnotationTool extends AnnotationTool {
@@ -90,7 +90,7 @@ export class PenAnnotationTool extends AnnotationTool {
       }
     );
 
-    this._contour = this.computeContours(bar);
+    this._contour = computeContours(bar);
 
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
   }

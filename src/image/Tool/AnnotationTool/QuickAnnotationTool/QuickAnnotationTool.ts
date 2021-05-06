@@ -3,6 +3,7 @@ import { slic } from "../../../slic";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
 import { encode } from "../../../rle";
+import { computeContours } from "../../../imageHelper";
 
 export class QuickAnnotationTool extends AnnotationTool {
   brushsize: number = 40;
@@ -109,7 +110,7 @@ export class QuickAnnotationTool extends AnnotationTool {
       return Array.from(el);
     });
 
-    this._contour = this.computeContours(bar);
+    this._contour = computeContours(bar);
     this._mask = this.computeQuickSelectionMask();
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 

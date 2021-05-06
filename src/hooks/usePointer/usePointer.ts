@@ -102,26 +102,52 @@ export const usePointer = () => {
   };
 
   const onMouseUp = (position: { x: number; y: number }) => {
-    if (!pointerSelection.selecting) return;
+    if (!pointerSelection.selecting || !pointerSelection.minimum) return;
 
     if (pointerSelection.dragging) {
       if (!position) return;
 
+      // correct minimum or maximum in the case where user may have selected rectangle from right to left
+      const maximum: { x: number; y: number } = {
+        x:
+          pointerSelection.minimum.x > position.x
+            ? pointerSelection.minimum.x
+            : position.x,
+        y:
+          pointerSelection.minimum.y > position.y
+            ? pointerSelection.minimum.y
+            : position.y,
+      };
+      const minimum: { x: number; y: number } = {
+        x:
+          pointerSelection.minimum.x > position.x
+            ? position.x
+            : pointerSelection.minimum.x,
+        y:
+          pointerSelection.minimum.y > position.y
+            ? position.y
+            : pointerSelection.minimum.y,
+      };
+
       dispatch(
         setPointerSelection({
-          pointerSelection: { ...pointerSelection, maximum: position },
+          pointerSelection: {
+            ...pointerSelection,
+            minimum: minimum,
+            maximum: maximum,
+          },
         })
       );
 
-      if (!pointerSelection.minimum || !annotations) return;
+      if (!minimum || !annotations) return;
 
       const scaledMinimum = {
-        x: pointerSelection.minimum.x / stageScale,
-        y: pointerSelection.minimum.y / stageScale,
+        x: minimum.x / stageScale,
+        y: minimum.y / stageScale,
       };
       const scaledMaximum = {
-        x: position.x / stageScale,
-        y: position.y / stageScale,
+        x: maximum.x / stageScale,
+        y: maximum.y / stageScale,
       };
 
       const annotationsInBox = getAnnotationsInBox(

@@ -125,12 +125,12 @@ export const Transformer = ({
     if (!imageWidth || !imageHeight || !relativeNewBox)
       return boundBox ? boundBox : startBox;
     if (
-      relativeNewBox.x + relativeNewBox.width > imageWidth ||
-      relativeNewBox.y + relativeNewBox.height > imageHeight ||
+      Math.floor(relativeNewBox.x + relativeNewBox.width) > imageWidth ||
+      Math.floor(relativeNewBox.y + relativeNewBox.height) > imageHeight ||
       relativeNewBox.x < 0 ||
       relativeNewBox.y < 0
     ) {
-      return boundBox ? boundBox : startBox;
+      return boundBox ? boundBox : oldBox;
     }
 
     setBoundBox(newBox);

@@ -90,11 +90,7 @@ export class PenAnnotationTool extends AnnotationTool {
       }
     );
 
-    const largest = this.computeContours(bar);
-
-    this.outline = _.flatten(largest);
-
-    this._contour = this.outline;
+    this._contour = this.computeContours(bar);
 
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
   }

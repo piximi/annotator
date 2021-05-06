@@ -53,7 +53,7 @@ export abstract class AnnotationTool extends Tool {
 
     const contours = this.computeContours(mat);
 
-    return [encode(data), _.flatten(contours)];
+    return [encode(data), contours];
   }
 
   connect() {
@@ -107,7 +107,7 @@ export abstract class AnnotationTool extends Tool {
     });
     const contours = this.computeContours(mat);
 
-    return [encode(data), _.flatten(contours)];
+    return [encode(data), contours];
   }
 
   /*
@@ -131,7 +131,7 @@ export abstract class AnnotationTool extends Tool {
     });
     const contours = this.computeContours(mat);
 
-    return [encode(data), _.flatten(contours)];
+    return [encode(data), contours];
   }
 
   get boundingBox(): [number, number, number, number] | undefined {
@@ -157,10 +157,36 @@ export abstract class AnnotationTool extends Tool {
     ];
   }
 
-  computeContours(data: Array<Array<number>>) {
-    return isoLines(data, 1).sort((a: Array<number>, b: Array<number>) => {
-      return b.length - a.length;
-    })[0];
+  computeContours(data: Array<Array<number>>): Array<number> {
+    //pad array to obtain better estimate of contours around mask
+    const pad = 10;
+    const padY = new Array(data[0].length + 2 * pad).fill(0);
+    const padX = new Array(pad).fill(0);
+
+    const paddedMatrix: Array<Array<number>> = [];
+
+    let i;
+    for (i = 0; i < pad; i++) {
+      paddedMatrix.push(padY);
+    }
+    data.forEach((row: Array<number>) => {
+      paddedMatrix.push(padX.concat(row).concat(padX));
+    });
+    for (i = 0; i < pad; i++) {
+      paddedMatrix.push(padY);
+    }
+
+    const largestIsoline = isoLines(paddedMatrix, 1).sort(
+      (a: Array<number>, b: Array<number>) => {
+        return b.length - a.length;
+      }
+    )[0];
+
+    return _.flatten(
+      largestIsoline.map((coord: Array<number>) => {
+        return [Math.round(coord[0] - pad), Math.round(coord[1] - pad)];
+      })
+    );
   }
 
   computeMask() {

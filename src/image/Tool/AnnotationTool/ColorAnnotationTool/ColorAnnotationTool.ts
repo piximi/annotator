@@ -130,22 +130,17 @@ export class ColorAnnotationTool extends AnnotationTool {
       return Array.from(el);
     });
 
-    const largest: Array<Array<number>> = this.computeContours(bar);
-
-    if (!largest) return;
-
     // @ts-ignore
     const offsetX = this.roiMask.position[0];
     // @ts-ignore
     const offsetY = this.roiMask.position[1];
 
-    this.points = _.flatten(
-      largest.map((coord) => {
-        return [Math.round(coord[0] + offsetX), Math.round(coord[1] + offsetY)];
+    this._contour = _.flatten(
+      _.chunk(this.computeContours(bar), 2).map((el: Array<number>) => {
+        return [el[0] + offsetX, el[1] + offsetY];
       })
     );
 
-    this._contour = this.points;
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
     //mask should be the whole image, not just the ROI

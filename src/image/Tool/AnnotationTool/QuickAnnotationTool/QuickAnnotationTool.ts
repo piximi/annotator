@@ -108,15 +108,8 @@ export class QuickAnnotationTool extends AnnotationTool {
     const bar = greyMatrix.map((el: Array<number>) => {
       return Array.from(el);
     });
-    const largest: Array<Array<number>> = this.computeContours(bar);
 
-    this.points = _.flatten(
-      largest.map((coord) => {
-        return [Math.round(coord[0]), Math.round(coord[1])];
-      })
-    );
-
-    this._contour = this.points;
+    this._contour = this.computeContours(bar);
     this._mask = this.computeQuickSelectionMask();
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 

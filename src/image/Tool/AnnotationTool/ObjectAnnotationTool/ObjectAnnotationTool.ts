@@ -118,16 +118,11 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
         return Array.from(el);
       });
 
-      const largest = this.computeContours(bar);
-
-      const foo: Array<number> = _.flatten(largest);
-      this.points = foo.map((el: number) => {
-        return Math.round(el);
-      });
+      this._contour = this.computeContours(bar);
 
       // @ts-ignore
       this._mask = encode(this.output.getChannel(0).data);
-      this._contour = this.points;
+
       this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
       this.annotated = true;

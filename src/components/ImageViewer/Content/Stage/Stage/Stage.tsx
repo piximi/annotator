@@ -345,14 +345,14 @@ export const Stage = () => {
       annotationTool.annotate(selectedCategory);
     }
 
-    if (selectionMode === AnnotationModeType.New) return;
-
     if (annotationTool.annotating)
       dispatch(
         applicationSlice.actions.setAnnotating({
           annotating: annotationTool.annotating,
         })
       );
+
+    if (selectionMode === AnnotationModeType.New) return;
   }, [annotationTool?.annotated, annotationTool?.annotating]);
 
   useEffect(() => {
@@ -755,7 +755,13 @@ export const Stage = () => {
               <Transformers transformPosition={getRelativePointerPosition} />
 
               <ColorAnnotationToolTip
-                colorAnnotationTool={annotationTool as ColorAnnotationTool}
+                toolTipPosition={
+                  (annotationTool as ColorAnnotationTool)?.toolTipPosition
+                }
+                initialPosition={
+                  (annotationTool as ColorAnnotationTool)?.initialPosition
+                }
+                tolerance={(annotationTool as ColorAnnotationTool)?.tolerance}
               />
             </Layer>
           </Provider>

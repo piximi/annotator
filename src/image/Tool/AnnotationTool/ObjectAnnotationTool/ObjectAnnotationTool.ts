@@ -114,15 +114,22 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
       });
 
       // @ts-ignore
-      const data = this.output.grey().getMatrix().data;
-      const bar = data.map((el: Array<number>) => {
-        return Array.from(el);
-      });
+      const data = this.output.grey().data;
 
-      this._contour = computeContours(bar);
+      //threshold
+      const thresholded = _.map(data, (i: number) => (i > 1 ? 255 : 0)); //threshold necessary because output of NN is not binary
+
+      const mask = _.map(
+        _.chunk(thresholded, this.image.width),
+        (el: Array<number>) => {
+          return Array.from(el);
+        }
+      );
+
+      this._contour = computeContours(mask);
 
       // @ts-ignore
-      this._mask = encode(this.output.getChannel(0).data);
+      this._mask = encode(thresholded);
 
       this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 

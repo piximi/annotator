@@ -168,7 +168,10 @@ export class ColorAnnotationTool extends AnnotationTool {
 
   private static colorOverlay(
     mask: ImageJS.Image,
+    offset: { x: number; y: number },
     position: { x: number; y: number },
+    width: number,
+    height: number,
     color: string
   ) {
     const r = parseInt(color.slice(1, 3), 16);
@@ -177,9 +180,9 @@ export class ColorAnnotationTool extends AnnotationTool {
     const fillColor = [r, g, b, 150];
 
     let overlay = new ImageJS.Image(
-      mask.width,
-      mask.height,
-      new Uint8Array(mask.width * mask.height * 4),
+      width,
+      height,
+      new Uint8Array(width * height * 4),
       { alpha: 1 }
     );
 
@@ -187,7 +190,7 @@ export class ColorAnnotationTool extends AnnotationTool {
     for (let x = 0; x < mask.width; x++) {
       for (let y = 0; y < mask.height; y++) {
         if (mask.getBitXY(x, y)) {
-          overlay.setPixelXY(x, y, fillColor);
+          overlay.setPixelXY(x + offset.x, y + offset.y, fillColor);
         }
       }
     }
@@ -231,7 +234,10 @@ export class ColorAnnotationTool extends AnnotationTool {
 
     this.overlayData = ColorAnnotationTool.colorOverlay(
       this.roiMask,
+      this.offset,
       position,
+      this.image.width,
+      this.image.height,
       "red"
     );
   }

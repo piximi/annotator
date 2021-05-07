@@ -26,8 +26,6 @@ export const ColorSelection = ({ operator }: ColorSelectionProps) => {
       <ReactKonva.Image
         image={image}
         scale={{ x: stageScale, y: stageScale }}
-        x={operator.offset.x * stageScale}
-        y={operator.offset.y * stageScale}
       />
     </ReactKonva.Group>
   );

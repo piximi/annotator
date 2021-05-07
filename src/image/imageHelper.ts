@@ -199,7 +199,9 @@ export const computeContours = (
 
   let largestIsoline = largestIsolines[0];
 
-  if (multiple) {
+  if (largestIsoline.length <= 5) return [];
+
+  if (multiple && largestIsolines.length) {
     //PenSelection case: if a loop was created, another contour will be detected. We concatenate those two contours together.
     largestIsoline =
       largestIsolines[1].length > 5

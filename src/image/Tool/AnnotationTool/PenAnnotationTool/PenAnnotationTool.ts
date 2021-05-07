@@ -24,14 +24,12 @@ export class PenAnnotationTool extends AnnotationTool {
       new ImageJS.Image(this.image.width, this.image.height)
     );
 
-    const radius = this.brushSize > 1 ? this.brushSize : 1; // if radius is smaller than 1, circle does not show
-
     connected.forEach((position) => {
       ctx.beginPath();
       ctx.arc(
-        Math.floor(position[0]),
-        Math.floor(position[1]),
-        radius,
+        Math.round(position[0]),
+        Math.round(position[1]),
+        this.brushSize / 2,
         0,
         Math.PI * 2,
         true

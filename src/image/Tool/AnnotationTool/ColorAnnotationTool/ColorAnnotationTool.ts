@@ -10,7 +10,7 @@ export class ColorAnnotationTool extends AnnotationTool {
   roiContour?: ImageJS.Image;
   roiMask?: ImageJS.Image;
   roiManager?: ImageJS.RoiManager;
-  offset?: { x: number; y: number };
+  offset?: { x: number; y: number } = { x: 0, y: 0 };
   overlayData: string = "";
   points: Array<number> = [];
   initialPosition: { x: number; y: number } = { x: 0, y: 0 };
@@ -112,6 +112,10 @@ export class ColorAnnotationTool extends AnnotationTool {
     if (!this.roiManager || !this.roiMask) return;
 
     // @ts-ignore
+    this.roiManager.fromMask(this.roiMask);
+    // @ts-ignore
+    this.roiMask = this.roiManager.getMasks()[0];
+    // @ts-ignore
     this.roiContour = this.roiManager.getMasks({ kind: "contour" })[0];
 
     const greyData = _.chunk(this.roiContour!.getRGBAData(), 4).map((chunk) => {
@@ -150,8 +154,8 @@ export class ColorAnnotationTool extends AnnotationTool {
       alpha: 0,
     });
 
-    for (let x = 0; x < this.roiMask.width; x++) {
-      for (let y = 0; y < this.roiMask.height; y++) {
+    for (let x = 0; x < this.roiMask!.width; x++) {
+      for (let y = 0; y < this.roiMask!.height; y++) {
         //@ts-ignore
         if (this.roiMask.getBitXY(x, y)) {
           imgMask.setPixelXY(x + offsetX, y + offsetY, [255]);
@@ -213,28 +217,16 @@ export class ColorAnnotationTool extends AnnotationTool {
       });
     }
     // Make a threshold mask
-    const mask = this.floodMap!.mask({
+    this.roiMask = this.floodMap!.mask({
       threshold: this.tolerance,
       invert: true,
     });
-    // @ts-ignore
-    this.roiManager.fromMask(mask);
-    // @ts-ignore
-    this.roiMask = this.roiManager.getMasks()[0];
-    // @ts-ignore
-    if (!this.roiMask) return;
 
-    // @ts-ignore
-    this.offset = {
-      // @ts-ignore
-      x: this.roiMask.position[0],
-      // @ts-ignore
-      y: this.roiMask.position[1],
-    };
+    if (!this.roiMask) return;
 
     this.overlayData = ColorAnnotationTool.colorOverlay(
       this.roiMask,
-      this.offset,
+      this.offset!,
       position,
       this.image.width,
       this.image.height,

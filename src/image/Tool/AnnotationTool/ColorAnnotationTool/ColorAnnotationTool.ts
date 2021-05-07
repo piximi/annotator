@@ -10,7 +10,7 @@ export class ColorAnnotationTool extends AnnotationTool {
   roiContour?: ImageJS.Image;
   roiMask?: ImageJS.Image;
   roiManager?: ImageJS.RoiManager;
-  offset?: { x: number; y: number } = { x: 0, y: 0 };
+  offset: { x: number; y: number } = { x: 0, y: 0 };
   overlayData: string = "";
   points: Array<number> = [];
   initialPosition: { x: number; y: number } = { x: 0, y: 0 };
@@ -226,7 +226,7 @@ export class ColorAnnotationTool extends AnnotationTool {
 
     this.overlayData = ColorAnnotationTool.colorOverlay(
       this.roiMask,
-      this.offset!,
+      this.offset,
       position,
       this.image.width,
       this.image.height,

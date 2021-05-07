@@ -169,7 +169,10 @@ export const computeBoundingBoxFromContours = (
   ];
 };
 
-export const computeContours = (data: Array<Array<number>>): Array<number> => {
+export const computeContours = (
+  data: Array<Array<number>>,
+  multiple = false
+): Array<number> => {
   //pad array to obtain better estimate of contours around mask
   const pad = 10;
   const padY = new Array(data[0].length + 2 * pad).fill(0);
@@ -188,11 +191,21 @@ export const computeContours = (data: Array<Array<number>>): Array<number> => {
     paddedMatrix.push(padY);
   }
 
-  const largestIsoline = isoLines(paddedMatrix, 1).sort(
+  const largestIsolines = isoLines(paddedMatrix, 1).sort(
     (a: Array<number>, b: Array<number>) => {
       return b.length - a.length;
     }
-  )[0];
+  );
+
+  let largestIsoline = largestIsolines[0];
+
+  if (multiple) {
+    //PenSelection case: if a loop was created, another contour will be detected. We concatenate those two contours together.
+    largestIsoline =
+      largestIsolines[1].length > 5
+        ? largestIsolines[0].concat(largestIsolines[1])
+        : largestIsolines[0];
+  }
 
   return _.flatten(
     largestIsoline.map((coord: Array<number>) => {

@@ -6,7 +6,7 @@ import { encode } from "../../../rle";
 import { computeContours } from "../../../imageHelper";
 
 export class QuickAnnotationTool extends AnnotationTool {
-  brushsize: number = 40;
+  brushsize?: number;
   colorMasks?: Array<string>;
   currentSuperpixels: Set<number> = new Set<number>();
   lastSuperpixel: number = 0;
@@ -127,7 +127,7 @@ export class QuickAnnotationTool extends AnnotationTool {
   }
 
   update(brushsize: number) {
-    this.brushsize = brushsize;
+    this.brushsize = Math.round(brushsize);
 
     const { superpixels } = this.filter();
 

@@ -29,7 +29,7 @@ export class PenAnnotationTool extends AnnotationTool {
       ctx.arc(
         Math.round(position[0]),
         Math.round(position[1]),
-        this.brushSize / 2,
+        this.brushSize,
         0,
         Math.PI * 2,
         true

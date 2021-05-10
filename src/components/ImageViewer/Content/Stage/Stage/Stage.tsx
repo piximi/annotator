@@ -189,6 +189,9 @@ export const Stage = () => {
 
     annotationTool.deselect();
 
+    dispatch(applicationSlice.actions.setAnnotating({ annotating: false }));
+    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
+
     if (!selectedAnnotation) return;
 
     selectingRef.current = null;
@@ -696,7 +699,7 @@ export const Stage = () => {
       if (toolType !== ToolType.Zoom) return;
       onZoomDeselect();
     },
-    [annotations]
+    [annotations, annotationTool, toolType]
   );
 
   /*/

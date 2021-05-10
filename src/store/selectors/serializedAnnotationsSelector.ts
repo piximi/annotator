@@ -38,6 +38,7 @@ export const serializedAnnotationsSelector = ({
       annotationBoundingBoxWidth: annotation.boundingBox[2],
       annotationBoundingBoxX: annotation.boundingBox[0],
       annotationBoundingBoxY: annotation.boundingBox[1],
+      annotationCategoryColor: category.color,
       annotationCategoryId: category.id,
       annotationCategoryName: category.name,
       annotationId: annotation.id,

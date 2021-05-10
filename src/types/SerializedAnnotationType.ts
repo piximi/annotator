@@ -3,6 +3,7 @@ export type SerializedAnnotationType = {
   annotationBoundingBoxWidth: number;
   annotationBoundingBoxX: number;
   annotationBoundingBoxY: number;
+  annotationCategoryColor: string;
   annotationCategoryId: string;
   annotationCategoryName: string;
   annotationId: string;

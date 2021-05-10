@@ -133,6 +133,21 @@ export const applicationSlice = createSlice({
 
           const contour = computeContours(decoded);
 
+          //if category does not already exist in state, add it
+          if (
+            !state.categories
+              .map((category: CategoryType) => category.id)
+              .includes(annotation.annotationCategoryId)
+          ) {
+            const category: CategoryType = {
+              color: annotation.annotationCategoryColor,
+              id: annotation.annotationCategoryId,
+              name: annotation.annotationCategoryName,
+              visible: true,
+            };
+            state.categories = [...state.categories, category];
+          }
+
           return {
             boundingBox: [
               annotation.annotationBoundingBoxX,

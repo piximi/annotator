@@ -304,15 +304,16 @@ const CreateCategoryListItem = () => {
   const t = useTranslation();
 
   return (
-    <ListItem button onClick={onOpen}>
-      <ListItemIcon>
-        <AddIcon />
-      </ListItemIcon>
+    <React.Fragment>
+      <ListItem button onClick={onOpen}>
+        <ListItemIcon>
+          <AddIcon />
+        </ListItemIcon>
 
-      <ListItemText primary={t("Create category")} />
-
+        <ListItemText primary={t("Create category")} />
+      </ListItem>
       <CreateCategoryDialog onClose={onClose} open={open} />
-    </ListItem>
+    </React.Fragment>
   );
 };
 

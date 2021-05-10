@@ -34,43 +34,16 @@ export const SelectedAnnotations = () => {
     <React.Fragment>
       {selectedAnnotations.map((annotation: AnnotationType) => {
         return (
-          <React.Fragment key={annotation.id}>
-            <ReactKonva.Line
-              closed
-              dash={[4 / stageScale, 2 / stageScale]}
-              dashOffset={-dashOffset}
-              // fill={fill}
-              // opacity={0.5}
-              points={annotation.contour}
-              scale={{ x: stageScale, y: stageScale }}
-              stroke="black"
-              strokeWidth={1 / stageScale}
-            />
-
-            <ReactKonva.Line
-              dash={[4 / stageScale, 2 / stageScale]}
-              dashOffset={-dashOffset}
-              points={annotation.contour}
-              scale={{ x: stageScale, y: stageScale }}
-              stroke="white"
-              strokeWidth={1 / stageScale}
-            />
-
-            <ReactKonva.Line
-              closed
-              dash={[4 / stageScale, 2 / stageScale]}
-              dashOffset={-dashOffset}
-              fill={fill}
-              id={annotation.id}
-              opacity={0.5}
-              points={annotation.contour.map((point: number) => {
-                return point * stageScale;
-              })}
-              stroke="blue"
-              strokeWidth={1 / stageScale}
-              viisble={false}
-            />
-          </React.Fragment>
+          <ReactKonva.Line
+            closed
+            fill={fill}
+            id={annotation.id}
+            opacity={0.5}
+            points={annotation.contour.map((point: number) => {
+              return point * stageScale;
+            })}
+            viisble={false}
+          />
         );
       })}
     </React.Fragment>

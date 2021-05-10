@@ -30,8 +30,6 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
         closed
         points={annotation.contour}
         scale={{ x: stageScale, y: stageScale }}
-        stroke="white"
-        strokeWidth={1}
       />
       <ReactKonva.Line
         closed

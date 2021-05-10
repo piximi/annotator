@@ -88,7 +88,7 @@ export class PenAnnotationTool extends AnnotationTool {
       }
     );
 
-    this._contour = computeContours(bar, true); //set multiple to true to allow for possibility of having loops and drawing accurate contour
+    this._contour = computeContours(bar);
 
     this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
   }

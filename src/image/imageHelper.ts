@@ -169,10 +169,7 @@ export const computeBoundingBoxFromContours = (
   ];
 };
 
-export const computeContours = (
-  data: Array<Array<number>>,
-  multiple = false
-): Array<number> => {
+export const computeContours = (data: Array<Array<number>>): Array<number> => {
   //pad array to obtain better estimate of contours around mask
   const pad = 10;
   const padY = new Array(data[0].length + 2 * pad).fill(0);
@@ -201,8 +198,8 @@ export const computeContours = (
 
   if (largestIsoline.length <= 5) return [];
 
-  if (multiple && largestIsolines.length) {
-    //PenSelection case: if a loop was created, another contour will be detected. We concatenate those two contours together.
+  if (largestIsolines.length === 3) {
+    //Here we address the case in which multiple contours are find, for example with a pen seelection with an inner and outer contour. We concatenate the inner and outer contours together.
     largestIsoline =
       largestIsolines[1].length > 5
         ? largestIsolines[0].concat(largestIsolines[1])

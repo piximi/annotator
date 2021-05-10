@@ -28,7 +28,7 @@ export const UnselectedAnnotations = () => {
         visibleCategories.includes(annotation.categoryId)
       )
     );
-  }, [annotations, selectedAnnotations]);
+  }, [annotations, selectedAnnotations, visibleCategories]);
 
   return (
     <React.Fragment>

@@ -71,6 +71,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { PointerSelection } from "../Selection/PointerSelection";
 import { usePointer } from "../../../../../hooks/usePointer/usePointer";
 import { pointerSelectionSelector } from "../../../../../store/selectors/pointerSelectionSelector";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -739,34 +741,36 @@ export const Stage = () => {
           width={stageWidth}
         >
           <Provider store={store}>
-            <Layer>
-              <Image ref={imageRef} />
+            <DndProvider backend={HTML5Backend}>
+              <Layer>
+                <Image ref={imageRef} />
 
-              <ZoomSelection />
+                <ZoomSelection />
 
-              <Selecting tool={tool!} />
+                <Selecting tool={tool!} />
 
-              <PenAnnotationToolTip
-                currentPosition={currentPosition}
-                annotationTool={annotationTool}
-              />
+                <PenAnnotationToolTip
+                  currentPosition={currentPosition}
+                  annotationTool={annotationTool}
+                />
 
-              <PointerSelection />
+                <PointerSelection />
 
-              <Annotations />
+                <Annotations />
 
-              <Transformers transformPosition={getRelativePointerPosition} />
+                <Transformers transformPosition={getRelativePointerPosition} />
 
-              <ColorAnnotationToolTip
-                toolTipPosition={
-                  (annotationTool as ColorAnnotationTool)?.toolTipPosition
-                }
-                initialPosition={
-                  (annotationTool as ColorAnnotationTool)?.initialPosition
-                }
-                tolerance={(annotationTool as ColorAnnotationTool)?.tolerance}
-              />
-            </Layer>
+                <ColorAnnotationToolTip
+                  toolTipPosition={
+                    (annotationTool as ColorAnnotationTool)?.toolTipPosition
+                  }
+                  initialPosition={
+                    (annotationTool as ColorAnnotationTool)?.initialPosition
+                  }
+                  tolerance={(annotationTool as ColorAnnotationTool)?.tolerance}
+                />
+              </Layer>
+            </DndProvider>
           </Provider>
         </ReactKonva.Stage>
       )}

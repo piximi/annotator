@@ -52,7 +52,9 @@ export const Content = ({ onDrop }: ContentProps) => {
       {/*<Divider />*/}
 
       <main className={classes.content} ref={ref} style={{ cursor: cursor }}>
-        <Stage />
+        <div ref={drop}>
+          <Stage />
+        </div>
       </main>
     </React.Fragment>
   );

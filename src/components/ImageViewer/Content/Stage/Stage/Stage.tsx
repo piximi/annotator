@@ -523,6 +523,24 @@ export const Stage = () => {
 
       if (toolType === ToolType.PenAnnotation) setCurrentPosition(relative);
 
+      // Add a little leeway around the canvas to aid drawing up to the edges
+      if (relative.x > -50 && relative.x < 0) {
+        relative.x = 0;
+      } else if (
+        relative.x > scaledImageWidth &&
+        relative.x < scaledImageWidth + 50
+      ) {
+        relative.x = scaledImageWidth;
+      }
+      if (relative.y > -50 && relative.y < 0) {
+        relative.y = 0;
+      } else if (
+        relative.y > scaledImageHeight &&
+        relative.y < scaledImageHeight + 50
+      ) {
+        relative.y = scaledImageHeight;
+      }
+
       if (
         relative.x > scaledImageWidth ||
         relative.y > scaledImageHeight ||

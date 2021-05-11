@@ -681,15 +681,16 @@ const SendFeedbackListItem = () => {
   const t = useTranslation();
 
   return (
-    <ListItem button onClick={onOpen}>
-      <ListItemIcon>
-        <FeedbackIcon />
-      </ListItemIcon>
+    <React.Fragment>
+      <ListItem button onClick={onOpen}>
+        <ListItemIcon>
+          <FeedbackIcon />
+        </ListItemIcon>
 
-      <ListItemText primary={t("Send feedback")} />
-
+        <ListItemText primary={t("Send feedback")} />
+      </ListItem>
       <SendFeedbackDialog onClose={onClose} open={open} />
-    </ListItem>
+    </React.Fragment>
   );
 };
 
@@ -699,14 +700,15 @@ const SettingsListItem = () => {
   const t = useTranslation();
 
   return (
-    <ListItem button onClick={onOpen}>
-      <ListItemIcon>
-        <SettingsIcon />
-      </ListItemIcon>
+    <React.Fragment>
+      <ListItem button onClick={onOpen}>
+        <ListItemIcon>
+          <SettingsIcon />
+        </ListItemIcon>
 
-      <ListItemText primary={t("Settings")} />
-
+        <ListItemText primary={t("Settings")} />
+      </ListItem>
       <SettingsDialog onClose={onClose} open={open} />
-    </ListItem>
+    </React.Fragment>
   );
 };

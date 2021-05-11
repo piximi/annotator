@@ -24,7 +24,6 @@ export {
   setPointerSelection,
   setQuickSelectionBrushSize,
   setSaturation,
-  setSaveAnnotationButtonClick,
   setSelectedAnnotation,
   setSelectedAnnotations,
   setSelectionMode,

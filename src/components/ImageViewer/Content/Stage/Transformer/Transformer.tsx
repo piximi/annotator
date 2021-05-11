@@ -317,14 +317,43 @@ export const Transformer = ({
   };
 
   return (
-    <ReactKonva.Transformer
-      boundBoxFunc={boundingBoxFunc}
-      onTransform={onTransform}
-      onTransformEnd={onTransformEnd}
-      onTransformStart={onTransformStart}
-      id={"tr-".concat(annotationId)}
-      ref={transformerRef}
-      rotateEnabled={false}
-    />
+    <ReactKonva.Group>
+      <ReactKonva.Transformer
+        boundBoxFunc={boundingBoxFunc}
+        onTransform={onTransform}
+        onTransformEnd={onTransformEnd}
+        onTransformStart={onTransformStart}
+        id={"tr-".concat(annotationId)}
+        ref={transformerRef}
+        rotateEnabled={false}
+      />
+      {selectedAnnotation && (
+        <ReactKonva.Label
+          position={{
+            x: selectedAnnotation.boundingBox[2] * stageScale,
+            y: selectedAnnotation.boundingBox[3] * stageScale,
+          }}
+          opacity={0.75}
+          onClick={() => {
+            console.info("CLiicked button");
+          }}
+        >
+          <ReactKonva.Tag
+            fill={"black"}
+            lineJoin={"round"}
+            shadowColor={"black"}
+            shadowBlur={10}
+            shadowOffset={{ x: 10, y: 10 }}
+            shadowOpacity={0.5}
+          />
+          <ReactKonva.Text
+            fill={"white"}
+            fontSize={12}
+            padding={5}
+            text={"Save annotation"}
+          />
+        </ReactKonva.Label>
+      )}
+    </ReactKonva.Group>
   );
 };

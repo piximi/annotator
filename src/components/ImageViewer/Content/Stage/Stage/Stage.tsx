@@ -73,7 +73,6 @@ import { usePointer } from "../../../../../hooks/usePointer/usePointer";
 import { pointerSelectionSelector } from "../../../../../store/selectors/pointerSelectionSelector";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { saveAnnotationButtonClickSelector } from "../../../../../store/selectors/saveAnnotationButtonClickSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -93,15 +92,12 @@ export const Stage = () => {
   const unselectedAnnotations = useSelector(unselectedAnnotationsSelector);
   const selectionMode = useSelector(selectionModeSelector);
 
-  const saveAnnotationButtonClick = useSelector(
-    saveAnnotationButtonClickSelector
-  );
-
   const stageHeight = useSelector(stageHeightSelector);
   const stageWidth = useSelector(stageWidthSelector);
   const stagePosition = useSelector(stagePositionSelector);
 
   const saveLabelRef = useRef<Konva.Label>();
+  const clearLabelRef = useRef<Konva.Label>();
 
   const [currentPosition, setCurrentPosition] = useState<{
     x: number;
@@ -430,8 +426,12 @@ export const Stage = () => {
 
       layer.batchDraw();
 
-      const label = stageRef.current.findOne(`#label`);
-      if (label) saveLabelRef.current = label as Konva.Label;
+      // Not ideal but this figures out which label is which
+      const label = stageRef.current.find(`#label`);
+      if (label.length > 1) {
+        saveLabelRef.current = label[0] as Konva.Label;
+        clearLabelRef.current = label[1] as Konva.Label;
+      }
     });
   }, [selectedAnnotationsIds, selectedAnnotation?.contour]);
 
@@ -468,6 +468,31 @@ export const Stage = () => {
 
       if (!relative) return;
 
+      if (
+        saveLabelRef &&
+        saveLabelRef.current &&
+        saveLabelRef.current.getText() &&
+        clearLabelRef.current
+      ) {
+        //do not proceed with mouse down events if user has clicked on Save Annotation button
+        if (
+          (relative.x <
+            saveLabelRef.current.x() + saveLabelRef.current.width() &&
+            relative.x > saveLabelRef.current.x() &&
+            relative.y <
+              saveLabelRef.current.y() + saveLabelRef.current.height() &&
+            relative.y > saveLabelRef.current.y()) ||
+          (relative.x <
+            clearLabelRef.current.x() + clearLabelRef.current.width() &&
+            relative.x > clearLabelRef.current.x() &&
+            relative.y <
+              clearLabelRef.current.y() + clearLabelRef.current.height() &&
+            relative.y > clearLabelRef.current.y())
+        ) {
+          return;
+        }
+      }
+
       if (toolType === ToolType.Pointer) {
         onPointerMouseDown(relative);
         return;
@@ -477,24 +502,6 @@ export const Stage = () => {
         x: relative.x / stageScale,
         y: relative.y / stageScale,
       };
-
-      if (
-        saveLabelRef &&
-        saveLabelRef.current &&
-        saveLabelRef.current.getText()
-      ) {
-        //do not proceed with mouse down events if user has clicked on Save Annotation button
-        if (
-          relative.x <
-            saveLabelRef.current.x() + saveLabelRef.current.width() &&
-          relative.x > saveLabelRef.current.x() &&
-          relative.y <
-            saveLabelRef.current.y() + saveLabelRef.current.height() &&
-          relative.y > saveLabelRef.current.y()
-        ) {
-          return;
-        }
-      }
 
       if (toolType === ToolType.Zoom) {
         onZoomMouseDown(relative);
@@ -681,10 +688,6 @@ export const Stage = () => {
     deselectAllAnnotations();
     deselectAllTransformers();
   };
-
-  useEffect(() => {
-    confirmAnnotations();
-  }, [saveAnnotationButtonClick]);
 
   useHotkeys(
     "enter",

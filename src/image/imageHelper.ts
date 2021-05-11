@@ -212,3 +212,10 @@ export const computeContours = (data: Array<Array<number>>): Array<number> => {
     })
   );
 };
+
+export const adjustContrast = (
+  contrast: { min: number; max: number },
+  data: Array<number>
+) => {
+  // const newData = _.map(data, ())
+};

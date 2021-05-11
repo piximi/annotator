@@ -23,6 +23,12 @@ export const ColorAdjustmentOptions = () => {
       console.info("Here");
       console.info(image.data);
       console.info(image.width);
+      console.info(image.components);
+      console.info(image.alpha);
+
+      //TODO: extract each channel using image.components. Should have a flat array of size N*M. Feed the channel data to imageHelper.adjustContrast and get a flat channel back
+      //make a new data array with these three transformed channels
+      //make a new ImageJS image, get its data with toDataURL, and do a dispatch that will update displayed string.
     });
   };
 

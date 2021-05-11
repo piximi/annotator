@@ -29,6 +29,7 @@ export type StateType = {
   };
   quickSelectionBrushSize: number;
   saturation: number;
+  saveAnnotationButtonClick: boolean;
   selectedAnnotations: Array<AnnotationType>;
   selectedAnnotation: AnnotationType | undefined;
   selectedCategory: string;

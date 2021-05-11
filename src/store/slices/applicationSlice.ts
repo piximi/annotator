@@ -67,6 +67,7 @@ const initialState: StateType = {
   },
   quickSelectionBrushSize: 40,
   saturation: 0,
+  saveAnnotationButtonClick: false,
   selectedAnnotation: undefined,
   selectedAnnotations: [],
   selectedCategory: "00000000-0000-0000-0000-000000000000",
@@ -306,6 +307,13 @@ export const applicationSlice = createSlice({
     ) {
       state.saturation = action.payload.saturation;
     },
+    setSaveAnnotationButtonClick(
+      state: StateType,
+      action: PayloadAction<{ saveAnnotationButtonClick: boolean }>
+    ) {
+      state.saveAnnotationButtonClick =
+        action.payload.saveAnnotationButtonClick;
+    },
     setSeletedCategory(
       state: StateType,
       action: PayloadAction<{ selectedCategory: string }>
@@ -412,6 +420,7 @@ export const {
   setPointerSelection,
   setQuickSelectionBrushSize,
   setSaturation,
+  setSaveAnnotationButtonClick,
   setSelectedAnnotation,
   setSelectedAnnotations,
   setSelectionMode,

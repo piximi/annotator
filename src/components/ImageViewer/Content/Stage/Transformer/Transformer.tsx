@@ -21,6 +21,7 @@ import { slpf } from "../../../../../image/polygon-fill/slpf";
 import { encode } from "../../../../../image/rle";
 import * as ImageJS from "image-js";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
+import { saveAnnotationButtonClickSelector } from "../../../../../store/selectors/saveAnnotationButtonClickSelector";
 
 type box = {
   x: number;
@@ -50,6 +51,10 @@ export const Transformer = ({
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
 
   const transformerRef = useRef<Konva.Transformer | null>(null);
+
+  const saveAnnotationButtonClick = useSelector(
+    saveAnnotationButtonClickSelector
+  );
 
   const dispatch = useDispatch();
 
@@ -317,7 +322,11 @@ export const Transformer = ({
   };
 
   const onSaveAnnotationClick = () => {
-    console.info("Clicked");
+    dispatch(
+      applicationSlice.actions.setSaveAnnotationButtonClick({
+        saveAnnotationButtonClick: !saveAnnotationButtonClick,
+      })
+    );
   };
 
   return (

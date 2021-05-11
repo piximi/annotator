@@ -73,6 +73,7 @@ import { usePointer } from "../../../../../hooks/usePointer/usePointer";
 import { pointerSelectionSelector } from "../../../../../store/selectors/pointerSelectionSelector";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { saveAnnotationButtonClickSelector } from "../../../../../store/selectors/saveAnnotationButtonClickSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image>(null);
@@ -92,11 +93,15 @@ export const Stage = () => {
   const unselectedAnnotations = useSelector(unselectedAnnotationsSelector);
   const selectionMode = useSelector(selectionModeSelector);
 
+  const saveAnnotationButtonClick = useSelector(
+    saveAnnotationButtonClickSelector
+  );
+
   const stageHeight = useSelector(stageHeightSelector);
   const stageWidth = useSelector(stageWidthSelector);
   const stagePosition = useSelector(stagePositionSelector);
 
-  const labelRef = useRef<Konva.Label>();
+  const saveLabelRef = useRef<Konva.Label>();
 
   const [currentPosition, setCurrentPosition] = useState<{
     x: number;
@@ -426,7 +431,7 @@ export const Stage = () => {
       layer.batchDraw();
 
       const label = stageRef.current.findOne(`#label`);
-      if (label) labelRef.current = label as Konva.Label;
+      if (label) saveLabelRef.current = label as Konva.Label;
     });
   }, [selectedAnnotationsIds, selectedAnnotation?.contour]);
 
@@ -473,13 +478,19 @@ export const Stage = () => {
         y: relative.y / stageScale,
       };
 
-      if (labelRef && labelRef.current && labelRef.current.getText()) {
-        //check if user clicked on Save Annotation button
+      if (
+        saveLabelRef &&
+        saveLabelRef.current &&
+        saveLabelRef.current.getText()
+      ) {
+        //do not proceed with mouse down events if user has clicked on Save Annotation button
         if (
-          relative.x < labelRef.current.x() + labelRef.current.width() &&
-          relative.x > labelRef.current.x() &&
-          relative.y < labelRef.current.y() + labelRef.current.height() &&
-          relative.y > labelRef.current.y()
+          relative.x <
+            saveLabelRef.current.x() + saveLabelRef.current.width() &&
+          relative.x > saveLabelRef.current.x() &&
+          relative.y <
+            saveLabelRef.current.y() + saveLabelRef.current.height() &&
+          relative.y > saveLabelRef.current.y()
         ) {
           return;
         }
@@ -518,7 +529,7 @@ export const Stage = () => {
   }, [
     annotated,
     annotationTool,
-    labelRef,
+    saveLabelRef,
     pointerDragging,
     pointerSelecting,
     selectionMode,
@@ -643,34 +654,42 @@ export const Stage = () => {
     zoomSelecting,
   ]);
 
-  useHotkeys(
-    "enter",
-    () => {
-      if (!annotations || !annotationTool || annotationTool.annotating) return;
+  const confirmAnnotations = () => {
+    if (!annotations || !annotationTool || annotationTool.annotating) return;
 
+    dispatch(
+      applicationSlice.actions.setImageInstances({
+        instances: [...unselectedAnnotations, ...selectedAnnotations],
+      })
+    );
+
+    if (soundEnabled) playCreateAnnotationSoundEffect();
+
+    deselectAnnotation();
+
+    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
+
+    if (selectionMode !== AnnotationModeType.New)
       dispatch(
-        applicationSlice.actions.setImageInstances({
-          instances: [...unselectedAnnotations, ...selectedAnnotations],
+        applicationSlice.actions.setSelectionMode({
+          selectionMode: AnnotationModeType.New,
         })
       );
 
-      if (soundEnabled) playCreateAnnotationSoundEffect();
+    if (!selectedAnnotationsIds.length) return;
 
-      deselectAnnotation();
+    deselectAllAnnotations();
+    deselectAllTransformers();
+  };
 
-      dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
+  useEffect(() => {
+    confirmAnnotations();
+  }, [saveAnnotationButtonClick]);
 
-      if (selectionMode !== AnnotationModeType.New)
-        dispatch(
-          applicationSlice.actions.setSelectionMode({
-            selectionMode: AnnotationModeType.New,
-          })
-        );
-
-      if (!selectedAnnotationsIds.length) return;
-
-      deselectAllAnnotations();
-      deselectAllTransformers();
+  useHotkeys(
+    "enter",
+    () => {
+      confirmAnnotations();
     },
     [
       annotations,

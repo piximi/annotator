@@ -136,7 +136,7 @@ export const useZoom = () => {
     zoomAndOffset(
       { x: imageWidth / 2, y: imageWidth / 2 },
       scaleBy,
-      event.evt.deltaY > 0
+      event.evt.deltaY < 0
     );
   };
 

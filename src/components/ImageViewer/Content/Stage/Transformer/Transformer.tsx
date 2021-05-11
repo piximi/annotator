@@ -316,6 +316,10 @@ export const Transformer = ({
     );
   };
 
+  const onSaveAnnotationClick = () => {
+    console.info("Clicked");
+  };
+
   return (
     <ReactKonva.Group>
       <ReactKonva.Transformer
@@ -333,10 +337,8 @@ export const Transformer = ({
             x: selectedAnnotation.boundingBox[2] * stageScale,
             y: selectedAnnotation.boundingBox[3] * stageScale,
           }}
-          opacity={0.75}
-          onClick={() => {
-            console.info("CLiicked button");
-          }}
+          onClick={onSaveAnnotationClick}
+          id={"label"}
         >
           <ReactKonva.Tag
             fill={"black"}
@@ -344,11 +346,10 @@ export const Transformer = ({
             shadowColor={"black"}
             shadowBlur={10}
             shadowOffset={{ x: 10, y: 10 }}
-            shadowOpacity={0.5}
           />
           <ReactKonva.Text
             fill={"white"}
-            fontSize={12}
+            fontSize={14}
             padding={5}
             text={"Save annotation"}
           />

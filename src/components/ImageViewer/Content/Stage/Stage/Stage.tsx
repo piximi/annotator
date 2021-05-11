@@ -96,6 +96,8 @@ export const Stage = () => {
   const stageWidth = useSelector(stageWidthSelector);
   const stagePosition = useSelector(stagePositionSelector);
 
+  const labelRef = useRef<Konva.Label>();
+
   const [currentPosition, setCurrentPosition] = useState<{
     x: number;
     y: number;
@@ -422,6 +424,9 @@ export const Stage = () => {
       if (!layer) return;
 
       layer.batchDraw();
+
+      const label = stageRef.current.findOne(`#label`);
+      if (label) labelRef.current = label as Konva.Label;
     });
   }, [selectedAnnotationsIds, selectedAnnotation?.contour]);
 
@@ -468,6 +473,18 @@ export const Stage = () => {
         y: relative.y / stageScale,
       };
 
+      if (labelRef && labelRef.current && labelRef.current.getText()) {
+        //check if user clicked on Save Annotation button
+        if (
+          relative.x < labelRef.current.x() + labelRef.current.width() &&
+          relative.x > labelRef.current.x() &&
+          relative.y < labelRef.current.y() + labelRef.current.height() &&
+          relative.y > labelRef.current.y()
+        ) {
+          return;
+        }
+      }
+
       if (toolType === ToolType.Zoom) {
         onZoomMouseDown(relative);
       } else {
@@ -501,6 +518,7 @@ export const Stage = () => {
   }, [
     annotated,
     annotationTool,
+    labelRef,
     pointerDragging,
     pointerSelecting,
     selectionMode,

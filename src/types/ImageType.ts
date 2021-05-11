@@ -7,5 +7,6 @@ export type ImageType = {
   annotations: Array<AnnotationType>;
   name: string;
   shape: ShapeType;
-  src: string;
+  src: string; // original image data
+  displayedSrc?: string; // filtered image data
 };

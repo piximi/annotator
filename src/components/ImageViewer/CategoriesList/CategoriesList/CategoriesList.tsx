@@ -506,6 +506,7 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
                 name: name,
                 shape: shape,
                 src: image.toDataURL(),
+                displayedSrc: image.toDataURL(),
               },
             })
           );

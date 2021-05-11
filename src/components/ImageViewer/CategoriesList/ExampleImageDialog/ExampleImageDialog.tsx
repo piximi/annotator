@@ -59,6 +59,7 @@ export const ExampleImageDialog = ({
           name: name,
           shape: shape,
           src: data as string,
+          displayedSrc: data as string,
         },
       })
     );

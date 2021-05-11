@@ -68,6 +68,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
                   name: name,
                   shape: shape,
                   src: image.toDataURL(),
+                  displayedSrc: image.toDataURL(),
                 },
               })
             );

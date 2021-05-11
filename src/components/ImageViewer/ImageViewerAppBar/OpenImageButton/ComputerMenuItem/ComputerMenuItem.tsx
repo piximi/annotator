@@ -54,6 +54,7 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
                 name: name,
                 shape: shape,
                 src: image.toDataURL(),
+                displayedSrc: image.toDataURL(),
               },
             })
           );

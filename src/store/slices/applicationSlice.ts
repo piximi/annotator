@@ -54,6 +54,7 @@ const initialState: StateType = {
       width: 512,
     },
     src: colorImage,
+    displayedSrc: colorImage,
   },
   invertMode: false,
   language: LanguageType.English,

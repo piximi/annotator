@@ -468,16 +468,6 @@ export const Stage = () => {
 
       if (!relative) return;
 
-      if (toolType === ToolType.Pointer) {
-        onPointerMouseDown(relative);
-        return;
-      }
-
-      const rawImagePosition = {
-        x: relative.x / stageScale,
-        y: relative.y / stageScale,
-      };
-
       if (
         saveLabelRef &&
         saveLabelRef.current &&
@@ -502,6 +492,16 @@ export const Stage = () => {
           return;
         }
       }
+
+      if (toolType === ToolType.Pointer) {
+        onPointerMouseDown(relative);
+        return;
+      }
+
+      const rawImagePosition = {
+        x: relative.x / stageScale,
+        y: relative.y / stageScale,
+      };
 
       if (toolType === ToolType.Zoom) {
         onZoomMouseDown(relative);

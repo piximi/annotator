@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { CategoriesList } from "../CategoriesList";
 import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
-import { applicationSlice, setImage } from "../../../store";
+import { applicationSlice, setContrast, setImage } from "../../../store";
 import { Content } from "../Content";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
@@ -70,6 +70,10 @@ export const ImageViewer = (props: ImageViewerProps) => {
                   src: image.toDataURL(),
                 },
               })
+            );
+
+            dispatch(
+              setContrast({ contrast: { min: 0, max: image.maxValue } })
             );
           });
         });

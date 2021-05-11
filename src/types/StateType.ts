@@ -11,7 +11,7 @@ export type StateType = {
   boundingClientRect: DOMRect;
   brightness: number;
   categories: Array<CategoryType>;
-  contrast: number;
+  contrast?: { min: number; max: number };
   currentIndex: number;
   currentPosition?: { x: number; y: number };
   exposure: number;

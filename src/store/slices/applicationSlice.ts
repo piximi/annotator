@@ -39,7 +39,7 @@ const initialState: StateType = {
     },
   ],
   currentIndex: 0,
-  contrast: 0,
+  contrast: undefined,
   exposure: 0,
   hue: 0,
   image: {
@@ -221,7 +221,10 @@ export const applicationSlice = createSlice({
         category,
       ];
     },
-    setContrast(state: StateType, action: PayloadAction<{ contrast: number }>) {
+    setContrast(
+      state: StateType,
+      action: PayloadAction<{ contrast: { min: number; max: number } }>
+    ) {
       state.contrast = action.payload.contrast;
     },
     setCurrentIndex(

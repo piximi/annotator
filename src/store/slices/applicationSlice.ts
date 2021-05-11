@@ -255,6 +255,10 @@ export const applicationSlice = createSlice({
 
       state.image.name = action.payload.name;
     },
+    setImageSrc(state: StateType, action: PayloadAction<{ src: string }>) {
+      if (!state.image) return;
+      state.image.displayedSrc = action.payload.src;
+    },
     setInvertMode(
       state: StateType,
       action: PayloadAction<{ invertMode: boolean }>

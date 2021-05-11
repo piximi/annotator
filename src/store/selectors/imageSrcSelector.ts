@@ -5,5 +5,5 @@ export const imageSrcSelector = ({ state }: { state: HistoryStateType }) => {
 
   if (!image) return;
 
-  return image.src;
+  return image.displayedSrc;
 };

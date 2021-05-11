@@ -444,7 +444,7 @@ export const Transformer = ({
           </ReactKonva.Label>
           <ReactKonva.Label
             position={{
-              x: posX - 43,
+              x: posX - 52,
               y: posY + 35,
             }}
             onClick={onClearAnnotationClick}
@@ -464,7 +464,7 @@ export const Transformer = ({
               fill={"white"}
               fontSize={14}
               padding={6}
-              text={"Clear"}
+              text={"Cancel"}
             />
           </ReactKonva.Label>
         </ReactKonva.Group>

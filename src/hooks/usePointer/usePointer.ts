@@ -248,6 +248,11 @@ export const usePointer = () => {
           selectedAnnotations: [currentAnnotation],
         })
       );
+      dispatch(
+        setSeletedCategory({
+          selectedCategory: currentAnnotation.categoryId,
+        })
+      );
     }
 
     if (shift && !selectedAnnotationsIds.includes(currentAnnotation.id)) {
@@ -263,12 +268,6 @@ export const usePointer = () => {
         })
       );
     }
-
-    dispatch(
-      setSeletedCategory({
-        selectedCategory: currentAnnotation.categoryId,
-      })
-    );
   };
 
   return { onMouseDown, onMouseUp, onMouseMove, onPointerClick: onClick };

@@ -15,8 +15,6 @@ import { selectedAnnotationsSelector } from "../../../../../../store/selectors/s
 export const SelectedAnnotations = () => {
   const stageScale = useSelector(stageScaleSelector);
 
-  const dashOffset = useMarchingAnts();
-
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
   const categories = useSelector(categoriesSelector);
@@ -25,19 +23,21 @@ export const SelectedAnnotations = () => {
 
   if (!selectedAnnotations || !selectedAnnotation) return <React.Fragment />;
 
-  const fill = _.find(
-    categories,
-    (category: CategoryType) => category.id === selectedAnnotation.categoryId
-  )?.color;
-
   return (
     <React.Fragment>
       {selectedAnnotations.map((annotation: AnnotationType) => {
         return (
           <ReactKonva.Line
             closed
-            fill={fill}
+            fill={
+              _.find(
+                categories,
+                (category: CategoryType) =>
+                  category.id === annotation.categoryId
+              )?.color
+            }
             id={annotation.id}
+            key={annotation.id}
             opacity={0.5}
             points={annotation.contour.map((point: number) => {
               return point * stageScale;

@@ -340,7 +340,7 @@ export const Transformer = ({
         ref={transformerRef}
         rotateEnabled={false}
       />
-      {selectedAnnotation && (
+      {selectedAnnotation && selectedAnnotations.length === 1 && (
         <ReactKonva.Label
           position={{
             x: selectedAnnotation.boundingBox[2] * stageScale,

@@ -15,7 +15,7 @@ import {
 } from "../../image/Tool";
 import { useSelector } from "react-redux";
 import {
-  imageSrcSelector,
+  imageOriginalSrcSelector,
   stageScaleSelector,
   toolTypeSelector,
 } from "../../store/selectors";
@@ -23,7 +23,7 @@ import { penSelectionBrushSizeSelector } from "../../store/selectors/penSelectio
 import { quickSelectionBrushSizeSelector } from "../../store/selectors/quickSelectionBrushSizeSelector";
 
 export const useAnnotationTool = () => {
-  const src = useSelector(imageSrcSelector);
+  const src = useSelector(imageOriginalSrcSelector);
   const operation = useSelector(toolTypeSelector);
   const stageScale = useSelector(stageScaleSelector);
 

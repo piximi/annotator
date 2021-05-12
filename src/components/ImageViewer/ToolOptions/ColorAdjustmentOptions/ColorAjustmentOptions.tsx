@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { InformationBox } from "../InformationBox";
 import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "../../../../hooks/useTranslation";
@@ -9,7 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
 import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
-import { scaleIntensities } from "../../../../image/imageHelper";
+import {
+  scaleIntensities,
+  scaleIntensity,
+} from "../../../../image/imageHelper";
 import { ContrastSliders } from "../ContrastSliders/ContrastSliders";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 
@@ -22,52 +25,68 @@ export const ColorAdjustmentOptions = () => {
 
   const channels = useSelector(channelsSelector);
 
-  const onContrastAdjustmentClick = () => {
+  const mapIntensities = () => {
     if (!originalSrc) return;
     ImageJS.Image.load(originalSrc).then((image) => {
-      const red: Array<number> = [];
-      const green: Array<number> = [];
-      const blue: Array<number> = [];
+      const delta = image.alpha ? image.components + 1 : image.components;
 
-      let newRed: Array<number>;
-      let newGreen: Array<number>;
-      let newBlue: Array<number>;
+      let newData: Array<number> = [];
 
-      //for now let's go through all the channels, but later it's only going to be the selected channels
-      const delta = image.alpha ? 4 : 3;
       for (let i = 0; i < image.data.length; i += delta) {
-        red.push(image.data[i]);
+        newData.push(
+          channels[0].visible
+            ? scaleIntensity(channels[0].range, image.data[i])
+            : 0
+        );
+        newData.push(
+          channels[1].visible
+            ? scaleIntensity(channels[1].range, image.data[i + 1])
+            : 0
+        );
+        newData.push(
+          channels[2].visible
+            ? scaleIntensity(channels[2].range, image.data[i + 2])
+            : 0
+        );
+        if (image.alpha) {
+          newData.push(image.data[i + image.components]);
+        }
       }
-      for (let j = 1; j < image.data.length; j += delta) {
-        green.push(image.data[j]);
-      }
-      for (let k = 2; k < image.data.length; k += delta) {
-        blue.push(image.data[k]);
-      }
-      newRed = channels[0].visible
-        ? scaleIntensities(channels[0].range, red)
-        : new Array(red.length).fill(0);
-      newGreen = channels[1].visible
-        ? scaleIntensities(channels[1].range, green)
-        : new Array(red.length).fill(0);
-      newBlue = channels[2].visible
-        ? scaleIntensities(channels[2].range, blue)
-        : new Array(red.length).fill(0);
-
-      const newData: Array<number> = [];
-      newRed.forEach((el: number, index: number) => {
-        newData.push(el);
-        newData.push(newGreen[index]);
-        newData.push(newBlue[index]);
-      });
       const newImage = new ImageJS.Image(image.width, image.height, newData, {
         components: image.components,
         alpha: image.alpha,
       });
       dispatch(
-        applicationSlice.actions.setImageSrc({ src: newImage.toDataURL() })
+        applicationSlice.actions.setImageSrc({
+          src: newImage.toDataURL("image-png", { useCanvas: true }),
+        })
       );
     });
+  };
+
+  useEffect(() => {
+    mapIntensities();
+  }, [channels]);
+
+  const onResetChannelsClick = () => {
+    dispatch(
+      applicationSlice.actions.setChannels({
+        channels: [
+          {
+            range: [0, 255],
+            visible: true,
+          },
+          {
+            range: [0, 255],
+            visible: true,
+          },
+          {
+            range: [0, 255],
+            visible: true,
+          },
+        ],
+      })
+    );
   };
 
   return (
@@ -79,8 +98,8 @@ export const ColorAdjustmentOptions = () => {
       <ContrastSliders />
 
       <List dense>
-        <ListItem button onClick={onContrastAdjustmentClick}>
-          <ListItemText>{t("Click to adjust")}</ListItemText>
+        <ListItem button onClick={onResetChannelsClick}>
+          <ListItemText>{t("Reset channels")}</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

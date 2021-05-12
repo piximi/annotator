@@ -223,3 +223,11 @@ export const scaleIntensities = (range: Array<number>, data: Array<number>) => {
   });
   return filtered;
 };
+
+export const scaleIntensity = (range: Array<number>, pixel: number) => {
+  if (pixel < range[0]) return range[0];
+  const foo =
+    (range[1] - range[0]) * ((pixel - range[0]) / (range[1] - range[0])) +
+    range[0]; //data will be between new min and max
+  return foo > 255 ? 255 : foo;
+};

@@ -2,7 +2,7 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { ListItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "@material-ui/core/Slider";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -22,6 +22,11 @@ export const ContrastSliders = () => {
     [0, 255],
     [0, 255],
   ]);
+
+  // useEffect( () => {
+  //   const copiedChannels = [...channels];
+  //   setValues(copiedChannels.map((channel: ChannelType) => {return (channel.range)}))
+  // }, [channels])
 
   const handleChange = (
     idx: number,

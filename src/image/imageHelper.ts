@@ -212,22 +212,3 @@ export const computeContours = (data: Array<Array<number>>): Array<number> => {
     })
   );
 };
-
-export const scaleIntensities = (range: Array<number>, data: Array<number>) => {
-  const filtered = data.map((el: number) => {
-    if (el < range[0]) return range[0];
-    const foo =
-      (range[1] - range[0]) * ((el - range[0]) / (range[1] - range[0])) +
-      range[0]; //data will be between new min and max
-    return foo > 255 ? 255 : foo;
-  });
-  return filtered;
-};
-
-export const scaleIntensity = (range: Array<number>, pixel: number) => {
-  if (pixel < range[0]) return range[0];
-  const foo =
-    (range[1] - range[0]) * ((pixel - range[0]) / (range[1] - range[0])) +
-    range[0]; //data will be between new min and max
-  return foo > 255 ? 255 : foo;
-};

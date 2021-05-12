@@ -9,10 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
 import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
-import {
-  scaleIntensities,
-  scaleIntensity,
-} from "../../../../image/imageHelper";
 import { ContrastSliders } from "../ContrastSliders/ContrastSliders";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 
@@ -24,6 +20,10 @@ export const ColorAdjustmentOptions = () => {
   const originalSrc = useSelector(imageOriginalSrcSelector);
 
   const channels = useSelector(channelsSelector);
+
+  const scaleIntensity = (range: Array<number>, pixel: number) => {
+    return (pixel / 255) * (range[1] - range[0]) + range[0];
+  };
 
   const mapIntensities = () => {
     if (!originalSrc) return;
@@ -56,6 +56,7 @@ export const ColorAdjustmentOptions = () => {
         components: image.components,
         alpha: image.alpha,
       });
+
       dispatch(
         applicationSlice.actions.setImageSrc({
           src: newImage.toDataURL("image-png", { useCanvas: true }),

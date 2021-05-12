@@ -53,8 +53,8 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
                 annotations: [],
                 name: name,
                 shape: shape,
+                originalSrc: image.toDataURL(),
                 src: image.toDataURL(),
-                displayedSrc: image.toDataURL(),
               },
             })
           );

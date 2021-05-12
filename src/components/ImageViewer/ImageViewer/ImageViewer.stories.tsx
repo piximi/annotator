@@ -26,6 +26,7 @@ const image: ImageType = {
     planes: 1,
     width: 512,
   },
+  originalSrc: src,
   src: src,
 };
 

@@ -9,5 +9,5 @@ export const imageOriginalSrcSelector = ({
 
   if (!image) return;
 
-  return image.src;
+  return image.originalSrc;
 };

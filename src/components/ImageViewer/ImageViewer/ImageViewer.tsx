@@ -67,8 +67,8 @@ export const ImageViewer = (props: ImageViewerProps) => {
                   annotations: [],
                   name: name,
                   shape: shape,
+                  originalSrc: image.toDataURL(),
                   src: image.toDataURL(),
-                  displayedSrc: image.toDataURL(),
                 },
               })
             );

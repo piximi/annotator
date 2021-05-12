@@ -58,8 +58,8 @@ export const ExampleImageDialog = ({
           annotations: [],
           name: name,
           shape: shape,
+          originalSrc: data as string,
           src: data as string,
-          displayedSrc: data as string,
         },
       })
     );

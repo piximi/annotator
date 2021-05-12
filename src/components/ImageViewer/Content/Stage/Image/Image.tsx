@@ -6,9 +6,10 @@ import { useSelector } from "react-redux";
 import { imageOriginalSrcSelector } from "../../../../../store/selectors";
 import { scaledImageWidthSelector } from "../../../../../store/selectors/scaledImageWidthSelector";
 import { scaledImageHeightSelector } from "../../../../../store/selectors/scaledImageHeightSelector";
+import { imageSrcSelector } from "../../../../../store/selectors/imageSrcSelector";
 
 export const Image = React.forwardRef<Konva.Image>((_, ref) => {
-  const src = useSelector(imageOriginalSrcSelector);
+  const src = useSelector(imageSrcSelector);
 
   const width = useSelector(scaledImageWidthSelector);
   const height = useSelector(scaledImageHeightSelector);

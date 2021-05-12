@@ -213,9 +213,15 @@ export const computeContours = (data: Array<Array<number>>): Array<number> => {
   );
 };
 
-export const adjustContrast = (
+export const scaleIntensities = (
   contrast: { min: number; max: number },
   data: Array<number>
 ) => {
-  // const newData = _.map(data, ())
+  const { min, max } = contrast;
+  const filtered = data.map((el: number) => {
+    if (el < min) return min;
+    const foo = (max - min) * ((el - min) / (max - min)) + min; //data will be between new min and max
+    return foo > 255 ? 255 : foo;
+  });
+  return filtered;
 };

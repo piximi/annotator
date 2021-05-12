@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
 import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
+import { scaleIntensities } from "../../../../image/imageHelper";
 
 export const ColorAdjustmentOptions = () => {
   const t = useTranslation();
@@ -26,9 +27,38 @@ export const ColorAdjustmentOptions = () => {
       console.info(image.components);
       console.info(image.alpha);
 
-      //TODO: extract each channel using image.components. Should have a flat array of size N*M. Feed the channel data to imageHelper.adjustContrast and get a flat channel back
-      //make a new data array with these three transformed channels
-      //make a new ImageJS image, get its data with toDataURL, and do a dispatch that will update displayed string.
+      const red: Array<number> = [];
+      const green: Array<number> = [];
+      const blue: Array<number> = [];
+      //for now let's assume selected channel is red
+      const delta = image.alpha ? 4 : 3;
+      console.info(delta);
+      for (let i = 0; i < image.data.length; i += delta) {
+        red.push(image.data[i]);
+      }
+      for (let j = 1; j < image.data.length; j += delta) {
+        green.push(image.data[j]);
+      }
+      for (let k = 2; k < image.data.length; k += delta) {
+        blue.push(image.data[k]);
+      }
+      const newRed = scaleIntensities({ min: 0, max: 0 }, red);
+      const newGreen = scaleIntensities({ min: 0, max: 0 }, green);
+      const newBlue = scaleIntensities({ min: 0, max: 255 }, blue);
+
+      const newData: Array<number> = [];
+      newRed.forEach((el: number, index: number) => {
+        newData.push(el);
+        newData.push(newGreen[index]);
+        newData.push(newBlue[index]);
+      });
+      const newImage = new ImageJS.Image(image.width, image.height, newData, {
+        components: image.components,
+        alpha: image.alpha,
+      });
+      dispatch(
+        applicationSlice.actions.setImageSrc({ src: newImage.toDataURL() })
+      );
     });
   };
 

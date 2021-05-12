@@ -53,8 +53,8 @@ const initialState: StateType = {
       planes: 1,
       width: 512,
     },
+    originalSrc: colorImage,
     src: colorImage,
-    displayedSrc: colorImage,
   },
   invertMode: false,
   language: LanguageType.English,
@@ -257,7 +257,7 @@ export const applicationSlice = createSlice({
     },
     setImageSrc(state: StateType, action: PayloadAction<{ src: string }>) {
       if (!state.image) return;
-      state.image.displayedSrc = action.payload.src;
+      state.image.src = action.payload.src;
     },
     setInvertMode(
       state: StateType,

@@ -38,12 +38,11 @@ export const ContrastSliders = () => {
     event: object,
     value: number | number[]
   ) => {
-    const bar = [...values][0];
-    const baz = [...values][1];
-    const foo = [...values][2];
     dispatch(
       applicationSlice.actions.setIntensityRange({
-        intensityRange: [[...bar], [...baz], [...foo]],
+        intensityRange: [...values].map((range: Array<number>) => {
+          return [...range];
+        }),
       })
     );
   };
@@ -57,8 +56,34 @@ export const ContrastSliders = () => {
 
     if (current === -1) {
       updated.push(index);
+      const valuesCopy = [...values].map((range: Array<number>) => {
+        return [...range];
+      });
+      const newValue = valuesCopy[index];
+      const intensitiesCopy = [...intensityRange].map(
+        (range: Array<number>) => {
+          return [...range];
+        }
+      );
+      intensitiesCopy[index] = newValue;
+      dispatch(
+        applicationSlice.actions.setIntensityRange({
+          intensityRange: intensitiesCopy,
+        })
+      );
     } else {
       updated.splice(current, 1);
+      const intensitiesCopy = [...intensityRange].map(
+        (range: Array<number>) => {
+          return [...range];
+        }
+      );
+      intensitiesCopy[index] = [0, 0];
+      dispatch(
+        applicationSlice.actions.setIntensityRange({
+          intensityRange: intensitiesCopy,
+        })
+      );
     }
 
     setChecked(updated);

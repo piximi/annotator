@@ -7,8 +7,12 @@ import Slider from "@material-ui/core/Slider";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
 import { CheckboxCheckedIcon, CheckboxUncheckedIcon } from "../../../icons";
+import { applicationSlice } from "../../../../store/slices";
+import { useDispatch } from "react-redux";
 
 export const ContrastSliders = () => {
+  const dispatch = useDispatch();
+
   const [values, setValues] = React.useState<Array<Array<number>>>([
     [0, 255],
     [0, 255],
@@ -23,6 +27,18 @@ export const ContrastSliders = () => {
     const newValues = [...values];
     newValues[idx] = newValue as number[];
     setValues(newValues);
+  };
+
+  const handleChangeCommitted = (event: object, value: number | number[]) => {
+    dispatch(
+      applicationSlice.actions.setIntensityRange({
+        intensityRange: {
+          red: values[0],
+          green: values[1],
+          blue: values[2],
+        },
+      })
+    );
   };
 
   const [checked, setChecked] = React.useState([0, 1, 2]);
@@ -64,6 +80,7 @@ export const ContrastSliders = () => {
           style={{ width: "60%" }}
           value={values[0]}
           max={255}
+          onChangeCommitted={handleChangeCommitted}
           onChange={(event, value: number | number[]) =>
             handleChange(0, event, value)
           }
@@ -84,12 +101,13 @@ export const ContrastSliders = () => {
             tabIndex={-1}
           />
         </ListItemIcon>
-        <ListItemText primary="Blue" />
+        <ListItemText primary="Green" />
         <Slider
           disabled={!(checked.indexOf(1) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
           value={values[1]}
           max={255}
+          onChangeCommitted={handleChangeCommitted}
           onChange={(event, value: number | number[]) =>
             handleChange(1, event, value)
           }
@@ -110,12 +128,13 @@ export const ContrastSliders = () => {
             tabIndex={-1}
           />
         </ListItemIcon>
-        <ListItemText primary="Green" />
+        <ListItemText primary="Blue" />
         <Slider
           disabled={!(checked.indexOf(2) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
           value={values[2]}
           max={255}
+          onChangeCommitted={handleChangeCommitted}
           onChange={(event, value: number | number[]) =>
             handleChange(2, event, value)
           }

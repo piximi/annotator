@@ -57,9 +57,9 @@ const initialState: StateType = {
     src: colorImage,
   },
   intensityRange: {
-    red: { min: 0, max: 255 },
-    green: { min: 0, max: 255 },
-    blue: { min: 0, max: 255 },
+    red: [0, 255],
+    green: [0, 255],
+    blue: [0, 255],
   },
   invertMode: false,
   language: LanguageType.English,
@@ -265,9 +265,9 @@ export const applicationSlice = createSlice({
       state: StateType,
       action: PayloadAction<{
         intensityRange: {
-          red: { min: number; max: number };
-          green: { min: number; max: number };
-          blue: { min: number; max: number };
+          red: Array<number>;
+          green: Array<number>;
+          blue: Array<number>;
         };
       }>
     ) {

@@ -5,9 +5,9 @@ export const intensityRangeSelector = ({
 }: {
   state: HistoryStateType;
 }): {
-  red: { min: number; max: number };
-  green: { min: number; max: number };
-  blue: { min: number; max: number };
+  red: Array<number>;
+  green: Array<number>;
+  blue: Array<number>;
 } => {
   return state.present.intensityRange;
 };

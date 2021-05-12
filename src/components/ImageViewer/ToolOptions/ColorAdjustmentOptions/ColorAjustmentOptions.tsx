@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { InformationBox } from "../InformationBox";
 import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "../../../../hooks/useTranslation";
@@ -12,6 +12,7 @@ import * as ImageJS from "image-js";
 import { scaleIntensities } from "../../../../image/imageHelper";
 import { SampleList } from "../SampleList";
 import { ContrastSliders } from "../ContrastSliders/ContrastSliders";
+import { intensityRangeSelector } from "../../../../store/selectors/intensityRangeSelector";
 
 export const ColorAdjustmentOptions = () => {
   const t = useTranslation();
@@ -19,6 +20,8 @@ export const ColorAdjustmentOptions = () => {
   const dispatch = useDispatch();
 
   const originalSrc = useSelector(imageOriginalSrcSelector);
+
+  const intensityRange = useSelector(intensityRangeSelector);
 
   const onContrastAdjustmentClick = () => {
     if (!originalSrc) return;
@@ -37,9 +40,9 @@ export const ColorAdjustmentOptions = () => {
       for (let k = 2; k < image.data.length; k += delta) {
         blue.push(image.data[k]);
       }
-      const newRed = scaleIntensities({ min: 0, max: 0 }, red);
-      const newGreen = scaleIntensities({ min: 0, max: 0 }, green);
-      const newBlue = scaleIntensities({ min: 0, max: 255 }, blue);
+      const newRed = scaleIntensities(intensityRange.red, red);
+      const newGreen = scaleIntensities(intensityRange.green, green);
+      const newBlue = scaleIntensities(intensityRange.blue, blue);
 
       const newData: Array<number> = [];
       newRed.forEach((el: number, index: number) => {

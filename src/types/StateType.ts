@@ -18,9 +18,9 @@ export type StateType = {
   hue: number;
   image?: ImageType;
   intensityRange: {
-    red: { min: number; max: number };
-    green: { min: number; max: number };
-    blue: { min: number; max: number };
+    red: Array<number>;
+    green: Array<number>;
+    blue: Array<number>;
   };
   invertMode: boolean;
   language: LanguageType;

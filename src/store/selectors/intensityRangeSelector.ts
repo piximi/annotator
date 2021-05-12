@@ -1,9 +1,10 @@
 import { HistoryStateType } from "../../types/HistoryStateType";
+import { ChannelType } from "../../types/ChannelType";
 
-export const intensityRangeSelector = ({
+export const channelsSelector = ({
   state,
 }: {
   state: HistoryStateType;
-}): Array<Array<number>> => {
-  return state.present.intensityRange;
+}): Array<ChannelType> => {
+  return state.present.channels;
 };

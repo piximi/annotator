@@ -12,6 +12,7 @@ import { StateType } from "../../types/StateType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 import { decode } from "../../image/rle";
 import { computeContours } from "../../image/imageHelper";
+import { ChannelType } from "../../types/ChannelType";
 
 const initialState: StateType = {
   annotated: false,
@@ -38,6 +39,21 @@ const initialState: StateType = {
       visible: true,
     },
   ],
+  channels: [
+    //R, G, and B channels
+    {
+      range: [0, 255],
+      visible: true,
+    },
+    {
+      range: [0, 255],
+      visible: true,
+    },
+    {
+      range: [0, 255],
+      visible: true,
+    },
+  ],
   currentIndex: 0,
   contrast: 0,
   exposure: 0,
@@ -56,11 +72,6 @@ const initialState: StateType = {
     originalSrc: colorImage,
     src: colorImage,
   },
-  intensityRange: [
-    [0, 255],
-    [0, 255],
-    [0, 255],
-  ],
   invertMode: false,
   language: LanguageType.English,
   offset: { x: 0, y: 0 },
@@ -261,13 +272,13 @@ export const applicationSlice = createSlice({
       if (!state.image) return;
       state.image.src = action.payload.src;
     },
-    setIntensityRange(
+    setChannels(
       state: StateType,
       action: PayloadAction<{
-        intensityRange: Array<Array<number>>;
+        channels: Array<ChannelType>;
       }>
     ) {
-      state.intensityRange = action.payload.intensityRange;
+      state.channels = action.payload.channels;
     },
     setInvertMode(
       state: StateType,
@@ -415,6 +426,7 @@ export const {
   setBrightness,
   setCategories,
   setCategoryVisibility,
+  setChannels,
   setContrast,
   setCurrentIndex,
   setExposure,
@@ -422,7 +434,6 @@ export const {
   setImage,
   setImageInstances,
   setImageName,
-  setIntensityRange,
   setInvertMode,
   setLanguage,
   setOffset,

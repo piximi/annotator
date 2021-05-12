@@ -2,20 +2,20 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { ListItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
-import React, { useEffect } from "react";
+import React from "react";
 import Slider from "@material-ui/core/Slider";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
 import { CheckboxCheckedIcon, CheckboxUncheckedIcon } from "../../../icons";
 import { applicationSlice } from "../../../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
-import { intensityRangeSelector } from "../../../../store/selectors/intensityRangeSelector";
-import * as _ from "lodash";
+import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
+import { ChannelType } from "../../../../types/ChannelType";
 
 export const ContrastSliders = () => {
   const dispatch = useDispatch();
 
-  const intensityRange = useSelector(intensityRangeSelector);
+  const channels = useSelector(channelsSelector);
 
   const [values, setValues] = React.useState<Array<Array<number>>>([
     [0, 255],
@@ -38,11 +38,19 @@ export const ContrastSliders = () => {
     event: object,
     value: number | number[]
   ) => {
+    const copiedValues = [...values].map((range: Array<number>) => {
+      return [...range];
+    });
+
+    const updatedChannels = channels.map(
+      (channel: ChannelType, index: number) => {
+        return { ...channel, range: copiedValues[index] };
+      }
+    );
+
     dispatch(
-      applicationSlice.actions.setIntensityRange({
-        intensityRange: [...values].map((range: Array<number>) => {
-          return [...range];
-        }),
+      applicationSlice.actions.setChannels({
+        channels: updatedChannels,
       })
     );
   };
@@ -56,34 +64,34 @@ export const ContrastSliders = () => {
 
     if (current === -1) {
       updated.push(index);
-      const valuesCopy = [...values].map((range: Array<number>) => {
-        return [...range];
-      });
-      const newValue = valuesCopy[index];
-      const intensitiesCopy = [...intensityRange].map(
-        (range: Array<number>) => {
-          return [...range];
-        }
-      );
-      intensitiesCopy[index] = newValue;
-      dispatch(
-        applicationSlice.actions.setIntensityRange({
-          intensityRange: intensitiesCopy,
-        })
-      );
+      // const valuesCopy = [...values].map((range: Array<number>) => {
+      //   return [...range];
+      // });
+      // const newValue = valuesCopy[index];
+      // const intensitiesCopy = [...intensityRange].map(
+      //   (range: Array<number>) => {
+      //     return [...range];
+      //   }
+      // );
+      // intensitiesCopy[index] = newValue;
+      // dispatch(
+      //   applicationSlice.actions.setIntensityRange({
+      //     intensityRange: intensitiesCopy,
+      //   })
+      // );
     } else {
       updated.splice(current, 1);
-      const intensitiesCopy = [...intensityRange].map(
-        (range: Array<number>) => {
-          return [...range];
-        }
-      );
-      intensitiesCopy[index] = [0, 0];
-      dispatch(
-        applicationSlice.actions.setIntensityRange({
-          intensityRange: intensitiesCopy,
-        })
-      );
+      // const intensitiesCopy = [...intensityRange].map(
+      //   (range: Array<number>) => {
+      //     return [...range];
+      //   }
+      // );
+      // intensitiesCopy[index] = [0, 0];
+      // dispatch(
+      //   applicationSlice.actions.setIntensityRange({
+      //     intensityRange: intensitiesCopy,
+      //   })
+      // );
     }
 
     setChecked(updated);

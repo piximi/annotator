@@ -1,1 +1,1 @@
-import { ContrastSliders } from "./ContrastSliders";
+import { IntensitySlider } from "./IntensitySlider";

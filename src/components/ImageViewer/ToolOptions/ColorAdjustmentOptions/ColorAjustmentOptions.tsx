@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
 import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
-import { ContrastSliders } from "../ContrastSliders/ContrastSliders";
+import { IntensitySlider } from "../ContrastSliders/IntensitySlider";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 
 export const ColorAdjustmentOptions = () => {
@@ -102,15 +102,15 @@ export const ColorAdjustmentOptions = () => {
 
   return (
     <React.Fragment>
-      <InformationBox description="…" name={t("Hand tool")} />
+      <InformationBox description="…" name={t("Color adjustment tool")} />
 
       <Divider />
 
-      <ContrastSliders />
+      <IntensitySlider />
 
       <List dense>
         <ListItem button onClick={onResetChannelsClick}>
-          <ListItemText>{t("Reset channels")}</ListItemText>
+          <ListItemText>{t("Reset")}</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

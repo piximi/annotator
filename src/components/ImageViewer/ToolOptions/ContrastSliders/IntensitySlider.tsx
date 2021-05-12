@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 import { ChannelType } from "../../../../types/ChannelType";
 
-export const ContrastSliders = () => {
+export const IntensitySlider = () => {
   const dispatch = useDispatch();
 
   const channels = useSelector(channelsSelector);
@@ -22,11 +22,6 @@ export const ContrastSliders = () => {
     [0, 255],
     [0, 255],
   ]);
-
-  // useEffect( () => {
-  //   const copiedChannels = [...channels];
-  //   setValues(copiedChannels.map((channel: ChannelType) => {return (channel.range)}))
-  // }, [channels])
 
   const handleChange = (
     idx: number,

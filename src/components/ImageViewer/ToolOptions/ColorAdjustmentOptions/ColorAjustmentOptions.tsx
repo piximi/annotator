@@ -10,6 +10,8 @@ import { applicationSlice } from "../../../../store/slices";
 import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
 import { scaleIntensities } from "../../../../image/imageHelper";
+import { SampleList } from "../SampleList";
+import { ContrastSliders } from "../ContrastSliders/ContrastSliders";
 
 export const ColorAdjustmentOptions = () => {
   const t = useTranslation();
@@ -21,18 +23,11 @@ export const ColorAdjustmentOptions = () => {
   const onContrastAdjustmentClick = () => {
     if (!originalSrc) return;
     ImageJS.Image.load(originalSrc).then((image) => {
-      console.info("Here");
-      console.info(image.data);
-      console.info(image.width);
-      console.info(image.components);
-      console.info(image.alpha);
-
       const red: Array<number> = [];
       const green: Array<number> = [];
       const blue: Array<number> = [];
-      //for now let's assume selected channel is red
+      //for now let's go through all the channels, but later it's only going to be the selected channels
       const delta = image.alpha ? 4 : 3;
-      console.info(delta);
       for (let i = 0; i < image.data.length; i += delta) {
         red.push(image.data[i]);
       }
@@ -68,9 +63,11 @@ export const ColorAdjustmentOptions = () => {
 
       <Divider />
 
+      <ContrastSliders />
+
       <List dense>
         <ListItem button onClick={onContrastAdjustmentClick}>
-          <ListItemText>{t("Change contrast")}</ListItemText>
+          <ListItemText>{t("Click to adjust")}</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

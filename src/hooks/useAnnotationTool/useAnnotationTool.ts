@@ -14,16 +14,13 @@ import {
   RectangularAnnotationTool,
 } from "../../image/Tool";
 import { useSelector } from "react-redux";
-import {
-  imageOriginalSrcSelector,
-  stageScaleSelector,
-  toolTypeSelector,
-} from "../../store/selectors";
+import { stageScaleSelector, toolTypeSelector } from "../../store/selectors";
 import { penSelectionBrushSizeSelector } from "../../store/selectors/penSelectionBrushSizeSelector";
 import { quickSelectionBrushSizeSelector } from "../../store/selectors/quickSelectionBrushSizeSelector";
+import { imageSrcSelector } from "../../store/selectors/imageSrcSelector";
 
 export const useAnnotationTool = () => {
-  const src = useSelector(imageOriginalSrcSelector);
+  const src = useSelector(imageSrcSelector);
   const operation = useSelector(toolTypeSelector);
   const stageScale = useSelector(stageScaleSelector);
 
@@ -48,6 +45,8 @@ export const useAnnotationTool = () => {
 
   useEffect(() => {
     if (!image) return;
+
+    console.info("Image changed");
 
     switch (operation) {
       case ToolType.ColorAnnotation:

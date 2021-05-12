@@ -39,7 +39,7 @@ const initialState: StateType = {
     },
   ],
   currentIndex: 0,
-  contrast: undefined,
+  contrast: 0,
   exposure: 0,
   hue: 0,
   image: {
@@ -55,6 +55,11 @@ const initialState: StateType = {
     },
     originalSrc: colorImage,
     src: colorImage,
+  },
+  intensityRange: {
+    red: { min: 0, max: 255 },
+    green: { min: 0, max: 255 },
+    blue: { min: 0, max: 255 },
   },
   invertMode: false,
   language: LanguageType.English,
@@ -222,10 +227,7 @@ export const applicationSlice = createSlice({
         category,
       ];
     },
-    setContrast(
-      state: StateType,
-      action: PayloadAction<{ contrast: { min: number; max: number } }>
-    ) {
+    setContrast(state: StateType, action: PayloadAction<{ contrast: number }>) {
       state.contrast = action.payload.contrast;
     },
     setCurrentIndex(
@@ -258,6 +260,18 @@ export const applicationSlice = createSlice({
     setImageSrc(state: StateType, action: PayloadAction<{ src: string }>) {
       if (!state.image) return;
       state.image.src = action.payload.src;
+    },
+    setIntensityRange(
+      state: StateType,
+      action: PayloadAction<{
+        intensityRange: {
+          red: { min: number; max: number };
+          green: { min: number; max: number };
+          blue: { min: number; max: number };
+        };
+      }>
+    ) {
+      state.intensityRange = action.payload.intensityRange;
     },
     setInvertMode(
       state: StateType,
@@ -412,6 +426,7 @@ export const {
   setImage,
   setImageInstances,
   setImageName,
+  setIntensityRange,
   setInvertMode,
   setLanguage,
   setOffset,

@@ -23,7 +23,6 @@ import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import {
   applicationSlice,
-  setContrast,
   setImage,
   setSelectedAnnotation,
   setSelectedAnnotations,
@@ -510,8 +509,6 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
               },
             })
           );
-
-          dispatch(setContrast({ contrast: { min: 0, max: image.maxValue } }));
 
           dispatch(
             setSelectedAnnotations({

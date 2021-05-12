@@ -4,6 +4,6 @@ export const contrastSelector = ({
   state,
 }: {
   state: HistoryStateType;
-}): { min: number; max: number } | undefined => {
+}): number => {
   return state.present.contrast;
 };

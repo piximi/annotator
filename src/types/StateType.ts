@@ -11,12 +11,17 @@ export type StateType = {
   boundingClientRect: DOMRect;
   brightness: number;
   categories: Array<CategoryType>;
-  contrast?: { min: number; max: number };
+  contrast: number;
   currentIndex: number;
   currentPosition?: { x: number; y: number };
   exposure: number;
   hue: number;
   image?: ImageType;
+  intensityRange: {
+    red: { min: number; max: number };
+    green: { min: number; max: number };
+    blue: { min: number; max: number };
+  };
   invertMode: boolean;
   language: LanguageType;
   offset: { x: number; y: number };

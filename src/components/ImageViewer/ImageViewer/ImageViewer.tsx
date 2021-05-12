@@ -72,10 +72,6 @@ export const ImageViewer = (props: ImageViewerProps) => {
                 },
               })
             );
-
-            dispatch(
-              setContrast({ contrast: { min: 0, max: image.maxValue } })
-            );
           });
         });
 

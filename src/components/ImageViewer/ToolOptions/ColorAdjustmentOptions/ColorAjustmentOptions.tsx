@@ -28,6 +28,11 @@ export const ColorAdjustmentOptions = () => {
       const red: Array<number> = [];
       const green: Array<number> = [];
       const blue: Array<number> = [];
+
+      let newRed: Array<number>;
+      let newGreen: Array<number>;
+      let newBlue: Array<number>;
+
       //for now let's go through all the channels, but later it's only going to be the selected channels
       const delta = image.alpha ? 4 : 3;
       for (let i = 0; i < image.data.length; i += delta) {
@@ -39,9 +44,15 @@ export const ColorAdjustmentOptions = () => {
       for (let k = 2; k < image.data.length; k += delta) {
         blue.push(image.data[k]);
       }
-      const newRed = scaleIntensities(channels[0].range, red);
-      const newGreen = scaleIntensities(channels[1].range, green);
-      const newBlue = scaleIntensities(channels[2].range, blue);
+      newRed = channels[0].visible
+        ? scaleIntensities(channels[0].range, red)
+        : new Array(red.length).fill(0);
+      newGreen = channels[1].visible
+        ? scaleIntensities(channels[1].range, green)
+        : new Array(red.length).fill(0);
+      newBlue = channels[2].visible
+        ? scaleIntensities(channels[2].range, blue)
+        : new Array(red.length).fill(0);
 
       const newData: Array<number> = [];
       newRed.forEach((el: number, index: number) => {

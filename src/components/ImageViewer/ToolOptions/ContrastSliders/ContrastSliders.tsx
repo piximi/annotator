@@ -62,37 +62,20 @@ export const ContrastSliders = () => {
 
     const updated = [...checked];
 
+    const copiedChannels = [...channels];
+
     if (current === -1) {
       updated.push(index);
-      // const valuesCopy = [...values].map((range: Array<number>) => {
-      //   return [...range];
-      // });
-      // const newValue = valuesCopy[index];
-      // const intensitiesCopy = [...intensityRange].map(
-      //   (range: Array<number>) => {
-      //     return [...range];
-      //   }
-      // );
-      // intensitiesCopy[index] = newValue;
-      // dispatch(
-      //   applicationSlice.actions.setIntensityRange({
-      //     intensityRange: intensitiesCopy,
-      //   })
-      // );
+      copiedChannels[index] = { ...copiedChannels[index], visible: true };
     } else {
       updated.splice(current, 1);
-      // const intensitiesCopy = [...intensityRange].map(
-      //   (range: Array<number>) => {
-      //     return [...range];
-      //   }
-      // );
-      // intensitiesCopy[index] = [0, 0];
-      // dispatch(
-      //   applicationSlice.actions.setIntensityRange({
-      //     intensityRange: intensitiesCopy,
-      //   })
-      // );
+      copiedChannels[index] = { ...copiedChannels[index], visible: false };
     }
+    dispatch(
+      applicationSlice.actions.setChannels({
+        channels: copiedChannels,
+      })
+    );
 
     setChecked(updated);
   };

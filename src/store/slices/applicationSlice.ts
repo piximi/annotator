@@ -56,11 +56,11 @@ const initialState: StateType = {
     originalSrc: colorImage,
     src: colorImage,
   },
-  intensityRange: {
-    red: [0, 255],
-    green: [0, 255],
-    blue: [0, 255],
-  },
+  intensityRange: [
+    [0, 255],
+    [0, 255],
+    [0, 255],
+  ],
   invertMode: false,
   language: LanguageType.English,
   offset: { x: 0, y: 0 },
@@ -264,11 +264,7 @@ export const applicationSlice = createSlice({
     setIntensityRange(
       state: StateType,
       action: PayloadAction<{
-        intensityRange: {
-          red: Array<number>;
-          green: Array<number>;
-          blue: Array<number>;
-        };
+        intensityRange: Array<Array<number>>;
       }>
     ) {
       state.intensityRange = action.payload.intensityRange;

@@ -38,25 +38,14 @@ export const ContrastSliders = () => {
     event: object,
     value: number | number[]
   ) => {
-    console.info({ ...intensityRange, red: value as Array<number> });
-    if (idx === 0)
-      dispatch(
-        applicationSlice.actions.setIntensityRange({
-          intensityRange: { ...intensityRange, red: value as Array<number> },
-        })
-      );
-    else if (idx === 1)
-      dispatch(
-        applicationSlice.actions.setIntensityRange({
-          intensityRange: { ...intensityRange, green: value as Array<number> },
-        })
-      );
-    else if (idx === 2)
-      dispatch(
-        applicationSlice.actions.setIntensityRange({
-          intensityRange: { ...intensityRange, blue: value as Array<number> },
-        })
-      );
+    const bar = [...values][0];
+    const baz = [...values][1];
+    const foo = [...values][2];
+    dispatch(
+      applicationSlice.actions.setIntensityRange({
+        intensityRange: [[...bar], [...baz], [...foo]],
+      })
+    );
   };
 
   const [checked, setChecked] = React.useState([0, 1, 2]);

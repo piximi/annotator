@@ -40,9 +40,9 @@ export const ColorAdjustmentOptions = () => {
       for (let k = 2; k < image.data.length; k += delta) {
         blue.push(image.data[k]);
       }
-      const newRed = scaleIntensities(intensityRange.red, red);
-      const newGreen = scaleIntensities(intensityRange.green, green);
-      const newBlue = scaleIntensities(intensityRange.blue, blue);
+      const newRed = scaleIntensities(intensityRange[0], red);
+      const newGreen = scaleIntensities(intensityRange[1], green);
+      const newBlue = scaleIntensities(intensityRange[2], blue);
 
       const newData: Array<number> = [];
       newRed.forEach((el: number, index: number) => {

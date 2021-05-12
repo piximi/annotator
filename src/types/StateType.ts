@@ -17,11 +17,7 @@ export type StateType = {
   exposure: number;
   hue: number;
   image?: ImageType;
-  intensityRange: {
-    red: Array<number>;
-    green: Array<number>;
-    blue: Array<number>;
-  };
+  intensityRange: Array<Array<number>>;
   invertMode: boolean;
   language: LanguageType;
   offset: { x: number; y: number };

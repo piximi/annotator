@@ -8,10 +8,14 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
 import { CheckboxCheckedIcon, CheckboxUncheckedIcon } from "../../../icons";
 import { applicationSlice } from "../../../../store/slices";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { intensityRangeSelector } from "../../../../store/selectors/intensityRangeSelector";
+import * as _ from "lodash";
 
 export const ContrastSliders = () => {
   const dispatch = useDispatch();
+
+  const intensityRange = useSelector(intensityRangeSelector);
 
   const [values, setValues] = React.useState<Array<Array<number>>>([
     [0, 255],
@@ -25,20 +29,34 @@ export const ContrastSliders = () => {
     newValue: number | number[]
   ) => {
     const newValues = [...values];
-    newValues[idx] = newValue as number[];
+    newValues[idx] = newValue as Array<number>;
     setValues(newValues);
   };
 
-  const handleChangeCommitted = (event: object, value: number | number[]) => {
-    dispatch(
-      applicationSlice.actions.setIntensityRange({
-        intensityRange: {
-          red: values[0],
-          green: values[1],
-          blue: values[2],
-        },
-      })
-    );
+  const handleChangeCommitted = (
+    idx: number,
+    event: object,
+    value: number | number[]
+  ) => {
+    console.info({ ...intensityRange, red: value as Array<number> });
+    if (idx === 0)
+      dispatch(
+        applicationSlice.actions.setIntensityRange({
+          intensityRange: { ...intensityRange, red: value as Array<number> },
+        })
+      );
+    else if (idx === 1)
+      dispatch(
+        applicationSlice.actions.setIntensityRange({
+          intensityRange: { ...intensityRange, green: value as Array<number> },
+        })
+      );
+    else if (idx === 2)
+      dispatch(
+        applicationSlice.actions.setIntensityRange({
+          intensityRange: { ...intensityRange, blue: value as Array<number> },
+        })
+      );
   };
 
   const [checked, setChecked] = React.useState([0, 1, 2]);
@@ -80,7 +98,9 @@ export const ContrastSliders = () => {
           style={{ width: "60%" }}
           value={values[0]}
           max={255}
-          onChangeCommitted={handleChangeCommitted}
+          onChangeCommitted={(event, value: number | number[]) =>
+            handleChangeCommitted(0, event, value)
+          }
           onChange={(event, value: number | number[]) =>
             handleChange(0, event, value)
           }
@@ -107,7 +127,9 @@ export const ContrastSliders = () => {
           style={{ width: "60%" }}
           value={values[1]}
           max={255}
-          onChangeCommitted={handleChangeCommitted}
+          onChangeCommitted={(event, value: number | number[]) =>
+            handleChangeCommitted(1, event, value)
+          }
           onChange={(event, value: number | number[]) =>
             handleChange(1, event, value)
           }
@@ -134,7 +156,9 @@ export const ContrastSliders = () => {
           style={{ width: "60%" }}
           value={values[2]}
           max={255}
-          onChangeCommitted={handleChangeCommitted}
+          onChangeCommitted={(event, value: number | number[]) =>
+            handleChangeCommitted(2, event, value)
+          }
           onChange={(event, value: number | number[]) =>
             handleChange(2, event, value)
           }

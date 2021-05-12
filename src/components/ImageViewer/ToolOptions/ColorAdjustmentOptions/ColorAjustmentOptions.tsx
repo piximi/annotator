@@ -7,7 +7,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
-import { imageOriginalSrcSelector } from "../../../../store/selectors";
+import {
+  imageOriginalSrcSelector,
+  imageSelector,
+} from "../../../../store/selectors";
 import * as ImageJS from "image-js";
 import { IntensitySlider } from "../ContrastSliders/IntensitySlider";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
@@ -77,7 +80,7 @@ export const ColorAdjustmentOptions = () => {
     }
 
     mapIntensities();
-  }, [channels]);
+  }, [channels, originalSrc]);
 
   const onResetChannelsClick = () => {
     dispatch(

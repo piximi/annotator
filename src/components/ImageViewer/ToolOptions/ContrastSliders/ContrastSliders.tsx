@@ -2,17 +2,27 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { ListItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "@material-ui/core/Slider";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
 import { CheckboxCheckedIcon, CheckboxUncheckedIcon } from "../../../icons";
 
 export const ContrastSliders = () => {
-  const [value, setValue] = React.useState<number[]>([0, 255]);
+  const [values, setValues] = React.useState<Array<Array<number>>>([
+    [0, 255],
+    [0, 255],
+    [0, 255],
+  ]);
 
-  const handleChange = (event: any, newValue: number | number[]) => {
-    setValue(newValue as number[]);
+  const handleChange = (
+    idx: number,
+    event: any,
+    newValue: number | number[]
+  ) => {
+    const newValues = [...values];
+    newValues[idx] = newValue as number[];
+    setValues(newValues);
   };
 
   const [checked, setChecked] = React.useState([0, 1, 2]);
@@ -34,7 +44,7 @@ export const ContrastSliders = () => {
   return (
     <List
       component="nav"
-      subheader={<ListSubheader component="div">Sample</ListSubheader>}
+      subheader={<ListSubheader component="div">Channels</ListSubheader>}
     >
       <ListItem dense>
         <ListItemIcon>
@@ -50,10 +60,13 @@ export const ContrastSliders = () => {
         </ListItemIcon>
         <ListItemText primary="Red" />
         <Slider
+          disabled={!(checked.indexOf(0) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
-          value={value}
+          value={values[0]}
           max={255}
-          onChange={handleChange}
+          onChange={(event, value: number | number[]) =>
+            handleChange(0, event, value)
+          }
           valueLabelDisplay="auto"
           aria-labelledby="range-slider"
         />
@@ -73,10 +86,13 @@ export const ContrastSliders = () => {
         </ListItemIcon>
         <ListItemText primary="Blue" />
         <Slider
+          disabled={!(checked.indexOf(1) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
-          value={value}
+          value={values[1]}
           max={255}
-          onChange={handleChange}
+          onChange={(event, value: number | number[]) =>
+            handleChange(1, event, value)
+          }
           valueLabelDisplay="auto"
           aria-labelledby="range-slider"
         />
@@ -96,10 +112,13 @@ export const ContrastSliders = () => {
         </ListItemIcon>
         <ListItemText primary="Green" />
         <Slider
+          disabled={!(checked.indexOf(2) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
-          value={value}
+          value={values[2]}
           max={255}
-          onChange={handleChange}
+          onChange={(event, value: number | number[]) =>
+            handleChange(2, event, value)
+          }
           valueLabelDisplay="auto"
           aria-labelledby="range-slider"
         />

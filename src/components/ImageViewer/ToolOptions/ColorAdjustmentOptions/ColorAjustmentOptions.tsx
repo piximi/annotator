@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { InformationBox } from "../InformationBox";
 import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "../../../../hooks/useTranslation";
@@ -23,6 +23,25 @@ export const ColorAdjustmentOptions = () => {
   const originalSrc = useSelector(imageOriginalSrcSelector);
 
   const channels = useSelector(channelsSelector);
+
+  const [channelData, setChannelData] = useState<Array<Array<number>>>([]);
+
+  useEffect(() => {
+    if (!originalSrc) return;
+
+    ImageJS.Image.load(originalSrc).then((image) => {
+      const delta = image.alpha ? image.components + 1 : image.components;
+
+      const newChannelData: Array<Array<number>> = [];
+
+      for (let i = 0; i < channels.length; i++) {
+        const currentChannel = getChannel(i, Array.from(image.data), delta);
+        newChannelData.push(currentChannel);
+      }
+
+      setChannelData(newChannelData);
+    });
+  }, [originalSrc]);
 
   const scaleIntensity = (range: Array<number>, pixel: number) => {
     if (pixel < range[0]) return 0;
@@ -72,9 +91,8 @@ export const ColorAdjustmentOptions = () => {
       const delta = image.alpha ? image.components + 1 : image.components;
 
       for (let i = 0; i < channels.length; i++) {
-        //TODO: this should be called only once -- whatever channel was changed by the slider
-        const currentChannel = getChannel(i, Array.from(image.data), delta); //TODO this should be computed only once and saved in store. That corresponds to the original data.
-        const updatedChannel = updateChannel(channels[i], currentChannel);
+        //TODO: this should not cycle and should be called only once -- whatever channel was changed by the slider
+        const updatedChannel = updateChannel(channels[i], channelData[i]);
         newData = setChannel(i, updatedChannel, newData, delta);
       }
 

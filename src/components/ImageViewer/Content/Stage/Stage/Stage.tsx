@@ -30,7 +30,7 @@ import { useAnnotationTool, useHandTool, useZoom } from "../../../../../hooks";
 import { AnnotationType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
-import { Image } from "../Image";
+import { ImageComponent } from "../Image";
 import { Selecting } from "../Selecting";
 import { annotatedSelector } from "../../../../../store/selectors/annotatedSelector";
 import {
@@ -801,7 +801,7 @@ export const Stage = () => {
           <Provider store={store}>
             <DndProvider backend={HTML5Backend}>
               <Layer>
-                <Image ref={imageRef} />
+                <ImageComponent ref={imageRef} />
 
                 <ZoomSelection />
 

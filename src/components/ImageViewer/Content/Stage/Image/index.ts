@@ -1,1 +1,1 @@
-export { Image } from "./Image";
+export { ImageComponent } from "./ImageComponent";

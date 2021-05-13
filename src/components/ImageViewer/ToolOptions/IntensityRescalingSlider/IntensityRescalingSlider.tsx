@@ -37,6 +37,22 @@ export const IntensityRescalingSlider = ({
     const newValues = [...intensityRanges];
     newValues[idx] = newValue as Array<number>;
     updateIntensityRanges(newValues);
+
+    const copiedValues = [...newValues].map((range: Array<number>) => {
+      return [...range];
+    });
+
+    const updatedChannels = channels.map(
+      (channel: ChannelType, index: number) => {
+        return { ...channel, range: copiedValues[index] };
+      }
+    );
+
+    dispatch(
+      applicationSlice.actions.setChannels({
+        channels: updatedChannels,
+      })
+    );
   };
 
   const handleSliderChangeComitted = () => {

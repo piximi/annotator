@@ -127,10 +127,8 @@ export const ColorAdjustmentOptions = () => {
       <Divider />
 
       <IntensityAdjustmentSliders
-        checked={checked}
-        updatedChecked={updateChecked}
-        values={values}
-        updateValues={updateValues}
+        intensityRanges={values}
+        updateIntensityRanges={updateValues}
       />
 
       <List dense>

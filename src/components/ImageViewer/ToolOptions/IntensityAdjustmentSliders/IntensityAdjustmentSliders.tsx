@@ -13,34 +13,34 @@ import { channelsSelector } from "../../../../store/selectors/intensityRangeSele
 import { ChannelType } from "../../../../types/ChannelType";
 
 type IntensitySliderProps = {
-  values: Array<Array<number>>;
-  updateValues: (values: Array<Array<number>>) => void;
-  checked: Array<number>;
-  updatedChecked: (checked: Array<number>) => void;
+  intensityRanges: Array<Array<number>>;
+  updateIntensityRanges: (values: Array<Array<number>>) => void;
 };
 
 export const IntensityAdjustmentSliders = ({
-  checked,
-  updatedChecked,
-  values,
-  updateValues,
+  intensityRanges,
+  updateIntensityRanges,
 }: IntensitySliderProps) => {
   const dispatch = useDispatch();
 
   const channels = useSelector(channelsSelector);
+
+  const visibleChannelsIndices = channels
+    .map((channel: ChannelType, idx) => channel.visible)
+    .reduce((c: Array<number>, v, i) => (v ? c.concat(i) : c), []);
 
   const handleSliderChange = (
     idx: number,
     event: any,
     newValue: number | number[]
   ) => {
-    const newValues = [...values];
+    const newValues = [...intensityRanges];
     newValues[idx] = newValue as Array<number>;
-    updateValues(newValues);
+    updateIntensityRanges(newValues);
   };
 
   const handleSliderChangeComitted = () => {
-    const copiedValues = [...values].map((range: Array<number>) => {
+    const copiedValues = [...intensityRanges].map((range: Array<number>) => {
       return [...range];
     });
 
@@ -58,9 +58,9 @@ export const IntensityAdjustmentSliders = ({
   };
 
   const onCheckboxChanged = (index: number) => () => {
-    const current = checked.indexOf(index);
+    const current = visibleChannelsIndices.indexOf(index);
 
-    const updated = [...checked];
+    const updated = [...visibleChannelsIndices];
 
     const copiedChannels = [...channels];
 
@@ -76,8 +76,6 @@ export const IntensityAdjustmentSliders = ({
         channels: copiedChannels,
       })
     );
-
-    updatedChecked(updated);
   };
 
   return (
@@ -89,7 +87,7 @@ export const IntensityAdjustmentSliders = ({
         <ListItemIcon>
           <Checkbox
             onClick={onCheckboxChanged(0)}
-            checked={checked.indexOf(0) !== -1}
+            checked={visibleChannelsIndices.indexOf(0) !== -1}
             disableRipple
             edge="start"
             icon={<CheckboxUncheckedIcon />}
@@ -99,9 +97,9 @@ export const IntensityAdjustmentSliders = ({
         </ListItemIcon>
         <ListItemText primary="Red" />
         <Slider
-          disabled={!(checked.indexOf(0) !== -1)} //TODO style slider when disabled mode
+          disabled={!(visibleChannelsIndices.indexOf(0) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
-          value={values[0]}
+          value={intensityRanges[0]}
           max={255}
           onChangeCommitted={handleSliderChangeComitted}
           onChange={(event, value: number | number[]) =>
@@ -116,7 +114,7 @@ export const IntensityAdjustmentSliders = ({
         <ListItemIcon>
           <Checkbox
             onClick={onCheckboxChanged(1)}
-            checked={checked.indexOf(1) !== -1}
+            checked={visibleChannelsIndices.indexOf(1) !== -1}
             disableRipple
             edge="start"
             icon={<CheckboxUncheckedIcon />}
@@ -126,9 +124,9 @@ export const IntensityAdjustmentSliders = ({
         </ListItemIcon>
         <ListItemText primary="Green" />
         <Slider
-          disabled={!(checked.indexOf(1) !== -1)} //TODO style slider when disabled mode
+          disabled={!(visibleChannelsIndices.indexOf(1) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
-          value={values[1]}
+          value={intensityRanges[1]}
           max={255}
           onChangeCommitted={handleSliderChangeComitted}
           onChange={(event, value: number | number[]) =>
@@ -143,7 +141,7 @@ export const IntensityAdjustmentSliders = ({
         <ListItemIcon>
           <Checkbox
             onClick={onCheckboxChanged(2)}
-            checked={checked.indexOf(2) !== -1}
+            checked={visibleChannelsIndices.indexOf(2) !== -1}
             disableRipple
             edge="start"
             icon={<CheckboxUncheckedIcon />}
@@ -153,9 +151,9 @@ export const IntensityAdjustmentSliders = ({
         </ListItemIcon>
         <ListItemText primary="Blue" />
         <Slider
-          disabled={!(checked.indexOf(2) !== -1)} //TODO style slider when disabled mode
+          disabled={!(visibleChannelsIndices.indexOf(2) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
-          value={values[2]}
+          value={intensityRanges[2]}
           max={255}
           onChangeCommitted={handleSliderChangeComitted}
           onChange={(event, value: number | number[]) =>

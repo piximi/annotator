@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
 import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
-import { IntensityAdjustmentSliders } from "../IntensityAdjustmentSliders/IntensityAdjustmentSliders";
+import { IntensityRescalingSlider } from "../IntensityRescalingSlider/IntensityRescalingSlider";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 
 export const ColorAdjustmentOptions = () => {
@@ -24,11 +24,9 @@ export const ColorAdjustmentOptions = () => {
   const channels = useSelector(channelsSelector);
 
   const scaleIntensity = (range: Array<number>, pixel: number) => {
-    // return (pixel / 255) * (range[1] - range[0]) + range[0];
     if (pixel < range[0]) return 0;
     return 255 * ((pixel - range[0]) / (range[1] - range[0]));
   };
-
   const mapIntensities = () => {
     if (!originalSrc) return;
     ImageJS.Image.load(originalSrc).then((image) => {
@@ -128,7 +126,7 @@ export const ColorAdjustmentOptions = () => {
 
       <Divider />
 
-      <IntensityAdjustmentSliders
+      <IntensityRescalingSlider
         intensityRanges={values}
         updateIntensityRanges={updateValues}
       />

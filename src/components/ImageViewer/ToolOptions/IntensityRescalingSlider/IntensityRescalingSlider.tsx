@@ -17,7 +17,7 @@ type IntensitySliderProps = {
   updateIntensityRanges: (values: Array<Array<number>>) => void;
 };
 
-export const IntensityAdjustmentSliders = ({
+export const IntensityRescalingSlider = ({
   intensityRanges,
   updateIntensityRanges,
 }: IntensitySliderProps) => {

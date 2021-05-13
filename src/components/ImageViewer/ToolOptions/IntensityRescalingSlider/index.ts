@@ -1,0 +1,1 @@
+import { IntensityRescalingSlider } from "./IntensityRescalingSlider";

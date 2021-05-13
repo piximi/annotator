@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { InformationBox } from "../InformationBox";
 import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "../../../../hooks/useTranslation";
@@ -7,10 +7,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
-import {
-  imageOriginalSrcSelector,
-  imageSelector,
-} from "../../../../store/selectors";
+import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
 import { IntensitySlider } from "../ContrastSliders/IntensitySlider";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
@@ -19,8 +16,6 @@ export const ColorAdjustmentOptions = () => {
   const t = useTranslation();
 
   const dispatch = useDispatch();
-
-  const [count, setCount] = useState(0);
 
   const firstUpdate = useRef(true);
 
@@ -82,6 +77,16 @@ export const ColorAdjustmentOptions = () => {
     mapIntensities();
   }, [channels, originalSrc]);
 
+  const [values, setValues] = React.useState<Array<Array<number>>>([
+    [0, 255],
+    [0, 255],
+    [0, 255],
+  ]);
+
+  const updateValues = (values: Array<Array<number>>) => {
+    setValues(values);
+  };
+
   const onResetChannelsClick = () => {
     dispatch(
       applicationSlice.actions.setChannels({
@@ -101,6 +106,11 @@ export const ColorAdjustmentOptions = () => {
         ],
       })
     );
+    setValues([
+      [0, 255],
+      [0, 255],
+      [0, 255],
+    ]); //reflect change in the slider values
   };
 
   return (
@@ -109,11 +119,11 @@ export const ColorAdjustmentOptions = () => {
 
       <Divider />
 
-      <IntensitySlider />
+      <IntensitySlider values={values} updateValues={updateValues} />
 
       <List dense>
         <ListItem button onClick={onResetChannelsClick}>
-          <ListItemText>{t("Reset")}</ListItemText>
+          <ListItemText>{t("Reset intensities range")}</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

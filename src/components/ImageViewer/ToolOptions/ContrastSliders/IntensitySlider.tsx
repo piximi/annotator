@@ -2,7 +2,7 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { ListItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
-import React, { useEffect } from "react";
+import React from "react";
 import Slider from "@material-ui/core/Slider";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -12,16 +12,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 import { ChannelType } from "../../../../types/ChannelType";
 
-export const IntensitySlider = () => {
+type IntensitySliderProps = {
+  values: Array<Array<number>>;
+  updateValues: (values: Array<Array<number>>) => void;
+};
+
+export const IntensitySlider = ({
+  values,
+  updateValues,
+}: IntensitySliderProps) => {
   const dispatch = useDispatch();
 
   const channels = useSelector(channelsSelector);
 
-  const [values, setValues] = React.useState<Array<Array<number>>>([
-    [0, 255],
-    [0, 255],
-    [0, 255],
-  ]);
+  const [checked, setChecked] = React.useState([0, 1, 2]);
 
   const handleChange = (
     idx: number,
@@ -30,14 +34,10 @@ export const IntensitySlider = () => {
   ) => {
     const newValues = [...values];
     newValues[idx] = newValue as Array<number>;
-    setValues(newValues);
+    updateValues(newValues);
   };
 
-  const handleChangeCommitted = (
-    idx: number,
-    event: object,
-    value: number | number[]
-  ) => {
+  const handleChangeCommitted = () => {
     const copiedValues = [...values].map((range: Array<number>) => {
       return [...range];
     });
@@ -55,9 +55,7 @@ export const IntensitySlider = () => {
     );
   };
 
-  const [checked, setChecked] = React.useState([0, 1, 2]);
-
-  const onChange = (index: number) => () => {
+  const onCheckboxChanged = (index: number) => () => {
     const current = checked.indexOf(index);
 
     const updated = [...checked];
@@ -88,7 +86,7 @@ export const IntensitySlider = () => {
       <ListItem dense>
         <ListItemIcon>
           <Checkbox
-            onClick={onChange(0)}
+            onClick={onCheckboxChanged(0)}
             checked={checked.indexOf(0) !== -1}
             disableRipple
             edge="start"
@@ -103,9 +101,7 @@ export const IntensitySlider = () => {
           style={{ width: "60%" }}
           value={values[0]}
           max={255}
-          onChangeCommitted={(event, value: number | number[]) =>
-            handleChangeCommitted(0, event, value)
-          }
+          onChangeCommitted={handleChangeCommitted}
           onChange={(event, value: number | number[]) =>
             handleChange(0, event, value)
           }
@@ -117,7 +113,7 @@ export const IntensitySlider = () => {
       <ListItem dense>
         <ListItemIcon>
           <Checkbox
-            onClick={onChange(1)}
+            onClick={onCheckboxChanged(1)}
             checked={checked.indexOf(1) !== -1}
             disableRipple
             edge="start"
@@ -132,9 +128,7 @@ export const IntensitySlider = () => {
           style={{ width: "60%" }}
           value={values[1]}
           max={255}
-          onChangeCommitted={(event, value: number | number[]) =>
-            handleChangeCommitted(1, event, value)
-          }
+          onChangeCommitted={handleChangeCommitted}
           onChange={(event, value: number | number[]) =>
             handleChange(1, event, value)
           }
@@ -146,7 +140,7 @@ export const IntensitySlider = () => {
       <ListItem dense>
         <ListItemIcon>
           <Checkbox
-            onClick={onChange(2)}
+            onClick={onCheckboxChanged(2)}
             checked={checked.indexOf(2) !== -1}
             disableRipple
             edge="start"
@@ -161,9 +155,7 @@ export const IntensitySlider = () => {
           style={{ width: "60%" }}
           value={values[2]}
           max={255}
-          onChangeCommitted={(event, value: number | number[]) =>
-            handleChangeCommitted(2, event, value)
-          }
+          onChangeCommitted={handleChangeCommitted}
           onChange={(event, value: number | number[]) =>
             handleChange(2, event, value)
           }

@@ -24,7 +24,9 @@ export const ColorAdjustmentOptions = () => {
   const channels = useSelector(channelsSelector);
 
   const scaleIntensity = (range: Array<number>, pixel: number) => {
-    return (pixel / 255) * (range[1] - range[0]) + range[0];
+    // return (pixel / 255) * (range[1] - range[0]) + range[0];
+    if (pixel < range[0]) return 0;
+    return 255 * ((pixel - range[0]) / (range[1] - range[0]));
   };
 
   const mapIntensities = () => {

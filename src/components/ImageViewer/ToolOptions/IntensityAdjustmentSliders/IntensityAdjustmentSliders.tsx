@@ -15,9 +15,13 @@ import { ChannelType } from "../../../../types/ChannelType";
 type IntensitySliderProps = {
   values: Array<Array<number>>;
   updateValues: (values: Array<Array<number>>) => void;
+  checked: Array<number>;
+  updatedChecked: (checked: Array<number>) => void;
 };
 
-export const IntensitySlider = ({
+export const IntensityAdjustmentSliders = ({
+  checked,
+  updatedChecked,
   values,
   updateValues,
 }: IntensitySliderProps) => {
@@ -25,9 +29,7 @@ export const IntensitySlider = ({
 
   const channels = useSelector(channelsSelector);
 
-  const [checked, setChecked] = React.useState([0, 1, 2]);
-
-  const handleChange = (
+  const handleSliderChange = (
     idx: number,
     event: any,
     newValue: number | number[]
@@ -37,7 +39,7 @@ export const IntensitySlider = ({
     updateValues(newValues);
   };
 
-  const handleChangeCommitted = () => {
+  const handleSliderChangeComitted = () => {
     const copiedValues = [...values].map((range: Array<number>) => {
       return [...range];
     });
@@ -75,7 +77,7 @@ export const IntensitySlider = ({
       })
     );
 
-    setChecked(updated);
+    updatedChecked(updated);
   };
 
   return (
@@ -101,9 +103,9 @@ export const IntensitySlider = ({
           style={{ width: "60%" }}
           value={values[0]}
           max={255}
-          onChangeCommitted={handleChangeCommitted}
+          onChangeCommitted={handleSliderChangeComitted}
           onChange={(event, value: number | number[]) =>
-            handleChange(0, event, value)
+            handleSliderChange(0, event, value)
           }
           valueLabelDisplay="auto"
           aria-labelledby="range-slider"
@@ -128,9 +130,9 @@ export const IntensitySlider = ({
           style={{ width: "60%" }}
           value={values[1]}
           max={255}
-          onChangeCommitted={handleChangeCommitted}
+          onChangeCommitted={handleSliderChangeComitted}
           onChange={(event, value: number | number[]) =>
-            handleChange(1, event, value)
+            handleSliderChange(1, event, value)
           }
           valueLabelDisplay="auto"
           aria-labelledby="range-slider"
@@ -155,9 +157,9 @@ export const IntensitySlider = ({
           style={{ width: "60%" }}
           value={values[2]}
           max={255}
-          onChangeCommitted={handleChangeCommitted}
+          onChangeCommitted={handleSliderChangeComitted}
           onChange={(event, value: number | number[]) =>
-            handleChange(2, event, value)
+            handleSliderChange(2, event, value)
           }
           valueLabelDisplay="auto"
           aria-labelledby="range-slider"

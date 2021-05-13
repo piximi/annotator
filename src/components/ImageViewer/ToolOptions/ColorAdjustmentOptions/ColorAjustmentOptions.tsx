@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
 import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
-import { IntensitySlider } from "../ContrastSliders/IntensitySlider";
+import { IntensityAdjustmentSliders } from "../IntensityAdjustmentSliders/IntensityAdjustmentSliders";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 
 export const ColorAdjustmentOptions = () => {
@@ -83,8 +83,14 @@ export const ColorAdjustmentOptions = () => {
     [0, 255],
   ]);
 
+  const [checked, setChecked] = React.useState([0, 1, 2]);
+
   const updateValues = (values: Array<Array<number>>) => {
     setValues(values);
+  };
+
+  const updateChecked = (checked: Array<number>) => {
+    setChecked(checked);
   };
 
   const onResetChannelsClick = () => {
@@ -111,6 +117,7 @@ export const ColorAdjustmentOptions = () => {
       [0, 255],
       [0, 255],
     ]); //reflect change in the slider values
+    setChecked([0, 1, 2]);
   };
 
   return (
@@ -119,11 +126,16 @@ export const ColorAdjustmentOptions = () => {
 
       <Divider />
 
-      <IntensitySlider values={values} updateValues={updateValues} />
+      <IntensityAdjustmentSliders
+        checked={checked}
+        updatedChecked={updateChecked}
+        values={values}
+        updateValues={updateValues}
+      />
 
       <List dense>
         <ListItem button onClick={onResetChannelsClick}>
-          <ListItemText>{t("Reset intensities range")}</ListItemText>
+          <ListItemText>{t("Reset")}</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

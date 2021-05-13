@@ -1,10 +1,4 @@
-import React, {
-  ChangeEvent,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useState } from "react";
 import { InformationBox } from "../InformationBox";
 import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "../../../../hooks/useTranslation";
@@ -23,8 +17,6 @@ export const ColorAdjustmentOptions = () => {
   const t = useTranslation();
 
   const dispatch = useDispatch();
-
-  const firstUpdate = useRef(true);
 
   const originalSrc = useSelector(imageOriginalSrcSelector);
 
@@ -61,13 +53,7 @@ export const ColorAdjustmentOptions = () => {
     });
   }, [originalSrc]);
 
-  useLayoutEffect(() => {
-    //layout effect is used to prevent unnecessary rerendering on first render
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
-
+  useEffect(() => {
     const changedChannel = changedChannelIndex();
 
     if (changedChannel === undefined || changedChannel === -1) return;

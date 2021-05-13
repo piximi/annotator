@@ -26,7 +26,7 @@ export {
   setSelectedAnnotation,
   setSelectedAnnotations,
   setSelectionMode,
-  setSeletedCategory,
+  setSelectedCategory,
   setStageHeight,
   setStagePosition,
   setStageScale,

@@ -306,7 +306,7 @@ export const applicationSlice = createSlice({
     ) {
       state.saturation = action.payload.saturation;
     },
-    setSeletedCategory(
+    setSelectedCategory(
       state: StateType,
       action: PayloadAction<{ selectedCategory: string }>
     ) {
@@ -415,7 +415,7 @@ export const {
   setSelectedAnnotation,
   setSelectedAnnotations,
   setSelectionMode,
-  setSeletedCategory,
+  setSelectedCategory,
   setSoundEnabled,
   setStageHeight,
   setStagePosition,

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   applicationSlice,
   setOperation,
-  setSeletedCategory,
+  setSelectedCategory,
 } from "../../store";
 import { ToolType } from "../../types/ToolType";
 import {
@@ -131,7 +131,7 @@ export const useKeyboardShortcuts = () => {
 
     if (!selectedCategory) return;
 
-    dispatch(setSeletedCategory({ selectedCategory: selectedCategory.id }));
+    dispatch(setSelectedCategory({ selectedCategory: selectedCategory.id }));
   });
 
   /*

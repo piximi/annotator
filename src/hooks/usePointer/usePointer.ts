@@ -9,7 +9,7 @@ import {
   setPointerSelection,
   setSelectedAnnotation,
   setSelectedAnnotations,
-  setSeletedCategory,
+  setSelectedCategory,
 } from "../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -249,7 +249,7 @@ export const usePointer = () => {
         })
       );
       dispatch(
-        setSeletedCategory({
+        setSelectedCategory({
           selectedCategory: currentAnnotation.categoryId,
         })
       );

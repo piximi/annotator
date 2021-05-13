@@ -27,7 +27,7 @@ export {
   setSelectedAnnotation,
   setSelectedAnnotations,
   setSelectionMode,
-  setSeletedCategory,
+  setSelectedCategory,
   setSoundEnabled,
   setStageHeight,
   setStagePosition,

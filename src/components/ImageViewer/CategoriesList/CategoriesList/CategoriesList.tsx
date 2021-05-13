@@ -94,7 +94,7 @@ export const CategoriesList = () => {
     category: CategoryType
   ) => {
     dispatch(
-      applicationSlice.actions.setSeletedCategory({
+      applicationSlice.actions.setSelectedCategory({
         selectedCategory: category.id,
       })
     );
@@ -105,7 +105,7 @@ export const CategoriesList = () => {
     category: CategoryType
   ) => {
     dispatch(
-      applicationSlice.actions.setSeletedCategory({
+      applicationSlice.actions.setSelectedCategory({
         selectedCategory: category.id,
       })
     );
@@ -124,7 +124,7 @@ export const CategoriesList = () => {
       );
     });
     dispatch(
-      applicationSlice.actions.setSeletedCategory({
+      applicationSlice.actions.setSelectedCategory({
         selectedCategory: "00000000-0000-0000-0000-000000000000",
       })
     );

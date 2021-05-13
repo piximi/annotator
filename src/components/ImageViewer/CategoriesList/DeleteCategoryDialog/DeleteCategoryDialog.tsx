@@ -30,7 +30,7 @@ export const DeleteCategoryDialog = ({
 
   const onDelete = () => {
     dispatch(
-      applicationSlice.actions.setSeletedCategory({
+      applicationSlice.actions.setSelectedCategory({
         selectedCategory: "00000000-0000-0000-0000-000000000000",
       })
     );

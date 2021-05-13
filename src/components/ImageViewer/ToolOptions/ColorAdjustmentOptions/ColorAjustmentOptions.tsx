@@ -26,10 +26,14 @@ export const ColorAdjustmentOptions = () => {
 
   const [channelData, setChannelData] = useState<Array<Array<number>>>([]);
 
+  const [image, setImage] = useState<ImageJS.Image>();
+
   useEffect(() => {
     if (!originalSrc) return;
 
     ImageJS.Image.load(originalSrc).then((image) => {
+      setImage(image);
+
       const delta = image.alpha ? image.components + 1 : image.components;
 
       const newChannelData: Array<Array<number>> = [];
@@ -84,29 +88,28 @@ export const ColorAdjustmentOptions = () => {
   };
 
   const mapIntensities = () => {
-    if (!originalSrc) return;
-    ImageJS.Image.load(originalSrc).then((image) => {
-      let newData: Array<number> = Array.from(image.data);
+    if (!image) return;
 
-      const delta = image.alpha ? image.components + 1 : image.components;
+    let newData: Array<number> = Array.from(image.data);
 
-      for (let i = 0; i < channels.length; i++) {
-        //TODO: this should not cycle and should be called only once -- whatever channel was changed by the slider
-        const updatedChannel = updateChannel(channels[i], channelData[i]);
-        newData = setChannel(i, updatedChannel, newData, delta);
-      }
+    const delta = image.alpha ? image.components + 1 : image.components;
 
-      const newImage = new ImageJS.Image(image.width, image.height, newData, {
-        components: image.components,
-        alpha: image.alpha,
-      });
+    for (let i = 0; i < channels.length; i++) {
+      //TODO: this should naot cycle and should be called only once -- whatever channel ws changed by the slider
+      const updatedChannel = updateChannel(channels[i], channelData[i]);
+      newData = setChannel(i, updatedChannel, newData, delta);
+    }
 
-      dispatch(
-        applicationSlice.actions.setImageSrc({
-          src: newImage.toDataURL("image-png", { useCanvas: true }),
-        })
-      );
+    const newImage = new ImageJS.Image(image.width, image.height, newData, {
+      components: image.components,
+      alpha: image.alpha,
     });
+
+    dispatch(
+      applicationSlice.actions.setImageSrc({
+        src: newImage.toDataURL("image-png", { useCanvas: true }),
+      })
+    );
   };
 
   useLayoutEffect(() => {

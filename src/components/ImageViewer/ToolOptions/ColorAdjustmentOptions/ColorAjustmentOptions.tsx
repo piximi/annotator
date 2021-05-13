@@ -1,4 +1,10 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { InformationBox } from "../InformationBox";
 import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "../../../../hooks/useTranslation";
@@ -24,9 +30,13 @@ export const ColorAdjustmentOptions = () => {
 
   const channels = useSelector(channelsSelector);
 
+  const [prevChannels, setPrevChannels] = useState<Array<ChannelType>>([]); //used to keep track of which channel was changed
+
   const [channelData, setChannelData] = useState<Array<Array<number>>>([]);
 
   const [image, setImage] = useState<ImageJS.Image>();
+
+  const [currentImageData, setCurrentImageData] = useState<Array<number>>([]);
 
   useEffect(() => {
     if (!originalSrc) return;
@@ -44,8 +54,51 @@ export const ColorAdjustmentOptions = () => {
       }
 
       setChannelData(newChannelData);
+
+      setPrevChannels(channels);
+
+      setCurrentImageData(Array.from(image.data));
     });
   }, [originalSrc]);
+
+  useLayoutEffect(() => {
+    //layout effect is used to prevent unnecessary rerendering on first render
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+
+    const changedChannel = changedChannelIndex();
+
+    if (changedChannel === undefined || changedChannel === -1) return;
+
+    mapIntensities(changedChannel);
+
+    setPrevChannels(channels);
+  }, [channels, originalSrc]);
+
+  /*
+   * Find out the channel index that was changed by the slider to avoid rescaling al channels
+   * */
+  const changedChannelIndex = () => {
+    const visibles = channels.map((channel: ChannelType) => channel.visible);
+    const ranges = channels.map((channel: ChannelType) => channel.range);
+    const changedChannels = prevChannels.map(
+      (prevChannel: ChannelType, idx: number) => {
+        if (
+          prevChannel.range[0] !== ranges[idx][0] ||
+          prevChannel.range[1] !== ranges[idx][1] ||
+          prevChannel.visible !== visibles[idx]
+        ) {
+          return idx;
+        } else return -1;
+      }
+    );
+
+    return changedChannels.find((index: number) => {
+      return index !== -1;
+    });
+  };
 
   const scaleIntensity = (range: Array<number>, pixel: number) => {
     if (pixel < range[0]) return 0;
@@ -55,15 +108,15 @@ export const ColorAdjustmentOptions = () => {
   const setChannel = (
     channelIdx: number,
     updatedChannel: Array<number>,
-    data: Array<number>,
     delta: number
   ) => {
     let j = channelIdx;
+    let newData: Array<number> = currentImageData;
     for (let i = 0; i < updatedChannel.length; i++) {
-      data[j] = updatedChannel[i];
+      newData[j] = updatedChannel[i];
       j += delta;
     }
-    return data;
+    setCurrentImageData(newData);
   };
 
   const getChannel = (
@@ -87,23 +140,26 @@ export const ColorAdjustmentOptions = () => {
     });
   };
 
-  const mapIntensities = () => {
+  const mapIntensities = (channelIndex: number) => {
     if (!image) return;
-
-    let newData: Array<number> = Array.from(image.data);
 
     const delta = image.alpha ? image.components + 1 : image.components;
 
-    for (let i = 0; i < channels.length; i++) {
-      //TODO: this should naot cycle and should be called only once -- whatever channel ws changed by the slider
-      const updatedChannel = updateChannel(channels[i], channelData[i]);
-      newData = setChannel(i, updatedChannel, newData, delta);
-    }
+    const updatedChannel = updateChannel(
+      channels[channelIndex],
+      channelData[channelIndex]
+    );
+    setChannel(channelIndex, updatedChannel, delta);
 
-    const newImage = new ImageJS.Image(image.width, image.height, newData, {
-      components: image.components,
-      alpha: image.alpha,
-    });
+    const newImage = new ImageJS.Image(
+      image.width,
+      image.height,
+      currentImageData,
+      {
+        components: image.components,
+        alpha: image.alpha,
+      }
+    );
 
     dispatch(
       applicationSlice.actions.setImageSrc({
@@ -111,16 +167,6 @@ export const ColorAdjustmentOptions = () => {
       })
     );
   };
-
-  useLayoutEffect(() => {
-    //layout effect is used to prevent unnecessary rerendering on first render
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
-
-    mapIntensities();
-  }, [channels, originalSrc]);
 
   const [values, setValues] = React.useState<Array<Array<number>>>([
     [0, 255],

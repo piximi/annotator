@@ -11,6 +11,7 @@ import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
 import { IntensityRescalingSlider } from "../IntensityRescalingSlider/IntensityRescalingSlider";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
+import { ChannelType } from "../../../../types/ChannelType";
 
 export const ColorAdjustmentOptions = () => {
   const t = useTranslation();
@@ -27,33 +28,56 @@ export const ColorAdjustmentOptions = () => {
     if (pixel < range[0]) return 0;
     return 255 * ((pixel - range[0]) / (range[1] - range[0]));
   };
+
+  const setChannel = (
+    channelIdx: number,
+    updatedChannel: Array<number>,
+    data: Array<number>,
+    delta: number
+  ) => {
+    let j = channelIdx;
+    for (let i = 0; i < updatedChannel.length; i++) {
+      data[j] = updatedChannel[i];
+      j += delta;
+    }
+    return data;
+  };
+
+  const getChannel = (
+    channelIdx: number,
+    data: Array<number>,
+    delta: number
+  ) => {
+    let channelData: Array<number> = [];
+    let j = 0;
+    for (let i = channelIdx; i < data.length; i += delta) {
+      channelData[j] = data[i];
+      j += 1;
+    }
+    return channelData;
+  };
+
+  const updateChannel = (channel: ChannelType, channelData: Array<number>) => {
+    if (!channel.visible) return Array(channelData.length).fill(0);
+    return channelData.map((pixel: number) => {
+      return scaleIntensity(channel.range, pixel);
+    });
+  };
+
   const mapIntensities = () => {
     if (!originalSrc) return;
     ImageJS.Image.load(originalSrc).then((image) => {
+      let newData: Array<number> = Array.from(image.data);
+
       const delta = image.alpha ? image.components + 1 : image.components;
 
-      let newData: Array<number> = [];
-
-      for (let i = 0; i < image.data.length; i += delta) {
-        newData.push(
-          channels[0].visible
-            ? scaleIntensity(channels[0].range, image.data[i])
-            : 0
-        );
-        newData.push(
-          channels[1].visible
-            ? scaleIntensity(channels[1].range, image.data[i + 1])
-            : 0
-        );
-        newData.push(
-          channels[2].visible
-            ? scaleIntensity(channels[2].range, image.data[i + 2])
-            : 0
-        );
-        if (image.alpha) {
-          newData.push(image.data[i + image.components]);
-        }
+      for (let i = 0; i < channels.length; i++) {
+        //TODO: this should be called only once -- whatever channel was changed by the slider
+        const currentChannel = getChannel(i, Array.from(image.data), delta); //TODO this should be computed only once and saved in store. That corresponds to the original data.
+        const updatedChannel = updateChannel(channels[i], currentChannel);
+        newData = setChannel(i, updatedChannel, newData, delta);
       }
+
       const newImage = new ImageJS.Image(image.width, image.height, newData, {
         components: image.components,
         alpha: image.alpha,

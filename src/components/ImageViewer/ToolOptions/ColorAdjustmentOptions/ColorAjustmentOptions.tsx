@@ -203,10 +203,7 @@ export const ColorAdjustmentOptions = () => {
 
       <Divider />
 
-      <IntensityRescalingSlider
-        intensityRanges={values}
-        updateIntensityRanges={updateValues}
-      />
+      <IntensityRescalingSlider intensityRanges={values} />
 
       <List dense>
         <ListItem button onClick={onResetChannelsClick}>

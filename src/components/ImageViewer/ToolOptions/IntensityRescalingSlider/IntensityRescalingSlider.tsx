@@ -2,7 +2,7 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { ListItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
-import React from "react";
+import React, { useState } from "react";
 import Slider from "@material-ui/core/Slider";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -11,19 +11,22 @@ import { applicationSlice } from "../../../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 import { ChannelType } from "../../../../types/ChannelType";
+import * as _ from "lodash";
 
 type IntensitySliderProps = {
   intensityRanges: Array<Array<number>>;
-  updateIntensityRanges: (values: Array<Array<number>>) => void;
 };
 
 export const IntensityRescalingSlider = ({
   intensityRanges,
-  updateIntensityRanges,
 }: IntensitySliderProps) => {
   const dispatch = useDispatch();
 
   const channels = useSelector(channelsSelector);
+  const values = channels.map((channel: ChannelType) => channel.range);
+  const [displayedValues, setDisplayedValues] = useState<Array<Array<number>>>(
+    intensityRanges
+  );
 
   const visibleChannelsIndices = channels
     .map((channel: ChannelType, idx) => channel.visible)
@@ -34,11 +37,17 @@ export const IntensityRescalingSlider = ({
     event: any,
     newValue: number | number[]
   ) => {
-    const newValues = [...intensityRanges];
-    newValues[idx] = newValue as Array<number>;
-    updateIntensityRanges(newValues);
+    const copiedValues = [...displayedValues].map((range: Array<number>) => {
+      return [...range];
+    });
+    console.info("In here");
+    copiedValues[idx] = newValue as Array<number>;
+    setDisplayedValues(copiedValues);
+    debouncedSliderChange();
+  };
 
-    const copiedValues = [...newValues].map((range: Array<number>) => {
+  const updateIntensityRanges = () => {
+    const copiedValues = [...displayedValues].map((range: Array<number>) => {
       return [...range];
     });
 
@@ -55,23 +64,9 @@ export const IntensityRescalingSlider = ({
     );
   };
 
-  const handleSliderChangeComitted = () => {
-    const copiedValues = [...intensityRanges].map((range: Array<number>) => {
-      return [...range];
-    });
-
-    const updatedChannels = channels.map(
-      (channel: ChannelType, index: number) => {
-        return { ...channel, range: copiedValues[index] };
-      }
-    );
-
-    dispatch(
-      applicationSlice.actions.setChannels({
-        channels: updatedChannels,
-      })
-    );
-  };
+  const debouncedSliderChange = _.debounce(() => {
+    updateIntensityRanges();
+  }, 20);
 
   const onCheckboxChanged = (index: number) => () => {
     const current = visibleChannelsIndices.indexOf(index);
@@ -115,9 +110,8 @@ export const IntensityRescalingSlider = ({
         <Slider
           disabled={!(visibleChannelsIndices.indexOf(0) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
-          value={intensityRanges[0]}
+          value={displayedValues[0]}
           max={255}
-          onChangeCommitted={handleSliderChangeComitted}
           onChange={(event, value: number | number[]) =>
             handleSliderChange(0, event, value)
           }
@@ -142,9 +136,8 @@ export const IntensityRescalingSlider = ({
         <Slider
           disabled={!(visibleChannelsIndices.indexOf(1) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
-          value={intensityRanges[1]}
+          value={displayedValues[1]}
           max={255}
-          onChangeCommitted={handleSliderChangeComitted}
           onChange={(event, value: number | number[]) =>
             handleSliderChange(1, event, value)
           }
@@ -169,9 +162,8 @@ export const IntensityRescalingSlider = ({
         <Slider
           disabled={!(visibleChannelsIndices.indexOf(2) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
-          value={intensityRanges[2]}
+          value={displayedValues[2]}
           max={255}
-          onChangeCommitted={handleSliderChangeComitted}
           onChange={(event, value: number | number[]) =>
             handleSliderChange(2, event, value)
           }

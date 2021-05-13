@@ -46,8 +46,6 @@ export const useAnnotationTool = () => {
   useEffect(() => {
     if (!image) return;
 
-    console.info("Image changed");
-
     switch (operation) {
       case ToolType.ColorAnnotation:
         setOperator(new ColorAnnotationTool(image));

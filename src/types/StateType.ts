@@ -4,6 +4,7 @@ import { ToolType } from "./ToolType";
 import { AnnotationModeType } from "./AnnotationModeType";
 import { LanguageType } from "./LanguageType";
 import { AnnotationType } from "./AnnotationType";
+import { ChannelType } from "./ChannelType";
 
 export type StateType = {
   annotated: boolean;
@@ -11,6 +12,7 @@ export type StateType = {
   boundingClientRect: DOMRect;
   brightness: number;
   categories: Array<CategoryType>;
+  channels: Array<ChannelType>;
   contrast: number;
   currentIndex: number;
   currentPosition?: { x: number; y: number };

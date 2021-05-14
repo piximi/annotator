@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toolTypeSelector } from "../../../../store/selectors";
 import { applicationSlice } from "../../../../store";
 import {
+  ColorAdjustmentIcon,
   ColorSelectionIcon,
   EllipticalSelectionIcon,
   HandIcon,
@@ -39,6 +40,20 @@ export const Tools = () => {
       variant="permanent"
     >
       <br />
+      <Tool
+        name={t("Color Adjustment")}
+        onClick={() => {
+          dispatch(
+            applicationSlice.actions.setOperation({
+              operation: OperationType.ColorAdjustment,
+            })
+          );
+        }}
+        selected={activeOperation === OperationType.ColorAdjustment}
+      >
+        <ColorAdjustmentIcon />
+      </Tool>
+
       <Tool
         name={t("Pointer")}
         onClick={() => {

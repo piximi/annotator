@@ -24,8 +24,10 @@ import { useTranslation } from "../../../../hooks/useTranslation";
 import {
   applicationSlice,
   setImage,
+  setChannels,
   setSelectedAnnotation,
   setSelectedAnnotations,
+  setOperation,
 } from "../../../../store";
 import {
   Dialog,
@@ -63,6 +65,8 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import { CreateCategoryDialog } from "../CreateCategoryListItem/CreateCategoryDialog";
 import { serializedAnnotationsSelector } from "../../../../store/selectors/serializedAnnotationsSelector";
 import { saveAs } from "file-saver";
+import { ChannelType } from "../../../../types/ChannelType";
+import { ToolType } from "../../../../types/ToolType";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -490,7 +494,7 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
           const name = file.name;
 
           const shape: ShapeType = {
-            channels: 4,
+            channels: image.components,
             frames: 1,
             height: image.height,
             planes: 1,
@@ -504,6 +508,7 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
                 annotations: [],
                 name: name,
                 shape: shape,
+                originalSrc: image.toDataURL(),
                 src: image.toDataURL(),
               },
             })
@@ -520,6 +525,14 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
               selectedAnnotation: undefined,
             })
           );
+
+          let channels: Array<ChannelType> = []; //number of channels depends if image is greyscale or RGB
+          for (let i = 0; i < image.components; i++) {
+            channels.push({ visible: true, range: [0, 255] });
+          }
+          dispatch(setChannels({ channels: channels }));
+
+          dispatch(setOperation({ operation: ToolType.RectangularAnnotation }));
         });
       });
 

@@ -10,6 +10,7 @@ export {
   setBrightness,
   setCategories,
   setCategoryVisibility,
+  setChannels,
   setContrast,
   setCurrentIndex,
   setExposure,

@@ -31,6 +31,7 @@ import { toolTypeSelector } from "../../../../store/selectors";
 import { useTranslation } from "react-i18next";
 import { HandToolOptions } from "../HandToolOptions/HandToolOptions";
 import Box from "@material-ui/core/Box";
+import { ColorAdjustmentOptions } from "../ColorAdjustmentOptions/ColorAdjustmentOptions";
 
 export const ToolOptions = () => {
   const classes = useStyles();
@@ -45,7 +46,7 @@ export const ToolOptions = () => {
       icon: <ColorAdjustmentIcon />,
       method: ToolType.ColorAdjustment,
       name: t("Color adjustment"),
-      options: <React.Fragment />,
+      options: <ColorAdjustmentOptions />,
     },
     {
       description: "Nam a facilisis velit, sit amet interdum ante. In sodales.",

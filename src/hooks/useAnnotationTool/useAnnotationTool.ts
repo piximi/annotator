@@ -14,13 +14,10 @@ import {
   RectangularAnnotationTool,
 } from "../../image/Tool";
 import { useSelector } from "react-redux";
-import {
-  imageSrcSelector,
-  stageScaleSelector,
-  toolTypeSelector,
-} from "../../store/selectors";
+import { stageScaleSelector, toolTypeSelector } from "../../store/selectors";
 import { penSelectionBrushSizeSelector } from "../../store/selectors/penSelectionBrushSizeSelector";
 import { quickSelectionBrushSizeSelector } from "../../store/selectors/quickSelectionBrushSizeSelector";
+import { imageSrcSelector } from "../../store/selectors/imageSrcSelector";
 
 export const useAnnotationTool = () => {
   const src = useSelector(imageSrcSelector);

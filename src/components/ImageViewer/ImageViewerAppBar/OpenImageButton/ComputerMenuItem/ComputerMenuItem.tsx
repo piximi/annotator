@@ -1,9 +1,11 @@
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 import { ShapeType } from "../../../../../types/ShapeType";
-import { setImage } from "../../../../../store";
+import { setImage, setChannels, setOperation } from "../../../../../store";
 import { useDispatch } from "react-redux";
 import * as ImageJS from "image-js";
+import { ChannelType } from "../../../../../types/ChannelType";
+import { ToolType } from "../../../../../types/ToolType";
 
 type ComputerMenuItemProps = {
   onClose: () => void;
@@ -39,12 +41,18 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
           const name = file.name;
 
           const shape: ShapeType = {
-            channels: 4,
+            channels: image.components,
             frames: 1,
             height: image.height,
             planes: 1,
             width: image.width,
           };
+
+          let channels: Array<ChannelType> = []; //number of channels depends if image is greyscale or RGB
+          for (let i = 0; i < image.components; i++) {
+            channels.push({ visible: true, range: [0, 255] });
+          }
+          dispatch(setChannels({ channels }));
 
           dispatch(
             setImage({
@@ -53,10 +61,13 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
                 annotations: [],
                 name: name,
                 shape: shape,
+                originalSrc: image.toDataURL(),
                 src: image.toDataURL(),
               },
             })
           );
+
+          dispatch(setOperation({ operation: ToolType.RectangularAnnotation }));
         });
       });
 

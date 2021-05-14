@@ -28,6 +28,21 @@ export const ColorAdjustmentOptions = () => {
 
   const [origImage, setOrigImage] = useState<ImageJS.Image>();
 
+  const defaultChannels: Array<ChannelType> = [
+    {
+      range: [0, 255],
+      visible: true,
+    },
+    {
+      range: [0, 255],
+      visible: true,
+    },
+    {
+      range: [0, 255],
+      visible: true,
+    },
+  ];
+
   useEffect(() => {
     if (!originalSrc) return;
 
@@ -39,7 +54,11 @@ export const ColorAdjustmentOptions = () => {
       });
       setPrevChannels(channels);
       setImage(newImage);
-      // Todo: Reset channel variables
+      dispatch(
+        applicationSlice.actions.setChannels({
+          channels: defaultChannels,
+        })
+      );
     });
   }, [originalSrc]);
 
@@ -111,20 +130,7 @@ export const ColorAdjustmentOptions = () => {
   const onResetChannelsClick = () => {
     dispatch(
       applicationSlice.actions.setChannels({
-        channels: [
-          {
-            range: [0, 255],
-            visible: true,
-          },
-          {
-            range: [0, 255],
-            visible: true,
-          },
-          {
-            range: [0, 255],
-            visible: true,
-          },
-        ],
+        channels: defaultChannels,
       })
     );
     setImage(

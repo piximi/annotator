@@ -2,7 +2,7 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { ListItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "@material-ui/core/Slider";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -13,20 +13,17 @@ import { channelsSelector } from "../../../../store/selectors/intensityRangeSele
 import { ChannelType } from "../../../../types/ChannelType";
 import * as _ from "lodash";
 
-type IntensitySliderProps = {
-  intensityRanges: Array<Array<number>>;
+type ColorAdjustmentSlider = {
+  updateDisplayedValues: (values: Array<Array<number>>) => void;
+  displayedValues: Array<Array<number>>;
 };
-
 export const ColorAdjustmentSlider = ({
-  intensityRanges,
-}: IntensitySliderProps) => {
+  displayedValues,
+  updateDisplayedValues,
+}: ColorAdjustmentSlider) => {
   const dispatch = useDispatch();
 
   const channels = useSelector(channelsSelector);
-  const values = channels.map((channel: ChannelType) => channel.range);
-  const [displayedValues, setDisplayedValues] = useState<Array<Array<number>>>(
-    intensityRanges
-  );
 
   const visibleChannelsIndices = channels
     .map((channel: ChannelType, idx) => channel.visible)
@@ -40,9 +37,8 @@ export const ColorAdjustmentSlider = ({
     const copiedValues = [...displayedValues].map((range: Array<number>) => {
       return [...range];
     });
-    console.info("In here");
     copiedValues[idx] = newValue as Array<number>;
-    setDisplayedValues(copiedValues);
+    updateDisplayedValues(copiedValues);
     debouncedSliderChange();
   };
 

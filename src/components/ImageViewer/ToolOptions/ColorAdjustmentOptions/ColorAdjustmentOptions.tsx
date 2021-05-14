@@ -28,6 +28,10 @@ export const ColorAdjustmentOptions = () => {
 
   const [origImage, setOrigImage] = useState<ImageJS.Image>();
 
+  const [displayedValues, setDisplayedValues] = useState<Array<Array<number>>>(
+    channels.map((channel: ChannelType) => [...channel.range])
+  ); //we keep that state variable here and pass it to slider so that visible slider ranges can change accordingly
+
   const defaultChannels: Array<ChannelType> = [
     {
       range: [0, 255],
@@ -121,12 +125,6 @@ export const ColorAdjustmentOptions = () => {
     );
   };
 
-  const [values, setValues] = React.useState<Array<Array<number>>>([
-    [0, 255],
-    [0, 255],
-    [0, 255],
-  ]);
-
   const onResetChannelsClick = () => {
     dispatch(
       applicationSlice.actions.setChannels({
@@ -139,7 +137,13 @@ export const ColorAdjustmentOptions = () => {
       })
     );
     setPrevChannels(channels);
-    setValues(channels.map((channel: ChannelType) => channel.range));
+    setDisplayedValues(
+      defaultChannels.map((channel: ChannelType) => [...channel.range])
+    );
+  };
+
+  const updateDisplayedValues = (values: Array<Array<number>>) => {
+    setDisplayedValues(values);
   };
 
   return (
@@ -148,7 +152,10 @@ export const ColorAdjustmentOptions = () => {
 
       <Divider />
 
-      <ColorAdjustmentSlider intensityRanges={values} />
+      <ColorAdjustmentSlider
+        displayedValues={displayedValues}
+        updateDisplayedValues={updateDisplayedValues}
+      />
 
       <List dense>
         <ListItem button onClick={onResetChannelsClick}>

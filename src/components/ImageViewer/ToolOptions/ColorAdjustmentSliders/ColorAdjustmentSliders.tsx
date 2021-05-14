@@ -42,7 +42,7 @@ export const ColorAdjustmentSliders = ({
     });
     copiedValues[idx] = newValue as Array<number>;
     updateDisplayedValues(copiedValues);
-    debouncedSliderChange();
+    updateIntensityRanges();
   };
 
   const updateIntensityRanges = () => {
@@ -62,10 +62,6 @@ export const ColorAdjustmentSliders = ({
       })
     );
   };
-
-  const debouncedSliderChange = _.debounce(() => {
-    updateIntensityRanges();
-  }, 20);
 
   const onCheckboxChanged = (index: number) => () => {
     const current = visibleChannelsIndices.indexOf(index);

@@ -5,7 +5,14 @@ import { useDispatch } from "react-redux";
 import { CategoriesList } from "../CategoriesList";
 import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
-import { applicationSlice, setContrast, setImage } from "../../../store";
+import {
+  applicationSlice,
+  setChannels,
+  setContrast,
+  setImage,
+  setSelectedAnnotation,
+  setSelectedAnnotations,
+} from "../../../store";
 import { Content } from "../Content";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { useStyles } from "./ImageViewer.css";
@@ -14,6 +21,7 @@ import * as ImageJS from "image-js";
 import { ShapeType } from "../../../types/ShapeType";
 import { loadLayersModelThunk } from "../../../store/thunks";
 import { TooltipCard } from "../Tools/Tool/Tool";
+import { ChannelType } from "../../../types/ChannelType";
 
 type ImageViewerProps = {
   image?: ImageType;
@@ -72,6 +80,24 @@ export const ImageViewer = (props: ImageViewerProps) => {
                 },
               })
             );
+
+            dispatch(
+              setSelectedAnnotations({
+                selectedAnnotations: [],
+              })
+            );
+
+            dispatch(
+              setSelectedAnnotation({
+                selectedAnnotation: undefined,
+              })
+            );
+
+            let channels: Array<ChannelType> = []; //number of channels depends if image is greyscale or RGB
+            for (let i = 0; i < image.components; i++) {
+              channels.push({ visible: true, range: [0, 255] });
+            }
+            dispatch(setChannels({ channels }));
           });
         });
 

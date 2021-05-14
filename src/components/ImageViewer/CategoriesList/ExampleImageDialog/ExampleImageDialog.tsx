@@ -5,12 +5,14 @@ import {
   setImage,
   setSelectedAnnotations,
   setSelectedAnnotation,
+  setChannels,
 } from "../../../../store";
 import { useDispatch } from "react-redux";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import malaria from "../../../../images/malaria.png";
+import { ChannelType } from "../../../../types/ChannelType";
 
 type ExampleImageDialogProps = {
   onClose: () => void;
@@ -75,6 +77,12 @@ export const ExampleImageDialog = ({
         selectedAnnotation: undefined,
       })
     );
+
+    let channels: Array<ChannelType> = [];
+    for (let i = 0; i < 3; i++) {
+      channels.push({ visible: true, range: [0, 255] });
+    }
+    dispatch(setChannels({ channels }));
   };
 
   return (

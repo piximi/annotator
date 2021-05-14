@@ -40,7 +40,7 @@ const initialState: StateType = {
     },
   ],
   channels: [
-    //R, G, and B channels
+    //R, G, and B channels by default
     {
       range: [0, 255],
       visible: true,

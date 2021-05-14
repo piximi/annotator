@@ -24,6 +24,7 @@ import { useTranslation } from "../../../../hooks/useTranslation";
 import {
   applicationSlice,
   setImage,
+  setChannels,
   setSelectedAnnotation,
   setSelectedAnnotations,
 } from "../../../../store";
@@ -63,6 +64,7 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import { CreateCategoryDialog } from "../CreateCategoryListItem/CreateCategoryDialog";
 import { serializedAnnotationsSelector } from "../../../../store/selectors/serializedAnnotationsSelector";
 import { saveAs } from "file-saver";
+import { ChannelType } from "../../../../types/ChannelType";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -521,6 +523,12 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
               selectedAnnotation: undefined,
             })
           );
+
+          let channels: Array<ChannelType> = []; //number of channels depends if image is greyscale or RGB
+          for (let i = 0; i < image.components; i++) {
+            channels.push({ visible: true, range: [0, 255] });
+          }
+          dispatch(setChannels({ channels }));
         });
       });
 

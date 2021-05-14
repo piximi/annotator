@@ -10,6 +10,7 @@ import {
   setChannels,
   setContrast,
   setImage,
+  setOperation,
   setSelectedAnnotation,
   setSelectedAnnotations,
 } from "../../../store";
@@ -22,6 +23,7 @@ import { ShapeType } from "../../../types/ShapeType";
 import { loadLayersModelThunk } from "../../../store/thunks";
 import { TooltipCard } from "../Tools/Tool/Tool";
 import { ChannelType } from "../../../types/ChannelType";
+import { ToolType } from "../../../types/ToolType";
 
 type ImageViewerProps = {
   image?: ImageType;
@@ -68,7 +70,6 @@ export const ImageViewer = (props: ImageViewerProps) => {
               width: image.width,
             };
 
-            console.info("Line 71");
             dispatch(
               setImage({
                 image: {
@@ -99,6 +100,10 @@ export const ImageViewer = (props: ImageViewerProps) => {
               channels.push({ visible: true, range: [0, 255] });
             }
             dispatch(setChannels({ channels }));
+
+            dispatch(
+              setOperation({ operation: ToolType.RectangularAnnotation })
+            );
           });
         });
 

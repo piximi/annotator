@@ -27,6 +27,7 @@ import {
   setChannels,
   setSelectedAnnotation,
   setSelectedAnnotations,
+  setOperation,
 } from "../../../../store";
 import {
   Dialog,
@@ -65,6 +66,7 @@ import { CreateCategoryDialog } from "../CreateCategoryListItem/CreateCategoryDi
 import { serializedAnnotationsSelector } from "../../../../store/selectors/serializedAnnotationsSelector";
 import { saveAs } from "file-saver";
 import { ChannelType } from "../../../../types/ChannelType";
+import { ToolType } from "../../../../types/ToolType";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -529,6 +531,8 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
             channels.push({ visible: true, range: [0, 255] });
           }
           dispatch(setChannels({ channels: channels }));
+
+          dispatch(setOperation({ operation: ToolType.RectangularAnnotation }));
         });
       });
 

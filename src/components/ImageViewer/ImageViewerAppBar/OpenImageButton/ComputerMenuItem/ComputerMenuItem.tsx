@@ -1,10 +1,11 @@
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 import { ShapeType } from "../../../../../types/ShapeType";
-import { setImage, setChannels } from "../../../../../store";
+import { setImage, setChannels, setOperation } from "../../../../../store";
 import { useDispatch } from "react-redux";
 import * as ImageJS from "image-js";
 import { ChannelType } from "../../../../../types/ChannelType";
+import { ToolType } from "../../../../../types/ToolType";
 
 type ComputerMenuItemProps = {
   onClose: () => void;
@@ -65,6 +66,8 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
               },
             })
           );
+
+          dispatch(setOperation({ operation: ToolType.RectangularAnnotation }));
         });
       });
 

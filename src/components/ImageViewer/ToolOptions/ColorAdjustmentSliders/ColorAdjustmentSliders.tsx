@@ -140,7 +140,7 @@ export const ColorAdjustmentSliders = ({
       component="nav"
       subheader={<ListSubheader component="div">Channels</ListSubheader>}
     >
-      {allSliders(displayedValues)}
+      <React.Fragment>{allSliders(displayedValues)}</React.Fragment>
     </List>
   );
 };

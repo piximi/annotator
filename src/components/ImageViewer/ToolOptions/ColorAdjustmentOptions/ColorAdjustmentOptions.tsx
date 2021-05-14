@@ -63,6 +63,9 @@ export const ColorAdjustmentOptions = () => {
           channels: defaultChannels,
         })
       );
+      setDisplayedValues(
+        defaultChannels.map((channel: ChannelType) => [...channel.range])
+      );
     });
   }, [originalSrc]);
 

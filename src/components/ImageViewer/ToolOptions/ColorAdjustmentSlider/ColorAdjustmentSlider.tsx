@@ -17,7 +17,7 @@ type IntensitySliderProps = {
   intensityRanges: Array<Array<number>>;
 };
 
-export const IntensityRescalingSlider = ({
+export const ColorAdjustmentSlider = ({
   intensityRanges,
 }: IntensitySliderProps) => {
   const dispatch = useDispatch();

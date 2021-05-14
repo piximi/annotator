@@ -9,7 +9,7 @@ import { scaledImageHeightSelector } from "../../../../../store/selectors/scaled
 import { imageSrcSelector } from "../../../../../store/selectors/imageSrcSelector";
 import { ToolType } from "../../../../../types/ToolType";
 
-export const ImageComponent = React.forwardRef<Konva.Image>((_, ref) => {
+export const Image = React.forwardRef<Konva.Image>((_, ref) => {
   const src = useSelector(imageSrcSelector);
 
   const width = useSelector(scaledImageWidthSelector);

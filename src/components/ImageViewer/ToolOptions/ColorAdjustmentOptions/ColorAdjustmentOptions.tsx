@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
 import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
-import { IntensityRescalingSlider } from "../IntensityRescalingSlider/IntensityRescalingSlider";
+import { ColorAdjustmentSlider } from "../ColorAdjustmentSlider/ColorAdjustmentSlider";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 import { ChannelType } from "../../../../types/ChannelType";
 
@@ -148,7 +148,7 @@ export const ColorAdjustmentOptions = () => {
 
       <Divider />
 
-      <IntensityRescalingSlider intensityRanges={values} />
+      <ColorAdjustmentSlider intensityRanges={values} />
 
       <List dense>
         <ListItem button onClick={onResetChannelsClick}>

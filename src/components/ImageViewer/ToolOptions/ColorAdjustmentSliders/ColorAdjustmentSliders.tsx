@@ -2,7 +2,7 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { ListItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Slider from "@material-ui/core/Slider";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -88,9 +88,13 @@ export const ColorAdjustmentSliders = ({
     );
   };
 
-  const colorAdjustmentSlider = (index: number, name: string) => {
+  const colorAdjustmentSlider = (
+    index: number,
+    name: string,
+    displayedValue: Array<number>
+  ) => {
     return (
-      <ListItem dense>
+      <ListItem dense key={index}>
         <ListItemIcon>
           <Checkbox
             onClick={onCheckboxChanged(index)}
@@ -104,9 +108,10 @@ export const ColorAdjustmentSliders = ({
         </ListItemIcon>
         <ListItemText primary={name} />
         <Slider
+          key={index}
           disabled={!(visibleChannelsIndices.indexOf(index) !== -1)} //TODO style slider when disabled mode
           style={{ width: "60%" }}
-          value={displayedValues[index]}
+          value={displayedValue}
           max={255}
           onChange={(event, value: number | number[]) =>
             handleSliderChange(index, event, value)
@@ -118,14 +123,14 @@ export const ColorAdjustmentSliders = ({
     );
   };
 
-  const allSliders = () => {
+  const allSliders = (displayedValues: Array<Array<number>>) => {
     if (!imageShape) return;
     const sliders = [];
 
     const names =
       imageShape.channels === 1 ? ["Grey"] : ["Red", "Green", "Blue"];
     for (let i = 0; i < imageShape.channels; i++) {
-      sliders.push(colorAdjustmentSlider(i, names[i]));
+      sliders.push(colorAdjustmentSlider(i, names[i], displayedValues[i]));
     }
     return sliders;
   };
@@ -135,7 +140,7 @@ export const ColorAdjustmentSliders = ({
       component="nav"
       subheader={<ListSubheader component="div">Channels</ListSubheader>}
     >
-      {allSliders()};
+      {allSliders(displayedValues)}
     </List>
   );
 };

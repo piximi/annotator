@@ -59,26 +59,24 @@ export const ColorAdjustmentOptions = () => {
       const newImage = ImageJS.Image.createFrom(imageIn, {
         data: Uint8Array.from(imageIn.data),
       });
-      setPrevChannels(channels);
       setImage(newImage);
-      dispatch(
-        applicationSlice.actions.setChannels({
-          channels: defaultChannels,
-        })
-      );
-      setDisplayedValues(
-        defaultChannels.map((channel: ChannelType) => [...channel.range])
-      );
     });
+    dispatch(
+      applicationSlice.actions.setChannels({
+        channels: defaultChannels,
+      })
+    );
+    setPrevChannels(defaultChannels);
+    setDisplayedValues(
+      defaultChannels.map((channel: ChannelType) => [...channel.range])
+    );
   }, [originalSrc]);
 
   useEffect(() => {
     if (!origImage || !image) return;
     const changedChannel = changedChannelIndex();
     if (changedChannel === undefined || changedChannel === -1) return;
-    if (!image) return;
     applyScaling(changedChannel);
-
     setPrevChannels(channels);
   }, [channels]);
 

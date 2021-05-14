@@ -68,6 +68,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
               width: image.width,
             };
 
+            console.info("Line 71");
             dispatch(
               setImage({
                 image: {

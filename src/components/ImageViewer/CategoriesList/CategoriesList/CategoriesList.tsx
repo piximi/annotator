@@ -528,7 +528,7 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
           for (let i = 0; i < image.components; i++) {
             channels.push({ visible: true, range: [0, 255] });
           }
-          dispatch(setChannels({ channels }));
+          dispatch(setChannels({ channels: channels }));
         });
       });
 

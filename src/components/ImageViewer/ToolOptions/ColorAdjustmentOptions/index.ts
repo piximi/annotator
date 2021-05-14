@@ -1,1 +1,1 @@
-import { ColorAdjustmentOptions } from "./ColorAjustmentOptions";
+import { ColorAdjustmentOptions } from "./ColorAdjustmentOptions";

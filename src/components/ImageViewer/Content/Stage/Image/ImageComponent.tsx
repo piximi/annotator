@@ -13,34 +13,25 @@ export const ImageComponent = React.forwardRef<Konva.Image>((_, ref) => {
   const src = useSelector(imageSrcSelector);
 
   const width = useSelector(scaledImageWidthSelector);
-  const height = useSelector(scaledImageHeightSelector);
 
-  const toolType = useSelector(toolTypeSelector);
+  const height = useSelector(scaledImageHeightSelector);
 
   const [image] = useImage(src ? src : "", "Anonymous");
 
-  const [adjustedImage, setAdjustedImage] = useState<HTMLImageElement>();
+  const [cachedImage, setCachedImage] = useState<HTMLImageElement>();
 
   useEffect(() => {
-    if (!src) return;
-    const image = new Image();
-    image.src = src;
-    setAdjustedImage(image);
-  }, [src]);
+    if (image) {
+      setCachedImage(image);
+    }
+  }, [image]);
 
-  if (toolType !== ToolType.ColorAdjustment) {
-    return (
-      <ReactKonva.Image height={height} image={image} ref={ref} width={width} />
-    );
-  } else {
-    //when adjusting color, we want to show the image at each render
-    return (
-      <ReactKonva.Image
-        height={height}
-        image={adjustedImage}
-        ref={ref}
-        width={width}
-      />
-    );
-  }
+  return (
+    <ReactKonva.Image
+      height={height}
+      image={cachedImage}
+      ref={ref}
+      width={width}
+    />
+  );
 });

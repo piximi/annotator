@@ -24,44 +24,34 @@ export const ColorAdjustmentOptions = () => {
 
   const [prevChannels, setPrevChannels] = useState<Array<ChannelType>>([]); //used to keep track of which channel was changed
 
-  const [channelData, setChannelData] = useState<Array<Array<number>>>([]);
-
   const [image, setImage] = useState<ImageJS.Image>();
 
-  const [currentImageData, setCurrentImageData] = useState<Array<number>>([]);
+  const [origImage, setOrigImage] = useState<ImageJS.Image>();
 
   useEffect(() => {
     if (!originalSrc) return;
 
-    ImageJS.Image.load(originalSrc).then((image) => {
-      setImage(image);
+    ImageJS.Image.load(originalSrc).then((imageIn) => {
+      setOrigImage(imageIn);
 
-      const delta = image.alpha ? image.components + 1 : image.components;
-
-      const newChannelData: Array<Array<number>> = [];
-
-      for (let i = 0; i < channels.length; i++) {
-        const currentChannel = getChannel(i, Array.from(image.data), delta);
-        newChannelData.push(currentChannel);
-      }
-
-      setChannelData(newChannelData);
-
+      const newImage = ImageJS.Image.createFrom(imageIn, {
+        data: Uint8Array.from(imageIn.data),
+      });
       setPrevChannels(channels);
-
-      setCurrentImageData(Array.from(image.data));
+      setImage(newImage);
+      // Todo: Reset channel variables
     });
   }, [originalSrc]);
 
   useEffect(() => {
+    if (!origImage || !image) return;
     const changedChannel = changedChannelIndex();
-
     if (changedChannel === undefined || changedChannel === -1) return;
-
-    mapIntensities(changedChannel);
+    if (!image) return;
+    applyScaling(changedChannel);
 
     setPrevChannels(channels);
-  }, [channels, originalSrc]);
+  }, [channels]);
 
   /*
    * Find out the channel index that was changed by the slider to avoid rescaling al channels
@@ -80,7 +70,6 @@ export const ColorAdjustmentOptions = () => {
         } else return -1;
       }
     );
-
     return changedChannels.find((index: number) => {
       return index !== -1;
     });
@@ -88,68 +77,27 @@ export const ColorAdjustmentOptions = () => {
 
   const scaleIntensity = (range: Array<number>, pixel: number) => {
     if (pixel < range[0]) return 0;
+    if (pixel >= range[1]) return 255;
     return 255 * ((pixel - range[0]) / (range[1] - range[0]));
   };
 
-  const setChannel = (
-    channelIdx: number,
-    updatedChannel: Array<number>,
-    delta: number
-  ) => {
-    let j = channelIdx;
-    let newData: Array<number> = currentImageData;
-    for (let i = 0; i < updatedChannel.length; i++) {
-      newData[j] = updatedChannel[i];
-      j += delta;
-    }
-    setCurrentImageData(newData);
-  };
-
-  const getChannel = (
-    channelIdx: number,
-    data: Array<number>,
-    delta: number
-  ) => {
-    let channelData: Array<number> = [];
-    let j = 0;
-    for (let i = channelIdx; i < data.length; i += delta) {
-      channelData[j] = data[i];
-      j += 1;
-    }
-    return channelData;
-  };
-
-  const updateChannel = (channel: ChannelType, channelData: Array<number>) => {
-    if (!channel.visible) return Array(channelData.length).fill(0);
-    return channelData.map((pixel: number) => {
-      return scaleIntensity(channel.range, pixel);
-    });
-  };
-
-  const mapIntensities = (channelIndex: number) => {
-    if (!image) return;
-
-    const delta = image.alpha ? image.components + 1 : image.components;
-
-    const updatedChannel = updateChannel(
-      channels[channelIndex],
-      channelData[channelIndex]
-    );
-    setChannel(channelIndex, updatedChannel, delta);
-
-    const newImage = new ImageJS.Image(
-      image.width,
-      image.height,
-      currentImageData,
-      {
-        components: image.components,
-        alpha: image.alpha,
+  const applyScaling = (channelIndex: number) => {
+    const channelTgt = channels[channelIndex];
+    // @ts-ignore
+    const rawData = origImage.getChannel(channelIndex);
+    if (!channelTgt.visible) {
+      rawData.data = new Uint8Array(rawData.data.length);
+    } else {
+      for (let i = 0; i < rawData.data.length; i++) {
+        let pix = rawData.data[i];
+        rawData.setPixel(i, [scaleIntensity(channelTgt.range, pix)]);
       }
-    );
-
+    }
+    // @ts-ignore
+    image.setChannel(channelIndex, rawData);
     dispatch(
       applicationSlice.actions.setImageSrc({
-        src: newImage.toDataURL("image-png", { useCanvas: true }),
+        src: image!.toDataURL("image-png", { useCanvas: true }),
       })
     );
   };
@@ -159,16 +107,6 @@ export const ColorAdjustmentOptions = () => {
     [0, 255],
     [0, 255],
   ]);
-
-  const [checked, setChecked] = React.useState([0, 1, 2]);
-
-  const updateValues = (values: Array<Array<number>>) => {
-    setValues(values);
-  };
-
-  const updateChecked = (checked: Array<number>) => {
-    setChecked(checked);
-  };
 
   const onResetChannelsClick = () => {
     dispatch(
@@ -189,12 +127,13 @@ export const ColorAdjustmentOptions = () => {
         ],
       })
     );
-    setValues([
-      [0, 255],
-      [0, 255],
-      [0, 255],
-    ]); //reflect change in the slider values
-    setChecked([0, 1, 2]);
+    setImage(
+      ImageJS.Image.createFrom(origImage!, {
+        data: Uint8Array.from(origImage!.data),
+      })
+    );
+    setPrevChannels(channels);
+    setValues(channels.map((channel: ChannelType) => channel.range));
   };
 
   return (

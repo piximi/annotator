@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
 import { imageOriginalSrcSelector } from "../../../../store/selectors";
 import * as ImageJS from "image-js";
-import { ColorAdjustmentSlider } from "../ColorAdjustmentSlider/ColorAdjustmentSlider";
+import { ColorAdjustmentSliders } from "../ColorAdjustmentSliders/ColorAdjustmentSliders";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 import { ChannelType } from "../../../../types/ChannelType";
 
@@ -155,7 +155,7 @@ export const ColorAdjustmentOptions = () => {
 
       <Divider />
 
-      <ColorAdjustmentSlider
+      <ColorAdjustmentSliders
         displayedValues={displayedValues}
         updateDisplayedValues={updateDisplayedValues}
       />

@@ -13,14 +13,14 @@ import { channelsSelector } from "../../../../store/selectors/intensityRangeSele
 import { ChannelType } from "../../../../types/ChannelType";
 import * as _ from "lodash";
 
-type ColorAdjustmentSlider = {
+type ColorAdjustmentSlidersProp = {
   updateDisplayedValues: (values: Array<Array<number>>) => void;
   displayedValues: Array<Array<number>>;
 };
-export const ColorAdjustmentSlider = ({
+export const ColorAdjustmentSliders = ({
   displayedValues,
   updateDisplayedValues,
-}: ColorAdjustmentSlider) => {
+}: ColorAdjustmentSlidersProp) => {
   const dispatch = useDispatch();
 
   const channels = useSelector(channelsSelector);

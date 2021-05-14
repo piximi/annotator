@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 import { ChannelType } from "../../../../types/ChannelType";
 import * as _ from "lodash";
+import { imageShapeSelector } from "../../../../store/selectors/imageShapeSelector";
 
 type ColorAdjustmentSlidersProp = {
   updateDisplayedValues: (values: Array<Array<number>>) => void;
@@ -24,6 +25,8 @@ export const ColorAdjustmentSliders = ({
   const dispatch = useDispatch();
 
   const channels = useSelector(channelsSelector);
+
+  const imageShape = useSelector(imageShapeSelector);
 
   const visibleChannelsIndices = channels
     .map((channel: ChannelType, idx) => channel.visible)
@@ -85,88 +88,54 @@ export const ColorAdjustmentSliders = ({
     );
   };
 
+  const colorAdjustmentSlider = (index: number, name: string) => {
+    return (
+      <ListItem dense>
+        <ListItemIcon>
+          <Checkbox
+            onClick={onCheckboxChanged(index)}
+            checked={visibleChannelsIndices.indexOf(index) !== -1}
+            disableRipple
+            edge="start"
+            icon={<CheckboxUncheckedIcon />}
+            checkedIcon={<CheckboxCheckedIcon />}
+            tabIndex={-1}
+          />
+        </ListItemIcon>
+        <ListItemText primary={name} />
+        <Slider
+          disabled={!(visibleChannelsIndices.indexOf(index) !== -1)} //TODO style slider when disabled mode
+          style={{ width: "60%" }}
+          value={displayedValues[index]}
+          max={255}
+          onChange={(event, value: number | number[]) =>
+            handleSliderChange(index, event, value)
+          }
+          valueLabelDisplay="auto"
+          aria-labelledby="range-slider"
+        />
+      </ListItem>
+    );
+  };
+
+  const allSliders = () => {
+    if (!imageShape) return;
+    const sliders = [];
+
+    const names =
+      imageShape.channels === 1 ? ["Grey"] : ["Red", "Green", "Blue"];
+    for (let i = 0; i < imageShape.channels; i++) {
+      sliders.push(colorAdjustmentSlider(i, names[i]));
+    }
+    return sliders;
+  };
+
   return (
     <List
       component="nav"
       subheader={<ListSubheader component="div">Channels</ListSubheader>}
     >
-      <ListItem dense>
-        <ListItemIcon>
-          <Checkbox
-            onClick={onCheckboxChanged(0)}
-            checked={visibleChannelsIndices.indexOf(0) !== -1}
-            disableRipple
-            edge="start"
-            icon={<CheckboxUncheckedIcon />}
-            checkedIcon={<CheckboxCheckedIcon />}
-            tabIndex={-1}
-          />
-        </ListItemIcon>
-        <ListItemText primary="Red" />
-        <Slider
-          disabled={!(visibleChannelsIndices.indexOf(0) !== -1)} //TODO style slider when disabled mode
-          style={{ width: "60%" }}
-          value={displayedValues[0]}
-          max={255}
-          onChange={(event, value: number | number[]) =>
-            handleSliderChange(0, event, value)
-          }
-          valueLabelDisplay="auto"
-          aria-labelledby="range-slider"
-        />
-      </ListItem>
-
-      <ListItem dense>
-        <ListItemIcon>
-          <Checkbox
-            onClick={onCheckboxChanged(1)}
-            checked={visibleChannelsIndices.indexOf(1) !== -1}
-            disableRipple
-            edge="start"
-            icon={<CheckboxUncheckedIcon />}
-            checkedIcon={<CheckboxCheckedIcon />}
-            tabIndex={-1}
-          />
-        </ListItemIcon>
-        <ListItemText primary="Green" />
-        <Slider
-          disabled={!(visibleChannelsIndices.indexOf(1) !== -1)} //TODO style slider when disabled mode
-          style={{ width: "60%" }}
-          value={displayedValues[1]}
-          max={255}
-          onChange={(event, value: number | number[]) =>
-            handleSliderChange(1, event, value)
-          }
-          valueLabelDisplay="auto"
-          aria-labelledby="range-slider"
-        />
-      </ListItem>
-
-      <ListItem dense>
-        <ListItemIcon>
-          <Checkbox
-            onClick={onCheckboxChanged(2)}
-            checked={visibleChannelsIndices.indexOf(2) !== -1}
-            disableRipple
-            edge="start"
-            icon={<CheckboxUncheckedIcon />}
-            checkedIcon={<CheckboxCheckedIcon />}
-            tabIndex={-1}
-          />
-        </ListItemIcon>
-        <ListItemText primary="Blue" />
-        <Slider
-          disabled={!(visibleChannelsIndices.indexOf(2) !== -1)} //TODO style slider when disabled mode
-          style={{ width: "60%" }}
-          value={displayedValues[2]}
-          max={255}
-          onChange={(event, value: number | number[]) =>
-            handleSliderChange(2, event, value)
-          }
-          valueLabelDisplay="auto"
-          aria-labelledby="range-slider"
-        />
-      </ListItem>
+      {allSliders()};
     </List>
   );
 };

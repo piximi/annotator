@@ -12,6 +12,7 @@ import * as ImageJS from "image-js";
 import { ColorAdjustmentSliders } from "../ColorAdjustmentSliders/ColorAdjustmentSliders";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 import { ChannelType } from "../../../../types/ChannelType";
+import { imageShapeSelector } from "../../../../store/selectors/imageShapeSelector";
 
 export const ColorAdjustmentOptions = () => {
   const t = useTranslation();
@@ -19,6 +20,8 @@ export const ColorAdjustmentOptions = () => {
   const dispatch = useDispatch();
 
   const originalSrc = useSelector(imageOriginalSrcSelector);
+
+  const imageShape = useSelector(imageShapeSelector);
 
   const channels = useSelector(channelsSelector);
 
@@ -32,23 +35,23 @@ export const ColorAdjustmentOptions = () => {
     channels.map((channel: ChannelType) => [...channel.range])
   ); //we keep that state variable here and pass it to slider so that visible slider ranges can change accordingly
 
-  const defaultChannels: Array<ChannelType> = [
-    {
-      range: [0, 255],
-      visible: true,
-    },
-    {
-      range: [0, 255],
-      visible: true,
-    },
-    {
-      range: [0, 255],
-      visible: true,
-    },
-  ];
+  const setDefaultChannels = (components: number) => {
+    const defaultChannels: Array<ChannelType> = []; //number of channels depends on whether image is greyscale or RGB
+    for (let i = 0; i < components; i++) {
+      defaultChannels.push({
+        range: [0, 255],
+        visible: true,
+      });
+    }
+    return defaultChannels;
+  };
 
   useEffect(() => {
     if (!originalSrc) return;
+
+    if (!imageShape) return;
+
+    const defaultChannels = setDefaultChannels(imageShape.channels);
 
     ImageJS.Image.load(originalSrc).then((imageIn) => {
       setOrigImage(imageIn);
@@ -129,6 +132,8 @@ export const ColorAdjustmentOptions = () => {
   };
 
   const onResetChannelsClick = () => {
+    if (!imageShape) return;
+    const defaultChannels = setDefaultChannels(imageShape.channels);
     dispatch(
       applicationSlice.actions.setChannels({
         channels: defaultChannels,

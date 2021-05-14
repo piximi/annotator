@@ -39,7 +39,7 @@ export const ComputerMenuItem = ({ onClose }: ComputerMenuItemProps) => {
           const name = file.name;
 
           const shape: ShapeType = {
-            channels: 4,
+            channels: image.components,
             frames: 1,
             height: image.height,
             planes: 1,

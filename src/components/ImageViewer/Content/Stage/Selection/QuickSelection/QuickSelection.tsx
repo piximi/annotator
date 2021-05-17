@@ -15,7 +15,7 @@ export const QuickSelection = ({ operator }: QuickSelectionProps) => {
     if (!operator.currentMask) return;
 
     const image = new Image();
-    image.src = operator.currentMask.toDataURL("image-png", {
+    image.src = operator.currentMask.toDataURL("image/png", {
       useCanvas: true,
     });
     setImage(image);

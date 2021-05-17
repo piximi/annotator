@@ -124,7 +124,7 @@ export const ColorAdjustmentOptions = () => {
     image.setChannel(channelIndex, rawData);
     dispatch(
       applicationSlice.actions.setImageSrc({
-        src: image!.toDataURL("image-png", { useCanvas: true }),
+        src: image!.toDataURL("image/png", { useCanvas: true }),
       })
     );
   };

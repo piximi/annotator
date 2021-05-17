@@ -11,6 +11,7 @@ import {
 import { computeOverlayMask } from "../../../../../../../image/imageHelper";
 import { imageWidthSelector } from "../../../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../../../store/selectors/imageHeightSelector";
+import { toRGBA } from "../../../../../../../image";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -32,7 +33,11 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
 
   useEffect(() => {
     if (!annotation.mask || !imageWidth || !imageHeight) return;
-    setImageMask(computeOverlayMask(annotation.mask, imageWidth, imageHeight));
+    if (!fill) return;
+    const color = toRGBA(fill, 0);
+    setImageMask(
+      computeOverlayMask(annotation.mask, imageWidth, imageHeight, color)
+    );
   }, [annotation.mask]);
 
   if (!annotation || !annotation.contour) return <React.Fragment />;

@@ -219,19 +219,22 @@ export const computeContours = (data: Array<Array<number>>): Array<number> => {
 export const computeOverlayMask = (
   encodedMask: Array<number>,
   width: number,
-  height: number
+  height: number,
+  color: Array<number>
 ): HTMLImageElement | undefined => {
   if (!encodedMask) return undefined;
   const decodedData = decode(encodedMask);
   //manipulate data such that everything outside of mask has alpha 0
   const overlayData: Array<number> = [];
   for (let i = 0; i < decodedData.length; i++) {
-    overlayData.push(decodedData[i]);
-    overlayData.push(decodedData[i] ? 128 : 0);
+    overlayData.push(color[0]); //red
+    overlayData.push(color[1]); //green
+    overlayData.push(color[2]); //blue
+    overlayData.push(decodedData[i] ? 128 : 0); //alpha
   }
   const data = new Uint8Array(overlayData);
   const src = new ImageJS.Image(width, height, data, {
-    components: 1,
+    components: 3,
     alpha: 1,
   }).toDataURL();
   const image = new Image();

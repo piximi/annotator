@@ -18,7 +18,7 @@ import { selectedAnnotationSelector } from "../../../../../store/selectors/selec
 import { connectPoints } from "../../../../../image/imageHelper";
 import { simplify } from "../../../../../image/simplify/simplify";
 import { slpf } from "../../../../../image/polygon-fill/slpf";
-import { encode } from "../../../../../image/rle";
+import { decode, encode } from "../../../../../image/rle";
 import * as ImageJS from "image-js";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 import { useCursor } from "../../../../../hooks";
@@ -112,6 +112,7 @@ export const Transformer = ({
     if (!selectedAnnotation) return;
 
     const contour = selectedAnnotation.contour;
+    // const mask = selectedAnnotation.mask;
 
     if (!center) return;
 
@@ -210,6 +211,15 @@ export const Transformer = ({
 
   const onTransformEnd = () => {
     if (!selectedAnnotation) return;
+
+    //TODO try the following
+    // //EXPERIMENTATION ZONE
+    // const mask = selectedAnnotation.mask;
+    // const decodedMask = decode(mask);
+    // const decodedImage = new ImageJS.Image(512, 512, decodedMask, {alpha: 0, components: 1 }) //FIXME don't use arbitrary width and height
+    // //Next step: do .resize with scaled width and heihgt
+    // //Next step: do a crop (512, 512) where the offset is going to be the x and y prop of scaled opposite anchor position (maybe)
+    // //END OF EXPERIMENTATION ZONE
 
     const resizedMask = resizeMask(resizedContour);
 

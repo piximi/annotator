@@ -2,7 +2,7 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import { ListItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
-import React from "react";
+import React, { useCallback } from "react";
 import Slider from "@material-ui/core/Slider";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -11,13 +11,14 @@ import { applicationSlice } from "../../../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
 import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
 import { ChannelType } from "../../../../types/ChannelType";
-import * as _ from "lodash";
+import { debounce } from "lodash";
 import { imageShapeSelector } from "../../../../store/selectors/imageShapeSelector";
 
 type ColorAdjustmentSlidersProp = {
   updateDisplayedValues: (values: Array<Array<number>>) => void;
   displayedValues: Array<Array<number>>;
 };
+
 export const ColorAdjustmentSliders = ({
   displayedValues,
   updateDisplayedValues,
@@ -42,11 +43,11 @@ export const ColorAdjustmentSliders = ({
     });
     copiedValues[idx] = newValue as Array<number>;
     updateDisplayedValues(copiedValues);
-    updateIntensityRanges();
+    handler(copiedValues);
   };
 
-  const updateIntensityRanges = () => {
-    const copiedValues = [...displayedValues].map((range: Array<number>) => {
+  const updateIntensityRanges = (values: Array<Array<number>>) => {
+    const copiedValues = [...values].map((range: Array<number>) => {
       return [...range];
     });
 
@@ -55,13 +56,14 @@ export const ColorAdjustmentSliders = ({
         return { ...channel, range: copiedValues[index] };
       }
     );
-
     dispatch(
       applicationSlice.actions.setChannels({
         channels: updatedChannels,
       })
     );
   };
+
+  const handler = useCallback(debounce(updateIntensityRanges, 100), []);
 
   const onCheckboxChanged = (index: number) => () => {
     const current = visibleChannelsIndices.indexOf(index);

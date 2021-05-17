@@ -11,13 +11,11 @@ import * as _ from "lodash";
 import { CategoryType } from "../../../../../../types/CategoryType";
 import { AnnotationType } from "../../../../../../types/AnnotationType";
 import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
+import { SelectedAnnotation } from "../SelectedAnnotation/SelectedAnnotation";
+import { Annotation } from "../ConfirmedAnnotations/Annotation";
 
 export const SelectedAnnotations = () => {
-  const stageScale = useSelector(stageScaleSelector);
-
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
-
-  const categories = useSelector(categoriesSelector);
 
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
 
@@ -27,23 +25,7 @@ export const SelectedAnnotations = () => {
     <React.Fragment>
       {selectedAnnotations.map((annotation: AnnotationType) => {
         return (
-          <ReactKonva.Line
-            closed
-            fill={
-              _.find(
-                categories,
-                (category: CategoryType) =>
-                  category.id === annotation.categoryId
-              )?.color
-            }
-            id={annotation.id}
-            key={annotation.id}
-            opacity={0.5}
-            points={annotation.contour.map((point: number) => {
-              return point * stageScale;
-            })}
-            viisble={false}
-          />
+          <SelectedAnnotation key={annotation.id} annotation={annotation} />
         );
       })}
     </React.Fragment>

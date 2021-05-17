@@ -38,13 +38,14 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
     setImageMask(
       computeOverlayMask(annotation.mask, imageWidth, imageHeight, color)
     );
-  }, [annotation.mask]);
+  }, [annotation.mask, fill]);
 
   if (!annotation || !annotation.contour) return <React.Fragment />;
 
   return (
     <ReactKonva.Group>
       <ReactKonva.Image
+        id={annotation.id}
         image={imageMask}
         scale={{ x: stageScale, y: stageScale }}
       />

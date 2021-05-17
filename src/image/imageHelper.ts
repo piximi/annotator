@@ -212,3 +212,29 @@ export const computeContours = (data: Array<Array<number>>): Array<number> => {
     })
   );
 };
+
+/*
+ * From encoded mask data, get the decoded data and return results as an HTMLImageElement to be used by Konva.Image
+ */
+export const computeOverlayMask = (
+  encodedMask: Array<number>,
+  width: number,
+  height: number
+): HTMLImageElement | undefined => {
+  if (!encodedMask) return undefined;
+  const decodedData = decode(encodedMask);
+  //manipulate data such that everything outside of mask has alpha 0
+  const overlayData: Array<number> = [];
+  for (let i = 0; i < decodedData.length; i++) {
+    overlayData.push(decodedData[i]);
+    overlayData.push(decodedData[i] ? 128 : 0);
+  }
+  const data = new Uint8Array(overlayData);
+  const src = new ImageJS.Image(width, height, data, {
+    components: 1,
+    alpha: 1,
+  }).toDataURL();
+  const image = new Image();
+  image.src = src;
+  return image;
+};

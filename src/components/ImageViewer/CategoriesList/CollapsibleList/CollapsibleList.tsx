@@ -11,14 +11,16 @@ type CollapsibleListProps = {
   children: any;
   dense: boolean;
   primary: string;
+  closed?: boolean;
 };
 
 export const CollapsibleList = ({
   children,
   dense,
+  closed,
   primary,
 }: CollapsibleListProps) => {
-  const [collapsed, setCollapsed] = React.useState(true);
+  const [collapsed, setCollapsed] = React.useState(!closed);
 
   const onClick = () => {
     setCollapsed(!collapsed);

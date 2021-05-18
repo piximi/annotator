@@ -42,7 +42,7 @@ const LightnessList = () => {
   const t = useTranslation();
 
   return (
-    <CollapsibleList dense primary={t("Lightness")}>
+    <CollapsibleList closed dense primary={t("Lightness")}>
       <LightnessListItem name="Exposure" />
       <LightnessListItem name="Highlights" />
       <LightnessListItem name="Shadows" />

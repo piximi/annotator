@@ -142,7 +142,7 @@ export const ChannelsList = ({
   };
 
   return (
-    <CollapsibleList dense primary="Channels">
+    <CollapsibleList closed dense primary="Channels">
       {allSliders(displayedValues)}
     </CollapsibleList>
   );

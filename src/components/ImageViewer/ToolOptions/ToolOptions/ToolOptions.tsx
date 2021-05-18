@@ -31,7 +31,7 @@ import { toolTypeSelector } from "../../../../store/selectors";
 import { useTranslation } from "react-i18next";
 import { HandToolOptions } from "../HandToolOptions/HandToolOptions";
 import Box from "@material-ui/core/Box";
-import { ColorAdjustmentOptions } from "../ColorAdjustmentOptions/ColorAdjustmentOptions";
+import { ColorAdjustmentOptions } from "../ColorAdjustmentOptions/ColorAdjustmentOptions/ColorAdjustmentOptions";
 
 export const ToolOptions = () => {
   const classes = useStyles();

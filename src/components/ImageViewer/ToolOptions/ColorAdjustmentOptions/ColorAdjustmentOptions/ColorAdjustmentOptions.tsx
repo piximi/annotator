@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { InformationBox } from "../InformationBox";
+import { InformationBox } from "../../InformationBox";
 import Divider from "@material-ui/core/Divider";
-import { useTranslation } from "../../../../hooks/useTranslation";
+import { useTranslation } from "../../../../../hooks/useTranslation";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useDispatch, useSelector } from "react-redux";
-import { applicationSlice } from "../../../../store/slices";
-import { imageOriginalSrcSelector } from "../../../../store/selectors";
+import { applicationSlice } from "../../../../../store";
+import { imageOriginalSrcSelector } from "../../../../../store/selectors";
 import * as ImageJS from "image-js";
-import { ColorAdjustmentSliders } from "../ColorAdjustmentSliders/ColorAdjustmentSliders";
-import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
-import { ChannelType } from "../../../../types/ChannelType";
-import { imageShapeSelector } from "../../../../store/selectors/imageShapeSelector";
+import { ChannelsList } from "../ChannelsList";
+import { channelsSelector } from "../../../../../store/selectors/intensityRangeSelector";
+import { ChannelType } from "../../../../../types/ChannelType";
+import { imageShapeSelector } from "../../../../../store/selectors/imageShapeSelector";
 
 export const ColorAdjustmentOptions = () => {
   const t = useTranslation();
@@ -158,7 +158,7 @@ export const ColorAdjustmentOptions = () => {
 
       <Divider />
 
-      <ColorAdjustmentSliders
+      <ChannelsList
         displayedValues={displayedValues}
         updateDisplayedValues={updateDisplayedValues}
       />

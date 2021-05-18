@@ -4,25 +4,33 @@ import { ListItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
 import React, { useCallback } from "react";
 import Slider from "@material-ui/core/Slider";
+import Collapse from "@material-ui/core/Collapse";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
-import { CheckboxCheckedIcon, CheckboxUncheckedIcon } from "../../../icons";
-import { applicationSlice } from "../../../../store/slices";
+import { CheckboxCheckedIcon, CheckboxUncheckedIcon } from "../../../../icons";
+import { applicationSlice } from "../../../../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
-import { channelsSelector } from "../../../../store/selectors/intensityRangeSelector";
-import { ChannelType } from "../../../../types/ChannelType";
+import { channelsSelector } from "../../../../../store/selectors/intensityRangeSelector";
+import { ChannelType } from "../../../../../types/ChannelType";
 import { debounce } from "lodash";
-import { imageShapeSelector } from "../../../../store/selectors/imageShapeSelector";
+import { imageShapeSelector } from "../../../../../store/selectors/imageShapeSelector";
+import { CollapsibleList } from "../../../CategoriesList/CollapsibleList";
 
 type ColorAdjustmentSlidersProp = {
   updateDisplayedValues: (values: Array<Array<number>>) => void;
   displayedValues: Array<Array<number>>;
 };
 
-export const ColorAdjustmentSliders = ({
+export const ChannelsList = ({
   displayedValues,
   updateDisplayedValues,
 }: ColorAdjustmentSlidersProp) => {
+  const [open, setOpen] = React.useState(true);
+
+  const onClick = () => {
+    setOpen(!open);
+  };
+
   const dispatch = useDispatch();
 
   const channels = useSelector(channelsSelector);
@@ -134,11 +142,8 @@ export const ColorAdjustmentSliders = ({
   };
 
   return (
-    <List
-      component="nav"
-      subheader={<ListSubheader component="div">Channels</ListSubheader>}
-    >
-      <React.Fragment>{allSliders(displayedValues)}</React.Fragment>
-    </List>
+    <CollapsibleList dense primary="Channels">
+      {allSliders(displayedValues)}
+    </CollapsibleList>
   );
 };

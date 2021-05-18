@@ -154,7 +154,7 @@ export const ColorAdjustmentOptions = () => {
 
   return (
     <React.Fragment>
-      <InformationBox description="…" name={t("Color adjustment tool")} />
+      <InformationBox description="…" name={t("Color adjustment")} />
 
       <Divider />
 

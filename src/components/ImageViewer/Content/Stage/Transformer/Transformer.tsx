@@ -212,6 +212,18 @@ export const Transformer = ({
   const onTransformEnd = () => {
     if (!selectedAnnotation) return;
 
+    if (!boundBox || !startBox) return;
+
+    const relativeBoundBox = getRelativeBox(boundBox);
+    const relativeStartBox = getRelativeBox(startBox);
+
+    if (!relativeBoundBox || !relativeStartBox) return;
+
+    // get necessary parameters for transformation
+    const scaleX = relativeBoundBox.width / relativeStartBox.width;
+    const scaleY = relativeBoundBox.height / relativeStartBox.height;
+
+    //extract roi and resize
     const mask = selectedAnnotation.mask;
     const boundingBox = selectedAnnotation.boundingBox;
     const decodedData = new Uint8Array(decode(mask));
@@ -221,11 +233,20 @@ export const Transformer = ({
       decodedData,
       { components: 1, alpha: 0 }
     );
+
+    const roiWidth = boundingBox[2] - boundingBox[0];
+    const roiHeight = boundingBox[3] - boundingBox[1];
     const roi = binaryMaskImage.crop({
       x: boundingBox[0],
       y: boundingBox[1],
-      width: boundingBox[2] - boundingBox[0],
-      height: boundingBox[3] - boundingBox[1],
+      width: roiWidth,
+      height: roiHeight,
+    });
+
+    const resizedImage = roi.resize({
+      height: Math.round(roiHeight * scaleY),
+      width: Math.round(roiWidth * scaleX),
+      preserveAspectRatio: false,
     });
 
     const resizedMask = resizeMask(resizedContour);

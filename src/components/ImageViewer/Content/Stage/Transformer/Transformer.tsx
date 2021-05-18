@@ -95,46 +95,6 @@ export const Transformer = ({
     deleteAnnotationSoundEffect
   );
 
-  const computeResizedContour = () => {
-    if (!boundBox || !startBox) return;
-
-    const relativeBoundBox = getRelativeBox(boundBox);
-    const relativeStartBox = getRelativeBox(startBox);
-
-    if (!relativeBoundBox || !relativeStartBox) return;
-
-    // get necessary parameters for transformation
-    const scaleX = relativeBoundBox.width / relativeStartBox.width;
-    const scaleY = relativeBoundBox.height / relativeStartBox.height;
-
-    if (!selectedAnnotation) return;
-
-    const contour = selectedAnnotation.contour;
-    // const mask = selectedAnnotation.mask;
-
-    if (!center) return;
-
-    setResizedContour(
-      resizeContour(contour, center, {
-        x: scaleX,
-        y: scaleY,
-      })
-    );
-  };
-
-  const computeBoundingBoxFromContours = (
-    contour: Array<number>
-  ): [number, number, number, number] => {
-    const pairs = _.chunk(contour, 2);
-
-    return [
-      Math.round(_.min(_.map(pairs, _.first))!),
-      Math.round(_.min(_.map(pairs, _.last))!),
-      Math.round(_.max(_.map(pairs, _.first))!),
-      Math.round(_.max(_.map(pairs, _.last))!),
-    ];
-  };
-
   const boundingBoxFunc = (oldBox: box, newBox: box) => {
     if (!boundBox) {
       setStartBox(oldBox);
@@ -175,7 +135,7 @@ export const Transformer = ({
     };
   };
 
-  const resizeContour = (
+  const getScaledCoordinate = (
     contour: Array<number>,
     center: { x: number; y: number },
     scale: { x: number; y: number }
@@ -188,23 +148,6 @@ export const Transformer = ({
         ];
       })
     );
-  };
-
-  const resizeMask = (points: Array<number>) => {
-    const maskImage = new ImageJS.Image({
-      width: imageWidth,
-      height: imageHeight,
-      bitDepth: 8,
-    });
-
-    const coords = _.chunk(points, 2);
-
-    const connectedPoints = connectPoints(coords, maskImage); // get coordinates of connected points and draw boundaries of mask
-    simplify(connectedPoints, 1, true);
-    slpf(connectedPoints, maskImage);
-
-    //@ts-ignore
-    return encode(maskImage.getChannel(0).data);
   };
 
   const onTransformEnd = () => {
@@ -249,7 +192,7 @@ export const Transformer = ({
       preserveAspectRatio: false,
     });
 
-    const scaledOffset = resizeContour([roiX, roiY], center, {
+    const scaledOffset = getScaledCoordinate([roiX, roiY], center, {
       x: scaleX,
       y: scaleY,
     });
@@ -368,6 +311,7 @@ export const Transformer = ({
 
   const onTransform = () => {
     if (!center) {
+      //at the beginning of transform, find out the "center" coordinate used for the resizing (i.e., the coordinate that does not move during resize)
       const oppositeAnchorPosition = getOppositeAnchorPosition();
       const scaledOppositeAnchorPosition = {
         x: oppositeAnchorPosition.x / stageScale,
@@ -382,7 +326,7 @@ export const Transformer = ({
         x: scaledOppositeAnchorPosition.x + relativeStartBox.x,
         y: scaledOppositeAnchorPosition.y + relativeStartBox.y,
       });
-    } else computeResizedContour();
+    }
   };
 
   const onTransformStart = () => {

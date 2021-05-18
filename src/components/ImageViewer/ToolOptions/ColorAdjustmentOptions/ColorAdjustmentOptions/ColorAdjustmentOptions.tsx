@@ -53,6 +53,40 @@ const LightnessList = () => {
   );
 };
 
+const HueAndSaturationListItem = ({ name }: { name: string }) => {
+  const t = useTranslation();
+
+  return (
+    <ListItem alignItems="flex-start" dense>
+      <ListItemText
+        primary={t(name)}
+        secondary={
+          <Slider
+            defaultValue={0}
+            valueLabelDisplay="auto"
+            step={1}
+            marks
+            min={-200}
+            max={200}
+          />
+        }
+      />
+    </ListItem>
+  );
+};
+
+const HueAndSaturationList = () => {
+  const t = useTranslation();
+
+  return (
+    <CollapsibleList closed dense primary={t("Hue & Saturation")}>
+      <HueAndSaturationListItem name="Hue" />
+      <HueAndSaturationListItem name="Saturation" />
+      <HueAndSaturationListItem name="Vibrance" />
+    </CollapsibleList>
+  );
+};
+
 export const ColorAdjustmentOptions = () => {
   const t = useTranslation();
 
@@ -205,6 +239,10 @@ export const ColorAdjustmentOptions = () => {
       <Divider />
 
       <LightnessList />
+
+      <Divider />
+
+      <HueAndSaturationList />
 
       <Divider />
 

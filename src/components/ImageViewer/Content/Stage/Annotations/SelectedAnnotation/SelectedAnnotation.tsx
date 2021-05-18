@@ -11,7 +11,7 @@ import {
 import { imageWidthSelector } from "../../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../../store/selectors/imageHeightSelector";
 import { toRGBA } from "../../../../../../image";
-import { computeOverlayMask } from "../../../../../../image/imageHelper";
+import { computeOverlayRoi } from "../../../../../../image/imageHelper";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -33,12 +33,20 @@ export const SelectedAnnotation = ({ annotation }: AnnotationProps) => {
 
   useEffect(() => {
     if (!annotation.mask || !imageWidth || !imageHeight) return;
-    console.info("Here");
     if (!fill) return;
     const color = toRGBA(fill, 0);
+    const t0 = performance.now();
     setImageMask(
-      computeOverlayMask(annotation.mask, imageWidth, imageHeight, color)
+      computeOverlayRoi(
+        annotation.mask,
+        annotation.boundingBox,
+        imageWidth,
+        imageHeight,
+        color
+      )
     );
+    const t1 = performance.now();
+    console.info(`Total computing overlay time: ${t1 - t0} ms`);
   }, [annotation.mask, fill]);
 
   return (
@@ -47,6 +55,8 @@ export const SelectedAnnotation = ({ annotation }: AnnotationProps) => {
         image={imageMask}
         scale={{ x: stageScale, y: stageScale }}
         key={annotation.id}
+        x={annotation.boundingBox[0] * stageScale}
+        y={annotation.boundingBox[1] * stageScale}
       />
       <ReactKonva.Rect
         visible={false}

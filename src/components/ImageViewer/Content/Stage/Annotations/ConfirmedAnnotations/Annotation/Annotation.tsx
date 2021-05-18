@@ -8,7 +8,7 @@ import {
   categoriesSelector,
   stageScaleSelector,
 } from "../../../../../../../store/selectors";
-import { computeOverlayMask } from "../../../../../../../image/imageHelper";
+import { computeOverlayRoi } from "../../../../../../../image/imageHelper";
 import { imageWidthSelector } from "../../../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../../../store/selectors/imageHeightSelector";
 import { toRGBA } from "../../../../../../../image";
@@ -36,7 +36,13 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
     if (!fill) return;
     const color = toRGBA(fill, 0);
     setImageMask(
-      computeOverlayMask(annotation.mask, imageWidth, imageHeight, color)
+      computeOverlayRoi(
+        annotation.mask,
+        annotation.boundingBox,
+        imageWidth,
+        imageHeight,
+        color
+      )
     );
   }, [annotation.mask, fill]);
 
@@ -48,6 +54,8 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
         id={annotation.id}
         image={imageMask}
         scale={{ x: stageScale, y: stageScale }}
+        x={annotation.boundingBox[0] * stageScale}
+        y={annotation.boundingBox[1] * stageScale}
       />
     </ReactKonva.Group>
   );

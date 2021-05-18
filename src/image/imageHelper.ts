@@ -240,28 +240,45 @@ export const computeContours = (data: Array<Array<number>>): Array<number> => {
 /*
  * From encoded mask data, get the decoded data and return results as an HTMLImageElement to be used by Konva.Image
  */
-export const computeOverlayMask = (
+export const computeOverlayRoi = (
   encodedMask: Array<number>,
-  width: number,
-  height: number,
+  boundingBox: [number, number, number, number],
+  imageWidth: number,
+  imageHeight: number,
   color: Array<number>
 ): HTMLImageElement | undefined => {
   if (!encodedMask) return undefined;
+
   const decodedData = decode(encodedMask);
-  //manipulate data such that everything outside of mask has alpha 0
-  const overlayData: Array<number> = [];
-  for (let i = 0; i < decodedData.length; i++) {
-    overlayData.push(color[0]); //red
-    overlayData.push(color[1]); //green
-    overlayData.push(color[2]); //blue
-    overlayData.push(decodedData[i] ? 128 : 0); //alpha
-  }
-  const data = new Uint8Array(overlayData);
-  const src = new ImageJS.Image(width, height, data, {
+
+  //extract bounding box params
+  const boxWidth = boundingBox[2] - boundingBox[0];
+  const boxHeight = boundingBox[3] - boundingBox[1];
+  const boxX = boundingBox[0];
+  const boxY = boundingBox[1];
+
+  const overlayROIImage = new ImageJS.Image(boxWidth, boxHeight, {
     components: 3,
     alpha: 1,
-  }).toDataURL();
+  });
+
+  for (let i = 0; i < overlayROIImage.width; i++) {
+    for (let j = 0; j < overlayROIImage.height; j++) {
+      //compute linear pixel coordinate in original image space
+      const k = (j + boxY) * imageWidth + (i + boxX);
+      if (decodedData[k]) {
+        overlayROIImage.setPixelXY(i, j, [color[0], color[1], color[2], 128]); //r,g,b,alpha
+      } else {
+        overlayROIImage.setPixelXY(i, j, [0, 0, 0, 0]); //r,g,b,alpha
+      }
+    }
+  }
+
+  const src = overlayROIImage.toDataURL("image-png", {
+    useCanvas: true,
+  });
   const image = new Image();
   image.src = src;
+
   return image;
 };

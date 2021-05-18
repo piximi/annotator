@@ -13,6 +13,45 @@ import { ChannelsList } from "../ChannelsList";
 import { channelsSelector } from "../../../../../store/selectors/intensityRangeSelector";
 import { ChannelType } from "../../../../../types/ChannelType";
 import { imageShapeSelector } from "../../../../../store/selectors/imageShapeSelector";
+import { CollapsibleList } from "../../../CategoriesList/CollapsibleList";
+import Slider from "@material-ui/core/Slider";
+
+const LightnessListItem = ({ name }: { name: string }) => {
+  const t = useTranslation();
+
+  return (
+    <ListItem alignItems="flex-start" dense>
+      <ListItemText
+        primary={t(name)}
+        secondary={
+          <Slider
+            defaultValue={0}
+            valueLabelDisplay="auto"
+            step={1}
+            marks
+            min={-200}
+            max={200}
+          />
+        }
+      />
+    </ListItem>
+  );
+};
+
+const LightnessList = () => {
+  const t = useTranslation();
+
+  return (
+    <CollapsibleList dense primary={t("Lightness")}>
+      <LightnessListItem name="Exposure" />
+      <LightnessListItem name="Highlights" />
+      <LightnessListItem name="Shadows" />
+      <LightnessListItem name="Brightness" />
+      <LightnessListItem name="Contrast" />
+      <LightnessListItem name="Black Point" />
+    </CollapsibleList>
+  );
+};
 
 export const ColorAdjustmentOptions = () => {
   const t = useTranslation();
@@ -162,6 +201,12 @@ export const ColorAdjustmentOptions = () => {
         displayedValues={displayedValues}
         updateDisplayedValues={updateDisplayedValues}
       />
+
+      <Divider />
+
+      <LightnessList />
+
+      <Divider />
 
       <List dense>
         <ListItem button onClick={onResetChannelsClick}>

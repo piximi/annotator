@@ -141,15 +141,6 @@ export const applicationSlice = createSlice({
             .split(" ")
             .map((x: string) => parseInt(x));
 
-          const decoded = _.map(
-            _.chunk(decode(mask), state.image?.shape.width),
-            (el: Array<number>) => {
-              return Array.from(el);
-            }
-          );
-
-          const contour = computeContours(decoded);
-
           //if category does not already exist in state, add it
           if (
             !state.categories
@@ -173,7 +164,6 @@ export const applicationSlice = createSlice({
               annotation.annotationBoundingBoxHeight,
             ],
             categoryId: annotation.annotationCategoryId,
-            contour: contour,
             id: annotation.annotationId,
             mask: mask,
           };

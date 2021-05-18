@@ -40,7 +40,7 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
     );
   }, [annotation.mask, fill]);
 
-  if (!annotation || !annotation.contour) return <React.Fragment />;
+  if (!annotation) return <React.Fragment />;
 
   return (
     <ReactKonva.Group>

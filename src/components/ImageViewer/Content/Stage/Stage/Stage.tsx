@@ -139,7 +139,6 @@ export const Stage = () => {
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
-  const scaledContour = useSelector(scaledSelectedAnnotationContourSelector);
   const { dragging: zoomDragging, selecting: zoomSelecting } = useSelector(
     zoomSelectionSelector
   );
@@ -208,32 +207,17 @@ export const Stage = () => {
   useEffect(() => {
     if (!annotationTool) return;
 
-    if (
-      !selectedAnnotation ||
-      !selectedAnnotation.mask ||
-      !selectedAnnotation.contour
-    )
-      return;
+    if (!selectedAnnotation || !selectedAnnotation.mask) return;
 
     const invertedMask = invertMask(selectedAnnotation.mask, true);
-
-    if (!imageWidth || !imageHeight) return;
-
-    const invertedContour = invertContour(
-      selectedAnnotation.contour,
-      imageWidth,
-      imageHeight
-    );
-
-    const invertedBoundingBox = computeBoundingBoxFromContours(invertedContour);
+    //TODO Call function computeBoundingBoxFromMask
 
     dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [
           {
             ...selectedAnnotation,
-            boundingBox: invertedBoundingBox,
-            contour: invertedContour,
+            boundingBox: [0, 0, 100, 100], //FIXME
             mask: invertedMask,
           },
         ],
@@ -291,7 +275,6 @@ export const Stage = () => {
           {
             ...selectedAnnotation,
             boundingBox: annotationTool.boundingBox,
-            contour: annotationTool.contour,
             mask: annotationTool.mask,
           },
         ],
@@ -303,7 +286,6 @@ export const Stage = () => {
         selectedAnnotation: {
           ...selectedAnnotation,
           boundingBox: annotationTool.boundingBox,
-          contour: annotationTool.contour,
           mask: annotationTool.mask,
         },
       })
@@ -433,7 +415,7 @@ export const Stage = () => {
         clearLabelRef.current = label[1] as Konva.Label;
       }
     });
-  }, [selectedAnnotationsIds, selectedAnnotation?.contour]);
+  }, [selectedAnnotationsIds, selectedAnnotation?.mask]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;

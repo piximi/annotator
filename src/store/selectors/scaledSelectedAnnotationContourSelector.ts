@@ -6,9 +6,10 @@ export const scaledSelectedAnnotationContourSelector = ({
 }: {
   state: HistoryStateType;
 }): Array<number> | undefined => {
-  const stageScale = state.present.stageScale;
-  if (!state.present.selectedAnnotation) return;
-  return state.present.selectedAnnotation.contour.map((point: number) => {
-    return point * stageScale;
-  });
+  return [0]; //FIXME remove this selector
+  // const stageScale = state.present.stageScale;
+  // if (!state.present.selectedAnnotation) return;
+  // return state.present.selectedAnnotation.contour.map((point: number) => {
+  //   return point * stageScale;
+  // });
 };

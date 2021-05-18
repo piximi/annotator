@@ -204,7 +204,6 @@ export abstract class AnnotationTool extends Tool {
     this.annotation = {
       boundingBox: this.boundingBox,
       categoryId: category.id,
-      contour: this.contour,
       id: uuid.v4(),
       mask: this.mask,
     };

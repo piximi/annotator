@@ -169,6 +169,8 @@ export const computeBoundingBoxFromContours = (
   ];
 };
 
+export const computeBoundingBoxFromMask = () => {};
+
 export const computeContours = (data: Array<Array<number>>): Array<number> => {
   //pad array to obtain better estimate of contours around mask
   const pad = 10;

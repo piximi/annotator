@@ -255,19 +255,13 @@ export const Stage = () => {
     }
 
     annotationTool.mask = combinedMask;
-    annotationTool.contour = combinedContour;
 
     if (!combinedContour) return;
     annotationTool.boundingBox = annotationTool.computeBoundingBoxFromContours(
       combinedContour
     );
 
-    if (
-      !annotationTool.boundingBox ||
-      !annotationTool.contour ||
-      !annotationTool.mask
-    )
-      return;
+    if (!annotationTool.boundingBox || !annotationTool.mask) return;
 
     dispatch(
       setSelectedAnnotations({
@@ -361,8 +355,6 @@ export const Stage = () => {
 
   useEffect(() => {
     if (!annotated) return;
-
-    if (!annotationTool || !annotationTool.contour) return;
 
     if (!annotationTool) return;
 

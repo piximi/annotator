@@ -33,6 +33,7 @@ export const SelectedAnnotation = ({ annotation }: AnnotationProps) => {
 
   useEffect(() => {
     if (!annotation.mask || !imageWidth || !imageHeight) return;
+    console.info("Here");
     if (!fill) return;
     const color = toRGBA(fill, 0);
     setImageMask(

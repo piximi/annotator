@@ -199,7 +199,7 @@ export abstract class AnnotationTool extends Tool {
   abstract onMouseUp(position: { x: number; y: number }): void;
 
   annotate(category: CategoryType): void {
-    if (!this.boundingBox || !this.contour || !this.mask) return;
+    if (!this.boundingBox || !this.mask) return;
 
     this.annotation = {
       boundingBox: this.boundingBox,

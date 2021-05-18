@@ -169,7 +169,29 @@ export const computeBoundingBoxFromContours = (
   ];
 };
 
-export const computeBoundingBoxFromMask = () => {};
+export const computeBoundingBoxFromMask = (
+  encoded: Array<number>,
+  imageWidth: number,
+  imageHeight: number
+): [number, number, number, number] => {
+  const decodedData = decode(encoded);
+  let x, y: number;
+  let minX = decodedData.length / imageHeight;
+  let maxX = 0;
+  let minY = decodedData.length / imageWidth;
+  let maxY = 0;
+  for (let i = 0; i < decodedData.length; i++) {
+    if (decodedData[i]) {
+      y = Math.floor(i / imageWidth);
+      x = i % imageWidth;
+      if (y > maxY) maxY = y;
+      else if (y < minY) minY = y;
+      if (x > maxX) maxX = x;
+      else if (x < minX) minX = x;
+    }
+  }
+  return [minX, minY, maxX, maxY];
+};
 
 export const computeContours = (data: Array<Array<number>>): Array<number> => {
   //pad array to obtain better estimate of contours around mask

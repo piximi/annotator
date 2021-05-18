@@ -1,7 +1,11 @@
 import { AnnotationTool } from "../AnnotationTool";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
-import { computeContours, connectPoints } from "../../../imageHelper";
+import {
+  computeBoundingBoxFromMask,
+  computeContours,
+  connectPoints,
+} from "../../../imageHelper";
 import { encode } from "../../../rle";
 
 export class PenAnnotationTool extends AnnotationTool {
@@ -81,16 +85,11 @@ export class PenAnnotationTool extends AnnotationTool {
 
     this._mask = encode(this.circlesData);
 
-    const bar = _.map(
-      _.chunk(this.circlesData, this.image.width),
-      (el: Array<number>) => {
-        return Array.from(el);
-      }
+    this._boundingBox = computeBoundingBoxFromMask(
+      this._mask,
+      this.image.width,
+      this.image.height
     );
-
-    this._contour = computeContours(bar);
-
-    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
   }
 
   static async setup(image: ImageJS.Image, brushSize: number) {

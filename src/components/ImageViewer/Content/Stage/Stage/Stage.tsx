@@ -61,6 +61,7 @@ import { Annotations } from "../Annotations/Annotations";
 import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
 import {
   computeBoundingBoxFromContours,
+  computeBoundingBoxFromMask,
   invertContour,
   invertMask,
 } from "../../../../../image/imageHelper";
@@ -236,30 +237,27 @@ export const Stage = () => {
 
     if (!annotationTool.annotated) return;
 
-    let combinedMask, combinedContour;
+    let combinedMask, combinedBoundingBox;
 
     if (!selectedAnnotation) return;
 
     if (selectionMode === AnnotationModeType.Add) {
-      [combinedMask, combinedContour] = annotationTool.add(
-        selectedAnnotation.mask
+      [combinedMask, combinedBoundingBox] = annotationTool.add(
+        selectedAnnotation.mask,
+        selectedAnnotation.boundingBox
       );
     } else if (selectionMode === AnnotationModeType.Subtract) {
-      [combinedMask, combinedContour] = annotationTool.subtract(
-        selectedAnnotation.mask
+      [combinedMask, combinedBoundingBox] = annotationTool.subtract(
+        selectedAnnotation.mask,
+        selectedAnnotation.boundingBox
       );
     } else if (selectionMode === AnnotationModeType.Intersect) {
-      [combinedMask, combinedContour] = annotationTool.intersect(
-        selectedAnnotation.mask
-      );
+      combinedMask = annotationTool.intersect(selectedAnnotation.mask);
     }
 
     annotationTool.mask = combinedMask;
 
-    if (!combinedContour) return;
-    annotationTool.boundingBox = annotationTool.computeBoundingBoxFromContours(
-      combinedContour
-    );
+    annotationTool.boundingBox = combinedBoundingBox;
 
     if (!annotationTool.boundingBox || !annotationTool.mask) return;
 

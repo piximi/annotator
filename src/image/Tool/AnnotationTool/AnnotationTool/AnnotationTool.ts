@@ -35,8 +35,11 @@ export abstract class AnnotationTool extends Tool {
    * Adding to a Operator adds any new areas you select to your existing
    * Operator.
    */
-  add(selectedMask: Array<number>): [Array<number>, Array<number>] {
-    if (!this._mask) return [[], []];
+  add(
+    selectedMask: Array<number>,
+    selectedBoundingBox: [number, number, number, number]
+  ): [Array<number>, [number, number, number, number]] {
+    if (!this._mask || !this._boundingBox) return [[], [0, 0, 0, 0]];
 
     const selectedMaskData = decode(selectedMask);
     const maskData = decode(this._mask);
@@ -47,13 +50,22 @@ export abstract class AnnotationTool extends Tool {
       } else return 0;
     });
 
-    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
-      return Array.from(el);
-    });
+    const combinedBoundingBox = [
+      this._boundingBox[0] < selectedBoundingBox[0]
+        ? this._boundingBox[0]
+        : selectedBoundingBox[0],
+      this._boundingBox[1] < selectedBoundingBox[1]
+        ? this._boundingBox[1]
+        : selectedBoundingBox[1],
+      this._boundingBox[2] > selectedBoundingBox[2]
+        ? this._boundingBox[2]
+        : selectedBoundingBox[2],
+      this._boundingBox[3] > selectedBoundingBox[3]
+        ? this._boundingBox[3]
+        : selectedBoundingBox[3],
+    ] as [number, number, number, number];
 
-    const contours = computeContours(mat);
-
-    return [encode(data), contours];
+    return [encode(data), combinedBoundingBox];
   }
 
   connect() {
@@ -90,8 +102,8 @@ export abstract class AnnotationTool extends Tool {
    * select over will be kept and any currently selected areas outside your
    * new Operator will be removed from the Operator.
    */
-  intersect(selectedMask: Array<number>): [Array<number>, Array<number>] {
-    if (!this._mask) return [[], []];
+  intersect(selectedMask: Array<number>): Array<number> {
+    if (!this._mask) return [];
 
     const selectedMaskData = decode(selectedMask);
     const maskData = decode(this._mask);
@@ -102,20 +114,18 @@ export abstract class AnnotationTool extends Tool {
       } else return 0;
     });
 
-    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
-      return Array.from(el);
-    });
-    const contours = computeContours(mat);
-
-    return [encode(data), contours];
+    return encode(data);
   }
 
   /*
    * Subtracting from a Operator deselects the areas you draw over, keeping
    * the rest of your existing Operator.
    */
-  subtract(selectedMask: Array<number>): [Array<number>, Array<number>] {
-    if (!this._mask) return [[], []];
+  subtract(
+    selectedMask: Array<number>,
+    selectedBoundingBox: [number, number, number, number]
+  ): [Array<number>, [number, number, number, number]] {
+    if (!this._mask || !this._boundingBox) return [[], [0, 0, 0, 0]];
 
     const selectedMaskData = decode(selectedMask);
     const maskData = decode(this._mask);
@@ -126,12 +136,27 @@ export abstract class AnnotationTool extends Tool {
       } else return selectedMaskData[index];
     });
 
-    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
-      return Array.from(el);
-    });
-    const contours = computeContours(mat);
+    console.info(selectedBoundingBox);
+    console.info(this._boundingBox);
 
-    return [encode(data), contours];
+    //FIXME this is the wrong logic
+    const combinedBoundingBox = [
+      this._boundingBox[0] > selectedBoundingBox[0]
+        ? this._boundingBox[2]
+        : selectedBoundingBox[0],
+      this._boundingBox[3] > selectedBoundingBox[1]
+        ? selectedBoundingBox[1]
+        : this._boundingBox[3],
+      this._boundingBox[0] > selectedBoundingBox[2]
+        ? this._boundingBox[0]
+        : selectedBoundingBox[2],
+      this._boundingBox[1] > selectedBoundingBox[3]
+        ? this._boundingBox[1]
+        : selectedBoundingBox[3],
+    ] as [number, number, number, number];
+
+    console.info(combinedBoundingBox);
+    return [encode(data), combinedBoundingBox];
   }
 
   get boundingBox(): [number, number, number, number] | undefined {

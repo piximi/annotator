@@ -28,6 +28,8 @@ import useSound from "use-sound";
 import createAnnotationSoundEffect from "../../../../../sounds/pop-up-on.mp3";
 import { soundEnabledSelector } from "../../../../../store/selectors/soundEnabledSelector";
 import deleteAnnotationSoundEffect from "../../../../../sounds/pop-up-off.mp3";
+import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
+import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 
 type box = {
   x: number;
@@ -78,11 +80,12 @@ export const Transformer = ({
 
   const stageScale = useSelector(stageScaleSelector);
 
-  const image = useSelector(imageSelector);
-
   const cursor = useCursor();
 
   const soundEnabled = useSelector(soundEnabledSelector);
+
+  const imageWidth = useSelector(imageWidthSelector);
+  const imageHeight = useSelector(imageHeightSelector);
 
   const [playCreateAnnotationSoundEffect] = useSound(
     createAnnotationSoundEffect
@@ -91,11 +94,6 @@ export const Transformer = ({
   const [playDeleteAnnotationSoundEffect] = useSound(
     deleteAnnotationSoundEffect
   );
-
-  if (!image || !image.shape) return <React.Fragment />;
-
-  const imageWidth = image.shape.width;
-  const imageHeight = image.shape.height;
 
   const computeResizedContour = () => {
     if (!boundBox || !startBox) return;
@@ -185,8 +183,8 @@ export const Transformer = ({
     return _.flatten(
       _.map(_.chunk(contour, 2), (el: Array<number>) => {
         return [
-          center.x + scale.x * (el[0] - center.x),
-          center.y + scale.y * (el[1] - center.y),
+          Math.round(center.x + scale.x * (el[0] - center.x)),
+          Math.round(center.y + scale.y * (el[1] - center.y)),
         ];
       })
     );
@@ -214,10 +212,12 @@ export const Transformer = ({
 
     if (!boundBox || !startBox) return;
 
+    if (!imageWidth || !imageHeight) return;
+
     const relativeBoundBox = getRelativeBox(boundBox);
     const relativeStartBox = getRelativeBox(startBox);
 
-    if (!relativeBoundBox || !relativeStartBox) return;
+    if (!relativeBoundBox || !relativeStartBox || !center) return;
 
     // get necessary parameters for transformation
     const scaleX = relativeBoundBox.width / relativeStartBox.width;
@@ -227,34 +227,66 @@ export const Transformer = ({
     const mask = selectedAnnotation.mask;
     const boundingBox = selectedAnnotation.boundingBox;
     const decodedData = new Uint8Array(decode(mask));
-    const binaryMaskImage = new ImageJS.Image(
-      imageWidth,
-      imageHeight,
-      decodedData,
-      { components: 1, alpha: 0 }
-    );
+    const maskImage = new ImageJS.Image(imageWidth, imageHeight, decodedData, {
+      components: 1,
+      alpha: 0,
+    });
 
     const roiWidth = boundingBox[2] - boundingBox[0];
     const roiHeight = boundingBox[3] - boundingBox[1];
-    const roi = binaryMaskImage.crop({
-      x: boundingBox[0],
-      y: boundingBox[1],
+    const roiX = boundingBox[0];
+    const roiY = boundingBox[1];
+    const roi = maskImage.crop({
+      x: roiX,
+      y: roiY,
       width: roiWidth,
       height: roiHeight,
     });
 
-    const resizedImage = roi.resize({
+    const resizedMaskROI = roi.resize({
       height: Math.round(roiHeight * scaleY),
       width: Math.round(roiWidth * scaleX),
       preserveAspectRatio: false,
     });
 
-    const resizedMask = resizeMask(resizedContour);
+    const scaledOffset = resizeContour([roiX, roiY], center, {
+      x: scaleX,
+      y: scaleY,
+    });
+
+    const resizedMaskData: Array<number> = [];
+
+    for (let k = 0; k < decodedData.length; k++) {
+      const x = k % imageWidth;
+      const y = Math.floor(k / imageWidth);
+      const pixel = resizedMaskROI.getPixelXY(
+        x - scaledOffset[0],
+        y - scaledOffset[1]
+      )[0];
+      if (
+        x > scaledOffset[0] &&
+        x < scaledOffset[0] + resizedMaskROI.width &&
+        y > scaledOffset[1] &&
+        y < scaledOffset[1] + resizedMaskROI.height &&
+        pixel
+      ) {
+        resizedMaskData.push(255);
+      } else {
+        resizedMaskData.push(0);
+      }
+    }
+
+    const resizedMask = encode(Uint8Array.from(resizedMaskData));
 
     const updatedAnnotation = {
       ...selectedAnnotation,
       contour: resizedContour,
-      boundingBox: computeBoundingBoxFromContours(resizedContour),
+      boundingBox: [
+        scaledOffset[0],
+        scaledOffset[1],
+        scaledOffset[0] + resizedMaskROI.width,
+        scaledOffset[1] + resizedMaskROI.height,
+      ] as [number, number, number, number],
       mask: resizedMask,
     };
 

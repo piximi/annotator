@@ -212,14 +212,21 @@ export const Transformer = ({
   const onTransformEnd = () => {
     if (!selectedAnnotation) return;
 
-    //TODO try the following
-    // //EXPERIMENTATION ZONE
-    // const mask = selectedAnnotation.mask;
-    // const decodedMask = decode(mask);
-    // const decodedImage = new ImageJS.Image(512, 512, decodedMask, {alpha: 0, components: 1 }) //FIXME don't use arbitrary width and height
-    // //Next step: do .resize with scaled width and heihgt
-    // //Next step: do a crop (512, 512) where the offset is going to be the x and y prop of scaled opposite anchor position (maybe)
-    // //END OF EXPERIMENTATION ZONE
+    const mask = selectedAnnotation.mask;
+    const boundingBox = selectedAnnotation.boundingBox;
+    const decodedData = new Uint8Array(decode(mask));
+    const binaryMaskImage = new ImageJS.Image(
+      imageWidth,
+      imageHeight,
+      decodedData,
+      { components: 1, alpha: 0 }
+    );
+    const roi = binaryMaskImage.crop({
+      x: boundingBox[0],
+      y: boundingBox[1],
+      width: boundingBox[2] - boundingBox[0],
+      height: boundingBox[3] - boundingBox[1],
+    });
 
     const resizedMask = resizeMask(resizedContour);
 

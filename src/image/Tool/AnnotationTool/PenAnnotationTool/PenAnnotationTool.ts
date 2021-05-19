@@ -23,6 +23,8 @@ export class PenAnnotationTool extends AnnotationTool {
 
     if (!ctx) return undefined;
 
+    //TODO find the bounding box coordinates by looping over the points (and adding the brushsize width to it).
+
     const connected = connectPoints(
       _.chunk(this.points, 2),
       new ImageJS.Image(this.image.width, this.image.height)

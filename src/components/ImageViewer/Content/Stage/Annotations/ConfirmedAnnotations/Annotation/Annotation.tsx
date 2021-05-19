@@ -8,7 +8,7 @@ import {
   categoriesSelector,
   stageScaleSelector,
 } from "../../../../../../../store/selectors";
-import { computeOverlayRoi } from "../../../../../../../image/imageHelper";
+import { colorOverlayROI } from "../../../../../../../image/imageHelper";
 import { imageWidthSelector } from "../../../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../../../store/selectors/imageHeightSelector";
 import { toRGBA } from "../../../../../../../image";
@@ -39,7 +39,7 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
     if (Math.round(boxWidth) <= 0 || Math.round(boxHeight) <= 0) return;
     const color = toRGBA(fill, 0);
     setImageMask(
-      computeOverlayRoi(
+      colorOverlayROI(
         annotation.mask,
         annotation.boundingBox,
         imageWidth,

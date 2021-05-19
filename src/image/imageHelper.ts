@@ -240,7 +240,7 @@ export const computeContours = (data: Array<Array<number>>): Array<number> => {
 /*
  * From encoded mask data, get the decoded data and return results as an HTMLImageElement to be used by Konva.Image
  */
-export const computeOverlayRoi = (
+export const colorOverlayROI = (
   encodedMask: Array<number>,
   boundingBox: [number, number, number, number],
   imageWidth: number,
@@ -257,29 +257,34 @@ export const computeOverlayRoi = (
   const boxX = boundingBox[0];
   const boxY = boundingBox[1];
 
-  const overlayROIImage = new ImageJS.Image(
-    Math.round(boxWidth),
-    Math.round(boxHeight),
-    {
-      components: 3,
-      alpha: 1,
-    }
-  );
+  const fullImage = new ImageJS.Image(imageWidth, imageHeight, decodedData, {
+    components: 1,
+    alpha: 0,
+  });
 
-  //FIXME: here use ImageJS crop isntead of this
-  for (let i = 0; i < overlayROIImage.width; i++) {
-    for (let j = 0; j < overlayROIImage.height; j++) {
-      //compute linear pixel coordinate in original image space
-      const k = (j + boxY) * imageWidth + (i + boxX);
-      if (decodedData[k]) {
-        overlayROIImage.setPixelXY(i, j, [color[0], color[1], color[2], 128]); //r,g,b,alpha
+  const croppedImage = fullImage.crop({
+    x: boxX,
+    y: boxY,
+    width: boxWidth,
+    height: boxHeight,
+  });
+
+  const colorROIImage = new ImageJS.Image(boxWidth, boxHeight, {
+    components: 3,
+    alpha: 1,
+  });
+
+  for (let i = 0; i < croppedImage.width; i++) {
+    for (let j = 0; j < croppedImage.height; j++) {
+      if (croppedImage.getPixelXY(i, j)[0] > 0) {
+        colorROIImage.setPixelXY(i, j, [color[0], color[1], color[2], 128]);
       } else {
-        overlayROIImage.setPixelXY(i, j, [0, 0, 0, 0]); //r,g,b,alpha
+        colorROIImage.setPixelXY(i, j, [0, 0, 0, 0]);
       }
     }
   }
 
-  const src = overlayROIImage.toDataURL("image-png", {
+  const src = colorROIImage.toDataURL("image-png", {
     useCanvas: true,
   });
   const image = new Image();

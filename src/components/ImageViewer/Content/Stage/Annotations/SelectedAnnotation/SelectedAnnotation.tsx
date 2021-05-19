@@ -11,7 +11,7 @@ import {
 import { imageWidthSelector } from "../../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../../store/selectors/imageHeightSelector";
 import { toRGBA } from "../../../../../../image";
-import { computeOverlayRoi } from "../../../../../../image/imageHelper";
+import { colorOverlayROI } from "../../../../../../image/imageHelper";
 
 type AnnotationProps = {
   annotation: AnnotationType;
@@ -37,7 +37,7 @@ export const SelectedAnnotation = ({ annotation }: AnnotationProps) => {
     const color = toRGBA(fill, 0);
     const t0 = performance.now();
     setImageMask(
-      computeOverlayRoi(
+      colorOverlayROI(
         annotation.mask,
         annotation.boundingBox,
         imageWidth,

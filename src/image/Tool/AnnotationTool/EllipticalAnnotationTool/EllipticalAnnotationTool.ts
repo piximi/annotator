@@ -81,7 +81,6 @@ export class EllipticalAnnotationTool extends AnnotationTool {
     canvas.width = this.image.width;
     canvas.height = this.image.height;
 
-    console.info(this.image.width, this.image.height);
     const ctx = canvas.getContext("2d");
 
     if (!ctx || !this.center || !this.radius) return undefined;
@@ -105,6 +104,8 @@ export class EllipticalAnnotationTool extends AnnotationTool {
       for (let y = 0; y < imageMask.height; y++) {
         if (imageMask.getPixelXY(x, y)[0] > 1) {
           imageMask.setPixelXY(x, y, [255]);
+        } else {
+          imageMask.setPixelXY(x, y, [0]);
         }
       }
     }

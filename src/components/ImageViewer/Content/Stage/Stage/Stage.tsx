@@ -252,7 +252,10 @@ export const Stage = () => {
         selectedAnnotation.boundingBox
       );
     } else if (selectionMode === AnnotationModeType.Intersect) {
-      combinedMask = annotationTool.intersect(selectedAnnotation.mask);
+      [combinedMask, combinedBoundingBox] = annotationTool.intersect(
+        selectedAnnotation.mask,
+        selectedAnnotation.boundingBox
+      );
     }
 
     annotationTool.mask = combinedMask;

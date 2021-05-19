@@ -102,8 +102,11 @@ export abstract class AnnotationTool extends Tool {
    * select over will be kept and any currently selected areas outside your
    * new Operator will be removed from the Operator.
    */
-  intersect(selectedMask: Array<number>): Array<number> {
-    if (!this._mask) return [];
+  intersect(
+    selectedMask: Array<number>,
+    selectedBoundingBox: [number, number, number, number]
+  ): [Array<number>, [number, number, number, number]] {
+    if (!this._mask || !this._boundingBox) return [[], [0, 0, 0, 0]];
 
     const selectedMaskData = decode(selectedMask);
     const maskData = decode(this._mask);
@@ -114,7 +117,22 @@ export abstract class AnnotationTool extends Tool {
       } else return 0;
     });
 
-    return encode(data);
+    const combinedBoundingBox = [
+      this._boundingBox[0] > selectedBoundingBox[0]
+        ? this._boundingBox[0]
+        : selectedBoundingBox[0],
+      this._boundingBox[1] > selectedBoundingBox[1]
+        ? this._boundingBox[1]
+        : selectedBoundingBox[1],
+      this._boundingBox[2] < selectedBoundingBox[2]
+        ? this._boundingBox[2]
+        : selectedBoundingBox[2],
+      this._boundingBox[3] < selectedBoundingBox[3]
+        ? this._boundingBox[3]
+        : selectedBoundingBox[3],
+    ] as [number, number, number, number];
+
+    return [encode(data), combinedBoundingBox];
   }
 
   /*

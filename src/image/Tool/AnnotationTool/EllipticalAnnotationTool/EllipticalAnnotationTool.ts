@@ -6,17 +6,6 @@ export class EllipticalAnnotationTool extends AnnotationTool {
   origin?: { x: number; y: number };
   radius?: { x: number; y: number };
 
-  computeBoundingBox(): [number, number, number, number] | undefined {
-    if (!this.center || !this.origin || !this.radius) return undefined;
-
-    return [
-      Math.round(this.origin.x),
-      Math.round(this.origin.y),
-      Math.round(this.center.x + this.radius.x),
-      Math.round(this.center.y + this.radius.y),
-    ];
-  }
-
   deselect() {
     this.annotated = false;
     this.annotating = false;
@@ -46,7 +35,7 @@ export class EllipticalAnnotationTool extends AnnotationTool {
 
       this._mask = this.computeMask();
 
-      this._boundingBox = this.computeBoundingBox();
+      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
     }
   }
 
@@ -70,7 +59,7 @@ export class EllipticalAnnotationTool extends AnnotationTool {
 
       this._mask = this.computeMask();
 
-      this._boundingBox = this.computeBoundingBox();
+      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
     }
   }
 

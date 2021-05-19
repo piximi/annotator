@@ -7,14 +7,8 @@ export class RectangularAnnotationTool extends AnnotationTool {
   height?: number;
 
   computeBoundingBox(): [number, number, number, number] | undefined {
-    if (!this.origin || !this.width || !this.height) return undefined;
-
-    return [
-      Math.round(this.origin.x),
-      Math.round(this.origin.y),
-      Math.round(this.origin.x + this.width),
-      Math.round(this.origin.y + this.height),
-    ];
+    if (!this.points || !this.points.length) return undefined;
+    return [this.points[0], this.points[1], this.points[4], this.points[5]];
   }
 
   deselect() {

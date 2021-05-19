@@ -1,4 +1,6 @@
 import { AnnotationTool } from "../AnnotationTool";
+import * as ImageJS from "image-js";
+import { encode } from "../../../rle";
 
 export class RectangularAnnotationTool extends AnnotationTool {
   origin?: { x: number; y: number };
@@ -34,8 +36,12 @@ export class RectangularAnnotationTool extends AnnotationTool {
       this.points = this.convertToPoints();
 
       this._contour = this.points;
-      this._mask = this.computeMask();
+
       this._boundingBox = this.computeBoundingBox();
+
+      const mask = this.convertToMask();
+      if (!mask) return;
+      this._mask = encode(new Uint8Array(mask));
 
       this.annotated = true;
       this.annotating = false;
@@ -54,8 +60,11 @@ export class RectangularAnnotationTool extends AnnotationTool {
       this.points = this.convertToPoints();
 
       this._contour = this.points;
-      this._mask = this.computeMask();
       this._boundingBox = this.computeBoundingBox();
+
+      const mask = this.convertToMask();
+      if (!mask) return;
+      this._mask = encode(new Uint8Array(mask));
 
       this.annotated = true;
       this.annotating = false;
@@ -89,6 +98,23 @@ export class RectangularAnnotationTool extends AnnotationTool {
     points.push(...[x1, y1, x2, y1, x2, y2, x1, y2, x1, y1]);
 
     return points;
+  }
+
+  private convertToMask() {
+    if (!this.points) return;
+
+    const x1 = this.points[0];
+    const y1 = this.points[1];
+    const x2 = this.points[4];
+    const y2 = this.points[5];
+    const maskImage = new ImageJS.Image(this.image.width, this.image.height, {
+      components: 1,
+      alpha: 0,
+    });
+    for (let i = x1; i < x2; i++) {
+      for (let j = y1; j < y2; j++) maskImage.setPixelXY(i, j, [255]);
+    }
+    return maskImage.data;
   }
 
   private resize(position: { x: number; y: number }) {

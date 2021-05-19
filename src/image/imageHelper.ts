@@ -266,6 +266,7 @@ export const computeOverlayRoi = (
     }
   );
 
+  //FIXME: here use ImageJS crop isntead of this
   for (let i = 0; i < overlayROIImage.width; i++) {
     for (let j = 0; j < overlayROIImage.height; j++) {
       //compute linear pixel coordinate in original image space

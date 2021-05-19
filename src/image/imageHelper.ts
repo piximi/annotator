@@ -257,10 +257,14 @@ export const computeOverlayRoi = (
   const boxX = boundingBox[0];
   const boxY = boundingBox[1];
 
-  const overlayROIImage = new ImageJS.Image(boxWidth, boxHeight, {
-    components: 3,
-    alpha: 1,
-  });
+  const overlayROIImage = new ImageJS.Image(
+    Math.round(boxWidth),
+    Math.round(boxHeight),
+    {
+      components: 3,
+      alpha: 1,
+    }
+  );
 
   for (let i = 0; i < overlayROIImage.width; i++) {
     for (let j = 0; j < overlayROIImage.height; j++) {

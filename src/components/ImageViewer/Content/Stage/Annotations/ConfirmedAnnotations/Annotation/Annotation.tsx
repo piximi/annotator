@@ -34,6 +34,9 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
   useEffect(() => {
     if (!annotation.mask || !imageWidth || !imageHeight) return;
     if (!fill) return;
+    const boxWidth = annotation.boundingBox[2] - annotation.boundingBox[0];
+    const boxHeight = annotation.boundingBox[3] - annotation.boundingBox[1];
+    if (Math.round(boxWidth) <= 0 || Math.round(boxHeight) <= 0) return;
     const color = toRGBA(fill, 0);
     setImageMask(
       computeOverlayRoi(

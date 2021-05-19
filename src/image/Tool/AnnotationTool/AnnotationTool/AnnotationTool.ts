@@ -136,26 +136,33 @@ export abstract class AnnotationTool extends Tool {
       } else return selectedMaskData[index];
     });
 
-    console.info(selectedBoundingBox);
-    console.info(this._boundingBox);
-
-    //FIXME this is the wrong logic
     const combinedBoundingBox = [
-      this._boundingBox[0] > selectedBoundingBox[0]
+      this._boundingBox[2] > selectedBoundingBox[0] &&
+      this._boundingBox[0] < selectedBoundingBox[0] &&
+      this._boundingBox[1] < selectedBoundingBox[1] &&
+      this._boundingBox[3] > selectedBoundingBox[3]
         ? this._boundingBox[2]
         : selectedBoundingBox[0],
-      this._boundingBox[3] > selectedBoundingBox[1]
-        ? selectedBoundingBox[1]
-        : this._boundingBox[3],
-      this._boundingBox[0] > selectedBoundingBox[2]
+      this._boundingBox[3] > selectedBoundingBox[1] &&
+      this._boundingBox[1] < selectedBoundingBox[1] &&
+      this._boundingBox[0] < selectedBoundingBox[0] &&
+      this._boundingBox[2] > selectedBoundingBox[2]
+        ? this._boundingBox[3]
+        : selectedBoundingBox[1],
+      this._boundingBox[0] < selectedBoundingBox[2] &&
+      this._boundingBox[2] > selectedBoundingBox[2] &&
+      this._boundingBox[1] < selectedBoundingBox[1] &&
+      this._boundingBox[3] > selectedBoundingBox[3]
         ? this._boundingBox[0]
         : selectedBoundingBox[2],
-      this._boundingBox[1] > selectedBoundingBox[3]
+      this._boundingBox[1] < selectedBoundingBox[3] &&
+      this._boundingBox[3] > selectedBoundingBox[3] &&
+      this._boundingBox[0] < selectedBoundingBox[0] &&
+      this._boundingBox[2] > selectedBoundingBox[2]
         ? this._boundingBox[1]
         : selectedBoundingBox[3],
     ] as [number, number, number, number];
 
-    console.info(combinedBoundingBox);
     return [encode(data), combinedBoundingBox];
   }
 

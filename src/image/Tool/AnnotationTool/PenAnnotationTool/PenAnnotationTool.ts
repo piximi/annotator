@@ -105,6 +105,8 @@ export class PenAnnotationTool extends AnnotationTool {
       for (let y = 0; y < mask.height; y++) {
         if (mask.getPixelXY(x, y)[0] > 1) {
           mask.setPixelXY(x, y, [255]);
+        } else {
+          mask.setPixelXY(x, y, [0]);
         }
       }
     }

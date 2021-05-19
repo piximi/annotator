@@ -56,15 +56,9 @@ import { scaledImageWidthSelector } from "../../../../../store/selectors/scaledI
 import { scaledImageHeightSelector } from "../../../../../store/selectors/scaledImageHeightSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
-import { scaledSelectedAnnotationContourSelector } from "../../../../../store/selectors/scaledSelectedAnnotationContourSelector";
 import { Annotations } from "../Annotations/Annotations";
 import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
-import {
-  computeBoundingBoxFromContours,
-  computeBoundingBoxFromMask,
-  invertContour,
-  invertMask,
-} from "../../../../../image/imageHelper";
+import { invertMask } from "../../../../../image/imageHelper";
 import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { quickSelectionBrushSizeSelector } from "../../../../../store/selectors/quickSelectionBrushSizeSelector";

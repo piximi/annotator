@@ -2,6 +2,7 @@ import { AnnotationTool } from "../AnnotationTool";
 import { slic } from "../../../slic";
 import * as ImageJS from "image-js";
 import { encode } from "../../../rle";
+import * as _ from "lodash";
 
 export class QuickAnnotationTool extends AnnotationTool {
   brushsize?: number;
@@ -105,8 +106,10 @@ export class QuickAnnotationTool extends AnnotationTool {
     const roi = roiManager.getRois()[0];
     this._boundingBox = [roi.minX, roi.minY, roi.maxX, roi.maxY];
 
+    const thresholded = _.map(greyMask.data, (i: number) => (i > 1 ? 255 : 0)); //threshold necessary because output of NN is not binary
+
     //compute mask
-    this._mask = encode(greyMask.data as Uint8Array);
+    this._mask = encode(Uint8Array.from(thresholded));
 
     this.annotated = true;
     this.annotating = false;

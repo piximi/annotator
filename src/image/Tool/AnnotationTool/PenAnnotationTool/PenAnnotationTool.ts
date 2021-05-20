@@ -19,18 +19,25 @@ export class PenAnnotationTool extends AnnotationTool {
 
     if (!ctx) return undefined;
 
-    const connected = connectPoints(
-      _.chunk(this.points, 2),
-      new ImageJS.Image(this.image.width, this.image.height)
-    );
+    let connected;
+
+    if (this.points.length === 2) {
+      // handling the case in which a single point has been clicked
+      connected = _.chunk(this.points, 2);
+    } else {
+      connected = connectPoints(
+        _.chunk(this.points, 2),
+        new ImageJS.Image(this.image.width, this.image.height)
+      );
+    }
 
     //compute bounding box coordinates
     const bbox = this.computeBoundingBoxFromContours(_.flatten(connected));
     this._boundingBox = [
-      Math.round(bbox[0] - this.brushSize),
-      Math.round(bbox[1] - this.brushSize),
-      Math.round(bbox[2] + this.brushSize),
-      Math.round(bbox[3] + this.brushSize),
+      Math.max(0, Math.round(bbox[0] - this.brushSize)),
+      Math.max(0, Math.round(bbox[1] - this.brushSize)),
+      Math.min(this.image.width, Math.round(bbox[2] + this.brushSize)),
+      Math.min(this.image.height, Math.round(bbox[3] + this.brushSize)),
     ];
 
     //compute mask by drawing circles over canvas
@@ -48,6 +55,7 @@ export class PenAnnotationTool extends AnnotationTool {
     });
 
     const rgbMask = ImageJS.Image.fromCanvas(canvas);
+
     // @ts-ignore
     this.circlesData = this.thresholdMask(rgbMask.getChannel(3)).data;
   }

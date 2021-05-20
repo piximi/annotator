@@ -1,9 +1,7 @@
 import { AnnotationTool } from "../AnnotationTool";
 import { slic } from "../../../slic";
 import * as ImageJS from "image-js";
-import * as _ from "lodash";
 import { encode } from "../../../rle";
-import { computeContoursFromIsolines } from "../../../imageHelper";
 
 export class QuickAnnotationTool extends AnnotationTool {
   brushsize?: number;
@@ -17,12 +15,6 @@ export class QuickAnnotationTool extends AnnotationTool {
 
   flatPixelCoordinate(position: { x: number; y: number }) {
     return Math.round(position.x) + Math.round(position.y) * this.image.width;
-  }
-
-  computeQuickSelectionMask(): Array<number> | undefined {
-    if (!this.currentMask) return;
-
-    return encode(this.currentMask.grey().data as Uint8Array);
   }
 
   filter(): {
@@ -101,18 +93,20 @@ export class QuickAnnotationTool extends AnnotationTool {
 
     if (!this.currentMask) return;
 
-    const greyData = this.currentMask.grey();
+    const greyMask = this.currentMask.grey();
+    //@ts-ignore
+    const binaryMask = greyMask.mask({ algorithm: "threshold", threshold: 1 });
 
+    //compute bounding box with ROI manager
+    const roiManager = this.image.getRoiManager();
     // @ts-ignore
-    const greyMatrix = greyData.getMatrix().data;
+    roiManager.fromMask(binaryMask);
+    // @ts-ignore
+    const roi = roiManager.getRois()[0];
+    this._boundingBox = [roi.minX, roi.minY, roi.maxX, roi.maxY];
 
-    const bar = greyMatrix.map((el: Array<number>) => {
-      return Array.from(el);
-    });
-
-    this._contour = computeContoursFromIsolines(bar);
-    this._mask = this.computeQuickSelectionMask();
-    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
+    //compute mask
+    this._mask = encode(greyMask.data as Uint8Array);
 
     this.annotated = true;
     this.annotating = false;

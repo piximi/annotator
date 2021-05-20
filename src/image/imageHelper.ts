@@ -166,11 +166,14 @@ export const colorOverlayROI = (
 
   const decodedData = decode(encodedMask);
 
+  const endX = Math.min(imageWidth, boundingBox[2]);
+  const endY = Math.min(imageHeight, boundingBox[3]);
+
   //extract bounding box params
-  const boxWidth = boundingBox[2] - boundingBox[0];
-  const boxHeight = boundingBox[3] - boundingBox[1];
-  const boxX = boundingBox[0];
-  const boxY = boundingBox[1];
+  const boxWidth = endX - boundingBox[0];
+  const boxHeight = endY - boundingBox[1];
+  const boxX = Math.max(0, boundingBox[0]);
+  const boxY = Math.max(0, boundingBox[1]);
 
   const fullImage = new ImageJS.Image(imageWidth, imageHeight, decodedData, {
     components: 1,

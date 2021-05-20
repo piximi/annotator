@@ -35,7 +35,6 @@ export const SelectedAnnotation = ({ annotation }: AnnotationProps) => {
     if (!annotation.mask || !imageWidth || !imageHeight) return;
     if (!fill) return;
     const color = toRGBA(fill, 0);
-    const t0 = performance.now();
     setImageMask(
       colorOverlayROI(
         annotation.mask,
@@ -45,8 +44,6 @@ export const SelectedAnnotation = ({ annotation }: AnnotationProps) => {
         color
       )
     );
-    const t1 = performance.now();
-    console.info(`Total computing overlay time: ${t1 - t0} ms`);
   }, [annotation.mask, fill]);
 
   return (

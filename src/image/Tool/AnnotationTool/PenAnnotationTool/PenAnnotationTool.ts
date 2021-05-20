@@ -23,13 +23,21 @@ export class PenAnnotationTool extends AnnotationTool {
 
     if (!ctx) return undefined;
 
-    //TODO find the bounding box coordinates by looping over the points (and adding the brushsize width to it).
-
     const connected = connectPoints(
       _.chunk(this.points, 2),
       new ImageJS.Image(this.image.width, this.image.height)
     );
 
+    //compute bounding box coordinates
+    const bbox = this.computeBoundingBoxFromContours(_.flatten(connected));
+    this._boundingBox = [
+      Math.round(bbox[0] - this.brushSize),
+      Math.round(bbox[1] - this.brushSize),
+      Math.round(bbox[2] + this.brushSize),
+      Math.round(bbox[3] + this.brushSize),
+    ];
+
+    //compute mask by drawing circles over canvas
     connected.forEach((position) => {
       ctx.beginPath();
       ctx.arc(
@@ -81,17 +89,11 @@ export class PenAnnotationTool extends AnnotationTool {
 
     this.points = this.buffer;
 
-    this.computeCircleData();
+    this.computeCircleData(); //this will set the bounding box as well
 
     if (!this.circlesData) return [];
 
     this._mask = encode(this.circlesData);
-
-    this._boundingBox = computeBoundingBoxFromMask(
-      this._mask,
-      this.image.width,
-      this.image.height
-    );
   }
 
   static async setup(image: ImageJS.Image, brushSize: number) {

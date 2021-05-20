@@ -4,7 +4,6 @@ import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
-  annotatingSelector,
   imageInstancesSelector,
   invertModeSelector,
   selectedCategorySelector,
@@ -59,8 +58,6 @@ import { selectedAnnotationsSelector } from "../../../../../store/selectors/sele
 import { Annotations } from "../Annotations/Annotations";
 import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
 import { invertMask } from "../../../../../image/imageHelper";
-import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
-import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { quickSelectionBrushSizeSelector } from "../../../../../store/selectors/quickSelectionBrushSizeSelector";
 import { useHotkeys } from "react-hotkeys-hook";
 import { PointerSelection } from "../Selection/PointerSelection";
@@ -102,9 +99,6 @@ export const Stage = () => {
   const scaledImageWidth = useSelector(scaledImageWidthSelector);
   const scaledImageHeight = useSelector(scaledImageHeightSelector);
 
-  const imageWidth = useSelector(imageWidthSelector);
-  const imageHeight = useSelector(imageHeightSelector);
-
   const stageScale = useSelector(stageScaleSelector);
 
   const dispatch = useDispatch();
@@ -130,7 +124,6 @@ export const Stage = () => {
   const annotations = useSelector(imageInstancesSelector);
 
   const annotated = useSelector(annotatedSelector);
-  const annotating = useSelector(annotatingSelector);
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 

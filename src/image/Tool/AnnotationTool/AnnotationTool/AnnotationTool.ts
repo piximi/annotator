@@ -21,7 +21,6 @@ export abstract class AnnotationTool extends Tool {
   buffer?: Array<number> = [];
 
   protected _boundingBox?: [number, number, number, number];
-  protected _contour?: Array<number>;
   protected _mask?: Array<number>;
 
   constructor(image: ImageJS.Image) {
@@ -84,9 +83,8 @@ export abstract class AnnotationTool extends Tool {
 
     this.buffer.splice(anchorIndex, segment.length, ...segment);
 
-    this._contour = this.buffer;
     this._mask = this.computeMask();
-    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
+    this._boundingBox = this.computeBoundingBoxFromContours(this.buffer);
 
     this.anchor = undefined;
     this.origin = undefined;
@@ -221,14 +219,6 @@ export abstract class AnnotationTool extends Tool {
 
     //@ts-ignore
     return encode(maskImage.getChannel(0).data);
-  }
-
-  get contour(): Array<number> | undefined {
-    return this._contour;
-  }
-
-  set contour(updatedContours: Array<number> | undefined) {
-    this._contour = updatedContours;
   }
 
   get mask(): Array<number> | undefined {

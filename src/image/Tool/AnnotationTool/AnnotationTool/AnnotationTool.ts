@@ -2,7 +2,11 @@ import { AnnotationType } from "../../../../types/AnnotationType";
 import * as ImageJS from "image-js";
 import { CategoryType } from "../../../../types/CategoryType";
 import * as _ from "lodash";
-import { computeContours, connectPoints, drawLine } from "../../../imageHelper";
+import {
+  computeContoursFromIsolines,
+  connectPoints,
+  drawLine,
+} from "../../../imageHelper";
 import { simplify } from "../../../simplify/simplify";
 import { slpf } from "../../../polygon-fill/slpf";
 import * as uuid from "uuid";

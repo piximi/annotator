@@ -3,7 +3,7 @@ import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
 import * as _ from "lodash";
 import { encode } from "../../../rle";
-import { computeContours } from "../../../imageHelper";
+import { computeContoursFromIsolines } from "../../../imageHelper";
 
 export class ObjectAnnotationTool extends RectangularAnnotationTool {
   graph?: tensorflow.LayersModel;
@@ -126,7 +126,7 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
         }
       );
 
-      this._contour = computeContours(mask);
+      this._contour = computeContoursFromIsolines(mask);
 
       // @ts-ignore
       this._mask = encode(thresholded);

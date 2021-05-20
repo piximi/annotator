@@ -103,7 +103,10 @@ export class QuickAnnotationTool extends AnnotationTool {
     // @ts-ignore
     roiManager.fromMask(binaryMask);
     // @ts-ignore
-    const roi = roiManager.getRois()[0];
+    const rois = roiManager.getRois();
+    const roi = rois.sort((a: any, b: any) => {
+      return b.surface - a.surface;
+    })[1]; // take the second roi because the first one will be of the size of the image,the second one is the actual largest roi
     this._boundingBox = [roi.minX, roi.minY, roi.maxX, roi.maxY];
 
     const thresholded = _.map(greyMask.data, (i: number) => (i > 1 ? 255 : 0)); //threshold necessary because output of NN is not binary

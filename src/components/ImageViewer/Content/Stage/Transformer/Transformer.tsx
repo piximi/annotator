@@ -207,9 +207,9 @@ export const Transformer = ({
         y - scaledOffset[1]
       )[0];
       if (
-        x > scaledOffset[0] &&
+        x >= scaledOffset[0] &&
         x < scaledOffset[0] + resizedMaskROI.width &&
-        y > scaledOffset[1] &&
+        y >= scaledOffset[1] &&
         y < scaledOffset[1] + resizedMaskROI.height &&
         pixel
       ) {

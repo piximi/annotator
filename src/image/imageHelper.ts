@@ -79,7 +79,9 @@ Given a click at a position, return all overlapping annotations ids
  */
 export const getOverlappingAnnotations = (
   position: { x: number; y: number },
-  annotations: Array<AnnotationType>
+  annotations: Array<AnnotationType>,
+  imageWidth: number,
+  imageHeight: number
 ) => {
   const overlappingAnnotations = annotations.filter(
     (annotation: AnnotationType) => {
@@ -90,7 +92,20 @@ export const getOverlappingAnnotations = (
         position.y >= boundingBox[1] &&
         position.y <= boundingBox[3]
       ) {
-        return annotation;
+        //return annotation if clicked on actual selected data
+        const maskImage = new ImageJS.Image(
+          imageWidth,
+          imageHeight,
+          decode(annotation.mask),
+          { components: 1, alpha: 0 }
+        );
+        if (
+          maskImage.getPixelXY(
+            Math.round(position.x),
+            Math.round(position.y)
+          )[0]
+        )
+          return annotation;
       }
     }
   );

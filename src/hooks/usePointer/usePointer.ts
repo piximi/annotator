@@ -24,6 +24,8 @@ import hotkeys from "hotkeys-js";
 import { useState } from "react";
 import { pointerSelectionSelector } from "../../store/selectors/pointerSelectionSelector";
 import { selectedAnnotationsIdsSelector } from "../../store/selectors/selectedAnnotationsIdsSelector";
+import { imageWidthSelector } from "../../store/selectors/imageWidthSelector";
+import { imageHeightSelector } from "../../store/selectors/imageHeightSelector";
 
 export const usePointer = () => {
   const dispatch = useDispatch();
@@ -41,6 +43,10 @@ export const usePointer = () => {
   const annotations = useSelector(imageInstancesSelector);
 
   const stageScale = useSelector(stageScaleSelector);
+
+  const imageWidth = useSelector(imageWidthSelector);
+
+  const imageHeight = useSelector(imageHeightSelector);
 
   let overlappingAnnotationsIds: Array<string> = [];
 
@@ -200,7 +206,8 @@ export const usePointer = () => {
 
     if (!position) return;
 
-    if (!annotations || !annotations.length) return;
+    if (!annotations || !annotations.length || !imageWidth || !imageHeight)
+      return;
 
     const scaledCurrentPosition = {
       x: position.x / stageScale,
@@ -209,7 +216,9 @@ export const usePointer = () => {
 
     overlappingAnnotationsIds = getOverlappingAnnotations(
       scaledCurrentPosition,
-      annotations
+      annotations,
+      imageWidth,
+      imageHeight
     );
 
     let currentAnnotation: AnnotationType;

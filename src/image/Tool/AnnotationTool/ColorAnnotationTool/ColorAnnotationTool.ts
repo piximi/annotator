@@ -32,7 +32,6 @@ export class ColorAnnotationTool extends AnnotationTool {
 
     this.roiManager = undefined;
     this.roiMask = undefined;
-    this.roiContour = undefined;
 
     this.points = [];
 
@@ -113,8 +112,6 @@ export class ColorAnnotationTool extends AnnotationTool {
     this.roiManager.fromMask(this.roiMask);
     // @ts-ignore
     this.roiMask = this.roiManager.getMasks()[0];
-    // @ts-ignore
-    this.roiContour = this.roiManager.getMasks({ kind: "contour" })[0];
 
     //@ts-ignore
     const roi = this.roiManager.getRois()[0];

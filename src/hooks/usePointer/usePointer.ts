@@ -232,6 +232,11 @@ export const usePointer = () => {
       currentAnnotation = annotations.filter((annotation: AnnotationType) => {
         return annotation.id === overlappingAnnotationsIds[0];
       })[0];
+      dispatch(
+        applicationSlice.actions.setCurrentIndex({
+          currentIndex: 0,
+        })
+      );
     }
 
     if (!currentAnnotation) return;

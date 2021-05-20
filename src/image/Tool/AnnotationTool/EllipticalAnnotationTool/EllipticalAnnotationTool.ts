@@ -33,11 +33,9 @@ export class EllipticalAnnotationTool extends AnnotationTool {
 
       this.points = this.convertToPoints();
 
-      this._contour = this.points;
-
       this._mask = this.computeMask();
 
-      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
+      this._boundingBox = this.computeBoundingBoxFromContours(this.points);
     }
   }
 
@@ -57,22 +55,13 @@ export class EllipticalAnnotationTool extends AnnotationTool {
 
       this.points = this.convertToPoints();
 
-      this._contour = this.points;
-
-      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
+      this._boundingBox = this.computeBoundingBoxFromContours(this.points);
 
       const mask = this.convertToMask();
 
       if (!mask) return;
 
       this._mask = encode(mask);
-
-      const foo = decode(this._mask);
-      const baz = new ImageJS.Image(this.image.width, this.image.height, foo, {
-        components: 1,
-        alpha: 0,
-      }); //FIXME the decoded image does not look right
-      // console.info(baz.toDataURL())
     }
   }
 

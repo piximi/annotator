@@ -35,8 +35,6 @@ export class RectangularAnnotationTool extends AnnotationTool {
 
       this.points = this.convertToPoints();
 
-      this._contour = this.points;
-
       this._boundingBox = this.computeBoundingBox();
 
       const mask = this.convertToMask();
@@ -59,7 +57,6 @@ export class RectangularAnnotationTool extends AnnotationTool {
     if (this.width) {
       this.points = this.convertToPoints();
 
-      this._contour = this.points;
       this._boundingBox = this.computeBoundingBox();
 
       const mask = this.convertToMask();

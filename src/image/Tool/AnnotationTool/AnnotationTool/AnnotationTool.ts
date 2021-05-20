@@ -133,6 +133,50 @@ export abstract class AnnotationTool extends Tool {
   }
 
   /*
+   * Invert selected mask and compute inverted bounding box coordinates
+   * */
+  invert(
+    selectedMask: Array<number>
+  ): [Array<number>, [number, number, number, number]] {
+    const mask = Array.from(decode(selectedMask));
+
+    const imageWidth = this.image.width;
+    const imageHeight = this.image.height;
+
+    //find min and max boundary points when computing the mask
+    const boundingbox: [number, number, number, number] = [
+      imageWidth,
+      imageHeight,
+      0,
+      0,
+    ];
+
+    mask.forEach((currentValue: number, index: number) => {
+      if (currentValue === 255) {
+        mask[index] = 0;
+      } else {
+        mask[index] = 255;
+        const x = index % imageWidth;
+        const y = Math.floor(index / imageWidth);
+        if (x < boundingbox[0]) {
+          boundingbox[0] = x;
+        } else if (x > boundingbox[2]) {
+          boundingbox[2] = x;
+        }
+        if (y < boundingbox[1]) {
+          boundingbox[1] = y;
+        } else if (y > boundingbox[3]) {
+        }
+        boundingbox[3] = y;
+      }
+    });
+
+    const invertedmask = encode(Uint8Array.from(mask));
+
+    return [invertedmask, boundingbox];
+  }
+
+  /*
    * Subtracting from a Operator deselects the areas you draw over, keeping
    * the rest of your existing Operator.
    */

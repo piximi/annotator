@@ -57,7 +57,6 @@ import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolT
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
 import { Annotations } from "../Annotations/Annotations";
 import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
-import { invertMask } from "../../../../../image/imageHelper";
 import { quickSelectionBrushSizeSelector } from "../../../../../store/selectors/quickSelectionBrushSizeSelector";
 import { useHotkeys } from "react-hotkeys-hook";
 import { PointerSelection } from "../Selection/PointerSelection";
@@ -197,18 +196,29 @@ export const Stage = () => {
 
     if (!selectedAnnotation || !selectedAnnotation.mask) return;
 
-    const invertedMask = invertMask(selectedAnnotation.mask, true);
-    //TODO Call function computeBoundingBoxFromMask
+    const [invertedMask, invertedBoundingBox] = annotationTool.invert(
+      selectedAnnotation.mask
+    );
 
     dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [
           {
             ...selectedAnnotation,
-            boundingBox: [0, 0, 100, 100], //FIXME
+            boundingBox: invertedBoundingBox,
             mask: invertedMask,
           },
         ],
+      })
+    );
+
+    dispatch(
+      setSelectedAnnotation({
+        selectedAnnotation: {
+          ...selectedAnnotation,
+          boundingBox: invertedBoundingBox,
+          mask: invertedMask,
+        },
       })
     );
   }, [invertMode]);

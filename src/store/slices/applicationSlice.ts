@@ -10,8 +10,6 @@ import { LanguageType } from "../../types/LanguageType";
 import * as tensorflow from "@tensorflow/tfjs";
 import { StateType } from "../../types/StateType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
-import { decode } from "../../image/rle";
-import { computeContoursFromIsolines } from "../../image/imageHelper";
 import { ChannelType } from "../../types/ChannelType";
 
 const initialState: StateType = {

@@ -3,7 +3,6 @@ import * as ImageJS from "image-js";
 import * as tensorflow from "@tensorflow/tfjs";
 import * as _ from "lodash";
 import { encode } from "../../../rle";
-import { computeContoursFromIsolines } from "../../../imageHelper";
 
 export class ObjectAnnotationTool extends RectangularAnnotationTool {
   graph?: tensorflow.LayersModel;
@@ -113,25 +112,31 @@ export class ObjectAnnotationTool extends RectangularAnnotationTool {
         data: clamped,
       });
 
+      const greyMask = this.output.grey();
+
+      //compute bounding box with ROI manager
+      const roiManager = this.image.getRoiManager();
+      //@ts-ignore
+      const binaryMask = greyMask.mask({
+        algorithm: "threshold",
+        threshold: 1,
+      });
       // @ts-ignore
-      const data = this.output.grey().data;
+      roiManager.fromMask(binaryMask);
+      // @ts-ignore
+      const rois = roiManager.getRois();
+      const roi = rois.sort((a: any, b: any) => {
+        return b.surface - a.surface;
+      })[1]; // take the second roi because the first one will be of the size of the image,the second one is the actual largest roi
+      this._boundingBox = [roi.minX, roi.minY, roi.maxX, roi.maxY];
 
       //threshold
-      const thresholded = _.map(data, (i: number) => (i > 1 ? 255 : 0)); //threshold necessary because output of NN is not binary
-
-      const mask = _.map(
-        _.chunk(thresholded, this.image.width),
-        (el: Array<number>) => {
-          return Array.from(el);
-        }
-      );
-
-      this._contour = computeContoursFromIsolines(mask);
+      const thresholded = _.map(greyMask.data, (i: number) =>
+        i > 1 ? 255 : 0
+      ); //threshold necessary because output of NN is not binary
 
       // @ts-ignore
       this._mask = encode(thresholded);
-
-      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
       this.annotated = true;
       this.width = undefined;

@@ -35,7 +35,7 @@ export const Image = React.forwardRef<Konva.Image>((_, ref) => {
     return (
       <ReactKonva.Text
         x={boundingClientRect.x + 80}
-        y={boundingClientRect.height / 3}
+        y={0.4 * boundingClientRect.height}
         text={
           'To start annotating, drag and drop an image onto the canvas or click on "Open Image".'
         }

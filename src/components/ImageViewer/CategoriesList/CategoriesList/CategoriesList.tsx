@@ -67,6 +67,7 @@ import { serializedAnnotationsSelector } from "../../../../store/selectors/seria
 import { saveAs } from "file-saver";
 import { ChannelType } from "../../../../types/ChannelType";
 import { ToolType } from "../../../../types/ToolType";
+import { selectedAnnotationsIdsSelector } from "../../../../store/selectors/selectedAnnotationsIdsSelector";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -76,6 +77,8 @@ export const CategoriesList = () => {
   const unknownCategory = useSelector(unknownCategorySelector);
 
   const annotations = useSelector(imageInstancesSelector);
+
+  const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
   const dispatch = useDispatch();
 
@@ -130,6 +133,28 @@ export const CategoriesList = () => {
     dispatch(
       applicationSlice.actions.setSelectedCategory({
         selectedCategory: "00000000-0000-0000-0000-000000000000",
+      })
+    );
+  };
+
+  const onClearSelectedAnnotations = () => {
+    if (!selectedAnnotationsIds) return;
+    selectedAnnotationsIds.forEach((id: string) => {
+      dispatch(applicationSlice.actions.deleteImageInstance({ id: id }));
+    });
+    dispatch(
+      applicationSlice.actions.setSelectedCategory({
+        selectedCategory: "00000000-0000-0000-0000-000000000000",
+      })
+    );
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: undefined,
+      })
+    );
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotations({
+        selectedAnnotations: [],
       })
     );
   };
@@ -248,6 +273,15 @@ export const CategoriesList = () => {
             <DeleteIcon color="disabled" />
           </ListItemIcon>
           <ListItemText primary={t("Clear all annotations")} />
+        </ListItem>
+      </List>
+
+      <List dense>
+        <ListItem button onClick={onClearSelectedAnnotations}>
+          <ListItemIcon>
+            <DeleteIcon color="disabled" />
+          </ListItemIcon>
+          <ListItemText primary={t("Clear selected annotations")} />
         </ListItem>
       </List>
 

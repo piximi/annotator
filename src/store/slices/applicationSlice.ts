@@ -14,6 +14,24 @@ import { decode } from "../../image/rle";
 import { computeContours } from "../../image/imageHelper";
 import { ChannelType } from "../../types/ChannelType";
 
+const initialImage =
+  process.env.NODE_ENV === "development"
+    ? {
+        id: "",
+        annotations: [],
+        name: "example.png",
+        shape: {
+          channels: 3,
+          frames: 1,
+          height: 512,
+          planes: 1,
+          width: 512,
+        },
+        originalSrc: colorImage,
+        src: colorImage,
+      }
+    : undefined;
+
 const initialState: StateType = {
   annotated: false,
   annotating: false,
@@ -58,20 +76,7 @@ const initialState: StateType = {
   contrast: 0,
   exposure: 0,
   hue: 0,
-  image: {
-    id: "",
-    annotations: [],
-    name: "example.png",
-    shape: {
-      channels: 3,
-      frames: 1,
-      height: 512,
-      planes: 1,
-      width: 512,
-    },
-    originalSrc: colorImage,
-    src: colorImage,
-  },
+  image: initialImage,
   invertMode: false,
   language: LanguageType.English,
   offset: { x: 0, y: 0 },

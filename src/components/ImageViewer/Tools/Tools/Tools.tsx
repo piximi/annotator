@@ -41,6 +41,34 @@ export const Tools = () => {
     >
       <br />
       <Tool
+        name={t("Hand")}
+        onClick={() => {
+          dispatch(
+            applicationSlice.actions.setOperation({
+              operation: OperationType.Hand,
+            })
+          );
+        }}
+        selected={activeOperation === OperationType.Hand}
+      >
+        <HandIcon />
+      </Tool>
+
+      <Tool
+        name={t("Zoom")}
+        onClick={() => {
+          dispatch(
+            applicationSlice.actions.setOperation({
+              operation: OperationType.Zoom,
+            })
+          );
+        }}
+        selected={activeOperation === OperationType.Zoom}
+      >
+        <ZoomIcon />
+      </Tool>
+
+      <Tool
         name={t("Color Adjustment")}
         onClick={() => {
           dispatch(
@@ -201,33 +229,6 @@ export const Tools = () => {
         <ObjectSelectionIcon />
       </Tool>
       <br />
-      <Tool
-        name={t("Hand")}
-        onClick={() => {
-          dispatch(
-            applicationSlice.actions.setOperation({
-              operation: OperationType.Hand,
-            })
-          );
-        }}
-        selected={activeOperation === OperationType.Hand}
-      >
-        <HandIcon />
-      </Tool>
-
-      <Tool
-        name={t("Zoom")}
-        onClick={() => {
-          dispatch(
-            applicationSlice.actions.setOperation({
-              operation: OperationType.Zoom,
-            })
-          );
-        }}
-        selected={activeOperation === OperationType.Zoom}
-      >
-        <ZoomIcon />
-      </Tool>
     </Drawer>
   );
 };

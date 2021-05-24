@@ -580,6 +580,7 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
       <input
         accept="image/*"
         hidden
+        multiple
         id="open-image"
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           onOpenImage(event, popupState.close)

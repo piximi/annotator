@@ -1,10 +1,8 @@
 import { AnnotationTool } from "../AnnotationTool";
 import { doFlood, makeFloodMap } from "../../../flood";
 import * as ImageJS from "image-js";
-import * as _ from "lodash";
 import { encode } from "../../../rle";
 import PriorityQueue from "ts-priority-queue";
-import { computeContours } from "../../../imageHelper";
 
 export class ColorAnnotationTool extends AnnotationTool {
   roiContour?: ImageJS.Image;
@@ -34,7 +32,6 @@ export class ColorAnnotationTool extends AnnotationTool {
 
     this.roiManager = undefined;
     this.roiMask = undefined;
-    this.roiContour = undefined;
 
     this.points = [];
 
@@ -115,38 +112,18 @@ export class ColorAnnotationTool extends AnnotationTool {
     this.roiManager.fromMask(this.roiMask);
     // @ts-ignore
     this.roiMask = this.roiManager.getMasks()[0];
-    // @ts-ignore
-    this.roiContour = this.roiManager.getMasks({ kind: "contour" })[0];
 
-    const greyData = _.chunk(this.roiContour!.getRGBAData(), 4).map((chunk) => {
-      if (chunk[0] === 255) {
-        return 255;
-      } else return 0;
-    });
-    // @ts-ignore
-    const foo = ImageJS.Image.createFrom(this.roiMask, {
-      bitDepth: 8,
-      data: greyData,
-    });
-    // @ts-ignore
-    const maskData = foo.getMatrix().data;
-
-    const bar = maskData.map((el: Array<number>) => {
-      return Array.from(el);
-    });
+    //@ts-ignore
+    const rois = this.roiManager.getRois();
+    const roi = rois.sort((a: any, b: any) => {
+      return b.surface - a.surface;
+    })[1]; // take the second roi because the first one will be of the size of the image,the second one is the actual largest roi
+    this._boundingBox = [roi.minX, roi.minY, roi.maxX, roi.maxY];
 
     // @ts-ignore
     const offsetX = this.roiMask.position[0];
     // @ts-ignore
     const offsetY = this.roiMask.position[1];
-
-    this._contour = _.flatten(
-      _.chunk(computeContours(bar), 2).map((el: Array<number>) => {
-        return [el[0] + offsetX, el[1] + offsetY];
-      })
-    );
-
-    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
 
     //mask should be the whole image, not just the ROI
     const imgMask = new ImageJS.Image(this.image.width, this.image.height, {

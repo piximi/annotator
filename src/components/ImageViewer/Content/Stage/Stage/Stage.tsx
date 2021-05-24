@@ -4,7 +4,6 @@ import Konva from "konva";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
-  annotatingSelector,
   imageInstancesSelector,
   invertModeSelector,
   selectedCategorySelector,
@@ -56,16 +55,8 @@ import { scaledImageWidthSelector } from "../../../../../store/selectors/scaledI
 import { scaledImageHeightSelector } from "../../../../../store/selectors/scaledImageHeightSelector";
 import { PenAnnotationToolTip } from "../PenAnnotationToolTip/PenAnnotationToolTip";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
-import { scaledSelectedAnnotationContourSelector } from "../../../../../store/selectors/scaledSelectedAnnotationContourSelector";
 import { Annotations } from "../Annotations/Annotations";
 import { unselectedAnnotationsSelector } from "../../../../../store/selectors/unselectedAnnotationsSelector";
-import {
-  computeBoundingBoxFromContours,
-  invertContour,
-  invertMask,
-} from "../../../../../image/imageHelper";
-import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
-import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
 import { quickSelectionBrushSizeSelector } from "../../../../../store/selectors/quickSelectionBrushSizeSelector";
 import { useHotkeys } from "react-hotkeys-hook";
 import { PointerSelection } from "../Selection/PointerSelection";
@@ -107,9 +98,6 @@ export const Stage = () => {
   const scaledImageWidth = useSelector(scaledImageWidthSelector);
   const scaledImageHeight = useSelector(scaledImageHeightSelector);
 
-  const imageWidth = useSelector(imageWidthSelector);
-  const imageHeight = useSelector(imageHeightSelector);
-
   const stageScale = useSelector(stageScaleSelector);
 
   const dispatch = useDispatch();
@@ -135,11 +123,9 @@ export const Stage = () => {
   const annotations = useSelector(imageInstancesSelector);
 
   const annotated = useSelector(annotatedSelector);
-  const annotating = useSelector(annotatingSelector);
 
   const selectedAnnotation = useSelector(selectedAnnotationSelector);
 
-  const scaledContour = useSelector(scaledSelectedAnnotationContourSelector);
   const { dragging: zoomDragging, selecting: zoomSelecting } = useSelector(
     zoomSelectionSelector
   );
@@ -208,24 +194,11 @@ export const Stage = () => {
   useEffect(() => {
     if (!annotationTool) return;
 
-    if (
-      !selectedAnnotation ||
-      !selectedAnnotation.mask ||
-      !selectedAnnotation.contour
-    )
-      return;
+    if (!selectedAnnotation || !selectedAnnotation.mask) return;
 
-    const invertedMask = invertMask(selectedAnnotation.mask, true);
-
-    if (!imageWidth || !imageHeight) return;
-
-    const invertedContour = invertContour(
-      selectedAnnotation.contour,
-      imageWidth,
-      imageHeight
+    const [invertedMask, invertedBoundingBox] = annotationTool.invert(
+      selectedAnnotation.mask
     );
-
-    const invertedBoundingBox = computeBoundingBoxFromContours(invertedContour);
 
     dispatch(
       setSelectedAnnotations({
@@ -233,10 +206,19 @@ export const Stage = () => {
           {
             ...selectedAnnotation,
             boundingBox: invertedBoundingBox,
-            contour: invertedContour,
             mask: invertedMask,
           },
         ],
+      })
+    );
+
+    dispatch(
+      setSelectedAnnotation({
+        selectedAnnotation: {
+          ...selectedAnnotation,
+          boundingBox: invertedBoundingBox,
+          mask: invertedMask,
+        },
       })
     );
   }, [invertMode]);
@@ -252,38 +234,32 @@ export const Stage = () => {
 
     if (!annotationTool.annotated) return;
 
-    let combinedMask, combinedContour;
+    let combinedMask, combinedBoundingBox;
 
     if (!selectedAnnotation) return;
 
     if (selectionMode === AnnotationModeType.Add) {
-      [combinedMask, combinedContour] = annotationTool.add(
-        selectedAnnotation.mask
+      [combinedMask, combinedBoundingBox] = annotationTool.add(
+        selectedAnnotation.mask,
+        selectedAnnotation.boundingBox
       );
     } else if (selectionMode === AnnotationModeType.Subtract) {
-      [combinedMask, combinedContour] = annotationTool.subtract(
-        selectedAnnotation.mask
+      [combinedMask, combinedBoundingBox] = annotationTool.subtract(
+        selectedAnnotation.mask,
+        selectedAnnotation.boundingBox
       );
     } else if (selectionMode === AnnotationModeType.Intersect) {
-      [combinedMask, combinedContour] = annotationTool.intersect(
-        selectedAnnotation.mask
+      [combinedMask, combinedBoundingBox] = annotationTool.intersect(
+        selectedAnnotation.mask,
+        selectedAnnotation.boundingBox
       );
     }
 
     annotationTool.mask = combinedMask;
-    annotationTool.contour = combinedContour;
 
-    if (!combinedContour) return;
-    annotationTool.boundingBox = annotationTool.computeBoundingBoxFromContours(
-      combinedContour
-    );
+    annotationTool.boundingBox = combinedBoundingBox;
 
-    if (
-      !annotationTool.boundingBox ||
-      !annotationTool.contour ||
-      !annotationTool.mask
-    )
-      return;
+    if (!annotationTool.boundingBox || !annotationTool.mask) return;
 
     dispatch(
       setSelectedAnnotations({
@@ -291,7 +267,6 @@ export const Stage = () => {
           {
             ...selectedAnnotation,
             boundingBox: annotationTool.boundingBox,
-            contour: annotationTool.contour,
             mask: annotationTool.mask,
           },
         ],
@@ -303,7 +278,6 @@ export const Stage = () => {
         selectedAnnotation: {
           ...selectedAnnotation,
           boundingBox: annotationTool.boundingBox,
-          contour: annotationTool.contour,
           mask: annotationTool.mask,
         },
       })
@@ -380,8 +354,6 @@ export const Stage = () => {
   useEffect(() => {
     if (!annotated) return;
 
-    if (!annotationTool || !annotationTool.contour) return;
-
     if (!annotationTool) return;
 
     annotationTool.annotate(selectedCategory);
@@ -433,7 +405,7 @@ export const Stage = () => {
         clearLabelRef.current = label[1] as Konva.Label;
       }
     });
-  }, [selectedAnnotationsIds, selectedAnnotation?.contour]);
+  }, [selectedAnnotationsIds, selectedAnnotation?.mask]);
 
   const getRelativePointerPosition = (position: { x: number; y: number }) => {
     if (!imageRef || !imageRef.current) return;

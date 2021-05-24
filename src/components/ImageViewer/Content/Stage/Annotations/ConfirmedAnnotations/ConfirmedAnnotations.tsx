@@ -7,7 +7,7 @@ import { imageInstancesSelector } from "../../../../../../store/selectors";
 import { selectedAnnotationsSelector } from "../../../../../../store/selectors/selectedAnnotationsSelector";
 import { unselectedAnnotationsSelector } from "../../../../../../store/selectors/unselectedAnnotationsSelector";
 
-export const UnselectedAnnotations = () => {
+export const ConfirmedAnnotations = () => {
   const annotations = useSelector(imageInstancesSelector);
 
   const unselectedAnnotations = useSelector(unselectedAnnotationsSelector);

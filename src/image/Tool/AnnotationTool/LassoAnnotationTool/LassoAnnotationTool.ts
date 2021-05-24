@@ -32,9 +32,8 @@ export class LassoAnnotationTool extends AnnotationTool {
 
       this.points = this.buffer;
 
-      this._contour = this.points;
       this._mask = this.computeMask();
-      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
+      this._boundingBox = this.computeBoundingBoxFromContours(this.points);
 
       this.anchor = undefined;
       this.origin = undefined;
@@ -93,11 +92,9 @@ export class LassoAnnotationTool extends AnnotationTool {
       this.annotating = false;
 
       this.points = this.buffer;
-      this._contour = this.points;
-
       this._mask = this.computeMask();
 
-      this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
+      this._boundingBox = this.computeBoundingBoxFromContours(this.points);
 
       this.buffer = [];
     }

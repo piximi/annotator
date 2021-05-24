@@ -1,7 +1,7 @@
 import { AnnotationTool } from "../AnnotationTool";
 import * as ImageJS from "image-js";
 import * as _ from "lodash";
-import { computeContours, connectPoints } from "../../../imageHelper";
+import { connectPoints } from "../../../imageHelper";
 import { encode } from "../../../rle";
 
 export class PenAnnotationTool extends AnnotationTool {
@@ -19,11 +19,28 @@ export class PenAnnotationTool extends AnnotationTool {
 
     if (!ctx) return undefined;
 
-    const connected = connectPoints(
-      _.chunk(this.points, 2),
-      new ImageJS.Image(this.image.width, this.image.height)
-    );
+    let connected;
 
+    if (this.points.length === 2) {
+      // handling the case in which a single point has been clicked
+      connected = _.chunk(this.points, 2);
+    } else {
+      connected = connectPoints(
+        _.chunk(this.points, 2),
+        new ImageJS.Image(this.image.width, this.image.height)
+      );
+    }
+
+    //compute bounding box coordinates
+    const bbox = this.computeBoundingBoxFromContours(_.flatten(connected));
+    this._boundingBox = [
+      Math.max(0, Math.round(bbox[0] - this.brushSize)),
+      Math.max(0, Math.round(bbox[1] - this.brushSize)),
+      Math.min(this.image.width, Math.round(bbox[2] + this.brushSize)),
+      Math.min(this.image.height, Math.round(bbox[3] + this.brushSize)),
+    ];
+
+    //compute mask by drawing circles over canvas
     connected.forEach((position) => {
       ctx.beginPath();
       ctx.arc(
@@ -38,6 +55,7 @@ export class PenAnnotationTool extends AnnotationTool {
     });
 
     const rgbMask = ImageJS.Image.fromCanvas(canvas);
+
     // @ts-ignore
     this.circlesData = this.thresholdMask(rgbMask.getChannel(3)).data;
   }
@@ -75,22 +93,11 @@ export class PenAnnotationTool extends AnnotationTool {
 
     this.points = this.buffer;
 
-    this.computeCircleData();
+    this.computeCircleData(); //this will set the bounding box as well
 
     if (!this.circlesData) return [];
 
     this._mask = encode(this.circlesData);
-
-    const bar = _.map(
-      _.chunk(this.circlesData, this.image.width),
-      (el: Array<number>) => {
-        return Array.from(el);
-      }
-    );
-
-    this._contour = computeContours(bar);
-
-    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
   }
 
   static async setup(image: ImageJS.Image, brushSize: number) {
@@ -106,6 +113,8 @@ export class PenAnnotationTool extends AnnotationTool {
       for (let y = 0; y < mask.height; y++) {
         if (mask.getPixelXY(x, y)[0] > 1) {
           mask.setPixelXY(x, y, [255]);
+        } else {
+          mask.setPixelXY(x, y, [0]);
         }
       }
     }

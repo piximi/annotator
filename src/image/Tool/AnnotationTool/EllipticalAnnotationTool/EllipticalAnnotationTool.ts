@@ -1,21 +1,12 @@
 import { AnnotationTool } from "../AnnotationTool";
 import * as _ from "lodash";
+import * as ImageJS from "image-js";
+import { decode, encode } from "../../../rle";
 
 export class EllipticalAnnotationTool extends AnnotationTool {
   center?: { x: number; y: number };
   origin?: { x: number; y: number };
   radius?: { x: number; y: number };
-
-  computeBoundingBox(): [number, number, number, number] | undefined {
-    if (!this.center || !this.origin || !this.radius) return undefined;
-
-    return [
-      Math.round(this.origin.x),
-      Math.round(this.origin.y),
-      Math.round(this.center.x + this.radius.x),
-      Math.round(this.center.y + this.radius.y),
-    ];
-  }
 
   deselect() {
     this.annotated = false;
@@ -42,11 +33,9 @@ export class EllipticalAnnotationTool extends AnnotationTool {
 
       this.points = this.convertToPoints();
 
-      this._contour = this.points;
-
       this._mask = this.computeMask();
 
-      this._boundingBox = this.computeBoundingBox();
+      this._boundingBox = this.computeBoundingBoxFromContours(this.points);
     }
   }
 
@@ -66,12 +55,51 @@ export class EllipticalAnnotationTool extends AnnotationTool {
 
       this.points = this.convertToPoints();
 
-      this._contour = this.points;
+      this._boundingBox = this.computeBoundingBoxFromContours(this.points);
 
-      this._mask = this.computeMask();
+      const mask = this.convertToMask();
 
-      this._boundingBox = this.computeBoundingBox();
+      if (!mask) return;
+
+      this._mask = encode(mask);
     }
+  }
+
+  private convertToMask() {
+    const canvas = document.createElement("canvas");
+    canvas.width = this.image.width;
+    canvas.height = this.image.height;
+
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx || !this.center || !this.radius) return undefined;
+
+    ctx.beginPath();
+    ctx.ellipse(
+      this.center.x,
+      this.center.y,
+      this.radius.x,
+      this.radius.y,
+      2 * Math.PI,
+      0,
+      2 * Math.PI
+    );
+    ctx.fill();
+
+    //@ts-ignore
+    const imageMask = ImageJS.Image.fromCanvas(canvas).getChannel(3);
+
+    for (let x = 0; x < imageMask.width; x++) {
+      for (let y = 0; y < imageMask.height; y++) {
+        if (imageMask.getPixelXY(x, y)[0] > 1) {
+          imageMask.setPixelXY(x, y, [255]);
+        } else {
+          imageMask.setPixelXY(x, y, [0]);
+        }
+      }
+    }
+
+    return Uint8Array.from(imageMask.data);
   }
 
   private convertToPoints() {

@@ -79,7 +79,9 @@ Given a click at a position, return all overlapping annotations ids
  */
 export const getOverlappingAnnotations = (
   position: { x: number; y: number },
-  annotations: Array<AnnotationType>
+  annotations: Array<AnnotationType>,
+  imageWidth: number,
+  imageHeight: number
 ) => {
   const overlappingAnnotations = annotations.filter(
     (annotation: AnnotationType) => {
@@ -90,7 +92,20 @@ export const getOverlappingAnnotations = (
         position.y >= boundingBox[1] &&
         position.y <= boundingBox[3]
       ) {
-        return annotation;
+        //return annotation if clicked on actual selected data
+        const maskImage = new ImageJS.Image(
+          imageWidth,
+          imageHeight,
+          decode(annotation.mask),
+          { components: 1, alpha: 0 }
+        );
+        if (
+          maskImage.getPixelXY(
+            Math.round(position.x),
+            Math.round(position.y)
+          )[0]
+        )
+          return annotation;
       }
     }
   );
@@ -114,62 +129,9 @@ export const getAnnotationsInBox = (
   });
 };
 
-export const invertMask = (
-  mask: Array<number>,
-  encoded = false
+export const computeContoursFromIsolines = (
+  data: Array<Array<number>>
 ): Array<number> => {
-  if (encoded) {
-    mask = Array.from(decode(mask));
-  }
-
-  mask.forEach((currentValue: number, index: number) => {
-    if (currentValue === 255) {
-      mask[index] = 0;
-    } else mask[index] = 255;
-  });
-
-  if (encoded) {
-    mask = encode(Uint8Array.from(mask));
-  }
-  return mask;
-};
-
-export const invertContour = (
-  contour: Array<number>,
-  imageWidth: number,
-  imageHeight: number
-): Array<number> => {
-  //using https://jsbin.com/tevejujafi/3/edit?html,js,output and https://en.wikipedia.org/wiki/Nonzero-rule
-  const frame = [
-    0,
-    0,
-    imageWidth,
-    0,
-    imageWidth,
-    imageHeight,
-    0,
-    imageHeight,
-    0,
-    0,
-  ];
-  const counterClockWiseContours = _.flatten(_.reverse(_.chunk(contour, 2)));
-  return _.concat(frame, counterClockWiseContours);
-};
-
-export const computeBoundingBoxFromContours = (
-  contour: Array<number>
-): [number, number, number, number] => {
-  const pairs = _.chunk(contour, 2);
-
-  return [
-    Math.round(_.min(_.map(pairs, _.first))!),
-    Math.round(_.min(_.map(pairs, _.last))!),
-    Math.round(_.max(_.map(pairs, _.first))!),
-    Math.round(_.max(_.map(pairs, _.last))!),
-  ];
-};
-
-export const computeContours = (data: Array<Array<number>>): Array<number> => {
   //pad array to obtain better estimate of contours around mask
   const pad = 10;
   const padY = new Array(data[0].length + 2 * pad).fill(0);
@@ -198,17 +160,68 @@ export const computeContours = (data: Array<Array<number>>): Array<number> => {
 
   if (largestIsoline.length <= 5) return [];
 
-  if (largestIsolines.length === 3) {
-    //Here we address the case in which multiple contours are find, for example with a pen seelection with an inner and outer contour. We concatenate the inner and outer contours together.
-    largestIsoline =
-      largestIsolines[1].length > 5
-        ? largestIsolines[0].concat(largestIsolines[1])
-        : largestIsolines[0];
-  }
-
   return _.flatten(
     largestIsoline.map((coord: Array<number>) => {
       return [Math.round(coord[0] - pad), Math.round(coord[1] - pad)];
     })
   );
+};
+
+/*
+ * From encoded mask data, get the decoded data and return results as an HTMLImageElement to be used by Konva.Image
+ */
+export const colorOverlayROI = (
+  encodedMask: Array<number>,
+  boundingBox: [number, number, number, number],
+  imageWidth: number,
+  imageHeight: number,
+  color: Array<number>
+): HTMLImageElement | undefined => {
+  if (!encodedMask) return undefined;
+
+  const decodedData = decode(encodedMask);
+
+  const endX = Math.min(imageWidth, boundingBox[2]);
+  const endY = Math.min(imageHeight, boundingBox[3]);
+
+  //extract bounding box params
+  const boxWidth = endX - boundingBox[0];
+  const boxHeight = endY - boundingBox[1];
+  const boxX = Math.max(0, boundingBox[0]);
+  const boxY = Math.max(0, boundingBox[1]);
+
+  const fullImage = new ImageJS.Image(imageWidth, imageHeight, decodedData, {
+    components: 1,
+    alpha: 0,
+  });
+
+  const croppedImage = fullImage.crop({
+    x: boxX,
+    y: boxY,
+    width: boxWidth,
+    height: boxHeight,
+  });
+
+  const colorROIImage = new ImageJS.Image(boxWidth, boxHeight, {
+    components: 3,
+    alpha: 1,
+  });
+
+  for (let i = 0; i < croppedImage.width; i++) {
+    for (let j = 0; j < croppedImage.height; j++) {
+      if (croppedImage.getPixelXY(i, j)[0] > 0) {
+        colorROIImage.setPixelXY(i, j, [color[0], color[1], color[2], 128]);
+      } else {
+        colorROIImage.setPixelXY(i, j, [0, 0, 0, 0]);
+      }
+    }
+  }
+
+  const src = colorROIImage.toDataURL("image-png", {
+    useCanvas: true,
+  });
+  const image = new Image();
+  image.src = src;
+
+  return image;
 };

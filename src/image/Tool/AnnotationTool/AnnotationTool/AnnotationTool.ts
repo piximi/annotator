@@ -2,12 +2,11 @@ import { AnnotationType } from "../../../../types/AnnotationType";
 import * as ImageJS from "image-js";
 import { CategoryType } from "../../../../types/CategoryType";
 import * as _ from "lodash";
-import { computeContours, connectPoints, drawLine } from "../../../imageHelper";
+import { connectPoints, drawLine } from "../../../imageHelper";
 import { simplify } from "../../../simplify/simplify";
 import { slpf } from "../../../polygon-fill/slpf";
 import * as uuid from "uuid";
 import { decode, encode } from "../../../rle";
-import { isoLines } from "marchingsquares";
 import { Tool } from "../../Tool";
 
 export abstract class AnnotationTool extends Tool {
@@ -22,7 +21,6 @@ export abstract class AnnotationTool extends Tool {
   buffer?: Array<number> = [];
 
   protected _boundingBox?: [number, number, number, number];
-  protected _contour?: Array<number>;
   protected _mask?: Array<number>;
 
   constructor(image: ImageJS.Image) {
@@ -35,8 +33,11 @@ export abstract class AnnotationTool extends Tool {
    * Adding to a Operator adds any new areas you select to your existing
    * Operator.
    */
-  add(selectedMask: Array<number>): [Array<number>, Array<number>] {
-    if (!this._mask) return [[], []];
+  add(
+    selectedMask: Array<number>,
+    selectedBoundingBox: [number, number, number, number]
+  ): [Array<number>, [number, number, number, number]] {
+    if (!this._mask || !this._boundingBox) return [[], [0, 0, 0, 0]];
 
     const selectedMaskData = decode(selectedMask);
     const maskData = decode(this._mask);
@@ -47,13 +48,22 @@ export abstract class AnnotationTool extends Tool {
       } else return 0;
     });
 
-    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
-      return Array.from(el);
-    });
+    const combinedBoundingBox = [
+      this._boundingBox[0] < selectedBoundingBox[0]
+        ? this._boundingBox[0]
+        : selectedBoundingBox[0],
+      this._boundingBox[1] < selectedBoundingBox[1]
+        ? this._boundingBox[1]
+        : selectedBoundingBox[1],
+      this._boundingBox[2] > selectedBoundingBox[2]
+        ? this._boundingBox[2]
+        : selectedBoundingBox[2],
+      this._boundingBox[3] > selectedBoundingBox[3]
+        ? this._boundingBox[3]
+        : selectedBoundingBox[3],
+    ] as [number, number, number, number];
 
-    const contours = computeContours(mat);
-
-    return [encode(data), contours];
+    return [encode(data), combinedBoundingBox];
   }
 
   connect() {
@@ -73,9 +83,8 @@ export abstract class AnnotationTool extends Tool {
 
     this.buffer.splice(anchorIndex, segment.length, ...segment);
 
-    this._contour = this.buffer;
     this._mask = this.computeMask();
-    this._boundingBox = this.computeBoundingBoxFromContours(this._contour);
+    this._boundingBox = this.computeBoundingBoxFromContours(this.buffer);
 
     this.anchor = undefined;
     this.origin = undefined;
@@ -90,8 +99,11 @@ export abstract class AnnotationTool extends Tool {
    * select over will be kept and any currently selected areas outside your
    * new Operator will be removed from the Operator.
    */
-  intersect(selectedMask: Array<number>): [Array<number>, Array<number>] {
-    if (!this._mask) return [[], []];
+  intersect(
+    selectedMask: Array<number>,
+    selectedBoundingBox: [number, number, number, number]
+  ): [Array<number>, [number, number, number, number]] {
+    if (!this._mask || !this._boundingBox) return [[], [0, 0, 0, 0]];
 
     const selectedMaskData = decode(selectedMask);
     const maskData = decode(this._mask);
@@ -102,20 +114,77 @@ export abstract class AnnotationTool extends Tool {
       } else return 0;
     });
 
-    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
-      return Array.from(el);
-    });
-    const contours = computeContours(mat);
+    const combinedBoundingBox = [
+      this._boundingBox[0] > selectedBoundingBox[0]
+        ? this._boundingBox[0]
+        : selectedBoundingBox[0],
+      this._boundingBox[1] > selectedBoundingBox[1]
+        ? this._boundingBox[1]
+        : selectedBoundingBox[1],
+      this._boundingBox[2] < selectedBoundingBox[2]
+        ? this._boundingBox[2]
+        : selectedBoundingBox[2],
+      this._boundingBox[3] < selectedBoundingBox[3]
+        ? this._boundingBox[3]
+        : selectedBoundingBox[3],
+    ] as [number, number, number, number];
 
-    return [encode(data), contours];
+    return [encode(data), combinedBoundingBox];
+  }
+
+  /*
+   * Invert selected mask and compute inverted bounding box coordinates
+   * */
+  invert(
+    selectedMask: Array<number>
+  ): [Array<number>, [number, number, number, number]] {
+    const mask = Array.from(decode(selectedMask));
+
+    const imageWidth = this.image.width;
+    const imageHeight = this.image.height;
+
+    //find min and max boundary points when computing the mask
+    const boundingbox: [number, number, number, number] = [
+      imageWidth,
+      imageHeight,
+      0,
+      0,
+    ];
+
+    mask.forEach((currentValue: number, index: number) => {
+      if (currentValue === 255) {
+        mask[index] = 0;
+      } else {
+        mask[index] = 255;
+        const x = index % imageWidth;
+        const y = Math.floor(index / imageWidth);
+        if (x < boundingbox[0]) {
+          boundingbox[0] = x;
+        } else if (x > boundingbox[2]) {
+          boundingbox[2] = x;
+        }
+        if (y < boundingbox[1]) {
+          boundingbox[1] = y;
+        } else if (y > boundingbox[3]) {
+        }
+        boundingbox[3] = y;
+      }
+    });
+
+    const invertedmask = encode(Uint8Array.from(mask));
+
+    return [invertedmask, boundingbox];
   }
 
   /*
    * Subtracting from a Operator deselects the areas you draw over, keeping
    * the rest of your existing Operator.
    */
-  subtract(selectedMask: Array<number>): [Array<number>, Array<number>] {
-    if (!this._mask) return [[], []];
+  subtract(
+    selectedMask: Array<number>,
+    selectedBoundingBox: [number, number, number, number]
+  ): [Array<number>, [number, number, number, number]] {
+    if (!this._mask || !this._boundingBox) return [[], [0, 0, 0, 0]];
 
     const selectedMaskData = decode(selectedMask);
     const maskData = decode(this._mask);
@@ -126,12 +195,34 @@ export abstract class AnnotationTool extends Tool {
       } else return selectedMaskData[index];
     });
 
-    const mat = _.chunk(data, this.image.width).map((el: Array<number>) => {
-      return Array.from(el);
-    });
-    const contours = computeContours(mat);
+    const combinedBoundingBox = [
+      this._boundingBox[2] > selectedBoundingBox[0] &&
+      this._boundingBox[0] < selectedBoundingBox[0] &&
+      this._boundingBox[1] < selectedBoundingBox[1] &&
+      this._boundingBox[3] > selectedBoundingBox[3]
+        ? this._boundingBox[2]
+        : selectedBoundingBox[0],
+      this._boundingBox[3] > selectedBoundingBox[1] &&
+      this._boundingBox[1] < selectedBoundingBox[1] &&
+      this._boundingBox[0] < selectedBoundingBox[0] &&
+      this._boundingBox[2] > selectedBoundingBox[2]
+        ? this._boundingBox[3]
+        : selectedBoundingBox[1],
+      this._boundingBox[0] < selectedBoundingBox[2] &&
+      this._boundingBox[2] > selectedBoundingBox[2] &&
+      this._boundingBox[1] < selectedBoundingBox[1] &&
+      this._boundingBox[3] > selectedBoundingBox[3]
+        ? this._boundingBox[0]
+        : selectedBoundingBox[2],
+      this._boundingBox[1] < selectedBoundingBox[3] &&
+      this._boundingBox[3] > selectedBoundingBox[3] &&
+      this._boundingBox[0] < selectedBoundingBox[0] &&
+      this._boundingBox[2] > selectedBoundingBox[2]
+        ? this._boundingBox[1]
+        : selectedBoundingBox[3],
+    ] as [number, number, number, number];
 
-    return [encode(data), contours];
+    return [encode(data), combinedBoundingBox];
   }
 
   get boundingBox(): [number, number, number, number] | undefined {
@@ -174,14 +265,6 @@ export abstract class AnnotationTool extends Tool {
     return encode(maskImage.getChannel(0).data);
   }
 
-  get contour(): Array<number> | undefined {
-    return this._contour;
-  }
-
-  set contour(updatedContours: Array<number> | undefined) {
-    this._contour = updatedContours;
-  }
-
   get mask(): Array<number> | undefined {
     return this._mask;
   }
@@ -199,12 +282,11 @@ export abstract class AnnotationTool extends Tool {
   abstract onMouseUp(position: { x: number; y: number }): void;
 
   annotate(category: CategoryType): void {
-    if (!this.boundingBox || !this.contour || !this.mask) return;
+    if (!this.boundingBox || !this.mask) return;
 
     this.annotation = {
       boundingBox: this.boundingBox,
       categoryId: category.id,
-      contour: this.contour,
       id: uuid.v4(),
       mask: this.mask,
     };

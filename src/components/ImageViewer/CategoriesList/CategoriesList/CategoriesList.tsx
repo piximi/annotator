@@ -6,6 +6,7 @@ import { CategoryType } from "../../../../types/CategoryType";
 import {
   createdCategoriesSelector,
   imageInstancesSelector,
+  imageSelector,
   selectedCategorySelector,
   unknownCategorySelector,
 } from "../../../../store/selectors";
@@ -23,11 +24,11 @@ import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import {
   applicationSlice,
-  setImage,
   setChannels,
+  setImage,
+  setOperation,
   setSelectedAnnotation,
   setSelectedAnnotations,
-  setOperation,
 } from "../../../../store";
 import {
   Dialog,
@@ -68,6 +69,9 @@ import { saveAs } from "file-saver";
 import { ChannelType } from "../../../../types/ChannelType";
 import { ToolType } from "../../../../types/ToolType";
 import { selectedAnnotationsIdsSelector } from "../../../../store/selectors/selectedAnnotationsIdsSelector";
+import { ImageType } from "../../../../types/ImageType";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -159,6 +163,8 @@ export const CategoriesList = () => {
     );
   };
 
+  const images = useSelector(imageSelector);
+
   const t = useTranslation();
 
   return (
@@ -193,6 +199,34 @@ export const CategoriesList = () => {
       </List>
 
       <Divider />
+
+      <CollapsibleList dense primary={t("Images")}>
+        {[images].map((image: ImageType | undefined) => {
+          if (image)
+            return (
+              <div key={image.name}>
+                <ListItem
+                  button
+                  id={image.name}
+                  onClick={() => console.info("Do nothing")}
+                >
+                  <ListItemAvatar>
+                    <Avatar
+                      alt={image.name}
+                      src={image.src}
+                      variant={"square"}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText
+                    id={image.name}
+                    primary={image.name}
+                    primaryTypographyProps={{ noWrap: true }}
+                  />
+                </ListItem>
+              </div>
+            );
+        })}
+      </CollapsibleList>
 
       <CollapsibleList dense primary={t("Categories")}>
         {createdCategories.map((category: CategoryType) => {

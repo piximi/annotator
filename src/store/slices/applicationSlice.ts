@@ -75,6 +75,7 @@ const initialState: StateType = {
   exposure: 0,
   hue: 0,
   image: initialImage,
+  images: initialImage ? [initialImage] : [],
   invertMode: false,
   language: LanguageType.English,
   offset: { x: 0, y: 0 },
@@ -265,6 +266,12 @@ export const applicationSlice = createSlice({
       if (!state.image) return;
       state.image.src = action.payload.src;
     },
+    setImages(
+      state: StateType,
+      action: PayloadAction<{ images: Array<ImageType> }>
+    ) {
+      state.images = action.payload.images;
+    },
     setChannels(
       state: StateType,
       action: PayloadAction<{
@@ -427,6 +434,7 @@ export const {
   setImage,
   setImageInstances,
   setImageName,
+  setImages,
   setInvertMode,
   setLanguage,
   setOffset,

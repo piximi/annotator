@@ -6,7 +6,6 @@ import { CategoryType } from "../../../../types/CategoryType";
 import {
   createdCategoriesSelector,
   imageInstancesSelector,
-  imageSelector,
   selectedCategorySelector,
   unknownCategorySelector,
 } from "../../../../store/selectors";
@@ -26,6 +25,7 @@ import {
   applicationSlice,
   setChannels,
   setImage,
+  setImages,
   setOperation,
   setSelectedAnnotation,
   setSelectedAnnotations,
@@ -72,6 +72,8 @@ import { selectedAnnotationsIdsSelector } from "../../../../store/selectors/sele
 import { ImageType } from "../../../../types/ImageType";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
+import { imagesSelector } from "../../../../store/selectors/imagesSelector";
+import { v4 } from "uuid";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -163,7 +165,7 @@ export const CategoriesList = () => {
     );
   };
 
-  const images = useSelector(imageSelector);
+  const images = useSelector(imagesSelector);
 
   const t = useTranslation();
 
@@ -201,13 +203,13 @@ export const CategoriesList = () => {
       <Divider />
 
       <CollapsibleList dense primary={t("Images")}>
-        {[images].map((image: ImageType | undefined) => {
+        {images.map((image: ImageType) => {
           if (image)
             return (
-              <div key={image.name}>
+              <div key={image.id}>
                 <ListItem
                   button
-                  id={image.name}
+                  id={image.id}
                   onClick={() => console.info("Do nothing")}
                 >
                   <ListItemAvatar>
@@ -218,7 +220,7 @@ export const CategoriesList = () => {
                     />
                   </ListItemAvatar>
                   <ListItemText
-                    id={image.name}
+                    id={image.id}
                     primary={image.name}
                     primaryTypographyProps={{ noWrap: true }}
                   />
@@ -532,6 +534,8 @@ const OpenExampleImageMenuItem = ({
 const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
   const dispatch = useDispatch();
 
+  const images = useSelector(imagesSelector);
+
   const onOpenImage = (
     event: React.ChangeEvent<HTMLInputElement>,
     onClose: () => void
@@ -540,71 +544,85 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
 
     event.persist();
 
+    const loadedImages: Array<ImageType> = [];
+
     if (event.currentTarget.files) {
-      const file = event.currentTarget.files[0];
+      // const reader = new FileReader();
 
-      const reader = new FileReader();
+      for (let i = 0; i < event.currentTarget.files.length; i++) {
+        const file = event.currentTarget.files[i];
 
-      reader.onload = async (event: ProgressEvent<FileReader>) => {
-        if (event.target) {
-          const src = event.target.result;
+        //FIMXE: is this still necessary? The image in this block does not seem to be used anywhere.
+        // reader.onload = async (event: ProgressEvent<FileReader>) => {
+        //   if (event.target) {
+        //     const src = event.target.result;
+        //
+        //     const image = new Image();
+        //
+        //     image.onload = () => {};
+        //
+        //     image.src = src as string;
+        //   }
+        // };
 
-          const image = new Image();
+        file.arrayBuffer().then((buffer) => {
+          ImageJS.Image.load(buffer).then((image) => {
+            const name = file.name;
 
-          image.onload = () => {};
+            const shape: ShapeType = {
+              channels: image.components,
+              frames: 1,
+              height: image.height,
+              planes: 1,
+              width: image.width,
+            };
 
-          image.src = src as string;
-        }
-      };
+            const loaded: ImageType = {
+              id: v4(),
+              annotations: [],
+              name: name,
+              shape: shape,
+              originalSrc: image.toDataURL(),
+              src: image.toDataURL(),
+            };
 
-      file.arrayBuffer().then((buffer) => {
-        ImageJS.Image.load(buffer).then((image) => {
-          const name = file.name;
+            dispatch(setImages({ images: [...loadedImages, loaded] }));
+            loadedImages.push(loaded);
 
-          const shape: ShapeType = {
-            channels: image.components,
-            frames: 1,
-            height: image.height,
-            planes: 1,
-            width: image.width,
-          };
+            if (i === 0) {
+              dispatch(
+                setImage({
+                  image: loaded,
+                })
+              );
 
-          dispatch(
-            setImage({
-              image: {
-                id: "",
-                annotations: [],
-                name: name,
-                shape: shape,
-                originalSrc: image.toDataURL(),
-                src: image.toDataURL(),
-              },
-            })
-          );
+              dispatch(
+                setSelectedAnnotations({
+                  selectedAnnotations: [],
+                })
+              );
 
-          dispatch(
-            setSelectedAnnotations({
-              selectedAnnotations: [],
-            })
-          );
+              dispatch(
+                setSelectedAnnotation({
+                  selectedAnnotation: undefined,
+                })
+              );
 
-          dispatch(
-            setSelectedAnnotation({
-              selectedAnnotation: undefined,
-            })
-          );
+              let channels: Array<ChannelType> = []; //number of channels depends if image is greyscale or RGB
+              for (let i = 0; i < image.components; i++) {
+                channels.push({ visible: true, range: [0, 255] });
+              }
+              dispatch(setChannels({ channels: channels }));
 
-          let channels: Array<ChannelType> = []; //number of channels depends if image is greyscale or RGB
-          for (let i = 0; i < image.components; i++) {
-            channels.push({ visible: true, range: [0, 255] });
-          }
-          dispatch(setChannels({ channels: channels }));
-
-          dispatch(setOperation({ operation: ToolType.RectangularAnnotation }));
+              dispatch(
+                setOperation({ operation: ToolType.RectangularAnnotation })
+              );
+            }
+          });
         });
-      });
 
-      reader.readAsDataURL(file);
+        // reader.readAsDataURL(file);
+      }
     }
   };
 

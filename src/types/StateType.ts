@@ -19,6 +19,7 @@ export type StateType = {
   exposure: number;
   hue: number;
   image?: ImageType;
+  images: Array<ImageType>;
   invertMode: boolean;
   language: LanguageType;
   offset: { x: number; y: number };

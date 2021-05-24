@@ -17,6 +17,7 @@ export {
   setImage,
   setImageInstances,
   setImageName,
+  setImages,
   setInvertMode,
   setLanguage,
   setOffset,

@@ -16,6 +16,7 @@ export {
   setExposure,
   setHue,
   setImage,
+  setImages,
   setImageInstances,
   setInvertMode,
   setOffset,

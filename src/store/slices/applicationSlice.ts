@@ -119,6 +119,13 @@ export const applicationSlice = createSlice({
         (category: CategoryType) => category.id !== action.payload.category.id
       );
     },
+    deleteImage(state: StateType, action: PayloadAction<{ image: ImageType }>) {
+      if (state.image) {
+        state.images = state.images.filter(
+          (image: ImageType) => image.id !== action.payload.image.id
+        );
+      }
+    },
     deleteImageInstance(
       state: StateType,
       action: PayloadAction<{ id: string }>
@@ -429,6 +436,7 @@ export const applicationSlice = createSlice({
 
 export const {
   deleteCategory,
+  deleteImage,
   deleteImageInstance,
   replaceImageInstance,
   setAnnotating,

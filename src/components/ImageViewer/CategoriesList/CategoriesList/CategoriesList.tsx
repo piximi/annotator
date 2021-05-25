@@ -32,6 +32,7 @@ import {
   setSelectedAnnotations,
 } from "../../../../store";
 import {
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -75,6 +76,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 import { v4 } from "uuid";
+import { ImageMenu } from "../ImageMenu";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -106,6 +108,10 @@ export const CategoriesList = () => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+  const [imageAnchorEl, setImageAnchorEl] = React.useState<null | HTMLElement>(
+    null
+  );
+
   const onCategoryClick = (
     event: React.MouseEvent<HTMLDivElement>,
     category: CategoryType
@@ -131,6 +137,18 @@ export const CategoriesList = () => {
 
   const onCategoryMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const onImageMenuOpen = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    image: ImageType
+  ) => {
+    onImageItemClick(event, image);
+    setImageAnchorEl(event.currentTarget);
+  };
+
+  const onImageMenuClose = () => {
+    setImageAnchorEl(null);
   };
 
   const onClearAllAnnotations = () => {
@@ -170,7 +188,7 @@ export const CategoriesList = () => {
   };
 
   const onImageItemClick = (
-    evt: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    evt: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>,
     image: ImageType
   ) => {
     const selectedImage = images.filter((current: ImageType) => {
@@ -250,7 +268,25 @@ export const CategoriesList = () => {
                     primary={image.name}
                     primaryTypographyProps={{ noWrap: true }}
                   />
+                  {image.annotations.length !== 0 && (
+                    <Chip label={image.annotations.length} size="small" />
+                  )}
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      onClick={(event) => onImageMenuOpen(event, image)}
+                    >
+                      <MoreHorizIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
                 </ListItem>
+
+                <ImageMenu
+                  anchorElImageMenu={imageAnchorEl}
+                  onCloseImageMenu={onImageMenuClose}
+                  onOpenImageMenu={(event) => onImageMenuOpen(event, image)}
+                  openImageMenu={Boolean(imageAnchorEl)}
+                />
               </div>
             );
         })}

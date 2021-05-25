@@ -259,10 +259,14 @@ export const applicationSlice = createSlice({
       state.image.annotations = action.payload.instances;
 
       //update corresponding image object in array of Images stored in state
-      const otherImages = state.images.filter((current: ImageType) => {
-        return state.image!.id !== current.id;
+      const updatedImages = state.images.map((current: ImageType) => {
+        if (state.image!.id !== current.id) {
+          return current;
+        } else {
+          return state.image!;
+        }
       });
-      state.images = [...otherImages, state.image];
+      state.images = [...updatedImages];
     },
     setImageName(state: StateType, action: PayloadAction<{ name: string }>) {
       if (!state.image) return;

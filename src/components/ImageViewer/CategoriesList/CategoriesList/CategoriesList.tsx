@@ -560,6 +560,8 @@ const OpenExampleImageMenuItem = ({
 const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
   const dispatch = useDispatch();
 
+  const images = useSelector(imagesSelector);
+
   const onOpenImage = (
     event: React.ChangeEvent<HTMLInputElement>,
     onClose: () => void
@@ -568,7 +570,7 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
 
     event.persist();
 
-    const loadedImages: Array<ImageType> = [];
+    const loadedImages: Array<ImageType> = [...images];
 
     if (event.currentTarget.files) {
       for (let i = 0; i < event.currentTarget.files.length; i++) {

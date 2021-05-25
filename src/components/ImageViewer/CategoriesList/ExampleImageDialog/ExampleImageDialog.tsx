@@ -7,14 +7,18 @@ import {
   setSelectedAnnotations,
   setSelectedAnnotation,
   setChannels,
+  setImages,
 } from "../../../../store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import malaria from "../../../../images/malaria.png";
 import { ChannelType } from "../../../../types/ChannelType";
 import { ToolType } from "../../../../types/ToolType";
+import { ImageType } from "../../../../types/ImageType";
+import { v4 } from "uuid";
+import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 
 type ExampleImageDialogProps = {
   onClose: () => void;
@@ -26,6 +30,8 @@ export const ExampleImageDialog = ({
   open,
 }: ExampleImageDialogProps) => {
   const dispatch = useDispatch();
+
+  const images = useSelector(imagesSelector);
 
   const examples = [
     {
@@ -55,16 +61,20 @@ export const ExampleImageDialog = ({
       width: 1600,
     };
 
+    const example: ImageType = {
+      id: v4(),
+      annotations: [],
+      name: name,
+      shape: shape,
+      originalSrc: data as string,
+      src: data as string,
+    };
+
+    dispatch(setImages({ images: [...images, example] }));
+
     dispatch(
       setImage({
-        image: {
-          id: "",
-          annotations: [],
-          name: name,
-          shape: shape,
-          originalSrc: data as string,
-          src: data as string,
-        },
+        image: example,
       })
     );
 

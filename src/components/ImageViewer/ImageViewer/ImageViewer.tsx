@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { CssBaseline } from "@material-ui/core";
 import { ImageType } from "../../../types/ImageType";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CategoriesList } from "../CategoriesList";
 import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
@@ -26,6 +26,7 @@ import { TooltipCard } from "../Tools/Tool/Tool";
 import { ChannelType } from "../../../types/ChannelType";
 import { ToolType } from "../../../types/ToolType";
 import { v4 } from "uuid";
+import { imagesSelector } from "../../../store/selectors/imagesSelector";
 
 type ImageViewerProps = {
   image?: ImageType;
@@ -33,6 +34,8 @@ type ImageViewerProps = {
 
 export const ImageViewer = (props: ImageViewerProps) => {
   const dispatch = useDispatch();
+
+  const images = useSelector(imagesSelector);
 
   useEffect(() => {
     const path =
@@ -51,7 +54,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
   const [, setDropped] = useState<File[]>([]);
 
-  const loadedImages: Array<ImageType> = [];
+  const loadedImages: Array<ImageType> = [...images];
 
   const onDrop = useCallback(
     (item) => {

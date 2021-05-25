@@ -6,6 +6,7 @@ import { CategoryType } from "../../../../types/CategoryType";
 import {
   createdCategoriesSelector,
   imageInstancesSelector,
+  imageSelector,
   selectedCategorySelector,
   unknownCategorySelector,
 } from "../../../../store/selectors";
@@ -86,6 +87,9 @@ export const CategoriesList = () => {
 
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
+  const images = useSelector(imagesSelector);
+  const currentImage = useSelector(imageSelector);
+
   const dispatch = useDispatch();
 
   const {
@@ -165,7 +169,26 @@ export const CategoriesList = () => {
     );
   };
 
-  const images = useSelector(imagesSelector);
+  const onImageItemClick = (
+    evt: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    image: ImageType
+  ) => {
+    const selectedImage = images.filter((current: ImageType) => {
+      return image.id === current.id;
+    })[0];
+
+    dispatch(setImage({ image: selectedImage }));
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotation({
+        selectedAnnotation: undefined,
+      })
+    );
+    dispatch(
+      applicationSlice.actions.setSelectedAnnotations({
+        selectedAnnotations: [],
+      })
+    );
+  };
 
   const t = useTranslation();
 
@@ -210,7 +233,10 @@ export const CategoriesList = () => {
                 <ListItem
                   button
                   id={image.id}
-                  onClick={() => console.info("Do nothing")}
+                  onClick={(
+                    evt: React.MouseEvent<HTMLDivElement, MouseEvent>
+                  ) => onImageItemClick(evt, image)}
+                  selected={image.id === currentImage?.id}
                 >
                   <ListItemAvatar>
                     <Avatar

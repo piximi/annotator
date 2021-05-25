@@ -534,8 +534,6 @@ const OpenExampleImageMenuItem = ({
 const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
   const dispatch = useDispatch();
 
-  const images = useSelector(imagesSelector);
-
   const onOpenImage = (
     event: React.ChangeEvent<HTMLInputElement>,
     onClose: () => void
@@ -547,23 +545,8 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
     const loadedImages: Array<ImageType> = [];
 
     if (event.currentTarget.files) {
-      // const reader = new FileReader();
-
       for (let i = 0; i < event.currentTarget.files.length; i++) {
         const file = event.currentTarget.files[i];
-
-        //FIMXE: is this still necessary? The image in this block does not seem to be used anywhere.
-        // reader.onload = async (event: ProgressEvent<FileReader>) => {
-        //   if (event.target) {
-        //     const src = event.target.result;
-        //
-        //     const image = new Image();
-        //
-        //     image.onload = () => {};
-        //
-        //     image.src = src as string;
-        //   }
-        // };
 
         file.arrayBuffer().then((buffer) => {
           ImageJS.Image.load(buffer).then((image) => {
@@ -620,8 +603,6 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
             }
           });
         });
-
-        // reader.readAsDataURL(file);
       }
     }
   };

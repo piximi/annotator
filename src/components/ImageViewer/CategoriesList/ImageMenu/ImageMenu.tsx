@@ -61,8 +61,6 @@ export const ImageMenu = ({
     >
       <MenuList dense variant="menu">
         <div>
-          <Divider />
-
           <MenuItem onClick={onClearAnnotationsClick}>
             <Typography variant="inherit">{t("Clear Annotations")}</Typography>
           </MenuItem>

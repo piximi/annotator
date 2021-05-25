@@ -10,6 +10,7 @@ import {
   setChannels,
   setContrast,
   setImage,
+  setImages,
   setOperation,
   setSelectedAnnotation,
   setSelectedAnnotations,
@@ -24,6 +25,7 @@ import { loadLayersModelThunk } from "../../../store/thunks";
 import { TooltipCard } from "../Tools/Tool/Tool";
 import { ChannelType } from "../../../types/ChannelType";
 import { ToolType } from "../../../types/ToolType";
+import { v4 } from "uuid";
 
 type ImageViewerProps = {
   image?: ImageType;
@@ -49,65 +51,70 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
   const [, setDropped] = useState<File[]>([]);
 
+  const loadedImages: Array<ImageType> = [];
+
   const onDrop = useCallback(
     (item) => {
       if (item) {
-        const file = item.files[0];
+        for (let i = 0; i < item.files.length; i++) {
+          const file = item.files[i];
 
-        const reader = new FileReader();
+          file.arrayBuffer().then((buffer: any) => {
+            ImageJS.Image.load(buffer).then((image) => {
+              const name = file.name;
 
-        reader.onload = async (event: ProgressEvent<FileReader>) => {};
+              const shape: ShapeType = {
+                channels: image.components,
+                frames: 1,
+                height: image.height,
+                planes: 1,
+                width: image.width,
+              };
 
-        file.arrayBuffer().then((buffer: any) => {
-          ImageJS.Image.load(buffer).then((image) => {
-            const name = file.name;
+              const loaded: ImageType = {
+                id: v4(),
+                annotations: [],
+                name: name,
+                shape: shape,
+                originalSrc: image.toDataURL(),
+                src: image.toDataURL(),
+              };
 
-            const shape: ShapeType = {
-              channels: image.components,
-              frames: 1,
-              height: image.height,
-              planes: 1,
-              width: image.width,
-            };
+              dispatch(setImages({ images: [...loadedImages, loaded] }));
+              loadedImages.push(loaded);
 
-            dispatch(
-              setImage({
-                image: {
-                  id: "",
-                  annotations: [],
-                  name: name,
-                  shape: shape,
-                  originalSrc: image.toDataURL(),
-                  src: image.toDataURL(),
-                },
-              })
-            );
+              if (i === 0) {
+                dispatch(
+                  setImage({
+                    image: loaded,
+                  })
+                );
 
-            dispatch(
-              setSelectedAnnotations({
-                selectedAnnotations: [],
-              })
-            );
+                dispatch(
+                  setSelectedAnnotations({
+                    selectedAnnotations: [],
+                  })
+                );
 
-            dispatch(
-              setSelectedAnnotation({
-                selectedAnnotation: undefined,
-              })
-            );
+                dispatch(
+                  setSelectedAnnotation({
+                    selectedAnnotation: undefined,
+                  })
+                );
 
-            let channels: Array<ChannelType> = []; //number of channels depends if image is greyscale or RGB
-            for (let i = 0; i < image.components; i++) {
-              channels.push({ visible: true, range: [0, 255] });
-            }
-            dispatch(setChannels({ channels }));
+                let channels: Array<ChannelType> = []; //number of channels depends if image is greyscale or RGB
+                for (let i = 0; i < image.components; i++) {
+                  channels.push({ visible: true, range: [0, 255] });
+                }
+                dispatch(setChannels({ channels: channels }));
 
-            dispatch(
-              setOperation({ operation: ToolType.RectangularAnnotation })
-            );
+                dispatch(
+                  setOperation({ operation: ToolType.RectangularAnnotation })
+                );
+              }
+            });
           });
-        });
-
-        reader.readAsDataURL(file);
+        }
       }
     },
     [setDropped]

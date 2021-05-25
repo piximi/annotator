@@ -59,7 +59,7 @@ import { ExampleImageDialog } from "../ExampleImageDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
 import FeedbackIcon from "@material-ui/icons/Feedback";
 import HelpIcon from "@material-ui/icons/Help";
-import { SettingsDialog } from "../../ImageViewerAppBar/SettingsButton/SettingsDialog";
+import { SettingsDialog } from "../../SettingsButton/SettingsDialog";
 import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 import DescriptionIcon from "@material-ui/icons/Description";

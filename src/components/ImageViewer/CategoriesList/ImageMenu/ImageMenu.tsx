@@ -33,11 +33,7 @@ export const ImageMenu = ({
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     if (!currentImage) return;
-    currentImage.annotations.forEach((annotation: AnnotationType) => {
-      dispatch(
-        applicationSlice.actions.deleteImageInstance({ id: annotation.id })
-      );
-    });
+    //FIXME implement this (delete annotations of a given instance)
     onCloseImageMenu(event);
   };
 

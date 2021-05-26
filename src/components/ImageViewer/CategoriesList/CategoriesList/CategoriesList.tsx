@@ -85,8 +85,6 @@ export const CategoriesList = () => {
   const selectedCategory = useSelector(selectedCategorySelector);
   const unknownCategory = useSelector(unknownCategorySelector);
 
-  const annotations = useSelector(imageInstancesSelector);
-
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
 
   const images = useSelector(imagesSelector);
@@ -152,12 +150,7 @@ export const CategoriesList = () => {
   };
 
   const onClearAllAnnotations = () => {
-    if (!annotations) return;
-    annotations.forEach((annotation: AnnotationType) => {
-      dispatch(
-        applicationSlice.actions.deleteImageInstance({ id: annotation.id })
-      );
-    });
+    dispatch(applicationSlice.actions.deleteAllInstances({ id: "" }));
     dispatch(
       applicationSlice.actions.setSelectedCategory({
         selectedCategory: "00000000-0000-0000-0000-000000000000",

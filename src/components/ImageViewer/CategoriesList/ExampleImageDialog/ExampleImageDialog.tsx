@@ -2,7 +2,7 @@ import Dialog from "@material-ui/core/Dialog";
 import React from "react";
 import { ShapeType } from "../../../../types/ShapeType";
 import {
-  setImage,
+  setActiveImage,
   setOperation,
   setSelectedAnnotations,
   setSelectedAnnotation,
@@ -73,8 +73,8 @@ export const ExampleImageDialog = ({
     dispatch(setImages({ images: [...images, example] }));
 
     dispatch(
-      setImage({
-        image: example,
+      setActiveImage({
+        image: example.id,
       })
     );
 

@@ -15,7 +15,7 @@ import { ChannelType } from "../../types/ChannelType";
 const initialImage =
   process.env.NODE_ENV === "development"
     ? {
-        id: "",
+        id: "f8eecf66-8776-4e14-acd2-94b44603a1a7",
         annotations: [],
         name: "example.png",
         shape: {
@@ -74,7 +74,7 @@ const initialState: StateType = {
   contrast: 0,
   exposure: 0,
   hue: 0,
-  image: initialImage,
+  activeImageId: initialImage ? initialImage.id : undefined,
   images: initialImage ? [initialImage] : [],
   invertMode: false,
   language: LanguageType.English,
@@ -119,22 +119,25 @@ export const applicationSlice = createSlice({
         (category: CategoryType) => category.id !== action.payload.category.id
       );
     },
-    deleteImage(state: StateType, action: PayloadAction<{ image: ImageType }>) {
-      if (state.image) {
-        state.images = state.images.filter(
-          (image: ImageType) => image.id !== action.payload.image.id
-        );
-      }
+    deleteImage(state: StateType, action: PayloadAction<{ id: string }>) {
+      state.images = state.images.filter(
+        (image: ImageType) => image.id !== action.payload.id
+      );
     },
     deleteImageInstance(
       state: StateType,
       action: PayloadAction<{ id: string }>
     ) {
-      if (!state.image) return;
+      if (!state.activeImageId) return;
 
-      state.image.annotations = state.image.annotations.filter(
-        (instance: AnnotationType) => instance.id !== action.payload.id
-      );
+      state.images = state.images.map((image: ImageType) => {
+        if (image.id === state.activeImageId) {
+          const updatedAnnotations = image.annotations.filter(
+            (instance: AnnotationType) => instance.id !== action.payload.id
+          );
+          return { ...image, annotations: updatedAnnotations };
+        } else return image;
+      });
     },
     openAnnotations(
       state: StateType,
@@ -144,54 +147,49 @@ export const applicationSlice = createSlice({
        * NOTE: Users are expected to open their image before opening the
        * corresponding annotations. -- Allen
        */
-      if (!state.image) return;
+      if (!state.activeImageId) return;
 
-      state.image.annotations = action.payload.annotations.map(
-        (annotation: SerializedAnnotationType): AnnotationType => {
-          const mask = annotation.annotationMask
-            .split(" ")
-            .map((x: string) => parseInt(x));
+      state.images = state.images.map((image: ImageType) => {
+        if (image.id === state.activeImageId) {
+          const annotations = action.payload.annotations.map(
+            (annotation: SerializedAnnotationType): AnnotationType => {
+              const mask = annotation.annotationMask
+                .split(" ")
+                .map((x: string) => parseInt(x));
 
-          //if category does not already exist in state, add it
-          if (
-            !state.categories
-              .map((category: CategoryType) => category.id)
-              .includes(annotation.annotationCategoryId)
-          ) {
-            const category: CategoryType = {
-              color: annotation.annotationCategoryColor,
-              id: annotation.annotationCategoryId,
-              name: annotation.annotationCategoryName,
-              visible: true,
-            };
-            state.categories = [...state.categories, category];
-          }
+              //if category does not already exist in state, add it
+              if (
+                !state.categories
+                  .map((category: CategoryType) => category.id)
+                  .includes(annotation.annotationCategoryId)
+              ) {
+                const category: CategoryType = {
+                  color: annotation.annotationCategoryColor,
+                  id: annotation.annotationCategoryId,
+                  name: annotation.annotationCategoryName,
+                  visible: true,
+                };
+                state.categories = [...state.categories, category];
+              }
 
-          return {
-            boundingBox: [
-              annotation.annotationBoundingBoxX,
-              annotation.annotationBoundingBoxY,
-              annotation.annotationBoundingBoxWidth,
-              annotation.annotationBoundingBoxHeight,
-            ],
-            categoryId: annotation.annotationCategoryId,
-            id: annotation.annotationId,
-            mask: mask,
-          };
+              return {
+                boundingBox: [
+                  annotation.annotationBoundingBoxX,
+                  annotation.annotationBoundingBoxY,
+                  annotation.annotationBoundingBoxWidth,
+                  annotation.annotationBoundingBoxHeight,
+                ],
+                categoryId: annotation.annotationCategoryId,
+                id: annotation.annotationId,
+                mask: mask,
+              };
+            }
+          );
+          return { ...image, annotations: annotations };
+        } else {
+          return image;
         }
-      );
-    },
-    replaceImageInstance(
-      state: StateType,
-      action: PayloadAction<{ id: string; instance: AnnotationType }>
-    ) {
-      if (!state.image) return;
-
-      const instances = state.image.annotations.filter(
-        (instance: AnnotationType) => instance.id !== action.payload.id
-      );
-
-      state.image.annotations = [...instances, action.payload.instance];
+      });
     },
     setAnnotated(
       state: StateType,
@@ -254,35 +252,33 @@ export const applicationSlice = createSlice({
     setHue(state: StateType, action: PayloadAction<{ hue: number }>) {
       state.hue = action.payload.hue;
     },
-    setImage(state: StateType, action: PayloadAction<{ image: ImageType }>) {
-      state.image = action.payload.image;
+    setActiveImage(state: StateType, action: PayloadAction<{ image: string }>) {
+      state.activeImageId = action.payload.image;
     },
     setImageInstances(
       state: StateType,
       action: PayloadAction<{ instances: Array<AnnotationType> }>
     ) {
-      if (!state.image) return;
-
-      state.image.annotations = action.payload.instances;
+      if (!state.activeImageId) return;
 
       //update corresponding image object in array of Images stored in state
-      const updatedImages = state.images.map((current: ImageType) => {
-        if (state.image!.id !== current.id) {
-          return current;
+      state.images = state.images.map((image: ImageType) => {
+        if (state.activeImageId !== image.id) {
+          return image;
         } else {
-          return state.image!;
+          return { ...image, annotations: action.payload.instances };
         }
       });
-      state.images = [...updatedImages];
-    },
-    setImageName(state: StateType, action: PayloadAction<{ name: string }>) {
-      if (!state.image) return;
-
-      state.image.name = action.payload.name;
     },
     setImageSrc(state: StateType, action: PayloadAction<{ src: string }>) {
-      if (!state.image) return;
-      state.image.src = action.payload.src;
+      if (!state.activeImageId) return;
+      state.images = state.images.map((image: ImageType) => {
+        if (state.activeImageId !== image.id) {
+          return image;
+        } else {
+          return { ...image, src: action.payload.src };
+        }
+      });
     },
     setImages(
       state: StateType,
@@ -438,7 +434,7 @@ export const {
   deleteCategory,
   deleteImage,
   deleteImageInstance,
-  replaceImageInstance,
+  setActiveImage,
   setAnnotating,
   setAnnotated,
   setBoundingClientRect,
@@ -450,9 +446,7 @@ export const {
   setCurrentIndex,
   setExposure,
   setHue,
-  setImage,
   setImageInstances,
-  setImageName,
   setImages,
   setInvertMode,
   setLanguage,

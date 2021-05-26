@@ -2,13 +2,18 @@ import { HistoryStateType } from "../../types/HistoryStateType";
 import { AnnotationType } from "../../types/AnnotationType";
 import { CategoryType } from "../../types/CategoryType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
+import { ImageType } from "../../types/ImageType";
 
 export const serializedAnnotationsSelector = ({
   state,
 }: {
   state: HistoryStateType;
 }): Array<SerializedAnnotationType> => {
-  const image = state.present.image;
+  if (!state.present.images.length) return [];
+
+  const image = state.present.images.filter((image: ImageType) => {
+    return image.id === state.present.activeImageId;
+  })[0];
 
   if (!image) return [];
 

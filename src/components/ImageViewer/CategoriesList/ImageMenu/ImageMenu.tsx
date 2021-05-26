@@ -10,6 +10,7 @@ import { AnnotationType } from "../../../../types/AnnotationType";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { imageSelector } from "../../../../store/selectors";
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
+import { activeImageId } from "../../../../store/selectors/activeImageId";
 
 type ImageMenuProps = {
   anchorElImageMenu: any;
@@ -26,6 +27,7 @@ export const ImageMenu = ({
   const dispatch = useDispatch();
   const images = useSelector(imagesSelector);
   const currentImage = useSelector(imageSelector);
+  const currentImageId = useSelector(activeImageId);
 
   const onClearAnnotationsClick = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
@@ -40,10 +42,12 @@ export const ImageMenu = ({
   };
 
   const onDeleteImage = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    if (!currentImage) return;
-    dispatch(applicationSlice.actions.deleteImage({ image: currentImage }));
+    if (!currentImageId) return;
+    dispatch(applicationSlice.actions.deleteImage({ id: currentImageId }));
     if (images.length) {
-      dispatch(applicationSlice.actions.setImage({ image: images[0] }));
+      dispatch(
+        applicationSlice.actions.setActiveImage({ image: images[0].id })
+      );
     }
     onCloseImageMenu(event);
   };

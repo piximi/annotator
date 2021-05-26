@@ -9,7 +9,7 @@ import {
   applicationSlice,
   setChannels,
   setContrast,
-  setImage,
+  setActiveImage,
   setImages,
   setOperation,
   setSelectedAnnotation,
@@ -46,7 +46,9 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
   useEffect(() => {
     if (props.image) {
-      dispatch(applicationSlice.actions.setImage({ image: props.image }));
+      dispatch(
+        applicationSlice.actions.setActiveImage({ image: props.image.id })
+      );
     }
   }, [dispatch, props.image]);
 
@@ -88,8 +90,8 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
               if (i === 0) {
                 dispatch(
-                  setImage({
-                    image: loaded,
+                  setActiveImage({
+                    image: loaded.id,
                   })
                 );
 

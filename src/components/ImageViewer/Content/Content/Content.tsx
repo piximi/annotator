@@ -1,7 +1,5 @@
 import React, { useRef } from "react";
 import { Stage } from "../Stage";
-import { imageSelector } from "../../../../store/selectors";
-import { useSelector } from "react-redux";
 import { useStyles } from "./Content.css";
 import { NativeTypes } from "react-dnd-html5-backend";
 import { DropTargetMonitor, useDrop } from "react-dnd";
@@ -16,8 +14,6 @@ export const Content = ({ onDrop }: ContentProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const classes = useStyles();
-
-  const image = useSelector(imageSelector);
 
   useBoundingClientRect(ref);
 

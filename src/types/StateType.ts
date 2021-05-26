@@ -18,7 +18,7 @@ export type StateType = {
   currentPosition?: { x: number; y: number };
   exposure: number;
   hue: number;
-  image?: ImageType;
+  activeImageId?: string;
   images: Array<ImageType>;
   invertMode: boolean;
   language: LanguageType;

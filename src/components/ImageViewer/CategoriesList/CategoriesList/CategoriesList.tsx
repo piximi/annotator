@@ -25,7 +25,7 @@ import { useTranslation } from "../../../../hooks/useTranslation";
 import {
   applicationSlice,
   setChannels,
-  setImage,
+  setActiveImage,
   setImages,
   setOperation,
   setSelectedAnnotation,
@@ -191,11 +191,7 @@ export const CategoriesList = () => {
     evt: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>,
     image: ImageType
   ) => {
-    const selectedImage = images.filter((current: ImageType) => {
-      return image.id === current.id;
-    })[0];
-
-    dispatch(setImage({ image: selectedImage }));
+    dispatch(setActiveImage({ image: image.id }));
     dispatch(
       applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: undefined,
@@ -638,8 +634,8 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
 
             if (i === 0) {
               dispatch(
-                setImage({
-                  image: loaded,
+                setActiveImage({
+                  image: loaded.id,
                 })
               );
 

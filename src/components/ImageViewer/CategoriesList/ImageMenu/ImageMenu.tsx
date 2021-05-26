@@ -14,6 +14,7 @@ import { activeImageId } from "../../../../store/selectors/activeImageId";
 
 type ImageMenuProps = {
   anchorElImageMenu: any;
+  imageId: string;
   onCloseImageMenu: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   onOpenImageMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
   openImageMenu: boolean;
@@ -21,6 +22,7 @@ type ImageMenuProps = {
 
 export const ImageMenu = ({
   anchorElImageMenu,
+  imageId,
   onCloseImageMenu,
   openImageMenu,
 }: ImageMenuProps) => {
@@ -33,13 +35,17 @@ export const ImageMenu = ({
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     if (!currentImage) return;
-    //FIXME implement this (delete annotations of a given instance)
+    //FIXME: the imageId seems to always the last one in the array of images
+    dispatch(
+      applicationSlice.actions.deleteImageInstances({ imageId: imageId })
+    );
     onCloseImageMenu(event);
   };
 
   const onDeleteImage = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     if (!currentImageId) return;
-    dispatch(applicationSlice.actions.deleteImage({ id: currentImageId }));
+    //FIXME bug here
+    dispatch(applicationSlice.actions.deleteImage({ id: imageId }));
     if (images.length) {
       dispatch(
         applicationSlice.actions.setActiveImage({ image: images[0].id })
@@ -55,6 +61,7 @@ export const ImageMenu = ({
       anchorEl={anchorElImageMenu}
       anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
       getContentAnchorEl={null}
+      id={imageId}
       onClose={onCloseImageMenu}
       open={openImageMenu}
       transformOrigin={{ horizontal: "center", vertical: "top" }}

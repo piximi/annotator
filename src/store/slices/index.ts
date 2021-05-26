@@ -3,6 +3,7 @@ export {
   deleteCategory,
   deleteAllInstances,
   deleteImageInstance,
+  deleteImageInstances,
   setAnnotated,
   setAnnotating,
   setBoundingClientRect,

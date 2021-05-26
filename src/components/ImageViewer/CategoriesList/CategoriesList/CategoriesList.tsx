@@ -272,6 +272,7 @@ export const CategoriesList = () => {
 
                 <ImageMenu
                   anchorElImageMenu={imageAnchorEl}
+                  imageId={image.id}
                   onCloseImageMenu={onImageMenuClose}
                   onOpenImageMenu={(event) => onImageMenuOpen(event, image)}
                   openImageMenu={Boolean(imageAnchorEl)}

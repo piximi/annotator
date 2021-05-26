@@ -133,6 +133,17 @@ export const applicationSlice = createSlice({
         return { ...image, annotations: [] };
       });
     },
+    deleteImageInstances(
+      state: StateType,
+      action: PayloadAction<{ imageId: string }>
+    ) {
+      //deletes all instances across a given image
+      state.images = state.images.map((image: ImageType) => {
+        if (image.id === action.payload.imageId) {
+          return { ...image, annotations: [] };
+        } else return image;
+      });
+    },
     deleteImageInstance(
       //deletes given instance on active image
       state: StateType,
@@ -445,6 +456,7 @@ export const {
   deleteAllInstances,
   deleteImage,
   deleteImageInstance,
+  deleteImageInstances,
   setActiveImage,
   setAnnotating,
   setAnnotated,

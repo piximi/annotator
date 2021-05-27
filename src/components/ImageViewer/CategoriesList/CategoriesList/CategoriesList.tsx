@@ -26,7 +26,7 @@ import {
   applicationSlice,
   setChannels,
   setActiveImage,
-  setImages,
+  addImages,
   setOperation,
   setSelectedAnnotation,
   setSelectedAnnotations,
@@ -588,8 +588,6 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
 
     event.persist();
 
-    const loadedImages: Array<ImageType> = [...images];
-
     if (event.currentTarget.files) {
       for (let i = 0; i < event.currentTarget.files.length; i++) {
         const file = event.currentTarget.files[i];
@@ -615,8 +613,7 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
               src: image.toDataURL(),
             };
 
-            dispatch(setImages({ images: [...loadedImages, loaded] }));
-            loadedImages.push(loaded);
+            dispatch(addImages({ newImages: [loaded] }));
 
             if (i === 0) {
               dispatch(

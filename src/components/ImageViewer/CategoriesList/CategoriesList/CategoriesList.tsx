@@ -234,52 +234,44 @@ export const CategoriesList = () => {
 
       <CollapsibleList dense primary={t("Images")}>
         {images.map((image: ImageType) => {
-          if (image)
-            return (
-              <div key={image.id}>
-                <ListItem
-                  button
+          return (
+            <div key={image.id}>
+              <ListItem
+                button
+                id={image.id}
+                onClick={(evt: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+                  onImageItemClick(evt, image)
+                }
+                selected={image.id === currentImage?.id}
+              >
+                <ListItemAvatar>
+                  <Avatar alt={image.name} src={image.src} variant={"square"} />
+                </ListItemAvatar>
+                <ListItemText
                   id={image.id}
-                  onClick={(
-                    evt: React.MouseEvent<HTMLDivElement, MouseEvent>
-                  ) => onImageItemClick(evt, image)}
-                  selected={image.id === currentImage?.id}
-                >
-                  <ListItemAvatar>
-                    <Avatar
-                      alt={image.name}
-                      src={image.src}
-                      variant={"square"}
-                    />
-                  </ListItemAvatar>
-                  <ListItemText
-                    id={image.id}
-                    primary={image.name}
-                    primaryTypographyProps={{ noWrap: true }}
-                  />
-                  {image.annotations.length !== 0 && (
-                    <Chip label={image.annotations.length} size="small" />
-                  )}
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      edge="end"
-                      onClick={(event) => onImageMenuOpen(event, image)}
-                    >
-                      <MoreHorizIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-
-                <ImageMenu
-                  anchorElImageMenu={imageAnchorEl}
-                  imageId={image.id}
-                  onCloseImageMenu={onImageMenuClose}
-                  onOpenImageMenu={(event) => onImageMenuOpen(event, image)}
-                  openImageMenu={Boolean(imageAnchorEl)}
+                  primary={image.name}
+                  primaryTypographyProps={{ noWrap: true }}
                 />
-              </div>
-            );
+                {image.annotations.length !== 0 && (
+                  <Chip label={image.annotations.length} size="small" />
+                )}
+                <ListItemSecondaryAction>
+                  <IconButton
+                    edge="end"
+                    onClick={(event) => onImageMenuOpen(event, image)}
+                  >
+                    <MoreHorizIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            </div>
+          );
         })}
+        <ImageMenu
+          anchorElImageMenu={imageAnchorEl}
+          onCloseImageMenu={onImageMenuClose}
+          openImageMenu={Boolean(imageAnchorEl)}
+        />
       </CollapsibleList>
 
       <CollapsibleList dense primary={t("Categories")}>

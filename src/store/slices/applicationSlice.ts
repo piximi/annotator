@@ -123,6 +123,9 @@ export const applicationSlice = createSlice({
       state.images = state.images.filter(
         (image: ImageType) => image.id !== action.payload.id
       );
+      if (state.activeImageId === action.payload.id && state.images.length) {
+        state.activeImageId = state.images[0].id;
+      }
     },
     deleteAllInstances(
       state: StateType,

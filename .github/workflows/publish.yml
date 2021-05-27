@@ -17,7 +17,7 @@
           run: |
             git config --global user.email "alicelucas93@gmail.com"
             git config --global user.name "Alice Lucas"
-            git remote set-url origin https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}
+            git remote set-url origin https://${{ secrets.ALICE_PAGES_TOKEN }}@github.com/${{ github.repository }}
             yarn deploy
   name: publish
   on:

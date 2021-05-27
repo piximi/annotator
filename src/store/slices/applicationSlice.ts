@@ -111,6 +111,12 @@ export const applicationSlice = createSlice({
   initialState: initialState,
   name: "image-viewer-application",
   reducers: {
+    addImages(
+      state: StateType,
+      action: PayloadAction<{ newImages: Array<ImageType> }>
+    ) {
+      state.images.push(...action.payload.newImages);
+    },
     deleteCategory(
       state: StateType,
       action: PayloadAction<{ category: CategoryType }>
@@ -123,7 +129,11 @@ export const applicationSlice = createSlice({
       state.images = state.images.filter(
         (image: ImageType) => image.id !== action.payload.id
       );
-      if (state.activeImageId === action.payload.id && state.images.length) {
+      if (!state.images.length) state.activeImageId = undefined;
+      else if (
+        state.activeImageId === action.payload.id &&
+        state.images.length
+      ) {
         state.activeImageId = state.images[0].id;
       }
     },
@@ -455,6 +465,7 @@ export const applicationSlice = createSlice({
 });
 
 export const {
+  addImages,
   deleteCategory,
   deleteAllInstances,
   deleteImage,

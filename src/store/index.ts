@@ -1,6 +1,7 @@
 export { reducer } from "./reducer";
 export {
   applicationSlice,
+  addImages,
   deleteAllInstances,
   deleteCategory,
   deleteImageInstance,

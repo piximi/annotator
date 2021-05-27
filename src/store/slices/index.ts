@@ -1,5 +1,6 @@
 export {
   applicationSlice,
+  addImages,
   deleteCategory,
   deleteAllInstances,
   deleteImageInstance,

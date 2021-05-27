@@ -1,7 +1,7 @@
 import { HistoryStateType } from "../../types/HistoryStateType";
 import { ImageType } from "../../types/ImageType";
 
-export const activeImageId = ({
+export const activeImageIdSelector = ({
   state,
 }: {
   state: HistoryStateType;

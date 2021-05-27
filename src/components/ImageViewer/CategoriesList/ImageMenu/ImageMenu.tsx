@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice, setImages } from "../../../../store";
 import { useTranslation } from "../../../../hooks/useTranslation";
-import { activeImageId } from "../../../../store/selectors/activeImageId";
+import { activeImageIdSelector } from "../../../../store/selectors/activeImageIdSelector";
 
 type ImageMenuProps = {
   anchorElImageMenu: any;
@@ -20,7 +20,7 @@ export const ImageMenu = ({
   openImageMenu,
 }: ImageMenuProps) => {
   const dispatch = useDispatch();
-  const currentImageId = useSelector(activeImageId);
+  const currentImageId = useSelector(activeImageIdSelector);
 
   const onClearAnnotationsClick = (
     event: React.MouseEvent<HTMLElement, MouseEvent>

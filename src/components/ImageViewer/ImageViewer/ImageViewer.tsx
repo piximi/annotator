@@ -7,10 +7,10 @@ import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
 import {
   applicationSlice,
-  setChannels,
-  setContrast,
   setActiveImage,
+  setChannels,
   setImages,
+  addImages,
   setOperation,
   setSelectedAnnotation,
   setSelectedAnnotations,
@@ -22,11 +22,11 @@ import { theme } from "./theme";
 import * as ImageJS from "image-js";
 import { ShapeType } from "../../../types/ShapeType";
 import { loadLayersModelThunk } from "../../../store/thunks";
-import { TooltipCard } from "../Tools/Tool/Tool";
 import { ChannelType } from "../../../types/ChannelType";
 import { ToolType } from "../../../types/ToolType";
 import { v4 } from "uuid";
 import { imagesSelector } from "../../../store/selectors/imagesSelector";
+import { activeImageIdSelector } from "../../../store/selectors/activeImageIdSelector";
 
 type ImageViewerProps = {
   image?: ImageType;
@@ -34,8 +34,6 @@ type ImageViewerProps = {
 
 export const ImageViewer = (props: ImageViewerProps) => {
   const dispatch = useDispatch();
-
-  const images = useSelector(imagesSelector);
 
   useEffect(() => {
     const path =
@@ -52,11 +50,13 @@ export const ImageViewer = (props: ImageViewerProps) => {
     }
   }, [dispatch, props.image]);
 
+  const images = useSelector(imagesSelector);
+
   const classes = useStyles();
 
-  const [, setDropped] = useState<File[]>([]);
+  const activeImageId = useSelector(activeImageIdSelector);
 
-  const loadedImages: Array<ImageType> = [...images];
+  const [, setDropped] = useState<File[]>([]);
 
   const onDrop = useCallback(
     (item) => {
@@ -85,8 +85,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
                 src: image.toDataURL(),
               };
 
-              dispatch(setImages({ images: [...loadedImages, loaded] }));
-              loadedImages.push(loaded);
+              dispatch(addImages({ newImages: [loaded] }));
 
               if (i === 0) {
                 dispatch(

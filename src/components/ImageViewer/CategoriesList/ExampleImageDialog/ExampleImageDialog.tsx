@@ -62,6 +62,7 @@ export const ExampleImageDialog = ({
     };
 
     const example: ImageType = {
+      avatar: data as string,
       id: v4(),
       annotations: [],
       name: name,

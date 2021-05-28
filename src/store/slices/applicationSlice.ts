@@ -15,6 +15,7 @@ import { ChannelType } from "../../types/ChannelType";
 const initialImage =
   process.env.NODE_ENV === "development"
     ? {
+        avatar: colorImage,
         id: "f8eecf66-8776-4e14-acd2-94b44603a1a7",
         annotations: [],
         name: "example.png",

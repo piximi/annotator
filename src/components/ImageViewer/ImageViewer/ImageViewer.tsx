@@ -76,13 +76,20 @@ export const ImageViewer = (props: ImageViewerProps) => {
                 width: image.width,
               };
 
+              const imageDataURL = image.toDataURL("image/png", {
+                useCanvas: true,
+              });
+
               const loaded: ImageType = {
+                avatar: image
+                  .resize({ width: 50 })
+                  .toDataURL("image/png", { useCanvas: true }),
                 id: v4(),
                 annotations: [],
                 name: name,
                 shape: shape,
-                originalSrc: image.toDataURL(),
-                src: image.toDataURL(),
+                originalSrc: imageDataURL,
+                src: imageDataURL,
               };
 
               dispatch(addImages({ newImages: [loaded] }));

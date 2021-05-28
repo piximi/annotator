@@ -16,6 +16,7 @@ const Template: Story<ComponentProps<typeof ImageViewer>> = (args) => (
 export const Default = Template.bind({});
 
 const image: ImageType = {
+  avatar: "",
   id: "",
   annotations: [],
   name: "foo.png",

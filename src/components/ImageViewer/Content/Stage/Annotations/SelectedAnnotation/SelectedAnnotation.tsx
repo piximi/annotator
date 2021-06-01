@@ -52,10 +52,18 @@ export const SelectedAnnotation = ({ annotation }: AnnotationProps) => {
         image={imageMask}
         scale={{ x: stageScale, y: stageScale }}
         key={annotation.id}
-        id={annotation.id}
         x={annotation.boundingBox[0] * stageScale}
         y={annotation.boundingBox[1] * stageScale}
       />
+      <ReactKonva.Rect
+        visible={false}
+        id={annotation.id}
+        width={annotation.boundingBox[2] - annotation.boundingBox[0]}
+        height={annotation.boundingBox[3] - annotation.boundingBox[1]}
+        x={annotation.boundingBox[0] * stageScale}
+        y={annotation.boundingBox[1] * stageScale}
+        scale={{ x: stageScale, y: stageScale }}
+      ></ReactKonva.Rect>
     </React.Fragment>
   );
 };

@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ToolType } from "../../../../../types/ToolType";
 import {
   imageInstancesSelector,
+  imageOriginalSrcSelector,
   invertModeSelector,
   selectedCategorySelector,
   selectionModeSelector,
@@ -64,10 +65,13 @@ import { usePointer } from "../../../../../hooks/usePointer/usePointer";
 import { pointerSelectionSelector } from "../../../../../store/selectors/pointerSelectionSelector";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { channelsSelector } from "../../../../../store/selectors/intensityRangeSelector";
 
 export const Stage = () => {
-  const imageRef = useRef<Konva.Image>(null);
+  const imageRef = useRef<Konva.Image | null>(null);
   const stageRef = useRef<Konva.Stage>(null);
+
+  const src = useSelector(imageOriginalSrcSelector);
 
   const selectingRef = useRef<Konva.Line | null>(null);
 
@@ -79,6 +83,8 @@ export const Stage = () => {
   const quickSelectionBrushSize = useSelector(quickSelectionBrushSizeSelector);
   const selectedCategory = useSelector(selectedCategorySelector);
 
+  const channels = useSelector(channelsSelector);
+
   const selectedAnnotations = useSelector(selectedAnnotationsSelector);
   const unselectedAnnotations = useSelector(unselectedAnnotationsSelector);
   const selectionMode = useSelector(selectionModeSelector);
@@ -89,6 +95,8 @@ export const Stage = () => {
 
   const saveLabelRef = useRef<Konva.Label>();
   const clearLabelRef = useRef<Konva.Label>();
+
+  const [foo, setFoo] = useState<boolean>(false);
 
   const [currentPosition, setCurrentPosition] = useState<{
     x: number;
@@ -746,6 +754,16 @@ export const Stage = () => {
     deselectAllAnnotations();
   }, [annotations?.length]);
 
+  useEffect(() => {
+    console.error("BIG OBVIOUS TEXT STRING In There");
+    if (!imageRef.current) return;
+    imageRef.current.clearCache();
+    console.info("In There", imageRef.current.width());
+    imageRef.current.filters([Konva.Filters.Invert]);
+    if (foo) imageRef.current.cache();
+    setFoo(true);
+  }, [channels]);
+
   const [tool, setTool] = useState<Tool>();
 
   useEffect(() => {
@@ -755,6 +773,11 @@ export const Stage = () => {
   useKeyboardShortcuts();
 
   const { draggable } = useHandTool();
+
+  const KonvaImage = <Image ref={imageRef} />;
+
+  // imageRef.current?.cache();
+  // console.info("Caching here");
 
   return (
     <ReactReduxContext.Consumer>
@@ -773,7 +796,7 @@ export const Stage = () => {
           <Provider store={store}>
             <DndProvider backend={HTML5Backend}>
               <Layer>
-                <Image ref={imageRef} />
+                {KonvaImage}
 
                 <ZoomSelection />
 

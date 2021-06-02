@@ -137,19 +137,24 @@ export const Tool = ({ children, name, onClick, selected }: ToolProps) => {
   };
 
   return (
-    <Tooltip
-      classes={{ tooltip: classes.tooltip }}
-      onClose={onClose}
-      onOpen={onOpen}
-      open={open}
-      placement="left"
-      title={<TooltipCard name={name} onClose={onClose} />}
-    >
-      <ListItem button onClick={onClick} selected={selected}>
-        <ListItemIcon>
-          <SvgIcon fontSize="small">{children}</SvgIcon>
-        </ListItemIcon>
-      </ListItem>
-    </Tooltip>
+    // <Tooltip
+    //   classes={{ tooltip: classes.tooltip }}
+    //   onClose={onClose}
+    //   onOpen={onOpen}
+    //   open={open}
+    //   placement="left"
+    //   title={<TooltipCard name={name} onClose={onClose} />}
+    // >
+    //   <ListItem button onClick={onClick} selected={selected}>
+    //     <ListItemIcon>
+    //       <SvgIcon fontSize="small">{children}</SvgIcon>
+    //     </ListItemIcon>
+    //   </ListItem>
+    // </Tooltip>
+    <ListItem button onClick={onClick} selected={selected}>
+      <ListItemIcon>
+        <SvgIcon fontSize="small">{children}</SvgIcon>
+      </ListItemIcon>
+    </ListItem>
   );
 };

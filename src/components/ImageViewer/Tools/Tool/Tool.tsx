@@ -100,7 +100,7 @@ export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
             className={classes.cardHeader}
           />
 
-          <CardMedia className={classes.cardMedia} image={image} />
+          {/*<CardMedia className={classes.cardMedia} image={image} />*/}
         </div>
 
         <CardContent>

@@ -32,31 +32,43 @@ const initialImage =
       }
     : undefined;
 
+const initialCategories =
+  process.env.NODE_ENV === "development"
+    ? [
+        {
+          color: "#AAAAAA",
+          id: "00000000-0000-0000-0000-000000000000",
+          name: "Unknown",
+          visible: true,
+        },
+        {
+          color: "#a08cd2",
+          id: "00000000-0000-0000-0000-000000000001",
+          name: "Cell membrane",
+          visible: true,
+        },
+        {
+          color: "#b8ddf3",
+          id: "00000000-0000-0000-0000-000000000002",
+          name: "Cell nucleus",
+          visible: true,
+        },
+      ]
+    : [
+        {
+          color: "#AAAAAA",
+          id: "00000000-0000-0000-0000-000000000000",
+          name: "Unknown",
+          visible: true,
+        },
+      ];
+
 const initialState: StateType = {
   annotated: false,
   annotating: false,
   boundingClientRect: new DOMRect(),
   brightness: 0,
-  categories: [
-    {
-      color: "#AAAAAA",
-      id: "00000000-0000-0000-0000-000000000000",
-      name: "Unknown",
-      visible: true,
-    },
-    {
-      color: "#a08cd2",
-      id: "00000000-0000-0000-0000-000000000001",
-      name: "Cell membrane",
-      visible: true,
-    },
-    {
-      color: "#b8ddf3",
-      id: "00000000-0000-0000-0000-000000000002",
-      name: "Cell nucleus",
-      visible: true,
-    },
-  ],
+  categories: initialCategories.length > 0 ? initialCategories : [],
   channels: [
     //R, G, and B channels by default
     {

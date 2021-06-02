@@ -331,20 +331,22 @@ export const CategoriesList = () => {
           );
         })}
 
-        <ListItem
-          button
-          id={unknownCategory.id}
-          onClick={(event) => onCategoryClick(event, unknownCategory)}
-          selected={unknownCategory.id === selectedCategory.id}
-        >
-          <CategoryListItemCheckbox category={unknownCategory} />
-
-          <ListItemText
+        {unknownCategory && (
+          <ListItem
+            button
             id={unknownCategory.id}
-            primary={t(unknownCategory.name)}
-            primaryTypographyProps={{ noWrap: true }}
-          />
-        </ListItem>
+            onClick={(event) => onCategoryClick(event, unknownCategory)}
+            selected={unknownCategory.id === selectedCategory.id}
+          >
+            <CategoryListItemCheckbox category={unknownCategory} />
+
+            <ListItemText
+              id={unknownCategory.id}
+              primary={t(unknownCategory.name)}
+              primaryTypographyProps={{ noWrap: true }}
+            />
+          </ListItem>
+        )}
 
         <CreateCategoryListItem />
       </CollapsibleList>

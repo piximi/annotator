@@ -78,6 +78,8 @@ import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 import { v4 } from "uuid";
 import { ImageMenu } from "../ImageMenu";
 import JSZip from "jszip";
+import { allSerializedAnnotationsSelector } from "../../../../store/selectors/allSerializedAnnotationsSelector";
+import { serialize } from "v8";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -736,15 +738,24 @@ const SaveAnnotationsMenuItem = ({
 const SaveAllAnnotationsMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
-  const annotations = useSelector(activeSerializedAnnotationsSelector);
+  const allAnnotations = useSelector(allSerializedAnnotationsSelector);
 
   const onSaveAllAnnotations = () => {
-    const blob = new Blob([JSON.stringify(annotations)], {
-      type: "application/json;charset=utf-8",
+    let zip = new JSZip();
+
+    let blob: Blob;
+
+    allAnnotations.forEach((serializedAnnotations) => {
+      blob = new Blob([JSON.stringify(serializedAnnotations)], {
+        type: "application/json;charset=utf-8",
+      });
+      zip.folder("annotations");
+      zip.file(
+        `annotations/${serializedAnnotations[0].imageFilename}.json`,
+        blob
+      );
     });
 
-    let zip = new JSZip();
-    zip.file(`${annotations[0].imageFilename}.json`, blob);
     zip.generateAsync({ type: "blob" }).then((blob) => {
       saveAs(blob, "annotations.zip");
     });

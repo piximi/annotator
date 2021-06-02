@@ -215,19 +215,19 @@ export const Tools = () => {
         <QuickSelectionIcon />
       </Tool>
 
-      <Tool
-        name={t("Object annotation")}
-        onClick={() => {
-          dispatch(
-            applicationSlice.actions.setOperation({
-              operation: OperationType.ObjectAnnotation,
-            })
-          );
-        }}
-        selected={activeOperation === OperationType.ObjectAnnotation}
-      >
-        <ObjectSelectionIcon />
-      </Tool>
+      {/*<Tool*/}
+      {/*  name={t("Object annotation")}*/}
+      {/*  onClick={() => {*/}
+      {/*    dispatch(*/}
+      {/*      applicationSlice.actions.setOperation({*/}
+      {/*        operation: OperationType.ObjectAnnotation,*/}
+      {/*      })*/}
+      {/*    );*/}
+      {/*  }}*/}
+      {/*  selected={activeOperation === OperationType.ObjectAnnotation}*/}
+      {/*>*/}
+      {/*  <ObjectSelectionIcon />*/}
+      {/*</Tool>*/}
       <br />
     </Drawer>
   );

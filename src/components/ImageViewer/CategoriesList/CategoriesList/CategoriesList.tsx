@@ -358,9 +358,7 @@ export const CategoriesList = () => {
           </ListItemIcon>
           <ListItemText primary={t("Clear all annotations")} />
         </ListItem>
-      </List>
 
-      <List dense>
         <ListItem button onClick={onClearSelectedAnnotations}>
           <ListItemIcon>
             <DeleteIcon color="disabled" />

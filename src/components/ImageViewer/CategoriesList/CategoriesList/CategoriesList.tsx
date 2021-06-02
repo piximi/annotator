@@ -5,7 +5,6 @@ import React, { ChangeEvent } from "react";
 import { CategoryType } from "../../../../types/CategoryType";
 import {
   createdCategoriesSelector,
-  imageInstancesSelector,
   imageSelector,
   selectedCategorySelector,
   unknownCategorySelector,
@@ -23,10 +22,10 @@ import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import {
-  applicationSlice,
-  setChannels,
-  setActiveImage,
   addImages,
+  applicationSlice,
+  setActiveImage,
+  setChannels,
   setOperation,
   setSelectedAnnotation,
   setSelectedAnnotations,
@@ -46,7 +45,6 @@ import {
 import List from "@material-ui/core/List";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { AnnotationType } from "../../../../types/AnnotationType";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import SaveIcon from "@material-ui/icons/Save";
 import Typography from "@material-ui/core/Typography";
@@ -79,7 +77,6 @@ import { v4 } from "uuid";
 import { ImageMenu } from "../ImageMenu";
 import JSZip from "jszip";
 import { allSerializedAnnotationsSelector } from "../../../../store/selectors/allSerializedAnnotationsSelector";
-import { serialize } from "v8";
 
 export const CategoriesList = () => {
   const classes = useStyles();

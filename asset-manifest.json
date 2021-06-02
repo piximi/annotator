@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/image-viewer/static/js/main.e49081d2.chunk.js",
-    "main.js.map": "/image-viewer/static/js/main.e49081d2.chunk.js.map",
-    "runtime-main.js": "/image-viewer/static/js/runtime-main.6cf4cdb9.js",
-    "runtime-main.js.map": "/image-viewer/static/js/runtime-main.6cf4cdb9.js.map",
-    "static/js/2.d6f2b274.chunk.js": "/image-viewer/static/js/2.d6f2b274.chunk.js",
-    "static/js/2.d6f2b274.chunk.js.map": "/image-viewer/static/js/2.d6f2b274.chunk.js.map",
+    "main.js": "/image-viewer/static/js/main.c24af5fc.chunk.js",
+    "main.js.map": "/image-viewer/static/js/main.c24af5fc.chunk.js.map",
+    "runtime-main.js": "/image-viewer/static/js/runtime-main.c6c8e20a.js",
+    "runtime-main.js.map": "/image-viewer/static/js/runtime-main.c6c8e20a.js.map",
+    "static/js/2.9b51e88c.chunk.js": "/image-viewer/static/js/2.9b51e88c.chunk.js",
+    "static/js/2.9b51e88c.chunk.js.map": "/image-viewer/static/js/2.9b51e88c.chunk.js.map",
     "static/js/3.df7b6b45.chunk.js": "/image-viewer/static/js/3.df7b6b45.chunk.js",
     "static/js/3.df7b6b45.chunk.js.map": "/image-viewer/static/js/3.df7b6b45.chunk.js.map",
-    "static/js/4.74ee141c.chunk.js": "/image-viewer/static/js/4.74ee141c.chunk.js",
-    "static/js/4.74ee141c.chunk.js.map": "/image-viewer/static/js/4.74ee141c.chunk.js.map",
+    "static/js/4.58869cae.chunk.js": "/image-viewer/static/js/4.58869cae.chunk.js",
+    "static/js/4.58869cae.chunk.js.map": "/image-viewer/static/js/4.58869cae.chunk.js.map",
     "index.html": "/image-viewer/index.html",
-    "static/js/2.d6f2b274.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.d6f2b274.chunk.js.LICENSE.txt",
+    "static/js/2.9b51e88c.chunk.js.LICENSE.txt": "/image-viewer/static/js/2.9b51e88c.chunk.js.LICENSE.txt",
     "static/js/3.df7b6b45.chunk.js.LICENSE.txt": "/image-viewer/static/js/3.df7b6b45.chunk.js.LICENSE.txt",
     "static/media/CheckboxChecked.6700c862.svg": "/image-viewer/static/media/CheckboxChecked.6700c862.svg",
     "static/media/CheckboxUnchecked.1714692b.svg": "/image-viewer/static/media/CheckboxUnchecked.1714692b.svg",
@@ -32,15 +32,14 @@
     "static/media/Selection.4e4701f2.svg": "/image-viewer/static/media/Selection.4e4701f2.svg",
     "static/media/Zoom.58f47de7.svg": "/image-viewer/static/media/Zoom.58f47de7.svg",
     "static/media/cell-painting.f118ef08.png": "/image-viewer/static/media/cell-painting.f118ef08.png",
-    "static/media/contemplative-reptile.7ab41865.jpeg": "/image-viewer/static/media/contemplative-reptile.7ab41865.jpeg",
     "static/media/malaria.5b73ad75.png": "/image-viewer/static/media/malaria.5b73ad75.png",
     "static/media/pop-up-off.83c6ba5b.mp3": "/image-viewer/static/media/pop-up-off.83c6ba5b.mp3",
     "static/media/pop-up-on.b776a1ef.mp3": "/image-viewer/static/media/pop-up-on.b776a1ef.mp3",
     "static/media/texture.2ed6f96c.png": "/image-viewer/static/media/texture.2ed6f96c.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.6cf4cdb9.js",
-    "static/js/2.d6f2b274.chunk.js",
-    "static/js/main.e49081d2.chunk.js"
+    "static/js/runtime-main.c6c8e20a.js",
+    "static/js/2.9b51e88c.chunk.js",
+    "static/js/main.c24af5fc.chunk.js"
   ]
 }

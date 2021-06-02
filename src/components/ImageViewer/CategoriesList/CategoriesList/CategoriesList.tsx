@@ -66,7 +66,7 @@ import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { CreateCategoryDialog } from "../CreateCategoryListItem/CreateCategoryDialog";
-import { serializedAnnotationsSelector } from "../../../../store/selectors/serializedAnnotationsSelector";
+import { activeSerializedAnnotationsSelector } from "../../../../store/selectors/activeSerializedAnnotationsSelector";
 import { saveAs } from "file-saver";
 import { ChannelType } from "../../../../types/ChannelType";
 import { ToolType } from "../../../../types/ToolType";
@@ -716,7 +716,7 @@ const OpenMenu = ({ popupState }: OpenMenuProps) => {
 const SaveAnnotationsMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
-  const annotations = useSelector(serializedAnnotationsSelector);
+  const annotations = useSelector(activeSerializedAnnotationsSelector);
 
   const onSaveAnnotations = () => {
     popupState.close();
@@ -736,7 +736,7 @@ const SaveAnnotationsMenuItem = ({
 const SaveAllAnnotationsMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
-  const annotations = useSelector(serializedAnnotationsSelector);
+  const annotations = useSelector(activeSerializedAnnotationsSelector);
 
   const onSaveAllAnnotations = () => {
     const blob = new Blob([JSON.stringify(annotations)], {

@@ -4,7 +4,7 @@ import { CategoryType } from "../../types/CategoryType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 import { ImageType } from "../../types/ImageType";
 
-export const serializedAnnotationsSelector = ({
+export const activeSerializedAnnotationsSelector = ({
   state,
 }: {
   state: HistoryStateType;

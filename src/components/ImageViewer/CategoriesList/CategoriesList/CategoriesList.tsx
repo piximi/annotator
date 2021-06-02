@@ -526,23 +526,23 @@ const OpenAnnotationsMenuItem = ({
     event.persist();
 
     if (event.currentTarget.files) {
-      const file = event.currentTarget.files[0];
+      Array.from(event.currentTarget.files).forEach((file: any) => {
+        const reader = new FileReader();
 
-      const reader = new FileReader();
+        reader.onload = async (event: ProgressEvent<FileReader>) => {
+          if (event.target && event.target.result) {
+            const annotations = JSON.parse(event.target.result as string);
 
-      reader.onload = async (event: ProgressEvent<FileReader>) => {
-        if (event.target && event.target.result) {
-          const annotations = JSON.parse(event.target.result as string);
+            dispatch(
+              applicationSlice.actions.openAnnotations({
+                annotations: annotations,
+              })
+            );
+          }
+        };
 
-          dispatch(
-            applicationSlice.actions.openAnnotations({
-              annotations: annotations,
-            })
-          );
-        }
-      };
-
-      reader.readAsText(file);
+        reader.readAsText(file);
+      });
     }
   };
 
@@ -553,6 +553,7 @@ const OpenAnnotationsMenuItem = ({
         accept="application/json"
         hidden
         id="open-annotations"
+        multiple
         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
           onOpenAnnotations(event, popupState.close)
         }

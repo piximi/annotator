@@ -21,9 +21,9 @@ export const ColorAnnotationOptions = () => {
 
       <InvertAnnotation />
 
-      <Divider />
+      {/*<Divider />*/}
 
-      <SampleList />
+      {/*<SampleList />*/}
     </React.Fragment>
   );
 };

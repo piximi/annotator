@@ -21,9 +21,9 @@ export const MagneticAnnotationOptions = () => {
 
       <InvertAnnotation />
 
-      <Divider />
+      {/*<Divider />*/}
 
-      <SampleList />
+      {/*<SampleList />*/}
     </React.Fragment>
   );
 };

@@ -18,9 +18,9 @@ export const ObjectAnnotationOptions = () => {
 
       <Divider />
 
-      <Divider />
+      {/*<Divider />*/}
 
-      <SampleList />
+      {/*<SampleList />*/}
     </React.Fragment>
   );
 };

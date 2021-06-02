@@ -58,11 +58,13 @@ export const QuickAnnotationOptions = () => {
         </ListItem>
       </List>
 
-      <InvertAnnotation />
-
       <Divider />
 
-      <SampleList />
+      <InvertAnnotation />
+
+      {/*<Divider />*/}
+
+      {/*<SampleList />*/}
     </React.Fragment>
   );
 };

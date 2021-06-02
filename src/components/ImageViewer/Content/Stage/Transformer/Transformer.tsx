@@ -76,8 +76,6 @@ export const Transformer = ({
 
   const [center, setCenter] = useState<{ x: number; y: number } | undefined>();
 
-  const [resizedContour, setResizedContour] = useState<Array<number>>([]);
-
   const stageScale = useSelector(stageScaleSelector);
 
   const cursor = useCursor();
@@ -104,6 +102,15 @@ export const Transformer = ({
 
     if (!imageWidth || !imageHeight || !relativeNewBox)
       return boundBox ? boundBox : startBox;
+
+    const minimumBoxArea = 5;
+
+    if (
+      relativeNewBox.width < minimumBoxArea ||
+      relativeNewBox.height < minimumBoxArea
+    )
+      return boundBox ? boundBox : oldBox;
+
     if (
       Math.floor(relativeNewBox.x + relativeNewBox.width) > imageWidth ||
       Math.floor(relativeNewBox.y + relativeNewBox.height) > imageHeight ||
@@ -223,7 +230,6 @@ export const Transformer = ({
 
     const updatedAnnotation = {
       ...selectedAnnotation,
-      contour: resizedContour,
       boundingBox: [
         scaledOffset[0],
         scaledOffset[1],

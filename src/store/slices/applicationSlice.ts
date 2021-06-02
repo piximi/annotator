@@ -11,6 +11,7 @@ import * as tensorflow from "@tensorflow/tfjs";
 import { StateType } from "../../types/StateType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 import { ChannelType } from "../../types/ChannelType";
+import { SerializedFileType } from "../../types/SerializedFileType";
 
 const initialImage =
   process.env.NODE_ENV === "development"
@@ -176,17 +177,19 @@ export const applicationSlice = createSlice({
     },
     openAnnotations(
       state: StateType,
-      action: PayloadAction<{ annotations: Array<SerializedAnnotationType> }>
+      action: PayloadAction<{ annotations: SerializedFileType }>
     ) {
       /*
-       * NOTE: Users are expected to open their image before opening the
-       * corresponding annotations. -- Allen
+       * NOTE: The correct image to annotate is found by looking at the
+       * imageFilename property in the imported annotation file. -- Alice
        */
       if (!state.activeImageId) return;
 
+      const filename = action.payload.annotations.imageFilename;
+
       state.images = state.images.map((image: ImageType) => {
-        if (image.id === state.activeImageId) {
-          const annotations = action.payload.annotations.map(
+        if (image.name === filename) {
+          const annotations = action.payload.annotations.annotations.map(
             (annotation: SerializedAnnotationType): AnnotationType => {
               const mask = annotation.annotationMask
                 .split(" ")

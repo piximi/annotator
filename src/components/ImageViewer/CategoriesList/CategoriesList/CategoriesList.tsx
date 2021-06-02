@@ -77,6 +77,7 @@ import Avatar from "@material-ui/core/Avatar";
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 import { v4 } from "uuid";
 import { ImageMenu } from "../ImageMenu";
+import JSZip from "jszip";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -735,8 +736,18 @@ const SaveAnnotationsMenuItem = ({
 const SaveAllAnnotationsMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
+  const annotations = useSelector(serializedAnnotationsSelector);
+
   const onSaveAllAnnotations = () => {
-    console.info("Save all");
+    const blob = new Blob([JSON.stringify(annotations)], {
+      type: "application/json;charset=utf-8",
+    });
+
+    let zip = new JSZip();
+    zip.file(`${annotations[0].imageFilename}.json`, blob);
+    zip.generateAsync({ type: "blob" }).then((blob) => {
+      saveAs(blob, "annotations.zip");
+    });
   };
   return (
     <MenuItem onClick={onSaveAllAnnotations}>

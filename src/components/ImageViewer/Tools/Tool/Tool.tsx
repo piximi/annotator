@@ -1,20 +1,17 @@
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import React, { useState } from "react";
+import React from "react";
 import SvgIcon from "@material-ui/core/SvgIcon";
-import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import {
+  Button,
   Card,
   CardActionArea,
   CardActions,
-  Button,
+  CardContent,
   CardHeader,
   IconButton,
-  CardContent,
-  CardMedia,
 } from "@material-ui/core";
-import image from "../../../../images/contemplative-reptile.jpeg";
 import { useStyles } from "./Tool.css";
 import CancelIcon from "@material-ui/icons/Cancel";
 
@@ -124,17 +121,17 @@ export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
 };
 
 export const Tool = ({ children, name, onClick, selected }: ToolProps) => {
-  const classes = useStyles();
-
-  const [open, setOpen] = useState<boolean>(false);
-
-  const onClose = () => {
-    setOpen(false);
-  };
-
-  const onOpen = () => {
-    setOpen(true);
-  };
+  // const classes = useStyles();
+  //
+  // const [open, setOpen] = useState<boolean>(false);
+  //
+  // const onClose = () => {
+  //   setOpen(false);
+  // };
+  //
+  // const onOpen = () => {
+  //   setOpen(true);
+  // };
 
   return (
     // <Tooltip

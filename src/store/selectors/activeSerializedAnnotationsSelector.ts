@@ -1,21 +1,22 @@
 import { HistoryStateType } from "../../types/HistoryStateType";
 import { AnnotationType } from "../../types/AnnotationType";
 import { CategoryType } from "../../types/CategoryType";
-import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 import { ImageType } from "../../types/ImageType";
+import { SerializedFileType } from "../../types/SerializedFileType";
+import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 
 export const activeSerializedAnnotationsSelector = ({
   state,
 }: {
   state: HistoryStateType;
-}): Array<SerializedAnnotationType> => {
-  if (!state.present.images.length) return [];
+}): SerializedFileType | undefined => {
+  if (!state.present.images.length) return undefined;
 
   const image = state.present.images.filter((image: ImageType) => {
     return image.id === state.present.activeImageId;
   })[0];
 
-  if (!image) return [];
+  if (!image) return undefined;
 
   const columns = {
     imageChannels: image.shape.channels,
@@ -28,26 +29,29 @@ export const activeSerializedAnnotationsSelector = ({
     imageWidth: image.shape.width,
   };
 
-  return image.annotations.map((annotation: AnnotationType) => {
-    const index = state.present.categories.findIndex(
-      (category: CategoryType) => {
-        return category.id === annotation.categoryId;
-      }
-    );
+  const serializedAnnotations: Array<SerializedAnnotationType> = image.annotations.map(
+    (annotation: AnnotationType) => {
+      const index = state.present.categories.findIndex(
+        (category: CategoryType) => {
+          return category.id === annotation.categoryId;
+        }
+      );
 
-    const category = state.present.categories[index];
+      const category = state.present.categories[index];
 
-    return {
-      ...columns,
-      annotationBoundingBoxHeight: annotation.boundingBox[3],
-      annotationBoundingBoxWidth: annotation.boundingBox[2],
-      annotationBoundingBoxX: annotation.boundingBox[0],
-      annotationBoundingBoxY: annotation.boundingBox[1],
-      annotationCategoryColor: category.color,
-      annotationCategoryId: category.id,
-      annotationCategoryName: category.name,
-      annotationId: annotation.id,
-      annotationMask: annotation.mask.join(" "),
-    };
-  });
+      return {
+        annotationBoundingBoxHeight: annotation.boundingBox[3],
+        annotationBoundingBoxWidth: annotation.boundingBox[2],
+        annotationBoundingBoxX: annotation.boundingBox[0],
+        annotationBoundingBoxY: annotation.boundingBox[1],
+        annotationCategoryColor: category.color,
+        annotationCategoryId: category.id,
+        annotationCategoryName: category.name,
+        annotationId: annotation.id,
+        annotationMask: annotation.mask.join(" "),
+      };
+    }
+  );
+
+  return { ...columns, annotations: serializedAnnotations };
 };

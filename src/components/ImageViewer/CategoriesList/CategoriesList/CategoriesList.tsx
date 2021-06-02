@@ -722,10 +722,11 @@ const SaveAnnotationsMenuItem = ({
 
   const onSaveAnnotations = () => {
     popupState.close();
+    if (!annotations) return;
     const blob = new Blob([JSON.stringify(annotations)], {
       type: "application/json;charset=utf-8",
     });
-    saveAs(blob, `${annotations[0].imageFilename}.json`);
+    saveAs(blob, `${annotations.imageFilename}.json`);
   };
 
   return (
@@ -741,19 +742,19 @@ const SaveAllAnnotationsMenuItem = ({
   const allAnnotations = useSelector(allSerializedAnnotationsSelector);
 
   const onSaveAllAnnotations = () => {
+    popupState.close();
+
     let zip = new JSZip();
 
     let blob: Blob;
 
     allAnnotations.forEach((serializedAnnotations) => {
+      if (!serializedAnnotations) return;
       blob = new Blob([JSON.stringify(serializedAnnotations)], {
         type: "application/json;charset=utf-8",
       });
       zip.folder("annotations");
-      zip.file(
-        `annotations/${serializedAnnotations[0].imageFilename}.json`,
-        blob
-      );
+      zip.file(`annotations/${serializedAnnotations.imageFilename}.json`, blob);
     });
 
     zip.generateAsync({ type: "blob" }).then((blob) => {

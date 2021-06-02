@@ -96,7 +96,7 @@ export const Stage = () => {
   const saveLabelRef = useRef<Konva.Label>();
   const clearLabelRef = useRef<Konva.Label>();
 
-  const [foo, setFoo] = useState<boolean>(false);
+  const [imageCached, setImageCached] = useState<boolean>(false);
 
   const [currentPosition, setCurrentPosition] = useState<{
     x: number;
@@ -755,13 +755,14 @@ export const Stage = () => {
   }, [annotations?.length]);
 
   useEffect(() => {
-    console.error("BIG OBVIOUS TEXT STRING In There");
+    setImageCached(false);
+    imageRef.current?.clearCache();
+  }, [src]);
+
+  useEffect(() => {
     if (!imageRef.current) return;
-    imageRef.current.clearCache();
-    console.info("In There", imageRef.current.width());
-    imageRef.current.filters([Konva.Filters.Invert]);
-    if (foo) imageRef.current.cache();
-    setFoo(true);
+    if (imageCached) imageRef.current.cache();
+    setImageCached(true);
   }, [channels]);
 
   const [tool, setTool] = useState<Tool>();
@@ -775,9 +776,6 @@ export const Stage = () => {
   const { draggable } = useHandTool();
 
   const KonvaImage = <Image ref={imageRef} />;
-
-  // imageRef.current?.cache();
-  // console.info("Caching here");
 
   return (
     <ReactReduxContext.Consumer>

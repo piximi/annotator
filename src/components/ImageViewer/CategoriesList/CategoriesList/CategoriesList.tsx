@@ -732,23 +732,25 @@ const SaveAnnotationsMenuItem = ({
   );
 };
 
+const SaveAllAnnotationsMenuItem = ({
+  popupState,
+}: SaveAnnotationsMenuItemProps) => {
+  const onSaveAllAnnotations = () => {
+    console.info("Save all");
+  };
+  return (
+    <MenuItem onClick={onSaveAllAnnotations}>
+      <ListItemText primary="Save all annotations" />
+    </MenuItem>
+  );
+};
+
 const SaveMenu = ({ popupState }: SaveMenuProps) => {
   return (
     <Menu {...bindMenu(popupState)}>
       <SaveAnnotationsMenuItem popupState={popupState} />
-
-      <SaveModelMenuItem popupState={popupState} />
+      <SaveAllAnnotationsMenuItem popupState={popupState} />
     </Menu>
-  );
-};
-
-const SaveModelMenuItem = ({ popupState }: SaveModelMenuItemProps) => {
-  const t = useTranslation();
-
-  return (
-    <MenuItem disabled onClick={popupState.close}>
-      <ListItemText primary={t("Save model")} />
-    </MenuItem>
   );
 };
 

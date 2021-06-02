@@ -20,7 +20,7 @@ export const CollapsibleList = ({
   closed,
   primary,
 }: CollapsibleListProps) => {
-  const [collapsed, setCollapsed] = React.useState(!closed);
+  const [collapsed, setCollapsed] = React.useState(closed);
 
   const onClick = () => {
     setCollapsed(!collapsed);

@@ -236,13 +236,13 @@ export const ColorAdjustmentOptions = () => {
         updateDisplayedValues={updateDisplayedValues}
       />
 
-      <Divider />
+      {/*<Divider />*/}
 
-      <LightnessList />
+      {/*<LightnessList />*/}
 
-      <Divider />
+      {/*<Divider />*/}
 
-      <HueAndSaturationList />
+      {/*<HueAndSaturationList />*/}
 
       <Divider />
 

@@ -20,19 +20,19 @@ export const useKeyboardShortcuts = () => {
   const categories = useSelector(createdCategoriesSelector);
   const toolType = useSelector(toolTypeSelector);
 
-  /*
-  Undo operation (Ctrl+z)
-  */
-  useHotkeys("ctrl+z", () => {
-    dispatch(ActionCreators.jump(-1)); //undo should be allowed only if user did an accidental delete or an accidental modification to the selected annotation
-  });
-
-  /*
-  Undo operation (Cmd+z)
-  */
-  useHotkeys("cmd+z", () => {
-    dispatch(ActionCreators.jump(-1)); //undo should be allowed only if user did an accidental delete or an accidental modification to the selected annotation
-  });
+  // /*
+  // Undo operation (Ctrl+z)
+  // */
+  // useHotkeys("ctrl+z", () => {
+  //   dispatch(ActionCreators.jump(-1)); //undo should be allowed only if user did an accidental delete or an accidental modification to the selected annotation
+  // });
+  //
+  // /*
+  // Undo operation (Cmd+z)
+  // */
+  // useHotkeys("cmd+z", () => {
+  //   dispatch(ActionCreators.jump(-1)); //undo should be allowed only if user did an accidental delete or an accidental modification to the selected annotation
+  // });
 
   /*
    * Cycle lasso tools (Shift + L)

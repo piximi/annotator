@@ -77,6 +77,7 @@ import { v4 } from "uuid";
 import { ImageMenu } from "../ImageMenu";
 import JSZip from "jszip";
 import { allSerializedAnnotationsSelector } from "../../../../store/selectors/allSerializedAnnotationsSelector";
+import { DeleteAllAnnotationsDialog } from "../DeleteAllAnnotationsDialog";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -102,6 +103,12 @@ export const CategoriesList = () => {
     onClose: onCloseEditCategoryDialog,
     onOpen: onOpenEditCategoryDialog,
     open: openEditCategoryDialog,
+  } = useDialog();
+
+  const {
+    onClose: onCloseDeleteAllAnnotationsDialog,
+    onOpen: onOpenDeleteAllAnnotationsDialog,
+    open: openDeleteAllAnnotationsDialog,
   } = useDialog();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -150,12 +157,7 @@ export const CategoriesList = () => {
   };
 
   const onClearAllAnnotations = () => {
-    dispatch(applicationSlice.actions.deleteAllInstances({ id: "" }));
-    dispatch(
-      applicationSlice.actions.setSelectedCategory({
-        selectedCategory: "00000000-0000-0000-0000-000000000000",
-      })
-    );
+    onOpenDeleteAllAnnotationsDialog();
   };
 
   const onClearSelectedAnnotations = () => {
@@ -360,6 +362,11 @@ export const CategoriesList = () => {
           </ListItemIcon>
           <ListItemText primary={t("Clear all annotations")} />
         </ListItem>
+
+        <DeleteAllAnnotationsDialog
+          onClose={onCloseDeleteAllAnnotationsDialog}
+          open={openDeleteAllAnnotationsDialog}
+        />
 
         <ListItem button onClick={onClearSelectedAnnotations}>
           <ListItemIcon>

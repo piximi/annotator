@@ -5,6 +5,7 @@ import React, { ChangeEvent } from "react";
 import { CategoryType } from "../../../../types/CategoryType";
 import {
   createdCategoriesSelector,
+  imageInstancesSelector,
   imageSelector,
   selectedCategorySelector,
   unknownCategorySelector,
@@ -157,7 +158,14 @@ export const CategoriesList = () => {
   };
 
   const onClearAllAnnotations = () => {
-    onOpenDeleteAllAnnotationsDialog();
+    const existingAnnotations = images
+      .map((image: ImageType) => {
+        return [...image.annotations];
+      })
+      .flat();
+    if (existingAnnotations.length) {
+      onOpenDeleteAllAnnotationsDialog();
+    }
   };
 
   const onClearSelectedAnnotations = () => {

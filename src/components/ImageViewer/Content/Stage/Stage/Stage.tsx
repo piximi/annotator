@@ -755,9 +755,11 @@ export const Stage = () => {
   }, [annotations?.length]);
 
   useEffect(() => {
-    setImageCached(false);
+    const wasCached = imageCached;
     imageRef.current?.clearCache();
-  }, [src]);
+    if (wasCached) imageRef.current?.cache();
+    else setImageCached(false);
+  }, [src, stageScale]);
 
   useEffect(() => {
     if (!imageRef.current) return;

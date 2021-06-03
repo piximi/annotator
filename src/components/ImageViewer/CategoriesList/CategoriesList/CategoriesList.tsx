@@ -77,8 +77,6 @@ import { v4 } from "uuid";
 import { ImageMenu } from "../ImageMenu";
 import JSZip from "jszip";
 import { allSerializedAnnotationsSelector } from "../../../../store/selectors/allSerializedAnnotationsSelector";
-import { imageNamesSelector } from "../../../../store/selectors/imageNamesSelector";
-import { replaceDuplicateName } from "../../../../image/imageHelper";
 
 export const CategoriesList = () => {
   const classes = useStyles();

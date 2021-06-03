@@ -3,6 +3,7 @@ import * as ImageJS from "image-js";
 import { AnnotationType } from "../types/AnnotationType";
 import { decode, encode } from "./rle";
 import { isoLines } from "marchingsquares";
+import { CategoryType } from "../types/CategoryType";
 
 export const connectPoints = (
   coordinates: Array<Array<number>>,
@@ -224,4 +225,17 @@ export const colorOverlayROI = (
   image.src = src;
 
   return image;
+};
+
+/*
+ * Method to rename a cateogry/image if a category/image with this name already exists
+ * */
+export const replaceDuplicateName = (name: string, names: Array<string>) => {
+  let currentName = name;
+  let i = 1;
+  while (names.includes(currentName)) {
+    currentName = name + `_${i}`;
+    i += 1;
+  }
+  return currentName;
 };

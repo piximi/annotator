@@ -77,6 +77,8 @@ import { v4 } from "uuid";
 import { ImageMenu } from "../ImageMenu";
 import JSZip from "jszip";
 import { allSerializedAnnotationsSelector } from "../../../../store/selectors/allSerializedAnnotationsSelector";
+import { imageNamesSelector } from "../../../../store/selectors/imageNamesSelector";
+import { replaceDuplicateName } from "../../../../image/imageHelper";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -583,7 +585,7 @@ const OpenExampleImageMenuItem = ({
 const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
   const dispatch = useDispatch();
 
-  const images = useSelector(imagesSelector);
+  const imageNames = useSelector(imageNamesSelector);
 
   const onOpenImage = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -599,8 +601,11 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
 
         file.arrayBuffer().then((buffer) => {
           ImageJS.Image.load(buffer).then((image) => {
-            const name = file.name;
+            const initialName = file.name;
 
+            const updatedName = replaceDuplicateName(initialName, imageNames);
+
+            //check whether name already exists
             const shape: ShapeType = {
               channels: image.components,
               frames: 1,
@@ -619,7 +624,7 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
                 .toDataURL("image/png", { useCanvas: true }),
               id: v4(),
               annotations: [],
-              name: name,
+              name: updatedName,
               shape: shape,
               originalSrc: imageDataURL,
               src: imageDataURL,

@@ -16,6 +16,7 @@ import { v4 } from "uuid";
 import { CategoryType } from "../../../../../types/CategoryType";
 import { categoriesSelector } from "../../../../../store/selectors";
 import { useTranslation } from "../../../../../hooks/useTranslation";
+import { replaceDuplicateName } from "../../../../../image/imageHelper";
 
 const COLORS = [
   "#f44336",
@@ -57,22 +58,12 @@ export const CreateCategoryDialog = ({
 
   const classes = useStyles();
 
-  const replaceDuplicateName = (name: string) => {
+  const onCreate = () => {
+    const initialName = name ? name : "Unnamed";
     const categoryNames = categories.map((category: CategoryType) => {
       return category.name;
     });
-    let currentName = name;
-    let i = 1;
-    while (categoryNames.includes(currentName)) {
-      currentName = name + `_${i}`;
-      i += 1;
-    }
-    return currentName;
-  };
-
-  const onCreate = () => {
-    const initialName = name ? name : "Unnamed";
-    const updatedName = replaceDuplicateName(initialName);
+    const updatedName = replaceDuplicateName(initialName, categoryNames);
 
     const category: CategoryType = {
       color: color,

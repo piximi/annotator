@@ -242,7 +242,7 @@ export const CategoriesList = () => {
 
       <Divider />
 
-      <CollapsibleList dense primary={t("Images")}>
+      <CollapsibleList closed dense primary={t("Images")}>
         {images.map((image: ImageType) => {
           return (
             <div key={image.id}>
@@ -288,7 +288,7 @@ export const CategoriesList = () => {
         />
       </CollapsibleList>
 
-      <CollapsibleList dense primary={t("Categories")}>
+      <CollapsibleList closed dense primary={t("Categories")}>
         {createdCategories.map((category: CategoryType) => {
           return (
             <div key={category.id}>

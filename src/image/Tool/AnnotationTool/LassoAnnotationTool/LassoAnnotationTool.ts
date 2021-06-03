@@ -72,14 +72,11 @@ export class LassoAnnotationTool extends AnnotationTool {
   }
 
   onMouseUp(position: { x: number; y: number }) {
-    if (this.annotated || !this.annotating) return;
+    if (this.annotated || !this.annotating || !this.origin) return;
 
-    if (
-      this.connected(position) &&
-      this.origin &&
-      this.buffer &&
-      this.buffer.length > 0
-    ) {
+    if (this.buffer.length < 3) return;
+
+    if (this.origin && this.buffer && this.buffer.length > 0) {
       this.buffer = [
         ...this.buffer,
         position.x,

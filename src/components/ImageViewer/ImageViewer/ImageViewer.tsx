@@ -6,11 +6,10 @@ import { CategoriesList } from "../CategoriesList";
 import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
 import {
+  addImages,
   applicationSlice,
   setActiveImage,
   setChannels,
-  setImages,
-  addImages,
   setOperation,
   setSelectedAnnotation,
   setSelectedAnnotations,
@@ -26,7 +25,7 @@ import { ChannelType } from "../../../types/ChannelType";
 import { ToolType } from "../../../types/ToolType";
 import { v4 } from "uuid";
 import { imagesSelector } from "../../../store/selectors/imagesSelector";
-import { activeImageIdSelector } from "../../../store/selectors/activeImageIdSelector";
+import { replaceDuplicateName } from "../../../image/imageHelper";
 
 type ImageViewerProps = {
   image?: ImageType;
@@ -54,8 +53,6 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
   const classes = useStyles();
 
-  const activeImageId = useSelector(activeImageIdSelector);
-
   const [, setDropped] = useState<File[]>([]);
 
   const onDrop = useCallback(
@@ -66,7 +63,15 @@ export const ImageViewer = (props: ImageViewerProps) => {
 
           file.arrayBuffer().then((buffer: any) => {
             ImageJS.Image.load(buffer).then((image) => {
-              const name = file.name;
+              const imageNames = images.map((image: ImageType) => {
+                return image.name.split(".")[0];
+              });
+
+              const initialName = file.name.split(".")[0]; //get name before file extension
+              const updatedName =
+                replaceDuplicateName(initialName, imageNames) +
+                "." +
+                file.name.split(".")[1]; //add filename extension to updatedName
 
               const shape: ShapeType = {
                 channels: image.components,
@@ -86,11 +91,17 @@ export const ImageViewer = (props: ImageViewerProps) => {
                   .toDataURL("image/png", { useCanvas: true }),
                 id: v4(),
                 annotations: [],
-                name: name,
+                name: updatedName,
                 shape: shape,
                 originalSrc: imageDataURL,
                 src: imageDataURL,
               };
+
+              console.error(
+                images.map((image: ImageType) => {
+                  return image.name.split(".")[0];
+                })
+              );
 
               dispatch(addImages({ newImages: [loaded] }));
 

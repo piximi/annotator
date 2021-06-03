@@ -57,11 +57,27 @@ export const CreateCategoryDialog = ({
 
   const classes = useStyles();
 
+  const replaceDuplicateName = (name: string) => {
+    const categoryNames = categories.map((category: CategoryType) => {
+      return category.name;
+    });
+    let currentName = name;
+    let i = 1;
+    while (categoryNames.includes(currentName)) {
+      currentName = name + `_${i}`;
+      i += 1;
+    }
+    return currentName;
+  };
+
   const onCreate = () => {
+    const initialName = name ? name : "Unnamed";
+    const updatedName = replaceDuplicateName(initialName);
+
     const category: CategoryType = {
       color: color,
       id: v4().toString(),
-      name: name ? name : "Unnamed",
+      name: updatedName,
       visible: true,
     };
 

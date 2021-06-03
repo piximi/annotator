@@ -585,8 +585,6 @@ const OpenExampleImageMenuItem = ({
 const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
   const dispatch = useDispatch();
 
-  const imageNames = useSelector(imageNamesSelector);
-
   const onOpenImage = (
     event: React.ChangeEvent<HTMLInputElement>,
     onClose: () => void
@@ -601,12 +599,6 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
 
         file.arrayBuffer().then((buffer) => {
           ImageJS.Image.load(buffer).then((image) => {
-            const initialName = file.name.split(".")[0]; //get name before file extension
-            const updatedName =
-              replaceDuplicateName(initialName, imageNames) +
-              "." +
-              file.name.split(".")[1]; //add filename extension to updatedName
-
             //check whether name already exists
             const shape: ShapeType = {
               channels: image.components,
@@ -626,7 +618,7 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
                 .toDataURL("image/png", { useCanvas: true }),
               id: v4(),
               annotations: [],
-              name: updatedName,
+              name: file.name,
               shape: shape,
               originalSrc: imageDataURL,
               src: imageDataURL,

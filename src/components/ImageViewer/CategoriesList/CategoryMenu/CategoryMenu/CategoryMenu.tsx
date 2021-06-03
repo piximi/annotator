@@ -8,6 +8,8 @@ import { HideOtherCategoriesMenuItem } from "../HideOtherCategoriesMenuItem";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import { useTranslation } from "../../../../../hooks/useTranslation";
+import { useSelector } from "react-redux";
+import { imageInstancesSelector } from "../../../../../store/selectors";
 
 type CategoryMenuProps = {
   anchorElCategoryMenu: any;
@@ -32,6 +34,8 @@ export const CategoryMenu = ({
   const onOpenDeleteCategoryDialogClick = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
+    //HERE find if there are annotations associated with that category (search across all iamges)
+    //open category dialog only ifi that s the case
     onOpenDeleteCategoryDialog();
     onCloseCategoryMenu(event);
   };

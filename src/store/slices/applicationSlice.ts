@@ -12,6 +12,7 @@ import { StateType } from "../../types/StateType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 import { ChannelType } from "../../types/ChannelType";
 import { SerializedFileType } from "../../types/SerializedFileType";
+import { replaceDuplicateName } from "../../image/imageHelper";
 
 const initialImage =
   process.env.NODE_ENV === "development"
@@ -129,7 +130,21 @@ export const applicationSlice = createSlice({
       state: StateType,
       action: PayloadAction<{ newImages: Array<ImageType> }>
     ) {
-      state.images.push(...action.payload.newImages);
+      //we look for image name duplicates and append number if such duplicates are found
+      const imageNames = state.images.map((image: ImageType) => {
+        return image.name.split(".")[0];
+      });
+      const updatedImages = action.payload.newImages.map((image: ImageType) => {
+        const initialName = image.name.split(".")[0]; //get name before file extension
+        //add filename extension to updatedName
+        const updatedName =
+          replaceDuplicateName(initialName, imageNames) +
+          "." +
+          image.name.split(".")[1];
+        return { ...image, name: updatedName };
+      });
+
+      state.images.push(...updatedImages);
     },
     deleteCategory(
       state: StateType,

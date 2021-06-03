@@ -601,9 +601,11 @@ const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
 
         file.arrayBuffer().then((buffer) => {
           ImageJS.Image.load(buffer).then((image) => {
-            const initialName = file.name;
-
-            const updatedName = replaceDuplicateName(initialName, imageNames);
+            const initialName = file.name.split(".")[0]; //get name before file extension
+            const updatedName =
+              replaceDuplicateName(initialName, imageNames) +
+              "." +
+              file.name.split(".")[1]; //add filename extension to updatedName
 
             //check whether name already exists
             const shape: ShapeType = {

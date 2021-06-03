@@ -8,8 +8,10 @@ import { HideOtherCategoriesMenuItem } from "../HideOtherCategoriesMenuItem";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import { useTranslation } from "../../../../../hooks/useTranslation";
-import { useSelector } from "react-redux";
-import { imageInstancesSelector } from "../../../../../store/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { imagesSelector } from "../../../../../store/selectors/imagesSelector";
+import { applicationSlice } from "../../../../../store/slices";
+import { selectedCategorySelector } from "../../../../../store/selectors";
 
 type CategoryMenuProps = {
   anchorElCategoryMenu: any;
@@ -25,18 +27,44 @@ type CategoryMenuProps = {
 
 export const CategoryMenu = ({
   anchorElCategoryMenu,
-  category,
   onCloseCategoryMenu,
   openCategoryMenu,
   onOpenDeleteCategoryDialog,
   onOpenEditCategoryDialog,
 }: CategoryMenuProps) => {
+  const images = useSelector(imagesSelector);
+
+  const dispatch = useDispatch();
+
+  const category = useSelector(selectedCategorySelector);
+
   const onOpenDeleteCategoryDialogClick = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
-    //HERE find if there are annotations associated with that category (search across all iamges)
-    //open category dialog only ifi that s the case
-    onOpenDeleteCategoryDialog();
+    //cycle through the annotations to determine if annotations of that category exist
+    // show a warning dialog box is they do exist
+    let existAnnotations = false;
+    for (let i = 0; i < images.length; i++) {
+      if (!existAnnotations) {
+        for (let j = 0; j < images[i].annotations.length; j++) {
+          if (images[i].annotations[j].categoryId === category.id) {
+            existAnnotations = true;
+          }
+        }
+      }
+    }
+    if (existAnnotations) {
+      onOpenDeleteCategoryDialog();
+    } //warn user that these annotations will be relabeled as unknown
+    else {
+      dispatch(
+        applicationSlice.actions.setSelectedCategory({
+          selectedCategory: "00000000-0000-0000-0000-000000000000",
+        })
+      );
+
+      dispatch(applicationSlice.actions.deleteCategory({ category: category }));
+    }
     onCloseCategoryMenu(event);
   };
 

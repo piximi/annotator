@@ -5,7 +5,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { CategoryType } from "../../../../types/CategoryType";
 import { AnnotationType } from "../../../../types/AnnotationType";
 import { applicationSlice } from "../../../../store";
 import {
@@ -62,7 +61,8 @@ export const DeleteCategoryDialog = ({
       <DialogTitle>Delete "{category.name}" category?</DialogTitle>
 
       <DialogContent>
-        Images categorized as "{category.name}" will not be deleted.
+        Annotations categorized as "{category.name}" will not be deleted and
+        instead will be labeled as "Unknown."
       </DialogContent>
 
       <DialogActions>

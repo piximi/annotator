@@ -553,7 +553,7 @@ const OpenAnnotationsMenuItem = ({
 
   return (
     <MenuItem component="label">
-      <ListItemText primary="Open annotations" />
+      <ListItemText primary="Open project file" />
       <input
         accept="application/json"
         hidden

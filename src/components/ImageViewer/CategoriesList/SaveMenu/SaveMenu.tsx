@@ -1,9 +1,9 @@
 import { Menu } from "@material-ui/core";
 import { bindMenu } from "material-ui-popup-state";
 import React from "react";
-import { SaveAnnotationsMenuItem } from "./SaveAnnotationsMenuItem";
-import { SaveAllAnnotationsMenuItem } from "./SaveAllAnnotationsMenuItem";
-import { SavePNGMenuItem } from "./SavePNGMenuItem";
+import { ExportAnnotationsMenuItem } from "./ExportAnnotationsMenuItem";
+import { ExportAllAnnotationsMenuItem } from "./ExportAllAnnotationsMenuItem";
+import { SaveProjectMenuItem } from "./SaveProjectMenuItem";
 
 type SaveMenuProps = {
   popupState: any;
@@ -12,9 +12,9 @@ type SaveMenuProps = {
 export const SaveMenu = ({ popupState }: SaveMenuProps) => {
   return (
     <Menu {...bindMenu(popupState)}>
-      <SavePNGMenuItem popupState={popupState} />
-      <SaveAnnotationsMenuItem popupState={popupState} />
-      <SaveAllAnnotationsMenuItem popupState={popupState} />
+      <ExportAnnotationsMenuItem popupState={popupState} />
+      <ExportAllAnnotationsMenuItem popupState={popupState} />
+      <SaveProjectMenuItem popupState={popupState} />
     </Menu>
   );
 };

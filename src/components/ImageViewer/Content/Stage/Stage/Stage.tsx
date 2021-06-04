@@ -96,8 +96,6 @@ export const Stage = () => {
   const saveLabelRef = useRef<Konva.Label>();
   const clearLabelRef = useRef<Konva.Label>();
 
-  const [imageCached, setImageCached] = useState<boolean>(false);
-
   const [currentPosition, setCurrentPosition] = useState<{
     x: number;
     y: number;
@@ -754,19 +752,6 @@ export const Stage = () => {
     deselectAllAnnotations();
   }, [annotations?.length]);
 
-  useEffect(() => {
-    const wasCached = imageCached;
-    imageRef.current?.clearCache();
-    if (wasCached) imageRef.current?.cache();
-    else setImageCached(false);
-  }, [src, stageScale]);
-
-  useEffect(() => {
-    if (!imageRef.current) return;
-    if (imageCached) imageRef.current.cache();
-    setImageCached(true);
-  }, [channels]);
-
   const [tool, setTool] = useState<Tool>();
 
   useEffect(() => {
@@ -776,8 +761,6 @@ export const Stage = () => {
   useKeyboardShortcuts();
 
   const { draggable } = useHandTool();
-
-  const KonvaImage = <Image ref={imageRef} />;
 
   return (
     <ReactReduxContext.Consumer>
@@ -796,7 +779,7 @@ export const Stage = () => {
           <Provider store={store}>
             <DndProvider backend={HTML5Backend}>
               <Layer>
-                {KonvaImage}
+                <Image ref={imageRef} />
 
                 <ZoomSelection />
 

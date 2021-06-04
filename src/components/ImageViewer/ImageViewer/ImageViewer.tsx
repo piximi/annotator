@@ -114,12 +114,6 @@ export const ImageViewer = (props: ImageViewerProps) => {
                   })
                 );
 
-                let channels: Array<ChannelType> = []; //number of channels depends if image is greyscale or RGB
-                for (let i = 0; i < image.components; i++) {
-                  channels.push({ visible: true, range: [0, 255] });
-                }
-                dispatch(setChannels({ channels: channels }));
-
                 dispatch(
                   setOperation({ operation: ToolType.RectangularAnnotation })
                 );

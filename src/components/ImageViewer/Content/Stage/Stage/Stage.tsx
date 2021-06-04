@@ -434,7 +434,8 @@ export const Stage = () => {
 
   const memoizedOnMouseDown = useMemo(() => {
     const func = () => {
-      if (toolType === ToolType.Hand) return;
+      if (toolType === ToolType.Hand || toolType === ToolType.ColorAdjustment)
+        return;
 
       if (!stageRef || !stageRef.current) return;
 
@@ -526,6 +527,8 @@ export const Stage = () => {
   const onMouseMove = useMemo(() => {
     const func = () => {
       if (!stageRef || !stageRef.current) return;
+
+      if (toolType === ToolType.ColorAdjustment) return;
 
       const position = stageRef.current.getPointerPosition();
 

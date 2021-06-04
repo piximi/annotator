@@ -319,6 +319,18 @@ export const applicationSlice = createSlice({
     },
     setActiveImage(state: StateType, action: PayloadAction<{ image: string }>) {
       state.activeImageId = action.payload.image;
+      const activeImage = state.images.find((image: ImageType) => {
+        return image.id === action.payload.image;
+      });
+      if (!activeImage) return;
+      const defaultChannels: Array<ChannelType> = []; //number of channels depends on whether image is greyscale or RGB
+      for (let i = 0; i < activeImage.shape.channels; i++) {
+        defaultChannels.push({
+          range: [0, 255],
+          visible: true,
+        });
+      }
+      state.channels = defaultChannels;
     },
     setImageInstances(
       state: StateType,

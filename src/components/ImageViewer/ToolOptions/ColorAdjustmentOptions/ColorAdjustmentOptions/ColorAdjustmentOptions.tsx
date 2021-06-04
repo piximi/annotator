@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { InformationBox } from "../../InformationBox";
 import Divider from "@material-ui/core/Divider";
 import { useTranslation } from "../../../../../hooks/useTranslation";
@@ -126,7 +126,7 @@ export const ColorAdjustmentOptions = () => {
     channels.map((channel: ChannelType) => [...channel.range])
   ); //we keep that state variable here and pass it to slider so that visible slider ranges can change accordingly
 
-  const setDefaultChannels = (components: number) => {
+  const generateDefaultChannels = (components: number) => {
     const defaultChannels: Array<ChannelType> = []; //number of channels depends on whether image is greyscale or RGB
     for (let i = 0; i < components; i++) {
       defaultChannels.push({
@@ -142,21 +142,14 @@ export const ColorAdjustmentOptions = () => {
 
     if (!imageShape) return;
 
-    const defaultChannels = setDefaultChannels(imageShape.channels);
-
-    dispatch(
-      applicationSlice.actions.setChannels({
-        channels: defaultChannels,
-      })
-    );
     setDisplayedValues(
-      defaultChannels.map((channel: ChannelType) => [...channel.range])
+      channels.map((channel: ChannelType) => [...channel.range])
     );
   }, [originalSrc]);
 
   const onResetChannelsClick = () => {
     if (!imageShape) return;
-    const defaultChannels = setDefaultChannels(imageShape.channels);
+    const defaultChannels = generateDefaultChannels(imageShape.channels);
     dispatch(
       applicationSlice.actions.setChannels({
         channels: defaultChannels,
@@ -181,14 +174,6 @@ export const ColorAdjustmentOptions = () => {
         displayedValues={displayedValues}
         updateDisplayedValues={updateDisplayedValues}
       />
-
-      {/*<Divider />*/}
-
-      {/*<LightnessList />*/}
-
-      {/*<Divider />*/}
-
-      {/*<HueAndSaturationList />*/}
 
       <Divider />
 

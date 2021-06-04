@@ -37,7 +37,7 @@ export const SaveAllAnnotationsMenuItem = ({
   };
   return (
     <MenuItem onClick={onSaveAllAnnotations}>
-      <ListItemText primary="Save all annotations" />
+      <ListItemText primary="Save all annotations as json" />
     </MenuItem>
   );
 };

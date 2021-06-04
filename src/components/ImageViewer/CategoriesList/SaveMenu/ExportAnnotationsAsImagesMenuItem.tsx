@@ -71,7 +71,6 @@ export const ExportAnnotationsAsImagesMenuItem = ({
               )[0].name;
 
               zip.folder(`${current.name}/${categoryName}`);
-              const name = uuid.v4();
 
               //create image from Data URL
               const image = new Image(
@@ -89,7 +88,7 @@ export const ExportAnnotationsAsImagesMenuItem = ({
                 canvas.toBlob((blob) => {
                   if (!blob) return;
                   zip.file(
-                    `${current.name}/${categoryName}/${name}.png`,
+                    `${current.name}/${categoryName}/${annotation.id}.png`,
                     blob,
                     {
                       base64: true,

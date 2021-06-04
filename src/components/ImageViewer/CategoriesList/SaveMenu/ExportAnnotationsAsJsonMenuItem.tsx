@@ -25,7 +25,7 @@ export const ExportAnnotationsMenuItem = ({
 
   return (
     <MenuItem onClick={onSaveAnnotations}>
-      <ListItemText primary="Export annotations as images" />
+      <ListItemText primary="Export annotations as json" />
     </MenuItem>
   );
 };

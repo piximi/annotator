@@ -71,7 +71,7 @@ export const ChannelsList = ({
     );
   };
 
-  const handler = useCallback(debounce(updateIntensityRanges, 100), []);
+  const handler = useCallback(debounce(updateIntensityRanges, 100), [channels]);
 
   const onCheckboxChanged = (index: number) => () => {
     const current = visibleChannelsIndices.indexOf(index);

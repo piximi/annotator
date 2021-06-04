@@ -10,7 +10,7 @@ type SaveAnnotationsMenuItemProps = {
   popupState: any;
 };
 
-export const ExportAllAnnotationsMenuItem = ({
+export const SaveProjectFileMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
   const allAnnotations = useSelector(allSerializedAnnotationsSelector);
@@ -37,7 +37,7 @@ export const ExportAllAnnotationsMenuItem = ({
   };
   return (
     <MenuItem onClick={onSaveAllAnnotations}>
-      <ListItemText primary="Export all annotations as images" />
+      <ListItemText primary="Save project file" />
     </MenuItem>
   );
 };

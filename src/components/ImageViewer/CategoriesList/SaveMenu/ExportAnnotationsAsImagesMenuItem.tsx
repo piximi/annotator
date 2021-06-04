@@ -20,7 +20,7 @@ type SaveAnnotationsMenuItemProps = {
   popupState: any;
 };
 
-export const ExportAnnotationsAsImages = ({
+export const ExportAnnotationsAsImagesMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(imageInstancesSelector);
@@ -116,7 +116,7 @@ export const ExportAnnotationsAsImages = ({
 
   return (
     <MenuItem onClick={onExport}>
-      <ListItemText primary="Export annotations as images" />
+      <ListItemText primary="Export all annotations as images" />
     </MenuItem>
   );
 };

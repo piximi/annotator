@@ -33,6 +33,8 @@ export const Image = React.forwardRef<Konva.Image>((_, ref) => {
   const stageScale = useSelector(stageScaleSelector);
 
   useEffect(() => {
+    // @ts-ignore
+    if (!ref || !ref.current) return;
     const defaultChannels: Array<ChannelType> = []; //number of channels depends on whether image is greyscale or RGB
     for (let i = 0; i < channels.length; i++) {
       defaultChannels.push({
@@ -53,6 +55,8 @@ export const Image = React.forwardRef<Konva.Image>((_, ref) => {
   }, [channels, stageScale]);
 
   useEffect(() => {
+    // @ts-ignore
+    if (!ref || !ref.current) return;
     setFilters([]);
     // @ts-ignore
     ref?.current.clearCache();

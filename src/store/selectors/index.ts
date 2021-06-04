@@ -1,6 +1,7 @@
 export { annotatingSelector } from "./annotatingSelector";
 export { boundingClientRectSelector } from "./boundingClientRectSelector";
 export { brightnessSelector } from "./brightnessSelector";
+export { categoryCountsSelector } from "./categoryCountsSelector";
 export { categoriesSelector } from "./categoriesSelector";
 export { contrastSelector } from "./contrastSelector";
 export { createdCategoriesSelector } from "./createdCategoriesSelector";

@@ -4,6 +4,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import React, { ChangeEvent } from "react";
 import { CategoryType } from "../../../../types/CategoryType";
 import {
+  categoryCountsSelector,
   createdCategoriesSelector,
   imageInstancesSelector,
   imageSelector,
@@ -89,6 +90,8 @@ export const CategoriesList = () => {
   const unknownCategory = useSelector(unknownCategorySelector);
 
   const selectedAnnotationsIds = useSelector(selectedAnnotationsIdsSelector);
+
+  const categoryCounts = useSelector(categoryCountsSelector);
 
   const images = useSelector(imagesSelector);
   const currentImage = useSelector(imageSelector);
@@ -306,6 +309,9 @@ export const CategoriesList = () => {
                   primary={category.name}
                   primaryTypographyProps={{ noWrap: true }}
                 />
+                {categoryCounts[category.id] !== 0 && (
+                  <Chip label={categoryCounts[category.id]} size="small" />
+                )}
 
                 <ListItemSecondaryAction>
                   <IconButton
@@ -356,6 +362,17 @@ export const CategoriesList = () => {
               primary={t(unknownCategory.name)}
               primaryTypographyProps={{ noWrap: true }}
             />
+            {categoryCounts[unknownCategory.id] !== 0 && (
+              <Chip label={categoryCounts[unknownCategory.id]} size="small" />
+            )}
+            <ListItemSecondaryAction>
+              <IconButton
+                edge="end"
+                onClick={(event) => onCategoryMenuOpen(event, unknownCategory)}
+              >
+                <MoreHorizIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
           </ListItem>
         )}
 

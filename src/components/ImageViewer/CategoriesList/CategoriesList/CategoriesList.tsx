@@ -79,6 +79,7 @@ import { ImageMenu } from "../ImageMenu";
 import JSZip from "jszip";
 import { allSerializedAnnotationsSelector } from "../../../../store/selectors/allSerializedAnnotationsSelector";
 import { DeleteAllAnnotationsDialog } from "../DeleteAllAnnotationsDialog";
+import { SaveMenu } from "../SaveMenu/SaveMenu";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -418,15 +419,7 @@ type HelpDialogProps = {
   open: boolean;
 };
 
-type SaveAnnotationsMenuItemProps = {
-  popupState: any;
-};
-
 type SaveModelMenuItemProps = {
-  popupState: any;
-};
-
-type SaveMenuProps = {
   popupState: any;
 };
 
@@ -721,68 +714,6 @@ const OpenMenu = ({ popupState }: OpenMenuProps) => {
       <Divider />
 
       <OpenExampleImageMenuItem popupState={popupState} />
-    </Menu>
-  );
-};
-
-const SaveAnnotationsMenuItem = ({
-  popupState,
-}: SaveAnnotationsMenuItemProps) => {
-  const annotations = useSelector(activeSerializedAnnotationsSelector);
-
-  const onSaveAnnotations = () => {
-    popupState.close();
-    if (!annotations) return;
-    const blob = new Blob([JSON.stringify(annotations)], {
-      type: "application/json;charset=utf-8",
-    });
-    saveAs(blob, `${annotations.imageFilename}.json`);
-  };
-
-  return (
-    <MenuItem onClick={onSaveAnnotations}>
-      <ListItemText primary="Save annotations" />
-    </MenuItem>
-  );
-};
-
-const SaveAllAnnotationsMenuItem = ({
-  popupState,
-}: SaveAnnotationsMenuItemProps) => {
-  const allAnnotations = useSelector(allSerializedAnnotationsSelector);
-
-  const onSaveAllAnnotations = () => {
-    popupState.close();
-
-    let zip = new JSZip();
-
-    let blob: Blob;
-
-    allAnnotations.forEach((serializedAnnotations) => {
-      if (!serializedAnnotations) return;
-      blob = new Blob([JSON.stringify(serializedAnnotations)], {
-        type: "application/json;charset=utf-8",
-      });
-      zip.folder("annotations");
-      zip.file(`annotations/${serializedAnnotations.imageFilename}.json`, blob);
-    });
-
-    zip.generateAsync({ type: "blob" }).then((blob) => {
-      saveAs(blob, "annotations.zip");
-    });
-  };
-  return (
-    <MenuItem onClick={onSaveAllAnnotations}>
-      <ListItemText primary="Save all annotations" />
-    </MenuItem>
-  );
-};
-
-const SaveMenu = ({ popupState }: SaveMenuProps) => {
-  return (
-    <Menu {...bindMenu(popupState)}>
-      <SaveAnnotationsMenuItem popupState={popupState} />
-      <SaveAllAnnotationsMenuItem popupState={popupState} />
     </Menu>
   );
 };

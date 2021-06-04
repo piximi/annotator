@@ -70,7 +70,7 @@ export const ExportAnnotationsAsImagesMenuItem = ({
                 }
               )[0].name;
 
-              zip.folder(`${categoryName}/${current.name}`);
+              zip.folder(`${current.name}/${categoryName}`);
               const name = uuid.v4();
 
               //create image from Data URL
@@ -89,7 +89,7 @@ export const ExportAnnotationsAsImagesMenuItem = ({
                 canvas.toBlob((blob) => {
                   if (!blob) return;
                   zip.file(
-                    `${categoryName}/${current.name}/${name}.png`,
+                    `${current.name}/${categoryName}/${name}.png`,
                     blob,
                     {
                       base64: true,
@@ -109,7 +109,7 @@ export const ExportAnnotationsAsImagesMenuItem = ({
 
     Promise.all(loopOverImages()).then(() => {
       zip.generateAsync({ type: "blob" }).then((blob) => {
-        saveAs(blob, "project.zip");
+        saveAs(blob, "annotations.zip");
       });
     });
   };

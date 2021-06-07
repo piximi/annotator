@@ -1,12 +1,11 @@
 import Drawer from "@material-ui/core/Drawer";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { CategoryType } from "../../../../types/CategoryType";
 import {
   categoryCountsSelector,
   createdCategoriesSelector,
-  imageInstancesSelector,
   imageSelector,
   selectedCategorySelector,
   unknownCategorySelector,
@@ -23,15 +22,7 @@ import { DeleteCategoryDialog } from "../DeleteCategoryDialog";
 import { EditCategoryDialog } from "../EditCategoryDialog";
 import { useDialog } from "../../../../hooks";
 import { useTranslation } from "../../../../hooks/useTranslation";
-import {
-  addImages,
-  applicationSlice,
-  setActiveImage,
-  setChannels,
-  setOperation,
-  setSelectedAnnotation,
-  setSelectedAnnotations,
-} from "../../../../store";
+import { applicationSlice, setActiveImage } from "../../../../store";
 import {
   Chip,
   Dialog,
@@ -40,8 +31,6 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
-  Menu,
-  MenuItem,
   TextField,
 } from "@material-ui/core";
 import List from "@material-ui/core/List";
@@ -54,10 +43,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
 import Box from "@material-ui/core/Box";
-import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
-import * as ImageJS from "image-js";
-import { ShapeType } from "../../../../types/ShapeType";
-import { ExampleImageDialog } from "../ExampleImageDialog";
+import PopupState, { bindTrigger } from "material-ui-popup-state";
 import SettingsIcon from "@material-ui/icons/Settings";
 import FeedbackIcon from "@material-ui/icons/Feedback";
 import HelpIcon from "@material-ui/icons/Help";
@@ -66,21 +52,15 @@ import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { CreateCategoryDialog } from "../CreateCategoryListItem/CreateCategoryDialog";
-import { activeSerializedAnnotationsSelector } from "../../../../store/selectors/activeSerializedAnnotationsSelector";
-import { saveAs } from "file-saver";
-import { ChannelType } from "../../../../types/ChannelType";
-import { ToolType } from "../../../../types/ToolType";
 import { selectedAnnotationsIdsSelector } from "../../../../store/selectors/selectedAnnotationsIdsSelector";
 import { ImageType } from "../../../../types/ImageType";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
-import { v4 } from "uuid";
 import { ImageMenu } from "../ImageMenu";
-import JSZip from "jszip";
-import { allSerializedAnnotationsSelector } from "../../../../store/selectors/allSerializedAnnotationsSelector";
 import { DeleteAllAnnotationsDialog } from "../DeleteAllAnnotationsDialog";
 import { SaveMenu } from "../SaveMenu/SaveMenu";
+import { OpenMenu } from "../OpenMenu/OpenMenu";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -415,29 +395,9 @@ export const CategoriesList = () => {
   );
 };
 
-type OpenAnnotationsMenuItemProps = {
-  popupState: any;
-};
-
-type OpenExampleImageMenuItemProps = {
-  popupState: any;
-};
-
-type OpenImageMenuItemProps = {
-  popupState: any;
-};
-
-type OpenMenuProps = {
-  popupState: any;
-};
-
 type HelpDialogProps = {
   onClose: () => void;
   open: boolean;
-};
-
-type SaveModelMenuItemProps = {
-  popupState: any;
 };
 
 type SendFeedbackDialogProps = {
@@ -534,163 +494,6 @@ const HelpListItem = () => {
   );
 };
 
-const OpenAnnotationsMenuItem = ({
-  popupState,
-}: OpenAnnotationsMenuItemProps) => {
-  const dispatch = useDispatch();
-
-  const onOpenAnnotations = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    onClose: () => void
-  ) => {
-    onClose();
-
-    event.persist();
-
-    if (event.currentTarget.files) {
-      Array.from(event.currentTarget.files).forEach((file: any) => {
-        const reader = new FileReader();
-
-        reader.onload = async (event: ProgressEvent<FileReader>) => {
-          if (event.target && event.target.result) {
-            const annotations = JSON.parse(event.target.result as string);
-
-            dispatch(
-              applicationSlice.actions.openAnnotations({
-                annotations: annotations,
-              })
-            );
-          }
-        };
-
-        reader.readAsText(file);
-      });
-    }
-  };
-
-  return (
-    <MenuItem component="label">
-      <ListItemText primary="Open project file" />
-      <input
-        accept="application/json"
-        hidden
-        id="open-annotations"
-        multiple
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-          onOpenAnnotations(event, popupState.close)
-        }
-        type="file"
-      />
-    </MenuItem>
-  );
-};
-
-const OpenExampleImageMenuItem = ({
-  popupState,
-}: OpenExampleImageMenuItemProps) => {
-  const { onClose, onOpen, open } = useDialog();
-
-  return (
-    <MenuItem onClick={onOpen}>
-      <ListItemText primary="Open example image" />
-      <ExampleImageDialog
-        onClose={() => {
-          onClose();
-
-          popupState.close();
-        }}
-        open={open}
-      />
-    </MenuItem>
-  );
-};
-
-const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
-  const dispatch = useDispatch();
-
-  const onOpenImage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    onClose: () => void
-  ) => {
-    onClose();
-
-    event.persist();
-
-    if (event.currentTarget.files) {
-      for (let i = 0; i < event.currentTarget.files.length; i++) {
-        const file = event.currentTarget.files[i];
-
-        file.arrayBuffer().then((buffer) => {
-          ImageJS.Image.load(buffer).then((image) => {
-            //check whether name already exists
-            const shape: ShapeType = {
-              channels: image.components,
-              frames: 1,
-              height: image.height,
-              planes: 1,
-              width: image.width,
-            };
-
-            const imageDataURL = image.toDataURL("image/png", {
-              useCanvas: true,
-            });
-
-            const loaded: ImageType = {
-              avatar: image
-                .resize({ width: 50 })
-                .toDataURL("image/png", { useCanvas: true }),
-              id: v4(),
-              annotations: [],
-              name: file.name,
-              shape: shape,
-              originalSrc: imageDataURL,
-              src: imageDataURL,
-            };
-
-            dispatch(addImages({ newImages: [loaded] }));
-
-            if (i === 0) {
-              dispatch(
-                setActiveImage({
-                  image: loaded.id,
-                })
-              );
-
-              dispatch(
-                setSelectedAnnotations({
-                  selectedAnnotations: [],
-                })
-              );
-
-              dispatch(
-                setSelectedAnnotation({
-                  selectedAnnotation: undefined,
-                })
-              );
-            }
-          });
-        });
-      }
-    }
-  };
-
-  return (
-    <MenuItem component="label">
-      <ListItemText primary="Open image" />
-      <input
-        accept="image/*"
-        hidden
-        multiple
-        id="open-image"
-        onChange={(event: ChangeEvent<HTMLInputElement>) =>
-          onOpenImage(event, popupState.close)
-        }
-        type="file"
-      />
-    </MenuItem>
-  );
-};
-
 const OpenListItem = () => {
   return (
     <PopupState variant="popover">
@@ -708,20 +511,6 @@ const OpenListItem = () => {
         </React.Fragment>
       )}
     </PopupState>
-  );
-};
-
-const OpenMenu = ({ popupState }: OpenMenuProps) => {
-  return (
-    <Menu {...bindMenu(popupState)}>
-      <OpenImageMenuItem popupState={popupState} />
-
-      <OpenAnnotationsMenuItem popupState={popupState} />
-
-      <Divider />
-
-      <OpenExampleImageMenuItem popupState={popupState} />
-    </Menu>
   );
 };
 

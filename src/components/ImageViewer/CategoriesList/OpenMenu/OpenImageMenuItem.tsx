@@ -88,7 +88,7 @@ export const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
 
   return (
     <MenuItem component="label">
-      <ListItemText primary="Open image" />
+      <ListItemText primary="Open new image" />
       <input
         accept="image/*"
         hidden

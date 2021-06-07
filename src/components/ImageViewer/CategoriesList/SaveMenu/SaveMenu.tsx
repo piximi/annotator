@@ -10,9 +10,10 @@ type SaveMenuProps = {
 };
 
 export const SaveMenu = ({ popupState }: SaveMenuProps) => {
+  //TODO: do we need the ExportAnnotationsAsJSON button or is it redundant from SaveProjectFileMenuItem?
   return (
     <Menu {...bindMenu(popupState)}>
-      <ExportAnnotationsAsJsonMenuItem popupState={popupState} />
+      {/*<ExportAnnotationsAsJsonMenuItem popupState={popupState} />*/}
       <ExportAnnotationsAsImagesMenuItem popupState={popupState} />
       <SaveProjectFileMenuItem popupState={popupState} />
     </Menu>

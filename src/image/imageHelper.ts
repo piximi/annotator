@@ -4,6 +4,7 @@ import { AnnotationType } from "../types/AnnotationType";
 import { decode, encode } from "./rle";
 import { isoLines } from "marchingsquares";
 import { CategoryType } from "../types/CategoryType";
+import { ImageType } from "../types/ImageType";
 
 export const connectPoints = (
   coordinates: Array<Array<number>>,
@@ -238,4 +239,77 @@ export const replaceDuplicateName = (name: string, names: Array<string>) => {
     i += 1;
   }
   return currentName;
+};
+
+export const saveAnnotationsAsMasks = (
+  images: Array<ImageType>,
+  categories: Array<CategoryType>,
+  zip: any
+): Array<Promise<unknown>> => {
+  return images
+    .map((current: ImageType) => {
+      return current.annotations.map((annotation: AnnotationType) => {
+        return new Promise((resolve, reject) => {
+          const encoded = annotation.mask;
+
+          const decoded = decode(encoded);
+
+          const mask = new ImageJS.Image(
+            current.shape.width,
+            current.shape.height,
+            decoded,
+            {
+              components: 1,
+              alpha: 0,
+            }
+          );
+
+          const uri = mask.toDataURL("image/png", {
+            useCanvas: true,
+          });
+
+          //draw to canvas
+          const canvas = document.createElement("canvas");
+          canvas.width = current.shape.width;
+          canvas.height = current.shape.height;
+
+          const ctx = canvas.getContext("2d");
+
+          if (!ctx) return;
+
+          const categoryName = categories.filter((category: CategoryType) => {
+            return category.id === annotation.categoryId;
+          })[0].name;
+
+          zip.folder(`${current.name}/${categoryName}`);
+
+          //create image from Data URL
+          const image = new Image(current.shape.width, current.shape.height);
+          image.onload = () => {
+            ctx.drawImage(
+              image,
+              0,
+              0,
+              current.shape.width,
+              current.shape.height
+            );
+            canvas.toBlob((blob) => {
+              if (!blob) return;
+              zip.file(
+                `${current.name}/${categoryName}/${annotation.id}.png`,
+                blob,
+                {
+                  base64: true,
+                }
+              );
+              resolve(true);
+            }, "image/png");
+          };
+          image.onerror = reject;
+          image.crossOrigin = "anonymous";
+          image.src = uri;
+        });
+      });
+    })
+    .flat();
 };

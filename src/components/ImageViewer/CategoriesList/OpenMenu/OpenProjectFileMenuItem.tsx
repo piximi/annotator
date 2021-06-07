@@ -86,7 +86,7 @@ export const OpenProjectFileMenuItem = ({
       <input
         accept="application/json"
         hidden
-        id="open-annotations"
+        id="open-project-file"
         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
           onOpenProjectFile(event, popupState.close)
         }

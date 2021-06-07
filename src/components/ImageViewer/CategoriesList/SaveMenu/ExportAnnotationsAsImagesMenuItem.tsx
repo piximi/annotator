@@ -14,6 +14,7 @@ import { AnnotationType } from "../../../../types/AnnotationType";
 import JSZip from "jszip";
 import { CategoryType } from "../../../../types/CategoryType";
 import { saveAs } from "file-saver";
+import { saveAnnotationsAsMasks } from "../../../../image/imageHelper";
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
@@ -33,81 +34,7 @@ export const ExportAnnotationsAsImagesMenuItem = ({
 
     let zip = new JSZip();
 
-    const loopOverImages = (): Array<Promise<unknown>> => {
-      return images
-        .map((current: ImageType) => {
-          return current.annotations.map((annotation: AnnotationType) => {
-            return new Promise((resolve, reject) => {
-              const encoded = annotation.mask;
-
-              const decoded = decode(encoded);
-
-              const mask = new ImageJS.Image(
-                current.shape.width,
-                current.shape.height,
-                decoded,
-                {
-                  components: 1,
-                  alpha: 0,
-                }
-              );
-
-              const uri = mask.toDataURL("image/png", {
-                useCanvas: true,
-              });
-
-              //draw to canvas
-              const canvas = document.createElement("canvas");
-              canvas.width = current.shape.width;
-              canvas.height = current.shape.height;
-
-              const ctx = canvas.getContext("2d");
-
-              if (!ctx) return;
-
-              const categoryName = categories.filter(
-                (category: CategoryType) => {
-                  return category.id === annotation.categoryId;
-                }
-              )[0].name;
-
-              zip.folder(`${current.name}/${categoryName}`);
-
-              //create image from Data URL
-              const image = new Image(
-                current.shape.width,
-                current.shape.height
-              );
-              image.onload = () => {
-                ctx.drawImage(
-                  image,
-                  0,
-                  0,
-                  current.shape.width,
-                  current.shape.height
-                );
-                canvas.toBlob((blob) => {
-                  if (!blob) return;
-                  zip.file(
-                    `${current.name}/${categoryName}/${annotation.id}.png`,
-                    blob,
-                    {
-                      base64: true,
-                    }
-                  );
-                  resolve(true);
-                }, "image/png");
-              };
-              image.onerror = reject;
-              image.crossOrigin = "anonymous";
-              image.src = uri;
-            });
-          });
-        })
-        .flat();
-    };
-
-    Promise.all(loopOverImages()).then(() => {
+    Promise.all(saveAnnotationsAsMasks(images, categories, zip)).then(() => {
       zip.generateAsync({ type: "blob" }).then((blob) => {
         saveAs(blob, "annotations.zip");
       });
@@ -116,7 +43,7 @@ export const ExportAnnotationsAsImagesMenuItem = ({
 
   return (
     <MenuItem onClick={onExport}>
-      <ListItemText primary="Export annotations as images" />
+      <ListItemText primary="Export annotations" />
     </MenuItem>
   );
 };

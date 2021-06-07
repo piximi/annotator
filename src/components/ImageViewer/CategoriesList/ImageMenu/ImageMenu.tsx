@@ -7,6 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { applicationSlice, setImages } from "../../../../store";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { activeImageIdSelector } from "../../../../store/selectors/activeImageIdSelector";
+import { saveAnnotationsAsMasks } from "../../../../image/imageHelper";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
+import { categoriesSelector } from "../../../../store/selectors";
+import { imagesSelector } from "../../../../store/selectors/imagesSelector";
+import { ImageType } from "../../../../types/ImageType";
 
 type ImageMenuProps = {
   anchorElImageMenu: any;
@@ -21,6 +27,8 @@ export const ImageMenu = ({
 }: ImageMenuProps) => {
   const dispatch = useDispatch();
   const currentImageId = useSelector(activeImageIdSelector);
+  const categories = useSelector(categoriesSelector);
+  const images = useSelector(imagesSelector);
 
   const onClearAnnotationsClick = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
@@ -36,6 +44,26 @@ export const ImageMenu = ({
     if (!currentImageId) return;
     dispatch(applicationSlice.actions.deleteImage({ id: currentImageId }));
     onCloseImageMenu(event);
+  };
+
+  const onExportAnnotations = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    let zip = new JSZip();
+
+    const activeImage = images.find((image: ImageType) => {
+      return image.id === currentImageId;
+    });
+
+    if (!activeImage) return;
+
+    Promise.all(saveAnnotationsAsMasks([activeImage], categories, zip)).then(
+      () => {
+        zip.generateAsync({ type: "blob" }).then((blob) => {
+          saveAs(blob, "annotations.zip");
+        });
+      }
+    );
   };
 
   const t = useTranslation();
@@ -57,6 +85,10 @@ export const ImageMenu = ({
 
           <MenuItem onClick={onDeleteImage}>
             <Typography variant="inherit">{t("Delete Image")}</Typography>
+          </MenuItem>
+
+          <MenuItem onClick={onExportAnnotations}>
+            <Typography variant="inherit">{t("Export annotations")}</Typography>
           </MenuItem>
         </div>
       </MenuList>

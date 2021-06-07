@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
 import { allSerializedAnnotationsSelector } from "../../../../store/selectors/allSerializedAnnotationsSelector";
-import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { MenuItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -18,22 +17,9 @@ export const SaveProjectFileMenuItem = ({
   const onSaveAllAnnotations = () => {
     popupState.close();
 
-    let zip = new JSZip();
+    const blob = new Blob([JSON.stringify(allAnnotations)]);
 
-    let blob: Blob;
-
-    allAnnotations.forEach((serializedAnnotations) => {
-      if (!serializedAnnotations) return;
-      blob = new Blob([JSON.stringify(serializedAnnotations)], {
-        type: "application/json;charset=utf-8",
-      });
-      zip.folder("annotations");
-      zip.file(`annotations/${serializedAnnotations.imageFilename}.json`, blob);
-    });
-
-    zip.generateAsync({ type: "blob" }).then((blob) => {
-      saveAs(blob, "annotations.zip");
-    });
+    saveAs(blob, "project.json");
   };
   return (
     <MenuItem onClick={onSaveAllAnnotations}>

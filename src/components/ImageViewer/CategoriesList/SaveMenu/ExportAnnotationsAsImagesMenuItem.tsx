@@ -2,7 +2,6 @@ import React from "react";
 import { MenuItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useSelector } from "react-redux";
-import * as uuid from "uuid";
 import {
   categoriesSelector,
   imageInstancesSelector,
@@ -28,6 +27,8 @@ export const ExportAnnotationsAsImagesMenuItem = ({
   const categories = useSelector(categoriesSelector);
 
   const onExport = () => {
+    popupState.close();
+
     if (!annotations) return;
 
     let zip = new JSZip();
@@ -115,7 +116,7 @@ export const ExportAnnotationsAsImagesMenuItem = ({
 
   return (
     <MenuItem onClick={onExport}>
-      <ListItemText primary="Export all annotations as images" />
+      <ListItemText primary="Export annotations as images" />
     </MenuItem>
   );
 };

@@ -13,7 +13,7 @@ export const OpenProjectFileMenuItem = ({
 }: OpenAnnotationsMenuItemProps) => {
   const dispatch = useDispatch();
 
-  const onOpenAnnotations = (
+  const onOpenProjectFile = (
     event: React.ChangeEvent<HTMLInputElement>,
     onClose: () => void
   ) => {
@@ -21,25 +21,25 @@ export const OpenProjectFileMenuItem = ({
 
     event.persist();
 
-    if (event.currentTarget.files) {
-      Array.from(event.currentTarget.files).forEach((file: any) => {
-        const reader = new FileReader();
+    if (!event.currentTarget.files) return;
 
-        reader.onload = async (event: ProgressEvent<FileReader>) => {
-          if (event.target && event.target.result) {
-            const annotations = JSON.parse(event.target.result as string);
+    const file = event.currentTarget.files[0];
 
-            dispatch(
-              applicationSlice.actions.openAnnotations({
-                annotations: annotations,
-              })
-            );
-          }
-        };
+    const reader = new FileReader();
 
-        reader.readAsText(file);
-      });
-    }
+    reader.onload = async (event: ProgressEvent<FileReader>) => {
+      if (event.target && event.target.result) {
+        const annotations = JSON.parse(event.target.result as string);
+
+        dispatch(
+          applicationSlice.actions.openAnnotations({
+            annotations: annotations,
+          })
+        );
+      }
+    };
+
+    reader.readAsText(file);
   };
 
   return (
@@ -49,9 +49,8 @@ export const OpenProjectFileMenuItem = ({
         accept="application/json"
         hidden
         id="open-annotations"
-        multiple
         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-          onOpenAnnotations(event, popupState.close)
+          onOpenProjectFile(event, popupState.close)
         }
         type="file"
       />

@@ -12,14 +12,14 @@ type SaveAnnotationsMenuItemProps = {
 export const SaveProjectFileMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
-  const allAnnotations = useSelector(allSerializedAnnotationsSelector);
+  const serializedProject = useSelector(allSerializedAnnotationsSelector);
 
   const onSaveAllAnnotations = () => {
-    popupState.close();
-
-    const blob = new Blob([JSON.stringify(allAnnotations)]);
+    const blob = new Blob([JSON.stringify(serializedProject)]);
 
     saveAs(blob, "project.json");
+
+    popupState.close();
   };
   return (
     <MenuItem onClick={onSaveAllAnnotations}>

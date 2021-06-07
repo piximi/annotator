@@ -204,7 +204,7 @@ export const applicationSlice = createSlice({
     },
     openAnnotations(
       state: StateType,
-      action: PayloadAction<{ annotations: SerializedFileType }>
+      action: PayloadAction<{ file: SerializedFileType }>
     ) {
       /*
        * NOTE: The correct image to annotate is found by looking at the
@@ -212,49 +212,58 @@ export const applicationSlice = createSlice({
        */
       if (!state.activeImageId) return;
 
-      const filename = action.payload.annotations.imageFilename;
+      const annotations = action.payload.file.annotations.map(
+        (annotation: SerializedAnnotationType): AnnotationType => {
+          const mask = annotation.annotationMask
+            .split(" ")
+            .map((x: string) => parseInt(x));
 
-      state.images = state.images.map((image: ImageType) => {
-        if (image.name === filename) {
-          const annotations = action.payload.annotations.annotations.map(
-            (annotation: SerializedAnnotationType): AnnotationType => {
-              const mask = annotation.annotationMask
-                .split(" ")
-                .map((x: string) => parseInt(x));
+          //if category does not already exist in state, add it
+          if (
+            !state.categories
+              .map((category: CategoryType) => category.id)
+              .includes(annotation.annotationCategoryId)
+          ) {
+            const category: CategoryType = {
+              color: annotation.annotationCategoryColor,
+              id: annotation.annotationCategoryId,
+              name: annotation.annotationCategoryName,
+              visible: true,
+            };
+            state.categories = [...state.categories, category];
+          }
 
-              //if category does not already exist in state, add it
-              if (
-                !state.categories
-                  .map((category: CategoryType) => category.id)
-                  .includes(annotation.annotationCategoryId)
-              ) {
-                const category: CategoryType = {
-                  color: annotation.annotationCategoryColor,
-                  id: annotation.annotationCategoryId,
-                  name: annotation.annotationCategoryName,
-                  visible: true,
-                };
-                state.categories = [...state.categories, category];
-              }
-
-              return {
-                boundingBox: [
-                  annotation.annotationBoundingBoxX,
-                  annotation.annotationBoundingBoxY,
-                  annotation.annotationBoundingBoxWidth,
-                  annotation.annotationBoundingBoxHeight,
-                ],
-                categoryId: annotation.annotationCategoryId,
-                id: annotation.annotationId,
-                mask: mask,
-              };
-            }
-          );
-          return { ...image, annotations: annotations };
-        } else {
-          return image;
+          return {
+            boundingBox: [
+              annotation.annotationBoundingBoxX,
+              annotation.annotationBoundingBoxY,
+              annotation.annotationBoundingBoxWidth,
+              annotation.annotationBoundingBoxHeight,
+            ],
+            categoryId: annotation.annotationCategoryId,
+            id: annotation.annotationId,
+            mask: mask,
+          };
         }
-      });
+      );
+
+      const loaded: ImageType = {
+        avatar: action.payload.file.imageData,
+        id: action.payload.file.imageId,
+        src: action.payload.file.imageData,
+        originalSrc: action.payload.file.imageData,
+        name: action.payload.file.imageFilename,
+        annotations: annotations,
+        shape: {
+          channels: action.payload.file.imageChannels,
+          frames: action.payload.file.imageFrames,
+          height: action.payload.file.imageHeight,
+          planes: action.payload.file.imagePlanes,
+          width: action.payload.file.imageWidth,
+        },
+      };
+
+      state.images.push(...[loaded]);
     },
     setAnnotated(
       state: StateType,

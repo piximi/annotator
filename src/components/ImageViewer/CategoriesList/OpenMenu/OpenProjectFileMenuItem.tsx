@@ -1,8 +1,16 @@
 import { useDispatch } from "react-redux";
 import React from "react";
-import { applicationSlice } from "../../../../store/slices";
+import {
+  applicationSlice,
+  setActiveImage,
+  setOperation,
+  setSelectedAnnotation,
+  setSelectedAnnotations,
+} from "../../../../store/slices";
 import { MenuItem } from "@material-ui/core";
 import ListItemText from "@material-ui/core/ListItemText";
+import { SerializedFileType } from "../../../../types/SerializedFileType";
+import { ToolType } from "../../../../types/ToolType";
 
 type OpenAnnotationsMenuItemProps = {
   popupState: any;
@@ -29,12 +37,42 @@ export const OpenProjectFileMenuItem = ({
 
     reader.onload = async (event: ProgressEvent<FileReader>) => {
       if (event.target && event.target.result) {
-        const annotations = JSON.parse(event.target.result as string);
+        const project = JSON.parse(event.target.result as string);
 
-        dispatch(
-          applicationSlice.actions.openAnnotations({
-            annotations: annotations,
-          })
+        //clear all images
+        dispatch(applicationSlice.actions.setImages({ images: [] }));
+
+        project.forEach(
+          (serializedImage: SerializedFileType, index: number) => {
+            if (index === 0) {
+              dispatch(
+                setActiveImage({
+                  image: serializedImage.imageId,
+                })
+              );
+
+              dispatch(
+                setSelectedAnnotations({
+                  selectedAnnotations: [],
+                })
+              );
+
+              dispatch(
+                setSelectedAnnotation({
+                  selectedAnnotation: undefined,
+                })
+              );
+
+              dispatch(
+                setOperation({ operation: ToolType.RectangularAnnotation })
+              );
+            }
+            dispatch(
+              applicationSlice.actions.openAnnotations({
+                file: serializedImage,
+              })
+            );
+          }
         );
       }
     };

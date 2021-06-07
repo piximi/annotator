@@ -209,10 +209,31 @@ export const colorOverlayROI = (
     alpha: 1,
   });
 
+  const checkNeighbors = (
+    arr: ImageJS.Image,
+    x: number,
+    y: number
+  ): boolean => {
+    if (x === 0 || x === boxWidth - 1) return true;
+    for (let [dx, dy] of [
+      [0, 1],
+      [1, 0],
+      [0, -1],
+      [-1, 0],
+    ]) {
+      if (!arr.getPixelXY(x + dx, y + dy)[0]) return true;
+    }
+    return false;
+  };
+
   for (let i = 0; i < croppedImage.width; i++) {
     for (let j = 0; j < croppedImage.height; j++) {
       if (croppedImage.getPixelXY(i, j)[0] > 0) {
-        colorROIImage.setPixelXY(i, j, [color[0], color[1], color[2], 128]);
+        if (checkNeighbors(croppedImage, i, j)) {
+          colorROIImage.setPixelXY(i, j, [color[0], color[1], color[2], 255]);
+        } else {
+          colorROIImage.setPixelXY(i, j, [color[0], color[1], color[2], 128]);
+        }
       } else {
         colorROIImage.setPixelXY(i, j, [0, 0, 0, 0]);
       }

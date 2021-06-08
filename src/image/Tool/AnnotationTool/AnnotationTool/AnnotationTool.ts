@@ -83,8 +83,20 @@ export abstract class AnnotationTool extends Tool {
 
     this.buffer.splice(anchorIndex, segment.length, ...segment);
 
-    this._mask = this.computeMask();
     this._boundingBox = this.computeBoundingBoxFromContours(this.buffer);
+
+    this.points = this.buffer;
+
+    const maskImage = this.computeMask().crop({
+      x: this._boundingBox[0],
+      y: this._boundingBox[1],
+      width: this._boundingBox[2] - this._boundingBox[0],
+      height: this._boundingBox[3] - this._boundingBox[1],
+    });
+
+    this._mask = encode(maskImage.data);
+
+    console.error(maskImage.toDataURL());
 
     this.anchor = undefined;
     this.origin = undefined;

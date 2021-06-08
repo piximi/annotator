@@ -118,24 +118,24 @@ export class ColorAnnotationTool extends AnnotationTool {
     const roi = rois.sort((a: any, b: any) => {
       return b.surface - a.surface;
     })[1]; // take the second roi because the first one will be of the size of the image,the second one is the actual largest roi
-    this._boundingBox = [roi.minX, roi.minY, roi.maxX, roi.maxY];
+    this._boundingBox = [roi.minX, roi.minY, roi.maxX + 1, roi.maxY + 1];
 
-    // @ts-ignore
-    const offsetX = this.roiMask.position[0];
-    // @ts-ignore
-    const offsetY = this.roiMask.position[1];
+    if (!this.roiMask || !this.boundingBox) return;
+
+    const boundingBoxWidth = this.boundingBox[2] - this.boundingBox[0];
+    const boundingBoxHeight = this.boundingBox[3] - this.boundingBox[1];
 
     //mask should be the whole image, not just the ROI
-    const imgMask = new ImageJS.Image(this.image.width, this.image.height, {
+    const imgMask = new ImageJS.Image(boundingBoxWidth, boundingBoxHeight, {
       components: 1,
       alpha: 0,
     });
 
-    for (let x = 0; x < this.roiMask!.width; x++) {
-      for (let y = 0; y < this.roiMask!.height; y++) {
+    for (let x = 0; x < boundingBoxWidth; x++) {
+      for (let y = 0; y < boundingBoxHeight; y++) {
         //@ts-ignore
         if (this.roiMask.getBitXY(x, y)) {
-          imgMask.setPixelXY(x + offsetX, y + offsetY, [255]);
+          imgMask.setPixelXY(x, y, [255]);
         }
       }
     }

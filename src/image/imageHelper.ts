@@ -103,7 +103,10 @@ export const getOverlappingAnnotations = (
           { components: 1, alpha: 0 }
         );
         if (
-          maskROI.getPixelXY(Math.round(position.x), Math.round(position.y))[0]
+          maskROI.getPixelXY(
+            Math.round(position.x - boundingBox[0]),
+            Math.round(position.y - boundingBox[1])
+          )[0]
         )
           return annotation;
       }

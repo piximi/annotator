@@ -193,17 +193,17 @@ export const colorOverlayROI = (
   const boxX = Math.max(0, boundingBox[0]);
   const boxY = Math.max(0, boundingBox[1]);
 
-  const fullImage = new ImageJS.Image(imageWidth, imageHeight, decodedData, {
+  const croppedImage = new ImageJS.Image(boxWidth, boxHeight, decodedData, {
     components: 1,
     alpha: 0,
   });
 
-  const croppedImage = fullImage.crop({
-    x: boxX,
-    y: boxY,
-    width: boxWidth,
-    height: boxHeight,
-  });
+  // const croppedImage = fullImage.crop({
+  //   x: boxX,
+  //   y: boxY,
+  //   width: boxWidth,
+  //   height: boxHeight,
+  // });
 
   const colorROIImage = new ImageJS.Image(boxWidth, boxHeight, {
     components: 3,

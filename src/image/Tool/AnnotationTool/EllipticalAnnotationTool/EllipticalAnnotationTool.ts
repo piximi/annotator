@@ -66,6 +66,8 @@ export class EllipticalAnnotationTool extends AnnotationTool {
   }
 
   private convertToMask() {
+    if (!this.boundingBox) return;
+
     const canvas = document.createElement("canvas");
     canvas.width = this.image.width;
     canvas.height = this.image.height;
@@ -86,20 +88,32 @@ export class EllipticalAnnotationTool extends AnnotationTool {
     );
     ctx.fill();
 
+    const roiWidth = this.boundingBox[2] - this.boundingBox[0];
+    const roiHeight = this.boundingBox[3] - this.boundingBox[1];
+
     //@ts-ignore
     const imageMask = ImageJS.Image.fromCanvas(canvas).getChannel(3);
+    const croppedImageMask = new ImageJS.Image(roiWidth, roiHeight, {
+      components: 1,
+      alpha: 0,
+    });
 
-    for (let x = 0; x < imageMask.width; x++) {
-      for (let y = 0; y < imageMask.height; y++) {
-        if (imageMask.getPixelXY(x, y)[0] > 1) {
-          imageMask.setPixelXY(x, y, [255]);
+    for (let x = 0; x < roiWidth; x++) {
+      for (let y = 0; y < roiHeight; y++) {
+        if (
+          imageMask.getPixelXY(
+            x + this.boundingBox[0],
+            y + this.boundingBox[1]
+          )[0] > 1
+        ) {
+          croppedImageMask.setPixelXY(x, y, [255]);
         } else {
-          imageMask.setPixelXY(x, y, [0]);
+          croppedImageMask.setPixelXY(x, y, [0]);
         }
       }
     }
 
-    return Uint8Array.from(imageMask.data);
+    return Uint8Array.from(croppedImageMask.data);
   }
 
   private convertToPoints() {

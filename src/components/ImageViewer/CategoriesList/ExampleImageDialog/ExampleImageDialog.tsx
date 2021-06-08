@@ -14,6 +14,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import malaria from "../../../../images/malaria.png";
+import cellpainting from "../../../../images/cell-painting.png";
 import { ChannelType } from "../../../../types/ChannelType";
 import { ToolType } from "../../../../types/ToolType";
 import { ImageType } from "../../../../types/ImageType";
@@ -39,6 +40,26 @@ export const ExampleImageDialog = ({
       description:
         "Blood cells infected by malaria and stained with Giemsa reagent. Image from the Broad Bioimage Benchmark Collection, image set BBBC041v1.",
       data: malaria,
+      shape: {
+        channels: 3,
+        frames: 1,
+        height: 1200,
+        planes: 1,
+        width: 1600,
+      },
+    },
+    {
+      name: "cell-painting.png",
+      description:
+        "Help: can someome provide a one sentence description for this image?",
+      data: cellpainting,
+      shape: {
+        channels: 3,
+        frames: 1,
+        height: 512,
+        planes: 1,
+        width: 512,
+      },
     },
   ];
 
@@ -46,20 +67,14 @@ export const ExampleImageDialog = ({
     data,
     description,
     name,
+    shape,
   }: {
     data: any;
     description: string;
     name: string;
+    shape: ShapeType;
   }) => {
     onClose();
-
-    const shape: ShapeType = {
-      channels: 3,
-      frames: 1,
-      height: 1200,
-      planes: 1,
-      width: 1600,
-    };
 
     const example: ImageType = {
       avatar: data as string,
@@ -92,7 +107,7 @@ export const ExampleImageDialog = ({
     );
 
     let channels: Array<ChannelType> = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < shape.channels; i++) {
       channels.push({ visible: true, range: [0, 255] });
     }
     dispatch(setChannels({ channels }));

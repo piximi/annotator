@@ -109,7 +109,16 @@ export class QuickAnnotationTool extends AnnotationTool {
     })[1]; // take the second roi because the first one will be of the size of the image,the second one is the actual largest roi
     this._boundingBox = [roi.minX, roi.minY, roi.maxX, roi.maxY];
 
-    const thresholded = _.map(greyMask.data, (i: number) => (i > 1 ? 255 : 0)); //threshold necessary because output of NN is not binary
+    const croppedGreyMask = greyMask.crop({
+      x: this._boundingBox[0],
+      y: this._boundingBox[1],
+      width: this._boundingBox[2] - this._boundingBox[0],
+      height: this._boundingBox[3] - this._boundingBox[1],
+    });
+
+    const thresholded = _.map(croppedGreyMask.data, (i: number) =>
+      i > 1 ? 255 : 0
+    );
 
     //compute mask
     this._mask = encode(Uint8Array.from(thresholded));

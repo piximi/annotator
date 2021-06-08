@@ -96,17 +96,14 @@ export const getOverlappingAnnotations = (
         position.y <= boundingBox[3]
       ) {
         //return annotation if clicked on actual selected data
-        const maskImage = new ImageJS.Image(
-          imageWidth,
-          imageHeight,
+        const maskROI = new ImageJS.Image(
+          boundingBox[2] - boundingBox[0],
+          boundingBox[3] - boundingBox[1],
           decode(annotation.mask),
           { components: 1, alpha: 0 }
         );
         if (
-          maskImage.getPixelXY(
-            Math.round(position.x),
-            Math.round(position.y)
-          )[0]
+          maskROI.getPixelXY(Math.round(position.x), Math.round(position.y))[0]
         )
           return annotation;
       }
@@ -190,20 +187,11 @@ export const colorOverlayROI = (
   //extract bounding box params
   const boxWidth = endX - boundingBox[0];
   const boxHeight = endY - boundingBox[1];
-  const boxX = Math.max(0, boundingBox[0]);
-  const boxY = Math.max(0, boundingBox[1]);
 
   const croppedImage = new ImageJS.Image(boxWidth, boxHeight, decodedData, {
     components: 1,
     alpha: 0,
   });
-
-  // const croppedImage = fullImage.crop({
-  //   x: boxX,
-  //   y: boxY,
-  //   width: boxWidth,
-  //   height: boxHeight,
-  // });
 
   const colorROIImage = new ImageJS.Image(boxWidth, boxHeight, {
     components: 3,
@@ -276,9 +264,14 @@ export const saveAnnotationsAsMasks = (
 
           const decoded = decode(encoded);
 
-          const mask = new ImageJS.Image(
-            current.shape.width,
-            current.shape.height,
+          const boundingBoxWidth =
+            annotation.boundingBox[2] - annotation.boundingBox[0];
+          const boundingBoxHeight =
+            annotation.boundingBox[3] - annotation.boundingBox[1];
+
+          const roiMask = new ImageJS.Image(
+            boundingBoxWidth,
+            boundingBoxHeight,
             decoded,
             {
               components: 1,
@@ -286,7 +279,27 @@ export const saveAnnotationsAsMasks = (
             }
           );
 
-          const uri = mask.toDataURL("image/png", {
+          const fullImageMaskData = new Uint8Array().fill(0);
+          const fullImageMask = new ImageJS.Image(
+            current.shape.width,
+            current.shape.height,
+            fullImageMaskData,
+            { components: 1, alpha: 0 }
+          );
+
+          for (let i = 0; i < boundingBoxWidth; i++) {
+            for (let j = 0; j < boundingBoxHeight; j++) {
+              if (roiMask.getPixelXY(i, j)[0] > 0) {
+                fullImageMask.setPixelXY(
+                  i + annotation.boundingBox[0],
+                  j + annotation.boundingBox[1],
+                  [255, 255, 255]
+                );
+              }
+            }
+          }
+
+          const uri = fullImageMask.toDataURL("image/png", {
             useCanvas: true,
           });
 

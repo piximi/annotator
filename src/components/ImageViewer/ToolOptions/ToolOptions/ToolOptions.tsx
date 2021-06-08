@@ -32,6 +32,7 @@ import { useTranslation } from "react-i18next";
 import { HandToolOptions } from "../HandToolOptions/HandToolOptions";
 import Box from "@material-ui/core/Box";
 import { ColorAdjustmentOptions } from "../ColorAdjustmentOptions/ColorAdjustmentOptions/ColorAdjustmentOptions";
+import { PointerSelectionOptions } from "../PointerSelectionOptions";
 
 export const ToolOptions = () => {
   const classes = useStyles();
@@ -130,7 +131,7 @@ export const ToolOptions = () => {
       icon: <ObjectSelectionIcon />,
       method: ToolType.Pointer,
       name: "Pointer",
-      options: <React.Fragment />,
+      options: <PointerSelectionOptions />,
     },
   ];
 

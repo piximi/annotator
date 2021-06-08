@@ -98,12 +98,16 @@ export class RectangularAnnotationTool extends AnnotationTool {
   }
 
   private convertToMask() {
-    if (!this.points) return;
+    if (!this.points || !this.boundingBox) return;
 
     const x1 = this.points[0];
     const y1 = this.points[1];
     const x2 = this.points[4];
     const y2 = this.points[5];
+
+    const roiWidth = this.boundingBox[2] - this.boundingBox[0];
+    const roiHeight = this.boundingBox[3] - this.boundingBox[1];
+
     const maskImage = new ImageJS.Image(this.image.width, this.image.height, {
       components: 1,
       alpha: 0,

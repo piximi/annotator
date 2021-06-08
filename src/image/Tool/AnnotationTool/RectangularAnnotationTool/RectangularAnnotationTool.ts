@@ -105,17 +105,7 @@ export class RectangularAnnotationTool extends AnnotationTool {
     const x2 = this.points[4];
     const y2 = this.points[5];
 
-    const roiWidth = this.boundingBox[2] - this.boundingBox[0];
-    const roiHeight = this.boundingBox[3] - this.boundingBox[1];
-
-    const maskImage = new ImageJS.Image(this.image.width, this.image.height, {
-      components: 1,
-      alpha: 0,
-    });
-    for (let i = x1; i < x2; i++) {
-      for (let j = y1; j < y2; j++) maskImage.setPixelXY(i, j, [255]);
-    }
-    return maskImage.data;
+    return new Uint8Array((x2 - x1) * (y2 - y1)).fill(255);
   }
 
   private resize(position: { x: number; y: number }) {

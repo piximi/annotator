@@ -56,8 +56,15 @@ export class PenAnnotationTool extends AnnotationTool {
 
     const rgbMask = ImageJS.Image.fromCanvas(canvas);
 
+    const croppedRgbMask = rgbMask.crop({
+      x: this._boundingBox[0],
+      y: this._boundingBox[1],
+      width: this._boundingBox[2] - this._boundingBox[0],
+      height: this._boundingBox[3] - this._boundingBox[1],
+    });
+
     // @ts-ignore
-    this.circlesData = this.thresholdMask(rgbMask.getChannel(3)).data;
+    this.circlesData = this.thresholdMask(croppedRgbMask.getChannel(3)).data;
   }
 
   deselect() {

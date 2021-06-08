@@ -5,6 +5,7 @@ import { decode, encode } from "./rle";
 import { isoLines } from "marchingsquares";
 import { CategoryType } from "../types/CategoryType";
 import { ImageType } from "../types/ImageType";
+import { SerializedAnnotationType } from "../types/SerializedAnnotationType";
 
 export const connectPoints = (
   coordinates: Array<Array<number>>,
@@ -333,4 +334,44 @@ export const saveAnnotationsAsMasks = (
       });
     })
     .flat();
+};
+
+export const importSerializedAnnotations = (
+  annotation: SerializedAnnotationType,
+  existingCategories: Array<CategoryType>
+): { annotation_out: AnnotationType; categories: Array<CategoryType> } => {
+  const mask = annotation.annotationMask
+    .split(" ")
+    .map((x: string) => parseInt(x));
+
+  let newCategories = existingCategories;
+  //if category does not already exist in state, add it
+  if (
+    !existingCategories
+      .map((category: CategoryType) => category.id)
+      .includes(annotation.annotationCategoryId)
+  ) {
+    const category: CategoryType = {
+      color: annotation.annotationCategoryColor,
+      id: annotation.annotationCategoryId,
+      name: annotation.annotationCategoryName,
+      visible: true,
+    };
+    newCategories = [...newCategories, category];
+  }
+
+  return {
+    annotation_out: {
+      boundingBox: [
+        annotation.annotationBoundingBoxX,
+        annotation.annotationBoundingBoxY,
+        annotation.annotationBoundingBoxWidth,
+        annotation.annotationBoundingBoxHeight,
+      ],
+      categoryId: annotation.annotationCategoryId,
+      id: annotation.annotationId,
+      mask: mask,
+    },
+    categories: newCategories,
+  };
 };

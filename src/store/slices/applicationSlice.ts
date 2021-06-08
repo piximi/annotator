@@ -12,7 +12,10 @@ import { StateType } from "../../types/StateType";
 import { SerializedAnnotationType } from "../../types/SerializedAnnotationType";
 import { ChannelType } from "../../types/ChannelType";
 import { SerializedFileType } from "../../types/SerializedFileType";
-import { replaceDuplicateName } from "../../image/imageHelper";
+import {
+  importSerializedAnnotations,
+  replaceDuplicateName,
+} from "../../image/imageHelper";
 
 const initialImage =
   process.env.NODE_ENV === "development"
@@ -214,36 +217,12 @@ export const applicationSlice = createSlice({
 
       const annotations = action.payload.file.annotations.map(
         (annotation: SerializedAnnotationType): AnnotationType => {
-          const mask = annotation.annotationMask
-            .split(" ")
-            .map((x: string) => parseInt(x));
-
-          //if category does not already exist in state, add it
-          if (
-            !state.categories
-              .map((category: CategoryType) => category.id)
-              .includes(annotation.annotationCategoryId)
-          ) {
-            const category: CategoryType = {
-              color: annotation.annotationCategoryColor,
-              id: annotation.annotationCategoryId,
-              name: annotation.annotationCategoryName,
-              visible: true,
-            };
-            state.categories = [...state.categories, category];
-          }
-
-          return {
-            boundingBox: [
-              annotation.annotationBoundingBoxX,
-              annotation.annotationBoundingBoxY,
-              annotation.annotationBoundingBoxWidth,
-              annotation.annotationBoundingBoxHeight,
-            ],
-            categoryId: annotation.annotationCategoryId,
-            id: annotation.annotationId,
-            mask: mask,
-          };
+          const { annotation_out, categories } = importSerializedAnnotations(
+            annotation,
+            state.categories
+          );
+          state.categories = categories;
+          return annotation_out;
         }
       );
 

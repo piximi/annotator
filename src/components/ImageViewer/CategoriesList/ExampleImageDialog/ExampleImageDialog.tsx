@@ -76,6 +76,11 @@ export const ExampleImageDialog = ({
   }) => {
     onClose();
 
+    //PSEUDOCODE
+    //1: Open json file
+    //2: iterate through array
+    //3 import the serialized annotation as AnnotationType
+
     const example: ImageType = {
       avatar: data as string,
       id: v4(),

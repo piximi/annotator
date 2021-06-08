@@ -24,18 +24,6 @@ export class EllipticalAnnotationTool extends AnnotationTool {
       this.origin = position;
 
       this.annotating = true;
-    } else {
-      this.resize(position);
-
-      this.annotated = true;
-
-      this.annotating = false;
-
-      this.points = this.convertToPoints();
-
-      this._mask = this.computeMask();
-
-      this._boundingBox = this.computeBoundingBoxFromContours(this.points);
     }
   }
 

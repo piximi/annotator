@@ -262,7 +262,7 @@ export abstract class AnnotationTool extends Tool {
     slpf(connectedPoints, maskImage);
 
     //@ts-ignore
-    return encode(maskImage.getChannel(0).data);
+    return maskImage.getChannel(0);
   }
 
   get mask(): Array<number> | undefined {

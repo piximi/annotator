@@ -1,5 +1,6 @@
 import { AnnotationTool } from "../AnnotationTool";
 import * as _ from "lodash";
+import { encode } from "../../../rle";
 
 export class LassoAnnotationTool extends AnnotationTool {
   anchor?: { x: number; y: number };
@@ -21,23 +22,6 @@ export class LassoAnnotationTool extends AnnotationTool {
 
   onMouseDown(position: { x: number; y: number }) {
     if (this.annotated) return;
-
-    if (this.connected(position)) {
-      if (this.origin) {
-        this.buffer = [...this.buffer, this.origin.x, this.origin.y];
-      }
-
-      this.annotated = true;
-      this.annotating = false;
-
-      this.points = this.buffer;
-
-      this._mask = this.computeMask();
-      this._boundingBox = this.computeBoundingBoxFromContours(this.points);
-
-      this.anchor = undefined;
-      this.origin = undefined;
-    }
 
     if (this.buffer && this.buffer.length === 0) {
       this.annotating = true;
@@ -89,9 +73,16 @@ export class LassoAnnotationTool extends AnnotationTool {
       this.annotating = false;
 
       this.points = this.buffer;
-      this._mask = this.computeMask();
-
       this._boundingBox = this.computeBoundingBoxFromContours(this.points);
+
+      const maskImage = this.computeMask().crop({
+        x: this._boundingBox[0],
+        y: this._boundingBox[1],
+        width: this._boundingBox[2] - this._boundingBox[0],
+        height: this._boundingBox[3] - this._boundingBox[1],
+      });
+
+      this._mask = encode(maskImage.data);
 
       this.buffer = [];
     }

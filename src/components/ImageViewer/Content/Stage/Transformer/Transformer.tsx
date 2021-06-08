@@ -176,21 +176,16 @@ export const Transformer = ({
     //extract roi and resize
     const mask = selectedAnnotation.mask;
     const boundingBox = selectedAnnotation.boundingBox;
-    const decodedData = new Uint8Array(decode(mask));
-    const maskImage = new ImageJS.Image(imageWidth, imageHeight, decodedData, {
-      components: 1,
-      alpha: 0,
-    });
 
     const roiWidth = boundingBox[2] - boundingBox[0];
     const roiHeight = boundingBox[3] - boundingBox[1];
     const roiX = boundingBox[0];
     const roiY = boundingBox[1];
-    const roi = maskImage.crop({
-      x: roiX,
-      y: roiY,
-      width: roiWidth,
-      height: roiHeight,
+
+    const decodedData = new Uint8Array(decode(mask));
+    const roi = new ImageJS.Image(roiWidth, roiHeight, decodedData, {
+      components: 1,
+      alpha: 0,
     });
 
     const resizedMaskROI = roi.resize({
@@ -204,29 +199,7 @@ export const Transformer = ({
       y: scaleY,
     });
 
-    const resizedMaskData: Array<number> = [];
-
-    for (let k = 0; k < decodedData.length; k++) {
-      const x = k % imageWidth;
-      const y = Math.floor(k / imageWidth);
-      const pixel = resizedMaskROI.getPixelXY(
-        x - scaledOffset[0],
-        y - scaledOffset[1]
-      )[0];
-      if (
-        x >= scaledOffset[0] &&
-        x < scaledOffset[0] + resizedMaskROI.width &&
-        y >= scaledOffset[1] &&
-        y < scaledOffset[1] + resizedMaskROI.height &&
-        pixel
-      ) {
-        resizedMaskData.push(255);
-      } else {
-        resizedMaskData.push(0);
-      }
-    }
-
-    const resizedMask = encode(Uint8Array.from(resizedMaskData));
+    const resizedMask = encode(Uint8Array.from(resizedMaskROI.data));
 
     const updatedAnnotation = {
       ...selectedAnnotation,

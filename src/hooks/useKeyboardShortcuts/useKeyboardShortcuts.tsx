@@ -117,7 +117,7 @@ export const useKeyboardShortcuts = () => {
   /*
    * Select arrange tool (V)
    */
-  useHotkeys("v", () => {
+  useHotkeys("s", () => {
     dispatch(setOperation({ operation: ToolType.Pointer }));
   });
 
@@ -174,6 +174,13 @@ export const useKeyboardShortcuts = () => {
    */
   useHotkeys("z", () => {
     dispatch(setOperation({ operation: ToolType.Zoom }));
+  });
+
+  /*
+   * Select intensity adjustment tool (Z)
+   */
+  useHotkeys("i", () => {
+    dispatch(setOperation({ operation: ToolType.ColorAdjustment }));
   });
 
   useHotkeys(

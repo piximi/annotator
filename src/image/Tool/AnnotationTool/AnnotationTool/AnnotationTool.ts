@@ -328,15 +328,8 @@ export abstract class AnnotationTool extends Tool {
         maskData2[b2i] === 255
       ) {
         newMaskData.push(0);
-      } else if (
-        this.inBoundingBox(b1x, b1y, boundingBox1) &&
-        maskData1[b1i] === 255 &&
-        this.inBoundingBox(b2x, b2y, boundingBox2) &&
-        maskData2[b2i] === 0
-      ) {
-        newMaskData.push(255);
       } else {
-        newMaskData.push(0);
+        newMaskData.push(maskData1[b1i]);
       }
     }
 

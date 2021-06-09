@@ -55,6 +55,16 @@ export abstract class AnnotationTool extends Tool {
     return newMaskImage;
   }
 
+  inBoundingBox(
+    x: number,
+    y: number,
+    boundingBox: [number, number, number, number]
+  ) {
+    if (x < 0 || y < 0) return false;
+    if (x > boundingBox[2] - boundingBox[0]) return false;
+    if (y > boundingBox[3] - boundingBox[1]) return false;
+    return true;
+  }
   /*
    * Adding to a Operator adds any new areas you select to your existing
    * Operator.
@@ -69,19 +79,6 @@ export abstract class AnnotationTool extends Tool {
     const maskData2 = decode(this._mask);
     const boundingBox2 = this._boundingBox;
 
-    // const maskImage1 = new ImageJS.Image(
-    //   boundingBox1[2] - boundingBox1[0],
-    //   boundingBox1[3] - boundingBox1[1],
-    //   maskData1,
-    //   { components: 1, alpha: 0 }
-    // );
-    // const maskImage2 = new ImageJS.Image(
-    //   boundingBox2[2] - boundingBox2[0],
-    //   boundingBox2[3] - boundingBox2[1],
-    //   maskData2,
-    //   { components: 1, alpha: 0 }
-    // );
-    //
     const newBoundingBox = [
       boundingBox2[0] < boundingBox1[0] ? boundingBox2[0] : boundingBox1[0],
       boundingBox2[1] < boundingBox1[1] ? boundingBox2[1] : boundingBox1[1],
@@ -91,47 +88,34 @@ export abstract class AnnotationTool extends Tool {
     //
     const newBoundingBoxWidth = newBoundingBox[2] - newBoundingBox[0];
     const newBoundingBoxHeight = newBoundingBox[3] - newBoundingBox[1];
-    //
-    // let translatedMaskImage = new ImageJS.Image(
-    //   newBoundingBoxWidth,
-    //   newBoundingBoxHeight,
-    //   { components: 1, alpha: 0 }
-    // );
-    //
-    // translatedMaskImage = this.drawMaskInNewBoundingBox(
-    //   translatedMaskImage,
-    //   maskImage1,
-    //   boundingBox1,
-    //   newBoundingBox
-    // );
-    // translatedMaskImage = this.drawMaskInNewBoundingBox(
-    //   translatedMaskImage,
-    //   maskImage2,
-    //   boundingBox2,
-    //   newBoundingBox
-    // );
 
     const newMaskData = [];
+    const deltaX1 = boundingBox1[0] - newBoundingBox[0];
+    const deltaY1 = boundingBox1[1] - newBoundingBox[1];
+    const deltaX2 = boundingBox2[0] - newBoundingBox[0];
+    const deltaY2 = boundingBox2[1] - newBoundingBox[1];
 
     for (let i = 0; i < newBoundingBoxWidth * newBoundingBoxHeight; i++) {
       const x = i % newBoundingBoxWidth;
       const y = Math.floor(i / newBoundingBoxWidth);
-      const x_img = x + newBoundingBox[0]; //translate from bounding box coordinates to image coords
-      const y_img = y + newBoundingBox[1];
-      const x_mask1 = x_img - boundingBox1[0]; //translate from image coords to mask coordinates
-      const y_mask1 = y_img - boundingBox1[1];
-      const x_mask2 = x_img - boundingBox2[0];
-      const y_mask2 = y_img - boundingBox2[1];
-      const i_mask1 = x_mask1 + y_mask1 * (boundingBox1[2] - boundingBox1[0]); //flattened index for mask1
-      const i_mask2 = x_mask2 + y_mask2 * (boundingBox2[2] - boundingBox2[0]); //flattened index for mask2
-      if (maskData1[i_mask1] === 255 || maskData2[i_mask2] === 255) {
+      const b1x = x - deltaX1;
+      const b1y = y - deltaY1;
+      const b2x = x - deltaX2;
+      const b2y = y - deltaY2;
+
+      const b1i = b1x + b1y * (boundingBox1[2] - boundingBox1[0]);
+      const b2i = b2x + b2y * (boundingBox2[2] - boundingBox2[0]);
+      if (
+        (this.inBoundingBox(b1x, b1y, boundingBox1) &&
+          maskData1[b1i] === 255) ||
+        (this.inBoundingBox(b2x, b2y, boundingBox2) && maskData2[b2i] === 255)
+      ) {
         newMaskData.push(255);
       } else {
         newMaskData.push(0);
       }
     }
 
-    // return [encode(Uint8Array.from(translatedMaskImage.data)), newBoundingBox];
     return [encode(Uint8Array.from(newMaskData)), newBoundingBox];
   }
 
@@ -303,22 +287,37 @@ export abstract class AnnotationTool extends Tool {
     const newBoundingBoxHeight = newBoundingBox[3] - newBoundingBox[1];
 
     const newMaskData = [];
+    const deltaX1 = boundingBox1[0] - newBoundingBox[0];
+    const deltaY1 = boundingBox1[1] - newBoundingBox[1];
+    const deltaX2 = boundingBox2[0] - newBoundingBox[0];
+    const deltaY2 = boundingBox2[1] - newBoundingBox[1];
 
-    for (let x = 0; x < newBoundingBoxWidth; x++) {
-      for (let y = 0; y < newBoundingBoxHeight; y++) {
-        const x_img = x + newBoundingBox[0]; //translate from bounding box coordinates to image coords
-        const y_img = y + newBoundingBox[1];
-        const x_mask1 = x_img - boundingBox1[0]; //translate from image coords to mask coordinates
-        const y_mask1 = y_img - boundingBox1[1];
-        const x_mask2 = x_img - boundingBox2[0];
-        const y_mask2 = y_img - boundingBox2[1];
-        const i_mask1 = x_mask1 + y_mask1 * (boundingBox1[2] - boundingBox1[0]); //flattened index for mask1
-        const i_mask2 = x_mask2 + y_mask2 * (boundingBox2[2] - boundingBox2[0]); //flattened index for mask2
-        if (maskData1[i_mask1] === 255 && maskData2[i_mask2] === 255) {
-          newMaskData.push(255);
-        } else {
-          newMaskData.push(0);
-        }
+    for (let i = 0; i < newBoundingBoxWidth * newBoundingBoxHeight; i++) {
+      const x = i % newBoundingBoxWidth;
+      const y = Math.floor(i / newBoundingBoxWidth);
+      const b1x = x - deltaX1;
+      const b1y = y - deltaY1;
+      const b2x = x - deltaX2;
+      const b2y = y - deltaY2;
+
+      const b1i = b1x + b1y * (boundingBox1[2] - boundingBox1[0]);
+      const b2i = b2x + b2y * (boundingBox2[2] - boundingBox2[0]);
+      if (
+        this.inBoundingBox(b1x, b1y, boundingBox1) &&
+        maskData1[b1i] === 255 &&
+        this.inBoundingBox(b2x, b2y, boundingBox2) &&
+        maskData2[b2i] === 255
+      ) {
+        newMaskData.push(0);
+      } else if (
+        this.inBoundingBox(b1x, b1y, boundingBox1) &&
+        maskData1[b1i] === 255 &&
+        this.inBoundingBox(b2x, b2y, boundingBox2) &&
+        maskData2[b2i] === 0
+      ) {
+        newMaskData.push(255);
+      } else {
+        newMaskData.push(0);
       }
     }
 

@@ -4,7 +4,7 @@ const operationsWidth = 56;
 
 export const useStyles = makeStyles((theme) => ({
   card: {
-    width: 190,
+    width: 210,
   },
   cardContent: {
     width: "200px",

@@ -98,7 +98,7 @@ export const Tools = () => {
 
       <br />
       <Tool
-        name={t("Rectangular annotation (M)")}
+        name={t("Rectangular annotation")}
         onClick={() => {
           dispatch(
             applicationSlice.actions.setOperation({

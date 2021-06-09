@@ -158,15 +158,22 @@ export const useKeyboardShortcuts = () => {
   /*
    * Select pencil tool (P)
    */
-  useHotkeys("p", () => {
+  useHotkeys("d", () => {
     dispatch(setOperation({ operation: ToolType.PenAnnotation }));
   });
 
   /*
-   * Select rectangular tool (M)
+   * Select rectangular tool (R)
    */
-  useHotkeys("m", () => {
+  useHotkeys("r", () => {
     dispatch(setOperation({ operation: ToolType.RectangularAnnotation }));
+  });
+
+  /*
+   * Select elliptical tool (E)
+   */
+  useHotkeys("e", () => {
+    dispatch(setOperation({ operation: ToolType.EllipticalAnnotation }));
   });
 
   /*

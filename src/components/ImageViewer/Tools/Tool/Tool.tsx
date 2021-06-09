@@ -37,17 +37,14 @@ export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
     case "Pointer":
       description = "Select annotations (S)";
       break;
-    case "Rectangular annotation (M)":
-      description =
-        "Click to draw a rectangular annotation. Release to close the annotation.";
+    case "Rectangular annotation":
+      description = "Rectangular annotation (R)";
       break;
     case "Elliptical annotation":
-      description =
-        "Click to  draw an elliptical annotation. Release to close the annotation.";
+      description = "Elliptical annotation (E)";
       break;
     case "Freehand annotation":
-      description =
-        "Paint over pixels by clicking and dragging over the desired area. Release to close the annotation.";
+      description = "Pen annotation (D)";
       break;
     case "Lasso annotation (L)":
       description =

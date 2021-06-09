@@ -165,36 +165,55 @@ export abstract class AnnotationTool extends Tool {
    * new Operator will be removed from the Operator.
    */
   intersect(
-    selectedMask: Array<number>,
-    selectedBoundingBox: [number, number, number, number]
+    decodedMask1: Array<number>,
+    boundingBox1: [number, number, number, number]
   ): [Array<number>, [number, number, number, number]] {
     if (!this._mask || !this._boundingBox) return [[], [0, 0, 0, 0]];
 
-    const selectedMaskData = decode(selectedMask);
-    const maskData = decode(this._mask);
+    const maskData1 = decode(decodedMask1);
+    const maskData2 = decode(this._mask);
 
-    const data = maskData.map((currentValue: number, index: number) => {
-      if (currentValue === 255 && selectedMaskData[index] === 255) {
-        return 255;
-      } else return 0;
-    });
+    const boundingBox2 = this._boundingBox;
 
-    const combinedBoundingBox = [
-      this._boundingBox[0] > selectedBoundingBox[0]
-        ? this._boundingBox[0]
-        : selectedBoundingBox[0],
-      this._boundingBox[1] > selectedBoundingBox[1]
-        ? this._boundingBox[1]
-        : selectedBoundingBox[1],
-      this._boundingBox[2] < selectedBoundingBox[2]
-        ? this._boundingBox[2]
-        : selectedBoundingBox[2],
-      this._boundingBox[3] < selectedBoundingBox[3]
-        ? this._boundingBox[3]
-        : selectedBoundingBox[3],
+    const newBoundingBox = [
+      boundingBox2[0] > boundingBox1[0] ? boundingBox2[0] : boundingBox1[0],
+      boundingBox2[1] > boundingBox1[1] ? boundingBox2[1] : boundingBox1[1],
+      boundingBox2[2] < boundingBox1[2] ? boundingBox2[2] : boundingBox1[2],
+      boundingBox2[3] < boundingBox1[3] ? boundingBox2[3] : boundingBox1[3],
     ] as [number, number, number, number];
 
-    return [encode(data), combinedBoundingBox];
+    const newBoundingBoxWidth = newBoundingBox[2] - newBoundingBox[0];
+    const newBoundingBoxHeight = newBoundingBox[3] - newBoundingBox[1];
+
+    const newMaskData = [];
+    const deltaX1 = boundingBox1[0] - newBoundingBox[0];
+    const deltaY1 = boundingBox1[1] - newBoundingBox[1];
+    const deltaX2 = boundingBox2[0] - newBoundingBox[0];
+    const deltaY2 = boundingBox2[1] - newBoundingBox[1];
+
+    for (let i = 0; i < newBoundingBoxWidth * newBoundingBoxHeight; i++) {
+      const x = i % newBoundingBoxWidth;
+      const y = Math.floor(i / newBoundingBoxWidth);
+      const b1x = x - deltaX1;
+      const b1y = y - deltaY1;
+      const b2x = x - deltaX2;
+      const b2y = y - deltaY2;
+
+      const b1i = b1x + b1y * (boundingBox1[2] - boundingBox1[0]);
+      const b2i = b2x + b2y * (boundingBox2[2] - boundingBox2[0]);
+      if (
+        this.inBoundingBox(b1x, b1y, boundingBox1) &&
+        maskData1[b1i] === 255 &&
+        this.inBoundingBox(b2x, b2y, boundingBox2) &&
+        maskData2[b2i] === 255
+      ) {
+        newMaskData.push(255);
+      } else {
+        newMaskData.push(0);
+      }
+    }
+
+    return [encode(Uint8Array.from(newMaskData)), newBoundingBox];
   }
 
   /*

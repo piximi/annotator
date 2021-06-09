@@ -30,40 +30,88 @@ export abstract class AnnotationTool extends Tool {
   }
 
   /*
+   * Method for add, subtract and intersect modes.
+   * Draw a ROI mask in the coordinate space of the new combined bounding box.
+   * */
+  drawMaskInNewBoundingBox(
+    newMaskImage: ImageJS.Image,
+    maskImage: ImageJS.Image,
+    boundingBox: [number, number, number, number],
+    newBoundingBox: [number, number, number, number]
+  ) {
+    for (let x = 0; x < maskImage.width; x++) {
+      for (let y = 0; y < maskImage.height; y++) {
+        const pixel = maskImage.getPixelXY(x, y)[0];
+        // if (x > boundingBox1[2] && pixel > 0) console.info("Not supposed to happen")
+        if (pixel === 255) {
+          newMaskImage.setPixelXY(
+            x + boundingBox[0] - newBoundingBox[0],
+            y + boundingBox[1] - newBoundingBox[1],
+            [255]
+          );
+        }
+      }
+    }
+    return newMaskImage;
+  }
+
+  /*
    * Adding to a Operator adds any new areas you select to your existing
    * Operator.
    */
   add(
-    selectedMask: Array<number>,
-    selectedBoundingBox: [number, number, number, number]
+    encodedMaskData1: Array<number>,
+    boundingBox1: [number, number, number, number]
   ): [Array<number>, [number, number, number, number]] {
     if (!this._mask || !this._boundingBox) return [[], [0, 0, 0, 0]];
 
-    const selectedMaskData = decode(selectedMask);
-    const maskData = decode(this._mask);
+    const maskData1 = decode(encodedMaskData1);
+    const maskData2 = decode(this._mask);
+    const boundingBox2 = this._boundingBox;
 
-    const data = maskData.map((currentValue: number, index: number) => {
-      if (currentValue === 255 || selectedMaskData[index] === 255) {
-        return 255;
-      } else return 0;
-    });
+    const maskImage1 = new ImageJS.Image(
+      boundingBox1[2] - boundingBox1[0],
+      boundingBox1[3] - boundingBox1[1],
+      maskData1,
+      { components: 1, alpha: 0 }
+    );
+    const maskImage2 = new ImageJS.Image(
+      boundingBox2[2] - boundingBox2[0],
+      boundingBox2[3] - boundingBox2[1],
+      maskData2,
+      { components: 1, alpha: 0 }
+    );
 
-    const combinedBoundingBox = [
-      this._boundingBox[0] < selectedBoundingBox[0]
-        ? this._boundingBox[0]
-        : selectedBoundingBox[0],
-      this._boundingBox[1] < selectedBoundingBox[1]
-        ? this._boundingBox[1]
-        : selectedBoundingBox[1],
-      this._boundingBox[2] > selectedBoundingBox[2]
-        ? this._boundingBox[2]
-        : selectedBoundingBox[2],
-      this._boundingBox[3] > selectedBoundingBox[3]
-        ? this._boundingBox[3]
-        : selectedBoundingBox[3],
+    const newBoundingBox = [
+      boundingBox2[0] < boundingBox1[0] ? boundingBox2[0] : boundingBox1[0],
+      boundingBox2[1] < boundingBox1[1] ? boundingBox2[1] : boundingBox1[1],
+      boundingBox2[2] > boundingBox1[2] ? boundingBox2[2] : boundingBox1[2],
+      boundingBox2[3] > boundingBox1[3] ? boundingBox2[3] : boundingBox1[3],
     ] as [number, number, number, number];
 
-    return [encode(data), combinedBoundingBox];
+    const newBoundingBoxWidth = newBoundingBox[2] - newBoundingBox[0];
+    const newBoundingBoxHeight = newBoundingBox[3] - newBoundingBox[1];
+
+    let translatedMaskImage = new ImageJS.Image(
+      newBoundingBoxWidth,
+      newBoundingBoxHeight,
+      { components: 1, alpha: 0 }
+    );
+
+    translatedMaskImage = this.drawMaskInNewBoundingBox(
+      translatedMaskImage,
+      maskImage1,
+      boundingBox1,
+      newBoundingBox
+    );
+    translatedMaskImage = this.drawMaskInNewBoundingBox(
+      translatedMaskImage,
+      maskImage2,
+      boundingBox2,
+      newBoundingBox
+    );
+
+    return [encode(Uint8Array.from(translatedMaskImage.data)), newBoundingBox];
   }
 
   connect() {

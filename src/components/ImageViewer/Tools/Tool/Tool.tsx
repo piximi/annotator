@@ -47,24 +47,19 @@ export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
       description = "Pen annotation (D)";
       break;
     case "Lasso annotation (L)":
-      description =
-        "Draw a lasso annotation. Click and release to create new anchor points. Hit enter to automatically close the selection.";
+      description = "Lasso annotation (L)";
       break;
     case "Polygonal annotation":
-      description =
-        "Draw a polygonal annotation. Click and release to create new anchor points. Hit enter to automatically close the selection.";
+      description = "Polygonal annotation (P)";
       break;
     case "Magnetic annotation":
-      description =
-        "Automatically snap onto the edges of an object. Click and release to create new anchor points.";
+      description = "Magnetic annotation (M)";
       break;
     case "Color annotation":
-      description =
-        "Click and drag to select a region of similar color intensities. Release to close the annotation.";
+      description = "Color annotation (C)";
       break;
     case "Quick annotation":
-      description =
-        "Click and drag to select a region of superpixels. Release to close the annotation.";
+      description = "Quick annotation (Q)";
       break;
     case "Object annotation":
       description =

@@ -137,8 +137,15 @@ export const useKeyboardShortcuts = () => {
   /*
    * Select color tool (W)
    */
-  useHotkeys("w", () => {
+  useHotkeys("c", () => {
     dispatch(setOperation({ operation: ToolType.ColorAnnotation }));
+  });
+
+  /*
+   * Select quick tool (W)
+   */
+  useHotkeys("q", () => {
+    dispatch(setOperation({ operation: ToolType.QuickAnnotation }));
   });
 
   /*
@@ -153,6 +160,20 @@ export const useKeyboardShortcuts = () => {
    */
   useHotkeys("l", () => {
     dispatch(setOperation({ operation: ToolType.LassoAnnotation }));
+  });
+
+  /*
+   * Select polygonal tool (L)
+   */
+  useHotkeys("p", () => {
+    dispatch(setOperation({ operation: ToolType.PolygonalAnnotation }));
+  });
+
+  /*
+   * Select magnetic tool (M)
+   */
+  useHotkeys("m", () => {
+    dispatch(setOperation({ operation: ToolType.MagneticAnnotation }));
   });
 
   /*

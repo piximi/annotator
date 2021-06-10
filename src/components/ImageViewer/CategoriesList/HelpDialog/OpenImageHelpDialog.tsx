@@ -36,9 +36,10 @@ export const OpenImageHelpDialog = ({
         </Toolbar>
       </AppBar>
       <DialogContent>
+        <Typography variant={"h6"}>Opening images</Typography>
         <Typography display={"inline"}>
           From the left menu, select "Open new image" to select one or multiple
-          images to open.
+          image files to open.
         </Typography>
         <br />
         <br />
@@ -49,17 +50,19 @@ export const OpenImageHelpDialog = ({
         <br />
         <br />
         <Typography display={"inline"}>
-          Images can be deleted from the workspace at any time by selecting
-          "Delete image" on the menu options next to the image thumbnail.
-        </Typography>
-        <br />
-        <br />
-        <Typography display={"inline"}>
           Note that we currently only support 1-channel (grayscale) or 3-channel
           two-dimensional images.
         </Typography>
         <br />
         <br />
+        <Typography variant={"h6"}>Deleting images</Typography>
+        <Typography display={"inline"}>
+          Images can be deleted from the workspace at any time by selecting
+          "Delete image" on the menu options next to the image thumbnail.
+        </Typography>
+        <br />
+        <br />
+        <Typography variant={"h6"}>Example pre-annotated images</Typography>
         <Typography display={"inline"}>
           Take a look at our pre-annotated images by clicking "Open example
           image" and selecting the image of choice!

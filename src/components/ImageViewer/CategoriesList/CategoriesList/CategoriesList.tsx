@@ -61,6 +61,8 @@ import { ImageMenu } from "../ImageMenu";
 import { DeleteAllAnnotationsDialog } from "../DeleteAllAnnotationsDialog";
 import { SaveMenu } from "../SaveMenu/SaveMenu";
 import { OpenMenu } from "../OpenMenu/OpenMenu";
+import { HelpDialog } from "../HelpDialog/HelpDialog";
+import { OpenImageHelpDialog } from "../HelpDialog/OpenImageHelpDialog";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -395,11 +397,6 @@ export const CategoriesList = () => {
   );
 };
 
-type HelpDialogProps = {
-  onClose: () => void;
-  open: boolean;
-};
-
 type SendFeedbackDialogProps = {
   onClose: () => void;
   open: boolean;
@@ -424,73 +421,35 @@ const CreateCategoryListItem = () => {
   );
 };
 
-const HelpDialog = ({ onClose, open }: HelpDialogProps) => {
-  const t = useTranslation();
-
-  return (
-    <Dialog fullWidth maxWidth="xs" onClose={onClose} open={open}>
-      <AppBar position="relative">
-        <Toolbar>
-          <Typography style={{ flexGrow: 1 }} variant="h6">
-            <DialogTitle>{t("Help")}</DialogTitle>
-          </Typography>
-
-          <IconButton onClick={onClose}>
-            <CloseIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-
-      <List>
-        <ListItem button>
-          <ListItemIcon>
-            <DescriptionIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("What’s new?")} />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon>
-            <DescriptionIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Open images")} />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon>
-            <DescriptionIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Make annotations")} />
-        </ListItem>
-
-        <ListItem button>
-          <ListItemIcon>
-            <DescriptionIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Save annotations")} />
-        </ListItem>
-      </List>
-    </Dialog>
-  );
-};
-
 const HelpListItem = () => {
   const { onClose, onOpen, open } = useDialog();
 
+  const {
+    onClose: onCloseOpenImagesHelpDialog,
+    onOpen: onOpenOpenImagesHelpDialog,
+    open: openOpenImagesHelpDialog,
+  } = useDialog();
+
   return (
-    <ListItem button onClick={onOpen}>
-      <ListItemIcon>
-        <HelpIcon />
-      </ListItemIcon>
+    <React.Fragment>
+      <ListItem button onClick={onOpen}>
+        <ListItemIcon>
+          <HelpIcon />
+        </ListItemIcon>
 
-      <ListItemText primary="Help" />
+        <ListItemText primary="Help" />
+      </ListItem>
 
-      <HelpDialog onClose={onClose} open={open} />
-    </ListItem>
+      <HelpDialog
+        onClose={onClose}
+        open={open}
+        onOpenOpenImagesHelpDialog={onOpenOpenImagesHelpDialog}
+      />
+      <OpenImageHelpDialog
+        onClose={onCloseOpenImagesHelpDialog}
+        open={openOpenImagesHelpDialog}
+      />
+    </React.Fragment>
   );
 };
 

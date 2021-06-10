@@ -2,13 +2,13 @@ import Dialog from "@material-ui/core/Dialog";
 import React from "react";
 import { ShapeType } from "../../../../types/ShapeType";
 import {
+  applicationSlice,
   setActiveImage,
-  setOperation,
-  setSelectedAnnotations,
-  setSelectedAnnotation,
   setChannels,
   setImages,
-  applicationSlice,
+  setOperation,
+  setSelectedAnnotation,
+  setSelectedAnnotations,
 } from "../../../../store";
 import { useDispatch, useSelector } from "react-redux";
 import List from "@material-ui/core/List";
@@ -21,18 +21,12 @@ import { ToolType } from "../../../../types/ToolType";
 import { ImageType } from "../../../../types/ImageType";
 import { v4 } from "uuid";
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
-import { SerializedFileType } from "../../../../types/SerializedFileType";
-import * as cellpaintingAnnotations from "../../../../images/example.png-7.json";
+import * as malariaAnnotations from "../../../../images/malaria.json";
 import { AnnotationType } from "../../../../types/AnnotationType";
 import { SerializedAnnotationType } from "../../../../types/SerializedAnnotationType";
 import { CategoryType } from "../../../../types/CategoryType";
-import {
-  categoriesSelector,
-  imageInstancesSelector,
-} from "../../../../store/selectors";
+import { categoriesSelector } from "../../../../store/selectors";
 import { importSerializedAnnotations } from "../../../../image/imageHelper";
-import { decode, encode } from "../../../../image/rle";
-import * as ImageJS from "image-js";
 
 type ExampleImageDialogProps = {
   onClose: () => void;
@@ -48,8 +42,6 @@ export const ExampleImageDialog = ({
   const images = useSelector(imagesSelector);
 
   const categories_in = useSelector(categoriesSelector);
-
-  const annotations = useSelector(imageInstancesSelector);
 
   const examples = [
     {
@@ -133,87 +125,30 @@ export const ExampleImageDialog = ({
 
     const newAnnotations: Array<AnnotationType> = [];
 
-    let newCategories: Array<CategoryType> = [];
+    let updatedCategories: Array<CategoryType> = categories_in;
 
-    console.info(cellpaintingAnnotations);
-    const foo = (cellpaintingAnnotations as any).default;
+    const project = (malariaAnnotations as any).default;
+
     //FIXME This is temporary code to convert the way we prevously saved annotations to the way we want them now
-    foo.forEach((el: any, index: number) => {
-      const serializedAnnoation: SerializedAnnotationType = {
-        annotationBoundingBoxHeight: el.annotationBoundingBoxHeight,
-        annotationBoundingBoxWidth: el.annotationBoundingBoxWidth,
-        annotationBoundingBoxX: el.annotationBoundingBoxX,
-        annotationBoundingBoxY: el.annotationBoundingBoxY,
-        annotationCategoryColor: el.annotationCategoryColor,
-        annotationCategoryId: el.annotationCategoryId,
-        annotationCategoryName: el.annotationCategoryName,
-        annotationId: el.annotationId,
-        annotationMask: el.annotationMask,
-      };
+    project[0].annotations.forEach(
+      (serializedAnnotation: SerializedAnnotationType) => {
+        const { annotation_out, categories } = importSerializedAnnotations(
+          serializedAnnotation,
+          updatedCategories
+        );
 
-      const { annotation_out, categories } = importSerializedAnnotations(
-        serializedAnnoation,
-        categories_in
-      );
+        updatedCategories = categories;
 
-      newCategories = categories;
-
-      //the issue we have is that the mask of the annotation corresponds to the whoel size image
-      // we are going to have to crop it to the bounding box because that is what the rendereing function expects
-      // then encode the image again before setting iamge instances
-
-      const mask = annotation_out.mask;
-      const fullImage = new ImageJS.Image(
-        shape.width,
-        shape.height,
-        decode(mask),
-        { components: 1, alpha: 0 }
-      );
-
-      const boundingBox = annotation_out.boundingBox;
-
-      const endX = Math.min(shape.width, boundingBox[2]);
-      const endY = Math.min(shape.height, boundingBox[3]);
-
-      //extract bounding box params
-      const boxWidth = endX - boundingBox[0];
-      const boxHeight = endY - boundingBox[1];
-      const boxX = Math.max(0, boundingBox[0]);
-      const boxY = Math.max(0, boundingBox[1]);
-
-      if (!boxWidth || !boxHeight) return;
-
-      const croppedImage = fullImage.crop({
-        x: boxX,
-        y: boxY,
-        width: boxWidth,
-        height: boxHeight,
-      });
-
-      const croppedMask = encode(Uint8Array.from(croppedImage.data));
-
-      const convertedAnnotation: AnnotationType = {
-        ...annotation_out,
-        mask: croppedMask,
-      };
-
-      newAnnotations.push(convertedAnnotation);
-    });
-
-    console.info(newAnnotations);
-    debugger;
+        newAnnotations.push(annotation_out);
+      }
+    );
 
     dispatch(
       applicationSlice.actions.setImageInstances({ instances: newAnnotations })
     );
     dispatch(
-      applicationSlice.actions.setCategories({ categories: newCategories })
+      applicationSlice.actions.setCategories({ categories: updatedCategories })
     );
-
-    //PSEUDOCODE
-    //1: Open json file
-    //2: iterate through array
-    //3 import the serialized annotation as AnnotationType
   };
 
   return (

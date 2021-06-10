@@ -74,7 +74,7 @@ export const HelpDialog = ({
             <DescriptionIcon />
           </ListItemIcon>
 
-          <ListItemText primary={t("Save annotations")} />
+          <ListItemText primary={t("Save project and export annotations")} />
         </ListItem>
       </List>
     </Dialog>

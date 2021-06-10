@@ -1,6 +1,5 @@
 import React from "react";
 import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -38,7 +37,7 @@ export const OpenImageHelpDialog = ({
       <DialogContent>
         <Typography variant={"h6"}>Opening images</Typography>
         <Typography display={"inline"}>
-          From the left menu, select "Open new image" to select one or multiple
+          In the left menu, select "Open new image" to select one or multiple
           image files to open.
         </Typography>
         <br />

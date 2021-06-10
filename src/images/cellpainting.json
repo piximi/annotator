@@ -6,7 +6,7 @@
     "imageFilename": "cell-painting.png",
     "imageFrames": 1,
     "imageHeight": 512,
-    "imageId": "9c8deb5f-15f8-421c-beb0-3f6d3f1ba604",
+    "imageId": "2c201e92-f654-4609-a562-3c63bf0755dc",
     "imagePlanes": 1,
     "imageWidth": 512,
     "annotations": [
@@ -2022,6 +2022,39 @@
         "annotationCategoryName": "Cell membrane",
         "annotationId": "47edb528-0514-454f-a3e3-468b78c6bcb1",
         "annotationMask": "37 2 109 4 107 5 107 5 106 6 105 8 104 8 104 7 104 7 105 7 104 8 104 7 104 7 105 7 105 6 106 4 42 3 62 5 42 4 61 4 43 5 60 4 43 6 58 4 44 7 57 4 44 8 56 4 44 10 54 4 44 11 52 5 44 11 52 5 45 11 51 5 45 12 50 5 45 13 49 5 45 15 47 5 45 16 46 5 46 15 46 5 46 16 45 5 47 16 44 5 47 17 43 6 47 16 43 6 47 17 42 6 47 17 42 7 46 18 41 7 46 19 40 7 46 20 39 7 46 21 38 7 46 22 37 7 46 23 36 8 45 24 35 9 43 25 35 9 43 26 34 10 41 29 32 10 41 31 29 12 38 34 24 17 36 37 19 21 34 38 16 25 31 40 9 34 26 43 8 104 5 18 5 84 4 18 8 82 4 14 13 81 4 12 16 80 3 10 20 79 2 9 25 76 1 8 30 73 1 5 36 75 43 64 49 63 51 61 52 60 53 59 54 58 55 57 56 56 57 55 59 53 61 51 62 50 63 49 64 48 67 45 97 15 99 13 101 11 103 9 105 7 107 5 109 3 110 2 111 1"
+      },
+      {
+        "annotationBoundingBoxHeight": 217,
+        "annotationBoundingBoxWidth": 255,
+        "annotationBoundingBoxX": 236,
+        "annotationBoundingBoxY": 204,
+        "annotationCategoryColor": "#b8ddf3",
+        "annotationCategoryId": "00000000-0000-0000-0000-000000000002",
+        "annotationCategoryName": "Cell nucleus",
+        "annotationId": "56914bf0-c775-4958-9462-59e4e3734e2c",
+        "annotationMask": "9 6 10 11 5 16 2 17 1 18 1 35 2 17 2 16 3 16 3 15 5 12 8 10 7"
+      },
+      {
+        "annotationBoundingBoxHeight": 512,
+        "annotationBoundingBoxWidth": 199,
+        "annotationBoundingBoxX": 184,
+        "annotationBoundingBoxY": 500,
+        "annotationCategoryColor": "#b8ddf3",
+        "annotationCategoryId": "00000000-0000-0000-0000-000000000002",
+        "annotationCategoryName": "Cell nucleus",
+        "annotationId": "f4fb6076-8781-4cd1-b7fc-1522b964ff75",
+        "annotationMask": "1 6 8 8 7 8 7 9 6 10 5 11 5 11 4 11 5 11 4 11 5 11 4 11 1"
+      },
+      {
+        "annotationBoundingBoxHeight": 19,
+        "annotationBoundingBoxWidth": 154,
+        "annotationBoundingBoxX": 81,
+        "annotationBoundingBoxY": 0,
+        "annotationCategoryColor": "#a08cd2",
+        "annotationCategoryId": "00000000-0000-0000-0000-000000000001",
+        "annotationCategoryName": "Cell membrane",
+        "annotationId": "b1d503ea-51ed-4982-8163-3fab4435cf93",
+        "annotationMask": "1 71 3 71 2 71 3 23 6 41 5 20 9 39 6 18 12 37 7 16 15 35 8 15 18 32 10 12 19 32 11 11 20 31 12 9 22 30 13 8 25 27 14 8 28 22 16 7 31 19 17 6 32 17 19 5 33 15 21 4 33 5 1 9 59 4 2 6 63 2 4 4 5"
       }
     ]
   }

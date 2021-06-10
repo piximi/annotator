@@ -6,13 +6,8 @@ import {
   categoriesSelector,
   imageInstancesSelector,
 } from "../../../../store/selectors";
-import { decode } from "../../../../image/rle";
-import * as ImageJS from "image-js";
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
-import { ImageType } from "../../../../types/ImageType";
-import { AnnotationType } from "../../../../types/AnnotationType";
 import JSZip from "jszip";
-import { CategoryType } from "../../../../types/CategoryType";
 import { saveAs } from "file-saver";
 import { saveAnnotationsAsMasks } from "../../../../image/imageHelper";
 

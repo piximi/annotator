@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as ImageJS from "image-js";
 import { AnnotationType } from "../types/AnnotationType";
-import { decode, encode } from "./rle";
+import { decode } from "./rle";
 import { isoLines } from "marchingsquares";
 import { CategoryType } from "../types/CategoryType";
 import { ImageType } from "../types/ImageType";
@@ -267,10 +267,14 @@ export const saveAnnotationsAsMasks = (
 
           const decoded = decode(encoded);
 
-          const boundingBoxWidth =
-            annotation.boundingBox[2] - annotation.boundingBox[0];
-          const boundingBoxHeight =
-            annotation.boundingBox[3] - annotation.boundingBox[1];
+          const boundingBox = annotation.boundingBox;
+
+          const endX = Math.min(current.shape.width, boundingBox[2]);
+          const endY = Math.min(current.shape.height, boundingBox[3]);
+
+          //extract bounding box params
+          const boundingBoxWidth = endX - boundingBox[0];
+          const boundingBoxHeight = endY - boundingBox[1];
 
           const roiMask = new ImageJS.Image(
             boundingBoxWidth,

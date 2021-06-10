@@ -22,6 +22,7 @@ import { ImageType } from "../../../../types/ImageType";
 import { v4 } from "uuid";
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 import * as malariaAnnotations from "../../../../images/malaria.json";
+import * as cellpaintingAnnotations from "../../../../images/cellpainting.json";
 import { AnnotationType } from "../../../../types/AnnotationType";
 import { SerializedAnnotationType } from "../../../../types/SerializedAnnotationType";
 import { CategoryType } from "../../../../types/CategoryType";
@@ -49,6 +50,7 @@ export const ExampleImageDialog = ({
       description:
         "Blood cells infected by malaria and stained with Giemsa reagent. Image from the Broad Bioimage Benchmark Collection, image set BBBC041v1.",
       data: malaria,
+      project: (malariaAnnotations as any).default,
       shape: {
         channels: 3,
         frames: 1,
@@ -62,6 +64,7 @@ export const ExampleImageDialog = ({
       description:
         "Help: can someome provide a one sentence description for this image?",
       data: cellpainting,
+      project: (cellpaintingAnnotations as any).default,
       shape: {
         channels: 3,
         frames: 1,
@@ -77,10 +80,12 @@ export const ExampleImageDialog = ({
     description,
     name,
     shape,
+    project,
   }: {
     data: any;
     description: string;
     name: string;
+    project: any;
     shape: ShapeType;
   }) => {
     onClose();
@@ -127,9 +132,6 @@ export const ExampleImageDialog = ({
 
     let updatedCategories: Array<CategoryType> = categories_in;
 
-    const project = (malariaAnnotations as any).default;
-
-    //FIXME This is temporary code to convert the way we prevously saved annotations to the way we want them now
     project[0].annotations.forEach(
       (serializedAnnotation: SerializedAnnotationType) => {
         const { annotation_out, categories } = importSerializedAnnotations(

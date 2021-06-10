@@ -20,7 +20,7 @@ export const OpenImageHelpDialog = ({
     <Dialog
       disableBackdropClick={true}
       fullWidth
-      maxWidth="md"
+      maxWidth="sm"
       onClose={onClose}
       open={open}
     >
@@ -36,7 +36,34 @@ export const OpenImageHelpDialog = ({
         </Toolbar>
       </AppBar>
       <DialogContent>
-        <DialogContentText>Text text</DialogContentText>
+        <Typography display={"inline"}>
+          From the left menu, select "Open new image" to select one or multiple
+          images to open.
+        </Typography>
+        <br />
+        <br />
+        <Typography display={"inline"}>
+          Alternatively, drag and drop the desired image files directly onto the
+          canvas.
+        </Typography>
+        <br />
+        <br />
+        <Typography display={"inline"}>
+          Images can be deleted from the workspace at any time by selecting
+          "Delete image" on the menu options next to the image thumbnail.
+        </Typography>
+        <br />
+        <br />
+        <Typography display={"inline"}>
+          Note that we currently only support 1-channel (grayscale) or 3-channel
+          two-dimensional images.
+        </Typography>
+        <br />
+        <br />
+        <Typography display={"inline"}>
+          Take a look at our pre-annotated images by clicking "Open example
+          image" and selecting the image of choice!
+        </Typography>
       </DialogContent>
     </Dialog>
   );

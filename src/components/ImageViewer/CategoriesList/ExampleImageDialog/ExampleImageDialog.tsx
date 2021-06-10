@@ -139,7 +139,6 @@ export const ExampleImageDialog = ({
     const foo = (cellpaintingAnnotations as any).default;
     //FIXME This is temporary code to convert the way we prevously saved annotations to the way we want them now
     foo.forEach((el: any, index: number) => {
-      console.info(el);
       const serializedAnnoation: SerializedAnnotationType = {
         annotationBoundingBoxHeight: el.annotationBoundingBoxHeight,
         annotationBoundingBoxWidth: el.annotationBoundingBoxWidth,
@@ -182,6 +181,8 @@ export const ExampleImageDialog = ({
       const boxX = Math.max(0, boundingBox[0]);
       const boxY = Math.max(0, boundingBox[1]);
 
+      if (!boxWidth || !boxHeight) return;
+
       const croppedImage = fullImage.crop({
         x: boxX,
         y: boxY,
@@ -196,12 +197,11 @@ export const ExampleImageDialog = ({
         mask: croppedMask,
       };
 
-      if (index === 0) {
-        debugger;
-      }
-
       newAnnotations.push(convertedAnnotation);
     });
+
+    console.info(newAnnotations);
+    debugger;
 
     dispatch(
       applicationSlice.actions.setImageInstances({ instances: newAnnotations })

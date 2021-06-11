@@ -1,7 +1,7 @@
 import Drawer from "@material-ui/core/Drawer";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import React from "react";
+import React, { useState } from "react";
 import { CategoryType } from "../../../../types/CategoryType";
 import {
   categoryCountsSelector,
@@ -397,6 +397,7 @@ export const CategoriesList = () => {
 type SendFeedbackDialogProps = {
   onClose: () => void;
   open: boolean;
+  onSend: (text: string) => void;
 };
 
 const CreateCategoryListItem = () => {
@@ -537,8 +538,19 @@ const SaveListItem = () => {
   );
 };
 
-const SendFeedbackDialog = ({ onClose, open }: SendFeedbackDialogProps) => {
+const SendFeedbackDialog = ({
+  onClose,
+  open,
+  onSend,
+}: SendFeedbackDialogProps) => {
   const t = useTranslation();
+
+  const [input, setInput] = useState("");
+
+  const send = () => {
+    onSend(input);
+    onClose();
+  };
 
   return (
     <Dialog onClose={onClose} open={open}>
@@ -546,14 +558,14 @@ const SendFeedbackDialog = ({ onClose, open }: SendFeedbackDialogProps) => {
 
       <DialogContent>
         <DialogContentText>
-          Vestibulum eu vestibulum nibh, quis commodo sapien. Donec a sem nec
-          augue rutrum tristique. Nam pretium nec dui in sagittis.
+          {t("Use this form to report issues with Piximi via our GitHub page")}.
         </DialogContentText>
 
         <TextField
           autoFocus
           margin="dense"
           id="feedback"
+          onChange={(e) => setInput(e.target.value)}
           multiline
           rows={12}
           fullWidth
@@ -566,7 +578,7 @@ const SendFeedbackDialog = ({ onClose, open }: SendFeedbackDialogProps) => {
           Cancel
         </Button>
 
-        <Button onClick={onClose} color="primary">
+        <Button onClick={send} color="primary">
           Send feedback
         </Button>
       </DialogActions>
@@ -576,6 +588,13 @@ const SendFeedbackDialog = ({ onClose, open }: SendFeedbackDialogProps) => {
 
 const SendFeedbackListItem = () => {
   const { onClose, onOpen, open } = useDialog();
+
+  const onSend = (text: string) => {
+    const url =
+      "https://github.com/piximi/image-viewer/issues/new?title=Bug%20Report&labels=bug&body=" +
+      encodeURIComponent(text);
+    window.open(url);
+  };
 
   const t = useTranslation();
 
@@ -588,7 +607,7 @@ const SendFeedbackListItem = () => {
 
         <ListItemText primary={t("Send feedback")} />
       </ListItem>
-      <SendFeedbackDialog onClose={onClose} open={open} />
+      <SendFeedbackDialog onClose={onClose} open={open} onSend={onSend} />
     </React.Fragment>
   );
 };

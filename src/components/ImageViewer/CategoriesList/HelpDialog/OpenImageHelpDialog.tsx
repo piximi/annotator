@@ -26,7 +26,7 @@ export const OpenImageHelpDialog = ({
       <AppBar position="relative">
         <Toolbar>
           <Typography style={{ flexGrow: 1 }} variant="h6">
-            <DialogTitle>{"Open images"}</DialogTitle>
+            <DialogTitle>{"Opening images"}</DialogTitle>
           </Typography>
 
           <IconButton onClick={onClose}>
@@ -35,7 +35,7 @@ export const OpenImageHelpDialog = ({
         </Toolbar>
       </AppBar>
       <DialogContent>
-        <Typography variant={"h5"}>Opening images</Typography>
+        <Typography variant={"h6"}>Opening images</Typography>
         <Typography>
           In the left menu, select "Open new image" to select one or multiple
           image files to open.
@@ -51,13 +51,13 @@ export const OpenImageHelpDialog = ({
           two-dimensional images.
         </Typography>
         <br />
-        <Typography variant={"h5"}>Deleting images</Typography>
+        <Typography variant={"h6"}>Deleting images</Typography>
         <Typography>
           Images can be deleted from the workspace at any time by selecting
           "Delete image" on the menu options next to the image thumbnail.
         </Typography>
         <br />
-        <Typography variant={"h5"}>Example pre-annotated images</Typography>
+        <Typography variant={"h6"}>Example pre-annotated images</Typography>
         <Typography>
           Take a look at our pre-annotated images by clicking "Open example
           image" and selecting the image of choice!

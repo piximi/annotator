@@ -61,15 +61,7 @@ export const HelpDialog = ({
             <DescriptionIcon />
           </ListItemIcon>
 
-          <ListItemText primary={t("Open images")} />
-        </ListItem>
-
-        <ListItem button onClick={onMakeAnnotationsHelpClick}>
-          <ListItemIcon>
-            <DescriptionIcon />
-          </ListItemIcon>
-
-          <ListItemText primary={t("Make annotations")} />
+          <ListItemText primary={t("Opening images")} />
         </ListItem>
 
         <ListItem button>
@@ -77,7 +69,23 @@ export const HelpDialog = ({
             <DescriptionIcon />
           </ListItemIcon>
 
-          <ListItemText primary={t("Change annotations")} />
+          <ListItemText primary={t("Manipulating images")} />
+        </ListItem>
+
+        <ListItem button onClick={onMakeAnnotationsHelpClick}>
+          <ListItemIcon>
+            <DescriptionIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Making annotations")} />
+        </ListItem>
+
+        <ListItem button>
+          <ListItemIcon>
+            <DescriptionIcon />
+          </ListItemIcon>
+
+          <ListItemText primary={t("Changing annotations")} />
         </ListItem>
 
         <ListItem button>

@@ -26,7 +26,7 @@ export const MakeAnnotationsHelpDialog = ({
       <AppBar position="relative">
         <Toolbar>
           <Typography style={{ flexGrow: 1 }} variant="h6">
-            <DialogTitle>{"Make annotations"}</DialogTitle>
+            <DialogTitle>{"Making annotations"}</DialogTitle>
           </Typography>
 
           <IconButton onClick={onClose}>
@@ -43,52 +43,66 @@ export const MakeAnnotationsHelpDialog = ({
           the tool.
         </Typography>
         <br />
+        <Typography>
+          Once you an annotation is completed, press "Enter" on your keyboard or
+          click on "confirm".
+        </Typography>
+        <br />
+        <Typography>
+          To undo an unconfirmed annotation, press "Escape" on your keyboard or
+          click on "cancel".
+        </Typography>
+        <br />
         <Typography variant={"h6"}>Rectangular annotation (r)</Typography>
         <Typography>
           Click and drag to start drawing a rectangular annotation (bounding
-          box). Release to close the annotation."
+          box). Release to close the annotation.
         </Typography>
         <br />
         <Typography variant={"h6"}>Elliptical annotation (e)</Typography>
         <Typography>
           Click and drag to start drawing an elliptical annotation. Release to
-          close the annotation."
+          close the annotation.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Rectangular annotation (r)</Typography>
+        <Typography variant={"h6"}>Pen annotation (d)</Typography>
         <Typography>
-          Click and drag to start drawing a rectangular annotation (bounding
-          box). Release to close the annotation."
+          Select desired brush size using the brush size slider. Draw over
+          pixels by clicking and dragging over the desired area. Release to
+          close the annotation.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Rectangular annotation (r)</Typography>
+        <Typography variant={"h6"}>Lasso annotation (l)</Typography>
         <Typography>
-          Click and drag to start drawing a rectangular annotation (bounding
-          box). Release to close the annotation."
+          Click and drag cursor around the desired region. Release to
+          automatically close the lasso annotation.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Rectangular annotation (r)</Typography>
+        <Typography variant={"h6"}>Polygonal annotation (p)</Typography>
         <Typography>
-          Click and drag to start drawing a rectangular annotation (bounding
-          box). Release to close the annotation."
+          Click and release to create new anchor points. Close the polygonal
+          annotation either by clicking on its origin point or by hitting enter
+          on your keyboard.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Rectangular annotation (r)</Typography>
+        <Typography variant={"h6"}>Magnetic annotation (m)</Typography>
         <Typography>
-          Click and drag to start drawing a rectangular annotation (bounding
-          box). Release to close the annotation."
+          Click and release to create new anchor points. The tool will
+          automatically snap onto the edges of an object. Close the magnetic
+          annotation by clicking on its origin point.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Rectangular annotation (r)</Typography>
+        <Typography variant={"h6"}>Color annotation (c)</Typography>
         <Typography>
-          Click and drag to start drawing a rectangular annotation (bounding
-          box). Release to close the annotation."
+          Click on a pixel with the color of interest, hold and drag outwards to
+          select a region of similar color intensities near the point. Release
+          to finish the annotation.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Rectangular annotation (r)</Typography>
+        <Typography variant={"h6"}>Quick annotation (q)</Typography>
         <Typography>
-          Click and drag to start drawing a rectangular annotation (bounding
-          box). Release to close the annotation."
+          Click and drag to select a region of superpixels. Release to finish
+          the annotation.
         </Typography>
         <br />
       </DialogContent>

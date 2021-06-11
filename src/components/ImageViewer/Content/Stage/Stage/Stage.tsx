@@ -199,7 +199,8 @@ export const Stage = () => {
     if (!selectedAnnotation || !selectedAnnotation.mask) return;
 
     const [invertedMask, invertedBoundingBox] = annotationTool.invert(
-      selectedAnnotation.mask
+      selectedAnnotation.mask,
+      selectedAnnotation.boundingBox
     );
 
     dispatch(

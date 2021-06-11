@@ -220,44 +220,66 @@ export abstract class AnnotationTool extends Tool {
    * Invert selected mask and compute inverted bounding box coordinates
    * */
   invert(
-    selectedMask: Array<number>
+    selectedMask: Array<number>,
+    selectedBoundingBox: [number, number, number, number]
   ): [Array<number>, [number, number, number, number]] {
-    const mask = Array.from(decode(selectedMask));
+    const mask = decode(selectedMask);
 
     const imageWidth = this.image.width;
     const imageHeight = this.image.height;
 
     //find min and max boundary points when computing the mask
-    const boundingbox: [number, number, number, number] = [
+    const invertedBoundingBox: [number, number, number, number] = [
       imageWidth,
       imageHeight,
       0,
       0,
     ];
 
-    mask.forEach((currentValue: number, index: number) => {
-      if (currentValue === 255) {
-        mask[index] = 0;
-      } else {
-        mask[index] = 255;
-        const x = index % imageWidth;
-        const y = Math.floor(index / imageWidth);
-        if (x < boundingbox[0]) {
-          boundingbox[0] = x;
-        } else if (x > boundingbox[2]) {
-          boundingbox[2] = x;
+    const invertedMask = new ImageJS.Image(imageWidth, imageHeight, {
+      components: 1,
+      alpha: 0,
+    });
+    for (let x = 0; x < imageWidth; x++) {
+      for (let y = 0; y < imageHeight; y++) {
+        const x_mask = x - selectedBoundingBox[0];
+        const y_mask = y - selectedBoundingBox[1];
+        const value =
+          mask[
+            x_mask + y_mask * (selectedBoundingBox[2] - selectedBoundingBox[0])
+          ];
+        if (
+          value > 0 &&
+          this.inBoundingBox(x_mask, y_mask, selectedBoundingBox)
+        ) {
+          invertedMask.setPixelXY(x, y, [0]);
+        } else {
+          invertedMask.setPixelXY(x, y, [255]);
+          if (x < invertedBoundingBox[0]) {
+            invertedBoundingBox[0] = x;
+          } else if (x > invertedBoundingBox[2]) {
+            invertedBoundingBox[2] = x + 1;
+          }
+          if (y < invertedBoundingBox[1]) {
+            invertedBoundingBox[1] = y;
+          } else if (y > invertedBoundingBox[3]) {
+          }
+          invertedBoundingBox[3] = y + 1;
         }
-        if (y < boundingbox[1]) {
-          boundingbox[1] = y;
-        } else if (y > boundingbox[3]) {
-        }
-        boundingbox[3] = y;
       }
+    }
+
+    //now crop the mask using the new bounding box
+    const croppedInvertedMask = invertedMask.crop({
+      x: invertedBoundingBox[0],
+      y: invertedBoundingBox[1],
+      width: invertedBoundingBox[2] - invertedBoundingBox[0],
+      height: invertedBoundingBox[3] - invertedBoundingBox[1],
     });
 
-    const invertedmask = encode(Uint8Array.from(mask));
+    const invertedmaskData = encode(Uint8Array.from(croppedInvertedMask.data));
 
-    return [invertedmask, boundingbox];
+    return [invertedmaskData, invertedBoundingBox];
   }
 
   /*

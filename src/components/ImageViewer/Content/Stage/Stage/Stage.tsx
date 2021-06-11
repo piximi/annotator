@@ -174,11 +174,6 @@ export const Stage = () => {
 
   const deselectAllAnnotations = () => {
     dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
   };
 
   const deselectAnnotation = () => {
@@ -491,11 +486,6 @@ export const Stage = () => {
         }
 
         if (selectionMode === AnnotationModeType.New) {
-          dispatch(
-            applicationSlice.actions.setSelectedAnnotation({
-              selectedAnnotation: undefined,
-            })
-          );
           dispatch(
             applicationSlice.actions.setSelectedAnnotations({
               selectedAnnotations: [],

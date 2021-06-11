@@ -431,6 +431,9 @@ export const applicationSlice = createSlice({
       action: PayloadAction<{ selectedAnnotations: Array<AnnotationType> }>
     ) {
       state.selectedAnnotations = action.payload.selectedAnnotations;
+      if (action.payload.selectedAnnotations.length === 0) {
+        state.selectedAnnotation = undefined;
+      }
     },
     setSelectionMode(
       state: StateType,

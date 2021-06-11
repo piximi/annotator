@@ -58,12 +58,6 @@ export const OpenProjectFileMenuItem = ({
               );
 
               dispatch(
-                setSelectedAnnotation({
-                  selectedAnnotation: undefined,
-                })
-              );
-
-              dispatch(
                 setOperation({ operation: ToolType.RectangularAnnotation })
               );
             }

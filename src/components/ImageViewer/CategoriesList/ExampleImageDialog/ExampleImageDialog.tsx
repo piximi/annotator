@@ -116,12 +116,6 @@ export const ExampleImageDialog = ({
       })
     );
 
-    dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
-
     let channels: Array<ChannelType> = [];
     for (let i = 0; i < shape.channels; i++) {
       channels.push({ visible: true, range: [0, 255] });

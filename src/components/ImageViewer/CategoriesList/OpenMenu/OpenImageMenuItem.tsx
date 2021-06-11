@@ -73,12 +73,6 @@ export const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
                   selectedAnnotations: [],
                 })
               );
-
-              dispatch(
-                setSelectedAnnotation({
-                  selectedAnnotation: undefined,
-                })
-              );
             }
           });
         });

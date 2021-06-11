@@ -109,12 +109,6 @@ export const ImageViewer = (props: ImageViewerProps) => {
                 );
 
                 dispatch(
-                  setSelectedAnnotation({
-                    selectedAnnotation: undefined,
-                  })
-                );
-
-                dispatch(
                   setOperation({ operation: ToolType.RectangularAnnotation })
                 );
               }

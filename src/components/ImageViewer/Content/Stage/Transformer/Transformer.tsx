@@ -349,11 +349,6 @@ export const Transformer = ({
       })
     );
     dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
     if (soundEnabled) playCreateAnnotationSoundEffect();
   };
 
@@ -363,11 +358,6 @@ export const Transformer = ({
     const container = event.target.getStage()!.container();
     container.style.cursor = cursor.cursor!;
     dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
     if (soundEnabled) playDeleteAnnotationSoundEffect();
   };
 

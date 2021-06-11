@@ -169,11 +169,6 @@ export const CategoriesList = () => {
       })
     );
     dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
-    dispatch(
       applicationSlice.actions.setSelectedAnnotations({
         selectedAnnotations: [],
       })
@@ -185,11 +180,7 @@ export const CategoriesList = () => {
     image: ImageType
   ) => {
     dispatch(setActiveImage({ image: image.id }));
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
-        selectedAnnotation: undefined,
-      })
-    );
+
     dispatch(
       applicationSlice.actions.setSelectedAnnotations({
         selectedAnnotations: [],

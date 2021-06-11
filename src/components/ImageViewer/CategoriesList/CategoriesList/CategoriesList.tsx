@@ -63,6 +63,7 @@ import { SaveMenu } from "../SaveMenu/SaveMenu";
 import { OpenMenu } from "../OpenMenu/OpenMenu";
 import { HelpDialog } from "../HelpDialog/HelpDialog";
 import { OpenImageHelpDialog } from "../HelpDialog/OpenImageHelpDialog";
+import { MakeAnnotationsHelpDialog } from "../HelpDialog/MakeAnnotationsHelpDialog";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -430,6 +431,12 @@ const HelpListItem = () => {
     open: openOpenImagesHelpDialog,
   } = useDialog();
 
+  const {
+    onClose: onCloseMakeAnnotationsHelpDialog,
+    onOpen: onOpenMakeAnnotationsHelpDialog,
+    open: openMakeAnnotationsHelpDialog,
+  } = useDialog();
+
   return (
     <React.Fragment>
       <ListItem button onClick={onOpen}>
@@ -444,10 +451,15 @@ const HelpListItem = () => {
         onClose={onClose}
         open={open}
         onOpenOpenImagesHelpDialog={onOpenOpenImagesHelpDialog}
+        onOpenMakeAnnotationsHelpDialog={onOpenMakeAnnotationsHelpDialog}
       />
       <OpenImageHelpDialog
         onClose={onCloseOpenImagesHelpDialog}
         open={openOpenImagesHelpDialog}
+      />
+      <MakeAnnotationsHelpDialog
+        onClose={onCloseMakeAnnotationsHelpDialog}
+        open={openMakeAnnotationsHelpDialog}
       />
     </React.Fragment>
   );

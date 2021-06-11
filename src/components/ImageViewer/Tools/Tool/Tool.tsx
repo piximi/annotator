@@ -35,44 +35,44 @@ export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
 
   switch (name) {
     case "Pointer":
-      description = "Select annotations (S)";
+      description = "Select annotations (s)";
       break;
     case "Rectangular annotation":
-      description = "Rectangular annotation (R)";
+      description = "Rectangular annotation (r)";
       break;
     case "Elliptical annotation":
-      description = "Elliptical annotation (E)";
+      description = "Elliptical annotation (e)";
       break;
     case "Freehand annotation":
-      description = "Pen annotation (D)";
+      description = "Pen annotation (d)";
       break;
     case "Lasso annotation (L)":
-      description = "Lasso annotation (L)";
+      description = "Lasso annotation (l)";
       break;
     case "Polygonal annotation":
-      description = "Polygonal annotation (P)";
+      description = "Polygonal annotation (p)";
       break;
     case "Magnetic annotation":
-      description = "Magnetic annotation (M)";
+      description = "Magnetic annotation (m)";
       break;
     case "Color annotation":
-      description = "Color annotation (C)";
+      description = "Color annotation (c)";
       break;
     case "Quick annotation":
-      description = "Quick annotation (Q)";
+      description = "Quick annotation (q)";
       break;
     case "Object annotation":
       description =
         "Select a rectangular annotation around a desired object to automatically generate its boundaries.";
       break;
     case "Hand":
-      description = "Hand tool (H)";
+      description = "Hand tool (h)";
       break;
     case "Zoom":
-      description = "Zoom tool (Z)";
+      description = "Zoom tool (z)";
       break;
     case "Color Adjustment":
-      description = "Intensity adjustment (I)";
+      description = "Intensity adjustment (i)";
       break;
     default:
       description = "";

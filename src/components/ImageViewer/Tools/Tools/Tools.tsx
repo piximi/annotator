@@ -82,6 +82,8 @@ export const Tools = () => {
         <ColorAdjustmentIcon />
       </Tool>
 
+      <br />
+
       <Tool
         name={t("Pointer")}
         onClick={() => {

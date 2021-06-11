@@ -17,6 +17,7 @@ type HelpDialogProps = {
   open: boolean;
   onOpenOpenImagesHelpDialog: () => void;
   onOpenMakeAnnotationsHelpDialog: () => void;
+  onOpenManipulatingCanvasHelpDialog: () => void;
 };
 
 export const HelpDialog = ({
@@ -24,16 +25,9 @@ export const HelpDialog = ({
   open,
   onOpenOpenImagesHelpDialog,
   onOpenMakeAnnotationsHelpDialog,
+  onOpenManipulatingCanvasHelpDialog,
 }: HelpDialogProps) => {
   const t = useTranslation();
-
-  const onOpenImagesHelpClick = () => {
-    onOpenOpenImagesHelpDialog();
-  };
-
-  const onMakeAnnotationsHelpClick = () => {
-    onOpenMakeAnnotationsHelpDialog();
-  };
 
   return (
     <Dialog
@@ -56,7 +50,7 @@ export const HelpDialog = ({
       </AppBar>
 
       <List>
-        <ListItem button onClick={onOpenImagesHelpClick}>
+        <ListItem button onClick={onOpenOpenImagesHelpDialog}>
           <ListItemIcon>
             <DescriptionIcon />
           </ListItemIcon>
@@ -64,15 +58,15 @@ export const HelpDialog = ({
           <ListItemText primary={t("Opening images")} />
         </ListItem>
 
-        <ListItem button>
+        <ListItem button onClick={onOpenManipulatingCanvasHelpDialog}>
           <ListItemIcon>
             <DescriptionIcon />
           </ListItemIcon>
 
-          <ListItemText primary={t("Manipulating images")} />
+          <ListItemText primary={t("Manipulating the canvas")} />
         </ListItem>
 
-        <ListItem button onClick={onMakeAnnotationsHelpClick}>
+        <ListItem button onClick={onOpenMakeAnnotationsHelpDialog}>
           <ListItemIcon>
             <DescriptionIcon />
           </ListItemIcon>

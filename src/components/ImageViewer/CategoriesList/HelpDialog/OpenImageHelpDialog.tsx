@@ -35,6 +35,7 @@ export const OpenImageHelpDialog = ({
         </Toolbar>
       </AppBar>
       <DialogContent>
+        <br />
         <Typography variant={"h6"}>Opening images</Typography>
         <Typography>
           In the left menu, select "Open new image" to select one or multiple
@@ -62,6 +63,7 @@ export const OpenImageHelpDialog = ({
           Take a look at our pre-annotated images by clicking "Open example
           image" and selecting the image of choice!
         </Typography>
+        <br />
       </DialogContent>
     </Dialog>
   );

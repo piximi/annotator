@@ -330,10 +330,7 @@ export const ZoomOptions = () => {
           />
         </ListItemIcon>
 
-        <ListItemText
-          primary={t("Auto-center")}
-          secondary={t("Keep the image centered")}
-        />
+        <ListItemText primary={t("Automatically zoom towards the center")} />
       </ListItem>
 
       <Divider />

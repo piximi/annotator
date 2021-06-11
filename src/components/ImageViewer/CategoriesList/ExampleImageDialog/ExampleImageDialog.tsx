@@ -62,7 +62,9 @@ export const ExampleImageDialog = ({
     {
       name: "cell-painting.png",
       description:
-        "Help: can someome provide a one sentence description for this image?",
+        "U2OS cells treated with an RNAi reagent (https://iwww.broadinstitute.org/rnai/db/clone/details?cloneId=TRCN0000195467) and stained for a " +
+        "cell-painting experiment (Merged; red: Actin, Golgi, and Plasma membrane stained via phalloidin and wheat germ agglutinin; " +
+        "blue: DNA stained via Hoechst; green: mitochondria stained via MitoTracker).",
       data: cellpainting,
       project: (cellpaintingAnnotations as any).default,
       shape: {

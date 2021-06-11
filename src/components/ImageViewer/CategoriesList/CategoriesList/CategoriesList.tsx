@@ -64,6 +64,7 @@ import { OpenMenu } from "../OpenMenu/OpenMenu";
 import { HelpDialog } from "../HelpDialog/HelpDialog";
 import { OpenImageHelpDialog } from "../HelpDialog/OpenImageHelpDialog";
 import { MakeAnnotationsHelpDialog } from "../HelpDialog/MakeAnnotationsHelpDialog";
+import { ManipulateCanvasHelpDialog } from "../HelpDialog/ManipulateCanvasHelpDialog";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -432,6 +433,12 @@ const HelpListItem = () => {
   } = useDialog();
 
   const {
+    onClose: onCloseManipulatingCanvasHelpDialog,
+    onOpen: onOpenManipulatingCanvasHelpDialog,
+    open: openManipulatingCanvasHelpDialog,
+  } = useDialog();
+
+  const {
     onClose: onCloseMakeAnnotationsHelpDialog,
     onOpen: onOpenMakeAnnotationsHelpDialog,
     open: openMakeAnnotationsHelpDialog,
@@ -452,6 +459,7 @@ const HelpListItem = () => {
         open={open}
         onOpenOpenImagesHelpDialog={onOpenOpenImagesHelpDialog}
         onOpenMakeAnnotationsHelpDialog={onOpenMakeAnnotationsHelpDialog}
+        onOpenManipulatingCanvasHelpDialog={onOpenManipulatingCanvasHelpDialog}
       />
       <OpenImageHelpDialog
         onClose={onCloseOpenImagesHelpDialog}
@@ -460,6 +468,10 @@ const HelpListItem = () => {
       <MakeAnnotationsHelpDialog
         onClose={onCloseMakeAnnotationsHelpDialog}
         open={openMakeAnnotationsHelpDialog}
+      />
+      <ManipulateCanvasHelpDialog
+        onClose={onCloseManipulatingCanvasHelpDialog}
+        open={openManipulatingCanvasHelpDialog}
       />
     </React.Fragment>
   );

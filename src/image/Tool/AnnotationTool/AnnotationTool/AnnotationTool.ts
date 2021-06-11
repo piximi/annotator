@@ -263,8 +263,8 @@ export abstract class AnnotationTool extends Tool {
           if (y < invertedBoundingBox[1]) {
             invertedBoundingBox[1] = y;
           } else if (y > invertedBoundingBox[3]) {
+            invertedBoundingBox[3] = y + 1;
           }
-          invertedBoundingBox[3] = y + 1;
         }
       }
     }

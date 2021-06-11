@@ -4,9 +4,9 @@ import { ImageType } from "../../types/ImageType";
 export const imageSrcSelector = ({ state }: { state: HistoryStateType }) => {
   if (!state.present.images.length) return;
 
-  const image = state.present.images.filter((image: ImageType) => {
+  const image = state.present.images.find((image: ImageType) => {
     return image.id === state.present.activeImageId;
-  })[0];
+  });
 
   if (!image) return;
 

@@ -221,7 +221,7 @@ export const usePointer = () => {
       imageHeight
     );
 
-    let currentAnnotation: AnnotationType;
+    let currentAnnotation: AnnotationType | undefined;
 
     if (overlappingAnnotationsIds.length > 1) {
       dispatch(
@@ -234,13 +234,13 @@ export const usePointer = () => {
       );
       const nextAnnotationId = overlappingAnnotationsIds[currentIndex];
 
-      currentAnnotation = annotations.filter((annotation: AnnotationType) => {
+      currentAnnotation = annotations.find((annotation: AnnotationType) => {
         return annotation.id === nextAnnotationId;
-      })[0];
+      });
     } else {
-      currentAnnotation = annotations.filter((annotation: AnnotationType) => {
+      currentAnnotation = annotations.find((annotation: AnnotationType) => {
         return annotation.id === overlappingAnnotationsIds[0];
-      })[0];
+      });
       dispatch(
         applicationSlice.actions.setCurrentIndex({
           currentIndex: 0,

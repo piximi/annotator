@@ -12,9 +12,9 @@ export const activeSerializedAnnotationsSelector = ({
 }): SerializedFileType | undefined => {
   if (!state.present.images.length) return undefined;
 
-  const image = state.present.images.filter((image: ImageType) => {
+  const image = state.present.images.find((image: ImageType) => {
     return image.id === state.present.activeImageId;
-  })[0];
+  });
 
   if (!image) return undefined;
 

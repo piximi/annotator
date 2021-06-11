@@ -309,23 +309,21 @@ export const Transformer = ({
   };
 
   const onTransformStart = () => {
+    const selected = selectedAnnotations.find((annotation: AnnotationType) => {
+      return annotation.id === annotationId;
+    });
+
+    if (!selected) return;
+
     dispatch(
       setSelectedAnnotation({
-        selectedAnnotation: selectedAnnotations.filter(
-          (annotation: AnnotationType) => {
-            return annotation.id === annotationId;
-          }
-        )[0],
+        selectedAnnotation: selected,
       })
     );
 
     dispatch(
       setSelectedAnnotations({
-        selectedAnnotations: [
-          selectedAnnotations.filter((annotation: AnnotationType) => {
-            return annotation.id === annotationId;
-          })[0],
-        ],
+        selectedAnnotations: [selected],
       })
     );
   };

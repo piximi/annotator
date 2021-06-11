@@ -319,9 +319,13 @@ export const saveAnnotationsAsMasks = (
 
           if (!ctx) return;
 
-          const categoryName = categories.filter((category: CategoryType) => {
+          const category = categories.find((category: CategoryType) => {
             return category.id === annotation.categoryId;
-          })[0].name;
+          });
+
+          if (!category) return;
+
+          const categoryName = category.name;
 
           zip.folder(`${current.name}/${categoryName}`);
 

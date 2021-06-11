@@ -3,21 +3,13 @@ import React, { useRef, useState } from "react";
 import * as _ from "lodash";
 import { AnnotationType } from "../../../../../types/AnnotationType";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  imageInstancesSelector,
-  imageSelector,
-  stageScaleSelector,
-} from "../../../../../store/selectors";
+import { stageScaleSelector } from "../../../../../store/selectors";
 import {
   applicationSlice,
   setSelectedAnnotations,
-  setSelectedAnnotation,
 } from "../../../../../store/slices";
 import Konva from "konva";
 import { selectedAnnotationSelector } from "../../../../../store/selectors/selectedAnnotationSelector";
-import { connectPoints } from "../../../../../image/imageHelper";
-import { simplify } from "../../../../../image/simplify/simplify";
-import { slpf } from "../../../../../image/polygon-fill/slpf";
 import { decode, encode } from "../../../../../image/rle";
 import * as ImageJS from "image-js";
 import { selectedAnnotationsSelector } from "../../../../../store/selectors/selectedAnnotationsSelector";
@@ -213,7 +205,8 @@ export const Transformer = ({
     };
 
     dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
+      applicationSlice.actions.setSelectedAnnotations({
+        selectedAnnotations: [],
         selectedAnnotation: undefined,
       })
     );
@@ -228,11 +221,6 @@ export const Transformer = ({
     dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [updatedAnnotation],
-      })
-    );
-
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: updatedAnnotation,
       })
     );
@@ -316,14 +304,9 @@ export const Transformer = ({
     if (!selected) return;
 
     dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: selected,
-      })
-    );
-
-    dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [selected],
+        selectedAnnotation: selected,
       })
     );
   };
@@ -346,7 +329,12 @@ export const Transformer = ({
         selectionMode: AnnotationModeType.New,
       })
     );
-    dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [],
+        selectedAnnotation: undefined,
+      })
+    );
     if (soundEnabled) playCreateAnnotationSoundEffect();
   };
 
@@ -355,7 +343,12 @@ export const Transformer = ({
   ) => {
     const container = event.target.getStage()!.container();
     container.style.cursor = cursor.cursor!;
-    dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [],
+        selectedAnnotation: undefined,
+      })
+    );
     if (soundEnabled) playDeleteAnnotationSoundEffect();
   };
 

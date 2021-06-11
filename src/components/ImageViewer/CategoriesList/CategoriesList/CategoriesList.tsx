@@ -171,6 +171,7 @@ export const CategoriesList = () => {
     dispatch(
       applicationSlice.actions.setSelectedAnnotations({
         selectedAnnotations: [],
+        selectedAnnotation: undefined,
       })
     );
   };
@@ -184,6 +185,7 @@ export const CategoriesList = () => {
     dispatch(
       applicationSlice.actions.setSelectedAnnotations({
         selectedAnnotations: [],
+        selectedAnnotation: undefined,
       })
     );
   };

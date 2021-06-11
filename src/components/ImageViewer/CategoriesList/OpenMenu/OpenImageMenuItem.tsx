@@ -7,7 +7,6 @@ import { v4 } from "uuid";
 import {
   addImages,
   setActiveImage,
-  setSelectedAnnotation,
   setSelectedAnnotations,
 } from "../../../../store/slices";
 import { MenuItem } from "@material-ui/core";
@@ -71,6 +70,7 @@ export const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
               dispatch(
                 setSelectedAnnotations({
                   selectedAnnotations: [],
+                  selectedAnnotation: undefined,
                 })
               );
             }

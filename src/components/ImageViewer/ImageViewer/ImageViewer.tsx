@@ -9,9 +9,7 @@ import {
   addImages,
   applicationSlice,
   setActiveImage,
-  setChannels,
   setOperation,
-  setSelectedAnnotation,
   setSelectedAnnotations,
 } from "../../../store";
 import { Content } from "../Content";
@@ -21,11 +19,9 @@ import { theme } from "./theme";
 import * as ImageJS from "image-js";
 import { ShapeType } from "../../../types/ShapeType";
 import { loadLayersModelThunk } from "../../../store/thunks";
-import { ChannelType } from "../../../types/ChannelType";
 import { ToolType } from "../../../types/ToolType";
 import { v4 } from "uuid";
 import { imagesSelector } from "../../../store/selectors/imagesSelector";
-import { replaceDuplicateName } from "../../../image/imageHelper";
 
 type ImageViewerProps = {
   image?: ImageType;
@@ -105,6 +101,7 @@ export const ImageViewer = (props: ImageViewerProps) => {
                 dispatch(
                   setSelectedAnnotations({
                     selectedAnnotations: [],
+                    selectedAnnotation: undefined,
                   })
                 );
 

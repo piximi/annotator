@@ -27,7 +27,6 @@ export {
   setPointerSelection,
   setQuickSelectionBrushSize,
   setSaturation,
-  setSelectedAnnotation,
   setSelectedAnnotations,
   setSelectionMode,
   setSelectedCategory,

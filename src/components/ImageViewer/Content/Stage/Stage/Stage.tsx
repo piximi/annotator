@@ -15,11 +15,7 @@ import {
   toolTypeSelector,
   zoomSelectionSelector,
 } from "../../../../../store/selectors";
-import {
-  applicationSlice,
-  setSelectedAnnotation,
-  setSelectedAnnotations,
-} from "../../../../../store";
+import { applicationSlice, setSelectedAnnotations } from "../../../../../store";
 import {
   Provider,
   ReactReduxContext,
@@ -173,7 +169,12 @@ export const Stage = () => {
   };
 
   const deselectAllAnnotations = () => {
-    dispatch(setSelectedAnnotations({ selectedAnnotations: [] }));
+    dispatch(
+      setSelectedAnnotations({
+        selectedAnnotations: [],
+        selectedAnnotation: undefined,
+      })
+    );
   };
 
   const deselectAnnotation = () => {
@@ -210,11 +211,6 @@ export const Stage = () => {
             mask: invertedMask,
           },
         ],
-      })
-    );
-
-    dispatch(
-      setSelectedAnnotation({
         selectedAnnotation: {
           ...selectedAnnotation,
           boundingBox: invertedBoundingBox,
@@ -271,11 +267,6 @@ export const Stage = () => {
             mask: annotationTool.mask,
           },
         ],
-      })
-    );
-
-    dispatch(
-      setSelectedAnnotation({
         selectedAnnotation: {
           ...selectedAnnotation,
           boundingBox: annotationTool.boundingBox,
@@ -297,15 +288,11 @@ export const Stage = () => {
       }
     );
 
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotations({
-        selectedAnnotations: updatedAnnotations,
-      })
-    );
     if (!selectedAnnotation) return;
 
     dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
+      applicationSlice.actions.setSelectedAnnotations({
+        selectedAnnotations: updatedAnnotations,
         selectedAnnotation: {
           ...selectedAnnotation,
           categoryId: selectedCategory.id,
@@ -364,14 +351,9 @@ export const Stage = () => {
     if (selectionMode !== AnnotationModeType.New) return;
 
     dispatch(
-      setSelectedAnnotation({
-        selectedAnnotation: annotationTool.annotation,
-      })
-    );
-
-    dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [annotationTool.annotation],
+        selectedAnnotation: annotationTool.annotation,
       })
     );
   }, [annotated]);
@@ -489,6 +471,7 @@ export const Stage = () => {
           dispatch(
             applicationSlice.actions.setSelectedAnnotations({
               selectedAnnotations: [],
+              selectedAnnotation: undefined,
             })
           );
         }

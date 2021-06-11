@@ -4,7 +4,6 @@ import {
   applicationSlice,
   setActiveImage,
   setOperation,
-  setSelectedAnnotation,
   setSelectedAnnotations,
 } from "../../../../store/slices";
 import { MenuItem } from "@material-ui/core";
@@ -54,6 +53,7 @@ export const OpenProjectFileMenuItem = ({
               dispatch(
                 setSelectedAnnotations({
                   selectedAnnotations: [],
+                  selectedAnnotation: undefined,
                 })
               );
 

@@ -7,7 +7,6 @@ import { AnnotationType } from "../../types/AnnotationType";
 import {
   applicationSlice,
   setPointerSelection,
-  setSelectedAnnotation,
   setSelectedAnnotations,
   setSelectedCategory,
 } from "../../store/slices";
@@ -166,6 +165,7 @@ export const usePointer = () => {
         dispatch(
           setSelectedAnnotations({
             selectedAnnotations: annotationsInBox,
+            selectedAnnotation: annotationsInBox[0],
           })
         );
       } else {
@@ -181,15 +181,10 @@ export const usePointer = () => {
               ...selectedAnnotations,
               ...additionalAnnotations,
             ],
+            selectedAnnotation: annotationsInBox[0],
           })
         );
       }
-
-      dispatch(
-        setSelectedAnnotation({
-          selectedAnnotation: annotationsInBox[0],
-        })
-      );
     } else {
       onClick(position);
     }
@@ -252,14 +247,9 @@ export const usePointer = () => {
 
     if (!shift) {
       dispatch(
-        setSelectedAnnotation({
-          selectedAnnotation: currentAnnotation,
-        })
-      );
-
-      dispatch(
         setSelectedAnnotations({
           selectedAnnotations: [currentAnnotation],
+          selectedAnnotation: currentAnnotation,
         })
       );
       dispatch(
@@ -274,10 +264,6 @@ export const usePointer = () => {
       dispatch(
         setSelectedAnnotations({
           selectedAnnotations: [...selectedAnnotations, currentAnnotation],
-        })
-      );
-      dispatch(
-        setSelectedAnnotation({
           selectedAnnotation: currentAnnotation,
         })
       );

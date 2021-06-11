@@ -8,7 +8,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import { ReactComponent as InvertSelectionIcon } from "../../../icons/InvertAnnotation.svg";
 import ListItemText from "@material-ui/core/ListItemText";
-import { applicationSlice, setSelectedAnnotation } from "../../../../store";
+import { applicationSlice } from "../../../../store";
 import { useDispatch, useSelector } from "react-redux";
 import { selectedAnnotationsSelector } from "../../../../store/selectors/selectedAnnotationsSelector";
 import { unselectedAnnotationsSelector } from "../../../../store/selectors/unselectedAnnotationsSelector";
@@ -31,10 +31,6 @@ export const PointerSelectionOptions = () => {
     dispatch(
       applicationSlice.actions.setSelectedAnnotations({
         selectedAnnotations: allAnnotations,
-      })
-    );
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: allAnnotations[0],
       })
     );
@@ -44,6 +40,7 @@ export const PointerSelectionOptions = () => {
     dispatch(
       applicationSlice.actions.setSelectedAnnotations({
         selectedAnnotations: [],
+        selectedAnnotation: undefined,
       })
     );
   };
@@ -62,10 +59,6 @@ export const PointerSelectionOptions = () => {
     dispatch(
       applicationSlice.actions.setSelectedAnnotations({
         selectedAnnotations: desiredAnnotations,
-      })
-    );
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotation({
         selectedAnnotation: desiredAnnotations[0],
       })
     );

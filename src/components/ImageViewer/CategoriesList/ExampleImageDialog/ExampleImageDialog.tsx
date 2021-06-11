@@ -7,7 +7,6 @@ import {
   setChannels,
   setImages,
   setOperation,
-  setSelectedAnnotation,
   setSelectedAnnotations,
 } from "../../../../store";
 import { useDispatch, useSelector } from "react-redux";
@@ -113,6 +112,7 @@ export const ExampleImageDialog = ({
     dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [],
+        selectedAnnotation: undefined,
       })
     );
 

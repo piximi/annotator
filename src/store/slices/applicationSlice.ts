@@ -420,20 +420,15 @@ export const applicationSlice = createSlice({
     ) {
       state.selectedCategory = action.payload.selectedCategory;
     },
-    setSelectedAnnotation(
-      state: StateType,
-      action: PayloadAction<{ selectedAnnotation: AnnotationType | undefined }>
-    ) {
-      state.selectedAnnotation = action.payload.selectedAnnotation;
-    },
     setSelectedAnnotations(
       state: StateType,
-      action: PayloadAction<{ selectedAnnotations: Array<AnnotationType> }>
+      action: PayloadAction<{
+        selectedAnnotations: Array<AnnotationType>;
+        selectedAnnotation: AnnotationType | undefined;
+      }>
     ) {
       state.selectedAnnotations = action.payload.selectedAnnotations;
-      if (action.payload.selectedAnnotations.length === 0) {
-        state.selectedAnnotation = undefined;
-      }
+      state.selectedAnnotation = action.payload.selectedAnnotation;
     },
     setSelectionMode(
       state: StateType,
@@ -527,7 +522,6 @@ export const {
   setPointerSelection,
   setQuickSelectionBrushSize,
   setSaturation,
-  setSelectedAnnotation,
   setSelectedAnnotations,
   setSelectionMode,
   setSelectedCategory,

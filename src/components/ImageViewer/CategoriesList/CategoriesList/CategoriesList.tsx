@@ -66,6 +66,7 @@ import { OpenImageHelpDialog } from "../HelpDialog/OpenImageHelpDialog";
 import { MakeAnnotationsHelpDialog } from "../HelpDialog/MakeAnnotationsHelpDialog";
 import { ManipulateCanvasHelpDialog } from "../HelpDialog/ManipulateCanvasHelpDialog";
 import { ChangingAnnotationsHelpDialog } from "../HelpDialog/ChangingAnnotationsHelpDialog";
+import { SavingProjectHelpDialog } from "../HelpDialog/SavingProjectHelpDialog";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -451,6 +452,12 @@ const HelpListItem = () => {
     open: openChangingAnnotationsHelpDialog,
   } = useDialog();
 
+  const {
+    onClose: onCloseSavingProjectHelpDialog,
+    onOpen: onOpenSavingProjectHelpDialog,
+    open: openSavingProjectHelpDialog,
+  } = useDialog();
+
   return (
     <React.Fragment>
       <ListItem button onClick={onOpen}>
@@ -470,6 +477,7 @@ const HelpListItem = () => {
         onOpenChangingAnnotationsHelpDialog={
           onOpenChangingAnnotationsHelpDialog
         }
+        onOpenSavingProjectHelpDialog={onOpenSavingProjectHelpDialog}
       />
       <OpenImageHelpDialog
         onClose={onCloseOpenImagesHelpDialog}
@@ -486,6 +494,10 @@ const HelpListItem = () => {
       <ChangingAnnotationsHelpDialog
         onClose={onCloseChangingAnnotationsHelpDialog}
         open={openChangingAnnotationsHelpDialog}
+      />
+      <SavingProjectHelpDialog
+        onClose={onCloseSavingProjectHelpDialog}
+        open={openSavingProjectHelpDialog}
       />
     </React.Fragment>
   );

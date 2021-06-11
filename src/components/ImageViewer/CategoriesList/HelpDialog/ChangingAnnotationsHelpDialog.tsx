@@ -89,6 +89,14 @@ export const ChangingAnnotationsHelpDialog = ({
           click on "Clear selected annotations" in the left toolbar.
         </Typography>
         <br />
+        <Typography variant={"h6"}>
+          Deleting all annotations for a single image
+        </Typography>
+        <Typography>
+          To clear annotations of a particular image, click on the menu to the
+          right of the image thumbnail and select "Clear annotations."
+        </Typography>
+        <br />
         <Typography variant={"h6"}>Deleting all annotations</Typography>
         <Typography>
           Delete all annotations by clicking "Clear all annotations" in the left

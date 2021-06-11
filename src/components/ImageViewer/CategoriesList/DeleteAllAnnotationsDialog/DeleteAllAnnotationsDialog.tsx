@@ -33,7 +33,7 @@ export const DeleteAllAnnotationsDialog = ({
       <DialogTitle>Delete all annotations?</DialogTitle>
 
       <DialogContent>
-        All annotations will be permanently deleted."
+        All annotations across all images will be permanently deleted."
       </DialogContent>
 
       <DialogActions>

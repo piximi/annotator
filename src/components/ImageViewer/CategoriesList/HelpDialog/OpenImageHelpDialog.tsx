@@ -19,7 +19,7 @@ export const OpenImageHelpDialog = ({
     <Dialog
       disableBackdropClick={true}
       fullWidth
-      maxWidth="sm"
+      maxWidth="md"
       onClose={onClose}
       open={open}
     >
@@ -49,7 +49,7 @@ export const OpenImageHelpDialog = ({
         <br />
         <Typography>
           Note that we currently only support 1-channel (grayscale) or 3-channel
-          two-dimensional images.
+          2D images. We do not support multi-dimensional images.
         </Typography>
         <br />
         <Typography variant={"h6"}>Deleting images</Typography>

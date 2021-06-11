@@ -18,6 +18,7 @@ type HelpDialogProps = {
   onOpenOpenImagesHelpDialog: () => void;
   onOpenMakeAnnotationsHelpDialog: () => void;
   onOpenManipulatingCanvasHelpDialog: () => void;
+  onOpenChangingAnnotationsHelpDialog: () => void;
 };
 
 export const HelpDialog = ({
@@ -26,6 +27,7 @@ export const HelpDialog = ({
   onOpenOpenImagesHelpDialog,
   onOpenMakeAnnotationsHelpDialog,
   onOpenManipulatingCanvasHelpDialog,
+  onOpenChangingAnnotationsHelpDialog,
 }: HelpDialogProps) => {
   const t = useTranslation();
 
@@ -71,15 +73,15 @@ export const HelpDialog = ({
             <DescriptionIcon />
           </ListItemIcon>
 
-          <ListItemText primary={t("Making annotations")} />
+          <ListItemText primary={t("Making new annotations")} />
         </ListItem>
 
-        <ListItem button>
+        <ListItem button onClick={onOpenChangingAnnotationsHelpDialog}>
           <ListItemIcon>
             <DescriptionIcon />
           </ListItemIcon>
 
-          <ListItemText primary={t("Changing annotations")} />
+          <ListItemText primary={t("Changing existing annotations")} />
         </ListItem>
 
         <ListItem button>

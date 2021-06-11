@@ -19,14 +19,14 @@ export const MakeAnnotationsHelpDialog = ({
     <Dialog
       disableBackdropClick={true}
       fullWidth
-      maxWidth="sm"
+      maxWidth="md"
       onClose={onClose}
       open={open}
     >
       <AppBar position="relative">
         <Toolbar>
           <Typography style={{ flexGrow: 1 }} variant="h6">
-            <DialogTitle>{"Making annotations"}</DialogTitle>
+            <DialogTitle>{"Making new annotations"}</DialogTitle>
           </Typography>
 
           <IconButton onClick={onClose}>

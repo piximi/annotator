@@ -19,7 +19,7 @@ export const ManipulateCanvasHelpDialog = ({
     <Dialog
       disableBackdropClick={true}
       fullWidth
-      maxWidth="sm"
+      maxWidth="md"
       onClose={onClose}
       open={open}
     >
@@ -38,14 +38,14 @@ export const ManipulateCanvasHelpDialog = ({
         <br />
         <Typography variant={"h6"}>Hand tool (h)</Typography>
         <Typography>
-          Selec the Hand tool or press "h" on your keyboard to enter the hand
+          Select the Hand tool or press "h" on your keyboard to enter the hand
           tool. Hold and drag to pan the image in the canvas. Click on "Reset
           position" to center the image back onto the canvas.
         </Typography>
         <br />
         <Typography variant={"h6"}>Zoom tool (z)</Typography>
         <Typography>
-          Select the Hand tool or press "z" on your keyboard to enter the zoom
+          Select the Zoom tool or press "z" on your keyboard to enter the zoom
           tool. Use the zoom slider or your mouse wheel to zoom in or out of the
           image.
         </Typography>

@@ -209,7 +209,7 @@ export const CategoriesList = () => {
       <AppBar className={classes.appBar} color="default">
         <Toolbar>
           <Typography variant="h6" color="inherit">
-            Piximi
+            Piximi Annotator
           </Typography>
         </Toolbar>
       </AppBar>

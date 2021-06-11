@@ -69,6 +69,34 @@ export const ChangingAnnotationsHelpDialog = ({
           "cancel" to undo the resize event.
         </Typography>
         <br />
+        <Typography variant={"h6"}>Adding area to an annotation</Typography>
+        <Typography>
+          Select the annotation tool to use to add an area and select the "add
+          area" selection mode. Draw on the selected annotation with the
+          annotation tool to combine areas together. Once finished annotating,
+          press the "Enter key" or hit "confirm" to save the annotation.
+        </Typography>
+        <br />
+        <Typography variant={"h6"}>
+          Subtracting an area from an annotation
+        </Typography>
+        <Typography>
+          Select the annotation tool to use to subtract an area and select the
+          "subtract area" selection mode. Draw on the selected annotation with
+          the annotation tool to subtract an area from the selected annotation.
+          Once finished annotating, press the "Enter key" or hit "confirm" to
+          save the annotation.
+        </Typography>
+        <br />
+        <Typography variant={"h6"}>Intersection of two annotations</Typography>
+        <Typography>
+          Select the annotation tool to use to use for the intersection
+          operation and select the "intersect" selection mode. Draw on the
+          selected annotation with the annotation tool and release to obtain the
+          intersection of the two annotations. One finished annotating, press
+          the "Enter key" or hit "confirm" to save the annotation.
+        </Typography>
+        <br />
         <Typography variant={"h6"}>
           Changing the category of an annotation
         </Typography>

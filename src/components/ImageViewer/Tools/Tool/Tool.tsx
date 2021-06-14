@@ -93,7 +93,7 @@ export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
       break;
     case "Color Adjustment":
       description = (
-        <ToolBarToolTitle toolName={"Itensity adjustment"} letter={"I"} />
+        <ToolBarToolTitle toolName={"Intensity adjustment"} letter={"I"} />
       );
       break;
     default:

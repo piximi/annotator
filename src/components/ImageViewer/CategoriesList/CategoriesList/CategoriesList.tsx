@@ -315,7 +315,6 @@ export const CategoriesList = () => {
             </div>
           );
         })}
-
         {unknownCategory && (
           <div key={unknownCategory.id}>
             <ListItem
@@ -358,6 +357,16 @@ export const CategoriesList = () => {
             />
           </div>
         )}
+
+        <DeleteCategoryDialog
+          onClose={onCloseDeleteCategoryDialog}
+          open={openDeleteCategoryDialog}
+        />
+
+        <EditCategoryDialog
+          onCloseDialog={onCloseEditCategoryDialog}
+          openDialog={openEditCategoryDialog}
+        />
 
         <CreateCategoryListItem />
       </CollapsibleList>

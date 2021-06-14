@@ -5,6 +5,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import { KeyboardKey } from "./KeyboardKey";
+import { HelpWindowToolTitle } from "./HelpWindowToolTitle";
 
 type ChangingAnnotationsHelpDiagogProps = {
   onClose: () => void;
@@ -36,16 +38,15 @@ export const ChangingAnnotationsHelpDialog = ({
       </AppBar>
       <DialogContent>
         <br />
-        <Typography variant={"h6"}>
-          Selecting annotations with the Select tool (s)
-        </Typography>
-
+        <HelpWindowToolTitle
+          toolName={"Selecting annotations with the Select tool"}
+          letter={"S"}
+        />
         <Typography>
-          Select the Selection tool or press "s" on your keyboard to enter the
-          selection tool. Click on a desired annotation to select it, and hold
-          shift while clicking other annotations to select multiple annotations.
-          Alternatively, draw a rectangular box around multiple annotations to
-          select multiple annotations at once.
+          Select the Selection tool. Click on a desired annotation to select it,
+          and hold shift while clicking other annotations to select multiple
+          annotations. Alternatively, draw a rectangular box around multiple
+          annotations to select multiple annotations at once.
         </Typography>
         <br />
         <Typography>
@@ -61,21 +62,35 @@ export const ChangingAnnotationsHelpDialog = ({
           annotation is selected.
         </Typography>
         <br />
-        <Typography>Press the Escape key to unselect annotations.</Typography>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Typography>Press the</Typography>
+          <KeyboardKey letter="escape" />
+          <Typography>
+            {" "}
+            key to undo changes or to unselect annotations.
+          </Typography>
+        </div>
+        <br />
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Typography>Press the</Typography>
+          <KeyboardKey letter="enter" />
+          <Typography>
+            {" "}
+            key to confirm changes to a selected annotation.
+          </Typography>
+        </div>
         <br />
         <Typography variant={"h6"}>Resizing an annotation</Typography>
         <Typography>
           Once an annotation is selected, use the anchor points of the bouding
-          box to resize it. Click "confirm" to save the resized annotation, or
-          "cancel" to undo the resize event.
+          box to resize it.
         </Typography>
         <br />
         <Typography variant={"h6"}>Adding area to an annotation</Typography>
         <Typography>
           Select the annotation tool to use to add an area and select the "add
           area" selection mode. Draw on the selected annotation with the
-          annotation tool to combine areas together. Once finished annotating,
-          press the "Enter key" or hit "confirm" to save the annotation.
+          annotation tool to combine areas together.
         </Typography>
         <br />
         <Typography variant={"h6"}>
@@ -85,8 +100,6 @@ export const ChangingAnnotationsHelpDialog = ({
           Select the annotation tool to use to subtract an area and select the
           "subtract area" selection mode. Draw on the selected annotation with
           the annotation tool to subtract an area from the selected annotation.
-          Once finished annotating, press the "Enter key" or hit "confirm" to
-          save the annotation.
         </Typography>
         <br />
         <Typography variant={"h6"}>Intersection of two annotations</Typography>
@@ -94,8 +107,7 @@ export const ChangingAnnotationsHelpDialog = ({
           Select the annotation tool to use to use for the intersection
           operation and select the "intersect" selection mode. Draw on the
           selected annotation with the annotation tool and release to obtain the
-          intersection of the two annotations. One finished annotating, press
-          the "Enter key" or hit "confirm" to save the annotation.
+          intersection of the two annotations.
         </Typography>
         <br />
         <Typography variant={"h6"}>
@@ -107,10 +119,14 @@ export const ChangingAnnotationsHelpDialog = ({
           not exist, click "Create category" to make a new category.
         </Typography>
         <br />
-        <Typography>
-          Press the "Enter" key to save the selected annotations with the new
-          category assigned.
-        </Typography>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Typography>Make sure to press the</Typography>
+          <KeyboardKey letter="enter" />
+          <Typography>
+            {" "}
+            key to save the selected annotations with the new category assigned.
+          </Typography>
+        </div>
         <br />
         <Typography variant={"h6"}>Deleting selected annotations</Typography>
         <Typography>

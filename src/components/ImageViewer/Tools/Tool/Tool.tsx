@@ -1,6 +1,6 @@
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import Typography from "@material-ui/core/Typography";
 import {
@@ -15,6 +15,8 @@ import {
 import { useStyles } from "./Tool.css";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { Tooltip } from "@material-ui/core";
+import { HelpWindowToolTitle } from "../../CategoriesList/HelpDialog/HelpWindowToolTitle";
+import { ToolBarToolTitle } from "./ToolBarToolTitle";
 
 type TooltipCardProps = {
   name: string;
@@ -31,48 +33,68 @@ type ToolProps = {
 export const TooltipCard = ({ name, onClose }: TooltipCardProps) => {
   const classes = useStyles();
 
-  let description: string;
+  let description: string | ReactElement;
 
   switch (name) {
     case "Pointer":
-      description = "Select annotations (s)";
+      description = (
+        <ToolBarToolTitle toolName={"Select annotations"} letter={"S"} />
+      );
       break;
     case "Rectangular annotation":
-      description = "Rectangular annotation (r)";
+      description = (
+        <ToolBarToolTitle toolName={"Rectangular annotation"} letter={"R"} />
+      );
       break;
     case "Elliptical annotation":
-      description = "Elliptical annotation (e)";
+      description = (
+        <ToolBarToolTitle toolName={"Elliptical annotation"} letter={"E"} />
+      );
       break;
     case "Freehand annotation":
-      description = "Pen annotation (d)";
+      description = (
+        <ToolBarToolTitle toolName={"Pen annotation"} letter={"D"} />
+      );
       break;
     case "Lasso annotation (L)":
-      description = "Lasso annotation (l)";
+      description = (
+        <ToolBarToolTitle toolName={"Lasso annotation"} letter={"L"} />
+      );
       break;
     case "Polygonal annotation":
-      description = "Polygonal annotation (p)";
+      description = (
+        <ToolBarToolTitle toolName={"Polygonal annotation"} letter={"P"} />
+      );
       break;
     case "Magnetic annotation":
-      description = "Magnetic annotation (m)";
+      description = (
+        <ToolBarToolTitle toolName={"Magnetic annotation"} letter={"M"} />
+      );
       break;
     case "Color annotation":
-      description = "Color annotation (c)";
+      description = (
+        <ToolBarToolTitle toolName={"Color annotation"} letter={"C"} />
+      );
       break;
     case "Quick annotation":
-      description = "Quick annotation (q)";
+      description = (
+        <ToolBarToolTitle toolName={"Quick annotation"} letter={"Q"} />
+      );
       break;
     case "Object annotation":
       description =
         "Select a rectangular annotation around a desired object to automatically generate its boundaries.";
       break;
     case "Hand":
-      description = "Hand tool (h)";
+      description = <ToolBarToolTitle toolName={"Hand tool"} letter={"H"} />;
       break;
     case "Zoom":
-      description = "Zoom tool (z)";
+      description = <ToolBarToolTitle toolName={"Zoom tool"} letter={"Z"} />;
       break;
     case "Color Adjustment":
-      description = "Intensity adjustment (i)";
+      description = (
+        <ToolBarToolTitle toolName={"Itensity adjustment"} letter={"I"} />
+      );
       break;
     default:
       description = "";

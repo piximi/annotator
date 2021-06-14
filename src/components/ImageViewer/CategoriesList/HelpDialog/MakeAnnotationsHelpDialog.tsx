@@ -5,10 +5,61 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import { makeStyles } from "@material-ui/core/styles";
+import texture from "../../../../images/texture.png";
 
 type MakeAnnotationsHelpDialogProps = {
   onClose: () => void;
   open: boolean;
+};
+
+const useStyles = makeStyles((theme) => ({
+  kbd: {
+    backgroundColor: "rgba(237, 242, 247, 1)",
+    borderWidth: "1px 1px 3px",
+    borderRadius: "6px",
+    fontSize: "0.8em",
+    paddingInline: "0.4em",
+    whiteSpace: "nowrap",
+    fontWeight: 700,
+    borderColor: "rgba(184, 186, 189, 1)",
+    borderStyle: "solid",
+    color: "rgba(45, 55, 72, 1)",
+    width: "fit-content",
+    lineHeight: "revert",
+    marginLeft: "5px",
+    marginRight: "5px",
+  },
+  title: {
+    display: "flex",
+    alignItems: "center",
+  },
+}));
+
+type KeyboardKeyProps = {
+  letter: string;
+};
+const KeyboardKey = ({ letter }: KeyboardKeyProps) => {
+  const classes = useStyles();
+
+  return <div className={classes.kbd}>{letter}</div>;
+};
+
+const ToolTitle = () => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.title}>
+      <Typography variant={"h6"}>Rectangular annotation</Typography>
+      <Typography variant={"h6"} style={{ marginLeft: "5px" }}>
+        (
+      </Typography>
+      <KeyboardKey letter="shift" />
+      <Typography>+</Typography>
+      <KeyboardKey letter="R" />
+      <Typography variant={"h6"}>)</Typography>
+    </div>
+  );
 };
 
 export const MakeAnnotationsHelpDialog = ({
@@ -53,7 +104,7 @@ export const MakeAnnotationsHelpDialog = ({
           click on "cancel".
         </Typography>
         <br />
-        <Typography variant={"h6"}>Rectangular annotation (r)</Typography>
+        <ToolTitle />
         <Typography>
           Click and drag to start drawing a rectangular annotation (bounding
           box). Release to close the annotation.

@@ -32,6 +32,8 @@ export const Image = React.forwardRef<Konva.Image>((_, ref) => {
 
   const stageScale = useSelector(stageScaleSelector);
 
+  const normalizeFont = 1300;
+
   useEffect(() => {
     // @ts-ignore
     if (!ref || !ref.current) return;
@@ -65,13 +67,15 @@ export const Image = React.forwardRef<Konva.Image>((_, ref) => {
   if (!src) {
     return (
       <ReactKonva.Text
-        x={boundingClientRect.x + 80}
+        x={
+          boundingClientRect.x + (80 * boundingClientRect.width) / normalizeFont
+        } //center depending on window width
         y={0.4 * boundingClientRect.height}
         text={
           'To start annotating, drag and drop an image onto the canvas or click on "Open Image".'
         }
         fill={"white"}
-        fontSize={30}
+        fontSize={(30 * boundingClientRect.width) / normalizeFont} //scale font depending on window width
       />
     );
   }

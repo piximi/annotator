@@ -88,16 +88,16 @@ export const SettingsDialog = ({ onClose, open }: SettingsDialogProps) => {
                       value={language}
                     >
                       <MenuItem value={LanguageType.English}>English</MenuItem>
-                      <MenuItem value={LanguageType.Arabic}>Arabic</MenuItem>
+                      {/*<MenuItem value={LanguageType.Arabic}>Arabic<Arabic/MenuItem>*/}
                       <MenuItem value={LanguageType.Farsi}>Farsi</MenuItem>
-                      <MenuItem value={LanguageType.Finnish}>Finnish</MenuItem>
+                      {/*<MenuItem value={LanguageType.Finnish}>Finnish</MenuItem>*/}
                       <MenuItem value={LanguageType.French}>French</MenuItem>
-                      <MenuItem value={LanguageType.German}>German</MenuItem>
-                      <MenuItem value={LanguageType.Hindi}>Hindi</MenuItem>
-                      <MenuItem value={LanguageType.Hungarian}>
-                        Hungarian
-                      </MenuItem>
-                      <MenuItem value={LanguageType.Spanish}>Spanish</MenuItem>
+                      {/*<MenuItem value={LanguageType.German}>German</MenuItem>*/}
+                      {/*<MenuItem value={LanguageType.Hindi}>Hindi</MenuItem>*/}
+                      {/*<MenuItem value={LanguageType.Hungarian}>*/}
+                      {/*  Hungarian*/}
+                      {/*</MenuItem>*/}
+                      {/*<MenuItem value={LanguageType.Spanish}>Spanish</MenuItem>*/}
                     </Select>
                   </FormControl>
                 </Grid>

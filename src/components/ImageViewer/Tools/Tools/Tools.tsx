@@ -13,7 +13,6 @@ import {
   HandIcon,
   LassoSelectionIcon,
   MagneticSelectionIcon,
-  ObjectSelectionIcon,
   PenSelectionIcon,
   PolygonalSelectionIcon,
   QuickSelectionIcon,

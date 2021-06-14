@@ -3,8 +3,6 @@ import Typography from "@material-ui/core/Typography";
 import { KeyboardKey } from "./KeyboardKey";
 import React from "react";
 import { HelpWindowToolIcon } from "./HelpWindowToolIcons";
-import { HandIcon, RectangularSelectionIcon } from "../../../icons";
-import { DialogContent } from "@material-ui/core";
 
 type ToolTitleProps = {
   toolName: string;

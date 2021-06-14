@@ -168,6 +168,11 @@ export const usePointer = () => {
             selectedAnnotation: annotationsInBox[0],
           })
         );
+        dispatch(
+          setSelectedCategory({
+            selectedCategory: annotationsInBox[0].categoryId,
+          })
+        );
       } else {
         //only include if not already selected
         const additionalAnnotations = annotationsInBox.filter(

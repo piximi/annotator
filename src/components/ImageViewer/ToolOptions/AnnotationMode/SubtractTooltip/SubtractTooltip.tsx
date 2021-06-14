@@ -10,7 +10,7 @@ export const SubtractTooltip = ({ children }: SubtractTooltipProps) => {
     <React.Fragment>
       <p>
         Subtracting an area removes the area you label from an existing
-        annotation (Press alt/option on your keyboard to trigger this mode).
+        annotation.
       </p>
     </React.Fragment>
   );

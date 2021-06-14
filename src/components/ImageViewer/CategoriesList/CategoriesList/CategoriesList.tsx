@@ -385,10 +385,8 @@ export const CategoriesList = () => {
 
       <List dense>
         <SettingsListItem />
-
-        <SendFeedbackListItem />
-
         <HelpListItem />
+        <SendFeedbackListItem />
       </List>
     </Drawer>
   );

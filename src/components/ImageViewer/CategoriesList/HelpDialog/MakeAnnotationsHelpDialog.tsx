@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/core/styles";
-import texture from "../../../../images/texture.png";
 
 type MakeAnnotationsHelpDialogProps = {
   onClose: () => void;
@@ -45,18 +44,22 @@ const KeyboardKey = ({ letter }: KeyboardKeyProps) => {
   return <div className={classes.kbd}>{letter}</div>;
 };
 
-const ToolTitle = () => {
+type ToolTitleProps = {
+  toolName: string;
+  letter: string;
+};
+const ToolTitle = ({ toolName, letter }: ToolTitleProps) => {
   const classes = useStyles();
 
   return (
     <div className={classes.title}>
-      <Typography variant={"h6"}>Rectangular annotation</Typography>
+      <Typography variant={"h6"}>{toolName}</Typography>
       <Typography variant={"h6"} style={{ marginLeft: "5px" }}>
         (
       </Typography>
       <KeyboardKey letter="shift" />
       <Typography>+</Typography>
-      <KeyboardKey letter="R" />
+      <KeyboardKey letter={letter} />
       <Typography variant={"h6"}>)</Typography>
     </div>
   );
@@ -89,9 +92,7 @@ export const MakeAnnotationsHelpDialog = ({
         <br />
         <Typography>
           All annotation tools are accessed from the toolbar to the right of the
-          canvas. Alternatively, use the corresponding keyboard shortcut, often
-          corresponding to the first letter of the tool name, to quickly enter
-          the tool.
+          canvas or by using their keyboard key shortcut.
         </Typography>
         <br />
         <Typography>
@@ -104,53 +105,53 @@ export const MakeAnnotationsHelpDialog = ({
           click on "cancel".
         </Typography>
         <br />
-        <ToolTitle />
+        <ToolTitle toolName={"Rectangular annotation"} letter={"R"} />
         <Typography>
           Click and drag to start drawing a rectangular annotation (bounding
           box). Release to close the annotation.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Elliptical annotation (e)</Typography>
+        <ToolTitle toolName={"Elliptical annotation"} letter={"E"} />
         <Typography>
           Click and drag to start drawing an elliptical annotation. Release to
           close the annotation.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Pen annotation (d)</Typography>
+        <ToolTitle toolName={"Pen annotation"} letter={"D"} />
         <Typography>
           Select desired brush size using the brush size slider. Draw over
           pixels by clicking and dragging over the desired area. Release to
           close the annotation.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Lasso annotation (l)</Typography>
+        <ToolTitle toolName={"Lasso annotation"} letter={"L"} />
         <Typography>
           Click and drag cursor around the desired region. Release to
           automatically close the lasso annotation.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Polygonal annotation (p)</Typography>
+        <ToolTitle toolName={"Polygonal annotation"} letter={"P"} />
         <Typography>
           Click and release to create new anchor points. Close the polygonal
           annotation either by clicking on its origin point or by hitting enter
           on your keyboard.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Magnetic annotation (m)</Typography>
+        <ToolTitle toolName={"Magnetic annotation"} letter={"M"} />
         <Typography>
           Click and release to create new anchor points. The tool will
           automatically snap onto the edges of an object. Close the magnetic
           annotation by clicking on its origin point.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Color annotation (c)</Typography>
+        <ToolTitle toolName={"Color annotation"} letter={"C"} />
         <Typography>
           Click on a pixel with the color of interest, hold and drag outwards to
           select a region of similar color intensities near the point. Release
           to finish the annotation.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Quick annotation (q)</Typography>
+        <ToolTitle toolName={"Quick annotation"} letter={"Q"} />
         <Typography>
           Click and drag to select a region of superpixels. Release to finish
           the annotation.

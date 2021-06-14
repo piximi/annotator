@@ -10,7 +10,7 @@ export const AddTooltip = ({ children }: AddTooltipProps) => {
     <React.Fragment>
       <p>
         Adding to an annotation adds any new areas you annotate to an existing
-        annotation (Press shift on your keyboard to trigger this mode).
+        annotation.
       </p>
     </React.Fragment>
   );

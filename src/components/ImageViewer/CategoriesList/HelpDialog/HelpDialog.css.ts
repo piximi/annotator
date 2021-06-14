@@ -22,6 +22,6 @@ export const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   icon: {
-    marginRight: "5px ",
+    marginRight: "8px ",
   },
 }));

@@ -9,20 +9,18 @@ import { DialogContent } from "@material-ui/core";
 type ToolTitleProps = {
   toolName: string;
   letter: string;
-  icon?: any;
+  children: React.ReactNode;
 };
 export const HelpWindowToolTitle = ({
+  children,
   toolName,
   letter,
-  icon,
 }: ToolTitleProps) => {
   const classes = useStyles();
 
-  const loaded = icon ? icon : <HandIcon />;
-
   return (
     <div className={classes.title}>
-      <HelpWindowToolIcon>{loaded}</HelpWindowToolIcon>
+      <HelpWindowToolIcon>{children}</HelpWindowToolIcon>
       <Typography variant={"h6"}>{toolName}</Typography>
       <Typography variant={"h6"} style={{ marginLeft: "5px" }}>
         (

@@ -38,10 +38,10 @@ export const ChangingAnnotationsHelpDialog = ({
       </AppBar>
       <DialogContent>
         <br />
-        <HelpWindowToolTitle
-          toolName={"Selecting annotations with the Select tool"}
-          letter={"S"}
-        />
+        {/*<HelpWindowToolTitle*/}
+        {/*  toolName={"Selecting annotations with the Select tool"}*/}
+        {/*  letter={"S"}*/}
+        {/*/>*/}
         <Typography>
           Select the Selection tool. Click on a desired annotation to select it,
           and hold shift while clicking other annotations to select multiple

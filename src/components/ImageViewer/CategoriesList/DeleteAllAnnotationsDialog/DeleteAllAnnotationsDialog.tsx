@@ -29,7 +29,7 @@ export const DeleteAllAnnotationsDialog = ({
   };
 
   return (
-    <Dialog fullWidth onClose={onClose} open={open}>
+    <Dialog disableBackdropClick={true} fullWidth onClose={onClose} open={open}>
       <DialogTitle>Delete all annotations?</DialogTitle>
 
       <DialogContent>

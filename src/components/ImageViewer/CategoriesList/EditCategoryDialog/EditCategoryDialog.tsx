@@ -70,7 +70,12 @@ export const EditCategoryDialog = ({
   };
 
   return (
-    <Dialog fullWidth onClose={onCloseDialog} open={openDialog}>
+    <Dialog
+      disableBackdropClick={true}
+      fullWidth
+      onClose={onCloseDialog}
+      open={openDialog}
+    >
       <DialogTitle>Edit category</DialogTitle>
 
       <DialogContent>

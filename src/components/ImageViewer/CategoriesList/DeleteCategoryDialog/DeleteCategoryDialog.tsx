@@ -60,7 +60,7 @@ export const DeleteCategoryDialog = ({
   };
 
   return (
-    <Dialog fullWidth onClose={onClose} open={open}>
+    <Dialog disableBackdropClick={true} fullWidth onClose={onClose} open={open}>
       <DialogTitle>Delete "{category.name}" category?</DialogTitle>
 
       <DialogContent>

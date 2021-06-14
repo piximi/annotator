@@ -360,6 +360,99 @@ export const saveAnnotationsAsMasks = (
     .flat();
 };
 
+export const saveAnnotationsAsMatrix = (
+  images: Array<ImageType>,
+  categories: Array<CategoryType>,
+  zip: any
+): Array<Promise<unknown>> => {
+  return images
+    .map((current: ImageType) => {
+      return categories.map((category: CategoryType) => {
+        return new Promise((resolve, reject) => {
+          const fullLabelImage = new ImageJS.Image(
+            current.shape.width,
+            current.shape.height,
+            new Uint8Array().fill(0),
+            { components: 1, alpha: 0 }
+          );
+          let n = 1;
+          for (let annotation of current.annotations) {
+            if (annotation.categoryId !== category.id) continue;
+            const encoded = annotation.mask;
+            const decoded = decode(encoded);
+            const boundingBox = annotation.boundingBox;
+            const endX = Math.min(current.shape.width, boundingBox[2]);
+            const endY = Math.min(current.shape.height, boundingBox[3]);
+
+            //extract bounding box params
+            const boundingBoxWidth = endX - boundingBox[0];
+            const boundingBoxHeight = endY - boundingBox[1];
+
+            const roiMask = new ImageJS.Image(
+              boundingBoxWidth,
+              boundingBoxHeight,
+              decoded,
+              {
+                components: 1,
+                alpha: 0,
+              }
+            );
+            for (let i = 0; i < boundingBoxWidth; i++) {
+              for (let j = 0; j < boundingBoxHeight; j++) {
+                if (roiMask.getPixelXY(i, j)[0] > 0) {
+                  fullLabelImage.setPixelXY(
+                    i + annotation.boundingBox[0],
+                    j + annotation.boundingBox[1],
+                    [n, n, n]
+                  );
+                }
+              }
+            }
+            n += 1;
+          }
+
+          const uri = fullLabelImage.toDataURL("image/png", {
+            useCanvas: true,
+          });
+
+          //draw to canvas
+          const canvas = document.createElement("canvas");
+          canvas.width = current.shape.width;
+          canvas.height = current.shape.height;
+
+          const ctx = canvas.getContext("2d");
+
+          if (!ctx) return;
+
+          zip.folder(`${current.name}`);
+
+          //create image from Data URL
+          const image = new Image(current.shape.width, current.shape.height);
+          image.onload = () => {
+            ctx.drawImage(
+              image,
+              0,
+              0,
+              current.shape.width,
+              current.shape.height
+            );
+            canvas.toBlob((blob) => {
+              if (!blob) return;
+              zip.file(`${current.name}/${category.name}.png`, blob, {
+                base64: true,
+              });
+              resolve(true);
+            }, "image/png");
+          };
+          image.onerror = reject;
+          image.crossOrigin = "anonymous";
+          image.src = uri;
+        });
+      });
+    })
+    .flat();
+};
+
 export const importSerializedAnnotations = (
   annotation: SerializedAnnotationType,
   existingCategories: Array<CategoryType>

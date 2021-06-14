@@ -4,6 +4,7 @@ import React from "react";
 import { ExportAnnotationsAsJsonMenuItem } from "./ExportAnnotationsAsJsonMenuItem";
 import { SaveProjectFileMenuItem } from "./SaveProjectFileMenuItem";
 import { ExportAnnotationsAsImagesMenuItem } from "./ExportAnnotationsAsImagesMenuItem";
+import { ExportAnnotationsAsMatrixMenuItem } from "./ExportAnnotationsAsMatrixMenuItem";
 
 type SaveMenuProps = {
   popupState: any;
@@ -15,6 +16,7 @@ export const SaveMenu = ({ popupState }: SaveMenuProps) => {
     <Menu {...bindMenu(popupState)}>
       {/*<ExportAnnotationsAsJsonMenuItem popupState={popupState} />*/}
       <ExportAnnotationsAsImagesMenuItem popupState={popupState} />
+      <ExportAnnotationsAsMatrixMenuItem popupState={popupState} />
       <SaveProjectFileMenuItem popupState={popupState} />
     </Menu>
   );

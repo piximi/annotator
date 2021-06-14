@@ -7,6 +7,11 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { HelpWindowToolTitle } from "./HelpWindowToolTitle";
 import { KeyboardKey } from "./KeyboardKey";
+import SvgIcon from "@material-ui/core/SvgIcon";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { HandIcon, RectangularSelectionIcon } from "../../../icons";
+import ListItem from "@material-ui/core/ListItem";
+import { HelpWindowToolIcon } from "./HelpWindowToolIcons";
 
 type MakeAnnotationsHelpDialogProps = {
   onClose: () => void;
@@ -84,6 +89,7 @@ export const MakeAnnotationsHelpDialog = ({
           close the annotation.
         </Typography>
         <br />
+
         <HelpWindowToolTitle toolName={"Lasso annotation"} letter={"L"} />
         <Typography>
           Click and drag cursor around the desired region. Release to

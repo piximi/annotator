@@ -27,6 +27,9 @@ export const MakeAnnotationsHelpDialog = ({
     >
       <AppBar position="relative">
         <Toolbar>
+          <Typography variant={"h6"}>
+            Creating new categories and editting categories
+          </Typography>
           <Typography style={{ flexGrow: 1 }} variant="h6">
             <DialogTitle>{"Making new annotations"}</DialogTitle>
           </Typography>
@@ -37,6 +40,13 @@ export const MakeAnnotationsHelpDialog = ({
         </Toolbar>
       </AppBar>
       <DialogContent>
+        <br />
+        <Typography>
+          Create a new category by clicking on the "Create category" button.
+          Once a category is created, its name and color can be changed by
+          selecting its options menu on the right on the category menu in the
+          left toobar.
+        </Typography>
         <br />
         <Typography>
           All annotation tools are accessed from the toolbar to the right of the

@@ -130,8 +130,9 @@ export const ChangingAnnotationsHelpDialog = ({
         <br />
         <Typography variant={"h6"}>Deleting selected annotations</Typography>
         <Typography>
-          To delete one or more selected annotations, press the Delete key or
-          click on "Clear selected annotations" in the left toolbar.
+          First, use the Select tool to select annotations. To delete one or
+          more selected annotations, press the Delete key or click on "Clear
+          selected annotations" in the left toolbar.
         </Typography>
         <br />
         <Typography variant={"h6"}>

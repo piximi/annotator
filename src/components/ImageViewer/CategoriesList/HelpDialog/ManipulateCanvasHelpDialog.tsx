@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { HelpWindowToolTitle } from "./HelpWindowToolTitle";
+import { ColorAdjustmentIcon, HandIcon, ZoomIcon } from "../../../icons";
 
 type ManipulateCanvasHelpDialogProps = {
   onClose: () => void;
@@ -37,13 +38,17 @@ export const ManipulateCanvasHelpDialog = ({
       </AppBar>
       <DialogContent>
         <br />
-        {/*<HelpWindowToolTitle toolName={"Hand tool"} letter={"H"} />*/}
+        <HelpWindowToolTitle toolName={"Hand tool"} letter={"H"}>
+          <HandIcon />
+        </HelpWindowToolTitle>
         <Typography>
           Select the Hand tool. Hold and drag to pan the image in the canvas.
           Click on "Reset position" to center the image back onto the canvas.
         </Typography>
         <br />
-        {/*<HelpWindowToolTitle toolName={"Zoom tool"} letter={"Z"} />*/}
+        <HelpWindowToolTitle toolName={"Zoom tool"} letter={"Z"}>
+          <ZoomIcon />
+        </HelpWindowToolTitle>
         <Typography>
           Select the Zoom tool. Use the zoom slider or your mouse wheel to zoom
           in or out of the image.
@@ -56,7 +61,9 @@ export const ManipulateCanvasHelpDialog = ({
           selected region.
         </Typography>
         <br />
-        {/*<HelpWindowToolTitle toolName={"Intensity adjustment"} letter={"I"} />*/}
+        <HelpWindowToolTitle toolName={"Intensity adjustment"} letter={"I"}>
+          <ColorAdjustmentIcon />
+        </HelpWindowToolTitle>
         <Typography>
           Select the Intensity adjustment tool. Filter each color channel by
           setting new minimum and maximum for each color channel. Untoggle a

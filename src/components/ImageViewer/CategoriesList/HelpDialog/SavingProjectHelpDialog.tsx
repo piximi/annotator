@@ -64,8 +64,10 @@ export const SavingProjectHelpDialog = ({
           folders, names by their category, include multiple png files: each
           annotation file is the mask for an annotated object.
         </Typography>
-        <Typography variant={"h6"}>Exporting all annotations</Typography>
         <br />
+        <Typography variant={"h6"}>
+          Exporting annotations of a single image
+        </Typography>
         <Typography>
           To export annotations of a single image, click on the menu to the
           right of the image thumbnail and select "Export annotations." This

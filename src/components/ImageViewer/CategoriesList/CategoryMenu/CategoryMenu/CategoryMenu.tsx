@@ -15,7 +15,6 @@ import { selectedCategorySelector } from "../../../../../store/selectors";
 
 type CategoryMenuProps = {
   anchorElCategoryMenu: any;
-  category: CategoryType;
   onCloseCategoryMenu: (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => void;
@@ -96,18 +95,18 @@ export const CategoryMenu = ({
           onCloseCategoryMenu={onCloseCategoryMenu}
         />
 
+        <div>
+          <Divider />
+
+          <MenuItem onClick={onOpenEditCategoryDialogClick}>
+            <Typography variant="inherit">{t("Edit category")}</Typography>
+          </MenuItem>
+        </div>
+
         {category.id !== "00000000-0000-0000-0000-000000000000" && (
-          <div>
-            <Divider />
-
-            <MenuItem onClick={onOpenEditCategoryDialogClick}>
-              <Typography variant="inherit">{t("Edit category")}</Typography>
-            </MenuItem>
-
-            <MenuItem onClick={onOpenDeleteCategoryDialogClick}>
-              <Typography variant="inherit">{t("Delete category")}</Typography>
-            </MenuItem>
-          </div>
+          <MenuItem onClick={onOpenDeleteCategoryDialogClick}>
+            <Typography variant="inherit">{t("Delete category")}</Typography>
+          </MenuItem>
         )}
       </MenuList>
     </Menu>

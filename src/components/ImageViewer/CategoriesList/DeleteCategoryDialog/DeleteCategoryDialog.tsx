@@ -10,6 +10,7 @@ import { applicationSlice } from "../../../../store";
 import {
   imageInstancesSelector,
   selectedCategorySelector,
+  unknownCategorySelector,
 } from "../../../../store/selectors";
 
 type DeleteCategoryDialogProps = {
@@ -26,6 +27,8 @@ export const DeleteCategoryDialog = ({
   const category = useSelector(selectedCategorySelector);
 
   const selections = useSelector(imageInstancesSelector);
+
+  const unknownCategory = useSelector(unknownCategorySelector);
 
   const onDelete = () => {
     dispatch(
@@ -62,7 +65,7 @@ export const DeleteCategoryDialog = ({
 
       <DialogContent>
         Annotations categorized as "{category.name}" will not be deleted and
-        instead will be labeled as "Unknown."
+        instead will be labeled as "{unknownCategory.name}".
       </DialogContent>
 
       <DialogActions>

@@ -304,7 +304,6 @@ export const CategoriesList = () => {
 
               <CategoryMenu
                 anchorElCategoryMenu={anchorEl}
-                category={category}
                 onCloseCategoryMenu={onCategoryMenuClose}
                 onOpenCategoryMenu={(event) =>
                   onCategoryMenuOpen(event, category)
@@ -313,46 +312,51 @@ export const CategoriesList = () => {
                 onOpenEditCategoryDialog={onOpenEditCategoryDialog}
                 openCategoryMenu={Boolean(anchorEl)}
               />
-
-              <DeleteCategoryDialog
-                onClose={onCloseDeleteCategoryDialog}
-                open={openDeleteCategoryDialog}
-              />
-
-              <EditCategoryDialog
-                onCloseDialog={onCloseEditCategoryDialog}
-                openDialog={openEditCategoryDialog}
-              />
             </div>
           );
         })}
 
         {unknownCategory && (
-          <ListItem
-            button
-            id={unknownCategory.id}
-            onClick={(event) => onCategoryClick(event, unknownCategory)}
-            selected={unknownCategory.id === selectedCategory.id}
-          >
-            <CategoryListItemCheckbox category={unknownCategory} />
-
-            <ListItemText
+          <div key={unknownCategory.id}>
+            <ListItem
+              button
               id={unknownCategory.id}
-              primary={t(unknownCategory.name)}
-              primaryTypographyProps={{ noWrap: true }}
+              onClick={(event) => onCategoryClick(event, unknownCategory)}
+              selected={unknownCategory.id === selectedCategory.id}
+            >
+              <CategoryListItemCheckbox category={unknownCategory} />
+
+              <ListItemText
+                id={unknownCategory.id}
+                primary={t(unknownCategory.name)}
+                primaryTypographyProps={{ noWrap: true }}
+              />
+              {categoryCounts[unknownCategory.id] !== 0 && (
+                <Chip label={categoryCounts[unknownCategory.id]} size="small" />
+              )}
+              <ListItemSecondaryAction>
+                <IconButton
+                  edge="end"
+                  onClick={(event) =>
+                    onCategoryMenuOpen(event, unknownCategory)
+                  }
+                >
+                  <MoreHorizIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+
+            <CategoryMenu
+              anchorElCategoryMenu={anchorEl}
+              onCloseCategoryMenu={onCategoryMenuClose}
+              onOpenCategoryMenu={(event) =>
+                onCategoryMenuOpen(event, unknownCategory)
+              }
+              onOpenDeleteCategoryDialog={onOpenDeleteCategoryDialog}
+              onOpenEditCategoryDialog={onOpenEditCategoryDialog}
+              openCategoryMenu={Boolean(anchorEl)}
             />
-            {categoryCounts[unknownCategory.id] !== 0 && (
-              <Chip label={categoryCounts[unknownCategory.id]} size="small" />
-            )}
-            <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                onClick={(event) => onCategoryMenuOpen(event, unknownCategory)}
-              >
-                <MoreHorizIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
+          </div>
         )}
 
         <CreateCategoryListItem />

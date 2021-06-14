@@ -39,6 +39,7 @@ export const ChangingAnnotationsHelpDialog = ({
         <Typography variant={"h6"}>
           Selecting annotations with the Select tool (s)
         </Typography>
+
         <Typography>
           Select the Selection tool or press "s" on your keyboard to enter the
           selection tool. Click on a desired annotation to select it, and hold

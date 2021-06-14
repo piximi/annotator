@@ -5,6 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import { HelpWindowToolTitle } from "./HelpWindowToolTitle";
 
 type ManipulateCanvasHelpDialogProps = {
   onClose: () => void;
@@ -36,18 +37,16 @@ export const ManipulateCanvasHelpDialog = ({
       </AppBar>
       <DialogContent>
         <br />
-        <Typography variant={"h6"}>Hand tool (h)</Typography>
+        <HelpWindowToolTitle toolName={"Hand tool"} letter={"H"} />
         <Typography>
-          Select the Hand tool or press "h" on your keyboard to enter the hand
-          tool. Hold and drag to pan the image in the canvas. Click on "Reset
-          position" to center the image back onto the canvas.
+          Select the Hand tool. Hold and drag to pan the image in the canvas.
+          Click on "Reset position" to center the image back onto the canvas.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Zoom tool (z)</Typography>
+        <HelpWindowToolTitle toolName={"Zoom tool"} letter={"Z"} />
         <Typography>
-          Select the Zoom tool or press "z" on your keyboard to enter the zoom
-          tool. Use the zoom slider or your mouse wheel to zoom in or out of the
-          image.
+          Select the Zoom tool. Use the zoom slider or your mouse wheel to zoom
+          in or out of the image.
         </Typography>
         <br />
         <Typography>
@@ -57,13 +56,12 @@ export const ManipulateCanvasHelpDialog = ({
           selected region.
         </Typography>
         <br />
-        <Typography variant={"h6"}>Intensity adjustment (i)</Typography>
+        <HelpWindowToolTitle toolName={"Intensity adjustment"} letter={"I"} />
         <Typography>
-          Select the Intensity adjustment tool or press "i" on your keyboard to
-          enter the tool. Filter each color channel by setting new minimum and
-          maximum for each color channel. Untoggle a channel box to disable the
-          channel. Click on "Reset" to reset the intensities to their original
-          values.
+          Select the Intensity adjustment tool. Filter each color channel by
+          setting new minimum and maximum for each color channel. Untoggle a
+          channel box to disable the channel. Click on "Reset" to reset the
+          intensities to their original values.
         </Typography>
         <br />
       </DialogContent>

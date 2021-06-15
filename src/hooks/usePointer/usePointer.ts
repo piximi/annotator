@@ -161,34 +161,36 @@ export const usePointer = () => {
         annotations
       );
 
-      if (!shift) {
-        dispatch(
-          setSelectedAnnotations({
-            selectedAnnotations: annotationsInBox,
-            selectedAnnotation: annotationsInBox[0],
-          })
-        );
-        dispatch(
-          setSelectedCategory({
-            selectedCategory: annotationsInBox[0].categoryId,
-          })
-        );
-      } else {
-        //only include if not already selected
-        const additionalAnnotations = annotationsInBox.filter(
-          (annotation: AnnotationType) => {
-            return !selectedAnnotationsIds.includes(annotation.id);
-          }
-        );
-        dispatch(
-          setSelectedAnnotations({
-            selectedAnnotations: [
-              ...selectedAnnotations,
-              ...additionalAnnotations,
-            ],
-            selectedAnnotation: annotationsInBox[0],
-          })
-        );
+      if (annotationsInBox.length) {
+        if (!shift) {
+          dispatch(
+            setSelectedAnnotations({
+              selectedAnnotations: annotationsInBox,
+              selectedAnnotation: annotationsInBox[0],
+            })
+          );
+          dispatch(
+            setSelectedCategory({
+              selectedCategory: annotationsInBox[0].categoryId,
+            })
+          );
+        } else {
+          //only include if not already selected
+          const additionalAnnotations = annotationsInBox.filter(
+            (annotation: AnnotationType) => {
+              return !selectedAnnotationsIds.includes(annotation.id);
+            }
+          );
+          dispatch(
+            setSelectedAnnotations({
+              selectedAnnotations: [
+                ...selectedAnnotations,
+                ...additionalAnnotations,
+              ],
+              selectedAnnotation: annotationsInBox[0],
+            })
+          );
+        }
       }
     } else {
       onClick(position);

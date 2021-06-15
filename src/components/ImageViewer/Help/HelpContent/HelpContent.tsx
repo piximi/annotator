@@ -146,6 +146,7 @@ export const CreatingCategoriesContent = () => {
 export const MakingNewAnnotationsHelpContent = () => {
   return (
     <React.Fragment>
+      <br />
       <Typography>
         All annotation tools are accessed from the toolbar to the right of the
         canvas or by using their keyboard key shortcut.

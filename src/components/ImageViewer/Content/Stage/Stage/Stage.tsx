@@ -22,7 +22,12 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
-import { useAnnotationTool, useHandTool, useZoom } from "../../../../../hooks";
+import {
+  useAnnotationTool,
+  useCursor,
+  useHandTool,
+  useZoom,
+} from "../../../../../hooks";
 import { AnnotationType } from "../../../../../types/AnnotationType";
 import { penSelectionBrushSizeSelector } from "../../../../../store/selectors/penSelectionBrushSizeSelector";
 import { AnnotationModeType } from "../../../../../types/AnnotationModeType";
@@ -62,6 +67,7 @@ import { pointerSelectionSelector } from "../../../../../store/selectors/pointer
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { channelsSelector } from "../../../../../store/selectors/intensityRangeSelector";
+import { cursorSelector } from "../../../../../store/selectors/cursorSelector";
 
 export const Stage = () => {
   const imageRef = useRef<Konva.Image | null>(null);
@@ -192,6 +198,14 @@ export const Stage = () => {
     const transformerId = "tr-".concat(selectedAnnotation.id);
     detachTransformer(transformerId);
   };
+
+  const cursor = useSelector(cursorSelector);
+  useCursor();
+
+  useEffect(() => {
+    if (!stageRef || !stageRef.current) return;
+    stageRef.current.container().style.cursor = cursor;
+  }, [cursor]);
 
   useEffect(() => {
     if (!annotationTool) return;

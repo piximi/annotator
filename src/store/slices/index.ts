@@ -14,6 +14,7 @@ export {
   setChannels,
   setContrast,
   setCurrentIndex,
+  setCursor,
   setExposure,
   setHue,
   setActiveImage,

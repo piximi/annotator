@@ -22,6 +22,7 @@ import { soundEnabledSelector } from "../../../../../store/selectors/soundEnable
 import deleteAnnotationSoundEffect from "../../../../../sounds/pop-up-off.mp3";
 import { imageWidthSelector } from "../../../../../store/selectors/imageWidthSelector";
 import { imageHeightSelector } from "../../../../../store/selectors/imageHeightSelector";
+import { cursorSelector } from "../../../../../store/selectors/cursorSelector";
 
 type box = {
   x: number;
@@ -70,7 +71,7 @@ export const Transformer = ({
 
   const stageScale = useSelector(stageScaleSelector);
 
-  const cursor = useCursor();
+  const cursor = useSelector(cursorSelector);
 
   const soundEnabled = useSelector(soundEnabledSelector);
 
@@ -313,7 +314,7 @@ export const Transformer = ({
 
   const onSaveAnnotationClick = (event: Konva.KonvaEventObject<MouseEvent>) => {
     const container = event.target.getStage()!.container();
-    container.style.cursor = cursor.cursor!;
+    container.style.cursor = cursor;
 
     dispatch(
       applicationSlice.actions.setImageInstances({
@@ -342,7 +343,7 @@ export const Transformer = ({
     event: Konva.KonvaEventObject<MouseEvent>
   ) => {
     const container = event.target.getStage()!.container();
-    container.style.cursor = cursor.cursor!;
+    container.style.cursor = cursor;
     dispatch(
       setSelectedAnnotations({
         selectedAnnotations: [],
@@ -359,7 +360,7 @@ export const Transformer = ({
 
   const onMouseLeave = (event: Konva.KonvaEventObject<MouseEvent>) => {
     const container = event.target.getStage()!.container();
-    container.style.cursor = cursor.cursor!;
+    container.style.cursor = cursor;
   };
 
   let posX = 0;

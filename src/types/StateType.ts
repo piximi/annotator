@@ -16,6 +16,7 @@ export type StateType = {
   contrast: number;
   currentIndex: number;
   currentPosition?: { x: number; y: number };
+  cursor: string;
   exposure: number;
   hue: number;
   activeImageId?: string;

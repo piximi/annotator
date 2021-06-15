@@ -33,8 +33,6 @@ export const Content = ({ onDrop }: ContentProps) => {
     []
   );
 
-  const { cursor } = useCursor();
-
   return (
     <React.Fragment>
       {/*<AppBar className={classes.appBar} color="default">*/}
@@ -47,7 +45,7 @@ export const Content = ({ onDrop }: ContentProps) => {
 
       {/*<Divider />*/}
 
-      <main className={classes.content} ref={ref} style={{ cursor: cursor }}>
+      <main className={classes.content} ref={ref}>
         <div ref={drop}>
           <Stage />
         </div>

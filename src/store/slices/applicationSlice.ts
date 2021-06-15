@@ -89,6 +89,7 @@ const initialState: StateType = {
     },
   ],
   currentIndex: 0,
+  cursor: "default",
   contrast: 0,
   exposure: 0,
   hue: 0,
@@ -359,6 +360,14 @@ export const applicationSlice = createSlice({
     ) {
       state.channels = action.payload.channels;
     },
+    setCursor(
+      state: StateType,
+      action: PayloadAction<{
+        cursor: string;
+      }>
+    ) {
+      state.cursor = action.payload.cursor;
+    },
     setInvertMode(
       state: StateType,
       action: PayloadAction<{ invertMode: boolean }>
@@ -510,6 +519,7 @@ export const {
   setChannels,
   setContrast,
   setCurrentIndex,
+  setCursor,
   setExposure,
   setHue,
   setImageInstances,

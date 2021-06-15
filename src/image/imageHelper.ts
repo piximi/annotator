@@ -306,18 +306,7 @@ export const saveAnnotationsAsMasks = (
             }
           }
 
-          const uri = fullImageMask.toDataURL("image/png", {
-            useCanvas: true,
-          });
-
-          //draw to canvas
-          const canvas = document.createElement("canvas");
-          canvas.width = current.shape.width;
-          canvas.height = current.shape.height;
-
-          const ctx = canvas.getContext("2d");
-
-          if (!ctx) return;
+          const blob = fullImageMask.toBlob("image/png");
 
           const category = categories.find((category: CategoryType) => {
             return category.id === annotation.categoryId;
@@ -325,35 +314,15 @@ export const saveAnnotationsAsMasks = (
 
           if (!category) return;
 
-          const categoryName = category.name;
-
-          zip.folder(`${current.name}/${categoryName}`);
-
-          //create image from Data URL
-          const image = new Image(current.shape.width, current.shape.height);
-          image.onload = () => {
-            ctx.drawImage(
-              image,
-              0,
-              0,
-              current.shape.width,
-              current.shape.height
-            );
-            canvas.toBlob((blob) => {
-              if (!blob) return;
-              zip.file(
-                `${current.name}/${categoryName}/${annotation.id}.png`,
-                blob,
-                {
-                  base64: true,
-                }
-              );
-              resolve(true);
-            }, "image/png");
-          };
-          image.onerror = reject;
-          image.crossOrigin = "anonymous";
-          image.src = uri;
+          zip.folder(`${current.name}/${category.name}`);
+          zip.file(
+            `${current.name}/${category.name}/${annotation.id}.png`,
+            blob,
+            {
+              base64: true,
+            }
+          );
+          resolve(true);
         });
       });
     })
@@ -410,43 +379,12 @@ export const saveAnnotationsAsMatrix = (
             }
             n += 1;
           }
-
-          const uri = fullLabelImage.toDataURL("image/png", {
-            useCanvas: true,
-          });
-
-          //draw to canvas
-          const canvas = document.createElement("canvas");
-          canvas.width = current.shape.width;
-          canvas.height = current.shape.height;
-
-          const ctx = canvas.getContext("2d");
-
-          if (!ctx) return;
-
+          const blob = fullLabelImage.toBlob("image/png");
           zip.folder(`${current.name}`);
-
-          //create image from Data URL
-          const image = new Image(current.shape.width, current.shape.height);
-          image.onload = () => {
-            ctx.drawImage(
-              image,
-              0,
-              0,
-              current.shape.width,
-              current.shape.height
-            );
-            canvas.toBlob((blob) => {
-              if (!blob) return;
-              zip.file(`${current.name}/${category.name}.png`, blob, {
-                base64: true,
-              });
-              resolve(true);
-            }, "image/png");
-          };
-          image.onerror = reject;
-          image.crossOrigin = "anonymous";
-          image.src = uri;
+          zip.file(`${current.name}/${category.name}.png`, blob, {
+            base64: true,
+          });
+          resolve(true);
         });
       });
     })

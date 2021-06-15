@@ -15,7 +15,7 @@ import {
 import { useStyles } from "./Tool.css";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { Tooltip } from "@material-ui/core";
-import { HelpWindowToolTitle } from "../../CategoriesList/HelpDialog/HelpWindowToolTitle";
+import { HelpWindowToolTitle } from "../../Help/HelpDialog/HelpWindowToolTitle";
 import { ToolBarToolTitle } from "./ToolBarToolTitle";
 
 type TooltipCardProps = {

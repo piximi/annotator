@@ -1,7 +1,7 @@
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { KeyboardKey } from "../../CategoriesList/HelpDialog/KeyboardKey";
-import { useStyles } from "../../CategoriesList/HelpDialog/HelpDialog.css";
+import { KeyboardKey } from "../../Help/HelpDialog/KeyboardKey";
+import { useStyles } from "../../Help/HelpDialog/HelpDialog.css";
 
 type ToolTitleProps = {
   toolName: string;

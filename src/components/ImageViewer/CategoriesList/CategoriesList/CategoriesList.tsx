@@ -61,13 +61,13 @@ import { ImageMenu } from "../ImageMenu";
 import { DeleteAllAnnotationsDialog } from "../DeleteAllAnnotationsDialog";
 import { SaveMenu } from "../SaveMenu/SaveMenu";
 import { OpenMenu } from "../OpenMenu/OpenMenu";
-import { HelpDialog } from "../HelpDialog/HelpDialog";
-import { OpenImageHelpDialog } from "../HelpDialog/OpenImageHelpDialog";
-import { MakeAnnotationsHelpDialog } from "../HelpDialog/MakeAnnotationsHelpDialog";
-import { ManipulateCanvasHelpDialog } from "../HelpDialog/ManipulateCanvasHelpDialog";
-import { ChangingAnnotationsHelpDialog } from "../HelpDialog/ChangingAnnotationsHelpDialog";
-import { SavingProjectHelpDialog } from "../HelpDialog/SavingProjectHelpDialog";
-import TemporaryDrawer from "../HelpDrawer/TestDrawer";
+import { HelpDialog } from "../../Help/HelpDialog/HelpDialog";
+import { OpenImageHelpDialog } from "../../Help/HelpDialog/OpenImageHelpDialog";
+import { MakeAnnotationsHelpDialog } from "../../Help/HelpDialog/MakeAnnotationsHelpDialog";
+import { ManipulateCanvasHelpDialog } from "../../Help/HelpDialog/ManipulateCanvasHelpDialog";
+import { ChangingAnnotationsHelpDialog } from "../../Help/HelpDialog/ChangingAnnotationsHelpDialog";
+import { SavingProjectHelpDialog } from "../../Help/HelpDialog/SavingProjectHelpDialog";
+import HelpDrawer from "../../Help/HelpDrawer/HelpDrawer";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -401,7 +401,7 @@ export const CategoriesList = () => {
         <SettingsListItem />
         <HelpListItem />
         <SendFeedbackListItem />
-        <TemporaryDrawer />
+        <HelpDrawer />
       </List>
     </Drawer>
   );

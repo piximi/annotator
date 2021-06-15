@@ -15,7 +15,7 @@ export const ZoomSelection = ({}) => {
     return <React.Fragment />;
 
   return (
-    <React.Fragment>
+    <ReactKonva.Group>
       <ReactKonva.Rect
         dash={[4, 2]}
         dashOffset={-dashOffset}
@@ -26,6 +26,17 @@ export const ZoomSelection = ({}) => {
         x={minimum.x}
         y={minimum.y}
       />
-    </React.Fragment>
+
+      <ReactKonva.Rect
+        dash={[4, 2]}
+        dashOffset={-dashOffset}
+        height={maximum.y - minimum.y}
+        stroke="white"
+        strokeWidth={1}
+        width={maximum.x - minimum.x}
+        x={minimum.x}
+        y={minimum.y}
+      />
+    </ReactKonva.Group>
   );
 };

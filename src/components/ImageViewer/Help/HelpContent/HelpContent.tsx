@@ -14,9 +14,11 @@ import {
   ZoomIcon,
 } from "../../../icons";
 import Typography from "@material-ui/core/Typography";
-import { DialogContent } from "@material-ui/core";
+import { Box, DialogContent } from "@material-ui/core";
 import React from "react";
 import { KeyboardKey } from "../HelpDialog/KeyboardKey";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
 
 export const ManipulatingCanvasContent = () => {
   return (
@@ -26,16 +28,17 @@ export const ManipulatingCanvasContent = () => {
         <HandIcon />
       </HelpWindowToolTitle>
       <Typography>
-        Select the Hand tool. Hold and drag to pan the image in the canvas.
-        Click on "Reset position" to center the image back onto the canvas.
+        Hold and drag to pan the image in the canvas. Click on "Reset position"
+        to center the image back onto the canvas.
       </Typography>
+      <br />
+      <Divider />
       <br />
       <HelpWindowToolTitle toolName={"Zoom tool"} letter={"Z"}>
         <ZoomIcon />
       </HelpWindowToolTitle>
       <Typography>
-        Select the Zoom tool. Use the zoom slider or your mouse wheel to zoom in
-        or out of the image.
+        Use the zoom slider or your mouse wheel to zoom in or out of the image.
       </Typography>
       <br />
       <Typography>
@@ -45,14 +48,15 @@ export const ManipulatingCanvasContent = () => {
         selected region.
       </Typography>
       <br />
+      <Divider />
+      <br />
       <HelpWindowToolTitle toolName={"Intensity adjustment"} letter={"I"}>
         <ColorAdjustmentIcon />
       </HelpWindowToolTitle>
       <Typography>
-        Select the Intensity adjustment tool. Filter each color channel by
-        setting new minimum and maximum for each color channel. Untoggle a
-        channel box to disable the channel. Click on "Reset" to reset the
-        intensities to their original values.
+        Filter each color channel by setting new minimum and maximum for each
+        color channel. Untoggle a channel box to disable the channel. Click on
+        "Reset" to reset the intensities to their original values.
       </Typography>
       <br />
     </React.Fragment>
@@ -63,7 +67,9 @@ export const OpeningImagesHelpContent = () => {
   return (
     <React.Fragment>
       <br />
-      <Typography variant={"h6"}>Opening images</Typography>
+      <Typography>
+        <Box fontWeight="fontWeightBold">{"Opening images"}</Box>
+      </Typography>
       <Typography>
         In the left menu, select "Open new image" to select one or multiple
         image files to open.
@@ -79,13 +85,21 @@ export const OpeningImagesHelpContent = () => {
         2D images. We do not support multi-dimensional images.
       </Typography>
       <br />
-      <Typography variant={"h6"}>Deleting images</Typography>
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">{"Deleting images"}</Box>
+      </Typography>
       <Typography>
         Images can be deleted from the workspace at any time by selecting
         "Delete image" on the menu options next to the image thumbnail.
       </Typography>
       <br />
-      <Typography variant={"h6"}>Example pre-annotated images</Typography>
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">{"Example pre-annotated images"}</Box>
+      </Typography>
       <Typography>
         Take a look at our pre-annotated images by clicking "Open example image"
         and selecting the image of choice!
@@ -122,6 +136,8 @@ export const MakingNewAnnotationsHelpContent = () => {
         <Typography>on your keyboard or click on "cancel".</Typography>
       </div>
       <br />
+      <Divider />
+      <br />
       <HelpWindowToolTitle toolName={"Rectangular annotation"} letter={"R"}>
         <RectangularSelectionIcon />
       </HelpWindowToolTitle>
@@ -130,6 +146,8 @@ export const MakingNewAnnotationsHelpContent = () => {
         Release to close the annotation.
       </Typography>
       <br />
+      <Divider />
+      <br />
       <HelpWindowToolTitle toolName={"Elliptical annotation"} letter={"E"}>
         <EllipticalSelectionIcon />
       </HelpWindowToolTitle>
@@ -137,6 +155,8 @@ export const MakingNewAnnotationsHelpContent = () => {
         Click and drag to start drawing an elliptical annotation. Release to
         close the annotation.
       </Typography>
+      <br />
+      <Divider />
       <br />
       <HelpWindowToolTitle toolName={"Pen annotation"} letter={"D"}>
         <PenSelectionIcon />
@@ -147,6 +167,8 @@ export const MakingNewAnnotationsHelpContent = () => {
         annotation.
       </Typography>
       <br />
+      <Divider />
+      <br />
       <HelpWindowToolTitle toolName={"Lasso annotation"} letter={"L"}>
         <LassoSelectionIcon />
       </HelpWindowToolTitle>
@@ -154,6 +176,8 @@ export const MakingNewAnnotationsHelpContent = () => {
         Click and drag cursor around the desired region. Release to
         automatically close the lasso annotation.
       </Typography>
+      <br />
+      <Divider />
       <br />
       <HelpWindowToolTitle toolName={"Polygonal annotation"} letter={"P"}>
         <PolygonalSelectionIcon />
@@ -164,6 +188,8 @@ export const MakingNewAnnotationsHelpContent = () => {
         your keyboard.
       </Typography>
       <br />
+      <Divider />
+      <br />
       <HelpWindowToolTitle toolName={"Magnetic annotation"} letter={"M"}>
         <MagneticSelectionIcon />
       </HelpWindowToolTitle>
@@ -173,6 +199,8 @@ export const MakingNewAnnotationsHelpContent = () => {
         annotation by clicking on its origin point.
       </Typography>
       <br />
+      <Divider />
+      <br />
       <HelpWindowToolTitle toolName={"Color annotation"} letter={"C"}>
         <ColorSelectionIcon />
       </HelpWindowToolTitle>
@@ -181,6 +209,8 @@ export const MakingNewAnnotationsHelpContent = () => {
         select a region of similar color intensities near the point. Release to
         finish the annotation.
       </Typography>
+      <br />
+      <Divider />
       <br />
       <HelpWindowToolTitle toolName={"Quick annotation"} letter={"Q"}>
         <QuickSelectionIcon />
@@ -198,17 +228,14 @@ export const ChangingAnnotationsHelpContent = () => {
   return (
     <React.Fragment>
       <br />
-      <HelpWindowToolTitle
-        toolName={"Selecting annotations with the Select tool"}
-        letter={"S"}
-      >
+      <HelpWindowToolTitle toolName={"Select tool"} letter={"S"}>
         <SelectionIcon />
       </HelpWindowToolTitle>
       <Typography>
-        Select the Selection tool. Click on a desired annotation to select it,
-        and hold shift while clicking other annotations to select multiple
-        annotations. Alternatively, draw a rectangular box around multiple
-        annotations to select multiple annotations at once.
+        Use the Select tool to select annotations. Click on a desired annotation
+        to select it, and hold shift while clicking other annotations to select
+        multiple annotations. Alternatively, draw a rectangular box around
+        multiple annotations to select multiple annotations at once.
       </Typography>
       <br />
       <Typography>
@@ -241,21 +268,33 @@ export const ChangingAnnotationsHelpContent = () => {
         </Typography>
       </div>
       <br />
-      <Typography variant={"h6"}>Resizing an annotation</Typography>
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">{"Resizing an annotation"}</Box>
+      </Typography>
       <Typography>
         Once an annotation is selected, use the anchor points of the bouding box
         to resize it.
       </Typography>
       <br />
-      <Typography variant={"h6"}>Adding area to an annotation</Typography>
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">{"Adding area to an annotation"}</Box>
+      </Typography>
       <Typography>
         Select the annotation tool to use to add an area and select the "add
         area" selection mode. Draw on the selected annotation with the
         annotation tool to combine areas together.
       </Typography>
       <br />
-      <Typography variant={"h6"}>
-        Subtracting an area from an annotation
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">
+          {"Subtracting an area from an annotation"}
+        </Box>
       </Typography>
       <Typography>
         Select the annotation tool to use to subtract an area and select the
@@ -263,7 +302,13 @@ export const ChangingAnnotationsHelpContent = () => {
         annotation tool to subtract an area from the selected annotation.
       </Typography>
       <br />
-      <Typography variant={"h6"}>Intersection of two annotations</Typography>
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">
+          {"Intersection of two annotations"}
+        </Box>
+      </Typography>
       <Typography>
         Select the annotation tool to use to use for the intersection operation
         and select the "intersect" selection mode. Draw on the selected
@@ -271,8 +316,12 @@ export const ChangingAnnotationsHelpContent = () => {
         intersection of the two annotations.
       </Typography>
       <br />
-      <Typography variant={"h6"}>
-        Changing the category of an annotation
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">
+          {" Changing the category of an annotation"}
+        </Box>
       </Typography>
       <Typography>
         To change the category, first select the annotation(s) and click on the
@@ -289,22 +338,34 @@ export const ChangingAnnotationsHelpContent = () => {
         </Typography>
       </div>
       <br />
-      <Typography variant={"h6"}>Deleting selected annotations</Typography>
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">{"Deleting selected annotations"}</Box>
+      </Typography>
       <Typography>
         First, use the Select tool to select annotations. To delete one or more
         selected annotations, press the Delete key or click on "Clear selected
         annotations" in the left toolbar.
       </Typography>
       <br />
-      <Typography variant={"h6"}>
-        Deleting all annotations for a single image
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">
+          {"  Deleting all annotations for a single image"}
+        </Box>
       </Typography>
       <Typography>
         To clear annotations of a particular image, click on the menu to the
         right of the image thumbnail and select "Clear annotations."
       </Typography>
       <br />
-      <Typography variant={"h6"}>Deleting all annotations</Typography>
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">{"Deleting all annotations"}</Box>
+      </Typography>
       <Typography>
         Delete all annotations by clicking "Clear all annotations" in the left
         toolbar. WARNING: This will delete all annotations across all images
@@ -319,21 +380,31 @@ export const SavingProjectHelpContent = () => {
   return (
     <React.Fragment>
       <br />
-      <Typography variant={"h6"}>Saving a project</Typography>
+      <Typography>
+        <Box fontWeight="fontWeightBold">{"Saving a project"}</Box>
+      </Typography>
       <Typography>
         Save all images and their annotations by clicking on "Save project file"
         in the Save menu on the left toolbar. This will download a .json file
         that encodes the image data and their annotations.
       </Typography>
       <br />
-      <Typography variant={"h6"}>Opening a saved project</Typography>
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">{"Opening a saved project"}</Box>
+      </Typography>
       <Typography>
         To open a saved project and make new annotations or change annotations,
         Click "Open project file" in the Open menu on the left toolbar. Select
         the .json file that was downloaded when saving an earlier project.
       </Typography>
       <br />
-      <Typography variant={"h6"}>Exporting all annotations</Typography>
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">{"Exporting all annotations"}</Box>
+      </Typography>
       <Typography>
         It may be useful to export annotations as binary masks which can then be
         provided to subsequent machine learning pipelines. To export the
@@ -345,8 +416,12 @@ export const SavingProjectHelpContent = () => {
         mask for an annotated object.
       </Typography>
       <br />
-      <Typography variant={"h6"}>
-        Exporting annotations of a single image
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">
+          {"Exporting annotations of a single image"}
+        </Box>
       </Typography>
       <Typography>
         To export annotations of a single image, click on the menu to the right

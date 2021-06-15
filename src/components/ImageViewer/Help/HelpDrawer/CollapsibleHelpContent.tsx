@@ -6,6 +6,8 @@ import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ListItemText from "@material-ui/core/ListItemText";
 import Collapse from "@material-ui/core/Collapse";
+import DescriptionIcon from "@material-ui/icons/Description";
+import { Typography } from "@material-ui/core";
 
 type CollapsibleHelpContentProps = {
   children: any;
@@ -30,10 +32,9 @@ export const CollapsibleHelpContent = ({
     <List dense={dense}>
       <ListItem button onClick={onClick}>
         <ListItemIcon>
-          {collapsed ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          <DescriptionIcon />
         </ListItemIcon>
-
-        <ListItemText primary={primary} />
+        <ListItemText primary={<Typography>{primary}</Typography>} />
       </ListItem>
 
       <Collapse in={collapsed} timeout="auto" unmountOnExit>

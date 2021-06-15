@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 
 import { CollapsibleHelpContent } from "./CollapsibleHelpContent";
@@ -18,15 +17,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import HelpIcon from "@material-ui/icons/Help";
 import ListItemText from "@material-ui/core/ListItemText";
-
-const useStyles = makeStyles({
-  list: {
-    width: 250,
-  },
-  fullList: {
-    width: "auto",
-  },
-});
 
 export default function HelpDrawer() {
   const useStyles = makeStyles((theme) => ({
@@ -83,9 +73,14 @@ export default function HelpDrawer() {
             open={state["left"]}
             onClose={toggleDrawer("left", false)}
           >
-            <IconButton onClick={toggleDrawer("left", false)}>
-              <CloseIcon />
-            </IconButton>
+            <div tabIndex={1} role="button">
+              <IconButton
+                style={{ float: "right", marginRight: "20px" }}
+                onClick={toggleDrawer("left", false)}
+              >
+                <CloseIcon />
+              </IconButton>
+            </div>
             <CollapsibleHelpContent
               primary={"Opening images"}
               closed={false}

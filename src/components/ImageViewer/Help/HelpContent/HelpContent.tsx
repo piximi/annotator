@@ -123,16 +123,16 @@ export const MakingNewAnnotationsHelpContent = () => {
         canvas or by using their keyboard key shortcut.
       </Typography>
       <br />
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography>Once you an annotation is completed, press</Typography>
-        <KeyboardKey letter="enter" />
-        <Typography>on your keyboard or click on "confirm".</Typography>
-      </div>
+      <Typography>
+        Once you an annotation is completed, press "Enter" on your keyboard or
+        click on "confirm".
+      </Typography>
       <br />
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography>To undo an unconfirmed annotation, press</Typography>
-        <KeyboardKey letter="escape" />
-        <Typography>on your keyboard or click on "cancel".</Typography>
+      <div>
+        <Typography>
+          To undo an unconfirmed annotation, press "Escape" on your keyboard or
+          click on "cancel".
+        </Typography>
       </div>
       <br />
       <Divider />
@@ -249,23 +249,14 @@ export const ChangingAnnotationsHelpContent = () => {
         annotation is selected.
       </Typography>
       <br />
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography>Press the</Typography>
-        <KeyboardKey letter="escape" />
-        <Typography>
-          {" "}
-          key to undo changes or to unselect annotations.
-        </Typography>
-      </div>
+      <Typography>
+        Press the "Escape" key to undo changes or to unselect annotations.
+      </Typography>
       <br />
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography>Press the</Typography>
-        <KeyboardKey letter="enter" />
-        <Typography>
-          {" "}
-          key to confirm changes to a selected annotation.
-        </Typography>
-      </div>
+
+      <Typography>
+        Press the "Enter" key to confirm changes to a selected annotation.
+      </Typography>
       <br />
       <Divider />
       <br />
@@ -328,14 +319,10 @@ export const ChangingAnnotationsHelpContent = () => {
         exist, click "Create category" to make a new category.
       </Typography>
       <br />
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography>Make sure to press the</Typography>
-        <KeyboardKey letter="enter" />
-        <Typography>
-          {" "}
-          key to save the selected annotations with the new category assigned.
-        </Typography>
-      </div>
+      <Typography>
+        Make sure to press the "Enter" key to save the selected annotations with
+        the new category assigned.
+      </Typography>
       <br />
       <Divider />
       <br />

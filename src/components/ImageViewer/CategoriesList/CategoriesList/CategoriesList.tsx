@@ -67,7 +67,7 @@ import { MakeAnnotationsHelpDialog } from "../HelpDialog/MakeAnnotationsHelpDial
 import { ManipulateCanvasHelpDialog } from "../HelpDialog/ManipulateCanvasHelpDialog";
 import { ChangingAnnotationsHelpDialog } from "../HelpDialog/ChangingAnnotationsHelpDialog";
 import { SavingProjectHelpDialog } from "../HelpDialog/SavingProjectHelpDialog";
-import TemporaryDrawer from "../TestDrawer";
+import TemporaryDrawer from "../HelpDrawer/TestDrawer";
 
 export const CategoriesList = () => {
   const classes = useStyles();

@@ -108,16 +108,44 @@ export const OpeningImagesHelpContent = () => {
   );
 };
 
-export const MakingNewAnnotationsHelpContent = () => {
+export const CreatingCategoriesContent = () => {
   return (
     <React.Fragment>
       <br />
       <Typography>
+        <Box fontWeight="fontWeightBold">{" Creating a new category"}</Box>
+      </Typography>
+      <Typography>
         Create a new category by clicking on the "Create category" button. Once
-        a category is created, its name and color can be changed by selecting
-        its options menu on the right on the category menu in the left toobar.
+        a category is created, its name and color can be changed at any time by
+        selecting its "Edit category" menu on theego right of the catry icon.
       </Typography>
       <br />
+      <Divider />
+      <br />
+      <Typography>
+        <Box fontWeight="fontWeightBold">
+          {" Changing the category of an annotation"}
+        </Box>
+      </Typography>
+      <Typography>
+        To change the category of an annotation, first select the annotation(s)
+        to be changed and click on the desired new category button in the left
+        toolbar. If the desired category does not exist, click "Create category"
+        to make a new category.
+      </Typography>
+      <br />
+      <Typography>
+        Make sure to press the "Enter" key to save the selected annotations with
+        the new category assigned.
+      </Typography>
+    </React.Fragment>
+  );
+};
+
+export const MakingNewAnnotationsHelpContent = () => {
+  return (
+    <React.Fragment>
       <Typography>
         All annotation tools are accessed from the toolbar to the right of the
         canvas or by using their keyboard key shortcut.
@@ -304,24 +332,6 @@ export const ChangingAnnotationsHelpContent = () => {
         and select the "intersect" selection mode. Draw on the selected
         annotation with the annotation tool and release to obtain the
         intersection of the two annotations.
-      </Typography>
-      <br />
-      <Divider />
-      <br />
-      <Typography>
-        <Box fontWeight="fontWeightBold">
-          {" Changing the category of an annotation"}
-        </Box>
-      </Typography>
-      <Typography>
-        To change the category, first select the annotation(s) and click on the
-        desired category in the left toolbar. If the desired category does not
-        exist, click "Create category" to make a new category.
-      </Typography>
-      <br />
-      <Typography>
-        Make sure to press the "Enter" key to save the selected annotations with
-        the new category assigned.
       </Typography>
       <br />
       <Divider />

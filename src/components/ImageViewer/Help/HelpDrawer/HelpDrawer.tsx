@@ -7,6 +7,7 @@ import { CollapsibleHelpContent } from "./CollapsibleHelpContent";
 import { IconButton } from "@material-ui/core";
 import {
   ChangingAnnotationsHelpContent,
+  CreatingCategoriesContent,
   MakingNewAnnotationsHelpContent,
   ManipulatingCanvasContent,
   OpeningImagesHelpContent,
@@ -21,11 +22,11 @@ import ListItemText from "@material-ui/core/ListItemText";
 export default function HelpDrawer() {
   const useStyles = makeStyles((theme) => ({
     drawer: {
-      width: "300px",
+      width: theme.spacing(35),
       flexShrink: 0,
     },
     drawerPaper: {
-      width: "300px",
+      width: theme.spacing(35),
     },
   }));
 
@@ -97,6 +98,15 @@ export default function HelpDrawer() {
             >
               <Container>
                 <ManipulatingCanvasContent />
+              </Container>
+            </CollapsibleHelpContent>
+            <CollapsibleHelpContent
+              primary={"Creating categories"}
+              closed={false}
+              dense={true}
+            >
+              <Container>
+                <CreatingCategoriesContent />
               </Container>
             </CollapsibleHelpContent>
             <CollapsibleHelpContent

@@ -17,6 +17,7 @@ import {
   QuickSelectionIcon,
   RectangularSelectionIcon,
 } from "../../../icons";
+import { MakingNewAnnotationsHelpContent } from "../HelpContent/HelpContent";
 
 type MakeAnnotationsHelpDialogProps = {
   onClose: () => void;
@@ -50,99 +51,7 @@ export const MakeAnnotationsHelpDialog = ({
         </Toolbar>
       </AppBar>
       <DialogContent>
-        <br />
-        <Typography>
-          Create a new category by clicking on the "Create category" button.
-          Once a category is created, its name and color can be changed by
-          selecting its options menu on the right on the category menu in the
-          left toobar.
-        </Typography>
-        <br />
-        <Typography>
-          All annotation tools are accessed from the toolbar to the right of the
-          canvas or by using their keyboard key shortcut.
-        </Typography>
-        <br />
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Typography>Once you an annotation is completed, press</Typography>
-          <KeyboardKey letter="enter" />
-          <Typography>on your keyboard or click on "confirm".</Typography>
-        </div>
-        <br />
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Typography>To undo an unconfirmed annotation, press</Typography>
-          <KeyboardKey letter="escape" />
-          <Typography>on your keyboard or click on "cancel".</Typography>
-        </div>
-        <br />
-        <HelpWindowToolTitle toolName={"Rectangular annotation"} letter={"R"}>
-          <RectangularSelectionIcon />
-        </HelpWindowToolTitle>
-        <Typography>
-          Click and drag to start drawing a rectangular annotation (bounding
-          box). Release to close the annotation.
-        </Typography>
-        <br />
-        <HelpWindowToolTitle toolName={"Elliptical annotation"} letter={"E"}>
-          <EllipticalSelectionIcon />
-        </HelpWindowToolTitle>
-        <Typography>
-          Click and drag to start drawing an elliptical annotation. Release to
-          close the annotation.
-        </Typography>
-        <br />
-        <HelpWindowToolTitle toolName={"Pen annotation"} letter={"D"}>
-          <PenSelectionIcon />
-        </HelpWindowToolTitle>
-        <Typography>
-          Select desired brush size using the brush size slider. Draw over
-          pixels by clicking and dragging over the desired area. Release to
-          close the annotation.
-        </Typography>
-        <br />
-        <HelpWindowToolTitle toolName={"Lasso annotation"} letter={"L"}>
-          <LassoSelectionIcon />
-        </HelpWindowToolTitle>
-        <Typography>
-          Click and drag cursor around the desired region. Release to
-          automatically close the lasso annotation.
-        </Typography>
-        <br />
-        <HelpWindowToolTitle toolName={"Polygonal annotation"} letter={"P"}>
-          <PolygonalSelectionIcon />
-        </HelpWindowToolTitle>
-        <Typography>
-          Click and release to create new anchor points. Close the polygonal
-          annotation either by clicking on its origin point or by hitting enter
-          on your keyboard.
-        </Typography>
-        <br />
-        <HelpWindowToolTitle toolName={"Magnetic annotation"} letter={"M"}>
-          <MagneticSelectionIcon />
-        </HelpWindowToolTitle>
-        <Typography>
-          Click and release to create new anchor points. The tool will
-          automatically snap onto the edges of an object. Close the magnetic
-          annotation by clicking on its origin point.
-        </Typography>
-        <br />
-        <HelpWindowToolTitle toolName={"Color annotation"} letter={"C"}>
-          <ColorSelectionIcon />
-        </HelpWindowToolTitle>
-        <Typography>
-          Click on a pixel with the color of interest, hold and drag outwards to
-          select a region of similar color intensities near the point. Release
-          to finish the annotation.
-        </Typography>
-        <br />
-        <HelpWindowToolTitle toolName={"Quick annotation"} letter={"Q"}>
-          <QuickSelectionIcon />
-        </HelpWindowToolTitle>
-        <Typography>
-          Click and drag to select a region of superpixels. Release to finish
-          the annotation.
-        </Typography>
-        <br />
+        <MakingNewAnnotationsHelpContent />
       </DialogContent>
     </Dialog>
   );

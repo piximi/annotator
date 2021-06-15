@@ -5,18 +5,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import { HelpWindowToolTitle } from "./HelpWindowToolTitle";
-import { KeyboardKey } from "./KeyboardKey";
-import {
-  ColorSelectionIcon,
-  EllipticalSelectionIcon,
-  LassoSelectionIcon,
-  MagneticSelectionIcon,
-  PenSelectionIcon,
-  PolygonalSelectionIcon,
-  QuickSelectionIcon,
-  RectangularSelectionIcon,
-} from "../../../icons";
 import { MakingNewAnnotationsHelpContent } from "../HelpContent/HelpContent";
 
 type MakeAnnotationsHelpDialogProps = {

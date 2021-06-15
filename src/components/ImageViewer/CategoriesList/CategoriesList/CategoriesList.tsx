@@ -398,10 +398,9 @@ export const CategoriesList = () => {
       <Divider />
 
       <List dense>
-        <SettingsListItem />
-        <HelpListItem />
-        <SendFeedbackListItem />
         <HelpDrawer />
+        <SettingsListItem />
+        <SendFeedbackListItem />
       </List>
     </Drawer>
   );
@@ -431,6 +430,10 @@ const CreateCategoryListItem = () => {
     </React.Fragment>
   );
 };
+
+/*
+ * WARNING: This list item and its dialog box is not used anymore as it is been replaced with the HelpDrawer component.
+ * */
 
 const HelpListItem = () => {
   const { onClose, onOpen, open } = useDialog();
@@ -475,37 +478,39 @@ const HelpListItem = () => {
         <ListItemText primary="Help" />
       </ListItem>
 
-      <HelpDialog
-        onClose={onClose}
-        open={open}
-        onOpenOpenImagesHelpDialog={onOpenOpenImagesHelpDialog}
-        onOpenMakeAnnotationsHelpDialog={onOpenMakeAnnotationsHelpDialog}
-        onOpenManipulatingCanvasHelpDialog={onOpenManipulatingCanvasHelpDialog}
-        onOpenChangingAnnotationsHelpDialog={
-          onOpenChangingAnnotationsHelpDialog
-        }
-        onOpenSavingProjectHelpDialog={onOpenSavingProjectHelpDialog}
-      />
-      <OpenImageHelpDialog
-        onClose={onCloseOpenImagesHelpDialog}
-        open={openOpenImagesHelpDialog}
-      />
-      <MakeAnnotationsHelpDialog
-        onClose={onCloseMakeAnnotationsHelpDialog}
-        open={openMakeAnnotationsHelpDialog}
-      />
-      <ManipulateCanvasHelpDialog
-        onClose={onCloseManipulatingCanvasHelpDialog}
-        open={openManipulatingCanvasHelpDialog}
-      />
-      <ChangingAnnotationsHelpDialog
-        onClose={onCloseChangingAnnotationsHelpDialog}
-        open={openChangingAnnotationsHelpDialog}
-      />
-      <SavingProjectHelpDialog
-        onClose={onCloseSavingProjectHelpDialog}
-        open={openSavingProjectHelpDialog}
-      />
+      <HelpDrawer />
+
+      {/*<HelpDialog*/}
+      {/*  onClose={onClose}*/}
+      {/*  open={open}*/}
+      {/*  onOpenOpenImagesHelpDialog={onOpenOpenImagesHelpDialog}*/}
+      {/*  onOpenMakeAnnotationsHelpDialog={onOpenMakeAnnotationsHelpDialog}*/}
+      {/*  onOpenManipulatingCanvasHelpDialog={onOpenManipulatingCanvasHelpDialog}*/}
+      {/*  onOpenChangingAnnotationsHelpDialog={*/}
+      {/*    onOpenChangingAnnotationsHelpDialog*/}
+      {/*  }*/}
+      {/*  onOpenSavingProjectHelpDialog={onOpenSavingProjectHelpDialog}*/}
+      {/*/>*/}
+      {/*<OpenImageHelpDialog*/}
+      {/*  onClose={onCloseOpenImagesHelpDialog}*/}
+      {/*  open={openOpenImagesHelpDialog}*/}
+      {/*/>*/}
+      {/*<MakeAnnotationsHelpDialog*/}
+      {/*  onClose={onCloseMakeAnnotationsHelpDialog}*/}
+      {/*  open={openMakeAnnotationsHelpDialog}*/}
+      {/*/>*/}
+      {/*<ManipulateCanvasHelpDialog*/}
+      {/*  onClose={onCloseManipulatingCanvasHelpDialog}*/}
+      {/*  open={openManipulatingCanvasHelpDialog}*/}
+      {/*/>*/}
+      {/*<ChangingAnnotationsHelpDialog*/}
+      {/*  onClose={onCloseChangingAnnotationsHelpDialog}*/}
+      {/*  open={openChangingAnnotationsHelpDialog}*/}
+      {/*/>*/}
+      {/*<SavingProjectHelpDialog*/}
+      {/*  onClose={onCloseSavingProjectHelpDialog}*/}
+      {/*  open={openSavingProjectHelpDialog}*/}
+      {/*/>*/}
     </React.Fragment>
   );
 };

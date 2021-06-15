@@ -1,21 +1,11 @@
 import React from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Button from "@material-ui/core/Button";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import CloseIcon from "@material-ui/icons/Close";
 
 import { CollapsibleHelpContent } from "./CollapsibleHelpContent";
-import { DialogContent, IconButton } from "@material-ui/core";
-import { ColorAdjustmentIcon, HandIcon, ZoomIcon } from "../../../icons";
-import Typography from "@material-ui/core/Typography";
+import { IconButton } from "@material-ui/core";
 import {
   ChangingAnnotationsHelpContent,
   MakingNewAnnotationsHelpContent,
@@ -23,9 +13,11 @@ import {
   OpeningImagesHelpContent,
   SavingProjectHelpContent,
 } from "../HelpContent/HelpContent";
-import { Box } from "mdi-material-ui";
 import Container from "@material-ui/core/Container";
-import { ChangingAnnotationsHelpDialog } from "../HelpDialog/ChangingAnnotationsHelpDialog";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import HelpIcon from "@material-ui/icons/Help";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const useStyles = makeStyles({
   list: {
@@ -74,7 +66,13 @@ export default function HelpDrawer() {
     <div>
       {
         <React.Fragment key={"left"}>
-          <Button onClick={toggleDrawer("left", true)}>{"left"}</Button>
+          <ListItem button onClick={toggleDrawer("left", true)}>
+            <ListItemIcon>
+              <HelpIcon />
+            </ListItemIcon>
+
+            <ListItemText primary="Help" />
+          </ListItem>
           <Drawer
             variant={"persistent"}
             anchor={"left"}

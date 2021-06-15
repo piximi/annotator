@@ -5,9 +5,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import { KeyboardKey } from "./KeyboardKey";
-import { HelpWindowToolTitle } from "./HelpWindowToolTitle";
-import { SelectionIcon } from "../../../icons";
 import { ChangingAnnotationsHelpContent } from "../HelpContent/HelpContent";
 
 type ChangingAnnotationsHelpDiagogProps = {

@@ -14,11 +14,10 @@ import {
   ZoomIcon,
 } from "../../../icons";
 import Typography from "@material-ui/core/Typography";
-import { Box, DialogContent } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
 import { KeyboardKey } from "../HelpDialog/KeyboardKey";
 import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
 
 export const ManipulatingCanvasContent = () => {
   return (

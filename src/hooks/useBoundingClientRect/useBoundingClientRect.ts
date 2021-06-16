@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   boundingClientRectSelector,
   imageSelector,
+  stageHeightSelector,
   stageWidthSelector,
 } from "../../store/selectors";
 
@@ -17,6 +18,7 @@ export const useBoundingClientRect = (target: React.RefObject<HTMLElement>) => {
 
   const boundingClientRect = useSelector(boundingClientRectSelector);
   const stageWidth = useSelector(stageWidthSelector);
+  const stageHeight = useSelector(stageHeightSelector);
   const image = useSelector(imageSelector);
 
   useLayoutEffect(() => {
@@ -45,8 +47,20 @@ export const useBoundingClientRect = (target: React.RefObject<HTMLElement>) => {
   useEffect(() => {
     dispatch(setStageWidth({ stageWidth: boundingClientRect.width }));
     if (!image || !image.shape) return;
-    dispatch(
-      setStageScale({ stageScale: (0.95 * stageWidth) / image.shape.width })
-    );
+
+    //FIXME it seems like we are not currently getting the current stageHeight. It currently stays fixes to the initial state in the redux store.
+    if (image.shape.height / stageHeight > image.shape.width / stageWidth) {
+      dispatch(
+        setStageScale({
+          stageScale: (0.95 * stageHeight) / image.shape.height,
+        })
+      );
+    } else {
+      dispatch(
+        setStageScale({
+          stageScale: (0.95 * stageWidth) / image.shape.width,
+        })
+      );
+    }
   }, [boundingClientRect, dispatch, stageWidth, image?.shape]);
 };

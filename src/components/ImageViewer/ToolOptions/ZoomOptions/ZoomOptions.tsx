@@ -14,6 +14,7 @@ import {
 import Checkbox from "@material-ui/core/Checkbox";
 import {
   imageSelector,
+  stageHeightSelector,
   stageScaleSelector,
   stageWidthSelector,
   zoomToolOptionsSelector,
@@ -41,6 +42,7 @@ export const ZoomOptions = () => {
   const options = useSelector(zoomToolOptionsSelector);
 
   const stageWidth = useSelector(stageWidthSelector);
+  const stageHeight = useSelector(stageHeightSelector);
 
   const t = useTranslation();
 
@@ -101,12 +103,22 @@ export const ZoomOptions = () => {
 
     dispatch(setZoomToolOptions(payload));
 
-    dispatch(
-      setStageScale({
-        stageScale:
-          stageWidth / (image && image.shape ? image.shape.width : 512),
-      })
-    );
+    //FIXME it seems like we are not currently getting the current stageHeight. It currently stays fixes to the initial state in the redux store.
+    const imageWidth = image && image.shape ? image.shape.width : 512;
+    const imageHeight = image && image.shape ? image.shape.height : 512;
+    if (imageHeight / stageHeight > imageWidth / stageWidth) {
+      dispatch(
+        setStageScale({
+          stageScale: stageHeight / imageHeight,
+        })
+      );
+    } else {
+      dispatch(
+        setStageScale({
+          stageScale: stageWidth / imageWidth,
+        })
+      );
+    }
     dispatch(setOffset({ offset: { x: 0, y: 0 } }));
   };
 
@@ -123,13 +135,23 @@ export const ZoomOptions = () => {
 
     dispatch(setZoomToolOptions(payload));
 
-    dispatch(
-      setStageScale({
-        stageScale:
-          (0.95 * stageWidth) /
-          (image && image.shape ? image.shape.width : 512),
-      })
-    );
+    //FIXME it seems like we are not currently getting the current stageHeight. It currently stays fixes to the initial state in the redux store.
+    const imageWidth = image && image.shape ? image.shape.width : 512;
+    const imageHeight = image && image.shape ? image.shape.height : 512;
+    if (imageHeight / stageHeight > imageWidth / stageWidth) {
+      dispatch(
+        setStageScale({
+          stageScale: (0.95 * stageHeight) / imageHeight,
+        })
+      );
+    } else {
+      dispatch(
+        setStageScale({
+          stageScale: (0.95 * stageWidth) / imageWidth,
+        })
+      );
+    }
+
     dispatch(setOffset({ offset: { x: 0, y: 0 } }));
   };
 
@@ -345,7 +367,7 @@ export const ZoomOptions = () => {
         </ListItem>
 
         <ListItem button onClick={onToFitClick}>
-          <ListItemText>{t("Fit to screen")}</ListItemText>
+          <ListItemText>{t("Fit to canvas")}</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

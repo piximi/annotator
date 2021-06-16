@@ -150,6 +150,18 @@ export const applicationSlice = createSlice({
 
       state.images.push(...updatedImages);
     },
+    clearCategoryAnnotations(
+      state: StateType,
+      action: PayloadAction<{ category: CategoryType }>
+    ) {
+      for (let image of state.images) {
+        image.annotations = image.annotations.filter(
+          (annotation: AnnotationType) => {
+            return annotation.categoryId !== action.payload.category.id;
+          }
+        );
+      }
+    },
     deleteCategory(
       state: StateType,
       action: PayloadAction<{ category: CategoryType }>

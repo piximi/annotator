@@ -68,6 +68,7 @@ import { ManipulateCanvasHelpDialog } from "../../Help/HelpDialog/ManipulateCanv
 import { ChangingAnnotationsHelpDialog } from "../../Help/HelpDialog/ChangingAnnotationsHelpDialog";
 import { SavingProjectHelpDialog } from "../../Help/HelpDialog/SavingProjectHelpDialog";
 import HelpDrawer from "../../Help/HelpDrawer/HelpDrawer";
+import { ClearCategoryDialog } from "../ClearCategoryDialog";
 
 export const CategoriesList = () => {
   const classes = useStyles();
@@ -95,6 +96,12 @@ export const CategoriesList = () => {
     onClose: onCloseEditCategoryDialog,
     onOpen: onOpenEditCategoryDialog,
     open: openEditCategoryDialog,
+  } = useDialog();
+
+  const {
+    onClose: onCloseClearCategoryDialog,
+    onOpen: onOpenClearCategoryDialog,
+    open: openClearCategoryDialog,
   } = useDialog();
 
   const {
@@ -311,6 +318,7 @@ export const CategoriesList = () => {
                 }
                 onOpenDeleteCategoryDialog={onOpenDeleteCategoryDialog}
                 onOpenEditCategoryDialog={onOpenEditCategoryDialog}
+                onOpenClearCategoryDialog={onOpenClearCategoryDialog}
                 openCategoryMenu={Boolean(anchorEl)}
               />
             </div>
@@ -355,6 +363,7 @@ export const CategoriesList = () => {
               onOpenDeleteCategoryDialog={onOpenDeleteCategoryDialog}
               onOpenEditCategoryDialog={onOpenEditCategoryDialog}
               openCategoryMenu={Boolean(anchorEl)}
+              onOpenClearCategoryDialog={onOpenClearCategoryDialog}
             />
           </div>
         )}
@@ -367,6 +376,11 @@ export const CategoriesList = () => {
         <EditCategoryDialog
           onCloseDialog={onCloseEditCategoryDialog}
           openDialog={openEditCategoryDialog}
+        />
+
+        <ClearCategoryDialog
+          onClose={onCloseClearCategoryDialog}
+          open={openClearCategoryDialog}
         />
 
         <CreateCategoryListItem />

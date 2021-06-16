@@ -22,6 +22,7 @@ type CategoryMenuProps = {
   openCategoryMenu: boolean;
   onOpenDeleteCategoryDialog: () => void;
   onOpenEditCategoryDialog: () => void;
+  onOpenClearCategoryDialog: () => void;
 };
 
 export const CategoryMenu = ({
@@ -30,6 +31,7 @@ export const CategoryMenu = ({
   openCategoryMenu,
   onOpenDeleteCategoryDialog,
   onOpenEditCategoryDialog,
+  onOpenClearCategoryDialog,
 }: CategoryMenuProps) => {
   const images = useSelector(imagesSelector);
 
@@ -74,6 +76,13 @@ export const CategoryMenu = ({
     onCloseCategoryMenu(event);
   };
 
+  const onOpenClearCategoryDialogClick = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    onOpenClearCategoryDialog();
+    onCloseCategoryMenu(event);
+  };
+
   const t = useTranslation();
 
   return (
@@ -102,6 +111,9 @@ export const CategoryMenu = ({
             <Typography variant="inherit">{t("Edit category")}</Typography>
           </MenuItem>
         </div>
+        <MenuItem onClick={onOpenClearCategoryDialogClick}>
+          <Typography variant="inherit">{t("Clear Annotations")}</Typography>
+        </MenuItem>
 
         {category.id !== "00000000-0000-0000-0000-000000000000" && (
           <MenuItem onClick={onOpenDeleteCategoryDialogClick}>

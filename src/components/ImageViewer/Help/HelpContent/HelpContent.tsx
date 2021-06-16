@@ -38,13 +38,14 @@ export const ManipulatingCanvasContent = () => {
       </HelpWindowToolTitle>
       <Typography>
         Use the zoom slider or your mouse wheel to zoom in or out of the image.
+        Alternatively, click on the image to zoom in or out (select the desired
+        zooming mode first).
       </Typography>
       <br />
       <Typography>
-        To zoom in a particular region of the image, first unselect
-        "Auto-center" and then use your mouse to select the rectangular region
-        in which you would like to zoom in. Release the mouse to zoom in the
-        selected region.
+        To zoom in a particular region of the image, use your mouse to select
+        the rectangular region in which you would like to zoom in. Release the
+        mouse to zoom in the selected region.
       </Typography>
       <br />
       <Divider />

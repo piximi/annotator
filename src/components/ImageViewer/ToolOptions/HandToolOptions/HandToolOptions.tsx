@@ -7,19 +7,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { useDispatch } from "react-redux";
 import { applicationSlice } from "../../../../store/slices";
+import { ResetButton } from "./ResetButton";
 
 export const HandToolOptions = () => {
   const t = useTranslation();
-
-  const dispatch = useDispatch();
-
-  const onResetClick = () => {
-    dispatch(
-      applicationSlice.actions.setStagePosition({
-        stagePosition: { x: 0, y: 0 },
-      })
-    );
-  };
 
   return (
     <React.Fragment>
@@ -28,9 +19,7 @@ export const HandToolOptions = () => {
       <Divider />
 
       <List dense>
-        <ListItem button onClick={onResetClick}>
-          <ListItemText>{t("Reset position")}</ListItemText>
-        </ListItem>
+        <ResetButton />
       </List>
     </React.Fragment>
   );

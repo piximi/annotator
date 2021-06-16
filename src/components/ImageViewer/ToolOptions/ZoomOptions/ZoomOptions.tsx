@@ -35,6 +35,7 @@ import Grid from "@material-ui/core/Grid";
 import ZoomInIcon from "@material-ui/icons/ZoomIn";
 import ZoomOutIcon from "@material-ui/icons/ZoomOut";
 import { offsetSelector } from "../../../../store/selectors/offsetSelector";
+import { ResetButton } from "../HandToolOptions/ResetButton";
 
 export const ZoomOptions = () => {
   const dispatch = useDispatch();
@@ -369,6 +370,8 @@ export const ZoomOptions = () => {
         <ListItem button onClick={onToFitClick}>
           <ListItemText>{t("Fit to canvas")}</ListItemText>
         </ListItem>
+
+        <ResetButton />
       </List>
     </React.Fragment>
   );

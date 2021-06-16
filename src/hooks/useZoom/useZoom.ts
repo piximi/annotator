@@ -29,7 +29,7 @@ export const useZoom = () => {
     scaleBy: number,
     zoomIn: boolean = true
   ) => {
-    if (!automaticCentering) {
+    if (!automaticCentering || zoomSelection.dragging) {
       if (!position) return;
       dispatch(
         setOffset({
@@ -124,7 +124,7 @@ export const useZoom = () => {
 
     dispatch(
       setZoomSelection({
-        zoomSelection: { ...zoomSelection, selecting: false },
+        zoomSelection: { ...zoomSelection, dragging: false, selecting: false },
       })
     );
   };

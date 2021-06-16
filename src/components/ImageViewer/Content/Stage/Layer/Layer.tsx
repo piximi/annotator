@@ -6,6 +6,7 @@ import { scaledImageHeightSelector } from "../../../../../store/selectors/scaled
 import {
   stageHeightSelector,
   stageWidthSelector,
+  zoomSelectionSelector,
   zoomToolOptionsSelector,
 } from "../../../../../store/selectors";
 import { offsetSelector } from "../../../../../store/selectors/offsetSelector";
@@ -22,6 +23,8 @@ export const Layer = ({ children }: LayerProps) => {
 
   const { automaticCentering } = useSelector(zoomToolOptionsSelector);
 
+  const zoomSelection = useSelector(zoomSelectionSelector);
+
   const stageWidth = useSelector(stageWidthSelector);
   const stageHeight = useSelector(stageHeightSelector);
 
@@ -33,7 +36,7 @@ export const Layer = ({ children }: LayerProps) => {
   useEffect(() => {
     if (!imageWidth || !imageHeight) return;
 
-    if (automaticCentering) {
+    if (automaticCentering && !zoomSelection.dragging) {
       setPosition({
         x: (stageWidth - imageWidth) / 2,
         y: (stageHeight - imageHeight) / 2,

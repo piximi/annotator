@@ -61,8 +61,8 @@ export abstract class AnnotationTool extends Tool {
     boundingBox: [number, number, number, number]
   ) {
     if (x < 0 || y < 0) return false;
-    if (x > boundingBox[2] - boundingBox[0]) return false;
-    if (y > boundingBox[3] - boundingBox[1]) return false;
+    if (x >= boundingBox[2] - boundingBox[0]) return false;
+    if (y >= boundingBox[3] - boundingBox[1]) return false;
     return true;
   }
   /*

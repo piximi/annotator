@@ -37,8 +37,6 @@ export const DeleteCategoryDialog = ({
       })
     );
 
-    dispatch(applicationSlice.actions.deleteCategory({ category: category }));
-
     const instances = selections?.map((instance: AnnotationType) => {
       if (instance.categoryId === category.id) {
         return {
@@ -55,6 +53,8 @@ export const DeleteCategoryDialog = ({
         instances: instances as Array<AnnotationType>,
       })
     );
+
+    dispatch(applicationSlice.actions.deleteCategory({ category: category }));
 
     onClose();
   };

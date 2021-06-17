@@ -88,6 +88,26 @@ export const ImageMenu = ({
     );
   };
 
+  const onExportBinaryImage = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    let zip = new JSZip();
+
+    const activeImage = images.find((image: ImageType) => {
+      return image.id === currentImageId;
+    });
+
+    if (!activeImage) return;
+
+    Promise.all(
+      saveAnnotationsAsMatrix([activeImage], categories, zip, true)
+    ).then(() => {
+      zip.generateAsync({ type: "blob" }).then((blob) => {
+        saveAs(blob, "labels.zip");
+      });
+    });
+  };
+
   const t = useTranslation();
 
   return (
@@ -107,6 +127,11 @@ export const ImageMenu = ({
           <MenuItem onClick={onExportLabels}>
             <Typography variant="inherit">
               {t("Export label matrices")}
+            </Typography>
+          </MenuItem>
+          <MenuItem onClick={onExportBinaryImage}>
+            <Typography variant="inherit">
+              {t("Export binary images")}
             </Typography>
           </MenuItem>
           <Divider />

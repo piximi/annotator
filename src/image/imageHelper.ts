@@ -332,7 +332,8 @@ export const saveAnnotationsAsMasks = (
 export const saveAnnotationsAsMatrix = (
   images: Array<ImageType>,
   categories: Array<CategoryType>,
-  zip: any
+  zip: any,
+  binary: boolean = false
 ): Array<Promise<unknown>> => {
   return images
     .map((current: ImageType) => {
@@ -344,7 +345,7 @@ export const saveAnnotationsAsMatrix = (
             new Uint8Array().fill(0),
             { components: 1, alpha: 0 }
           );
-          let n = 1;
+          let n = binary ? 255 : 1;
           for (let annotation of current.annotations) {
             if (annotation.categoryId !== category.id) continue;
             const encoded = annotation.mask;
@@ -377,7 +378,7 @@ export const saveAnnotationsAsMatrix = (
                 }
               }
             }
-            n += 1;
+            if (!binary) n += 1;
           }
           const blob = fullLabelImage.toBlob("image/png");
           zip.folder(`${current.name}`);

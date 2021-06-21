@@ -110,6 +110,16 @@ export const ImageMenu = ({
 
   const t = useTranslation();
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLLIElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Menu
       anchorEl={anchorElImageMenu}
@@ -121,21 +131,34 @@ export const ImageMenu = ({
     >
       <MenuList dense variant="menu">
         <div>
-          <MenuItem onClick={onExportAnnotations}>
-            <Typography variant="inherit">
-              {t("Export annotations as instance segmentation masks")}
-            </Typography>
-          </MenuItem>
-          <MenuItem onClick={onExportLabels}>
-            <Typography variant="inherit">
-              {t("Export label matrices")}
-            </Typography>
-          </MenuItem>
-          <MenuItem onClick={onExportBinaryImage}>
-            <Typography variant="inherit">
-              {t("Export annotations as semantic segmentation masks")}
-            </Typography>
-          </MenuItem>
+          <MenuItem onClick={handleClick}>Export annotations as</MenuItem>
+          <Menu
+            id="save-annotations-as-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuList dense variant="menu">
+              <div>
+                <MenuItem onClick={onExportAnnotations}>
+                  <Typography variant="inherit">
+                    {t("Instance segmentation masks")}
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={onExportBinaryImage}>
+                  <Typography variant="inherit">
+                    {t("Semantic segmentation masks")}
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={onExportLabels}>
+                  <Typography variant="inherit">
+                    {t("Label matrices")}
+                  </Typography>
+                </MenuItem>
+              </div>
+            </MenuList>
+          </Menu>
           <Divider />
           <MenuItem onClick={onClearAnnotationsClick}>
             <Typography variant="inherit">{t("Clear Annotations")}</Typography>

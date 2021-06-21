@@ -25,7 +25,7 @@ export const SaveMenu = ({ popupState }: SaveMenuProps) => {
   //TODO: do we need the ExportAnnotationsAsJSON button or is it redundant from SaveProjectFileMenuItem?
   return (
     <Menu {...bindMenu(popupState)}>
-      <MenuItem onClick={handleClick}>Save annotations as</MenuItem>
+      <MenuItem onClick={handleClick}>Export annotations as</MenuItem>
       <Menu
         id="save-annotations-as-menu"
         anchorEl={anchorEl}

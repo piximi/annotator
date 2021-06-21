@@ -38,7 +38,7 @@ export const ExportAnnotationsAsImagesMenuItem = ({
 
   return (
     <MenuItem onClick={onExport}>
-      <ListItemText primary="Export annotations" />
+      <ListItemText primary="Instance segmentation masks" />
     </MenuItem>
   );
 };

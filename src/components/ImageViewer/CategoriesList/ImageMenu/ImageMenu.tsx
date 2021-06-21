@@ -122,7 +122,9 @@ export const ImageMenu = ({
       <MenuList dense variant="menu">
         <div>
           <MenuItem onClick={onExportAnnotations}>
-            <Typography variant="inherit">{t("Export annotations")}</Typography>
+            <Typography variant="inherit">
+              {t("Export annotations as instance segmentation masks")}
+            </Typography>
           </MenuItem>
           <MenuItem onClick={onExportLabels}>
             <Typography variant="inherit">
@@ -131,7 +133,7 @@ export const ImageMenu = ({
           </MenuItem>
           <MenuItem onClick={onExportBinaryImage}>
             <Typography variant="inherit">
-              {t("Export binary images")}
+              {t("Export annotations as semantic segmentation masks")}
             </Typography>
           </MenuItem>
           <Divider />

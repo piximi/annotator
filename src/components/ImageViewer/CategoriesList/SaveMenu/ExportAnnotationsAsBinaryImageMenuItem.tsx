@@ -40,7 +40,7 @@ export const ExportAnnotationsAsBinaryImageMenuItem = ({
 
   return (
     <MenuItem onClick={onExport}>
-      <ListItemText primary="Export binary image" />
+      <ListItemText primary="Semantic segmentation masks" />
     </MenuItem>
   );
 };

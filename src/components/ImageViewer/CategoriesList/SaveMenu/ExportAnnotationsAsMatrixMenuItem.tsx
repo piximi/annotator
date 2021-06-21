@@ -38,7 +38,7 @@ export const ExportAnnotationsAsMatrixMenuItem = ({
 
   return (
     <MenuItem onClick={onExport}>
-      <ListItemText primary="Export label matrices" />
+      <ListItemText primary="Label matrices" />
     </MenuItem>
   );
 };

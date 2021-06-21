@@ -401,31 +401,15 @@ export const SavingProjectHelpContent = () => {
       <Divider />
       <br />
       <Typography>
-        <Box fontWeight="fontWeightBold">{"Exporting all annotations"}</Box>
+        <Box fontWeight="fontWeightBold">{"Exporting annotations"}</Box>
       </Typography>
       <Typography>
-        It may be useful to export annotations as binary masks which can then be
-        provided to subsequent machine learning pipelines. To export the
-        annotations as binary png masks, click on "Export annotations" in the
-        Save menu of the left toolbar. This will download a zip file. Unzipping
-        the zip file will reveal one folder for each image in the project. Each
-        folder includes a folder for each category. These folders, names by
-        their category, include multiple png files: each annotation file is the
-        mask for an annotated object.
-      </Typography>
-      <br />
-      <Divider />
-      <br />
-      <Typography>
-        <Box fontWeight="fontWeightBold">
-          {"Exporting annotations of a single image"}
-        </Box>
-      </Typography>
-      <Typography>
-        To export annotations of a single image, click on the menu to the right
-        of the image thumbnail and select "Export annotations." This will export
-        the annotation masks, organized by their category, for the select image
-        only.
+        Annotations can be exported as instance segmentation masks (one binary
+        image per instance), semantic segmentation masks (one binary image per
+        category containing all instances), or label matrices. To export all
+        annotations across all images, use the Save menu on the left toolbar.
+        Otherwise, to export annotaions of a single image, click on the
+        corresponding image's submenu to export its annotations.
       </Typography>
     </React.Fragment>
   );

@@ -9,16 +9,13 @@ import {
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-import {
-  saveAnnotationsAsLabelMatrix,
-  saveAnnotationsAsSemanticSegmentationMasks,
-} from "../../../../image/imageHelper";
+import { saveAnnotationsAsInstanceSegmentationMasks } from "../../../../image/imageHelper";
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
 };
 
-export const ExportAnnotationsAsBinaryImageMenuItem = ({
+export const ExportAnnotationsAsInstanceSegmentationsMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(imageInstancesSelector);
@@ -32,20 +29,18 @@ export const ExportAnnotationsAsBinaryImageMenuItem = ({
 
     let zip = new JSZip();
 
-    saveAnnotationsAsSemanticSegmentationMasks(images, categories, zip);
-
-    // Promise.all(saveAnnotationsAsSegmentationMasks(images, categories, zip)).then(
-    //   () => {
-    //     zip.generateAsync({ type: "blob" }).then((blob) => {
-    //       saveAs(blob, "labels.zip");
-    //     });
-    //   }
-    // );
+    Promise.all(
+      saveAnnotationsAsInstanceSegmentationMasks(images, categories, zip)
+    ).then(() => {
+      zip.generateAsync({ type: "blob" }).then((blob) => {
+        saveAs(blob, "annotations.zip");
+      });
+    });
   };
 
   return (
     <MenuItem onClick={onExport}>
-      <ListItemText primary="Semantic segmentation masks" />
+      <ListItemText primary="Instance segmentation masks" />
     </MenuItem>
   );
 };

@@ -256,7 +256,7 @@ export const replaceDuplicateName = (name: string, names: Array<string>) => {
   return currentName;
 };
 
-export const saveAnnotationsAsMasks = (
+export const saveAnnotationsAsInstanceSegmentationMasks = (
   images: Array<ImageType>,
   categories: Array<CategoryType>,
   zip: any

@@ -2,9 +2,9 @@ import { Menu } from "@material-ui/core";
 import { bindMenu } from "material-ui-popup-state";
 import React from "react";
 import { SaveProjectFileMenuItem } from "./SaveProjectFileMenuItem";
-import { ExportAnnotationsAsImagesMenuItem } from "./ExportAnnotationsAsImagesMenuItem";
+import { ExportAnnotationsAsInstanceSegmentationsMenuItem } from "./ExportAnnotationsAsInstanceSegmentationsMenuItem";
 import { ExportAnnotationsAsMatrixMenuItem } from "./ExportAnnotationsAsMatrixMenuItem";
-import { ExportAnnotationsAsBinaryImageMenuItem } from "./ExportAnnotationsAsBinaryImageMenuItem";
+import { ExportAnnotationsAsSemanticMasksMenuItem } from "./ExportAnnotationsAsSemanticMasksMenuItem";
 import MenuItem from "@material-ui/core/MenuItem";
 
 type SaveMenuProps = {
@@ -22,7 +22,6 @@ export const SaveMenu = ({ popupState }: SaveMenuProps) => {
     setAnchorEl(null);
   };
 
-  //TODO: do we need the ExportAnnotationsAsJSON button or is it redundant from SaveProjectFileMenuItem?
   return (
     <Menu {...bindMenu(popupState)}>
       <MenuItem onClick={handleClick}>Export annotations as</MenuItem>
@@ -33,8 +32,10 @@ export const SaveMenu = ({ popupState }: SaveMenuProps) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <ExportAnnotationsAsImagesMenuItem popupState={popupState} />
-        <ExportAnnotationsAsBinaryImageMenuItem popupState={popupState} />
+        <ExportAnnotationsAsInstanceSegmentationsMenuItem
+          popupState={popupState}
+        />
+        <ExportAnnotationsAsSemanticMasksMenuItem popupState={popupState} />
         <ExportAnnotationsAsMatrixMenuItem popupState={popupState} />
       </Menu>
       <SaveProjectFileMenuItem popupState={popupState} />

@@ -8,8 +8,9 @@ import { applicationSlice, setImages } from "../../../../store";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { activeImageIdSelector } from "../../../../store/selectors/activeImageIdSelector";
 import {
-  saveAnnotationsAsMasks,
+  saveAnnotationsAsInstanceSegmentationMasks,
   saveAnnotationsAsLabelMatrix,
+  saveAnnotationsAsSemanticSegmentationMasks,
 } from "../../../../image/imageHelper";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
@@ -50,9 +51,12 @@ export const ImageMenu = ({
     onCloseImageMenu(event);
   };
 
-  const onExportAnnotations = (
+  const onExportInstanceMasks = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
+    setAnchorEl(null);
+    onCloseImageMenu(event);
+
     let zip = new JSZip();
 
     const activeImage = images.find((image: ImageType) => {
@@ -61,16 +65,19 @@ export const ImageMenu = ({
 
     if (!activeImage) return;
 
-    Promise.all(saveAnnotationsAsMasks([activeImage], categories, zip)).then(
-      () => {
-        zip.generateAsync({ type: "blob" }).then((blob) => {
-          saveAs(blob, "annotations.zip");
-        });
-      }
-    );
+    Promise.all(
+      saveAnnotationsAsInstanceSegmentationMasks([activeImage], categories, zip)
+    ).then(() => {
+      zip.generateAsync({ type: "blob" }).then((blob) => {
+        saveAs(blob, "annotations.zip");
+      });
+    });
   };
 
   const onExportLabels = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    setAnchorEl(null);
+    onCloseImageMenu(event);
+
     let zip = new JSZip();
 
     const activeImage = images.find((image: ImageType) => {
@@ -88,9 +95,12 @@ export const ImageMenu = ({
     });
   };
 
-  const onExportBinaryImage = (
+  const onExportSemanticMasks = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
+    setAnchorEl(null);
+    onCloseImageMenu(event);
+
     let zip = new JSZip();
 
     const activeImage = images.find((image: ImageType) => {
@@ -99,13 +109,7 @@ export const ImageMenu = ({
 
     if (!activeImage) return;
 
-    Promise.all(
-      saveAnnotationsAsLabelMatrix([activeImage], categories, zip, true)
-    ).then(() => {
-      zip.generateAsync({ type: "blob" }).then((blob) => {
-        saveAs(blob, "labels.zip");
-      });
-    });
+    saveAnnotationsAsSemanticSegmentationMasks([activeImage], categories, zip);
   };
 
   const t = useTranslation();
@@ -141,12 +145,12 @@ export const ImageMenu = ({
           >
             <MenuList dense variant="menu">
               <div>
-                <MenuItem onClick={onExportAnnotations}>
+                <MenuItem onClick={onExportInstanceMasks}>
                   <Typography variant="inherit">
                     {t("Instance segmentation masks")}
                   </Typography>
                 </MenuItem>
-                <MenuItem onClick={onExportBinaryImage}>
+                <MenuItem onClick={onExportSemanticMasks}>
                   <Typography variant="inherit">
                     {t("Semantic segmentation masks")}
                   </Typography>

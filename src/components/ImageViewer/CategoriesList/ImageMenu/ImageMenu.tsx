@@ -8,7 +8,6 @@ import { applicationSlice } from "../../../../store";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { activeImageIdSelector } from "../../../../store/selectors/activeImageIdSelector";
 import {
-  saveAnnotationsAsInstanceSegmentationMasks,
   saveAnnotationsAsLabelMatrix,
   saveAnnotationsAsLabeledSemanticSegmentationMasks,
 } from "../../../../image/imageHelper";

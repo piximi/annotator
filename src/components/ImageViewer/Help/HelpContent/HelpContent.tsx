@@ -404,12 +404,17 @@ export const SavingProjectHelpContent = () => {
         <Box fontWeight="fontWeightBold">{"Exporting annotations"}</Box>
       </Typography>
       <Typography>
-        Annotations can be exported as instance segmentation masks (one binary
-        image per instance), semantic segmentation masks (one binary image per
-        category containing all instances), or label matrices. To export all
-        annotations across all images, use the Save menu on the left toolbar.
-        Otherwise, to export annotaions of a single image, click on the
-        corresponding image's submenu to export its annotations.
+        To export all annotations simultaneously across all images, use the Save
+        menu on the left toolbar. Otherwise, to export annotations of a single
+        image, click on the corresponding image's submenu to export its
+        annotations.
+      </Typography>
+      <br />
+      <Typography>
+        Annotations can be exported as instance segmentation masks (a binary
+        image is saved for each instance in its corresponding category folder),
+        semantic segmentation masks (the category of each pixel is denoted by a
+        different (R, G, B) value), or label matrices.
       </Typography>
     </React.Fragment>
   );

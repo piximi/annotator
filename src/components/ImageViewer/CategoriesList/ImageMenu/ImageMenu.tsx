@@ -65,7 +65,13 @@ export const ImageMenu = ({
 
     if (!activeImage) return;
 
-    saveAnnotationsAsInstanceSegmentationMasks([activeImage], categories, zip);
+    Promise.all(
+      saveAnnotationsAsLabelMatrix([activeImage], categories, zip, true)
+    ).then(() => {
+      zip.generateAsync({ type: "blob" }).then((blob) => {
+        saveAs(blob, "instances.zip");
+      });
+    });
   };
 
   const onExportLabels = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -89,7 +95,7 @@ export const ImageMenu = ({
     });
   };
 
-  const onExportSemanticMasks = (
+  const onExportLabeledSemanticMasks = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     setAnchorEl(null);
@@ -108,6 +114,29 @@ export const ImageMenu = ({
       categories,
       zip
     );
+  };
+
+  const onExportBinarySemanticMasks = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    setAnchorEl(null);
+    onCloseImageMenu(event);
+
+    let zip = new JSZip();
+
+    const activeImage = images.find((image: ImageType) => {
+      return image.id === currentImageId;
+    });
+
+    if (!activeImage) return;
+
+    Promise.all(
+      saveAnnotationsAsLabelMatrix(images, categories, zip, false, true)
+    ).then(() => {
+      zip.generateAsync({ type: "blob" }).then((blob) => {
+        saveAs(blob, "binary_masks.zip");
+      });
+    });
   };
 
   const t = useTranslation();
@@ -148,9 +177,14 @@ export const ImageMenu = ({
                     {t("Instance segmentation masks")}
                   </Typography>
                 </MenuItem>
-                <MenuItem onClick={onExportSemanticMasks}>
+                <MenuItem onClick={onExportLabeledSemanticMasks}>
                   <Typography variant="inherit">
-                    {t("Semantic segmentation masks")}
+                    {t("Labeled semantic masks")}
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={onExportBinarySemanticMasks}>
+                  <Typography variant="inherit">
+                    {t("Binary semantic masks")}
                   </Typography>
                 </MenuItem>
                 <MenuItem onClick={onExportLabels}>

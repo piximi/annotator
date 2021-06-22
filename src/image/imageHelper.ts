@@ -7,7 +7,6 @@ import { CategoryType } from "../types/CategoryType";
 import { ImageType } from "../types/ImageType";
 import { SerializedAnnotationType } from "../types/SerializedAnnotationType";
 import { saveAs } from "file-saver";
-import { categoryCountsSelector } from "../store/selectors";
 
 export const connectPoints = (
   coordinates: Array<Array<number>>,
@@ -256,81 +255,6 @@ export const replaceDuplicateName = (name: string, names: Array<string>) => {
   return currentName;
 };
 
-export const saveAnnotationsAsInstanceSegmentationMasks = (
-  images: Array<ImageType>,
-  categories: Array<CategoryType>,
-  zip: any
-): Array<Promise<unknown>> => {
-  return images
-    .map((current: ImageType) => {
-      return current.annotations.map((annotation: AnnotationType) => {
-        return new Promise((resolve, reject) => {
-          const encoded = annotation.mask;
-
-          const decoded = decode(encoded);
-
-          const boundingBox = annotation.boundingBox;
-
-          const endX = Math.min(current.shape.width, boundingBox[2]);
-          const endY = Math.min(current.shape.height, boundingBox[3]);
-
-          //extract bounding box params
-          const boundingBoxWidth = endX - boundingBox[0];
-          const boundingBoxHeight = endY - boundingBox[1];
-
-          const roiMask = new ImageJS.Image(
-            boundingBoxWidth,
-            boundingBoxHeight,
-            decoded,
-            {
-              components: 1,
-              alpha: 0,
-            }
-          );
-
-          const fullImageMaskData = new Uint8Array().fill(0);
-          const fullImageMask = new ImageJS.Image(
-            current.shape.width,
-            current.shape.height,
-            fullImageMaskData,
-            { components: 1, alpha: 0 }
-          );
-
-          for (let i = 0; i < boundingBoxWidth; i++) {
-            for (let j = 0; j < boundingBoxHeight; j++) {
-              if (roiMask.getPixelXY(i, j)[0] > 0) {
-                fullImageMask.setPixelXY(
-                  i + annotation.boundingBox[0],
-                  j + annotation.boundingBox[1],
-                  [255, 255, 255]
-                );
-              }
-            }
-          }
-
-          const blob = fullImageMask.toBlob("image/png");
-
-          const category = categories.find((category: CategoryType) => {
-            return category.id === annotation.categoryId;
-          });
-
-          if (!category) return;
-
-          zip.folder(`${current.name}/${category.name}`);
-          zip.file(
-            `${current.name}/${category.name}/${annotation.id}.png`,
-            blob,
-            {
-              base64: true,
-            }
-          );
-          resolve(true);
-        });
-      });
-    })
-    .flat();
-};
-
 /*
  * from https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
  * */
@@ -343,6 +267,70 @@ const hexToRgb = (hex: string) => {
         b: parseInt(result[3], 16),
       }
     : null;
+};
+
+export const saveAnnotationsAsInstanceSegmentationMasks = (
+  images: Array<ImageType>,
+  categories: Array<CategoryType>,
+  zip: any
+): any => {
+  images.forEach((current: ImageType) => {
+    categories.forEach((category: CategoryType) => {
+      const fullLabelImage = new ImageJS.Image(
+        current.shape.width,
+        current.shape.height,
+        new Uint8Array().fill(0),
+        { components: 1, alpha: 0 }
+      );
+      const categoryColor = hexToRgb(category.color);
+      if (!categoryColor) return;
+
+      for (let annotation of current.annotations) {
+        const r = Math.round(Math.random() * 255);
+        const g = Math.round(Math.random() * 255);
+        const b = Math.round(Math.random() * 255);
+        if (annotation.categoryId !== category.id) continue;
+        const encoded = annotation.mask;
+        const decoded = decode(encoded);
+        const boundingBox = annotation.boundingBox;
+        const endX = Math.min(current.shape.width, boundingBox[2]);
+        const endY = Math.min(current.shape.height, boundingBox[3]);
+
+        //extract bounding box params
+        const boundingBoxWidth = endX - boundingBox[0];
+        const boundingBoxHeight = endY - boundingBox[1];
+
+        const roiMask = new ImageJS.Image(
+          boundingBoxWidth,
+          boundingBoxHeight,
+          decoded,
+          {
+            components: 1,
+            alpha: 0,
+          }
+        );
+        for (let i = 0; i < boundingBoxWidth; i++) {
+          for (let j = 0; j < boundingBoxHeight; j++) {
+            if (roiMask.getPixelXY(i, j)[0] > 0) {
+              fullLabelImage.setPixelXY(
+                i + annotation.boundingBox[0],
+                j + annotation.boundingBox[1],
+                [r, g, b]
+              );
+            }
+          }
+        }
+      }
+      const blob = fullLabelImage.toBlob("image/png");
+      zip.folder(`${category.name}`);
+      zip.file(`${category.name}/${current.name}.png`, blob, {
+        base64: true,
+      });
+    });
+  });
+  zip.generateAsync({ type: "blob" }).then((blob: Blob) => {
+    saveAs(blob, "masks.zip");
+  });
 };
 
 export const saveAnnotationsAsSemanticSegmentationMasks = (

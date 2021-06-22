@@ -4,7 +4,7 @@ import MenuList from "@material-ui/core/MenuList";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import { useDispatch, useSelector } from "react-redux";
-import { applicationSlice, setImages } from "../../../../store";
+import { applicationSlice } from "../../../../store";
 import { useTranslation } from "../../../../hooks/useTranslation";
 import { activeImageIdSelector } from "../../../../store/selectors/activeImageIdSelector";
 import {
@@ -65,13 +65,7 @@ export const ImageMenu = ({
 
     if (!activeImage) return;
 
-    Promise.all(
-      saveAnnotationsAsInstanceSegmentationMasks([activeImage], categories, zip)
-    ).then(() => {
-      zip.generateAsync({ type: "blob" }).then((blob) => {
-        saveAs(blob, "annotations.zip");
-      });
-    });
+    saveAnnotationsAsInstanceSegmentationMasks([activeImage], categories, zip);
   };
 
   const onExportLabels = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {

@@ -8,7 +8,6 @@ import {
 } from "../../../../store/selectors";
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 import JSZip from "jszip";
-import { saveAs } from "file-saver";
 import { saveAnnotationsAsInstanceSegmentationMasks } from "../../../../image/imageHelper";
 
 type SaveAnnotationsMenuItemProps = {
@@ -29,13 +28,7 @@ export const ExportAnnotationsAsInstanceSegmentationsMenuItem = ({
 
     let zip = new JSZip();
 
-    Promise.all(
-      saveAnnotationsAsInstanceSegmentationMasks(images, categories, zip)
-    ).then(() => {
-      zip.generateAsync({ type: "blob" }).then((blob) => {
-        saveAs(blob, "annotations.zip");
-      });
-    });
+    saveAnnotationsAsInstanceSegmentationMasks(images, categories, zip);
   };
 
   return (

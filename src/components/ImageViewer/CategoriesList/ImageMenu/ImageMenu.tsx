@@ -9,7 +9,7 @@ import { useTranslation } from "../../../../hooks/useTranslation";
 import { activeImageIdSelector } from "../../../../store/selectors/activeImageIdSelector";
 import {
   saveAnnotationsAsMasks,
-  saveAnnotationsAsMatrix,
+  saveAnnotationsAsLabelMatrix,
 } from "../../../../image/imageHelper";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
@@ -79,13 +79,13 @@ export const ImageMenu = ({
 
     if (!activeImage) return;
 
-    Promise.all(saveAnnotationsAsMatrix([activeImage], categories, zip)).then(
-      () => {
-        zip.generateAsync({ type: "blob" }).then((blob) => {
-          saveAs(blob, "labels.zip");
-        });
-      }
-    );
+    Promise.all(
+      saveAnnotationsAsLabelMatrix([activeImage], categories, zip)
+    ).then(() => {
+      zip.generateAsync({ type: "blob" }).then((blob) => {
+        saveAs(blob, "labels.zip");
+      });
+    });
   };
 
   const onExportBinaryImage = (
@@ -100,7 +100,7 @@ export const ImageMenu = ({
     if (!activeImage) return;
 
     Promise.all(
-      saveAnnotationsAsMatrix([activeImage], categories, zip, true)
+      saveAnnotationsAsLabelMatrix([activeImage], categories, zip, true)
     ).then(() => {
       zip.generateAsync({ type: "blob" }).then((blob) => {
         saveAs(blob, "labels.zip");

@@ -6,6 +6,8 @@ import { isoLines } from "marchingsquares";
 import { CategoryType } from "../types/CategoryType";
 import { ImageType } from "../types/ImageType";
 import { SerializedAnnotationType } from "../types/SerializedAnnotationType";
+import { saveAs } from "file-saver";
+import { categoryCountsSelector } from "../store/selectors";
 
 export const connectPoints = (
   coordinates: Array<Array<number>>,
@@ -329,7 +331,81 @@ export const saveAnnotationsAsMasks = (
     .flat();
 };
 
-export const saveAnnotationsAsMatrix = (
+/*
+ * from https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+ * */
+const hexToRgb = (hex: string) => {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+};
+
+export const saveAnnotationsAsSemanticSegmentationMasks = (
+  images: Array<ImageType>,
+  categories: Array<CategoryType>,
+  zip: any
+): any => {
+  images.forEach((current: ImageType) => {
+    const fullLabelImage = new ImageJS.Image(
+      current.shape.width,
+      current.shape.height,
+      new Uint8Array().fill(0),
+      { components: 1, alpha: 0 }
+    );
+    categories.forEach((category: CategoryType) => {
+      const categoryColor = hexToRgb(category.color);
+      if (!categoryColor) return;
+
+      for (let annotation of current.annotations) {
+        if (annotation.categoryId !== category.id) continue;
+        const encoded = annotation.mask;
+        const decoded = decode(encoded);
+        const boundingBox = annotation.boundingBox;
+        const endX = Math.min(current.shape.width, boundingBox[2]);
+        const endY = Math.min(current.shape.height, boundingBox[3]);
+
+        //extract bounding box params
+        const boundingBoxWidth = endX - boundingBox[0];
+        const boundingBoxHeight = endY - boundingBox[1];
+
+        const roiMask = new ImageJS.Image(
+          boundingBoxWidth,
+          boundingBoxHeight,
+          decoded,
+          {
+            components: 1,
+            alpha: 0,
+          }
+        );
+        for (let i = 0; i < boundingBoxWidth; i++) {
+          for (let j = 0; j < boundingBoxHeight; j++) {
+            if (roiMask.getPixelXY(i, j)[0] > 0) {
+              fullLabelImage.setPixelXY(
+                i + annotation.boundingBox[0],
+                j + annotation.boundingBox[1],
+                [categoryColor.r, categoryColor.g, categoryColor.b]
+              );
+            }
+          }
+        }
+      }
+    });
+    const blob = fullLabelImage.toBlob("image/png");
+    zip.file(`${current.name}.png`, blob, {
+      base64: true,
+    });
+  });
+  zip.generateAsync({ type: "blob" }).then((blob: Blob) => {
+    saveAs(blob, "masks.zip");
+  });
+};
+
+export const saveAnnotationsAsLabelMatrix = (
   images: Array<ImageType>,
   categories: Array<CategoryType>,
   zip: any,

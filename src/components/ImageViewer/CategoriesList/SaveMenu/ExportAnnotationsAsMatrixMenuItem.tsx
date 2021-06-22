@@ -9,7 +9,7 @@ import {
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-import { saveAnnotationsAsMatrix } from "../../../../image/imageHelper";
+import { saveAnnotationsAsLabelMatrix } from "../../../../image/imageHelper";
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
@@ -29,11 +29,13 @@ export const ExportAnnotationsAsMatrixMenuItem = ({
 
     let zip = new JSZip();
 
-    Promise.all(saveAnnotationsAsMatrix(images, categories, zip)).then(() => {
-      zip.generateAsync({ type: "blob" }).then((blob) => {
-        saveAs(blob, "labels.zip");
-      });
-    });
+    Promise.all(saveAnnotationsAsLabelMatrix(images, categories, zip)).then(
+      () => {
+        zip.generateAsync({ type: "blob" }).then((blob) => {
+          saveAs(blob, "labels.zip");
+        });
+      }
+    );
   };
 
   return (

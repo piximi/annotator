@@ -10,7 +10,7 @@ import { activeImageIdSelector } from "../../../../store/selectors/activeImageId
 import {
   saveAnnotationsAsInstanceSegmentationMasks,
   saveAnnotationsAsLabelMatrix,
-  saveAnnotationsAsSemanticSegmentationMasks,
+  saveAnnotationsAsLabeledSemanticSegmentationMasks,
 } from "../../../../image/imageHelper";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
@@ -103,7 +103,11 @@ export const ImageMenu = ({
 
     if (!activeImage) return;
 
-    saveAnnotationsAsSemanticSegmentationMasks([activeImage], categories, zip);
+    saveAnnotationsAsLabeledSemanticSegmentationMasks(
+      [activeImage],
+      categories,
+      zip
+    );
   };
 
   const t = useTranslation();

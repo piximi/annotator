@@ -333,7 +333,7 @@ export const saveAnnotationsAsInstanceSegmentationMasks = (
   });
 };
 
-export const saveAnnotationsAsSemanticSegmentationMasks = (
+export const saveAnnotationsAsLabeledSemanticSegmentationMasks = (
   images: Array<ImageType>,
   categories: Array<CategoryType>,
   zip: any
@@ -389,7 +389,7 @@ export const saveAnnotationsAsSemanticSegmentationMasks = (
     });
   });
   zip.generateAsync({ type: "blob" }).then((blob: Blob) => {
-    saveAs(blob, "masks.zip");
+    saveAs(blob, "labeled_masks.zip");
   });
 };
 
@@ -397,6 +397,7 @@ export const saveAnnotationsAsLabelMatrix = (
   images: Array<ImageType>,
   categories: Array<CategoryType>,
   zip: any,
+  random: boolean = false,
   binary: boolean = false
 ): Array<Promise<unknown>> => {
   return images
@@ -409,8 +410,19 @@ export const saveAnnotationsAsLabelMatrix = (
             new Uint8Array().fill(0),
             { components: 1, alpha: 0 }
           );
-          let n = binary ? 255 : 1;
+          let r = binary ? 255 : 1;
+          let g = binary ? 255 : 1;
+          let b = binary ? 255 : 1;
           for (let annotation of current.annotations) {
+            if (random) {
+              r = Math.round(Math.random() * 255);
+              g = Math.round(Math.random() * 255);
+              b = Math.round(Math.random() * 255);
+            } else if (!binary) {
+              r = r + 1;
+              b = b + 1;
+              g = g + 1;
+            }
             if (annotation.categoryId !== category.id) continue;
             const encoded = annotation.mask;
             const decoded = decode(encoded);
@@ -437,12 +449,11 @@ export const saveAnnotationsAsLabelMatrix = (
                   fullLabelImage.setPixelXY(
                     i + annotation.boundingBox[0],
                     j + annotation.boundingBox[1],
-                    [n, n, n]
+                    [r, g, b]
                   );
                 }
               }
             }
-            if (!binary) n += 1;
           }
           const blob = fullLabelImage.toBlob("image/png");
           zip.folder(`${current.name}`);

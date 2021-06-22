@@ -4,8 +4,9 @@ import React from "react";
 import { SaveProjectFileMenuItem } from "./SaveProjectFileMenuItem";
 import { ExportAnnotationsAsInstanceSegmentationsMenuItem } from "./ExportAnnotationsAsInstanceSegmentationsMenuItem";
 import { ExportAnnotationsAsMatrixMenuItem } from "./ExportAnnotationsAsMatrixMenuItem";
-import { ExportAnnotationsAsSemanticMasksMenuItem } from "./ExportAnnotationsAsSemanticMasksMenuItem";
+import { ExportAnnotationsAsLabeledSemanticMasksMenuItem } from "./ExportAnnotationsAsLabeledSemanticMasksMenuItem";
 import MenuItem from "@material-ui/core/MenuItem";
+import { ExportAnnotationsAsBinarySemanticMasksMenuItem } from "./ExportAnnotationsAsBinarySemanticMasksMenuItem";
 
 type SaveMenuProps = {
   popupState: any;
@@ -35,7 +36,12 @@ export const SaveMenu = ({ popupState }: SaveMenuProps) => {
         <ExportAnnotationsAsInstanceSegmentationsMenuItem
           popupState={popupState}
         />
-        <ExportAnnotationsAsSemanticMasksMenuItem popupState={popupState} />
+        <ExportAnnotationsAsLabeledSemanticMasksMenuItem
+          popupState={popupState}
+        />
+        <ExportAnnotationsAsBinarySemanticMasksMenuItem
+          popupState={popupState}
+        />
         <ExportAnnotationsAsMatrixMenuItem popupState={popupState} />
       </Menu>
       <SaveProjectFileMenuItem popupState={popupState} />

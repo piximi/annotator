@@ -8,14 +8,17 @@ import {
 } from "../../../../store/selectors";
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 import JSZip from "jszip";
-import { saveAnnotationsAsLabelMatrix } from "../../../../image/imageHelper";
+import {
+  saveAnnotationsAsLabeledSemanticSegmentationMasks,
+  saveAnnotationsAsLabelMatrix,
+} from "../../../../image/imageHelper";
 import { saveAs } from "file-saver";
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
 };
 
-export const ExportAnnotationsAsInstanceSegmentationsMenuItem = ({
+export const ExportAnnotationsAsBinarySemanticMasksMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(imageInstancesSelector);
@@ -28,19 +31,18 @@ export const ExportAnnotationsAsInstanceSegmentationsMenuItem = ({
     if (!annotations) return;
 
     let zip = new JSZip();
-
     Promise.all(
-      saveAnnotationsAsLabelMatrix(images, categories, zip, true)
+      saveAnnotationsAsLabelMatrix(images, categories, zip, false, true)
     ).then(() => {
       zip.generateAsync({ type: "blob" }).then((blob) => {
-        saveAs(blob, "instances.zip");
+        saveAs(blob, "binary_masks.zip");
       });
     });
   };
 
   return (
     <MenuItem onClick={onExport}>
-      <ListItemText primary="Labeled instance masks" />
+      <ListItemText primary="Binary semantic masks" />
     </MenuItem>
   );
 };

@@ -8,17 +8,13 @@ import {
 } from "../../../../store/selectors";
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 import JSZip from "jszip";
-import { saveAs } from "file-saver";
-import {
-  saveAnnotationsAsLabelMatrix,
-  saveAnnotationsAsSemanticSegmentationMasks,
-} from "../../../../image/imageHelper";
+import { saveAnnotationsAsLabeledSemanticSegmentationMasks } from "../../../../image/imageHelper";
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
 };
 
-export const ExportAnnotationsAsSemanticMasksMenuItem = ({
+export const ExportAnnotationsAsLabeledSemanticMasksMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(imageInstancesSelector);
@@ -32,12 +28,12 @@ export const ExportAnnotationsAsSemanticMasksMenuItem = ({
 
     let zip = new JSZip();
 
-    saveAnnotationsAsSemanticSegmentationMasks(images, categories, zip);
+    saveAnnotationsAsLabeledSemanticSegmentationMasks(images, categories, zip);
   };
 
   return (
     <MenuItem onClick={onExport}>
-      <ListItemText primary="Semantic segmentation masks" />
+      <ListItemText primary="Labeled semantic masks" />
     </MenuItem>
   );
 };

@@ -16,10 +16,12 @@ import { saveAs } from "file-saver";
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
+  handleCloseMenu: () => void;
 };
 
 export const ExportAnnotationsAsBinarySemanticMasksMenuItem = ({
   popupState,
+  handleCloseMenu,
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(imageInstancesSelector);
   const images = useSelector(imagesSelector);
@@ -27,6 +29,7 @@ export const ExportAnnotationsAsBinarySemanticMasksMenuItem = ({
 
   const onExport = () => {
     popupState.close();
+    handleCloseMenu();
 
     if (!annotations) return;
 

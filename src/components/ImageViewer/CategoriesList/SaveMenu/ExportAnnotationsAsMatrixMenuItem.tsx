@@ -13,10 +13,12 @@ import { saveAnnotationsAsLabelMatrix } from "../../../../image/imageHelper";
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
+  handleCloseMenu: () => void;
 };
 
 export const ExportAnnotationsAsMatrixMenuItem = ({
   popupState,
+  handleCloseMenu,
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(imageInstancesSelector);
   const images = useSelector(imagesSelector);
@@ -24,6 +26,7 @@ export const ExportAnnotationsAsMatrixMenuItem = ({
 
   const onExport = () => {
     popupState.close();
+    handleCloseMenu();
 
     if (!annotations) return;
 

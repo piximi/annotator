@@ -7,10 +7,12 @@ import React from "react";
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
+  handleCloseMenu: () => void;
 };
 
 export const SaveProjectFileMenuItem = ({
   popupState,
+  handleCloseMenu,
 }: SaveAnnotationsMenuItemProps) => {
   const serializedProject = useSelector(allSerializedAnnotationsSelector);
 
@@ -20,6 +22,7 @@ export const SaveProjectFileMenuItem = ({
     saveAs(blob, "project.json");
 
     popupState.close();
+    handleCloseMenu();
   };
   return (
     <MenuItem onClick={onSaveAllAnnotations}>

@@ -34,17 +34,31 @@ export const SaveMenu = ({ popupState }: SaveMenuProps) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <ExportAnnotationsAsLabeledInstancesMenuItem popupState={popupState} />
-        <ExportAnnotationsAsBinaryInstancesMenuItem popupState={popupState} />
+        <ExportAnnotationsAsLabeledInstancesMenuItem
+          popupState={popupState}
+          handleCloseMenu={handleClose}
+        />
+        <ExportAnnotationsAsBinaryInstancesMenuItem
+          popupState={popupState}
+          handleCloseMenu={handleClose}
+        />
         <ExportAnnotationsAsLabeledSemanticMasksMenuItem
           popupState={popupState}
+          handleCloseMenu={handleClose}
         />
         <ExportAnnotationsAsBinarySemanticMasksMenuItem
           popupState={popupState}
+          handleCloseMenu={handleClose}
         />
-        <ExportAnnotationsAsMatrixMenuItem popupState={popupState} />
+        <ExportAnnotationsAsMatrixMenuItem
+          popupState={popupState}
+          handleCloseMenu={handleClose}
+        />
       </Menu>
-      <SaveProjectFileMenuItem popupState={popupState} />
+      <SaveProjectFileMenuItem
+        popupState={popupState}
+        handleCloseMenu={handleClose}
+      />
     </Menu>
   );
 };

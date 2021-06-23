@@ -12,10 +12,12 @@ import { saveAnnotationsAsBinaryInstanceSegmentationMasks } from "../../../../im
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
+  handleCloseMenu: () => void;
 };
 
 export const ExportAnnotationsAsBinaryInstancesMenuItem = ({
   popupState,
+  handleCloseMenu,
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(imageInstancesSelector);
   const images = useSelector(imagesSelector);
@@ -23,6 +25,7 @@ export const ExportAnnotationsAsBinaryInstancesMenuItem = ({
 
   const onExport = () => {
     popupState.close();
+    handleCloseMenu();
 
     if (!annotations) return;
 

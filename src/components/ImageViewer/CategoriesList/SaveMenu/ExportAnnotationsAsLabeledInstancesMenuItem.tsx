@@ -13,10 +13,12 @@ import { saveAs } from "file-saver";
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
+  handleCloseMenu: () => void;
 };
 
 export const ExportAnnotationsAsLabeledInstancesMenuItem = ({
   popupState,
+  handleCloseMenu,
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(imageInstancesSelector);
   const images = useSelector(imagesSelector);
@@ -24,6 +26,7 @@ export const ExportAnnotationsAsLabeledInstancesMenuItem = ({
 
   const onExport = () => {
     popupState.close();
+    handleCloseMenu();
 
     if (!annotations) return;
 

@@ -12,10 +12,12 @@ import { saveAnnotationsAsLabeledSemanticSegmentationMasks } from "../../../../i
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;
+  handleCloseMenu: () => void;
 };
 
 export const ExportAnnotationsAsLabeledSemanticMasksMenuItem = ({
   popupState,
+  handleCloseMenu,
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(imageInstancesSelector);
   const images = useSelector(imagesSelector);
@@ -23,6 +25,7 @@ export const ExportAnnotationsAsLabeledSemanticMasksMenuItem = ({
 
   const onExport = () => {
     popupState.close();
+    handleCloseMenu();
 
     if (!annotations) return;
 

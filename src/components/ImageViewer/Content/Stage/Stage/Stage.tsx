@@ -342,6 +342,7 @@ export const Stage = () => {
 
   useEffect(() => {
     if (toolType === ToolType.PenAnnotation) {
+      if (!annotationTool) return;
       // @ts-ignore
       annotationTool.brushSize = penSelectionBrushSize / stageScale;
     }
@@ -349,6 +350,7 @@ export const Stage = () => {
 
   useEffect(() => {
     if (toolType === ToolType.QuickAnnotation) {
+      if (!annotationTool) return;
       //@ts-ignore
       annotationTool.update(Math.round(quickSelectionBrushSize / stageScale));
     }

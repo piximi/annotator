@@ -126,6 +126,20 @@ export const Tools = () => {
         <EllipticalSelectionIcon />
       </Tool>
 
+      <Tool
+        name={t("Polygonal annotation")}
+        onClick={() => {
+          dispatch(
+            applicationSlice.actions.setOperation({
+              operation: OperationType.PolygonalAnnotation,
+            })
+          );
+        }}
+        selected={activeOperation === OperationType.PolygonalAnnotation}
+      >
+        <PolygonalSelectionIcon />
+      </Tool>
+
       <br />
 
       <Tool
@@ -156,20 +170,6 @@ export const Tools = () => {
         selected={activeOperation === OperationType.LassoAnnotation}
       >
         <LassoSelectionIcon />
-      </Tool>
-
-      <Tool
-        name={t("Polygonal annotation")}
-        onClick={() => {
-          dispatch(
-            applicationSlice.actions.setOperation({
-              operation: OperationType.PolygonalAnnotation,
-            })
-          );
-        }}
-        selected={activeOperation === OperationType.PolygonalAnnotation}
-      >
-        <PolygonalSelectionIcon />
       </Tool>
 
       <Tool

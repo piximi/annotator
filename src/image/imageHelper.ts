@@ -275,6 +275,70 @@ const hexToRgb = (hex: string) => {
     : null;
 };
 
+export const saveAnnotationsAsBinaryInstanceSegmentationMasks = (
+  images: Array<ImageType>,
+  categories: Array<CategoryType>,
+  zip: any
+): any => {
+  images.forEach((current: ImageType) => {
+    current.annotations.forEach((annotation: AnnotationType) => {
+      const fullLabelImage = new ImageJS.Image(
+        current.shape.width,
+        current.shape.height,
+        new Uint8Array().fill(0),
+        { components: 1, alpha: 0 }
+      );
+      const encoded = annotation.mask;
+      const decoded = decode(encoded);
+      const boundingBox = annotation.boundingBox;
+      const endX = Math.min(current.shape.width, boundingBox[2]);
+      const endY = Math.min(current.shape.height, boundingBox[3]);
+
+      //extract bounding box params
+      const boundingBoxWidth = endX - boundingBox[0];
+      const boundingBoxHeight = endY - boundingBox[1];
+
+      const roiMask = new ImageJS.Image(
+        boundingBoxWidth,
+        boundingBoxHeight,
+        decoded,
+        {
+          components: 1,
+          alpha: 0,
+        }
+      );
+      for (let i = 0; i < boundingBoxWidth; i++) {
+        for (let j = 0; j < boundingBoxHeight; j++) {
+          if (roiMask.getPixelXY(i, j)[0] > 0) {
+            fullLabelImage.setPixelXY(
+              i + annotation.boundingBox[0],
+              j + annotation.boundingBox[1],
+              [255, 255, 255]
+            );
+          }
+        }
+      }
+      const blob = fullLabelImage.toBlob("image/png");
+      const category = categories.find((category: CategoryType) => {
+        return category.id === annotation.categoryId;
+      });
+      if (category) {
+        zip.folder(`${current.name}/${category.name}`);
+        zip.file(
+          `${current.name}/${category.name}/${annotation.id}.png`,
+          blob,
+          {
+            base64: true,
+          }
+        );
+      }
+    });
+  });
+  zip.generateAsync({ type: "blob" }).then((blob: Blob) => {
+    saveAs(blob, "binary_instances.zip");
+  });
+};
+
 export const saveAnnotationsAsLabeledSemanticSegmentationMasks = (
   images: Array<ImageType>,
   categories: Array<CategoryType>,
@@ -331,7 +395,7 @@ export const saveAnnotationsAsLabeledSemanticSegmentationMasks = (
     });
   });
   zip.generateAsync({ type: "blob" }).then((blob: Blob) => {
-    saveAs(blob, "labeled_masks.zip");
+    saveAs(blob, "labeled_semantic.zip");
   });
 };
 

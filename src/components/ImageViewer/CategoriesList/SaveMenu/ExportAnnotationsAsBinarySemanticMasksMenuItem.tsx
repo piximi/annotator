@@ -35,7 +35,7 @@ export const ExportAnnotationsAsBinarySemanticMasksMenuItem = ({
       saveAnnotationsAsLabelMatrix(images, categories, zip, false, true)
     ).then(() => {
       zip.generateAsync({ type: "blob" }).then((blob) => {
-        saveAs(blob, "binary_masks.zip");
+        saveAs(blob, "binary_semantics.zip");
       });
     });
   };

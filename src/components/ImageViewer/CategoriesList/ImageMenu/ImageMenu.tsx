@@ -10,6 +10,7 @@ import { activeImageIdSelector } from "../../../../store/selectors/activeImageId
 import {
   saveAnnotationsAsLabelMatrix,
   saveAnnotationsAsLabeledSemanticSegmentationMasks,
+  saveAnnotationsAsBinaryInstanceSegmentationMasks,
 } from "../../../../image/imageHelper";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
@@ -50,7 +51,7 @@ export const ImageMenu = ({
     onCloseImageMenu(event);
   };
 
-  const onExportInstanceMasks = (
+  const onExportLabeledInstanceMasks = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     setAnchorEl(null);
@@ -68,9 +69,30 @@ export const ImageMenu = ({
       saveAnnotationsAsLabelMatrix([activeImage], categories, zip, true)
     ).then(() => {
       zip.generateAsync({ type: "blob" }).then((blob) => {
-        saveAs(blob, "instances.zip");
+        saveAs(blob, "labeled_instances.zip");
       });
     });
+  };
+
+  const onExportBinaryInstanceMasks = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    setAnchorEl(null);
+    onCloseImageMenu(event);
+
+    let zip = new JSZip();
+
+    const activeImage = images.find((image: ImageType) => {
+      return image.id === currentImageId;
+    });
+
+    if (!activeImage) return;
+
+    saveAnnotationsAsBinaryInstanceSegmentationMasks(
+      [activeImage],
+      categories,
+      zip
+    );
   };
 
   const onExportLabels = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -133,7 +155,7 @@ export const ImageMenu = ({
       saveAnnotationsAsLabelMatrix(images, categories, zip, false, true)
     ).then(() => {
       zip.generateAsync({ type: "blob" }).then((blob) => {
-        saveAs(blob, "binary_masks.zip");
+        saveAs(blob, "binary_semantic.zip");
       });
     });
   };
@@ -171,9 +193,14 @@ export const ImageMenu = ({
           >
             <MenuList dense variant="menu">
               <div>
-                <MenuItem onClick={onExportInstanceMasks}>
+                <MenuItem onClick={onExportLabeledInstanceMasks}>
                   <Typography variant="inherit">
-                    {t("Instance segmentation masks")}
+                    {t("Labeled instance masks")}
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={onExportBinaryInstanceMasks}>
+                  <Typography variant="inherit">
+                    {t("Binary instance masks")}
                   </Typography>
                 </MenuItem>
                 <MenuItem onClick={onExportLabeledSemanticMasks}>

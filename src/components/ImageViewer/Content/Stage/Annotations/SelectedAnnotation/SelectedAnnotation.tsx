@@ -35,15 +35,15 @@ export const SelectedAnnotation = ({ annotation }: AnnotationProps) => {
     if (!annotation.mask || !imageWidth || !imageHeight) return;
     if (!fill) return;
     const color = toRGBA(fill, 0);
-    setImageMask(
-      colorOverlayROI(
-        annotation.mask,
-        annotation.boundingBox,
-        imageWidth,
-        imageHeight,
-        color
-      )
+    const overlayMask = colorOverlayROI(
+      annotation.mask,
+      annotation.boundingBox,
+      imageWidth,
+      imageHeight,
+      color
     );
+    if (!overlayMask) return;
+    setImageMask(overlayMask);
   }, [annotation.mask, fill]);
 
   return (

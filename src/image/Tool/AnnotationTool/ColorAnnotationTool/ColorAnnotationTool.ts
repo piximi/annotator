@@ -125,6 +125,8 @@ export class ColorAnnotationTool extends AnnotationTool {
     const boundingBoxWidth = this.boundingBox[2] - this.boundingBox[0];
     const boundingBoxHeight = this.boundingBox[3] - this.boundingBox[1];
 
+    if (boundingBoxWidth <= 0 || boundingBoxHeight <= 0) return;
+
     //mask should be the whole image, not just the ROI
     const imgMask = new ImageJS.Image(boundingBoxWidth, boundingBoxHeight, {
       components: 1,

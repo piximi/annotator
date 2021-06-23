@@ -96,20 +96,24 @@ export const getOverlappingAnnotations = (
         position.y >= boundingBox[1] &&
         position.y <= boundingBox[3]
       ) {
-        //return annotation if clicked on actual selected data
-        const maskROI = new ImageJS.Image(
-          boundingBox[2] - boundingBox[0],
-          boundingBox[3] - boundingBox[1],
-          decode(annotation.mask),
-          { components: 1, alpha: 0 }
-        );
-        if (
-          maskROI.getPixelXY(
-            Math.round(position.x - boundingBox[0]),
-            Math.round(position.y - boundingBox[1])
-          )[0]
-        )
-          return annotation;
+        const boundingBoxWidth = boundingBox[2] - boundingBox[0];
+        const boundingBoxHeight = boundingBox[3] - boundingBox[1];
+        if (boundingBoxHeight > 0 && boundingBoxWidth > 0) {
+          //return annotation if clicked on actual selected data
+          const maskROI = new ImageJS.Image(
+            boundingBox[2] - boundingBox[0],
+            boundingBox[3] - boundingBox[1],
+            decode(annotation.mask),
+            { components: 1, alpha: 0 }
+          );
+          if (
+            maskROI.getPixelXY(
+              Math.round(position.x - boundingBox[0]),
+              Math.round(position.y - boundingBox[1])
+            )[0]
+          )
+            return annotation;
+        }
       }
     }
   );
@@ -191,6 +195,8 @@ export const colorOverlayROI = (
   //extract bounding box params
   const boxWidth = endX - boundingBox[0];
   const boxHeight = endY - boundingBox[1];
+
+  if (boxWidth <= 0 || boxHeight <= 0) return undefined;
 
   const croppedImage = new ImageJS.Image(boxWidth, boxHeight, decodedData, {
     components: 1,

@@ -176,6 +176,9 @@ export const Transformer = ({
     const roiY = boundingBox[1];
 
     const decodedData = new Uint8Array(decode(mask));
+
+    if (roiWidth <= 0 || roiHeight <= 0) return;
+
     const roi = new ImageJS.Image(roiWidth, roiHeight, decodedData, {
       components: 1,
       alpha: 0,

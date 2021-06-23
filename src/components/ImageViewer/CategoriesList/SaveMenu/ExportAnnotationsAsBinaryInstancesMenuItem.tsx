@@ -9,7 +9,6 @@ import {
 import { imagesSelector } from "../../../../store/selectors/imagesSelector";
 import JSZip from "jszip";
 import { saveAnnotationsAsBinaryInstanceSegmentationMasks } from "../../../../image/imageHelper";
-import { saveAs } from "file-saver";
 
 type SaveAnnotationsMenuItemProps = {
   popupState: any;

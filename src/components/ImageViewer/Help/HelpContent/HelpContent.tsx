@@ -411,14 +411,14 @@ export const SavingProjectHelpContent = () => {
       </Typography>
       <br />
       <Typography>
-        Annotations can be exported as instance segmentation masks (each
-        instance in an image is assigned a random (R, G, B) color in the
-        exported mask), labeled semantic segmentation masks (each category in an
-        image is asssigned the category's (R, G, B) color in the exported mask),
-        binary semantic segmentation masks (each object is white and categorized
-        in its corresponding category folder), or label matrices (each instance
-        is an image is assigned an integer incrementing in value for each
-        instance).
+        Annotations can be exported as color-labeled instance segmentation masks
+        (a single image contains all instances labeled by different colors),
+        binary instance segmentation masks (a single image contains a single
+        instance), color-labeled semantic segmentation masks (a single image
+        contains all categories labeled by different colors), binary semantic
+        segmentation masks (a single image contains a single category with its
+        corresponding instances), or label matrices (a single image contains all
+        instances labeled by an integer).
       </Typography>
     </React.Fragment>
   );

@@ -15,7 +15,7 @@ type SaveAnnotationsMenuItemProps = {
   popupState: any;
 };
 
-export const ExportAnnotationsAsInstanceSegmentationsMenuItem = ({
+export const ExportAnnotationsAsLabeledInstancesMenuItem = ({
   popupState,
 }: SaveAnnotationsMenuItemProps) => {
   const annotations = useSelector(imageInstancesSelector);
@@ -33,7 +33,7 @@ export const ExportAnnotationsAsInstanceSegmentationsMenuItem = ({
       saveAnnotationsAsLabelMatrix(images, categories, zip, true)
     ).then(() => {
       zip.generateAsync({ type: "blob" }).then((blob) => {
-        saveAs(blob, "instances.zip");
+        saveAs(blob, "labeled_instances.zip");
       });
     });
   };

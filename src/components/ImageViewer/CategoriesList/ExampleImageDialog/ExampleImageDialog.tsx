@@ -9,7 +9,7 @@ import {
   setOperation,
   setSelectedAnnotations,
 } from "../../../../store";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch, useSelector } from "react-redux";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -101,28 +101,10 @@ export const ExampleImageDialog = ({
       src: data as string,
     };
 
-    dispatch(setImages({ images: [...images, example] }));
-
-    dispatch(
-      setActiveImage({
-        image: example.id,
-      })
-    );
-
-    dispatch(
-      setSelectedAnnotations({
-        selectedAnnotations: [],
-        selectedAnnotation: undefined,
-      })
-    );
-
     let channels: Array<ChannelType> = [];
     for (let i = 0; i < shape.channels; i++) {
       channels.push({ visible: true, range: [0, 255] });
     }
-    dispatch(setChannels({ channels }));
-
-    dispatch(setOperation({ operation: ToolType.RectangularAnnotation }));
 
     const newAnnotations: Array<AnnotationType> = [];
 
@@ -141,12 +123,37 @@ export const ExampleImageDialog = ({
       }
     );
 
-    dispatch(
-      applicationSlice.actions.setImageInstances({ instances: newAnnotations })
-    );
-    dispatch(
-      applicationSlice.actions.setCategories({ categories: updatedCategories })
-    );
+    batch(() => {
+      dispatch(setImages({ images: [...images, example] }));
+
+      dispatch(
+        setActiveImage({
+          image: example.id,
+        })
+      );
+
+      dispatch(setChannels({ channels }));
+
+      dispatch(setOperation({ operation: ToolType.RectangularAnnotation }));
+
+      dispatch(
+        setSelectedAnnotations({
+          selectedAnnotations: [],
+          selectedAnnotation: undefined,
+        })
+      );
+
+      dispatch(
+        applicationSlice.actions.setImageInstances({
+          instances: newAnnotations,
+        })
+      );
+      dispatch(
+        applicationSlice.actions.setCategories({
+          categories: updatedCategories,
+        })
+      );
+    });
   };
 
   return (

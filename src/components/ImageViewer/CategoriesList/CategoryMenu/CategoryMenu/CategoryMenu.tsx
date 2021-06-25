@@ -2,13 +2,12 @@ import React from "react";
 import Menu from "@material-ui/core/Menu";
 import MenuList from "@material-ui/core/MenuList";
 import Divider from "@material-ui/core/Divider";
-import { CategoryType } from "../../../../../types/CategoryType";
 import { HideOrShowCategoryMenuItem } from "../HideOrShowCategoryMenuItem";
 import { HideOtherCategoriesMenuItem } from "../HideOtherCategoriesMenuItem";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import { useTranslation } from "../../../../../hooks/useTranslation";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch, useSelector } from "react-redux";
 import { imagesSelector } from "../../../../../store/selectors/imagesSelector";
 import { applicationSlice } from "../../../../../store/slices";
 import { selectedCategorySelector } from "../../../../../store/selectors";
@@ -58,13 +57,17 @@ export const CategoryMenu = ({
       onOpenDeleteCategoryDialog();
     } //warn user that these annotations will be relabeled as unknown
     else {
-      dispatch(
-        applicationSlice.actions.setSelectedCategory({
-          selectedCategory: "00000000-0000-0000-0000-000000000000",
-        })
-      );
+      batch(() => {
+        dispatch(
+          applicationSlice.actions.setSelectedCategory({
+            selectedCategory: "00000000-0000-0000-0000-000000000000",
+          })
+        );
 
-      dispatch(applicationSlice.actions.deleteCategory({ category: category }));
+        dispatch(
+          applicationSlice.actions.deleteCategory({ category: category })
+        );
+      });
     }
     onCloseCategoryMenu(event);
   };

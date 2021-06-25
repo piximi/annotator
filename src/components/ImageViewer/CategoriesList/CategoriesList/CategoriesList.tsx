@@ -192,14 +192,16 @@ export const CategoriesList = () => {
     evt: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>,
     image: ImageType
   ) => {
-    dispatch(setActiveImage({ image: image.id }));
+    batch(() => {
+      dispatch(setActiveImage({ image: image.id }));
 
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotations({
-        selectedAnnotations: [],
-        selectedAnnotation: undefined,
-      })
-    );
+      dispatch(
+        applicationSlice.actions.setSelectedAnnotations({
+          selectedAnnotations: [],
+          selectedAnnotation: undefined,
+        })
+      );
+    });
   };
 
   const t = useTranslation();

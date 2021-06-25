@@ -10,7 +10,7 @@ import {
   selectedCategorySelector,
   unknownCategorySelector,
 } from "../../../../store/selectors";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, batch } from "react-redux";
 import { useStyles } from "./CategoriesList.css";
 import { CollapsibleList } from "../CollapsibleList";
 import { CategoryListItemCheckbox } from "../CategoryListItemCheckbox";
@@ -168,20 +168,24 @@ export const CategoriesList = () => {
 
   const onClearSelectedAnnotations = () => {
     if (!selectedAnnotationsIds) return;
-    selectedAnnotationsIds.forEach((id: string) => {
-      dispatch(applicationSlice.actions.deleteImageInstance({ id: id }));
+    batch(() => {
+      dispatch(
+        applicationSlice.actions.deleteImageInstances({
+          ids: selectedAnnotationsIds,
+        })
+      );
+      dispatch(
+        applicationSlice.actions.setSelectedCategory({
+          selectedCategory: "00000000-0000-0000-0000-000000000000",
+        })
+      );
+      dispatch(
+        applicationSlice.actions.setSelectedAnnotations({
+          selectedAnnotations: [],
+          selectedAnnotation: undefined,
+        })
+      );
     });
-    dispatch(
-      applicationSlice.actions.setSelectedCategory({
-        selectedCategory: "00000000-0000-0000-0000-000000000000",
-      })
-    );
-    dispatch(
-      applicationSlice.actions.setSelectedAnnotations({
-        selectedAnnotations: [],
-        selectedAnnotation: undefined,
-      })
-    );
   };
 
   const onImageItemClick = (

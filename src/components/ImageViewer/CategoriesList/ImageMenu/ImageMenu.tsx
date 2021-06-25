@@ -40,7 +40,9 @@ export const ImageMenu = ({
   ) => {
     if (!currentImageId) return;
     dispatch(
-      applicationSlice.actions.deleteImageInstances({ imageId: currentImageId })
+      applicationSlice.actions.deleteAllImageInstances({
+        imageId: currentImageId,
+      })
     );
     onCloseImageMenu(event);
   };

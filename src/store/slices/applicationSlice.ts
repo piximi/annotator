@@ -191,7 +191,7 @@ export const applicationSlice = createSlice({
         return { ...image, annotations: [] };
       });
     },
-    deleteImageInstances(
+    deleteAllImageInstances(
       state: StateType,
       action: PayloadAction<{ imageId: string }>
     ) {
@@ -202,17 +202,19 @@ export const applicationSlice = createSlice({
         } else return image;
       });
     },
-    deleteImageInstance(
+    deleteImageInstances(
       //deletes given instance on active image
       state: StateType,
-      action: PayloadAction<{ id: string }>
+      action: PayloadAction<{ ids: Array<string> }>
     ) {
       if (!state.activeImageId) return;
 
       state.images = state.images.map((image: ImageType) => {
         if (image.id === state.activeImageId) {
           const updatedAnnotations = image.annotations.filter(
-            (instance: AnnotationType) => instance.id !== action.payload.id
+            (annotation: AnnotationType) => {
+              return !action.payload.ids.includes(annotation.id);
+            }
           );
           return { ...image, annotations: updatedAnnotations };
         } else return image;
@@ -519,8 +521,7 @@ export const {
   deleteCategory,
   deleteAllInstances,
   deleteImage,
-  deleteImageInstance,
-  deleteImageInstances,
+  deleteAllImageInstances,
   setActiveImage,
   setAnnotating,
   setAnnotated,

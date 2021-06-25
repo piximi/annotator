@@ -696,13 +696,11 @@ export const Stage = () => {
   useHotkeys(
     "backspace, delete",
     () => {
-      _.map(selectedAnnotationsIds, (annotationId: string) => {
-        dispatch(
-          applicationSlice.actions.deleteImageInstance({
-            id: annotationId,
-          })
-        );
-      });
+      dispatch(
+        applicationSlice.actions.deleteImageInstances({
+          ids: selectedAnnotationsIds,
+        })
+      );
       deselectAllAnnotations();
       deselectAllTransformers();
 

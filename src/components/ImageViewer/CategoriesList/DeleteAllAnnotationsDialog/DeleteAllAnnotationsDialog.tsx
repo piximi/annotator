@@ -4,7 +4,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import { useDispatch } from "react-redux";
+import { batch, useDispatch } from "react-redux";
 import { applicationSlice } from "../../../../store";
 
 type DeleteAllAnnotationsDialogProps = {
@@ -19,12 +19,15 @@ export const DeleteAllAnnotationsDialog = ({
   const dispatch = useDispatch();
 
   const onDelete = () => {
-    dispatch(applicationSlice.actions.deleteAllInstances({ id: "" }));
-    dispatch(
-      applicationSlice.actions.setSelectedCategory({
-        selectedCategory: "00000000-0000-0000-0000-000000000000",
-      })
-    );
+    batch(() => {
+      dispatch(applicationSlice.actions.deleteAllInstances({ id: "" }));
+      dispatch(
+        applicationSlice.actions.setSelectedCategory({
+          selectedCategory: "00000000-0000-0000-0000-000000000000",
+        })
+      );
+    });
+
     onClose();
   };
 

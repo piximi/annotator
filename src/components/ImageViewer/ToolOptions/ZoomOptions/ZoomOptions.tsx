@@ -4,7 +4,7 @@ import { RadioGroup } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch, useSelector } from "react-redux";
 import { ZoomModeType } from "../../../../types/ZoomModeType";
 import {
   setOffset,
@@ -59,8 +59,6 @@ export const ZoomOptions = () => {
       },
     };
 
-    dispatch(setZoomToolOptions(payload));
-
     const centerOffset = {
       x:
         offset.x !== 0
@@ -74,7 +72,10 @@ export const ZoomOptions = () => {
             offset.y,
     }; //FIXME hardcoded heights and widths before merging with master branch!;
 
-    dispatch(setOffset({ offset: centerOffset }));
+    batch(() => {
+      dispatch(setZoomToolOptions(payload));
+      dispatch(setOffset({ offset: centerOffset }));
+    });
   };
 
   const onToActualSizeClick = () => {
@@ -86,9 +87,11 @@ export const ZoomOptions = () => {
       },
     };
 
-    dispatch(setZoomToolOptions(payload));
-    dispatch(setStageScale({ stageScale: 1 }));
-    dispatch(setOffset({ offset: { x: 0, y: 0 } }));
+    batch(() => {
+      dispatch(setZoomToolOptions(payload));
+      dispatch(setStageScale({ stageScale: 1 }));
+      dispatch(setOffset({ offset: { x: 0, y: 0 } }));
+    });
   };
 
   const onToFullSizeClick = () => {
@@ -101,8 +104,6 @@ export const ZoomOptions = () => {
     };
 
     if (!image || !image.shape) return;
-
-    dispatch(setZoomToolOptions(payload));
 
     //FIXME it seems like we are not currently getting the current stageHeight. It currently stays fixes to the initial state in the redux store.
     const imageWidth = image && image.shape ? image.shape.width : 512;
@@ -120,7 +121,11 @@ export const ZoomOptions = () => {
         })
       );
     }
-    dispatch(setOffset({ offset: { x: 0, y: 0 } }));
+    batch(() => {
+      dispatch(setZoomToolOptions(payload));
+
+      dispatch(setOffset({ offset: { x: 0, y: 0 } }));
+    });
   };
 
   const onToFitClick = () => {
@@ -133,8 +138,6 @@ export const ZoomOptions = () => {
     };
 
     if (!image || !image.shape) return;
-
-    dispatch(setZoomToolOptions(payload));
 
     //FIXME it seems like we are not currently getting the current stageHeight. It currently stays fixes to the initial state in the redux store.
     const imageWidth = image && image.shape ? image.shape.width : 512;
@@ -153,7 +156,11 @@ export const ZoomOptions = () => {
       );
     }
 
-    dispatch(setOffset({ offset: { x: 0, y: 0 } }));
+    batch(() => {
+      dispatch(setZoomToolOptions(payload));
+
+      dispatch(setOffset({ offset: { x: 0, y: 0 } }));
+    });
   };
 
   const onModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {

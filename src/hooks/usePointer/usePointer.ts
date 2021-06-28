@@ -10,7 +10,7 @@ import {
   setSelectedAnnotations,
   setSelectedCategory,
 } from "../../store/slices";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch, useSelector } from "react-redux";
 import {
   imageInstancesSelector,
   stageScaleSelector,
@@ -163,17 +163,19 @@ export const usePointer = () => {
 
       if (annotationsInBox.length) {
         if (!shift) {
-          dispatch(
-            setSelectedAnnotations({
-              selectedAnnotations: annotationsInBox,
-              selectedAnnotation: annotationsInBox[0],
-            })
-          );
-          dispatch(
-            setSelectedCategory({
-              selectedCategory: annotationsInBox[0].categoryId,
-            })
-          );
+          batch(() => {
+            dispatch(
+              setSelectedAnnotations({
+                selectedAnnotations: annotationsInBox,
+                selectedAnnotation: annotationsInBox[0],
+              })
+            );
+            dispatch(
+              setSelectedCategory({
+                selectedCategory: annotationsInBox[0].categoryId,
+              })
+            );
+          });
         } else {
           //only include if not already selected
           const additionalAnnotations = annotationsInBox.filter(
@@ -253,17 +255,20 @@ export const usePointer = () => {
     if (!currentAnnotation) return;
 
     if (!shift) {
-      dispatch(
-        setSelectedAnnotations({
-          selectedAnnotations: [currentAnnotation],
-          selectedAnnotation: currentAnnotation,
-        })
-      );
-      dispatch(
-        setSelectedCategory({
-          selectedCategory: currentAnnotation.categoryId,
-        })
-      );
+      batch(() => {
+        if (!currentAnnotation) return;
+        dispatch(
+          setSelectedAnnotations({
+            selectedAnnotations: [currentAnnotation],
+            selectedAnnotation: currentAnnotation,
+          })
+        );
+        dispatch(
+          setSelectedCategory({
+            selectedCategory: currentAnnotation.categoryId,
+          })
+        );
+      });
     }
 
     if (shift && !selectedAnnotationsIds.includes(currentAnnotation.id)) {

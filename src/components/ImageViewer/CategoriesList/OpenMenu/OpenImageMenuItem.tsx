@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { batch, useDispatch } from "react-redux";
 import React, { ChangeEvent } from "react";
 import * as ImageJS from "image-js";
 import { ShapeType } from "../../../../types/ShapeType";
@@ -61,18 +61,20 @@ export const OpenImageMenuItem = ({ popupState }: OpenImageMenuItemProps) => {
             dispatch(addImages({ newImages: [loaded] }));
 
             if (i === 0) {
-              dispatch(
-                setActiveImage({
-                  image: loaded.id,
-                })
-              );
+              batch(() => {
+                dispatch(
+                  setActiveImage({
+                    image: loaded.id,
+                  })
+                );
 
-              dispatch(
-                setSelectedAnnotations({
-                  selectedAnnotations: [],
-                  selectedAnnotation: undefined,
-                })
-              );
+                dispatch(
+                  setSelectedAnnotations({
+                    selectedAnnotations: [],
+                    selectedAnnotation: undefined,
+                  })
+                );
+              });
             }
           });
         });

@@ -17,6 +17,7 @@ import {
 } from "../../../../../store/selectors";
 import { applicationSlice, setSelectedAnnotations } from "../../../../../store";
 import {
+  batch,
   Provider,
   ReactReduxContext,
   useDispatch,
@@ -188,8 +189,10 @@ export const Stage = () => {
 
     annotationTool.deselect();
 
-    dispatch(applicationSlice.actions.setAnnotating({ annotating: false }));
-    dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
+    batch(() => {
+      dispatch(applicationSlice.actions.setAnnotating({ annotating: false }));
+      dispatch(applicationSlice.actions.setAnnotated({ annotated: false }));
+    });
 
     if (!selectedAnnotation) return;
 

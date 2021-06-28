@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { CssBaseline } from "@material-ui/core";
 import { ImageType } from "../../../types/ImageType";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch } from "react-redux";
 import { CategoriesList } from "../CategoriesList";
 import { ToolOptions } from "../ToolOptions";
 import { Tools } from "../Tools";
@@ -21,7 +21,6 @@ import { ShapeType } from "../../../types/ShapeType";
 import { loadLayersModelThunk } from "../../../store/thunks";
 import { ToolType } from "../../../types/ToolType";
 import { v4 } from "uuid";
-import { imagesSelector } from "../../../store/selectors/imagesSelector";
 
 type ImageViewerProps = {
   image?: ImageType;
@@ -44,8 +43,6 @@ export const ImageViewer = (props: ImageViewerProps) => {
       );
     }
   }, [dispatch, props.image]);
-
-  const images = useSelector(imagesSelector);
 
   const classes = useStyles();
 
@@ -83,31 +80,27 @@ export const ImageViewer = (props: ImageViewerProps) => {
                 src: imageDataURL,
               };
 
-              console.error(
-                images.map((image: ImageType) => {
-                  return image.name.split(".")[0];
-                })
-              );
-
               dispatch(addImages({ newImages: [loaded] }));
 
               if (i === 0) {
-                dispatch(
-                  setActiveImage({
-                    image: loaded.id,
-                  })
-                );
+                batch(() => {
+                  dispatch(
+                    setActiveImage({
+                      image: loaded.id,
+                    })
+                  );
 
-                dispatch(
-                  setSelectedAnnotations({
-                    selectedAnnotations: [],
-                    selectedAnnotation: undefined,
-                  })
-                );
+                  dispatch(
+                    setSelectedAnnotations({
+                      selectedAnnotations: [],
+                      selectedAnnotation: undefined,
+                    })
+                  );
 
-                dispatch(
-                  setOperation({ operation: ToolType.RectangularAnnotation })
-                );
+                  dispatch(
+                    setOperation({ operation: ToolType.RectangularAnnotation })
+                  );
+                });
               }
             });
           });

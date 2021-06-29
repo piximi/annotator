@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.js": "/annotator/static/js/main.97fef481.chunk.js",
-    "main.js.map": "/annotator/static/js/main.97fef481.chunk.js.map",
-    "runtime-main.js": "/annotator/static/js/runtime-main.1e3606d8.js",
-    "runtime-main.js.map": "/annotator/static/js/runtime-main.1e3606d8.js.map",
-    "static/js/2.ebf97e5a.chunk.js": "/annotator/static/js/2.ebf97e5a.chunk.js",
-    "static/js/2.ebf97e5a.chunk.js.map": "/annotator/static/js/2.ebf97e5a.chunk.js.map",
-    "static/js/3.d718a89b.chunk.js": "/annotator/static/js/3.d718a89b.chunk.js",
-    "static/js/3.d718a89b.chunk.js.map": "/annotator/static/js/3.d718a89b.chunk.js.map",
-    "static/js/4.74ee141c.chunk.js": "/annotator/static/js/4.74ee141c.chunk.js",
-    "static/js/4.74ee141c.chunk.js.map": "/annotator/static/js/4.74ee141c.chunk.js.map",
+    "main.js": "/annotator/static/js/main.d281d9aa.chunk.js",
+    "main.js.map": "/annotator/static/js/main.d281d9aa.chunk.js.map",
+    "runtime-main.js": "/annotator/static/js/runtime-main.3624467b.js",
+    "runtime-main.js.map": "/annotator/static/js/runtime-main.3624467b.js.map",
+    "static/js/2.913a8c5c.chunk.js": "/annotator/static/js/2.913a8c5c.chunk.js",
+    "static/js/2.913a8c5c.chunk.js.map": "/annotator/static/js/2.913a8c5c.chunk.js.map",
+    "static/js/3.aaa65c5b.chunk.js": "/annotator/static/js/3.aaa65c5b.chunk.js",
+    "static/js/3.aaa65c5b.chunk.js.map": "/annotator/static/js/3.aaa65c5b.chunk.js.map",
+    "static/js/4.17670434.chunk.js": "/annotator/static/js/4.17670434.chunk.js",
+    "static/js/4.17670434.chunk.js.map": "/annotator/static/js/4.17670434.chunk.js.map",
     "index.html": "/annotator/index.html",
-    "static/js/2.ebf97e5a.chunk.js.LICENSE.txt": "/annotator/static/js/2.ebf97e5a.chunk.js.LICENSE.txt",
-    "static/js/3.d718a89b.chunk.js.LICENSE.txt": "/annotator/static/js/3.d718a89b.chunk.js.LICENSE.txt",
+    "static/js/2.913a8c5c.chunk.js.LICENSE.txt": "/annotator/static/js/2.913a8c5c.chunk.js.LICENSE.txt",
+    "static/js/3.aaa65c5b.chunk.js.LICENSE.txt": "/annotator/static/js/3.aaa65c5b.chunk.js.LICENSE.txt",
     "static/media/CheckboxChecked.6700c862.svg": "/annotator/static/media/CheckboxChecked.6700c862.svg",
     "static/media/CheckboxUnchecked.1714692b.svg": "/annotator/static/media/CheckboxUnchecked.1714692b.svg",
     "static/media/ColorAdjustment.b6d05bdf.svg": "/annotator/static/media/ColorAdjustment.b6d05bdf.svg",
@@ -38,8 +38,8 @@
     "static/media/texture.2ed6f96c.png": "/annotator/static/media/texture.2ed6f96c.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.1e3606d8.js",
-    "static/js/2.ebf97e5a.chunk.js",
-    "static/js/main.97fef481.chunk.js"
+    "static/js/runtime-main.3624467b.js",
+    "static/js/2.913a8c5c.chunk.js",
+    "static/js/main.d281d9aa.chunk.js"
   ]
 }

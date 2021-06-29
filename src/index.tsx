@@ -12,7 +12,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 Sentry.init({
   dsn:
     "https://756e21ab7263457eab9bc2f65edddc79@o71028.ingest.sentry.io/5668724",
-  release: "image-viewer@" + process.env.npm_package_version,
+  release: "annotator@" + process.env.npm_package_version,
 });
 
 ReactDOM.render(

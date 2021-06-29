@@ -2,7 +2,7 @@
   {
     "imageChannels": 3,
     "imageChecksum": "",
-    "imageData": "/image-viewer/static/media/cell-painting.f118ef08.png",
+    "imageData": "src/images/cell-painting.png",
     "imageFilename": "cell-painting.png",
     "imageFrames": 1,
     "imageHeight": 512,

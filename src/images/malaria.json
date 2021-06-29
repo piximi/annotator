@@ -2,7 +2,7 @@
   {
     "imageChannels": 3,
     "imageChecksum": "",
-    "imageData": "/image-viewer/static/media/malaria.5b73ad75.png",
+    "imageData": "src/images/malaria.png",
     "imageFilename": "malaria.png",
     "imageFrames": 1,
     "imageHeight": 1200,

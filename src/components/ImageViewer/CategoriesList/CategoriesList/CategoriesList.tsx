@@ -629,7 +629,7 @@ const SendFeedbackListItem = () => {
 
   const onSend = (text: string) => {
     const url =
-      "https://github.com/piximi/image-viewer/issues/new?title=Bug%20Report&labels=bug&body=" +
+      "https://github.com/piximi/annotator/issues/new?title=Bug%20Report&labels=bug&body=" +
       encodeURIComponent(text);
     window.open(url);
   };

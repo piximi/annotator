@@ -102,7 +102,7 @@
       "react-app/jest"
     ]
   },
-  "homepage": "https://piximi.github.io/image-viewer",
+  "homepage": "https://piximi.github.io/annotator",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"

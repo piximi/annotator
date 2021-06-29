@@ -2,6 +2,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import texture from "../../../../images/texture.png";
 
 export const useStyles = makeStyles((theme) => ({
+  a: {
+    color: "deepskyblue",
+  },
   appBar: {
     backgroundColor: "rgba(0, 0, 0, 0)",
     borderBottom: "1px solid rgba(0, 0, 0, 0.12)",

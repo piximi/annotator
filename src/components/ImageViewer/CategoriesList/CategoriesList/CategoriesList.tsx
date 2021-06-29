@@ -581,6 +581,8 @@ const SendFeedbackDialog = ({
   open,
   onSend,
 }: SendFeedbackDialogProps) => {
+  const classes = useStyles();
+
   const t = useTranslation();
 
   const [input, setInput] = useState("");
@@ -596,7 +598,18 @@ const SendFeedbackDialog = ({
 
       <DialogContent>
         <DialogContentText>
-          {t("Use this form to report issues with Piximi via our GitHub page, or visit forum.image.sc/tag/piximi")}.
+          {t(
+            "Use this form to report issues with Piximi via our GitHub page, or visit"
+          )}{" "}
+          <a
+            className={classes.a}
+            href="https://forum.image.sc/tag/piximi"
+            target="_blank"
+            rel="noreferrer"
+          >
+            forum.image.sc/tag/piximi
+          </a>
+          .
         </DialogContentText>
 
         <TextField

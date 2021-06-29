@@ -98,7 +98,7 @@ export const getOverlappingAnnotations = (
       ) {
         const boundingBoxWidth = boundingBox[2] - boundingBox[0];
         const boundingBoxHeight = boundingBox[3] - boundingBox[1];
-        if (boundingBoxHeight > 0 && boundingBoxWidth > 0) {
+        if (boundingBoxHeight && boundingBoxWidth) {
           //return annotation if clicked on actual selected data
           const maskROI = new ImageJS.Image(
             boundingBox[2] - boundingBox[0],
@@ -196,7 +196,7 @@ export const colorOverlayROI = (
   const boxWidth = endX - boundingBox[0];
   const boxHeight = endY - boundingBox[1];
 
-  if (boxWidth <= 0 || boxHeight <= 0) return undefined;
+  if (!boxWidth || !boxHeight) return undefined;
 
   const croppedImage = new ImageJS.Image(boxWidth, boxHeight, decodedData, {
     components: 1,

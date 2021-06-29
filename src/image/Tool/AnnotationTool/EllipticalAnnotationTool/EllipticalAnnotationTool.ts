@@ -79,7 +79,9 @@ export class EllipticalAnnotationTool extends AnnotationTool {
     const roiWidth = this.boundingBox[2] - this.boundingBox[0];
     const roiHeight = this.boundingBox[3] - this.boundingBox[1];
 
-    if (roiWidth <= 0 || roiHeight <= 0) return undefined;
+    if (!roiWidth || !roiHeight) return undefined;
+
+    console.error(roiWidth, roiHeight);
 
     //@ts-ignore
     const imageMask = ImageJS.Image.fromCanvas(canvas).getChannel(3);

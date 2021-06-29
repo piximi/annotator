@@ -36,6 +36,7 @@ export const Annotation = ({ annotation }: AnnotationProps) => {
     if (!fill) return;
     const boxWidth = annotation.boundingBox[2] - annotation.boundingBox[0];
     const boxHeight = annotation.boundingBox[3] - annotation.boundingBox[1];
+    if (!boxWidth || !boxHeight) return;
     if (Math.round(boxWidth) <= 0 || Math.round(boxHeight) <= 0) return;
     const color = toRGBA(fill, 0);
     setImageMask(

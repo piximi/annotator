@@ -596,7 +596,7 @@ const SendFeedbackDialog = ({
 
       <DialogContent>
         <DialogContentText>
-          {t("Use this form to report issues with Piximi via our GitHub page")}.
+          {t("Use this form to report issues with Piximi via our GitHub page, or visit forum.image.sc/tag/piximi")}.
         </DialogContentText>
 
         <TextField

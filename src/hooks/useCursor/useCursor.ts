@@ -16,7 +16,7 @@ export const useCursor = () => {
 
         break;
       case ToolType.PenAnnotation:
-        dispatch(applicationSlice.actions.setCursor({ cursor: "none" }));
+        dispatch(applicationSlice.actions.setCursor({ cursor: "default" }));
 
         break;
       case ToolType.RectangularAnnotation:

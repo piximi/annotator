@@ -284,6 +284,8 @@ export const CategoriesList = () => {
           openImageMenu={Boolean(imageAnchorEl)}
         />
       </CollapsibleList>
+      
+      <Divider />
 
       <CollapsibleList closed dense primary={t("Categories")}>
         {createdCategories.map((category: CategoryType) => {

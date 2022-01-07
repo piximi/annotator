@@ -22,7 +22,7 @@ export const Image = React.forwardRef<Konva.Image>((_, ref) => {
 
   const height = useSelector(scaledImageHeightSelector);
 
-  const [image] = useImage(src ? src : "", "Anonymous");
+  const [image] = useImage(src ? src : "", "anonymous");
 
   const [filters, setFilters] = useState<Array<any>>();
 

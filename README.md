@@ -1,6 +1,3 @@
 # @piximi/annotator
 
-![publish](https://github.com/piximi/annotator/workflows/publish/badge.svg)
-![test](https://github.com/piximi/annotator/workflows/test/badge.svg)
-
-Official source for help- forum.image.sc/tag/piximi
+The contents of this repository has been merged with [Piximi](https://github.com/piximi/piximi) proper, and this repository is now archived.

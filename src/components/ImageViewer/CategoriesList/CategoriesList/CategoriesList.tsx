@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Drawer from "@material-ui/core/Drawer";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -284,7 +285,7 @@ export const CategoriesList = () => {
           openImageMenu={Boolean(imageAnchorEl)}
         />
       </CollapsibleList>
-      
+
       <Divider />
 
       <CollapsibleList closed dense primary={t("Categories")}>

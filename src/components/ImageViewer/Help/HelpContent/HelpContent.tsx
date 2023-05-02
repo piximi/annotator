@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { HelpWindowToolTitle } from "../HelpDialog/HelpWindowToolTitle";
 import {
   ColorAdjustmentIcon,

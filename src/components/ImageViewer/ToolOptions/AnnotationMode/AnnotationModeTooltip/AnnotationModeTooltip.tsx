@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from "react";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Box } from "@material-ui/core";

@@ -10,17 +10,27 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 Sentry.init({
-  dsn:
-    "https://756e21ab7263457eab9bc2f65edddc79@o71028.ingest.sentry.io/5668724",
+  dsn: "https://756e21ab7263457eab9bc2f65edddc79@o71028.ingest.sentry.io/5668724",
   release: "annotator@" + process.env.npm_package_version,
 });
 
+const Redirect = () => {
+  const newLocation = "https://www.piximi.app/annotator";
+
+  return (
+    <p>
+      This standalone annotator prototype is now part of the broader Piximi
+      application. If automatic redirection fails, visit{" "}
+      <a href={newLocation}>piximi.app/annotator</a>.
+    </p>
+  );
+};
+
 ReactDOM.render(
   <React.StrictMode>
+    <Redirect />
     <Provider store={store}>
-      <DndProvider backend={HTML5Backend}>
-        <ImageViewer />
-      </DndProvider>
+      <DndProvider backend={HTML5Backend}>{/* <ImageViewer /> */}</DndProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

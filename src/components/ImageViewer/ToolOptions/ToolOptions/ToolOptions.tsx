@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Drawer from "@material-ui/core/Drawer";
 import React from "react";
 import { useStyles } from "./ToolOptions.css";

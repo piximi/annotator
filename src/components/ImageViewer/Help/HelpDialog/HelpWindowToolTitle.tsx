@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { useStyles } from "./HelpDialog.css";
 import Typography from "@material-ui/core/Typography";
 import { KeyboardKey } from "./KeyboardKey";
